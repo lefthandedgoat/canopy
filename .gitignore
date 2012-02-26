@@ -1,0 +1,5 @@
+_Resharper.canopy
+*.ReSharper.user
+canopy/bin/**/*
+canopy/obj/**/*
+*.suo

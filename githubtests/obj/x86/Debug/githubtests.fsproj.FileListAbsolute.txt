@@ -1,0 +1,6 @@
+C:\projects\canopy\githubtests\bin\Debug\githubtests.XML
+C:\projects\canopy\githubtests\bin\Debug\githubtests.exe
+C:\projects\canopy\githubtests\bin\Debug\githubtests.pdb
+C:\projects\canopy\githubtests\obj\x86\Debug\ResolveAssemblyReference.cache
+C:\projects\canopy\githubtests\obj\x86\Debug\githubtests.exe
+C:\projects\canopy\githubtests\obj\x86\Debug\githubtests.pdb
