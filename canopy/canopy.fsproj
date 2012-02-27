@@ -36,6 +36,7 @@
   <ItemGroup>
     <Compile Include="firefox.fs" />
     <None Include="packages.config" />
+    <Compile Include="runner.fs" />
   </ItemGroup>
   <ItemGroup>
     <Reference Include="Castle.Core">
