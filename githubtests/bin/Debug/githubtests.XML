@@ -2,7 +2,10 @@
 <doc>
 <assembly><name>githubtests</name></assembly>
 <members>
-<member name="T:Program">
+<member name="">
+
+</member>
+<member name="T:main">
 
 </member>
 </members>

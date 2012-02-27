@@ -4,3 +4,17 @@ C:\projects\canopy\githubtests\bin\Debug\githubtests.pdb
 C:\projects\canopy\githubtests\obj\x86\Debug\ResolveAssemblyReference.cache
 C:\projects\canopy\githubtests\obj\x86\Debug\githubtests.exe
 C:\projects\canopy\githubtests\obj\x86\Debug\githubtests.pdb
+C:\projects\canopy\githubtests\bin\Debug\canopy.dll
+C:\projects\canopy\githubtests\bin\Debug\WebDriver.dll
+C:\projects\canopy\githubtests\bin\Debug\WebDriver.Support.dll
+C:\projects\canopy\githubtests\bin\Debug\Newtonsoft.Json.dll
+C:\projects\canopy\githubtests\bin\Debug\Ionic.Zip.dll
+C:\projects\canopy\githubtests\bin\Debug\Castle.Core.dll
+C:\projects\canopy\githubtests\bin\Debug\canopy.pdb
+C:\projects\canopy\githubtests\bin\Debug\canopy.xml
+C:\projects\canopy\githubtests\bin\Debug\WebDriver.xml
+C:\projects\canopy\githubtests\bin\Debug\WebDriver.Support.xml
+C:\projects\canopy\githubtests\bin\Debug\Newtonsoft.Json.pdb
+C:\projects\canopy\githubtests\bin\Debug\Newtonsoft.Json.xml
+C:\projects\canopy\githubtests\bin\Debug\Ionic.Zip.xml
+C:\projects\canopy\githubtests\bin\Debug\Castle.Core.xml

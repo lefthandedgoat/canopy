@@ -15,6 +15,9 @@ let write (cssSelector : string) (text : string) =
     let element = browser.FindElement(By.CssSelector(cssSelector))
     element.SendKeys(text)
 
+let ( << ) (cssSelector : string) (text : string) = 
+    write cssSelector text
+
 let read (cssSelector : string) =    
     try
         let element = browser.FindElement(By.CssSelector(cssSelector))
@@ -100,3 +103,9 @@ let describe (text : string) =
 let currentUrl _ =
     browser.Url
 
+let on (u: string) = 
+    if(browser.Url = u) then
+        System.Console.WriteLine("on check passed.");
+    else
+        System.Console.WriteLine("on check failed.");
+    ()
