@@ -2,4 +2,8 @@ _Resharper.canopy
 *.ReSharper.user
 canopy/bin/**/*
 canopy/obj/**/*
+githubtests/bin/**/*
+githubtests/obj/**/*
+basictests/bin/**/*
+basictests/obj/**/*
 *.suo
