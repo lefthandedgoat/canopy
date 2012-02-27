@@ -104,8 +104,12 @@ let currentUrl _ =
     browser.Url
 
 let on (u: string) = 
-    if(browser.Url = u) then
+    let wait = new WebDriverWait(browser, TimeSpan.FromSeconds(10.0))
+    try
+        System.Console.WriteLine(browser.Url);
+        System.Console.WriteLine(u);
+        wait.Until(fun _ -> (browser.Url = u)) |> ignore
         System.Console.WriteLine("on check passed.");
-    else
-        System.Console.WriteLine("on check failed.");
+    with
+        | :? Exception -> System.Console.WriteLine("on check failed.");
     ()

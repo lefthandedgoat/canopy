@@ -11,7 +11,7 @@ on "https://github.com/login"
 "#login_field" << "canopytest"
 "#password" << "password1"
 click "input[value='Log in']"
-on "https://github.com"
+on "https://github.com/"
 "#user" == "canopytest"
 
 describe "find leftahandedgoat user"
@@ -23,7 +23,7 @@ click "button.classy"
 
 describe "go to canopy project"
 click "a[href='/lefthandedgoat']"
-on "https://www.github.com/lefthandedgoat"
+on "https://github.com/lefthandedgoat"
 click "a[href='/lefthandedgoat/canopy']"
 on "https://github.com/lefthandedgoat/canopy"
 
