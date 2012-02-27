@@ -78,6 +78,21 @@ let ( == ) element value =
     with
         | :? Exception -> equals value "timeout trying to find element"
 
+let notequals value1 value2 =
+    if (value1 <> value2) then
+        System.Console.WriteLine("notequals check passed.");
+    else
+        System.Console.WriteLine("notequals check failed.", value1, value2);
+    ()
+
+let ( != ) element value =
+    let wait = new WebDriverWait(browser, TimeSpan.FromSeconds(3.0))
+    try
+        wait.Until(fun _ -> (read element) <> value) |> ignore
+        notequals value (read element)
+    with
+        | :? Exception -> equals value "timeout trying to find element"
+
 let listed (cssSelector : string) value =
     let wait = new WebDriverWait(browser, TimeSpan.FromSeconds(3.0))
     try
@@ -88,6 +103,17 @@ let listed (cssSelector : string) value =
 
 let ( *= ) (cssSelector : string) value =
     listed cssSelector value
+
+let notlisted (cssSelector : string) value =
+    let wait = new WebDriverWait(browser, TimeSpan.FromSeconds(3.0))
+    try
+        wait.Until(fun _ -> browser.FindElements(By.CssSelector(cssSelector)) |> Seq.exists(fun element -> element.Text = value) = false) |> ignore
+        notequals value ""
+    with
+        | :? Exception -> equals value "timeout waiting for element to not exist in list"    
+
+let ( *!= ) (cssSelector : string) value =
+    notlisted cssSelector value
     
 let contains (value1 : string) (value2 : string) =
     if (value2.Contains(value1) = true) then

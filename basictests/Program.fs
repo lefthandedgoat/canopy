@@ -123,6 +123,16 @@ test (fun _ ->
     url "http://www.reddit.com/"
     on "http://www.reddit.com/")
 
+test (fun _ ->
+    describe "textbox should not equals dontequalme"
+    !^ testpage
+    "#welcome" != "dontequalme")
+
+test (fun _ ->
+    describe "list should not have item"
+    !^ testpage
+    "#value_list td" *!= "Value 5")
+
 run ()
 
 quit ()
