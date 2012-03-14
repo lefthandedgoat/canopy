@@ -3,10 +3,11 @@
 open runner
 open canopy
 
-let github = "https://www.github.com"
 before <- fun () -> System.Console.WriteLine("This happens before every test")
-
+suggestions := false
 start "firefox"
+
+let github = "https://www.github.com"
 
 test (fun _ ->
     describe "go to github and login"

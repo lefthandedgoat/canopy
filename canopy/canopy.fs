@@ -5,6 +5,9 @@ open OpenQA.Selenium
 open OpenQA.Selenium.Support.UI
 open System
 
+type Action = { action : string; url : string }
+
+let mutable (actions : Action list) = [];
 let mutable (browser : IWebDriver) = null;
 let mutable chromedir = @"c:\"
 
@@ -19,11 +22,32 @@ let start (b : string) =
     | _ -> browser <- new OpenQA.Selenium.Firefox.FirefoxDriver() :> IWebDriver
     ()
 
-let ( !^ ) (u : string) = browser.Navigate().GoToUrl(u)
+let currentUrl _ =
+    browser.Url
 
-let url (u : string) = !^ u
+let logAction a = 
+    let action = { action = a; url = currentUrl () }
+    actions <- List.append actions [action]
+    ()
+
+let on (u: string) = 
+    logAction "on"
+    let wait = new WebDriverWait(browser, TimeSpan.FromSeconds(10.0))
+    try
+        wait.Until(fun _ -> (browser.Url = u)) |> ignore
+    with
+        | :? Exception -> failwith (System.String.Format("on check failed, expected {0} got {1}", u, browser.Url));
+    ()
+
+let ( !^ ) (u : string) = 
+    logAction "url"
+    browser.Navigate().GoToUrl(u)
+
+let url (u : string) = 
+    !^ u
 
 let write (cssSelector : string) (text : string) = 
+    logAction "write"
     let element = browser.FindElement(By.CssSelector(cssSelector))
     element.SendKeys(text)
 
@@ -32,6 +56,7 @@ let ( << ) (cssSelector : string) (text : string) =
 
 let read (cssSelector : string) =    
     try
+        logAction "read"
         let element = browser.FindElement(By.CssSelector(cssSelector))
         if element.TagName = "input" then
             element.GetAttribute("value")
@@ -39,13 +64,16 @@ let read (cssSelector : string) =
             element.Text    
     with
         | :? Exception -> failwith "can't find element"
+
         
 let clear (cssSelector : string) = 
+    logAction "clear"
     let element = browser.FindElement(By.CssSelector(cssSelector))
     element.Clear()
     
 let click (cssSelector : string) = 
     try
+        logAction "click"
         let element = browser.FindElement(By.CssSelector(cssSelector))
         element.Click()
     with
@@ -53,6 +81,7 @@ let click (cssSelector : string) =
 
 let selected (cssSelector : string) = 
     try
+        logAction "selected"
         let element = browser.FindElement(By.CssSelector(cssSelector))
         if element.Selected = false then
             failwith (System.String.Format("element selected failed, {0} not selected.", cssSelector));    
@@ -61,6 +90,7 @@ let selected (cssSelector : string) =
 
 let deselected (cssSelector : string) = 
     try
+        logAction "deselected"
         let element = browser.FindElement(By.CssSelector(cssSelector))
         if element.Selected then
             failwith (System.String.Format("element deselected failed, {0} selected.", cssSelector));    
@@ -70,15 +100,18 @@ let deselected (cssSelector : string) =
 let title _ = browser.Title
 
 let quit _ = 
+    logAction "quit"
     browser.Quit()    
     browser = null
 
 let equals value1 value2 =
+    logAction "equals"
     if (value1 <> value2) then
         failwith (System.String.Format("equality check failed.  expected: {0}, got: {1}", value1, value2));
     ()
 
 let ( == ) element value =
+    logAction "equals"
     let wait = new WebDriverWait(browser, TimeSpan.FromSeconds(3.0))
     try
         wait.Until(fun _ -> (read element) = value) |> ignore
@@ -86,11 +119,13 @@ let ( == ) element value =
         | :? Exception -> failwith (System.String.Format("cant find element {0}", element));
 
 let notequals value1 value2 =
+    logAction "notequals"
     if (value1 = value2) then
         failwith (System.String.Format("notequals check failed.", value1, value2));
     ()
 
 let ( != ) element value =
+    logAction "notequals"
     let wait = new WebDriverWait(browser, TimeSpan.FromSeconds(3.0))
     try
         wait.Until(fun _ -> (read element) <> value) |> ignore
@@ -98,6 +133,7 @@ let ( != ) element value =
         | :? Exception -> failwith (System.String.Format("notequals check failed for {0} on element {1}", value, element));
 
 let listed (cssSelector : string) value =
+    logAction "list"
     let wait = new WebDriverWait(browser, TimeSpan.FromSeconds(3.0))
     try
         wait.Until(fun _ -> browser.FindElements(By.CssSelector(cssSelector)) |> Seq.exists(fun element -> element.Text = value)) |> ignore
@@ -108,6 +144,7 @@ let ( *= ) (cssSelector : string) value =
     listed cssSelector value
 
 let notlisted (cssSelector : string) value =
+    logAction "notlisted"
     let wait = new WebDriverWait(browser, TimeSpan.FromSeconds(3.0))
     try
         wait.Until(fun _ -> browser.FindElements(By.CssSelector(cssSelector)) |> Seq.exists(fun element -> element.Text = value) = false) |> ignore
@@ -118,21 +155,11 @@ let ( *!= ) (cssSelector : string) value =
     notlisted cssSelector value
     
 let contains (value1 : string) (value2 : string) =
+    logAction "contains"
     if (value2.Contains(value1) <> true) then
         failwith (System.String.Format("contains check failed.  {0} does not contain {1}", value2, value1));
     ()
 
 let describe (text : string) =
     System.Console.WriteLine(text);
-    ()
-
-let currentUrl _ =
-    browser.Url
-
-let on (u: string) = 
-    let wait = new WebDriverWait(browser, TimeSpan.FromSeconds(10.0))
-    try
-        wait.Until(fun _ -> (browser.Url = u)) |> ignore
-    with
-        | :? Exception -> failwith (System.String.Format("on check failed, expected {0} got {1}", u, browser.Url));
     ()

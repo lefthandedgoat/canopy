@@ -2,11 +2,12 @@
 
 open runner
 open canopy
+
+before <- fun () -> System.Console.WriteLine("This happens before every test")
+suggestions := false
+start "firefox"
  
 let testpage = @"C:\projects\canopy\basictests\BasicPage.html"
-before <- fun () -> System.Console.WriteLine("This happens before every test")
-
-start "firefox"
 
 test (fun _ ->
     describe "#welcome should have Welcome"

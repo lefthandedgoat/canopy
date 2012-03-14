@@ -1,12 +1,28 @@
 ﻿module runner
 
+open canopy
+
 let mutable tests = []
 let mutable before = fun () -> ()
 let failfast = ref false
+let suggestions = ref true
 
 let test f = 
     let fAsList = [f]
     tests <- List.append tests fAsList
+
+let rec private makeSuggestions (actions : Action list) =
+    match actions with
+    | [] -> ()
+    | action1 :: action2 :: _ when action1.action <> "on" && action2.action <> "on" && (action1.url <> action2.url) ->  //suggestion for doing an action one page that transitioned you to another page and performing an action without checking to see if that page loaded with 'on'
+        (
+            System.Console.WriteLine("Suggestion: as a best practice you should check that you are on a page before
+accessing an element on it
+you were on {0}
+then on {1}", action1.url, action2.url);
+            makeSuggestions actions.Tail
+        )
+    | _ -> makeSuggestions actions.Tail
 
 let run _ =
     let failed = ref false
@@ -24,4 +40,10 @@ let run _ =
                                                     System.Console.WriteLine("Error: {0}", ex.Message);
                                                 )
                                         )
-                                ) 
+                                if suggestions = ref true then
+                                    makeSuggestions actions
+
+                                actions <- []
+                                ) |> ignore
+    
+    ()
