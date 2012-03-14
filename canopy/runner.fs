@@ -1,6 +1,7 @@
 ﻿module runner
 
 let mutable tests = []
+let mutable before = fun () -> ()
 
 let test f = 
     let fAsList = [f]
@@ -9,6 +10,7 @@ let test f =
 let run _ =
     tests |> List.map (fun f -> (
                                 try
+                                    (before ())
                                     (f ())
                                     System.Console.WriteLine("Passed");
                                 with
