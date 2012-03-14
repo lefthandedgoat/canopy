@@ -1,9 +1,12 @@
 ﻿module main
 
 open runner
-open firefox
- 
+open canopy
+
 let github = "https://www.github.com"
+before <- fun () -> System.Console.WriteLine("This happens before every test")
+
+start "firefox"
 
 test (fun _ ->
     describe "go to github and login"
