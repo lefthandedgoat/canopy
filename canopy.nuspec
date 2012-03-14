@@ -2,17 +2,19 @@
 <package xmlns="http://schemas.microsoft.com/packaging/2010/07/nuspec.xsd">
   <metadata>
     <id>canopy</id>
-    <version>0.01</version>
-    <authors>philha</authors>
-    <owners>philha</owners>
-    <licenseUrl>http://LICENSE_URL_HERE_OR_DELETE_THIS_LINE</licenseUrl>
-    <projectUrl>http://PROJECT_URL_HERE_OR_DELETE_THIS_LINE</projectUrl>
-    <iconUrl>http://ICON_URL_HERE_OR_DELETE_THIS_LINE</iconUrl>
-    <requireLicenseAcceptance>false</requireLicenseAcceptance>
-    <description>Package description</description>
-    <tags>Tag1 Tag2</tags>
+    <version>0.0.3</version>
+    <authors>Chris Holt</authors>
+    <owners>Chris Holt</owners>
+    <licenseUrl>https://github.com/lefthandedgoat/canopy/blob/master/license.txt</licenseUrl>
+    <projectUrl>https://github.com/lefthandedgoat/canopy</projectUrl>
+    <description>A simple framework in f# on top of selenium for writing UI automation tests.</description>
+    <tags>f# canopy selenium ui automation tests</tags>
     <dependencies>
-      <dependency id="SampleDependency" version="1.0" />
+      <dependency id="Selenium.WebDriver" version="2.20.0" />
+      <dependency id="Selenium.Support" version="2.20.0" />
     </dependencies>
   </metadata>
+  <files>
+	<file src="canopy\bin\Debug\canopy.dll" target="lib/canopy.dll" />
+  </files>
 </package>
