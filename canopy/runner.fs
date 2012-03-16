@@ -6,6 +6,10 @@ let mutable tests = []
 let mutable before = fun () -> ()
 let failfast = ref false
 let suggestions = ref true
+let mutable passedCount = 0
+let mutable failedCount = 0
+let stopWatch = new System.Diagnostics.Stopwatch()
+stopWatch.Start()
 
 let test f = 
     let fAsList = [f]
@@ -32,12 +36,14 @@ let run _ =
                                         (before ())
                                         (f ())
                                         System.Console.WriteLine("Passed");
+                                        passedCount <- passedCount + 1
                                     with
                                         | ex -> (
                                                     if failfast = ref true then
                                                         failed := true
                                                         System.Console.WriteLine("failfast was set to true and an error occured; stopping testing");
                                                     System.Console.WriteLine("Error: {0}", ex.Message);
+                                                    failedCount <- failedCount + 1
                                                 )
                                         )
                                 if suggestions = ref true then
@@ -46,4 +52,10 @@ let run _ =
                                 actions <- []
                                 ) |> ignore
     
+    stopWatch.Stop()
+    System.Console.WriteLine()
+    System.Console.WriteLine("{0} seconds to execute", stopWatch.Elapsed.Seconds)
+    System.Console.WriteLine("{0} passed", passedCount)
+    System.Console.WriteLine("{0} failed", failedCount)    
+
     ()
