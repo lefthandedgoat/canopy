@@ -136,6 +136,13 @@ test (fun _ ->
     !^ testpage
     "#value_list td" *!= "Value 5")
 
+test (fun _ ->
+    describe "ajax button should click"
+    !^ testpage
+    "#ajax_button_clicked" == "ajax button not clicked"
+    click "#ajax_button"
+    "#ajax_button_clicked" == "ajax button clicked")
+
 run ()
 
 quit ()
