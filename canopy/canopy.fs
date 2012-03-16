@@ -10,6 +10,9 @@ type Action = { action : string; url : string }
 let mutable (actions : Action list) = [];
 let mutable (browser : IWebDriver) = null;
 let mutable chromedir = @"c:\"
+let mutable elementTimeout = 3.0
+let mutable compareTimeout = 3.0
+let mutable pageTimeout = 10.0
 
 let start (b : string) =    
     //for chrome you need to download chromedriver.exe from http://code.google.com/p/chromedriver/wiki/GettingStarted
@@ -22,6 +25,25 @@ let start (b : string) =
     | _ -> browser <- new OpenQA.Selenium.Firefox.FirefoxDriver() :> IWebDriver
     ()
 
+let private findByFunction cssSelector timeout f =
+    let now = DateTime.Now
+    let finish = now.AddSeconds timeout
+
+    let rec findAndWait from til =
+        try
+            f(By.CssSelector(cssSelector))
+        with
+            | :? Exception when from < til -> findAndWait DateTime.Now til
+            | :? Exception -> failwith (String.Format("cant find element {0}", cssSelector))
+
+    findAndWait now finish
+
+let private find cssSelector timeout =
+    findByFunction cssSelector timeout browser.FindElement
+
+let private findMany cssSelector timeout =
+    findByFunction cssSelector timeout browser.FindElements
+
 let currentUrl _ =
     browser.Url
 
@@ -32,11 +54,11 @@ let logAction a =
 
 let on (u: string) = 
     logAction "on"
-    let wait = new WebDriverWait(browser, TimeSpan.FromSeconds(10.0))
+    let wait = new WebDriverWait(browser, TimeSpan.FromSeconds(pageTimeout))
     try
         wait.Until(fun _ -> (browser.Url = u)) |> ignore
     with
-        | :? Exception -> failwith (System.String.Format("on check failed, expected {0} got {1}", u, browser.Url));
+        | :? Exception -> failwith (String.Format("on check failed, expected {0} got {1}", u, browser.Url));
     ()
 
 let ( !^ ) (u : string) = 
@@ -49,7 +71,7 @@ let url (u : string) =
 
 let write (cssSelector : string) (text : string) = 
     logAction "write"
-    let element = browser.FindElement(By.CssSelector(cssSelector))
+    let element = find cssSelector elementTimeout
     element.SendKeys(text)
 
 let ( << ) (cssSelector : string) (text : string) = 
@@ -58,100 +80,107 @@ let ( << ) (cssSelector : string) (text : string) =
 let read (cssSelector : string) =    
     try
         logAction "read"
-        let element = browser.FindElement(By.CssSelector(cssSelector))
+        let element = find cssSelector elementTimeout
         if element.TagName = "input" then
             element.GetAttribute("value")
         else
             element.Text    
     with
-        | :? Exception -> failwith "can't find element"
+        | ex -> failwith ex.Message
 
         
 let clear (cssSelector : string) = 
     logAction "clear"
-    let element = browser.FindElement(By.CssSelector(cssSelector))
+    let element = find cssSelector elementTimeout
     element.Clear()
     
 let click (cssSelector : string) = 
     try
         logAction "click"
-        let element = browser.FindElement(By.CssSelector(cssSelector))
+        let element = find cssSelector elementTimeout
         element.Click()
     with
-        | :? Exception -> failwith (System.String.Format("cant find element {0}", cssSelector));
+        | ex -> failwith ex.Message
 
 let selected (cssSelector : string) = 
-    try
-        logAction "selected"
-        let element = browser.FindElement(By.CssSelector(cssSelector))
-        if element.Selected = false then
-            failwith (System.String.Format("element selected failed, {0} not selected.", cssSelector));    
-    with
-        | :? Exception -> failwith (System.String.Format("cant find element {0}", cssSelector));
+    logAction "selected"
+    let element = find cssSelector elementTimeout
+    if element.Selected = false then
+        failwith (String.Format("element selected failed, {0} not selected.", cssSelector));    
+    
 
-let deselected (cssSelector : string) = 
-    try
+let deselected (cssSelector : string) =     
         logAction "deselected"
-        let element = browser.FindElement(By.CssSelector(cssSelector))
+        let element = find cssSelector elementTimeout
         if element.Selected then
-            failwith (System.String.Format("element deselected failed, {0} selected.", cssSelector));    
-    with
-        | :? Exception -> failwith (System.String.Format("cant find element {0}", cssSelector));
+            failwith (String.Format("element deselected failed, {0} selected.", cssSelector));    
 
 let title _ = browser.Title
 
 let quit _ = 
     logAction "quit"
     browser.Quit()    
-    browser = null
+    browser <- null
     ()
 
 let equals value1 value2 =
     logAction "equals"
     if (value1 <> value2) then
-        failwith (System.String.Format("equality check failed.  expected: {0}, got: {1}", value1, value2));
+        failwith (String.Format("equality check failed.  expected: {0}, got: {1}", value1, value2));
     ()
 
-let ( == ) element value =
+let ( == ) cssSelector value =
     logAction "equals"
-    let wait = new WebDriverWait(browser, TimeSpan.FromSeconds(3.0))
+    let wait = new WebDriverWait(browser, TimeSpan.FromSeconds(compareTimeout))
     try
-        wait.Until(fun _ -> (read element) = value) |> ignore
+        wait.Until(fun _ -> (read cssSelector) = value) |> ignore
     with
-        | :? Exception -> failwith (System.String.Format("cant find element {0}", element));
+        | :? TimeoutException -> failwith (String.Format("equality check failed.  expected: {0}, got: {1}", value, (read cssSelector)));
+        | ex -> failwith ex.Message
 
 let notequals value1 value2 =
     logAction "notequals"
     if (value1 = value2) then
-        failwith (System.String.Format("notequals check failed.", value1, value2));
+        failwith (String.Format("notequals check failed.", value1, value2));
     ()
 
-let ( != ) element value =
+let ( != ) cssSelector value =
     logAction "notequals"
-    let wait = new WebDriverWait(browser, TimeSpan.FromSeconds(3.0))
+    let wait = new WebDriverWait(browser, TimeSpan.FromSeconds(compareTimeout))
     try
-        wait.Until(fun _ -> (read element) <> value) |> ignore
+        wait.Until(fun _ -> (read cssSelector) <> value) |> ignore
     with
-        | :? Exception -> failwith (System.String.Format("notequals check failed for {0} on element {1}", value, element));
+        | :? TimeoutException -> failwith (String.Format("not equals check failed.  expected NOT: {0}, got: {1}", value, (read cssSelector)));
+        | ex -> failwith ex.Message
 
 let listed (cssSelector : string) value =
     logAction "list"
-    let wait = new WebDriverWait(browser, TimeSpan.FromSeconds(3.0))
-    try
-        wait.Until(fun _ -> browser.FindElements(By.CssSelector(cssSelector)) |> Seq.exists(fun element -> element.Text = value)) |> ignore
+    let wait = new WebDriverWait(browser, TimeSpan.FromSeconds(compareTimeout))
+    try        
+        wait.Until(fun _ -> (
+                                let elements = findMany cssSelector elementTimeout
+                                elements |> Seq.exists(fun element -> element.Text = value)
+                            )
+                  ) |> ignore
     with
-        | :? Exception -> failwith (System.String.Format("cant find {0} in list {1}", value, cssSelector));
+        | :? TimeoutException -> failwith (String.Format("cant find {0} in list {1}", value, cssSelector));
+        | ex -> failwith ex.Message
 
 let ( *= ) (cssSelector : string) value =
     listed cssSelector value
 
 let notlisted (cssSelector : string) value =
     logAction "notlisted"
-    let wait = new WebDriverWait(browser, TimeSpan.FromSeconds(3.0))
+    let wait = new WebDriverWait(browser, TimeSpan.FromSeconds(compareTimeout))
     try
-        wait.Until(fun _ -> browser.FindElements(By.CssSelector(cssSelector)) |> Seq.exists(fun element -> element.Text = value) = false) |> ignore
+        wait.Until(fun _ -> (
+                                let elements = findMany cssSelector elementTimeout
+                                elements |> Seq.exists(fun element -> element.Text = value) = false
+                            )
+                  ) |> ignore
     with
-        | :? Exception -> failwith (System.String.Format("found {0} in list {1}, expected not to", value, cssSelector));
+        | :? TimeoutException -> failwith (String.Format("found {0} in list {1}, expected not to", value, cssSelector));
+        | ex -> failwith ex.Message
 
 let ( *!= ) (cssSelector : string) value =
     notlisted cssSelector value
@@ -159,9 +188,9 @@ let ( *!= ) (cssSelector : string) value =
 let contains (value1 : string) (value2 : string) =
     logAction "contains"
     if (value2.Contains(value1) <> true) then
-        failwith (System.String.Format("contains check failed.  {0} does not contain {1}", value2, value1));
+        failwith (String.Format("contains check failed.  {0} does not contain {1}", value2, value1));
     ()
 
 let describe (text : string) =
-    System.Console.WriteLine(text);
+    Console.WriteLine(text);
     ()
