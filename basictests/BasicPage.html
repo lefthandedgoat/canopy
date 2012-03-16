@@ -70,12 +70,22 @@
     <br>
     <br>
     <input id="date_2">
-
+        
+    <br>
+    <br>
+    <div id="ajax_button_clicked">ajax button not clicked</div>
+    
     <script type="text/javascript">
-        $(document).ready(function() {
-            setTimeout(function() {$("#ajax").html("ajax loaded");}, 2000)
-            setTimeout(function() {$("#slowAjax").html("slow ajax loaded");}, 6000) //works because current sapphire timeout for controls is 5 seconds
-        });
+        $(document).ready(function () {
+            setTimeout(function () { $("#ajax").html("ajax loaded"); }, 2000)
+            setTimeout(function () { $("#slowAjax").html("slow ajax loaded"); }, 3500) //works because current canopy timeout for controls is 3 seconds
+            setTimeout(function () {
+                $("<br><br><input type='button' id='ajax_button' value='Ajax Button' />").insertAfter("input#date_2");
+                $('#ajax_button').click(function () {
+                    $('#ajax_button_clicked').text('ajax button clicked');
+                });
+             }, 2000)
+        });        
     </script>
 
     </body>
