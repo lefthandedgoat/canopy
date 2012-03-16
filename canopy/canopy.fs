@@ -40,8 +40,9 @@ let on (u: string) =
     ()
 
 let ( !^ ) (u : string) = 
-    logAction "url"
     browser.Navigate().GoToUrl(u)
+    logAction "url"
+    ()
 
 let url (u : string) = 
     !^ u
@@ -103,6 +104,7 @@ let quit _ =
     logAction "quit"
     browser.Quit()    
     browser = null
+    ()
 
 let equals value1 value2 =
     logAction "equals"
