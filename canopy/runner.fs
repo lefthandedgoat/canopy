@@ -18,6 +18,7 @@ let test f =
 let rec private makeSuggestions (actions : Action list) =
     match actions with
     | [] -> ()
+    | _ :: action2 :: _ when action2.action = "url" -> makeSuggestions actions.Tail
     | action1 :: action2 :: _ when action1.action <> "on" && action2.action <> "on" && (action1.url <> action2.url) ->  //suggestion for doing an action one page that transitioned you to another page and performing an action without checking to see if that page loaded with 'on'
         (
             System.Console.WriteLine("Suggestion: as a best practice you should check that you are on a page before
