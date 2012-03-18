@@ -26,17 +26,20 @@ let start (b : string) =
     ()
 
 let private findByFunction cssSelector timeout f =
-    let now = DateTime.Now
-    let finish = now.AddSeconds timeout
+    let wait = new WebDriverWait(browser, TimeSpan.FromSeconds(elementTimeout))
+    try
+        wait.Until(fun _ -> (
+                                try
+                                    f(By.CssSelector(cssSelector)) <> null
+                                with
+                                | _ -> false
+                            )
+                  ) |> ignore
+    with
+        | :? System.TimeoutException -> failwith (String.Format("cant find element {0}", cssSelector))
+        | ex -> failwith ex.Message
 
-    let rec findAndWait from til =
-        try
-            f(By.CssSelector(cssSelector))
-        with
-            | :? Exception when from < til -> findAndWait DateTime.Now til
-            | :? Exception -> failwith (String.Format("cant find element {0}", cssSelector))
-
-    findAndWait now finish
+    f(By.CssSelector(cssSelector))    
 
 let private find cssSelector timeout =
     findByFunction cssSelector timeout browser.FindElement
