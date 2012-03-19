@@ -14,6 +14,14 @@ let mutable elementTimeout = 3.0
 let mutable compareTimeout = 3.0
 let mutable pageTimeout = 10.0
 
+//keys
+let tab = Keys.Tab
+let enter = Keys.Enter
+let down = Keys.Down
+let up = Keys.Up
+let left = Keys.Left
+let right = Keys.Right
+
 let start (b : string) =    
     //for chrome you need to download chromedriver.exe from http://code.google.com/p/chromedriver/wiki/GettingStarted
     //place chromedriver.exe in c:\ or you can place it in a customer location and change chromedir value above
@@ -197,3 +205,8 @@ let contains (value1 : string) (value2 : string) =
 let describe (text : string) =
     Console.WriteLine(text);
     ()
+
+let press key = 
+    let element = ((browser :?> IJavaScriptExecutor).ExecuteScript("return document.activeElement;") :?> IWebElement)
+    element.SendKeys(key)
+    

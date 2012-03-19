@@ -4,7 +4,7 @@ open runner
 open canopy
 
 before <- fun () -> System.Console.WriteLine("This happens before every test")
-suggestions := false
+suggestions := true
 start "firefox"
  
 let testpage = @"C:\projects\canopy\basictests\BasicPage.html"
@@ -143,8 +143,16 @@ test (fun _ ->
     click "#ajax_button"
     "#ajax_button_clicked" == "ajax button clicked")
 
+test (fun _ ->
+    describe "pressing keys should work (may need to verify visually)"
+    !^ testpage
+    click "#firstName"
+    press tab
+    press tab
+    press down)
+
 run ()
 
-quit ()
-
 System.Console.ReadKey()
+
+quit ()
