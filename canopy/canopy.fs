@@ -38,7 +38,8 @@ let private findByFunction cssSelector timeout f =
     try
         wait.Until(fun _ -> (
                                 try
-                                    f(By.CssSelector(cssSelector)) <> null
+                                    f(By.CssSelector(cssSelector)) |> ignore
+                                    true
                                 with
                                 | _ -> false
                             )
@@ -55,6 +56,21 @@ let private find cssSelector timeout =
 let private findMany cssSelector timeout =
     findByFunction cssSelector timeout browser.FindElements
 
+let private keepTrying (f : 'a -> 'b) =
+    let wait = new WebDriverWait(browser, TimeSpan.FromSeconds(elementTimeout))
+    try
+        wait.Until(fun _ -> (
+                                try
+                                    f () |> ignore
+                                    true
+                                with
+                                | _ -> false
+                            )
+                  ) |> ignore        
+    with
+    | ex -> failwith ex.Message
+    ()
+    
 let currentUrl _ =
     browser.Url
 
@@ -109,7 +125,7 @@ let click (cssSelector : string) =
     try
         logAction "click"
         let element = find cssSelector elementTimeout
-        element.Click()
+        keepTrying element.Click
     with
         | ex -> failwith ex.Message
 
