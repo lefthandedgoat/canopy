@@ -15,7 +15,9 @@ let test f =
     let fAsList = [f]
     tests <- List.append tests fAsList
 
-let rec private makeSuggestions (actions : Action list) =
+let xtest f = ()
+
+let rec private makeSuggestions actions =
     match actions with
     | [] -> ()
     | _ :: action2 :: _ when action2.action = "url" -> makeSuggestions actions.Tail
