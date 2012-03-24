@@ -151,6 +151,13 @@ test (fun _ ->
     press tab
     press down)
 
+test (fun _ -> 
+  describe "click polling"
+  url "http://localhost:4567/autocomplete"
+  click "#search"
+  click "table tr td"
+  "#console" == "worked")
+
 run ()
 
 System.Console.ReadKey()
