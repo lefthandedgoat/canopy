@@ -7,7 +7,7 @@ before <- fun () -> System.Console.WriteLine("This happens before every test")
 suggestions := true
 start "firefox"
  
-let testpage = @"C:\projects\canopy\basictests\BasicPage.html"
+let testpage = "http://localhost:4567" 
 
 test (fun _ ->
     describe "#welcome should have Welcome"
