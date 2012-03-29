@@ -45,7 +45,8 @@ let private findByFunction cssSelector timeout f =
                             )
                   ) |> ignore
     with
-        | :? System.TimeoutException -> failwith (String.Format("cant find element {0}", cssSelector))
+        | :? System.TimeoutException -> Console.WriteLine("Element not found in the allotted time. If you want to increase the time, put elementTimeout <- 10 anywhere before a test to increase the timeout")
+                                        failwith (String.Format("cant find element {0}", cssSelector))
         | ex -> failwith ex.Message
 
     f(By.CssSelector(cssSelector))    
@@ -225,4 +226,7 @@ let describe (text : string) =
 let press key = 
     let element = ((browser :?> IJavaScriptExecutor).ExecuteScript("return document.activeElement;") :?> IWebElement)
     element.SendKeys(key)
+
+let sleep seconds =
+    System.Threading.Thread.Sleep(seconds * 1000)
     

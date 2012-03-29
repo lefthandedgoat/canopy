@@ -158,6 +158,14 @@ test (fun _ ->
   click "table tr td"
   "#console" == "worked")
 
+test (fun _ ->
+    describe "ajax button should click after sleep"
+    !^ testpage
+    "#ajax_button_clicked" == "ajax button not clicked"
+    sleep 3
+    click "#ajax_button"
+    "#ajax_button_clicked" == "ajax button clicked")
+
 run ()
 
 System.Console.ReadKey()
