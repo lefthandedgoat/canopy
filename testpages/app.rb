@@ -20,3 +20,7 @@ get '/search' do
     ]
   }.to_json
 end
+
+get '/readonly' do
+  erb :readonly
+end
