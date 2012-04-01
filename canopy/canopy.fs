@@ -100,6 +100,10 @@ let url (u : string) =
 let write (cssSelector : string) (text : string) = 
     logAction "write"
     let element = find cssSelector elementTimeout
+    let readonly = element.GetAttribute("readonly")
+    if readonly = "true" then
+        failwith (String.Format("element {0} is marked as read only, you can not write to read only elements", cssSelector))        
+    element.Clear()
     element.SendKeys(text)
 
 let ( << ) (cssSelector : string) (text : string) = 
@@ -120,6 +124,9 @@ let read (cssSelector : string) =
 let clear (cssSelector : string) = 
     logAction "clear"
     let element = find cssSelector elementTimeout
+    let readonly = element.GetAttribute("readonly")
+    if readonly = "true" then
+        failwith (String.Format("element {0} is marked as read only, you can not clear read only elements", cssSelector))        
     element.Clear()
     
 let click (cssSelector : string) = 
@@ -229,4 +236,6 @@ let press key =
 
 let sleep seconds =
     System.Threading.Thread.Sleep(seconds * 1000)
-    
+
+let reload _ =
+    url (currentUrl ())

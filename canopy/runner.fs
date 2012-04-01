@@ -3,6 +3,7 @@
 open canopy
 
 let mutable tests = []
+let mutable wips = []
 let mutable before = fun () -> ()
 let failfast = ref false
 let suggestions = ref true
@@ -14,6 +15,10 @@ stopWatch.Start()
 let test f = 
     let fAsList = [f]
     tests <- List.append tests fAsList
+
+let wip f = 
+    let fAsList = [f]
+    wips <- List.append wips fAsList
 
 let xtest f = ()
 
@@ -33,27 +38,32 @@ then on {1}", action1.url, action2.url);
 
 let run _ =
     let failed = ref false
-    tests |> List.map (fun f -> (
-                                if failed = ref false then
-                                    try
-                                        (before ())
-                                        (f ())
-                                        System.Console.WriteLine("Passed");
-                                        passedCount <- passedCount + 1
-                                    with
-                                        | ex -> (
-                                                    if failfast = ref true then
-                                                        failed := true
-                                                        System.Console.WriteLine("failfast was set to true and an error occured; stopping testing");
-                                                    System.Console.WriteLine("Error: {0}", ex.Message);
-                                                    failedCount <- failedCount + 1
-                                                )
-                                        )
-                                if suggestions = ref true then
-                                    makeSuggestions actions
 
-                                actions <- []
-                                ) |> ignore
+    let runtest f = 
+            if failed = ref false then
+                try
+                    (before ())
+                    (f ())
+                    System.Console.WriteLine("Passed");
+                    passedCount <- passedCount + 1
+                with
+                    | ex -> (
+                                if failfast = ref true then
+                                    failed := true
+                                    System.Console.WriteLine("failfast was set to true and an error occured; stopping testing");
+                                System.Console.WriteLine("Error: {0}", ex.Message);
+                                failedCount <- failedCount + 1
+                            )
+            if suggestions = ref true then
+                makeSuggestions actions
+
+            actions <- []
+            ()
+
+    if wips.IsEmpty = false then
+        wips |> List.map runtest |> ignore
+    else
+        tests |> List.map runtest |> ignore
     
     stopWatch.Stop()
     System.Console.WriteLine()

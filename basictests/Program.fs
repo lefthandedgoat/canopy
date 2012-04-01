@@ -38,6 +38,12 @@ test (fun _ ->
     "#lastName" == "Smith")
 
 test (fun _ ->
+    describe "writing to #lastName sets text to new Smith (implicit clear in write)"
+    !^ testpage
+    write "#lastName" "Smith"
+    "#lastName" == "Smith")
+
+test (fun _ ->
     describe "#ajax label should have ajax loaded"
     !^ testpage
     "#ajax" == "ajax loaded")
@@ -127,6 +133,13 @@ test (fun _ ->
     on "http://www.reddit.com/")
 
 test (fun _ ->
+    describe "reloading redit should be on reddit"
+    url "http://www.reddit.com/"
+    on "http://www.reddit.com/"
+    reload ()
+    on "http://www.reddit.com/")
+
+test (fun _ ->
     describe "textbox should not equals dontequalme"
     !^ testpage
     "#welcome" != "dontequalme")
@@ -165,6 +178,17 @@ test (fun _ ->
     sleep 3
     click "#ajax_button"
     "#ajax_button_clicked" == "ajax button clicked")
+
+test (fun _ ->
+    describe "readonly should throw error on read only field with clear"
+    !^ "http://localhost:4567/readonly"
+    clear "#read_only")
+
+    
+test (fun _ ->
+    describe "readonly should throw error on read only field with write"
+    !^ "http://localhost:4567/readonly"
+    "#read_only" << "new text")
 
 run ()
 
