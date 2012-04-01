@@ -13,12 +13,10 @@ let stopWatch = new System.Diagnostics.Stopwatch()
 stopWatch.Start()
 
 let test f = 
-    let fAsList = [f]
-    tests <- List.append tests fAsList
+    tests <- tests @ [f]
 
 let wip f = 
-    let fAsList = [f]
-    wips <- List.append wips fAsList
+    wips <- wips @ [f]
 
 let xtest f = ()
 
@@ -61,9 +59,17 @@ let run _ =
             ()
 
     if wips.IsEmpty = false then
-        wips |> List.map runtest |> ignore
+        wips 
+        |> List.map (fun t -> 
+                        runtest t
+                        System.Console.WriteLine("This is a wip test, press enter to run next test")
+                        System.Console.ReadLine() |> ignore
+                    )
+        |> ignore
     else
-        tests |> List.map runtest |> ignore
+        tests 
+        |> List.map runtest 
+        |> ignore
     
     stopWatch.Stop()
     System.Console.WriteLine()

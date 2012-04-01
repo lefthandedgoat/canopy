@@ -183,15 +183,12 @@ test (fun _ ->
     describe "readonly should throw error on read only field with clear"
     !^ "http://localhost:4567/readonly"
     clear "#read_only")
-
-    
+        
 test (fun _ ->
     describe "readonly should throw error on read only field with write"
     !^ "http://localhost:4567/readonly"
     "#read_only" << "new text")
 
 run ()
-
-System.Console.ReadKey()
 
 quit ()
