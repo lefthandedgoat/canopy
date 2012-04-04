@@ -77,6 +77,7 @@
     <script type="text/javascript">
         $(document).ready(function () {
             setTimeout(function () { $("#ajax").html("ajax loaded"); }, 2000)
+			setTimeout(function () { $("#firstName").val(""); }, 2000)
             setTimeout(function () { $("#slowAjax").html("slow ajax loaded"); }, 3500) //works because current canopy timeout for controls is 3 seconds
             setTimeout(function () {
                 $("<br><br><input type='button' id='ajax_button' value='Ajax Button' />").insertAfter("input#date_2");

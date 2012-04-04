@@ -189,6 +189,11 @@ test (fun _ ->
     !^ "http://localhost:4567/readonly"
     "#read_only" << "new text")
 
+test (fun _ ->
+    describe "when value is wrong and changes to empty string prior to time out, it should show wrong value, not empty string"
+    url testpage
+    "#firstName" == "John1")
+
 run ()
 
 quit ()

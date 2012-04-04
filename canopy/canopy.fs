@@ -133,7 +133,10 @@ let click (cssSelector : string) =
     try
         logAction "click"
         let element = find cssSelector elementTimeout
-        keepTrying element.Click
+        keepTrying (fun _ ->
+                        let element = find cssSelector elementTimeout
+                        element.Click()
+                   )
     with
         | ex -> failwith ex.Message
 
@@ -167,10 +170,18 @@ let equals value1 value2 =
 let ( == ) cssSelector value =
     logAction "equals"
     let wait = new WebDriverWait(browser, TimeSpan.FromSeconds(compareTimeout))
+    let bestvalue = ref ""
     try
-        wait.Until(fun _ -> (read cssSelector) = value) |> ignore
+        wait.Until(fun _ -> (
+                                let readvalue = (read cssSelector)
+                                if readvalue <> value && readvalue <> "" then
+                                    bestvalue := readvalue
+                                    false
+                                else
+                                    readvalue = value
+                            )) |> ignore
     with
-        | :? TimeoutException -> failwith (String.Format("equality check failed.  expected: {0}, got: {1}", value, (read cssSelector)));
+        | :? TimeoutException -> failwith (String.Format("equality check failed.  expected: {0}, got: {1}", value, !bestvalue));
         | ex -> failwith ex.Message
 
 let notequals value1 value2 =
@@ -235,7 +246,10 @@ let press key =
     element.SendKeys(key)
 
 let sleep seconds =
-    System.Threading.Thread.Sleep(seconds * 1000)
+    match box seconds with
+    | :? int as i -> System.Threading.Thread.Sleep(i * 1000)
+    | _ -> System.Threading.Thread.Sleep(1 * 1000)    
+    
 
 let reload _ =
     url (currentUrl ())
