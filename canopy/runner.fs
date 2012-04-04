@@ -45,17 +45,21 @@ let run _ =
                     System.Console.WriteLine("Passed");
                     passedCount <- passedCount + 1
                 with
-                    | ex -> (
-                                if failfast = ref true then
-                                    failed := true
-                                    System.Console.WriteLine("failfast was set to true and an error occured; stopping testing");
-                                System.Console.WriteLine("Error: {0}", ex.Message);
-                                failedCount <- failedCount + 1
-                            )
+                    | ex when failuremessage <> null && failuremessage = ex.Message ->
+                        System.Console.WriteLine("Passed");
+                        passedCount <- passedCount + 1                            
+                    | ex -> 
+                        if failfast = ref true then
+                            failed := true
+                            System.Console.WriteLine("failfast was set to true and an error occured; testing stopped");
+                        System.Console.WriteLine("Error: {0}", ex.Message);
+                        failedCount <- failedCount + 1
+                            
             if suggestions = ref true then
                 makeSuggestions actions
 
             actions <- []
+            failuremessage <- null
             ()
 
     if wips.IsEmpty = false then

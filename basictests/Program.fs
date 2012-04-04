@@ -181,17 +181,20 @@ test (fun _ ->
 
 test (fun _ ->
     describe "readonly should throw error on read only field with clear"
-    !^ "http://localhost:4567/readonly"
+    failswith "element #read_only is marked as read only, you can not clear read only elements"
+    !^ "http://localhost:4567/readonly"    
     clear "#read_only")
         
 test (fun _ ->
     describe "readonly should throw error on read only field with write"
-    !^ "http://localhost:4567/readonly"
+    failswith "element #read_only is marked as read only, you can not write to read only elements"
+    !^ "http://localhost:4567/readonly"    
     "#read_only" << "new text")
 
 test (fun _ ->
     describe "when value is wrong and changes to empty string prior to time out, it should show wrong value, not empty string"
-    url testpage
+    failswith "equality check failed.  expected: John1, got: John"
+    url testpage    
     "#firstName" == "John1")
 
 run ()

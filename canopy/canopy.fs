@@ -13,6 +13,7 @@ let mutable chromedir = @"c:\"
 let mutable elementTimeout = 3.0
 let mutable compareTimeout = 3.0
 let mutable pageTimeout = 10.0
+let mutable (failuremessage : string) = null
 
 //keys
 let tab = Keys.Tab
@@ -253,3 +254,6 @@ let sleep seconds =
 
 let reload _ =
     url (currentUrl ())
+
+let failswith message = 
+    failuremessage <- message
