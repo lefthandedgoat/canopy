@@ -85,7 +85,7 @@ let currentUrl _ =
     browser.Url
 
 let logAction a = 
-    let action = { action = a; url = currentUrl () }
+    let action = { action = a; url = (currentUrl ()) }
     actions <- List.append actions [action]
     ()
 
@@ -165,7 +165,6 @@ let deselected (cssSelector : string) =
 let title _ = browser.Title
 
 let quit _ = 
-    logAction "quit"
     browser.Quit()    
     browser <- null
     ()
@@ -176,22 +175,31 @@ let equals value1 value2 =
         failwith (String.Format("equality check failed.  expected: {0}, got: {1}", value1, value2));
     ()
 
-let ( == ) cssSelector value =
-    logAction "equals"
-    let wait = new WebDriverWait(browser, TimeSpan.FromSeconds(compareTimeout))
-    let bestvalue = ref ""
-    try
-        wait.Until(fun _ -> (
-                                let readvalue = (read cssSelector)
-                                if readvalue <> value && readvalue <> "" then
-                                    bestvalue := readvalue
-                                    false
-                                else
-                                    readvalue = value
-                            )) |> ignore
-    with
-        | :? TimeoutException -> failwith (String.Format("equality check failed.  expected: {0}, got: {1}", value, !bestvalue));
-        | ex -> failwith ex.Message
+let ( == ) (item : 'a) value =
+    match box item with
+    | :? IAlert as alert -> let text = alert.Text
+                            if text = value then   
+                                ()           
+                            else
+                                alert.Dismiss()
+                                failwith (String.Format("equality check failed.  expected: {0}, got: {1}", value, text));                                
+    | :? string as cssSelector -> 
+        logAction "equals"
+        let wait = new WebDriverWait(browser, TimeSpan.FromSeconds(compareTimeout))
+        let bestvalue = ref ""
+        try
+            wait.Until(fun _ -> (
+                                    let readvalue = (read cssSelector)
+                                    if readvalue <> value && readvalue <> "" then
+                                        bestvalue := readvalue
+                                        false
+                                    else
+                                        readvalue = value
+                                )) |> ignore
+            ()
+        with
+            | :? TimeoutException -> failwith (String.Format("equality check failed.  expected: {0}, got: {1}", value, !bestvalue));
+            | ex -> failwith ex.Message
 
 let notequals value1 value2 =
     logAction "notequals"
@@ -259,3 +267,13 @@ let reload _ =
 
 let failswith message = 
     failuremessage <- message
+
+let alert (action : 'a) =
+    let alert = browser.SwitchTo().Alert()
+    alert
+
+let acceptAlert _ =
+    browser.SwitchTo().Alert().Accept()
+
+let dismissAlert _ =
+    browser.SwitchTo().Alert().Dismiss()

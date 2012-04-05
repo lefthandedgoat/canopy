@@ -197,6 +197,27 @@ test (fun _ ->
     url testpage    
     "#firstName" == "John1")
 
+test (fun _ ->
+    describe "alert box should have 'Alert Test'"
+    !^ "http://localhost:4567/alert"
+    click "#alert_test"
+    alert() == "Alert Test"
+    acceptAlert())
+
+test (fun _ ->
+    describe "alert box should have 'Alert Test'"
+    !^ "http://localhost:4567/alert"
+    click "#alert_test"
+    alert() == "Alert Test"
+    dismissAlert())
+
+test (fun _ ->
+    describe "alert box should fail correctly when expecting wrong message"
+    failswith "equality check failed.  expected: Not the message, got: Alert Test"
+    !^ "http://localhost:4567/alert"
+    click "#alert_test"
+    alert() == "Not the message")
+
 run ()
 
 quit ()

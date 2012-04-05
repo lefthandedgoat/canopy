@@ -24,3 +24,7 @@ end
 get '/readonly' do
   erb :readonly
 end
+
+get '/alert' do
+  erb :alert
+end
