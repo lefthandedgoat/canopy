@@ -14,6 +14,8 @@ let mutable elementTimeout = 3.0
 let mutable compareTimeout = 3.0
 let mutable pageTimeout = 10.0
 let mutable (failuremessage : string) = null
+let mutable wiptest = false
+let mutable wipSleep = 1
 
 //keys
 let tab = Keys.Tab
@@ -34,7 +36,13 @@ let start (b : string) =
     | _ -> browser <- new OpenQA.Selenium.Firefox.FirefoxDriver() :> IWebDriver
     ()
 
+let sleep seconds =
+    match box seconds with
+    | :? int as i -> System.Threading.Thread.Sleep(i * 1000)
+    | _ -> System.Threading.Thread.Sleep(1 * 1000)    
+
 let private findByFunction cssSelector timeout f =
+    if wiptest then sleep wipSleep
     let wait = new WebDriverWait(browser, TimeSpan.FromSeconds(elementTimeout))
     try
         wait.Until(fun _ -> (
@@ -245,12 +253,6 @@ let describe (text : string) =
 let press key = 
     let element = ((browser :?> IJavaScriptExecutor).ExecuteScript("return document.activeElement;") :?> IWebElement)
     element.SendKeys(key)
-
-let sleep seconds =
-    match box seconds with
-    | :? int as i -> System.Threading.Thread.Sleep(i * 1000)
-    | _ -> System.Threading.Thread.Sleep(1 * 1000)    
-    
 
 let reload _ =
     url (currentUrl ())

@@ -63,6 +63,7 @@ let run _ =
             ()
 
     if wips.IsEmpty = false then
+        wiptest <- true
         wips 
         |> List.map (fun t -> 
                         runtest t
@@ -70,6 +71,7 @@ let run _ =
                         System.Console.ReadLine() |> ignore
                     )
         |> ignore
+        wiptest <- false
     else
         tests 
         |> List.map runtest 
