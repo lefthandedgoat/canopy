@@ -218,6 +218,27 @@ test (fun _ ->
     click "#alert_test"
     alert() == "Not the message")
 
+test (fun _ ->
+    describe "confirmation box should have 'Confirmation Test'"
+    !^ "http://localhost:4567/alert"
+    click "#confirmation_test"
+    alert() == "Confirmation Test"
+    acceptAlert())
+
+test (fun _ ->
+    describe "confirmation box should have 'Confirmation Test'"
+    !^ "http://localhost:4567/alert"
+    click "#confirmation_test"
+    alert() == "Confirmation Test"
+    dismissAlert())
+
+test (fun _ ->
+    describe "confirmation box should fail correctly when expecting wrong message"
+    failswith "equality check failed.  expected: Not the message, got: Confirmation Test"
+    !^ "http://localhost:4567/alert"
+    click "#confirmation_test"
+    alert() == "Not the message")
+
 run ()
 
 quit ()
