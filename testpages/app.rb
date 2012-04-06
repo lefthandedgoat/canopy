@@ -28,3 +28,7 @@ end
 get '/alert' do
   erb :alert
 end
+
+get '/waitFor' do
+  erb :waitFor
+end

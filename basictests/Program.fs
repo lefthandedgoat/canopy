@@ -239,6 +239,23 @@ test (fun _ ->
     click "#confirmation_test"
     alert() == "Not the message")
 
+wip (fun _ ->
+    describe "define a custom wait for using any function that takes in unit and returns bool"
+    let pageLoaded () = 
+        (element "#wait_for").Text = "Done!"
+    
+    !^ "http://localhost:4567/waitFor"
+    waitFor pageLoaded
+    "#wait_for" == "Done!")
+
+wip (fun _ ->
+    describe "define a custom wait for using any function that takes in unit and returns bool, example using lists"
+    let fiveNumbersShown () = 
+        (elements ".number").Count = 5
+    
+    !^ "http://localhost:4567/waitFor"
+    waitFor fiveNumbersShown)
+
 run ()
 
 quit ()
