@@ -4,6 +4,7 @@ open canopy
 
 let mutable tests = []
 let mutable wips = []
+let mutable manys = []
 let mutable before = fun () -> ()
 let failfast = ref false
 let suggestions = ref true
@@ -17,6 +18,9 @@ let test f =
 
 let wip f = 
     wips <- wips @ [f]
+
+let many count f =
+    [1 .. count] |> List.map (fun _ -> manys <- manys @ [f]) |> ignore
 
 let xtest f = ()
 
@@ -72,6 +76,10 @@ let run _ =
                     )
         |> ignore
         wiptest <- false
+    else if manys.IsEmpty = false then
+        manys 
+        |> List.map runtest 
+        |> ignore
     else
         tests 
         |> List.map runtest 

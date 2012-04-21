@@ -32,3 +32,11 @@ end
 get '/waitFor' do
   erb :waitFor
 end
+
+get '/noClickTilVisible' do
+  erb :noClickTilVisible
+end
+
+get '/home' do
+  erb :home
+end

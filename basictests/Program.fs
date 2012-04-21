@@ -165,11 +165,11 @@ test (fun _ ->
     press down)
 
 test (fun _ -> 
-  describe "click polling"
-  url "http://localhost:4567/autocomplete"
-  click "#search"
-  click "table tr td"
-  "#console" == "worked")
+    describe "click polling"
+    url "http://localhost:4567/autocomplete"
+    click "#search"
+    click "table tr td"
+    "#console" == "worked")
 
 test (fun _ ->
     describe "ajax button should click after sleep"
@@ -239,7 +239,7 @@ test (fun _ ->
     click "#confirmation_test"
     alert() == "Not the message")
 
-wip (fun _ ->
+test (fun _ ->
     describe "define a custom wait for using any function that takes in unit and returns bool"
     let pageLoaded () = 
         (element "#wait_for").Text = "Done!"
@@ -248,7 +248,16 @@ wip (fun _ ->
     waitFor pageLoaded
     "#wait_for" == "Done!")
 
-wip (fun _ ->
+test (fun _ ->
+    compareTimeout <- 10.0
+    describe "another example of another wait for, waiting on opacity to be 100% before clicking"
+    !^ "http://localhost:4567/noClickTilVisible"
+    waitFor (fadedIn "#link")
+    click "#link"
+    on "http://localhost:4567/home"
+)
+
+test (fun _ ->
     describe "define a custom wait for using any function that takes in unit and returns bool, example using lists"
     let fiveNumbersShown () = 
         (elements ".number").Count = 5

@@ -292,3 +292,10 @@ let element cssSelector =
 
 let elements cssSelector =
     findMany cssSelector elementTimeout
+
+let fadedIn cssSelector =
+    let shown cssSelector () =
+        let opacity = (element cssSelector).GetCssValue("opacity")
+        let display = (element cssSelector).GetCssValue("display")
+        display <> "none" && opacity = "1"
+    shown cssSelector
