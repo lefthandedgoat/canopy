@@ -299,3 +299,11 @@ let fadedIn cssSelector =
         let display = (element cssSelector).GetCssValue("display")
         display <> "none" && opacity = "1"
     shown cssSelector
+
+let exists cssSelector =
+    find cssSelector elementTimeout
+
+//really need to refactor so there are results for every action
+//function for the action, true message, false message, something like that
+//and it all gets passed into some sort of assertor, will help with code reuse
+//and be able to impliment not this or not that easier
