@@ -1,0 +1,19 @@
+<html>
+    <head>
+        <title>floak testing page</title>
+        <script type="text/javascript" src="https://ajax.googleapis.com/ajax/libs/jquery/1.7.1/jquery.min.js"></script>
+    </head>
+
+    <body>
+
+	<label id="wait_for">Not Done</label>
+    
+    <script type="text/javascript">
+        $(document).ready(function () {
+            setTimeout(function () { $("#wait_for").html("Done!"); }, 2000)      
+		});        
+    </script>
+
+    </body>
+</html>
+
