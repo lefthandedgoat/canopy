@@ -25,6 +25,11 @@ let up = Keys.Up
 let left = Keys.Left
 let right = Keys.Right
 
+//browser
+let firefox = "firefox"
+let ie = "ie"
+let chrome = "chrome"
+
 let start (b : string) =    
     //for chrome you need to download chromedriver.exe from http://code.google.com/p/chromedriver/wiki/GettingStarted
     //place chromedriver.exe in c:\ or you can place it in a customer location and change chromedir value above
