@@ -25,32 +25,42 @@
         </ul>
       </header>
       <section>
-<h3>What is canopy?</h3>
-	  
-<p>canopy is a web testing framework with one goal in mind: keep testing simple. canopy is built on top of <a href="http://seleniumhq.org/">selenium</a> and written in <a href="http://en.wikipedia.org/wiki/F_Sharp_(programming_language)">f#</a>. It's syntax is clean and concise.  As an added benefit you can easily leverage your existing .Net code to help you test.</p>
+		<h3>What is canopy?</h3>
+			  
+		<p>canopy is a web testing framework with one goal in mind: keep testing simple. canopy is built on top of <a href="http://seleniumhq.org/">selenium</a> and written in <a href="http://en.wikipedia.org/wiki/F_Sharp_(programming_language)">f#</a>. It's syntax is clean and concise.  As an added benefit you can easily leverage your existing .Net code to help you test.</p>
 
-<h3>Getting started</h3>
+		<h3>Getting started</h3>
+		<ol>
+			<li>Create new F# console application</li>
+			<li>Open NuGet console</li>
+			<li>Type:
+			<pre><code>PM> Install-Package canopy</code></pre></li>
+			<li>Type in Program.fs:
+			<pre><code>open canopy
+start "firefox"
+url "http://google.com"
+"input[type='text']" << "hello world"</code></pre></li>
+			<li>Run!</li>
+		</ol>
+		
+		<h3>Defeating the Zerg Rush</h3>
 
-<pre><code>PM> Install-Package canopy
-</code></pre>
+		<p>video here<p>
 
-<h3>Defeating the Zerg Rush</h3>
+		<h3>Examples</h3>
 
-<p>video here<p>
+		<pre><code></code></pre>
 
-<h3>Examples</h3>
+		<a href="examples.html">more examples</a>
+		<br>
+		<br>
 
-<a href="/examples.html">more examples</a>
+		<h3>External Examples</h3>
 
-<pre><code>PM> Install-Package canopy
-</code></pre>
+		<h3>Support or Feature Requests</h3>
 
-<h3>External Examples</h3>
-
-<h3>Support or Feature Requests</h3>
-
-<p>Having trouble with canopy? Open an <a href="https://github.com/lefthandedgoat/canopy/issues">issue</a> and
-I will see how I can help.  For feature requests you may open an issue or send a pull request.</p>
+		<p>Having trouble with canopy? Open an <a href="https://github.com/lefthandedgoat/canopy/issues">issue</a> and
+		I will see how I can help.  For feature requests you may open an issue or send a pull request.</p>
       </section>
       <footer>
         <p>This project is maintained by <a href="https://github.com/lefthandedgoat">lefthandedgoat</a></p>
