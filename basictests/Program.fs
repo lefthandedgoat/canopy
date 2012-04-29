@@ -239,7 +239,7 @@ test (fun _ ->
     click "#confirmation_test"
     alert() == "Not the message")
 
-wip (fun _ ->
+test (fun _ ->
     describe "define a custom wait for using any function that takes in unit and returns bool"
     let pageLoaded () = 
         (element "#wait_for").Text = "Done!"
