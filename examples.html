@@ -25,8 +25,77 @@
         </ul>
       </header>
       <section>
-<h3>Examples</h3>
-	  
+		<h3>Examples</h3>
+		<p>Below are examples of all the basic commands in the framework.</p>
+		
+		<h3>Starting a Browser</h3>
+		<pre><code>start firefox
+start ie
+start chrome</code></pre>
+		
+		<h3>Describe the Test</h3>
+		<pre><code>describe "some functionality should work"</code></pre>
+		
+		<h3>Browse to a Url</h3>
+		<pre><code>url "http://lefthandedgoat.github.com/canopy/"</code></pre>
+
+		<h3>Assert on a Url</h3>
+		<pre><code>on "http://lefthandedgoat.github.com/canopy/"</code></pre>
+		
+		<h3>Clicking an Element</h3>
+		Note: Identify the element you want to interact with by using <a href="http://www.w3.org/TR/CSS2/selector.html">CSS Selectors</a>
+		<br>
+		<br>
+		<pre><code>click "#submit"</code></pre>
+		
+		<h3>Setting a TextBox</h3>
+		<pre><code>"#firstName" << "John"</code></pre>
+
+		<h3>Clear a TextBox</h3>
+		<pre><code>clear "#lastName"</code></pre>
+		
+		<h3>Assert the Value of an Element</h3>
+		<pre><code>"#firstName" == "John"</code></pre>
+
+		<h3>Assert the Value of an Element Not Equal</h3>
+		<pre><code>"#firstName" != "Johnny"</code></pre>
+		
+		<h3>Assert One of Many Elements Has a Value</h3>
+		<pre><code>".items" *= "Item 1"</code></pre>
+
+		<h3>Assert No Elements Have Value</h3>
+		<pre><code>".items" !*= "Item 100"</code></pre>
+		
+		<h3>Assert Element Selected</h3>
+		<pre><code>selected "#radio1"</code></pre>
+
+		<h3>Assert Element Not Selected</h3>
+		<pre><code>deselected "#checkbox"</code></pre>
+
+		<h3>Reload Current Page</h3>
+		<pre><code>reload ()</code></pre>
+
+		<h3>Simulate Key Press</h3>
+		<pre><code>press down
+press enter
+press tab</code></pre>
+
+		<h3>Alerts</h3>
+		<pre><code>alert() == "Alert Test"
+acceptAlert()
+dismissAlert()</code></pre>
+
+		<h3>elements</h3>
+		<pre><code>todo</code></pre>
+
+		<h3>failsWith</h3>
+		<pre><code>todo</code></pre>
+
+		<h3>waitFor</h3>
+		<pre><code>todo</code></pre>
+
+		<h3>fadedIn</h3>
+		<pre><code>todo</code></pre>
 
       </section>
       <footer>
