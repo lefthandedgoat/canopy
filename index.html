@@ -15,7 +15,7 @@
   <body>
     <div class="wrapper">
       <header>
-        <h1>canopy</h1>
+        <h1><a style="color:#222; font-weight:bold;" href="http://lefthandedgoat.github.com/canopy/">canopy</a></h1>
         <p>f# web testing framework</p>
         <p class="view"><a href="https://github.com/lefthandedgoat/canopy">View the Project on GitHub <small>lefthandedgoat/canopy</small></a></p>
         <ul>
@@ -45,6 +45,13 @@ url "http://google.com"
 		
 		<h3>Defeating the Zerg Rush</h3>
 
+		<pre><code>open canopy
+start "firefox"
+elementTimeout <- 20.0 //don't stop after killing first wave!
+url "https://www.google.com/search?q=zerg+rush"
+while (element ".zr_zergling_container").Displayed do
+    click ".zr_zergling_container"</code></pre>
+		
 		<p>video here<p>
 
 		<h3>Examples</h3>
@@ -56,6 +63,10 @@ url "http://google.com"
 		<br>
 
 		<h3>External Examples</h3>
+		
+		See examples written for other projects <a href="externalexamples.html">here.</a>
+		<br>
+		<br>
 
 		<h3>Support or Feature Requests</h3>
 
