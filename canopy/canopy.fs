@@ -9,12 +9,12 @@ type Action = { action : string; url : string }
 
 let mutable (actions : Action list) = [];
 let mutable (browser : IWebDriver) = null;
-let mutable chromedir = @"c:\"
+let mutable chromeDir = @"c:\"
 let mutable elementTimeout = 3.0
 let mutable compareTimeout = 3.0
 let mutable pageTimeout = 10.0
-let mutable (failuremessage : string) = null
-let mutable wiptest = false
+let mutable (failureMessage : string) = null
+let mutable wipTest = false
 let mutable wipSleep = 1
 
 //keys
@@ -32,12 +32,12 @@ let chrome = "chrome"
 
 let start (b : string) =    
     //for chrome you need to download chromedriver.exe from http://code.google.com/p/chromedriver/wiki/GettingStarted
-    //place chromedriver.exe in c:\ or you can place it in a customer location and change chromedir value above
+    //place chromedriver.exe in c:\ or you can place it in a customer location and change chromeDir value above
     //for ie you need to set Settings -> Advance -> Security Section -> Check-Allow active content to run files on My Computer*
     //firefox just works
     match b with
     | "ie" -> browser <- new OpenQA.Selenium.IE.InternetExplorerDriver() :> IWebDriver
-    | "chrome" -> browser <- new OpenQA.Selenium.Chrome.ChromeDriver(chromedir) :> IWebDriver
+    | "chrome" -> browser <- new OpenQA.Selenium.Chrome.ChromeDriver(chromeDir) :> IWebDriver
     | _ -> browser <- new OpenQA.Selenium.Firefox.FirefoxDriver() :> IWebDriver
     ()
 
@@ -47,7 +47,7 @@ let sleep seconds =
     | _ -> System.Threading.Thread.Sleep(1 * 1000)    
 
 let private findByFunction cssSelector timeout f =
-    if wiptest then sleep wipSleep
+    if wipTest then sleep wipSleep
     let wait = new WebDriverWait(browser, TimeSpan.FromSeconds(elementTimeout))
     try
         wait.Until(fun _ -> (
@@ -111,7 +111,7 @@ let ( !^ ) (u : string) =
 let url (u : string) = 
     !^ u
 
-let write (cssSelector : string) (text : string) = 
+let ( << ) (cssSelector : string) (text : string) = 
     logAction "write"
     let element = find cssSelector elementTimeout
     let readonly = element.GetAttribute("readonly")
@@ -119,9 +119,6 @@ let write (cssSelector : string) (text : string) =
         failwith (String.Format("element {0} is marked as read only, you can not write to read only elements", cssSelector))        
     element.Clear()
     element.SendKeys(text)
-
-let ( << ) (cssSelector : string) (text : string) = 
-    write cssSelector text
 
 let read (cssSelector : string) =    
     try
@@ -173,13 +170,7 @@ let quit _ =
     browser.Quit()    
     browser <- null
     ()
-
-let equals value1 value2 =
-    logAction "equals"
-    if (value1 <> value2) then
-        failwith (String.Format("equality check failed.  expected: {0}, got: {1}", value1, value2));
-    ()
-
+    
 let ( == ) (item : 'a) value =
     match box item with
     | :? IAlert as alert -> let text = alert.Text
@@ -206,12 +197,6 @@ let ( == ) (item : 'a) value =
             | :? TimeoutException -> failwith (String.Format("equality check failed.  expected: {0}, got: {1}", value, !bestvalue));
             | ex -> failwith ex.Message
 
-let notequals value1 value2 =
-    logAction "notequals"
-    if (value1 = value2) then
-        failwith (String.Format("notequals check failed.", value1, value2));
-    ()
-
 let ( != ) cssSelector value =
     logAction "notequals"
     let wait = new WebDriverWait(browser, TimeSpan.FromSeconds(compareTimeout))
@@ -221,8 +206,9 @@ let ( != ) cssSelector value =
         | :? TimeoutException -> failwith (String.Format("not equals check failed.  expected NOT: {0}, got: {1}", value, (read cssSelector)));
         | ex -> failwith ex.Message
 
-let listed (cssSelector : string) value =
-    logAction "list"
+
+let ( *= ) (cssSelector : string) value =
+    logAction "listed"
     let wait = new WebDriverWait(browser, TimeSpan.FromSeconds(compareTimeout))
     try        
         wait.Until(fun _ -> (
@@ -234,10 +220,7 @@ let listed (cssSelector : string) value =
         | :? TimeoutException -> failwith (String.Format("cant find {0} in list {1}", value, cssSelector));
         | ex -> failwith ex.Message
 
-let ( *= ) (cssSelector : string) value =
-    listed cssSelector value
-
-let notlisted (cssSelector : string) value =
+let ( *!= ) (cssSelector : string) value =
     logAction "notlisted"
     let wait = new WebDriverWait(browser, TimeSpan.FromSeconds(compareTimeout))
     try
@@ -249,9 +232,6 @@ let notlisted (cssSelector : string) value =
     with
         | :? TimeoutException -> failwith (String.Format("found {0} in list {1}, expected not to", value, cssSelector));
         | ex -> failwith ex.Message
-
-let ( *!= ) (cssSelector : string) value =
-    notlisted cssSelector value
     
 let contains (value1 : string) (value2 : string) =
     logAction "contains"
@@ -270,8 +250,8 @@ let press key =
 let reload _ =
     url (currentUrl ())
 
-let failswith message = 
-    failuremessage <- message
+let failsWith message = 
+    failureMessage <- message
 
 let alert (action : 'a) =
     let alert = browser.SwitchTo().Alert()

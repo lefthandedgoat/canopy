@@ -12,7 +12,7 @@ let testpage = "http://localhost:4567"
 test (fun _ ->
     describe "#welcome should have Welcome"
     url testpage
-    read "#welcome" |> equals "Welcome")
+    "#welcome" == "Welcome")
 
 test (fun _ ->
     describe "#firstName should have John (using == infix operator)"
@@ -51,40 +51,40 @@ test (fun _ ->
 test (fun _ ->
     describe "Value 1 listed in #value_list"
     !^ testpage
-    listed "#value_list td" "Value 1")
+    "#value_list td" *= "Value 1")
 
 test (fun _ ->
     describe "Value 2 listed in #value_list"
     !^ testpage
-    listed "#value_list td" "Value 2")
+    "#value_list td" *= "Value 2")
 
 test (fun _ ->
-    describe "Value 3 listed in #value_list (using *= infix operator)"
+    describe "Value 3 listed in #value_list"
     !^ testpage
     "#value_list td" *= "Value 3")
 
 test (fun _ ->
-    describe "Value 4 listed in #value_list (using *= infix operator)"
+    describe "Value 4 listed in #value_list"
     !^ testpage
     "#value_list td" *= "Value 4")
 
 test (fun _ ->
     describe "Item 1 listed in #item_list"
     !^ testpage
-    listed "#item_list option" "Item 1")
+    "#item_list option" *= "Item 1")
 
 test (fun _ ->
     describe "Item 2 listed in #item_list"
     !^ testpage
-    listed "#item_list option" "Item 2")
+    "#item_list option" *= "Item 2")
 
 test (fun _ ->
-    describe "Item 3 listed in #item_list (using *= infix operator)"
+    describe "Item 3 listed in #item_list"
     !^ testpage
     "#item_list option" *= "Item 3")
 
 test (fun _ ->
-    describe "Item 4 listed in #item_list (using *= infix operator)"
+    describe "Item 4 listed in #item_list"
     !^ testpage
     "#item_list option" *= "Item 4")
 
@@ -181,19 +181,19 @@ test (fun _ ->
 
 test (fun _ ->
     describe "readonly should throw error on read only field with clear"
-    failswith "element #read_only is marked as read only, you can not clear read only elements"
+    failsWith "element #read_only is marked as read only, you can not clear read only elements"
     !^ "http://localhost:4567/readonly"    
     clear "#read_only")
         
 test (fun _ ->
     describe "readonly should throw error on read only field with write"
-    failswith "element #read_only is marked as read only, you can not write to read only elements"
+    failsWith "element #read_only is marked as read only, you can not write to read only elements"
     !^ "http://localhost:4567/readonly"    
     "#read_only" << "new text")
 
 test (fun _ ->
     describe "when value is wrong and changes to empty string prior to time out, it should show wrong value, not empty string"
-    failswith "equality check failed.  expected: John1, got: John"
+    failsWith "equality check failed.  expected: John1, got: John"
     url testpage    
     "#firstName" == "John1")
 
@@ -213,7 +213,7 @@ test (fun _ ->
 
 test (fun _ ->
     describe "alert box should fail correctly when expecting wrong message"
-    failswith "equality check failed.  expected: Not the message, got: Alert Test"
+    failsWith "equality check failed.  expected: Not the message, got: Alert Test"
     !^ "http://localhost:4567/alert"
     click "#alert_test"
     alert() == "Not the message")
@@ -234,7 +234,7 @@ test (fun _ ->
 
 test (fun _ ->
     describe "confirmation box should fail correctly when expecting wrong message"
-    failswith "equality check failed.  expected: Not the message, got: Confirmation Test"
+    failsWith "equality check failed.  expected: Not the message, got: Confirmation Test"
     !^ "http://localhost:4567/alert"
     click "#confirmation_test"
     alert() == "Not the message")
