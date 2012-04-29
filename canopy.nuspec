@@ -2,11 +2,11 @@
 <package xmlns="http://schemas.microsoft.com/packaging/2010/07/nuspec.xsd">
   <metadata>
     <id>canopy</id>
-    <version>0.2.5</version>
+    <version>0.3.0</version>
     <authors>Chris Holt</authors>
     <owners>Chris Holt</owners>
     <licenseUrl>https://github.com/lefthandedgoat/canopy/blob/master/license.txt</licenseUrl>
-    <projectUrl>https://github.com/lefthandedgoat/canopy</projectUrl>
+    <projectUrl>http://lefthandedgoat.github.com/canopy</projectUrl>
     <description>A simple framework in f# on top of selenium for writing UI automation tests.</description>
     <tags>f# canopy selenium ui automation tests</tags>
     <dependencies>
