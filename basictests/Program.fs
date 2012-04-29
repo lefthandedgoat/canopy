@@ -34,13 +34,13 @@ test (fun _ ->
     describe "writing to #lastName sets text to new Smith"
     !^ testpage
     clear "#lastName"
-    write "#lastName" "Smith"
+    "#lastName" << "Smith"
     "#lastName" == "Smith")
 
 test (fun _ ->
     describe "writing to #lastName sets text to new Smith (implicit clear in write)"
     !^ testpage
-    write "#lastName" "Smith"
+    "#lastName" << "Smith"
     "#lastName" == "Smith")
 
 test (fun _ ->
