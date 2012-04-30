@@ -1,16 +1,16 @@
 ﻿module runner
 
+open configuration
 open canopy
 
 let mutable tests = []
 let mutable wips = []
 let mutable manys = []
 let mutable before = fun () -> ()
-let failFast = ref false
-let suggestions = ref true
 let mutable passedCount = 0
 let mutable failedCount = 0
 let stopWatch = new System.Diagnostics.Stopwatch()
+
 stopWatch.Start()
 
 let test f = 

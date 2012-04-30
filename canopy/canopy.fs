@@ -4,18 +4,14 @@ open OpenQA.Selenium.Firefox
 open OpenQA.Selenium
 open OpenQA.Selenium.Support.UI
 open System
+open configuration
 
 type Action = { action : string; url : string }
 
-let mutable (actions : Action list) = [];
+let mutable actions = [];
 let mutable (browser : IWebDriver) = null;
-let mutable chromeDir = @"c:\"
-let mutable elementTimeout = 3.0
-let mutable compareTimeout = 3.0
-let mutable pageTimeout = 10.0
 let mutable (failureMessage : string) = null
 let mutable wipTest = false
-let mutable wipSleep = 1
 
 //keys
 let tab = Keys.Tab
