@@ -263,7 +263,8 @@ test (fun _ ->
         (elements ".number").Count = 5
     
     !^ "http://localhost:4567/waitFor"
-    waitFor fiveNumbersShown)
+    waitFor fiveNumbersShown
+    is (elements ".number").Count 5)
 
 run ()
 

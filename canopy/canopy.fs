@@ -288,6 +288,13 @@ let fadedIn cssSelector =
 let exists cssSelector =
     find cssSelector elementTimeout
 
+let is expected actual =
+    if expected = actual then
+        ()
+    else
+        failwith (String.Format("equality check failed.  expected: {0}, got: {1}", expected, actual));
+        
+
 //really need to refactor so there are results for every action
 //function for the action, true message, false message, something like that
 //and it all gets passed into some sort of assertor, will help with code reuse
