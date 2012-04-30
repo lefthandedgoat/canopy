@@ -65,7 +65,7 @@ let private find cssSelector timeout =
     findByFunction cssSelector timeout browser.FindElement
 
 let private findMany cssSelector timeout =
-    findByFunction cssSelector timeout browser.FindElements
+    Seq.toList (findByFunction cssSelector timeout browser.FindElements)
 
 let private keepTrying (f : 'a -> 'b) =
     let wait = new WebDriverWait(browser, TimeSpan.FromSeconds(elementTimeout))
@@ -292,7 +292,17 @@ let is expected actual =
 
 let (===) expected actual =
     is expected actual
-        
+
+let regexMatch pattern input =
+    System.Text.RegularExpressions.Regex.Match(input, pattern).Success
+
+let elementsWithText cssSelector regex =
+    findMany cssSelector elementTimeout
+    |> List.filter (fun element -> regexMatch regex element.Text)
+
+let elementWithText cssSelector regex = 
+    (elementsWithText cssSelector regex).Head
+       
 
 //really need to refactor so there are results for every action
 //function for the action, true message, false message, something like that
