@@ -293,6 +293,9 @@ let is expected actual =
         ()
     else
         failwith (String.Format("equality check failed.  expected: {0}, got: {1}", expected, actual));
+
+let (===) expected actual =
+    is expected actual
         
 
 //really need to refactor so there are results for every action
