@@ -314,6 +314,15 @@ let ( =~ ) cssSelector pattern =
     with
         | :? TimeoutException -> failwith (String.Format("regex equality check failed.  expected: {0}, got: {1}", pattern, (read cssSelector)));
         | ex -> failwith ex.Message
+
+let nth index cssSelector =
+ List.nth (elements cssSelector) index
+
+let first cssSelector =
+ (elements cssSelector).Head
+
+let last cssSelector =
+ (List.rev (elements cssSelector)).Head
        
 
 //really need to refactor so there are results for every action

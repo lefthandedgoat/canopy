@@ -267,7 +267,7 @@ test (fun _ ->
     waitFor fiveNumbersShown
     (elements ".number").Length === 5)
 
-wip (fun _ ->
+test (fun _ ->
     describe "regex test"
     url testpage
     "#lastName" << "Gray"
@@ -275,6 +275,23 @@ wip (fun _ ->
     "#lastName" << "Grey"
     "#lastName" =~ "Gr[ae]y")
 
+test (fun _ ->
+    describe "test for first function"
+    !^ testpage
+    (first "#value_list td").Text === "Value 1")
+
+test (fun _ ->
+    describe "test for last function"
+    !^ testpage
+    (last "#value_list td").Text === "Value 4")
+
+test (fun _ ->
+    describe "test for nth function"
+    !^ testpage
+    (nth 2 "#value_list td").Text === "Value 3")
+
 run ()
+
+System.Console.ReadKey() |> ignore
 
 quit ()
