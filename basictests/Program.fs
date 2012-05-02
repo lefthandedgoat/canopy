@@ -290,6 +290,12 @@ test (fun _ ->
     !^ testpage
     (nth 2 "#value_list td").Text === "Value 3")
 
+test (fun _ ->
+    describe "writting (selecting) to drop down test"
+    !^ testpage
+    "#item_list" << "Item 2"
+    "#item_list" == "Item 2")
+
 run ()
 
 System.Console.ReadKey() |> ignore

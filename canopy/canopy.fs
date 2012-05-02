@@ -107,14 +107,26 @@ let ( !^ ) (u : string) =
 let url (u : string) = 
     !^ u
 
+let private writeToSelect cssSelector text =
+    let element = find cssSelector elementTimeout
+    let options = Seq.toList (element.FindElements(By.TagName("option")))
+    let option = options |> List.filter (fun e -> e.Text = text)
+    if option = [] then
+        failwith (String.Format("element {0} does not contain value {1}", cssSelector, text))        
+    else
+        option.Head.Click()
+
 let ( << ) (cssSelector : string) (text : string) = 
     logAction "write"
     let element = find cssSelector elementTimeout
-    let readonly = element.GetAttribute("readonly")
-    if readonly = "true" then
-        failwith (String.Format("element {0} is marked as read only, you can not write to read only elements", cssSelector))        
-    element.Clear()
-    element.SendKeys(text)
+    if element.TagName = "select" then
+        writeToSelect cssSelector text
+    else
+        let readonly = element.GetAttribute("readonly")
+        if readonly = "true" then
+            failwith (String.Format("element {0} is marked as read only, you can not write to read only elements", cssSelector))        
+        element.Clear()
+        element.SendKeys(text)
 
 let read (cssSelector : string) =    
     try
@@ -122,6 +134,11 @@ let read (cssSelector : string) =
         let element = find cssSelector elementTimeout
         if element.TagName = "input" then
             element.GetAttribute("value")
+        else if element.TagName = "select" then
+            let value = element.GetAttribute("value")
+            let options = Seq.toList (element.FindElements(By.TagName("option")))
+            let option = options |> List.filter (fun e -> e.GetAttribute("value") = value)
+            option.Head.Text
         else
             element.Text    
     with
