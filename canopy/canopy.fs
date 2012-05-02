@@ -293,7 +293,7 @@ let is expected actual =
 let (===) expected actual =
     is expected actual
 
-let regexMatch pattern input =
+let private regexMatch pattern input =
     System.Text.RegularExpressions.Regex.Match(input, pattern).Success
 
 let elementsWithText cssSelector regex =

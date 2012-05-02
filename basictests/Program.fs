@@ -261,11 +261,11 @@ test (fun _ ->
 test (fun _ ->
     describe "define a custom wait for using any function that takes in unit and returns bool, example using lists"
     let fiveNumbersShown () = 
-        (elements ".number").Count = 5
+        (elements ".number").Length = 5
     
     !^ "http://localhost:4567/waitFor"
     waitFor fiveNumbersShown
-    (elements ".number").Count === 5)
+    (elements ".number").Length === 5)
 
 run ()
 
