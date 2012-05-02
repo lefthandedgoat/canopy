@@ -55,7 +55,7 @@ let private findByFunction cssSelector timeout f =
                             )
                   ) |> ignore
     with
-        | :? System.TimeoutException -> Console.WriteLine("Element not found in the allotted time. If you want to increase the time, put elementTimeout <- 10 anywhere before a test to increase the timeout")
+        | :? System.TimeoutException -> Console.WriteLine("Element not found in the allotted time. If you want to increase the time, put elementTimeout <- 10.0 anywhere before a test to increase the timeout")
                                         failwith (String.Format("cant find element {0}", cssSelector))
         | ex -> failwith ex.Message
 
