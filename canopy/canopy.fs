@@ -264,7 +264,7 @@ let waitFor (f : unit -> bool) =
         let wait = new WebDriverWait(browser, TimeSpan.FromSeconds(compareTimeout))
         wait.Until(fun _ -> (f ())) |> ignore
     with
-        | :? System.TimeoutException -> Console.WriteLine("Condition not met in given amount of time. If you want to increase the time, put compareTimeout <- 10 anywhere before a test to increase the timeout")
+        | :? System.TimeoutException -> Console.WriteLine("Condition not met in given amount of time. If you want to increase the time, put compareTimeout <- 10.0 anywhere before a test to increase the timeout")
                                         failwith (String.Format("waitFor condition failed to become true in {0} seconds", compareTimeout))
         | ex -> failwith ex.Message
 
@@ -302,6 +302,18 @@ let elementsWithText cssSelector regex =
 
 let elementWithText cssSelector regex = 
     (elementsWithText cssSelector regex).Head
+
+let ( =~ ) cssSelector pattern =
+    logAction "regex equals"
+    let wait = new WebDriverWait(browser, TimeSpan.FromSeconds(compareTimeout))
+    try
+        wait.Until(fun _ -> (
+                                regexMatch pattern (read cssSelector)
+                            )) |> ignore
+        ()
+    with
+        | :? TimeoutException -> failwith (String.Format("regex equality check failed.  expected: {0}, got: {1}", pattern, (read cssSelector)));
+        | ex -> failwith ex.Message
        
 
 //really need to refactor so there are results for every action

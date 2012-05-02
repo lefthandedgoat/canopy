@@ -267,6 +267,14 @@ test (fun _ ->
     waitFor fiveNumbersShown
     (elements ".number").Length === 5)
 
+wip (fun _ ->
+    describe "regex test"
+    url testpage
+    "#lastName" << "Gray"
+    "#lastName" =~ "Gr[ae]y"
+    "#lastName" << "Grey"
+    "#lastName" =~ "Gr[ae]y")
+
 run ()
 
 quit ()
