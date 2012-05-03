@@ -6,7 +6,10 @@ open configuration
 
 before <- fun () -> System.Console.WriteLine("This happens before every test")
 suggestions := true
-start "firefox"
+start firefox
+
+elementTimeout <- 3.0
+compareTimeout <- 3.0
  
 let testpage = "http://localhost:4567" 
 

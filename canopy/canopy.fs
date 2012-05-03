@@ -41,9 +41,16 @@ let sleep seconds =
     match box seconds with
     | :? int as i -> System.Threading.Thread.Sleep(i * 1000)
     | _ -> System.Threading.Thread.Sleep(1 * 1000)    
+    
+let private colorizeAndSleep (cssSelector : string) =
+    let js = System.String.Format("document.querySelector('{0}').style.backgroundColor = '#FFF467';", cssSelector)
+    try (browser :?> IJavaScriptExecutor).ExecuteScript(js) |> ignore with | ex -> ()
+    sleep wipSleep
+    let js = System.String.Format("document.querySelector('{0}').style.backgroundColor = '#ACD372';", cssSelector)
+    try (browser :?> IJavaScriptExecutor).ExecuteScript(js) |> ignore with | ex -> ()
 
 let private findByFunction cssSelector timeout f =
-    if wipTest then sleep wipSleep
+    if wipTest then colorizeAndSleep cssSelector    
     let wait = new WebDriverWait(browser, TimeSpan.FromSeconds(elementTimeout))
     try
         wait.Until(fun _ -> (
