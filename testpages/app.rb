@@ -40,3 +40,7 @@ end
 get '/home' do
   erb :home
 end
+
+get '/sandbox' do
+  erb :sandbox
+end

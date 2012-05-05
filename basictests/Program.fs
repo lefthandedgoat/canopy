@@ -18,7 +18,7 @@ test (fun _ ->
     url testpage
     "#welcome" == "Welcome")
 
-test (fun _ ->
+wip (fun _ ->
     describe "#firstName should have John (using == infix operator)"
     url testpage
     "#firstName" == "John")
