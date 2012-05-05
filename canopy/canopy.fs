@@ -40,9 +40,17 @@ let start (b : string) =
 let sleep seconds =
     match box seconds with
     | :? int as i -> System.Threading.Thread.Sleep(i * 1000)
-    | _ -> System.Threading.Thread.Sleep(1 * 1000)    
+    | _ -> System.Threading.Thread.Sleep(1 * 1000)
+
+let puts (text : string) = 
+    Console.WriteLine(text) |> ignore
+    let info = "
+        var infoDiv = document.getElementById('canopy_info_div'); if(!infoDiv) { infoDiv = document.createElement('div'); } infoDiv.id = 'canopy_info_div'; infoDiv.setAttribute('style','position: absolute; border: 1px solid black; bottom: 0px; right: 0px; margin: 3px; padding: 3px; background-color: white; z-index: 99999; font-size: 20px; font-family: monospace; font-weight: bold;'); document.getElementsByTagName('body')[0].appendChild(infoDiv); infoDiv.innerHTML = '" + text + "';";
+    try (browser :?> IJavaScriptExecutor).ExecuteScript(info) |> ignore with | ex -> ()
+    ()
     
 let private colorizeAndSleep (cssSelector : string) =
+    puts cssSelector
     let js = System.String.Format("document.querySelector('{0}').style.backgroundColor = '#FFF467';", cssSelector)
     try (browser :?> IJavaScriptExecutor).ExecuteScript(js) |> ignore with | ex -> ()
     sleep wipSleep
@@ -62,7 +70,7 @@ let private findByFunction cssSelector timeout f =
                             )
                   ) |> ignore
     with
-        | :? System.TimeoutException -> Console.WriteLine("Element not found in the allotted time. If you want to increase the time, put elementTimeout <- 10.0 anywhere before a test to increase the timeout")
+        | :? System.TimeoutException -> puts("Element not found in the allotted time. If you want to increase the time, put elementTimeout <- 10.0 anywhere before a test to increase the timeout")
                                         failwith (String.Format("cant find element {0}", cssSelector))
         | ex -> failwith ex.Message
 
@@ -260,7 +268,7 @@ let contains (value1 : string) (value2 : string) =
     ()
 
 let describe (text : string) =
-    Console.WriteLine(text);
+    puts text
     ()
 
 let press key = 
@@ -288,7 +296,7 @@ let waitFor (f : unit -> bool) =
         let wait = new WebDriverWait(browser, TimeSpan.FromSeconds(compareTimeout))
         wait.Until(fun _ -> (f ())) |> ignore
     with
-        | :? System.TimeoutException -> Console.WriteLine("Condition not met in given amount of time. If you want to increase the time, put compareTimeout <- 10.0 anywhere before a test to increase the timeout")
+        | :? System.TimeoutException -> puts("Condition not met in given amount of time. If you want to increase the time, put compareTimeout <- 10.0 anywhere before a test to increase the timeout")
                                         failwith (String.Format("waitFor condition failed to become true in {0} seconds", compareTimeout))
         | ex -> failwith ex.Message
 
