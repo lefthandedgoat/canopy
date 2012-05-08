@@ -168,14 +168,17 @@ let clear (cssSelector : string) =
         failwith (String.Format("element {0} is marked as read only, you can not clear read only elements", cssSelector))        
     element.Clear()
     
-let click (cssSelector : string) = 
+let click item = 
     try
         logAction "click"
-        let element = find cssSelector elementTimeout
-        keepTrying (fun _ ->
-                        let element = find cssSelector elementTimeout
-                        element.Click()
-                   )
+        match box item with
+        | :? IWebElement as element -> element.Click()
+        | :? string as cssSelector ->         
+            let element = find cssSelector elementTimeout
+            keepTrying (fun _ ->
+                            let element = find cssSelector elementTimeout
+                            element.Click()
+                        )
     with
         | ex -> failwith ex.Message
 

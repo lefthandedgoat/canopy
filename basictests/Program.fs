@@ -18,7 +18,7 @@ test (fun _ ->
     url testpage
     "#welcome" == "Welcome")
 
-wip (fun _ ->
+test (fun _ ->
     describe "#firstName should have John (using == infix operator)"
     url testpage
     "#firstName" == "John")
@@ -97,6 +97,13 @@ test (fun _ ->
     !^ testpage
     "#button_clicked" == "button not clicked"
     click "#button"
+    "#button_clicked" == "button clicked")
+
+test (fun _ ->
+    describe "clicking (element #button) sets #button_clicked to button clicked"
+    !^ testpage
+    "#button_clicked" == "button not clicked"
+    click (element "#button")
     "#button_clicked" == "button clicked")
 
 test (fun _ ->
