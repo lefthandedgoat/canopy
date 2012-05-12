@@ -44,3 +44,7 @@ end
 get '/sandbox' do
   erb :sandbox
 end
+
+get '/doubleClick' do
+  erb :doubleClick
+end

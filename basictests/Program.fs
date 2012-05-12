@@ -306,6 +306,13 @@ test (fun _ ->
     "#item_list" << "Item 2"
     "#item_list" == "Item 2")
 
+test (fun _ ->
+    describe "writting (selecting) to drop down test"
+    !^ "http://localhost:4567/doubleClick"
+    "#clicked" == "Not Clicked"
+    doubleClick "#double_click"
+    "#clicked" == "Clicked")
+
 run ()
 
 System.Console.ReadKey() |> ignore

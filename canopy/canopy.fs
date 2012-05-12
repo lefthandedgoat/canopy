@@ -174,13 +174,28 @@ let click item =
         match box item with
         | :? IWebElement as element -> element.Click()
         | :? string as cssSelector ->         
-            let element = find cssSelector elementTimeout
             keepTrying (fun _ ->
                             let element = find cssSelector elementTimeout
                             element.Click()
                         )
     with
         | ex -> failwith ex.Message
+
+let doubleClick item =
+    try
+        let js = "var evt = document.createEvent('MouseEvents'); evt.initMouseEvent('dblclick',true, true, window, 0, 0, 0, 0, 0, false, false, false, false, 0,null); arguments[0].dispatchEvent(evt);"
+
+        logAction "doubleClick"
+        match box item with
+        | :? IWebElement as element -> (browser :?> IJavaScriptExecutor).ExecuteScript(js, element) |> ignore
+        | :? string as cssSelector ->         
+            keepTrying (fun _ ->
+                            let element = find cssSelector elementTimeout
+                            (browser :?> IJavaScriptExecutor).ExecuteScript(js, element)
+                        )
+    with
+        | ex -> failwith ex.Message
+
 
 let selected (cssSelector : string) = 
     logAction "selected"
