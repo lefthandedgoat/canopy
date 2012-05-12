@@ -307,7 +307,7 @@ test (fun _ ->
     "#item_list" == "Item 2")
 
 test (fun _ ->
-    describe "writting (selecting) to drop down test"
+    describe "double clicking"
     !^ "http://localhost:4567/doubleClick"
     "#clicked" == "Not Clicked"
     doubleClick "#double_click"
