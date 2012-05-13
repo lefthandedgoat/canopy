@@ -56,3 +56,7 @@ end
 get '/notDisplayed' do
   erb :notDisplayed
 end
+
+get '/count' do
+  erb :count
+end

@@ -325,6 +325,12 @@ test (fun _ ->
     notDisplayed "#notDisplayed"    
 )
 
+test (fun _ ->
+    describe "count test"
+    !^ "http://localhost:4567/count"
+    count ".number" 5
+)
+
 run ()
 
 System.Console.ReadKey() |> ignore

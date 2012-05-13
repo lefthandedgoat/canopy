@@ -285,6 +285,19 @@ let contains (value1 : string) (value2 : string) =
         failwith (String.Format("contains check failed.  {0} does not contain {1}", value2, value1));
     ()
 
+let count cssSelector count =
+    logAction "count"
+    let wait = new WebDriverWait(browser, TimeSpan.FromSeconds(compareTimeout))
+    try        
+        wait.Until(fun _ -> (
+                                let elements = findMany cssSelector elementTimeout
+                                elements.Length = count
+                            )
+                  ) |> ignore
+    with
+        | :? TimeoutException -> failwith (String.Format("count failed. expected: {0} got: {1} ", count, (findMany cssSelector elementTimeout).Length));
+        | ex -> failwith ex.Message
+
 let describe (text : string) =
     puts text
     ()
