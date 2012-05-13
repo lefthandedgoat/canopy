@@ -25,7 +25,7 @@ let right = Keys.Right
 let firefox = "firefox"
 let ie = "ie"
 let chrome = "chrome"
-
+  
 let start (b : string) =    
     //for chrome you need to download chromedriver.exe from http://code.google.com/p/chromedriver/wiki/GettingStarted
     //place chromedriver.exe in c:\ or you can place it in a customer location and change chromeDir value above
@@ -324,13 +324,6 @@ let element cssSelector =
 let elements cssSelector =
     findMany cssSelector elementTimeout
 
-let fadedIn cssSelector =
-    let shown cssSelector () =
-        let opacity = (element cssSelector).GetCssValue("opacity")
-        let display = (element cssSelector).GetCssValue("display")
-        display <> "none" && opacity = "1"
-    shown cssSelector
-
 let exists cssSelector =
     find cssSelector elementTimeout
 
@@ -373,7 +366,37 @@ let first cssSelector =
 
 let last cssSelector =
  (List.rev (elements cssSelector)).Head
+      
+let private shown cssSelector =
+    let element = element cssSelector
+    let opacity = element.GetCssValue("opacity")
+    let display = element.GetCssValue("display")
+    display <> "none" && opacity = "1"
        
+let displayed cssSelector =
+    let wait = new WebDriverWait(browser, TimeSpan.FromSeconds(compareTimeout))
+    try
+        wait.Until(fun _ -> (
+                                shown cssSelector = true
+                            )) |> ignore
+        ()
+    with
+        | :? TimeoutException -> failwith (String.Format("display checked for {0} failed.", cssSelector));
+        | ex -> failwith ex.Message
+
+let notDisplayed cssSelector =
+    let wait = new WebDriverWait(browser, TimeSpan.FromSeconds(compareTimeout))
+    try
+        wait.Until(fun _ -> (
+                                shown cssSelector = false
+                            )) |> ignore
+        ()
+    with
+        | :? TimeoutException -> failwith (String.Format("notDisplay checked for {0} failed.", cssSelector));
+        | ex -> failwith ex.Message    
+
+let fadedIn cssSelector =
+    (fun _ -> shown cssSelector)
 
 //really need to refactor so there are results for every action
 //function for the action, true message, false message, something like that

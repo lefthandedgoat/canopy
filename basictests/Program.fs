@@ -313,6 +313,18 @@ test (fun _ ->
     doubleClick "#double_click"
     "#clicked" == "Clicked")
 
+test (fun _ ->
+    describe "displayed test"
+    !^ "http://localhost:4567/displayed"
+    displayed "#displayed"
+)
+
+test (fun _ ->
+    describe "notDisplayed test"
+    !^ "http://localhost:4567/notDisplayed"
+    notDisplayed "#notDisplayed"    
+)
+
 run ()
 
 System.Console.ReadKey() |> ignore

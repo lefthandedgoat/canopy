@@ -48,3 +48,11 @@ end
 get '/doubleClick' do
   erb :doubleClick
 end
+
+get '/displayed' do
+  erb :displayed
+end
+
+get '/notDisplayed' do
+  erb :notDisplayed
+end
