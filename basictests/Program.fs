@@ -4,7 +4,7 @@ open runner
 open canopy
 open configuration
 
-before <- fun () -> System.Console.WriteLine("This happens before every test")
+//before <- fun () -> System.Console.WriteLine("This happens before every test")
 suggestions := true
 start firefox
 

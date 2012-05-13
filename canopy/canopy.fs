@@ -49,6 +49,21 @@ let puts (text : string) =
     try (browser :?> IJavaScriptExecutor).ExecuteScript(info) |> ignore with | ex -> ()
     ()
     
+let private wait timeout f =
+    let wait = new WebDriverWait(browser, TimeSpan.FromSeconds(timeout))
+    try
+        wait.Until(fun _ -> (
+                                try
+                                    (f ()) = true
+                                with
+                                | _ -> false
+                            )
+                  ) |> ignore        
+    with
+    | :? TimeoutException as te -> raise (System.TimeoutException(te.Message))
+    | ex -> failwith ex.Message
+    ()
+
 let private colorizeAndSleep (cssSelector : string) =
     puts cssSelector
     let js = System.String.Format("document.querySelector('{0}').style.backgroundColor = '#FFF467';", cssSelector)
@@ -81,21 +96,6 @@ let private find cssSelector timeout =
 
 let private findMany cssSelector timeout =
     Seq.toList (findByFunction cssSelector timeout browser.FindElements)
-
-let private keepTrying (f : 'a -> 'b) =
-    let wait = new WebDriverWait(browser, TimeSpan.FromSeconds(elementTimeout))
-    try
-        wait.Until(fun _ -> (
-                                try
-                                    f () |> ignore
-                                    true
-                                with
-                                | _ -> false
-                            )
-                  ) |> ignore        
-    with
-    | ex -> failwith ex.Message
-    ()
     
 let currentUrl _ =
     browser.Url
@@ -106,12 +106,11 @@ let logAction a =
     ()
 
 let on (u: string) = 
-    logAction "on"
-    let wait = new WebDriverWait(browser, TimeSpan.FromSeconds(pageTimeout))
+    logAction "on"    
     try
-        wait.Until(fun _ -> (browser.Url = u)) |> ignore
+        wait pageTimeout (fun _ -> (browser.Url = u))
     with
-        | :? Exception -> failwith (String.Format("on check failed, expected {0} got {1}", u, browser.Url));
+        | :? _ -> failwith (String.Format("on check failed, expected {0} got {1}", u, browser.Url));
     ()
 
 let ( !^ ) (u : string) = 
@@ -174,10 +173,9 @@ let click item =
         match box item with
         | :? IWebElement as element -> element.Click()
         | :? string as cssSelector ->         
-            keepTrying (fun _ ->
-                            let element = find cssSelector elementTimeout
-                            element.Click()
-                        )
+            wait elementTimeout (fun _ -> let element = find cssSelector elementTimeout
+                                          element.Click()
+                                          true)
     with
         | ex -> failwith ex.Message
 
@@ -189,10 +187,9 @@ let doubleClick item =
         match box item with
         | :? IWebElement as element -> (browser :?> IJavaScriptExecutor).ExecuteScript(js, element) |> ignore
         | :? string as cssSelector ->         
-            keepTrying (fun _ ->
-                            let element = find cssSelector elementTimeout
-                            (browser :?> IJavaScriptExecutor).ExecuteScript(js, element)
-                        )
+            wait elementTimeout (fun _ -> ( let element = find cssSelector elementTimeout
+                                            (browser :?> IJavaScriptExecutor).ExecuteScript(js, element) |> ignore
+                                            true))
     with
         | ex -> failwith ex.Message
 
@@ -226,55 +223,41 @@ let ( == ) (item : 'a) value =
                                 alert.Dismiss()
                                 failwith (String.Format("equality check failed.  expected: {0}, got: {1}", value, text));                                
     | :? string as cssSelector -> 
-        logAction "equals"
-        let wait = new WebDriverWait(browser, TimeSpan.FromSeconds(compareTimeout))
+        logAction "equals"        
         let bestvalue = ref ""
         try
-            wait.Until(fun _ -> (
-                                    let readvalue = (read cssSelector)
-                                    if readvalue <> value && readvalue <> "" then
-                                        bestvalue := readvalue
-                                        false
-                                    else
-                                        readvalue = value
-                                )) |> ignore
-            ()
+            wait compareTimeout (fun _ -> ( let readvalue = (read cssSelector)
+                                            if readvalue <> value && readvalue <> "" then
+                                                bestvalue := readvalue
+                                                false
+                                            else
+                                                readvalue = value))
         with
             | :? TimeoutException -> failwith (String.Format("equality check failed.  expected: {0}, got: {1}", value, !bestvalue));
             | ex -> failwith ex.Message
 
 let ( != ) cssSelector value =
     logAction "notequals"
-    let wait = new WebDriverWait(browser, TimeSpan.FromSeconds(compareTimeout))
     try
-        wait.Until(fun _ -> (read cssSelector) <> value) |> ignore
+        wait compareTimeout (fun _ -> (read cssSelector) <> value)
     with
         | :? TimeoutException -> failwith (String.Format("not equals check failed.  expected NOT: {0}, got: {1}", value, (read cssSelector)));
         | ex -> failwith ex.Message
-
-
+        
 let ( *= ) (cssSelector : string) value =
     logAction "listed"
-    let wait = new WebDriverWait(browser, TimeSpan.FromSeconds(compareTimeout))
     try        
-        wait.Until(fun _ -> (
-                                let elements = findMany cssSelector elementTimeout
-                                elements |> Seq.exists(fun element -> element.Text = value)
-                            )
-                  ) |> ignore
+        wait compareTimeout (fun _ -> ( let elements = findMany cssSelector elementTimeout
+                                        elements |> Seq.exists(fun element -> element.Text = value)))
     with
         | :? TimeoutException -> failwith (String.Format("cant find {0} in list {1}", value, cssSelector));
         | ex -> failwith ex.Message
 
 let ( *!= ) (cssSelector : string) value =
     logAction "notlisted"
-    let wait = new WebDriverWait(browser, TimeSpan.FromSeconds(compareTimeout))
     try
-        wait.Until(fun _ -> (
-                                let elements = findMany cssSelector elementTimeout
-                                elements |> Seq.exists(fun element -> element.Text = value) = false
-                            )
-                  ) |> ignore
+        wait compareTimeout (fun _ -> ( let elements = findMany cssSelector elementTimeout
+                                        elements |> Seq.exists(fun element -> element.Text = value) = false))
     with
         | :? TimeoutException -> failwith (String.Format("found {0} in list {1}, expected not to", value, cssSelector));
         | ex -> failwith ex.Message
@@ -287,13 +270,9 @@ let contains (value1 : string) (value2 : string) =
 
 let count cssSelector count =
     logAction "count"
-    let wait = new WebDriverWait(browser, TimeSpan.FromSeconds(compareTimeout))
     try        
-        wait.Until(fun _ -> (
-                                let elements = findMany cssSelector elementTimeout
-                                elements.Length = count
-                            )
-                  ) |> ignore
+        wait compareTimeout (fun _ -> ( let elements = findMany cssSelector elementTimeout
+                                        elements.Length = count))
     with
         | :? TimeoutException -> failwith (String.Format("count failed. expected: {0} got: {1} ", count, (findMany cssSelector elementTimeout).Length));
         | ex -> failwith ex.Message
@@ -323,9 +302,8 @@ let dismissAlert _ =
     browser.SwitchTo().Alert().Dismiss()
 
 let waitFor (f : unit -> bool) =
-    try
-        let wait = new WebDriverWait(browser, TimeSpan.FromSeconds(compareTimeout))
-        wait.Until(fun _ -> (f ())) |> ignore
+    try        
+        wait compareTimeout (fun _ -> (f ()))
     with
         | :? System.TimeoutException -> puts("Condition not met in given amount of time. If you want to increase the time, put compareTimeout <- 10.0 anywhere before a test to increase the timeout")
                                         failwith (String.Format("waitFor condition failed to become true in {0} seconds", compareTimeout))
@@ -360,13 +338,9 @@ let elementWithText cssSelector regex =
     (elementsWithText cssSelector regex).Head
 
 let ( =~ ) cssSelector pattern =
-    logAction "regex equals"
-    let wait = new WebDriverWait(browser, TimeSpan.FromSeconds(compareTimeout))
+    logAction "regex equals"    
     try
-        wait.Until(fun _ -> (
-                                regexMatch pattern (read cssSelector)
-                            )) |> ignore
-        ()
+        wait compareTimeout (fun _ -> regexMatch pattern (read cssSelector))
     with
         | :? TimeoutException -> failwith (String.Format("regex equality check failed.  expected: {0}, got: {1}", pattern, (read cssSelector)));
         | ex -> failwith ex.Message
@@ -387,22 +361,15 @@ let private shown cssSelector =
     display <> "none" && opacity = "1"
        
 let displayed cssSelector =
-    let wait = new WebDriverWait(browser, TimeSpan.FromSeconds(compareTimeout))
     try
-        wait.Until(fun _ -> (
-                                shown cssSelector = true
-                            )) |> ignore
-        ()
+        wait compareTimeout (fun _ ->  shown cssSelector = true)
     with
         | :? TimeoutException -> failwith (String.Format("display checked for {0} failed.", cssSelector));
         | ex -> failwith ex.Message
 
 let notDisplayed cssSelector =
-    let wait = new WebDriverWait(browser, TimeSpan.FromSeconds(compareTimeout))
     try
-        wait.Until(fun _ -> (
-                                shown cssSelector = false
-                            )) |> ignore
+        wait compareTimeout (fun _ -> shown cssSelector = false)
         ()
     with
         | :? TimeoutException -> failwith (String.Format("notDisplay checked for {0} failed.", cssSelector));
