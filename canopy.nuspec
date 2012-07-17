@@ -10,8 +10,8 @@
     <description>A simple framework in f# on top of selenium for writing UI automation tests.</description>
     <tags>f# canopy selenium ui automation tests</tags>
     <dependencies>
-      <dependency id="Selenium.WebDriver" version="2.20.0" />
-      <dependency id="Selenium.Support" version="2.20.0" />
+      <dependency id="Selenium.WebDriver" version="2.24.0" />
+      <dependency id="Selenium.Support" version="2.24.0" />
     </dependencies>
   </metadata>
   <files>
