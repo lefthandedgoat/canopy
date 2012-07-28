@@ -41,17 +41,24 @@ let run _ =
                 try
                     (before ())
                     (f ())
+                    System.Console.ForegroundColor <- System.ConsoleColor.Green
                     System.Console.WriteLine("Passed");
+                    System.Console.ResetColor()
                     passedCount <- passedCount + 1
                 with
                     | ex when failureMessage <> null && failureMessage = ex.Message ->
+                        System.Console.ForegroundColor <- System.ConsoleColor.Green
                         System.Console.WriteLine("Passed");
+                        System.Console.ResetColor()
                         passedCount <- passedCount + 1                            
                     | ex -> 
                         if failFast = ref true then
                             failed := true
                             System.Console.WriteLine("failFast was set to true and an error occured; testing stopped");
-                        System.Console.WriteLine("Error: {0}", ex.Message);
+                        System.Console.ForegroundColor <- System.ConsoleColor.Red
+                        System.Console.WriteLine("Error: ");
+                        System.Console.ResetColor()
+                        System.Console.WriteLine(ex.Message);
                         failedCount <- failedCount + 1
                             
             if suggestions = ref true then
@@ -83,7 +90,12 @@ let run _ =
     stopWatch.Stop()
     System.Console.WriteLine()
     System.Console.WriteLine("{0} seconds to execute", stopWatch.Elapsed.Seconds)
+    if failedCount = 0 then
+        System.Console.ForegroundColor <- System.ConsoleColor.Green
     System.Console.WriteLine("{0} passed", passedCount)
+    System.Console.ResetColor()
+    if failedCount > 0 then
+        System.Console.ForegroundColor <- System.ConsoleColor.Red        
     System.Console.WriteLine("{0} failed", failedCount)    
 
     ()

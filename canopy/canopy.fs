@@ -142,19 +142,22 @@ let ( << ) (cssSelector : string) (text : string) =
         element.Clear()
         element.SendKeys(text)
 
+let private textOf (element : IWebElement) =
+    if element.TagName = "input" then
+        element.GetAttribute("value")
+    else if element.TagName = "select" then
+        let value = element.GetAttribute("value")
+        let options = Seq.toList (element.FindElements(By.TagName("option")))
+        let option = options |> List.filter (fun e -> e.GetAttribute("value") = value)
+        option.Head.Text
+    else
+        element.Text    
+
 let read (cssSelector : string) =    
     try
         logAction "read"
         let element = find cssSelector elementTimeout
-        if element.TagName = "input" then
-            element.GetAttribute("value")
-        else if element.TagName = "select" then
-            let value = element.GetAttribute("value")
-            let options = Seq.toList (element.FindElements(By.TagName("option")))
-            let option = options |> List.filter (fun e -> e.GetAttribute("value") = value)
-            option.Head.Text
-        else
-            element.Text    
+        textOf element
     with
         | ex -> failwith ex.Message
 
@@ -248,16 +251,19 @@ let ( *= ) (cssSelector : string) value =
     logAction "listed"
     try        
         wait compareTimeout (fun _ -> ( let elements = findMany cssSelector elementTimeout
-                                        elements |> Seq.exists(fun element -> element.Text = value)))
+                                        elements |> Seq.exists(fun element -> (textOf element) = value)))
     with
-        | :? TimeoutException -> failwith (String.Format("cant find {0} in list {1}", value, cssSelector));
+        | :? TimeoutException -> let sb = new System.Text.StringBuilder()
+                                 let elements = findMany cssSelector elementTimeout
+                                 elements |> List.map (fun e -> sb.Append(String.Format("{0}\r\n", (textOf e)))) |> ignore
+                                 failwith (String.Format("cant find {0} in list {1}\r\ngot: {2}", value, cssSelector, sb.ToString()));
         | ex -> failwith ex.Message
 
 let ( *!= ) (cssSelector : string) value =
     logAction "notlisted"
     try
         wait compareTimeout (fun _ -> ( let elements = findMany cssSelector elementTimeout
-                                        elements |> Seq.exists(fun element -> element.Text = value) = false))
+                                        elements |> Seq.exists(fun element -> (textOf element) = value) = false))
     with
         | :? TimeoutException -> failwith (String.Format("found {0} in list {1}, expected not to", value, cssSelector));
         | ex -> failwith ex.Message
@@ -332,7 +338,7 @@ let private regexMatch pattern input =
 
 let elementsWithText cssSelector regex =
     findMany cssSelector elementTimeout
-    |> List.filter (fun element -> regexMatch regex element.Text)
+    |> List.filter (fun element -> regexMatch regex (textOf element))
 
 let elementWithText cssSelector regex = 
     (elementsWithText cssSelector regex).Head
