@@ -10,7 +10,7 @@ start "firefox"
 
 let github = "https://www.github.com"
 
-test (fun _ ->
+wip (fun _ ->
     describe "go to github and login"
     url github
     click "a[href='https://github.com/login']"
