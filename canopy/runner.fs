@@ -97,5 +97,5 @@ let run _ =
     if failedCount > 0 then
         System.Console.ForegroundColor <- System.ConsoleColor.Red        
     System.Console.WriteLine("{0} failed", failedCount)    
-
+    System.Console.ResetColor()
     ()
