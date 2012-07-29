@@ -1,0 +1,59 @@
+code {
+	text-align:left
+}
+
+#header {
+    text-align:center
+}
+
+.bx-pager 
+{
+    text-align:center
+}
+
+.bx-pager a
+{
+    padding-left:11px;
+    padding-right:11px;
+    padding-top:11px;
+    padding-bottom:0px;
+}
+
+.bx-pager
+{
+    padding-left:0px;
+    padding-right:0px;
+    padding-top:15px;
+    padding-bottom:0px;
+}
+
+#sliderButtons 
+{
+    text-align:center    
+}
+
+#footerButtons 
+{
+    text-align:center    
+}
+
+.pager 
+{
+    height:500px
+}
+
+pre 
+{
+    height:inherit
+}
+
+.btn-inverse 
+{
+    margin-left:5px;
+    margin-right:5px;
+}
+
+.bx-window
+{
+    background-color:#F5F5F5
+}
