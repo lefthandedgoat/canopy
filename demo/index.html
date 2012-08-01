@@ -14,17 +14,88 @@
     <br />
     <div id="slider">
         <div>
-            Welcome to the canopy demo<br />
-            Sit back and watch as the canopy demo tests take you through canopy's features.
+            <div class="left wrapper">
+                <div class="explanation">
+                    "Hello World" of automated web testing
+                    <br />
+                    <br />Fade
+                    <br />in
+                    <br />explanation
+                    <br />for
+                    <br />each
+                    <br />line
+                </div>
+            </div>
+            <div class="right wrapper">
+                <div class="example">
+<pre>
+open runner
+open canopy
+
+start firefox
+
+test (fun _ ->
+    url "http://www.google.com"
+    "input[type='text']" << "Hello World"
+)
+
+run ()
+</pre>                    
+                </div>
+            </div>
         </div>
         <div>
-            test (fun _ -> some code here 1 )
+            <div class="left wrapper">
+                <div class="explanation">
+                    Filling out a form and submitting it
+                    <br />
+                    <br />Fade
+                    <br />in
+                    <br />explanation
+                    <br />for
+                    <br />each
+                    <br />line
+                </div>
+            </div>
+            <div class="right wrapper">
+                <div class="example">
+<pre>
+test (fun _ ->
+    url "http://www.yourpage.com"
+    "#firstName" << "John"
+    "#last" << "Doe"
+    click "#submit"
+    on "http://www.yourpage.com/NewMember"
+)
+</pre>                 
+                </div>
+            </div>
         </div>
         <div>
-            test (fun _ -> some code here 2 )
-        </div>
-        <div>
-            test (fun _ -> some code here 3 )
+            <div class="left wrapper">
+                <div class="explanation">
+                    Asserting
+                    <br />
+                    <br />Fade
+                    <br />in
+                    <br />explanation
+                    <br />for
+                    <br />each
+                    <br />line
+                </div>
+            </div>
+            <div class="right wrapper">
+                <div class="example">
+<pre>
+test (fun _ ->
+    url "http://www.yourpage.com/todo"
+    "#name" == "John Doe"
+    ".todoItem" *= "learn canopy"
+    count ".todoItem" 5
+)
+</pre>                 
+                </div>
+            </div>
         </div>
     </div>
     <br />
@@ -36,8 +107,9 @@
     <hr />
     <div id="footerButtons">
         <a class="btn btn-success" href="http://nuget.org/packages/canopy">Find On <strong>NuGet</strong></a>
-        <a class="btn btn-success" href="https://github.com/lefthandedgoat/canopy">Fork On <strong>GitHub</strong></a>
-        <a class="btn btn-success" href="https://github.com/lefthandedgoat/canopy/zipball/master">Download <strong>ZIP File</strong></a>
+        <a class="btn btn-success" href="https://github.com/lefthandedgoat/canopy">Fork On <strong>
+            GitHub</strong></a> <a class="btn btn-success" href="https://github.com/lefthandedgoat/canopy/zipball/master">
+                Download <strong>ZIP File</strong></a>
     </div>
     <script type="text/javascript">
         $(document).ready(function () {
@@ -52,13 +124,13 @@
                 }
             });
 
-            $('#previous').click(function () {
-                slider.goToPreviousSlide();
+            $('#next').click(function () {
+                slider.goToNextSlide();
                 return false;
             });
 
-            $('#next').click(function () {
-                slider.goToNextSlide();
+            $('#previous').click(function () {
+                slider.goToPreviousSlide();
                 return false;
             });
         });
