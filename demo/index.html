@@ -12,23 +12,30 @@
         canopy demo</h1>
     <hr />
     <br />
-    <div id="slider">
-        <div>
-            <div class="left wrapper">
-                <div class="explanation">
-                    "Hello World" of automated web testing
-                    <br />
-                    <br />Fade
-                    <br />in
-                    <br />explanation
-                    <br />for
-                    <br />each
-                    <br />line
+    <div id="slideShowWrapper">
+        <div id="slider">
+            <div>
+                <div class="left wrapper">
+                    <div class="explanation">
+                        "Hello World" of automated web testing
+                        <br />
+                        <br />
+                        Fade
+                        <br />
+                        in
+                        <br />
+                        explanation
+                        <br />
+                        for
+                        <br />
+                        each
+                        <br />
+                        line
+                    </div>
                 </div>
-            </div>
-            <div class="right wrapper">
-                <div class="example">
-<pre>
+                <div class="right wrapper">
+                    <div class="example">
+                        <pre>
 open runner
 open canopy
 
@@ -40,26 +47,32 @@ test (fun _ ->
 )
 
 run ()
-</pre>                    
+</pre>
+                    </div>
                 </div>
             </div>
-        </div>
-        <div>
-            <div class="left wrapper">
-                <div class="explanation">
-                    Filling out a form and submitting it
-                    <br />
-                    <br />Fade
-                    <br />in
-                    <br />explanation
-                    <br />for
-                    <br />each
-                    <br />line
+            <div>
+                <div class="left wrapper">
+                    <div class="explanation">
+                        Filling out a form and submitting it
+                        <br />
+                        <br />
+                        Fade
+                        <br />
+                        in
+                        <br />
+                        explanation
+                        <br />
+                        for
+                        <br />
+                        each
+                        <br />
+                        line
+                    </div>
                 </div>
-            </div>
-            <div class="right wrapper">
-                <div class="example">
-<pre>
+                <div class="right wrapper">
+                    <div class="example">
+                        <pre>
 test (fun _ ->
     url "http://www.yourpage.com"
     "#firstName" << "John"
@@ -67,33 +80,40 @@ test (fun _ ->
     click "#submit"
     on "http://www.yourpage.com/NewMember"
 )
-</pre>                 
+</pre>
+                    </div>
                 </div>
             </div>
-        </div>
-        <div>
-            <div class="left wrapper">
-                <div class="explanation">
-                    Asserting
-                    <br />
-                    <br />Fade
-                    <br />in
-                    <br />explanation
-                    <br />for
-                    <br />each
-                    <br />line
+            <div>
+                <div class="left wrapper">
+                    <div class="explanation">
+                        Asserting
+                        <br />
+                        <br />
+                        Fade
+                        <br />
+                        in
+                        <br />
+                        explanation
+                        <br />
+                        for
+                        <br />
+                        each
+                        <br />
+                        line
+                    </div>
                 </div>
-            </div>
-            <div class="right wrapper">
-                <div class="example">
-<pre>
+                <div class="right wrapper">
+                    <div class="example">
+                        <pre>
 test (fun _ ->
     url "http://www.yourpage.com/todo"
     "#name" == "John Doe"
     ".todoItem" *= "learn canopy"
     count ".todoItem" 5
 )
-</pre>                 
+</pre>
+                    </div>
                 </div>
             </div>
         </div>

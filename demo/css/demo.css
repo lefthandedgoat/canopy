@@ -65,6 +65,13 @@ pre
     float:right;
 }
 
+#slideShowWrapper 
+{
+    width:1250px;
+    margin-left: auto ;
+    margin-right: auto ;
+}
+
 .wrapper
 {        
     text-align:left;
