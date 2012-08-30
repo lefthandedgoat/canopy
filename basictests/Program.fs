@@ -333,6 +333,4 @@ test (fun _ ->
 
 run ()
 
-System.Console.ReadKey() |> ignore
-
 quit ()

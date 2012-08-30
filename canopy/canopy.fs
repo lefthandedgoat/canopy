@@ -108,7 +108,7 @@ let logAction a =
 let on (u: string) = 
     logAction "on"    
     try
-        wait pageTimeout (fun _ -> (browser.Url = u))
+        wait pageTimeout (fun _ -> (browser.Url.Contains(u)))
     with
         | :? _ -> failwith (String.Format("on check failed, expected {0} got {1}", u, browser.Url));
     ()
