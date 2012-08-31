@@ -2,7 +2,7 @@
 <package xmlns="http://schemas.microsoft.com/packaging/2010/07/nuspec.xsd">
   <metadata>
     <id>canopy</id>
-    <version>0.4.2</version>
+    <version>0.4.3</version>
     <authors>Chris Holt</authors>
     <owners>Chris Holt</owners>
     <licenseUrl>https://github.com/lefthandedgoat/canopy/blob/master/license.txt</licenseUrl>

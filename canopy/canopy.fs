@@ -384,6 +384,12 @@ let notDisplayed cssSelector =
 let fadedIn cssSelector =
     (fun _ -> shown cssSelector)
 
+let check cssSelector =
+    if (element cssSelector).Selected = false then click cssSelector
+
+let uncheck cssSelector =
+    if (element cssSelector).Selected = true then click cssSelector
+
 //really need to refactor so there are results for every action
 //function for the action, true message, false message, something like that
 //and it all gets passed into some sort of assertor, will help with code reuse

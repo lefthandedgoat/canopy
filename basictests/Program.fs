@@ -128,14 +128,14 @@ test (fun _ ->
 test (fun _ ->
     describe "clicking #checkbox selects it"
     !^ testpage
-    click "#checkbox"
+    check "#checkbox"
     selected "#checkbox")
 
 test (fun _ ->
     describe "clicking selected #checkbox deselects it"
     !^ testpage
-    click "#checkbox"
-    click "#checkbox"
+    check "#checkbox"
+    uncheck "#checkbox"
     deselected "#checkbox")
 
 test (fun _ ->
