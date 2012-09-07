@@ -1,5 +1,6 @@
 ﻿module main
 
+open System
 open runner
 open canopy
 open configuration
@@ -9,6 +10,12 @@ start firefox
 
 elementTimeout <- 3.0
 compareTimeout <- 3.0
+
+context "context1"
+once (fun _ -> Console.WriteLine "once")
+before (fun _ -> Console.WriteLine "before")
+after (fun _ -> Console.WriteLine "after")
+lastly (fun _ -> Console.WriteLine "lastly")
  
 let testpage = "http://localhost:4567" 
 
@@ -137,6 +144,12 @@ test (fun _ ->
     uncheck "#checkbox"
     deselected "#checkbox")
 
+context "reddit tests"
+once (fun _ -> Console.WriteLine "once: reddit tests")
+before (fun _ -> Console.WriteLine "before: reddit tests")
+after (fun _ -> Console.WriteLine "after: reddit tests")
+lastly (fun _ -> Console.WriteLine "lastly: reddit tests")
+
 test (fun _ ->
     describe "browsing to redit should be on reddit"
     url "http://www.reddit.com/"
@@ -148,6 +161,9 @@ test (fun _ ->
     on "http://www.reddit.com/"
     reload ()
     on "http://www.reddit.com/")
+
+context "post reddit tests"
+before (fun _ -> Console.WriteLine "only before set now")
 
 test (fun _ ->
     describe "textbox should not equals dontequalme"
@@ -264,8 +280,7 @@ test (fun _ ->
     !^ "http://localhost:4567/noClickTilVisible"
     waitFor (fadedIn "#link")
     click "#link"
-    on "http://localhost:4567/home"
-)
+    on "http://localhost:4567/home")
 
 test (fun _ ->
     describe "define a custom wait for using any function that takes in unit and returns bool, example using lists"
@@ -315,20 +330,17 @@ test (fun _ ->
 test (fun _ ->
     describe "displayed test"
     !^ "http://localhost:4567/displayed"
-    displayed "#displayed"
-)
+    displayed "#displayed")
 
 test (fun _ ->
     describe "notDisplayed test"
     !^ "http://localhost:4567/notDisplayed"
-    notDisplayed "#notDisplayed"    
-)
+    notDisplayed "#notDisplayed")
 
 test (fun _ ->
     describe "count test"
     !^ "http://localhost:4567/count"
-    count ".number" 5
-)
+    count ".number" 5)
 
 run ()
 

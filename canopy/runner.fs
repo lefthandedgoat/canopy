@@ -4,23 +4,64 @@ open System
 open configuration
 open canopy
 
-let mutable _once = fun () -> ()
-let mutable _before = fun () -> ()
-let mutable _after = fun () -> ()
-let mutable _lastly = fun () -> ()
+let rec last = function
+    | hd :: [] -> hd
+    | hd :: tl -> last tl
+    | _ -> failwith "Empty list."
 
-let once f = _once <- f
-let before f = _before <- f
-let after f = _after <- f
-let lastly f = _lastly <- f
+type suite () = class
+    let mutable context : string = null
+    let mutable once = fun () -> ()
+    let mutable before = fun () -> ()
+    let mutable after = fun () -> ()
+    let mutable lastly = fun () -> () 
+    let mutable tests : (unit -> unit) list = []
+    let mutable wips : (unit -> unit) list = []
+    let mutable manys : (unit -> unit) list = []
 
-let mutable tests = []
-let mutable wips = []
-let mutable manys = []
+    member x.Context
+        with get() = context
+        and set(value) = context <- value
+    member x.Once
+        with get() = once
+        and set(value) = once <- value
+    member x.Before
+        with get() = before
+        and set(value) = before <- value
+    member x.After
+        with get() = after
+        and set(value) = after <- value
+    member x.Lastly
+        with get() = lastly
+        and set(value) = lastly <- value
+    member x.Tests
+        with get() = tests
+        and set(value) = tests <- value
+    member x.Wips
+        with get() = wips
+        and set(value) = wips <- value
+    member x.Manys
+        with get() = manys
+        and set(value) = manys <- value
+end
 
-let test f = tests <- tests @ [f]
-let wip f = wips <- wips @ [f]
-let many count f = [1 .. count] |> List.map (fun _ -> manys <- manys @ [f]) |> ignore
+let mutable suites = [new suite()]
+
+let once f = (last suites).Once <- f
+let before f = (last suites).Before <- f
+let after f = (last suites).After <- f
+let lastly f = (last suites).Lastly <- f
+let context c = 
+    if (last suites).Context = null then 
+        (last suites).Context <- c
+    else 
+        let s = new suite()
+        s.Context <- c
+        suites <- suites @ [s]
+
+let test f = (last suites).Tests <- (last suites).Tests @ [f]
+let wip f = (last suites).Wips <- (last suites).Wips @ [f]
+let many count f = [1 .. count] |> List.iter (fun _ -> (last suites).Manys <- (last suites).Manys @ [f])
 let xtest f = ()
 
 let rec private makeSuggestions actions =
@@ -41,57 +82,58 @@ let run _ =
     
     let failed = ref false
 
-    let runtest f = 
-            if failed = ref false then
-                try
-                    _before ()
-                    f ()
-                    _after ()
+    let runtest (suite : suite) test = 
+        if failed = ref false then
+            try
+                suite.Before ()
+                test ()
+                suite.After ()
+                Console.ForegroundColor <- ConsoleColor.Green
+                Console.WriteLine("Passed");
+                Console.ResetColor()
+                passedCount <- passedCount + 1
+            with
+                | ex when failureMessage <> null && failureMessage = ex.Message ->
                     Console.ForegroundColor <- ConsoleColor.Green
                     Console.WriteLine("Passed");
                     Console.ResetColor()
-                    passedCount <- passedCount + 1
-                with
-                    | ex when failureMessage <> null && failureMessage = ex.Message ->
-                        Console.ForegroundColor <- ConsoleColor.Green
-                        Console.WriteLine("Passed");
-                        Console.ResetColor()
-                        passedCount <- passedCount + 1                            
-                    | ex -> 
-                        if failFast = ref true then
-                            failed := true
-                            Console.WriteLine("failFast was set to true and an error occured; testing stopped");
-                        Console.ForegroundColor <- ConsoleColor.Red
-                        Console.WriteLine("Error: ");
-                        Console.ResetColor()
-                        Console.WriteLine(ex.Message);
-                        failedCount <- failedCount + 1
+                    passedCount <- passedCount + 1                            
+                | ex -> 
+                    if failFast = ref true then
+                        failed := true
+                        Console.WriteLine("failFast was set to true and an error occured; testing stopped");
+                    Console.ForegroundColor <- ConsoleColor.Red
+                    Console.WriteLine("Error: ");
+                    Console.ResetColor()
+                    Console.WriteLine(ex.Message);
+                    failedCount <- failedCount + 1
                             
-            if suggestions = ref true then
-                makeSuggestions actions
+        if suggestions = ref true then
+            makeSuggestions actions
 
-            actions <- []
-            failureMessage <- null
-            ()
+        actions <- []
+        failureMessage <- null            
 
-    if wips.IsEmpty = false then
-        wipTest <- true
-        wips 
-        |> List.map (fun t -> 
-                        runtest t
-                        Console.WriteLine("This is a wip test, press enter to run next test")
-                        Console.ReadLine() |> ignore
-                    )
-        |> ignore
-        wipTest <- false
-    else if manys.IsEmpty = false then
-        manys 
-        |> List.map runtest 
-        |> ignore
-    else
-        tests 
-        |> List.map runtest 
-        |> ignore
+    //run all the suites
+    suites
+    |> List.iter (fun s ->
+        Console.WriteLine (String.Format("context: {0}", s.Context))
+        s.Once ()
+        if s.Wips.IsEmpty = false then
+            wipTest <- true
+            s.Wips 
+            |> List.iter (fun w -> 
+                            runtest s w
+                            Console.WriteLine("This is a wip test, press enter to run next test")
+                            Console.ReadLine() |> ignore
+                         )
+            wipTest <- false
+        else if s.Manys.IsEmpty = false then
+            s.Manys |> List.iter (fun m -> runtest s m)
+        else
+            s.Tests |> List.iter (fun t -> runtest s t)
+        s.Lastly ()
+    )
     
     stopWatch.Stop()
     Console.WriteLine()
