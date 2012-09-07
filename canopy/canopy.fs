@@ -110,7 +110,7 @@ let on (u: string) =
     try
         wait pageTimeout (fun _ -> (browser.Url.Contains(u)))
     with
-        | :? _ -> failwith (String.Format("on check failed, expected {0} got {1}", u, browser.Url));
+        | ex -> failwith (String.Format("on check failed, expected {0} got {1}", u, browser.Url));
     ()
 
 let ( !^ ) (u : string) = 
@@ -179,6 +179,7 @@ let click item =
             wait elementTimeout (fun _ -> let element = find cssSelector elementTimeout
                                           element.Click()
                                           true)
+        | _ -> failwith (String.Format("Can't click {0} because it is not a string or webelement", item.ToString()))
     with
         | ex -> failwith ex.Message
 
@@ -193,6 +194,7 @@ let doubleClick item =
             wait elementTimeout (fun _ -> ( let element = find cssSelector elementTimeout
                                             (browser :?> IJavaScriptExecutor).ExecuteScript(js, element) |> ignore
                                             true))
+        | _ -> failwith (String.Format("Can't doubleClick {0} because it is not a string or webelement", item.ToString()))
     with
         | ex -> failwith ex.Message
 
@@ -238,6 +240,7 @@ let ( == ) (item : 'a) value =
         with
             | :? TimeoutException -> failwith (String.Format("equality check failed.  expected: {0}, got: {1}", value, !bestvalue));
             | ex -> failwith ex.Message
+    | _ -> failwith (String.Format("Can't check equality on {0} because it is not a string or alert", item.ToString()))
 
 let ( != ) cssSelector value =
     logAction "notequals"

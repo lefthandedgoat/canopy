@@ -4,7 +4,7 @@ open runner
 open canopy
 open configuration
 
-before <- fun () -> System.Console.WriteLine("This happens before every test")
+before (fun () -> System.Console.WriteLine("This happens before every test"))
 suggestions := false
 start "firefox"
 
@@ -54,6 +54,6 @@ test (fun _ ->
 
 run ()
 
-System.Console.ReadKey()
+System.Console.ReadKey() |> ignore
 
 quit ()
