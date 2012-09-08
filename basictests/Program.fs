@@ -19,10 +19,10 @@ lastly (fun _ -> Console.WriteLine "lastly")
  
 let testpage = "http://localhost:4567" 
 
-test (fun _ ->
+wip (fun _ ->
     describe "#welcome should have Welcome"
     url testpage
-    "#welcome" == "Welcome")
+    ".welcome1" == "Welcome")
 
 test (fun _ ->
     describe "#firstName should have John (using == infix operator)"

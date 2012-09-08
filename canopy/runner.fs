@@ -117,7 +117,7 @@ let run _ =
     //run all the suites
     suites
     |> List.iter (fun s ->
-        Console.WriteLine (String.Format("context: {0}", s.Context))
+        if s.Context <> null then Console.WriteLine (String.Format("context: {0}", s.Context))
         s.Once ()
         if s.Wips.IsEmpty = false then
             wipTest <- true

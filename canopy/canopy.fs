@@ -5,6 +5,7 @@ open OpenQA.Selenium
 open OpenQA.Selenium.Support.UI
 open System
 open configuration
+open levenshtein
 
 type Action = { action : string; url : string }
 
@@ -43,7 +44,7 @@ let sleep seconds =
     | _ -> System.Threading.Thread.Sleep(1 * 1000)
 
 let puts (text : string) = 
-    Console.WriteLine(text) |> ignore
+    Console.WriteLine text
     let info = "
         var infoDiv = document.getElementById('canopy_info_div'); if(!infoDiv) { infoDiv = document.createElement('div'); } infoDiv.id = 'canopy_info_div'; infoDiv.setAttribute('style','position: absolute; border: 1px solid black; bottom: 0px; right: 0px; margin: 3px; padding: 3px; background-color: white; z-index: 99999; font-size: 20px; font-family: monospace; font-weight: bold;'); document.getElementsByTagName('body')[0].appendChild(infoDiv); infoDiv.innerHTML = '" + text + "';";
     try (browser :?> IJavaScriptExecutor).ExecuteScript(info) |> ignore with | ex -> ()
@@ -72,6 +73,25 @@ let private colorizeAndSleep (cssSelector : string) =
     let js = System.String.Format("document.querySelector('{0}').style.backgroundColor = '#ACD372';", cssSelector)
     try (browser :?> IJavaScriptExecutor).ExecuteScript(js) |> ignore with | ex -> ()
 
+let suggestOtherSelectors (cssSelector : string) =     
+    let allElements = browser.FindElements(By.CssSelector("html *")) |> Array.ofSeq
+    let classes = allElements |> Array.Parallel.map (fun e -> "." + e.GetAttribute("class"))
+    let ids = allElements |> Array.Parallel.map (fun e -> "#" + e.GetAttribute("id"))
+    let unique = 
+        Array.append classes ids 
+            |> Seq.distinct |> List.ofSeq 
+            |> remove "." |> remove "#" |> Array.ofList
+    
+    Console.ForegroundColor <- ConsoleColor.DarkYellow                    
+    Console.WriteLine("Couldnt find any elements with selector '{0}', did you mean:", cssSelector)
+    unique 
+        |> Array.Parallel.map (fun u -> levenshtein cssSelector u)
+        |> Array.sortBy (fun r -> r.distance)
+        |> Seq.take 5
+        |> Seq.map (fun r -> r.selector)
+        |> Seq.iter (fun r -> Console.WriteLine("\t{0}", r))
+    Console.ResetColor()
+
 let private findByFunction cssSelector timeout f =
     if wipTest then colorizeAndSleep cssSelector    
     let wait = new WebDriverWait(browser, TimeSpan.FromSeconds(elementTimeout))
@@ -85,7 +105,8 @@ let private findByFunction cssSelector timeout f =
                             )
                   ) |> ignore
     with
-        | :? System.TimeoutException -> puts("Element not found in the allotted time. If you want to increase the time, put elementTimeout <- 10.0 anywhere before a test to increase the timeout")
+        | :? System.TimeoutException -> puts "Element not found in the allotted time. If you want to increase the time, put elementTimeout <- 10.0 anywhere before a test to increase the timeout"
+                                        suggestOtherSelectors cssSelector
                                         failwith (String.Format("cant find element {0}", cssSelector))
         | ex -> failwith ex.Message
 
@@ -314,7 +335,7 @@ let waitFor (f : unit -> bool) =
     try        
         wait compareTimeout (fun _ -> (f ()))
     with
-        | :? System.TimeoutException -> puts("Condition not met in given amount of time. If you want to increase the time, put compareTimeout <- 10.0 anywhere before a test to increase the timeout")
+        | :? System.TimeoutException -> puts "Condition not met in given amount of time. If you want to increase the time, put compareTimeout <- 10.0 anywhere before a test to increase the timeout"
                                         failwith (String.Format("waitFor condition failed to become true in {0} seconds", compareTimeout))
         | ex -> failwith ex.Message
 
