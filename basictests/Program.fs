@@ -10,6 +10,7 @@ start firefox
 
 elementTimeout <- 3.0
 compareTimeout <- 3.0
+runFailedContextsFirst <- true
 
 context "context1"
 once (fun _ -> Console.WriteLine "once")
@@ -19,10 +20,10 @@ lastly (fun _ -> Console.WriteLine "lastly")
  
 let testpage = "http://localhost:4567" 
 
-wip (fun _ ->
+test (fun _ ->
     describe "#welcome should have Welcome"
     url testpage
-    ".welcome1" == "Welcome")
+    "#welcome" == "Welcome")
 
 test (fun _ ->
     describe "#firstName should have John (using == infix operator)"

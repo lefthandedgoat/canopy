@@ -37,6 +37,7 @@
     <Compile Include="configuration.fs" />
     <Compile Include="levenshtein.fs" />
     <Compile Include="canopy.fs" />
+    <Compile Include="history.fs" />
     <Compile Include="runner.fs" />
     <None Include="packages.config" />
   </ItemGroup>

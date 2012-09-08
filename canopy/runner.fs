@@ -75,39 +75,42 @@ let rec private makeSuggestions actions =
 
 let mutable passedCount = 0
 let mutable failedCount = 0
+let mutable contextFailed = false
+let mutable failedContexts : string list = []
+let mutable failed = false
+
+let pass () =
+    Console.ForegroundColor <- ConsoleColor.Green
+    Console.WriteLine("Passed");
+    Console.ResetColor()
+    passedCount <- passedCount + 1
+
+let fail (ex : Exception) =
+    if failFast = ref true then
+        failed <- true
+        Console.WriteLine("failFast was set to true and an error occured; testing stopped");
+    Console.ForegroundColor <- ConsoleColor.Red
+    Console.WriteLine("Error: ");
+    Console.ResetColor()
+    Console.WriteLine(ex.Message);
+    failedCount <- failedCount + 1
+    contextFailed <- true
 
 let run _ =
     let stopWatch = new Diagnostics.Stopwatch()
-    stopWatch.Start()
-    
-    let failed = ref false
+    stopWatch.Start()       
 
     let runtest (suite : suite) test = 
-        if failed = ref false then
+        if failed = false then
             try
                 suite.Before ()
                 test ()
                 suite.After ()
-                Console.ForegroundColor <- ConsoleColor.Green
-                Console.WriteLine("Passed");
-                Console.ResetColor()
-                passedCount <- passedCount + 1
+                pass()
             with
-                | ex when failureMessage <> null && failureMessage = ex.Message ->
-                    Console.ForegroundColor <- ConsoleColor.Green
-                    Console.WriteLine("Passed");
-                    Console.ResetColor()
-                    passedCount <- passedCount + 1                            
-                | ex -> 
-                    if failFast = ref true then
-                        failed := true
-                        Console.WriteLine("failFast was set to true and an error occured; testing stopped");
-                    Console.ForegroundColor <- ConsoleColor.Red
-                    Console.WriteLine("Error: ");
-                    Console.ResetColor()
-                    Console.WriteLine(ex.Message);
-                    failedCount <- failedCount + 1
-                            
+                | ex when failureMessage <> null && failureMessage = ex.Message -> pass()
+                | ex -> fail ex
+                                                
         if suggestions = ref true then
             makeSuggestions actions
 
@@ -115,8 +118,15 @@ let run _ =
         failureMessage <- null            
 
     //run all the suites
+    if runFailedContextsFirst = true then
+        let failedContexts = history.get()
+        //reorder so failed contexts are first
+        let fc, pc = suites |> List.partition (fun s -> failedContexts |> List.exists (fun fc -> fc = s.Context))
+        suites <- fc @ pc
+
     suites
     |> List.iter (fun s ->
+        contextFailed <- false
         if s.Context <> null then Console.WriteLine (String.Format("context: {0}", s.Context))
         s.Once ()
         if s.Wips.IsEmpty = false then
@@ -133,8 +143,11 @@ let run _ =
         else
             s.Tests |> List.iter (fun t -> runtest s t)
         s.Lastly ()
+        if contextFailed = true then failedContexts <- failedContexts @ [s.Context]
     )
     
+    history.save failedContexts
+
     stopWatch.Stop()
     Console.WriteLine()
     Console.WriteLine("{0} seconds to execute", stopWatch.Elapsed.Seconds)
