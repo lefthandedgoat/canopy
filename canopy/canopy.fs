@@ -38,6 +38,10 @@ let start (b : string) =
     | _ -> browser <- new OpenQA.Selenium.Firefox.FirefoxDriver() :> IWebDriver
     ()
 
+let js script = (browser :?> IJavaScriptExecutor).ExecuteScript(script)
+
+let private swallowedJs script = try js script |> ignore with | ex -> ()
+
 let sleep seconds =
     match box seconds with
     | :? int as i -> System.Threading.Thread.Sleep(i * 1000)
@@ -47,8 +51,7 @@ let puts (text : string) =
     Console.WriteLine text
     let info = "
         var infoDiv = document.getElementById('canopy_info_div'); if(!infoDiv) { infoDiv = document.createElement('div'); } infoDiv.id = 'canopy_info_div'; infoDiv.setAttribute('style','position: absolute; border: 1px solid black; bottom: 0px; right: 0px; margin: 3px; padding: 3px; background-color: white; z-index: 99999; font-size: 20px; font-family: monospace; font-weight: bold;'); document.getElementsByTagName('body')[0].appendChild(infoDiv); infoDiv.innerHTML = '" + text + "';";
-    try (browser :?> IJavaScriptExecutor).ExecuteScript(info) |> ignore with | ex -> ()
-    ()
+    swallowedJs info
     
 let private wait timeout f =
     let wait = new WebDriverWait(browser, TimeSpan.FromSeconds(timeout))
@@ -67,11 +70,11 @@ let private wait timeout f =
 
 let private colorizeAndSleep (cssSelector : string) =
     puts cssSelector
-    let js = System.String.Format("document.querySelector('{0}').style.backgroundColor = '#FFF467';", cssSelector)
-    try (browser :?> IJavaScriptExecutor).ExecuteScript(js) |> ignore with | ex -> ()
+    let script = System.String.Format("document.querySelector('{0}').style.backgroundColor = '#FFF467';", cssSelector)
+    swallowedJs script
     sleep wipSleep
-    let js = System.String.Format("document.querySelector('{0}').style.backgroundColor = '#ACD372';", cssSelector)
-    try (browser :?> IJavaScriptExecutor).ExecuteScript(js) |> ignore with | ex -> ()
+    let script = System.String.Format("document.querySelector('{0}').style.backgroundColor = '#ACD372';", cssSelector)
+    swallowedJs script
 
 let suggestOtherSelectors (cssSelector : string) =     
     let allElements = browser.FindElements(By.CssSelector("html *")) |> Array.ofSeq
@@ -312,7 +315,7 @@ let describe (text : string) =
     ()
 
 let press key = 
-    let element = ((browser :?> IJavaScriptExecutor).ExecuteScript("return document.activeElement;") :?> IWebElement)
+    let element = ((js "return document.activeElement;") :?> IWebElement)
     element.SendKeys(key)
 
 let reload _ =
