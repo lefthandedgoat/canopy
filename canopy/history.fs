@@ -3,7 +3,7 @@
 open System.IO
 open System
 
-let path = Environment.GetFolderPath(Environment.SpecialFolder.ApplicationData) + @"\canopy.txt"
+let path = Environment.GetFolderPath(Environment.SpecialFolder.ApplicationData) + @"\canopy\failedContexts.txt"
 
 let save (results : string list) =
     using(new StreamWriter(path)) (fun sw ->    
@@ -11,7 +11,11 @@ let save (results : string list) =
     )
 
 let get _ =
-    using(new StreamReader(path)) (fun sr ->
-        let line = sr.ReadToEnd()
-        line.Split('|') |> List.ofArray
-    )
+    let emptyList : string list = []
+    if File.Exists(path) = false then 
+        emptyList
+    else
+        using(new StreamReader(path)) (fun sr ->
+            let line = sr.ReadToEnd()
+            line.Split('|') |> List.ofArray
+        )

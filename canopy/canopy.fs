@@ -38,6 +38,10 @@ let start (b : string) =
     | _ -> browser <- new OpenQA.Selenium.Firefox.FirefoxDriver() :> IWebDriver
     ()
 
+let screenshot _ = 
+    let pic = (browser :?> ITakesScreenshot).GetScreenshot().AsByteArray
+    IO.File.WriteAllBytes(Environment.GetFolderPath(Environment.SpecialFolder.ApplicationData) + @"\canopy\" + DateTime.Now.ToString("MMM-d_HH-mm-ss-fff") + ".png", pic)
+
 let js script = (browser :?> IJavaScriptExecutor).ExecuteScript(script)
 
 let private swallowedJs script = try js script |> ignore with | ex -> ()

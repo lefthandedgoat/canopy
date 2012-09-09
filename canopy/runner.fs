@@ -95,6 +95,7 @@ let fail (ex : Exception) =
     Console.WriteLine(ex.Message);
     failedCount <- failedCount + 1
     contextFailed <- true
+    screenshot ()
 
 let run _ =
     let stopWatch = new Diagnostics.Stopwatch()
