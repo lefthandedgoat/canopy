@@ -125,6 +125,10 @@ let run _ =
         let fc, pc = suites |> List.partition (fun s -> failedContexts |> List.exists (fun fc -> fc = s.Context))
         suites <- fc @ pc
 
+    //run only wips if there are any
+    if suites |> List.exists (fun s -> s.Wips.IsEmpty = false) then
+        suites <- suites |> List.filter (fun s -> s.Wips.IsEmpty = false)
+
     suites
     |> List.iter (fun s ->
         contextFailed <- false
@@ -132,12 +136,7 @@ let run _ =
         s.Once ()
         if s.Wips.IsEmpty = false then
             wipTest <- true
-            s.Wips 
-            |> List.iter (fun w -> 
-                            runtest s w
-                            Console.WriteLine("This is a wip test, press enter to run next test")
-                            Console.ReadLine() |> ignore
-                         )
+            s.Wips |> List.iter (fun w -> runtest s w)
             wipTest <- false
         else if s.Manys.IsEmpty = false then
             s.Manys |> List.iter (fun m -> runtest s m)
