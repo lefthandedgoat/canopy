@@ -6,6 +6,7 @@ open System
 let path = Environment.GetFolderPath(Environment.SpecialFolder.ApplicationData) + @"\canopy\failedContexts.txt"
 
 let save (results : string list) =
+    if File.Exists(path) = false then File.Create(path).Close()
     using(new StreamWriter(path)) (fun sw ->    
         sw.Write (String.Join("|", (results |> Array.ofList)))
     )
