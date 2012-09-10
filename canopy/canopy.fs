@@ -6,6 +6,7 @@ open OpenQA.Selenium.Support.UI
 open System
 open configuration
 open levenshtein
+open reporters
 
 type Action = { action : string; url : string }
 
@@ -52,7 +53,7 @@ let sleep seconds =
     | _ -> System.Threading.Thread.Sleep(1 * 1000)
 
 let puts (text : string) = 
-    Console.WriteLine text
+    reporter.write text
     let info = "
         var infoDiv = document.getElementById('canopy_info_div'); if(!infoDiv) { infoDiv = document.createElement('div'); } infoDiv.id = 'canopy_info_div'; infoDiv.setAttribute('style','position: absolute; border: 1px solid black; bottom: 0px; right: 0px; margin: 3px; padding: 3px; background-color: white; z-index: 99999; font-size: 20px; font-family: monospace; font-weight: bold;'); document.getElementsByTagName('body')[0].appendChild(infoDiv); infoDiv.innerHTML = '" + text + "';";
     swallowedJs info
@@ -84,20 +85,14 @@ let suggestOtherSelectors (cssSelector : string) =
     let allElements = browser.FindElements(By.CssSelector("html *")) |> Array.ofSeq
     let classes = allElements |> Array.Parallel.map (fun e -> "." + e.GetAttribute("class"))
     let ids = allElements |> Array.Parallel.map (fun e -> "#" + e.GetAttribute("id"))
-    let unique = 
-        Array.append classes ids 
-            |> Seq.distinct |> List.ofSeq 
-            |> remove "." |> remove "#" |> Array.ofList
-    
-    Console.ForegroundColor <- ConsoleColor.DarkYellow                    
-    Console.WriteLine("Couldnt find any elements with selector '{0}', did you mean:", cssSelector)
-    unique 
+    Array.append classes ids 
+        |> Seq.distinct |> List.ofSeq 
+        |> remove "." |> remove "#" |> Array.ofList
         |> Array.Parallel.map (fun u -> levenshtein cssSelector u)
         |> Array.sortBy (fun r -> r.distance)
         |> Seq.take 5
-        |> Seq.map (fun r -> r.selector)
-        |> Seq.iter (fun r -> Console.WriteLine("\t{0}", r))
-    Console.ResetColor()
+        |> Seq.map (fun r -> r.selector) |> List.ofSeq
+        |> (fun suggestions -> reporter.suggestSelectors cssSelector suggestions)    
 
 let private findByFunction cssSelector timeout f =
     if wipTest then colorizeAndSleep cssSelector    

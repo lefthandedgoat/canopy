@@ -3,6 +3,7 @@
 open System
 open configuration
 open canopy
+open reporters
 
 let rec last = function
     | hd :: [] -> hd
@@ -69,7 +70,7 @@ let rec private makeSuggestions actions =
     | [] -> ()
     | _ :: action2 :: _ when action2.action = "url" -> makeSuggestions actions.Tail
     | action1 :: action2 :: _ when action1.action <> "on" && action2.action <> "on" && (action1.url <> action2.url) ->  //suggestion for doing an action one page that transitioned you to another page and performing an action without checking to see if that page loaded with 'on'
-            Console.WriteLine("Suggestion: as a best practice you should check that you are on a page before\r\naccessing an element on it\r\nyou were on {0}\r\nthen on {1}", action1.url, action2.url);
+            reporter.write (String.Format("Suggestion: as a best practice you should check that you are on a page before\r\naccessing an element on it\r\nyou were on {0}\r\nthen on {1}", action1.url, action2.url))
             makeSuggestions actions.Tail
     | _ -> makeSuggestions actions.Tail
 
@@ -79,23 +80,16 @@ let mutable contextFailed = false
 let mutable failedContexts : string list = []
 let mutable failed = false
 
-let pass () =
-    Console.ForegroundColor <- ConsoleColor.Green
-    Console.WriteLine("Passed");
-    Console.ResetColor()
+let pass () =    
     passedCount <- passedCount + 1
+    reporter.pass ()
 
 let fail (ex : Exception) =
-    if failFast = ref true then
-        failed <- true
-        Console.WriteLine("failFast was set to true and an error occured; testing stopped");
-    Console.ForegroundColor <- ConsoleColor.Red
-    Console.WriteLine("Error: ");
-    Console.ResetColor()
-    Console.WriteLine(ex.Message);
+    if failFast = ref true then failed <- true        
     failedCount <- failedCount + 1
     contextFailed <- true
     screenshot ()
+    reporter.fail ex
 
 let run _ =
     let stopWatch = new Diagnostics.Stopwatch()
@@ -132,7 +126,7 @@ let run _ =
     suites
     |> List.iter (fun s ->
         contextFailed <- false
-        if s.Context <> null then Console.WriteLine (String.Format("context: {0}", s.Context))
+        if s.Context <> null then reporter.context s.Context
         s.Once ()
         if s.Wips.IsEmpty = false then
             wipTest <- true
@@ -148,15 +142,5 @@ let run _ =
     
     history.save failedContexts
 
-    stopWatch.Stop()
-    Console.WriteLine()
-    Console.WriteLine("{0} seconds to execute", stopWatch.Elapsed.Seconds)
-    if failedCount = 0 then
-        Console.ForegroundColor <- ConsoleColor.Green
-    Console.WriteLine("{0} passed", passedCount)
-    Console.ResetColor()
-    if failedCount > 0 then
-        Console.ForegroundColor <- ConsoleColor.Red        
-    Console.WriteLine("{0} failed", failedCount)    
-    Console.ResetColor()
-    ()
+    stopWatch.Stop()    
+    reporter.summary stopWatch.Elapsed.Seconds passedCount failedCount 
