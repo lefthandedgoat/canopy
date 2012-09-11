@@ -13,15 +13,21 @@ before (fun _ -> url page
 
 test(fun _ ->
     describe "fill out a form"
-    "#firstName" << "Mickey"
+    "#firstName" << "Minnie"
     "#lastName" << "Mouse"
     "#dob" << "01/02/1942"
+    
     click "#genderFemale"
+    
     "#address" << "The Big Screen"
     "#city" << "Holywood"
     "#state" << "CA"
     "#zip" << "91601"
-    click ".checkbox"
+    
+    click ".optin input"
+    click ".agree input"
 )
 
 run ()
+
+quit ()
