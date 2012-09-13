@@ -162,7 +162,7 @@ let ( << ) (cssSelector : string) (text : string) =
         let readonly = element.GetAttribute("readonly")
         if readonly = "true" then
             failwith (String.Format("element {0} is marked as read only, you can not write to read only elements", cssSelector))        
-        element.Clear()
+        try element.Clear() with ex -> ex |> ignore
         element.SendKeys(text)
 
 let private textOf (element : IWebElement) =
