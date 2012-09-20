@@ -2,10 +2,13 @@ _Resharper.canopy
 *.ReSharper.user
 *.pdb
 *.exe
+chromedriver.log
 canopy/bin/**/*
 canopy/obj/**/*
 githubtests/bin/**/*
 githubtests/obj/**/*
 basictests/bin/**/*
 basictests/obj/**/*
+demotests/bin/**/*
+demotests/obj/**/*
 *.suo

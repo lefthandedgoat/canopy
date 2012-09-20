@@ -6,8 +6,8 @@ open canopy
 open configuration
 
 suggestions := true
-start firefox
-
+start ie
+let mainBrowser = browser
 elementTimeout <- 3.0
 compareTimeout <- 3.0
 runFailedContextsFirst <- true
@@ -224,37 +224,35 @@ test (fun _ ->
     url testpage    
     "#firstName" == "John1")
 
-test (fun _ ->
-    describe "alert box should have 'Alert Test'"
-    !^ "http://localhost:4567/alert"
+context "alert tests"
+before (fun _ -> !^ "http://localhost:4567/alert")
+
+test (fun _ ->    
+    describe @"alert box should have \'Alert Test\'"    
     click "#alert_test"
     alert() == "Alert Test"
     acceptAlert())
 
 test (fun _ ->
-    describe "alert box should have 'Alert Test'"
-    !^ "http://localhost:4567/alert"
+    describe @"alert box should have \'Alert Test\'"    
     click "#alert_test"
     alert() == "Alert Test"
     dismissAlert())
 
 test (fun _ ->
     describe "alert box should fail correctly when expecting wrong message"
-    failsWith "equality check failed.  expected: Not the message, got: Alert Test"
-    !^ "http://localhost:4567/alert"
+    failsWith "equality check failed.  expected: Not the message, got: Alert Test"    
     click "#alert_test"
     alert() == "Not the message")
 
 test (fun _ ->
-    describe "confirmation box should have 'Confirmation Test'"
-    !^ "http://localhost:4567/alert"
+    describe @"confirmation box should have \'Confirmation Test\'"    
     click "#confirmation_test"
     alert() == "Confirmation Test"
     acceptAlert())
 
 test (fun _ ->
-    describe "confirmation box should have 'Confirmation Test'"
-    !^ "http://localhost:4567/alert"
+    describe @"confirmation box should have \'Confirmation Test\'"    
     click "#confirmation_test"
     alert() == "Confirmation Test"
     dismissAlert())
@@ -262,9 +260,10 @@ test (fun _ ->
 test (fun _ ->
     describe "confirmation box should fail correctly when expecting wrong message"
     failsWith "equality check failed.  expected: Not the message, got: Confirmation Test"
-    !^ "http://localhost:4567/alert"
     click "#confirmation_test"
     alert() == "Not the message")
+
+context "other tests"
 
 test (fun _ ->
     describe "define a custom wait for using any function that takes in unit and returns bool"
@@ -343,6 +342,29 @@ test (fun _ ->
     !^ "http://localhost:4567/count"
     count ".number" 5)
 
+context "dragging"
+test (fun _ ->
+    describe "draging works"
+    url "http://scrumy.com/silenter39delayed"
+    click ".plus-button a img"
+    "#task_title" << "Demo"
+    click "#task_editor_buttons .save_button"
+    ".handle" >> ".inprogress")
+
+context "tiling windows"
+test (fun _ ->
+    start firefox
+    let browser1 = browser
+    start firefox
+    let browser2 = browser
+
+    tile [mainBrowser; browser1; browser2]
+    sleep 1
+    quit ()
+    switchTo browser1
+    quit ()
+)
 run ()
 
+switchTo mainBrowser
 quit ()

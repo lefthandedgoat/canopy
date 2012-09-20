@@ -3,6 +3,7 @@
 open OpenQA.Selenium.Firefox
 open OpenQA.Selenium
 open OpenQA.Selenium.Support.UI
+open OpenQA.Selenium.Interactions
 open System
 open configuration
 open levenshtein
@@ -32,9 +33,10 @@ let start (b : string) =
     //for chrome you need to download chromedriver.exe from http://code.google.com/p/chromedriver/wiki/GettingStarted
     //place chromedriver.exe in c:\ or you can place it in a customer location and change chromeDir value above
     //for ie you need to set Settings -> Advance -> Security Section -> Check-Allow active content to run files on My Computer*
+    //also download IEDriverServer and place in c:\ or configure with ieDir
     //firefox just works
     match b with
-    | "ie" -> browser <- new OpenQA.Selenium.IE.InternetExplorerDriver() :> IWebDriver
+    | "ie" -> browser <- new OpenQA.Selenium.IE.InternetExplorerDriver(ieDir) :> IWebDriver
     | "chrome" -> browser <- new OpenQA.Selenium.Chrome.ChromeDriver(chromeDir) :> IWebDriver
     | _ -> browser <- new OpenQA.Selenium.Firefox.FirefoxDriver() :> IWebDriver
     ()
@@ -56,7 +58,8 @@ let puts (text : string) =
     reporter.write text
     let info = "
         var infoDiv = document.getElementById('canopy_info_div'); if(!infoDiv) { infoDiv = document.createElement('div'); } infoDiv.id = 'canopy_info_div'; infoDiv.setAttribute('style','position: absolute; border: 1px solid black; bottom: 0px; right: 0px; margin: 3px; padding: 3px; background-color: white; z-index: 99999; font-size: 20px; font-family: monospace; font-weight: bold;'); document.getElementsByTagName('body')[0].appendChild(infoDiv); infoDiv.innerHTML = '" + text + "';";
-    swallowedJs info
+    js info
+    ()
     
 let private wait timeout f =
     let wait = new WebDriverWait(browser, TimeSpan.FromSeconds(timeout))
@@ -220,7 +223,6 @@ let doubleClick item =
         | _ -> failwith (String.Format("Can't doubleClick {0} because it is not a string or webelement", item.ToString()))
     with
         | ex -> failwith ex.Message
-
 
 let selected (cssSelector : string) = 
     logAction "selected"
@@ -415,6 +417,32 @@ let check cssSelector =
 
 let uncheck cssSelector =
     if (element cssSelector).Selected = true then click cssSelector
+
+let (>>) cssSelectorA cssSelectorB =
+    let a = element cssSelectorA
+    let b = element cssSelectorB
+    (new Actions(browser)).DragAndDrop(a, b).Perform();
+
+let drag cssSelectorA cssSelectorB =
+    cssSelectorA >> cssSelectorB
+    
+let tile (browsers : OpenQA.Selenium.IWebDriver list) =   
+    let h = System.Windows.Forms.Screen.PrimaryScreen.WorkingArea.Height;
+    let w = System.Windows.Forms.Screen.PrimaryScreen.WorkingArea.Width;
+    let count = browsers.Length
+    let maxWidth = w / count
+
+    let rec setSize (browsers : OpenQA.Selenium.IWebDriver list) c =
+        match browsers with
+        | [] -> ()
+        | b :: tail -> 
+            b.Manage().Window.Size <- new System.Drawing.Size(maxWidth,h);        
+            b.Manage().Window.Position <- new System.Drawing.Point((maxWidth * c),0);
+            setSize tail (c + 1)
+    
+    setSize browsers 0
+
+let switchTo b = browser <- b
 
 //really need to refactor so there are results for every action
 //function for the action, true message, false message, something like that
