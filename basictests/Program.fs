@@ -6,7 +6,7 @@ open canopy
 open configuration
 
 suggestions := true
-start ie
+start firefox
 let mainBrowser = browser
 elementTimeout <- 3.0
 compareTimeout <- 3.0
@@ -360,11 +360,9 @@ test (fun _ ->
 
     tile [mainBrowser; browser1; browser2]
     sleep 1
-    quit ()
-    switchTo browser1
-    quit ()
+    quit browser2
+    quit browser1
 )
 run ()
 
-switchTo mainBrowser
-quit ()
+quit mainBrowser

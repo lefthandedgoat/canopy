@@ -29,6 +29,8 @@ let firefox = "firefox"
 let ie = "ie"
 let chrome = "chrome"
   
+let mutable browsers = []
+
 let start (b : string) =    
     //for chrome you need to download chromedriver.exe from http://code.google.com/p/chromedriver/wiki/GettingStarted
     //place chromedriver.exe in c:\ or you can place it in a customer location and change chromeDir value above
@@ -39,7 +41,7 @@ let start (b : string) =
     | "ie" -> browser <- new OpenQA.Selenium.IE.InternetExplorerDriver(ieDir) :> IWebDriver
     | "chrome" -> browser <- new OpenQA.Selenium.Chrome.ChromeDriver(chromeDir) :> IWebDriver
     | _ -> browser <- new OpenQA.Selenium.Firefox.FirefoxDriver() :> IWebDriver
-    ()
+    browsers <- browsers @ [browser]
 
 let screenshot _ = 
     let pic = (browser :?> ITakesScreenshot).GetScreenshot().AsByteArray
@@ -81,6 +83,10 @@ let private colorizeAndSleep (cssSelector : string) =
     let script = System.String.Format("document.querySelector('{0}').style.backgroundColor = '#FFF467';", cssSelector)
     swallowedJs script
     sleep wipSleep
+    let script = System.String.Format("document.querySelector('{0}').style.backgroundColor = '#ACD372';", cssSelector)
+    swallowedJs script
+
+let highlight (cssSelector : string) =
     let script = System.String.Format("document.querySelector('{0}').style.backgroundColor = '#ACD372';", cssSelector)
     swallowedJs script
 
@@ -239,10 +245,10 @@ let deselected (cssSelector : string) =
 
 let title _ = browser.Title
 
-let quit _ = 
-    browser.Quit()    
-    browser <- null
-    ()
+let quit browser =
+    match box browser with
+    | :? OpenQA.Selenium.IWebDriver as b -> b.Quit()
+    | _ -> browsers |> List.iter (fun b -> b.Quit())
     
 let ( == ) (item : 'a) value =
     match box item with
