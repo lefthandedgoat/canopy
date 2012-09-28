@@ -228,13 +228,13 @@ context "alert tests"
 before (fun _ -> !^ "http://localhost:4567/alert")
 
 test (fun _ ->    
-    describe @"alert box should have \'Alert Test\'"    
+    describe "alert box should have 'Alert Test'"    
     click "#alert_test"
     alert() == "Alert Test"
     acceptAlert())
 
 test (fun _ ->
-    describe @"alert box should have \'Alert Test\'"    
+    describe "alert box should have 'Alert Test'"    
     click "#alert_test"
     alert() == "Alert Test"
     dismissAlert())
@@ -246,13 +246,13 @@ test (fun _ ->
     alert() == "Not the message")
 
 test (fun _ ->
-    describe @"confirmation box should have \'Confirmation Test\'"    
+    describe "confirmation box should have 'Confirmation Test'"    
     click "#confirmation_test"
     alert() == "Confirmation Test"
     acceptAlert())
 
 test (fun _ ->
-    describe @"confirmation box should have \'Confirmation Test\'"    
+    describe "confirmation box should have 'Confirmation Test'"    
     click "#confirmation_test"
     alert() == "Confirmation Test"
     dismissAlert())
