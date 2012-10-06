@@ -84,30 +84,30 @@ let pass () =
     passedCount <- passedCount + 1
     reporter.pass ()
 
-let fail (ex : Exception) =
+let fail (ex : Exception) id =
     if failFast = ref true then failed <- true        
     failedCount <- failedCount + 1
     contextFailed <- true
     screenshot ()
-    reporter.fail ex
+    reporter.fail ex id
 
-let run _ =
+let run () =
     let stopWatch = new Diagnostics.Stopwatch()
-    stopWatch.Start()       
-
-    let runtest (suite : suite) test = 
+    stopWatch.Start()      
+    
+    let runtest (suite : suite) test (number : int) = 
+        let n = (String.Format("Test #{0}", number))
         if failed = false then
-            let id =  Guid.NewGuid().ToString()
             try
-                reporter.testStart id
+                reporter.testStart n
                 suite.Before ()
                 test ()
                 suite.After ()
                 pass()
             with
                 | ex when failureMessage <> null && failureMessage = ex.Message -> pass()
-                | ex -> fail ex id
-            reporter.testEnd id
+                | ex -> fail ex n
+            reporter.testEnd n
                                                 
         if suggestions = ref true then
             makeSuggestions actions
@@ -133,18 +133,21 @@ let run _ =
         s.Once ()
         if s.Wips.IsEmpty = false then
             wipTest <- true
-            s.Wips |> List.iter (fun w -> runtest s w)
+            s.Wips |> List.fold (fun acc w -> runtest s w acc
+                                              acc + 1) 1 |> ignore
             wipTest <- false
         else if s.Manys.IsEmpty = false then
-            s.Manys |> List.iter (fun m -> runtest s m)
+            s.Manys |> List.fold (fun acc m -> runtest s m acc
+                                               acc + 1) 1 |> ignore
         else
-            s.Tests |> List.iter (fun t -> runtest s t)
-        s.Lastly ()
+            s.Tests |> List.fold (fun acc t -> runtest s t acc
+                                               acc + 1) 1 |> ignore 
+        s.Lastly ()        
         if contextFailed = true then failedContexts <- failedContexts @ [s.Context]
-        reporter.contextEnd s.Context
+        if s.Context <> null then reporter.contextEnd s.Context
     )
     
     history.save failedContexts
 
     stopWatch.Stop()    
-    reporter.summary stopWatch.Elapsed.Seconds passedCount failedCount 
+    reporter.summary stopWatch.Elapsed.Minutes stopWatch.Elapsed.Seconds passedCount failedCount 

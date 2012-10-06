@@ -10,7 +10,7 @@ type IReporter =
    abstract member describe : string -> unit
    abstract member contextStart : string -> unit
    abstract member contextEnd : string -> unit
-   abstract member summary : int -> int -> int -> unit
+   abstract member summary : int -> int -> int -> int -> unit
    abstract member write : string -> unit
    abstract member suggestSelectors : string -> string list -> unit
 
@@ -33,9 +33,9 @@ type ConsoleReporter() =
         
         member this.contextEnd c = ()
 
-        member this.summary seconds passed failed =
+        member this.summary minutes seconds passed failed =
             Console.WriteLine()
-            Console.WriteLine("{0} seconds to execute", seconds)
+            Console.WriteLine("{0} minutes {1} seconds to execute", minutes, seconds)
             if failed = 0 then
                 Console.ForegroundColor <- ConsoleColor.Green
             Console.WriteLine("{0} passed", passed)
@@ -79,8 +79,8 @@ type TeamCityReporter() =
             consoleReporter.describe (String.Format("##teamcity[testSuiteFinished name='{0}']", c))
             consoleReporter.contextEnd c
 
-        member this.summary seconds passed failed =
-            consoleReporter.summary seconds passed failed
+        member this.summary minutes seconds passed failed =
+            consoleReporter.summary minutes seconds passed failed
         
         member this.write w = 
             consoleReporter.write w
