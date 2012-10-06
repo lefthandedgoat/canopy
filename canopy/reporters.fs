@@ -26,6 +26,8 @@ type ConsoleReporter() =
             Console.WriteLine("Error: ");
             Console.ResetColor()
             Console.WriteLine(ex.Message);
+            Console.WriteLine("Stack: ");
+            Console.WriteLine(ex.StackTrace);
 
         member this.describe d = Console.WriteLine d
           

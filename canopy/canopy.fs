@@ -10,6 +10,7 @@ open levenshtein
 open reporters
 
 type Action = { action : string; url : string }
+type CanopyException(message) = inherit Exception(message)
 
 let mutable actions = [];
 let mutable (browser : IWebDriver) = null;
@@ -70,6 +71,7 @@ let private wait timeout f =
                                 try
                                     (f ()) = true
                                 with
+                                | :? CanopyException as ce -> failwith ce.Message
                                 | _ -> false
                             )
                   ) |> ignore        
@@ -164,15 +166,17 @@ let private writeToSelect cssSelector text =
 
 let ( << ) (cssSelector : string) (text : string) = 
     logAction "write"
-    let element = find cssSelector elementTimeout
-    if element.TagName = "select" then
-        writeToSelect cssSelector text
-    else
-        let readonly = element.GetAttribute("readonly")
-        if readonly = "true" then
-            failwith (String.Format("element {0} is marked as read only, you can not write to read only elements", cssSelector))        
-        try element.Clear() with ex -> ex |> ignore
-        element.SendKeys(text)
+    wait (elementTimeout + 1.0) (fun _ ->
+        let element = find cssSelector elementTimeout
+        if element.TagName = "select" then
+            writeToSelect cssSelector text
+        else
+            let readonly = element.GetAttribute("readonly")
+            if readonly = "true" then
+                raise (CanopyException((String.Format("element {0} is marked as read only, you can not write to read only elements", cssSelector))))
+            try element.Clear() with ex -> ex |> ignore
+            element.SendKeys(text)
+        true)
 
 let private textOf (element : IWebElement) =
     if element.TagName = "input" then
