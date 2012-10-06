@@ -4,6 +4,7 @@ open System
 open runner
 open canopy
 open configuration
+open reporters
 
 suggestions := true
 start firefox
@@ -11,6 +12,7 @@ let mainBrowser = browser
 elementTimeout <- 3.0
 compareTimeout <- 3.0
 runFailedContextsFirst <- true
+reporter <- new TeamCityReporter() :> IReporter
 
 context "context1"
 once (fun _ -> Console.WriteLine "once")

@@ -97,14 +97,17 @@ let run _ =
 
     let runtest (suite : suite) test = 
         if failed = false then
+            let id =  Guid.NewGuid().ToString()
             try
+                reporter.testStart id
                 suite.Before ()
                 test ()
                 suite.After ()
                 pass()
             with
                 | ex when failureMessage <> null && failureMessage = ex.Message -> pass()
-                | ex -> fail ex
+                | ex -> fail ex id
+            reporter.testEnd id
                                                 
         if suggestions = ref true then
             makeSuggestions actions
