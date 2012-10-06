@@ -8,7 +8,8 @@ type IReporter =
    abstract member fail : Exception -> string -> unit
    abstract member testEnd : string -> unit
    abstract member describe : string -> unit
-   abstract member context : string -> unit
+   abstract member contextStart : string -> unit
+   abstract member contextEnd : string -> unit
    abstract member summary : int -> int -> int -> unit
    abstract member write : string -> unit
    abstract member suggestSelectors : string -> string list -> unit
@@ -28,7 +29,9 @@ type ConsoleReporter() =
 
         member this.describe d = Console.WriteLine d
           
-        member this.context c = Console.WriteLine (String.Format("context: {0}", c))
+        member this.contextStart c = Console.WriteLine (String.Format("context: {0}", c))
+        
+        member this.contextEnd c = ()
 
         member this.summary seconds passed failed =
             Console.WriteLine()
@@ -68,9 +71,13 @@ type TeamCityReporter() =
         member this.describe d = 
             consoleReporter.describe d
           
-        member this.context c = 
+        member this.contextStart c = 
             consoleReporter.describe (String.Format("##teamcity[testSuiteStarted name='{0}']", c))
-            consoleReporter.context c
+            consoleReporter.contextStart c
+
+        member this.contextEnd c = 
+            consoleReporter.describe (String.Format("##teamcity[testSuiteFinished name='{0}']", c))
+            consoleReporter.contextEnd c
 
         member this.summary seconds passed failed =
             consoleReporter.summary seconds passed failed

@@ -129,7 +129,7 @@ let run _ =
     suites
     |> List.iter (fun s ->
         contextFailed <- false
-        if s.Context <> null then reporter.context s.Context
+        if s.Context <> null then reporter.contextStart s.Context
         s.Once ()
         if s.Wips.IsEmpty = false then
             wipTest <- true
@@ -141,6 +141,7 @@ let run _ =
             s.Tests |> List.iter (fun t -> runtest s t)
         s.Lastly ()
         if contextFailed = true then failedContexts <- failedContexts @ [s.Context]
+        reporter.contextEnd s.Context
     )
     
     history.save failedContexts
