@@ -65,7 +65,7 @@ type TeamCityReporter() =
             consoleReporter.pass ()
 
         member this.fail ex id =         
-            consoleReporter.describe (String.Format("##teamcity[testFailed name='{0}' message='{1}' details='{2}']", id, ex.Message, ex.StackTrace))
+            consoleReporter.describe (String.Format("##teamcity[testFailed name='{0}' message='{1}']", id, ex.Message))
             consoleReporter.fail ex id
 
         member this.describe d = 
