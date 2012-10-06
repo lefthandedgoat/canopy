@@ -355,6 +355,7 @@ test (fun _ ->
 
 context "tiling windows"
 test (fun _ ->
+    describe "start multiple browsers and tile them"
     start firefox
     let browser1 = browser
     start firefox

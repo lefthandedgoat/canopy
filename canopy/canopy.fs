@@ -425,9 +425,11 @@ let uncheck cssSelector =
     if (element cssSelector).Selected = true then click cssSelector
 
 let (>>) cssSelectorA cssSelectorB =
-    let a = element cssSelectorA
-    let b = element cssSelectorB
-    (new Actions(browser)).DragAndDrop(a, b).Perform();
+    wait elementTimeout (fun _ ->
+        let a = element cssSelectorA
+        let b = element cssSelectorB
+        (new Actions(browser)).DragAndDrop(a, b).Perform()
+        true)
 
 let drag cssSelectorA cssSelectorB =
     cssSelectorA >> cssSelectorB
