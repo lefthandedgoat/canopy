@@ -71,6 +71,7 @@ type TeamCityReporter() =
             consoleReporter.fail ex id
 
         member this.describe d = 
+            consoleReporter.describe (String.Format("##teamcity[message text='{0}' status='NORMAL']", d))
             consoleReporter.describe d
           
         member this.contextStart c = 
