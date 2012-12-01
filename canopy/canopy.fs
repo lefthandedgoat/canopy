@@ -93,17 +93,18 @@ let highlight (cssSelector : string) =
     swallowedJs script
 
 let suggestOtherSelectors (cssSelector : string) =     
-    let allElements = browser.FindElements(By.CssSelector("html *")) |> Array.ofSeq
-    let classes = allElements |> Array.Parallel.map (fun e -> "." + e.GetAttribute("class"))
-    let ids = allElements |> Array.Parallel.map (fun e -> "#" + e.GetAttribute("id"))
-    Array.append classes ids 
-        |> Seq.distinct |> List.ofSeq 
-        |> remove "." |> remove "#" |> Array.ofList
-        |> Array.Parallel.map (fun u -> levenshtein cssSelector u)
-        |> Array.sortBy (fun r -> r.distance)
-        |> Seq.take 5
-        |> Seq.map (fun r -> r.selector) |> List.ofSeq
-        |> (fun suggestions -> reporter.suggestSelectors cssSelector suggestions)    
+    if not disableSuggestOtherSelectors then
+        let allElements = browser.FindElements(By.CssSelector("html *")) |> Array.ofSeq
+        let classes = allElements |> Array.Parallel.map (fun e -> "." + e.GetAttribute("class"))
+        let ids = allElements |> Array.Parallel.map (fun e -> "#" + e.GetAttribute("id"))
+        Array.append classes ids 
+            |> Seq.distinct |> List.ofSeq 
+            |> remove "." |> remove "#" |> Array.ofList
+            |> Array.Parallel.map (fun u -> levenshtein cssSelector u)
+            |> Array.sortBy (fun r -> r.distance)
+            |> Seq.take 5
+            |> Seq.map (fun r -> r.selector) |> List.ofSeq
+            |> (fun suggestions -> reporter.suggestSelectors cssSelector suggestions)    
 
 let private findByFunction cssSelector timeout f =
     if wipTest then colorizeAndSleep cssSelector    

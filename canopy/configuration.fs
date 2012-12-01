@@ -13,3 +13,4 @@ let mutable pageTimeout = 10.0
 let mutable wipSleep = 1
 let mutable runFailedContextsFirst = false
 let mutable reporter : IReporter = new ConsoleReporter() :> IReporter
+let mutable disableSuggestOtherSelectors = false
