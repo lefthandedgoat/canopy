@@ -14,3 +14,4 @@ let mutable wipSleep = 1
 let mutable runFailedContextsFirst = false
 let mutable reporter : IReporter = new ConsoleReporter() :> IReporter
 let mutable disableSuggestOtherSelectors = false
+let mutable autoPinBrowserRightOnLaunch = true
