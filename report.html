@@ -8,17 +8,17 @@
             border-style: solid;
             border-width: 1px;
         }
-        div.passed
+        div.passed, div.passedContext
         {
             border-color: Green;
             border-width: 3px;
         }
-        div.failed
+        div.failed, div.failedContext
         {
             border-color: Red;
             border-width: 3px;
         }
-        div.skipped
+        div.skipped, div.skippedContext
         {
             border-color: Orange;
             border-width: 3px;
@@ -29,9 +29,9 @@
     <div id="report">
         <div id="top">
             <div id="checkboxes">
-                <input type="checkbox" id="passed" />Passed
-                <input type="checkbox" id="failed" />Failed
-                <input type="checkbox" id="skipped" />Skipped
+                <input type="checkbox" id="passed" checked="checked"/>Passed
+                <input type="checkbox" id="failed" checked="checked"/>Failed
+                <input type="checkbox" id="skipped" checked="checked"/>Skipped
             </div>
             <div id="summary">
                 <span>10 total</span> <span>8 passed</span> <span>1 failed</span> <span>1 skipped</span>
@@ -41,15 +41,12 @@
             </div>
         </div>
         <div id="results">
-            <div class="context">
+            <div class="context failedContext">
                 <div class="contextDescription">
                     Context 1
                 </div>
                 <div class="contextResults">
                     <div class="result passed">
-                        <div class="resultTime">
-                            5 seconds
-                        </div>
                         <div class="resultDescriptions">
                             Going to google goes to google
                         </div>
@@ -62,9 +59,6 @@
                         </div>
                     </div>
                     <div class="result failed">
-                        <div class="resultTime">
-                            5 seconds
-                        </div>
                         <div class="resultDescriptions">
                             Going to yahoo goes to yahoo
                         </div>
@@ -77,9 +71,80 @@
                         </div>
                     </div>
                     <div class="result skipped">
-                        <div class="resultTime">
-                            5 seconds
+                        <div class="resultDescriptions">
+                            Going to msdn goes to msdn
                         </div>
+                        <div class="resultAssertion">
+                            Expected: "http://www.msdn.com"<br />
+                            Got: "http://www.msdn.com"
+                        </div>
+                        <div class="resultStacktrace">
+                            No stacktrace
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="context passedContext">
+                <div class="contextDescription">
+                    Context 1
+                </div>
+                <div class="contextResults">
+                    <div class="result passed">
+                        <div class="resultDescriptions">
+                            Going to google goes to google
+                        </div>
+                        <div class="resultAssertion">
+                            Expected: "http://www.google.com"<br />
+                            Got: "http://www.google.com"
+                        </div>
+                        <div class="resultStacktrace">
+                            No stacktrace
+                        </div>
+                    </div>
+                    <div class="result passed">
+                        <div class="resultDescriptions">
+                            Going to yahoo goes to yahoo
+                        </div>
+                        <div class="resultAssertion">
+                            Expected: "http://www.yahoo.com"<br />
+                            Got: "http://www.yahoo.com"
+                        </div>
+                        <div class="resultStacktrace">
+                            No stacktrace
+                        </div>
+                    </div>
+                    <div class="result passed">
+                        <div class="resultDescriptions">
+                            Going to msdn goes to msdn
+                        </div>
+                        <div class="resultAssertion">
+                            Expected: "http://www.msdn.com"<br />
+                            Got: "http://www.msdn.com"
+                        </div>
+                        <div class="resultStacktrace">
+                            No stacktrace
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="context skippedContext">
+                <div class="contextDescription">
+                    Context 1
+                </div>
+                <div class="contextResults">
+                    <div class="result skipped">
+                        <div class="resultDescriptions">
+                            Going to google goes to google
+                        </div>
+                        <div class="resultAssertion">
+                            Expected: "http://www.google.com"<br />
+                            Got: "http://www.google.com"
+                        </div>
+                        <div class="resultStacktrace">
+                            No stacktrace
+                        </div>
+                    </div>
+                    <div class="result skipped">
                         <div class="resultDescriptions">
                             Going to msdn goes to msdn
                         </div>
@@ -102,6 +167,20 @@
                 $(".passed").show();
             } else {
                 $(".passed").hide();
+            }
+        });
+        $("#failed").change(function () {
+            if ($(this).is(":checked")) {
+                $(".failed").show();
+            } else {
+                $(".failed").hide();
+            }
+        });
+        $("#skipped").change(function () {
+            if ($(this).is(":checked")) {
+                $(".skipped").show();
+            } else {
+                $(".skipped").hide();
             }
         });
     </script>
