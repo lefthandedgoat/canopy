@@ -1,0 +1,109 @@
+<html>
+<!DOCTYPE html>
+<head>
+    <title>canopy html report</title>
+    <style type="text/css">
+        div
+        {
+            border-style: solid;
+            border-width: 1px;
+        }
+        div.passed
+        {
+            border-color: Green;
+            border-width: 3px;
+        }
+        div.failed
+        {
+            border-color: Red;
+            border-width: 3px;
+        }
+        div.skipped
+        {
+            border-color: Orange;
+            border-width: 3px;
+        }
+    </style>
+</head>
+<body>
+    <div id="report">
+        <div id="top">
+            <div id="checkboxes">
+                <input type="checkbox" id="passed" />Passed
+                <input type="checkbox" id="failed" />Failed
+                <input type="checkbox" id="skipped" />Skipped
+            </div>
+            <div id="summary">
+                <span>10 total</span> <span>8 passed</span> <span>1 failed</span> <span>1 skipped</span>
+            </div>
+            <div id="time">
+                <span>212 seconds</span>
+            </div>
+        </div>
+        <div id="results">
+            <div class="context">
+                <div class="contextDescription">
+                    Context 1
+                </div>
+                <div class="contextResults">
+                    <div class="result passed">
+                        <div class="resultTime">
+                            5 seconds
+                        </div>
+                        <div class="resultDescriptions">
+                            Going to google goes to google
+                        </div>
+                        <div class="resultAssertion">
+                            Expected: "http://www.google.com"<br />
+                            Got: "http://www.google.com"
+                        </div>
+                        <div class="resultStacktrace">
+                            No stacktrace
+                        </div>
+                    </div>
+                    <div class="result failed">
+                        <div class="resultTime">
+                            5 seconds
+                        </div>
+                        <div class="resultDescriptions">
+                            Going to yahoo goes to yahoo
+                        </div>
+                        <div class="resultAssertion">
+                            Expected: "http://www.yahoo.com"<br />
+                            Got: "http://www.yahoo.com"
+                        </div>
+                        <div class="resultStacktrace">
+                            No stacktrace
+                        </div>
+                    </div>
+                    <div class="result skipped">
+                        <div class="resultTime">
+                            5 seconds
+                        </div>
+                        <div class="resultDescriptions">
+                            Going to msdn goes to msdn
+                        </div>
+                        <div class="resultAssertion">
+                            Expected: "http://www.msdn.com"<br />
+                            Got: "http://www.msdn.com"
+                        </div>
+                        <div class="resultStacktrace">
+                            No stacktrace
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    <script type="text/javascript" src="http://ajax.googleapis.com/ajax/libs/jquery/1.8.2/jquery.min.js"></script>
+    <script type="text/javascript">
+        $("#passed").change(function () {
+            if ($(this).is(":checked")) {
+                $(".passed").show();
+            } else {
+                $(".passed").hide();
+            }
+        });
+    </script>
+</body>
+</html>
