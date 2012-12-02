@@ -4,6 +4,7 @@ open OpenQA.Selenium.Firefox
 open OpenQA.Selenium
 open OpenQA.Selenium.Support.UI
 open OpenQA.Selenium.Interactions
+open System.IO
 open System
 open configuration
 open levenshtein
@@ -16,6 +17,11 @@ let mutable actions = [];
 let mutable (browser : IWebDriver) = null;
 let mutable (failureMessage : string) = null
 let mutable wipTest = false
+
+//directions
+type direction =
+    | Left
+    | Right
 
 //keys
 let tab = Keys.Tab
@@ -32,6 +38,15 @@ let chrome = "chrome"
   
 let mutable browsers = []
 
+let pin direction =   
+    let h = System.Windows.Forms.Screen.PrimaryScreen.WorkingArea.Height;
+    let w = System.Windows.Forms.Screen.PrimaryScreen.WorkingArea.Width;
+    let maxWidth = w / 2    
+    browser.Manage().Window.Size <- new System.Drawing.Size(maxWidth,h);        
+    match direction with
+    | Left -> browser.Manage().Window.Position <- new System.Drawing.Point((maxWidth * 0),0);   
+    | Right -> browser.Manage().Window.Position <- new System.Drawing.Point((maxWidth * 1),0);   
+    
 let start (b : string) =    
     //for chrome you need to download chromedriver.exe from http://code.google.com/p/chromedriver/wiki/GettingStarted
     //place chromedriver.exe in c:\ or you can place it in a customer location and change chromeDir value above
@@ -42,11 +57,14 @@ let start (b : string) =
     | "ie" -> browser <- new OpenQA.Selenium.IE.InternetExplorerDriver(ieDir) :> IWebDriver
     | "chrome" -> browser <- new OpenQA.Selenium.Chrome.ChromeDriver(chromeDir) :> IWebDriver
     | _ -> browser <- new OpenQA.Selenium.Firefox.FirefoxDriver() :> IWebDriver
+    if autoPinBrowserRightOnLaunch = true then pin Right
     browsers <- browsers @ [browser]
 
 let screenshot _ = 
-    let pic = (browser :?> ITakesScreenshot).GetScreenshot().AsByteArray
-    IO.File.WriteAllBytes(Environment.GetFolderPath(Environment.SpecialFolder.ApplicationData) + @"\canopy\" + DateTime.Now.ToString("MMM-d_HH-mm-ss-fff") + ".png", pic)
+    let pic = (browser :?> ITakesScreenshot).GetScreenshot().AsByteArray    
+    let p = Environment.GetFolderPath(Environment.SpecialFolder.ApplicationData) + @"\canopy\"
+    if Directory.Exists(p) = false then Directory.CreateDirectory(p) |> ignore
+    IO.File.WriteAllBytes(p + DateTime.Now.ToString("MMM-d_HH-mm-ss-fff") + ".png", pic)
 
 let js script = (browser :?> IJavaScriptExecutor).ExecuteScript(script)
 
