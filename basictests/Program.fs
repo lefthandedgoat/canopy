@@ -12,7 +12,7 @@ let mainBrowser = browser
 elementTimeout <- 3.0
 compareTimeout <- 3.0
 runFailedContextsFirst <- true
-reporter <- new TeamCityReporter() :> IReporter
+reporter <- new HtmlReporter() :> IReporter
 
 context "context1"
 once (fun _ -> Console.WriteLine "once")
