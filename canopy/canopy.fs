@@ -124,31 +124,72 @@ let suggestOtherSelectors (cssSelector : string) =
             |> Seq.map (fun r -> r.selector) |> List.ofSeq
             |> (fun suggestions -> reporter.suggestSelectors cssSelector suggestions)    
 
-let private findByFunction cssSelector timeout f =
+let private findByCss cssSelector f =
+    try
+        f(By.CssSelector(cssSelector))
+    with 
+        | _ -> null
+
+let private isInputField (element : IWebElement) =
+    element.TagName = "input" && element.GetAttribute("type") <> "hidden"
+    
+let private isField (element : IWebElement) =
+    element.TagName = "select" || element.TagName = "textarea" || isInputField element
+
+let private findByLabel locator f =
+    let firstFollowingField (label : IWebElement) =
+        let followingElements = label.FindElements(By.XPath("./following-sibling::*[1]")) |> Seq.toList
+        match followingElements with
+            | head :: tail -> 
+                if isField head then
+                    head
+                else
+                    null
+            | [] -> null
+    try
+        let label = browser.FindElement(By.XPath(sprintf ".//label[text() = '%s']" locator))
+        if (label = null) then
+            null
+        else
+            let id = label.GetAttribute("for")
+            match id with
+                | null -> firstFollowingField label
+                | id -> f(By.Id(id))
+    with
+        | _ -> null
+
+let findElement cssSelector =
+    try
+        let cssResult = findByCss cssSelector browser.FindElement
+        if cssResult <> null then
+            cssResult
+        else
+            findByLabel cssSelector browser.FindElement
+    with
+        | _ -> null
+
+let findElements cssSelector =
+    try
+        findByCss cssSelector browser.FindElements
+    with
+        | _ -> null
+
+let private findByFunction cssSelector timeout waitFunc =
     if wipTest then colorizeAndSleep cssSelector    
     let wait = new WebDriverWait(browser, TimeSpan.FromSeconds(elementTimeout))
     try
-        wait.Until(fun _ -> (
-                                try
-                                    f(By.CssSelector(cssSelector)) |> ignore
-                                    true
-                                with
-                                | _ -> false
-                            )
-                  ) |> ignore
+        wait.Until(fun _ -> waitFunc cssSelector)
     with
         | :? System.TimeoutException -> puts "Element not found in the allotted time. If you want to increase the time, put elementTimeout <- 10.0 anywhere before a test to increase the timeout"
                                         suggestOtherSelectors cssSelector
                                         failwith (String.Format("cant find element {0}", cssSelector))
         | ex -> failwith ex.Message
 
-    f(By.CssSelector(cssSelector))    
-
 let private find cssSelector timeout =
-    findByFunction cssSelector timeout browser.FindElement
+    findByFunction cssSelector timeout findElement
 
 let private findMany cssSelector timeout =
-    Seq.toList (findByFunction cssSelector timeout browser.FindElements)
+    Seq.toList (findByFunction cssSelector timeout findElements)
     
 let currentUrl _ =
     browser.Url
