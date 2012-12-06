@@ -28,6 +28,16 @@ test (fun _ ->
     "#welcome" == "Welcome")
 
 test (fun _ ->
+    describe "find by label, following field"
+    url testpage
+    "Test Field 1" == "test value 1")
+
+test (fun _ ->
+    describe "find by label, for attribute"
+    url testpage
+    "Test Field 2" == "test value 2")
+
+test (fun _ ->
     describe "#firstName should have John (using == infix operator)"
     url testpage
     "#firstName" == "John")
