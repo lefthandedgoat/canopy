@@ -94,7 +94,7 @@ let private wait timeout f =
                             )
                   ) |> ignore        
     with
-    | :? TimeoutException as te -> raise (System.TimeoutException(te.Message))
+    | :? OpenQA.Selenium.WebDriverTimeoutException as te -> raise (System.TimeoutException(te.Message))
     | ex -> failwith ex.Message
     ()
 
@@ -334,7 +334,8 @@ let ( == ) (item : 'a) value =
                                                 readvalue = value))
         with
             | :? TimeoutException -> failwith (String.Format("equality check failed.  expected: {0}, got: {1}", value, !bestvalue));
-            | ex -> failwith ex.Message
+            | ex -> System.Console.WriteLine(ex.GetType());
+                    failwith ex.Message
     | _ -> failwith (String.Format("Can't check equality on {0} because it is not a string or alert", item.ToString()))
 
 let ( != ) cssSelector value =

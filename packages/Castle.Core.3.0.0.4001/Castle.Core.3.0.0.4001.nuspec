@@ -1,0 +1,21 @@
+<?xml version="1.0"?>
+<package xmlns="http://schemas.microsoft.com/packaging/2011/08/nuspec.xsd">
+  <metadata>
+    <id>Castle.Core</id>
+    <version>3.0.0.4001</version>
+    <title>Castle.Core 3.0</title>
+    <authors>Castle Project Contributors</authors>
+    <owners>Castle Project Contributors</owners>
+    <licenseUrl>http://www.apache.org/licenses/LICENSE-2.0.html</licenseUrl>
+    <projectUrl>http://www.castleproject.org/</projectUrl>
+    <iconUrl>http://castleproject.org/images/cp_logo100.png</iconUrl>
+    <requireLicenseAcceptance>false</requireLicenseAcceptance>
+    <description>Castle Project Core, including DynamicProxy, Logging Abstractions and DictionaryAdapter</description>
+    <summary>Castle Project Core, including DynamicProxy, Logging Abstractions and DictionaryAdapter</summary>
+    <copyright>Copyright 2004-2011 Castle Project - http://www.castleproject.org/</copyright>
+    <tags>castle, dynamicproxy, dynamic proxy, dynamicproxy2, dictionaryadapter, emailsender</tags>
+    <references>
+      <reference file="Castle.Core.dll" />
+    </references>
+  </metadata>
+</package>
