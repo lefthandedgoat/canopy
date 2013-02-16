@@ -21,14 +21,6 @@ type direction =
     | Left
     | Right
 
-//keys
-let tab = Keys.Tab
-let enter = Keys.Enter
-let down = Keys.Down
-let up = Keys.Up
-let left = Keys.Left
-let right = Keys.Right
-
 //browser
 let firefox = "firefox"
 let ie = "ie"
@@ -36,27 +28,8 @@ let chrome = "chrome"
   
 let mutable browsers = []
 
-let pin direction =   
-    let h = System.Windows.Forms.Screen.PrimaryScreen.WorkingArea.Height;
-    let w = System.Windows.Forms.Screen.PrimaryScreen.WorkingArea.Width;
-    let maxWidth = w / 2    
-    browser.Manage().Window.Size <- new System.Drawing.Size(maxWidth,h);        
-    match direction with
-    | Left -> browser.Manage().Window.Position <- new System.Drawing.Point((maxWidth * 0),0);   
-    | Right -> browser.Manage().Window.Position <- new System.Drawing.Point((maxWidth * 1),0);   
-    
-let start (b : string) =    
-    //for chrome you need to download chromedriver.exe from http://code.google.com/p/chromedriver/wiki/GettingStarted
-    //place chromedriver.exe in c:\ or you can place it in a customer location and change chromeDir value above
-    //for ie you need to set Settings -> Advance -> Security Section -> Check-Allow active content to run files on My Computer*
-    //also download IEDriverServer and place in c:\ or configure with ieDir
-    //firefox just works
-    match b with
-    | "ie" -> browser <- new OpenQA.Selenium.IE.InternetExplorerDriver(ieDir) :> IWebDriver
-    | "chrome" -> browser <- new OpenQA.Selenium.Chrome.ChromeDriver(chromeDir) :> IWebDriver
-    | _ -> browser <- new OpenQA.Selenium.Firefox.FirefoxDriver() :> IWebDriver
-    if autoPinBrowserRightOnLaunch = true then pin Right
-    browsers <- browsers @ [browser]
+//misc
+let failsWith message = failureMessage <- message
 
 let screenshot _ = 
     let pic = (browser :?> ITakesScreenshot).GetScreenshot().AsByteArray    
@@ -122,19 +95,32 @@ let suggestOtherSelectors (cssSelector : string) =
             |> Seq.map (fun r -> r.selector) |> List.ofSeq
             |> (fun suggestions -> reporter.suggestSelectors cssSelector suggestions)    
 
+let describe (text : string) =
+    puts text
+    ()
+
+let waitFor (f : unit -> bool) =
+    try        
+        wait compareTimeout (fun _ -> (f ()))
+    with
+        | :? System.TimeoutException -> puts "Condition not met in given amount of time. If you want to increase the time, put compareTimeout <- 10.0 anywhere before a test to increase the timeout"
+                                        failwith (String.Format("waitFor condition failed to become true in {0} seconds", compareTimeout))
+        | ex -> failwith ex.Message
+
+//find related
 let private findByCss cssSelector f =
     try
         f(By.CssSelector(cssSelector))
     with 
         | _ -> null
 
-let private isInputField (element : IWebElement) =
-    element.TagName = "input" && element.GetAttribute("type") <> "hidden"
-    
-let private isField (element : IWebElement) =
-    element.TagName = "select" || element.TagName = "textarea" || isInputField element
-
 let private findByLabel locator f =
+    let isInputField (element : IWebElement) =
+        element.TagName = "input" && element.GetAttribute("type") <> "hidden"
+    
+    let isField (element : IWebElement) =
+        element.TagName = "select" || element.TagName = "textarea" || isInputField element
+
     let firstFollowingField (label : IWebElement) =
         let followingElements = label.FindElements(By.XPath("./following-sibling::*[1]")) |> Seq.toList
         match followingElements with
@@ -189,22 +175,7 @@ let private find cssSelector timeout =
 let private findMany cssSelector timeout =
     Seq.toList (findByFunction cssSelector timeout findElements)
     
-let currentUrl _ =
-    browser.Url
-
-let on (u: string) = 
-    try
-        wait pageTimeout (fun _ -> (browser.Url.Contains(u)))
-    with
-        | ex -> failwith (String.Format("on check failed, expected {0} got {1}", u, browser.Url));
-    ()
-
-let ( !^ ) (u : string) = 
-    browser.Navigate().GoToUrl(u)
-
-let url (u : string) = 
-    !^ u
-
+//read/write
 let private writeToSelect cssSelector text =
     let element = find cssSelector elementTimeout
     let options = Seq.toList (element.FindElements(By.TagName("option")))
@@ -252,51 +223,51 @@ let clear (cssSelector : string) =
     if readonly = "true" then
         failwith (String.Format("element {0} is marked as read only, you can not clear read only elements", cssSelector))        
     element.Clear()
-    
-let click item = 
-    try
-        match box item with
-        | :? IWebElement as element -> element.Click()
-        | :? string as cssSelector ->         
-            wait elementTimeout (fun _ -> let element = find cssSelector elementTimeout
-                                          element.Click()
-                                          true)
-        | _ -> failwith (String.Format("Can't click {0} because it is not a string or webelement", item.ToString()))
-    with
-        | ex -> failwith ex.Message
 
-let doubleClick item =
-    try
-        let js = "var evt = document.createEvent('MouseEvents'); evt.initMouseEvent('dblclick',true, true, window, 0, 0, 0, 0, 0, false, false, false, false, 0,null); arguments[0].dispatchEvent(evt);"
-
-        match box item with
-        | :? IWebElement as element -> (browser :?> IJavaScriptExecutor).ExecuteScript(js, element) |> ignore
-        | :? string as cssSelector ->         
-            wait elementTimeout (fun _ -> ( let element = find cssSelector elementTimeout
-                                            (browser :?> IJavaScriptExecutor).ExecuteScript(js, element) |> ignore
-                                            true))
-        | _ -> failwith (String.Format("Can't doubleClick {0} because it is not a string or webelement", item.ToString()))
-    with
-        | ex -> failwith ex.Message
-
+//status
 let selected (cssSelector : string) = 
     let element = find cssSelector elementTimeout
     if element.Selected = false then
         failwith (String.Format("element selected failed, {0} not selected.", cssSelector));    
     
-
 let deselected (cssSelector : string) =     
         let element = find cssSelector elementTimeout
         if element.Selected then
             failwith (String.Format("element deselected failed, {0} selected.", cssSelector));    
 
-let title _ = browser.Title
+//keyboard
+let tab = Keys.Tab
+let enter = Keys.Enter
+let down = Keys.Down
+let up = Keys.Up
+let left = Keys.Left
+let right = Keys.Right
 
-let quit browser =
-    match box browser with
-    | :? OpenQA.Selenium.IWebDriver as b -> b.Quit()
-    | _ -> browsers |> List.iter (fun b -> b.Quit())
+let press key = 
+    let element = ((js "return document.activeElement;") :?> IWebElement)
+    element.SendKeys(key)
+
+//alerts
+let alert() = browser.SwitchTo().Alert()
+
+let acceptAlert _ = browser.SwitchTo().Alert().Accept()
+
+let dismissAlert _ = browser.SwitchTo().Alert().Dismiss()
+
+//get elements
+let element cssSelector =  find cssSelector elementTimeout
+
+let elements cssSelector = findMany cssSelector elementTimeout
+
+let exists cssSelector = find cssSelector elementTimeout
+
+let nth index cssSelector = List.nth (elements cssSelector) index
+
+let first cssSelector = (elements cssSelector).Head
+
+let last cssSelector = (List.rev (elements cssSelector)).Head
     
+//assertions    
 let ( == ) (item : 'a) value =
     match box item with
     | :? IAlert as alert -> let text = alert.Text
@@ -359,65 +330,13 @@ let count cssSelector count =
         | :? TimeoutException -> failwith (String.Format("count failed. expected: {0} got: {1} ", count, (findMany cssSelector elementTimeout).Length));
         | ex -> failwith ex.Message
 
-let describe (text : string) =
-    puts text
-    ()
-
-let press key = 
-    let element = ((js "return document.activeElement;") :?> IWebElement)
-    element.SendKeys(key)
-
-let reload _ =
-    url (currentUrl ())
-
-let failsWith message = 
-    failureMessage <- message
-
-let alert (action : 'a) =
-    let alert = browser.SwitchTo().Alert()
-    alert
-
-let acceptAlert _ =
-    browser.SwitchTo().Alert().Accept()
-
-let dismissAlert _ =
-    browser.SwitchTo().Alert().Dismiss()
-
-let waitFor (f : unit -> bool) =
-    try        
-        wait compareTimeout (fun _ -> (f ()))
-    with
-        | :? System.TimeoutException -> puts "Condition not met in given amount of time. If you want to increase the time, put compareTimeout <- 10.0 anywhere before a test to increase the timeout"
-                                        failwith (String.Format("waitFor condition failed to become true in {0} seconds", compareTimeout))
-        | ex -> failwith ex.Message
-
-let element cssSelector = 
-    find cssSelector elementTimeout
-
-let elements cssSelector =
-    findMany cssSelector elementTimeout
-
-let exists cssSelector =
-    find cssSelector elementTimeout
-
-let is expected actual =
-    if expected = actual then
-        ()
-    else
-        failwith (String.Format("equality check failed.  expected: {0}, got: {1}", expected, actual));
-
-let (===) expected actual =
-    is expected actual
-
-let private regexMatch pattern input =
-    System.Text.RegularExpressions.Regex.Match(input, pattern).Success
+let private regexMatch pattern input = System.Text.RegularExpressions.Regex.Match(input, pattern).Success
 
 let elementsWithText cssSelector regex =
     findMany cssSelector elementTimeout
     |> List.filter (fun element -> regexMatch regex (textOf element))
 
-let elementWithText cssSelector regex = 
-    (elementsWithText cssSelector regex).Head
+let elementWithText cssSelector regex = (elementsWithText cssSelector regex).Head
 
 let ( =~ ) cssSelector pattern =
     try
@@ -426,15 +345,14 @@ let ( =~ ) cssSelector pattern =
         | :? TimeoutException -> failwith (String.Format("regex equality check failed.  expected: {0}, got: {1}", pattern, (read cssSelector)));
         | ex -> failwith ex.Message
 
-let nth index cssSelector =
- List.nth (elements cssSelector) index
+let is expected actual =
+    if expected = actual then
+        ()
+    else
+        failwith (String.Format("equality check failed.  expected: {0}, got: {1}", expected, actual));
 
-let first cssSelector =
- (elements cssSelector).Head
+let (===) expected actual = is expected actual
 
-let last cssSelector =
- (List.rev (elements cssSelector)).Head
-      
 let private shown cssSelector =
     let element = element cssSelector
     let opacity = element.GetCssValue("opacity")
@@ -456,15 +374,40 @@ let notDisplayed cssSelector =
         | :? TimeoutException -> failwith (String.Format("notDisplay checked for {0} failed.", cssSelector));
         | ex -> failwith ex.Message    
 
-let fadedIn cssSelector =
-    (fun _ -> shown cssSelector)
+let fadedIn cssSelector = (fun _ -> shown cssSelector)
 
-let check cssSelector =
-    if (element cssSelector).Selected = false then click cssSelector
+//clicking/checking
+let click item = 
+    try
+        match box item with
+        | :? IWebElement as element -> element.Click()
+        | :? string as cssSelector ->         
+            wait elementTimeout (fun _ -> let element = find cssSelector elementTimeout
+                                          element.Click()
+                                          true)
+        | _ -> failwith (String.Format("Can't click {0} because it is not a string or webelement", item.ToString()))
+    with
+        | ex -> failwith ex.Message
 
-let uncheck cssSelector =
-    if (element cssSelector).Selected = true then click cssSelector
+let doubleClick item =
+    try
+        let js = "var evt = document.createEvent('MouseEvents'); evt.initMouseEvent('dblclick',true, true, window, 0, 0, 0, 0, 0, false, false, false, false, 0,null); arguments[0].dispatchEvent(evt);"
 
+        match box item with
+        | :? IWebElement as element -> (browser :?> IJavaScriptExecutor).ExecuteScript(js, element) |> ignore
+        | :? string as cssSelector ->         
+            wait elementTimeout (fun _ -> ( let element = find cssSelector elementTimeout
+                                            (browser :?> IJavaScriptExecutor).ExecuteScript(js, element) |> ignore
+                                            true))
+        | _ -> failwith (String.Format("Can't doubleClick {0} because it is not a string or webelement", item.ToString()))
+    with
+        | ex -> failwith ex.Message
+
+let check cssSelector = if (element cssSelector).Selected = false then click cssSelector
+
+let uncheck cssSelector = if (element cssSelector).Selected = true then click cssSelector
+
+//draggin
 let (>>) cssSelectorA cssSelectorB =
     wait elementTimeout (fun _ ->
         let a = element cssSelectorA
@@ -472,9 +415,33 @@ let (>>) cssSelectorA cssSelectorB =
         (new Actions(browser)).DragAndDrop(a, b).Perform()
         true)
 
-let drag cssSelectorA cssSelectorB =
-    cssSelectorA >> cssSelectorB
+let drag cssSelectorA cssSelectorB = cssSelectorA >> cssSelectorB
     
+//browser related
+let pin direction =   
+    let h = System.Windows.Forms.Screen.PrimaryScreen.WorkingArea.Height;
+    let w = System.Windows.Forms.Screen.PrimaryScreen.WorkingArea.Width;
+    let maxWidth = w / 2    
+    browser.Manage().Window.Size <- new System.Drawing.Size(maxWidth,h);        
+    match direction with
+    | Left -> browser.Manage().Window.Position <- new System.Drawing.Point((maxWidth * 0),0);   
+    | Right -> browser.Manage().Window.Position <- new System.Drawing.Point((maxWidth * 1),0);   
+
+let start (b : string) =    
+    //for chrome you need to download chromedriver.exe from http://code.google.com/p/chromedriver/wiki/GettingStarted
+    //place chromedriver.exe in c:\ or you can place it in a customer location and change chromeDir value above
+    //for ie you need to set Settings -> Advance -> Security Section -> Check-Allow active content to run files on My Computer*
+    //also download IEDriverServer and place in c:\ or configure with ieDir
+    //firefox just works
+    match b with
+    | "ie" -> browser <- new OpenQA.Selenium.IE.InternetExplorerDriver(ieDir) :> IWebDriver
+    | "chrome" -> browser <- new OpenQA.Selenium.Chrome.ChromeDriver(chromeDir) :> IWebDriver
+    | _ -> browser <- new OpenQA.Selenium.Firefox.FirefoxDriver() :> IWebDriver
+    if autoPinBrowserRightOnLaunch = true then pin Right
+    browsers <- browsers @ [browser]
+
+let switchTo b = browser <- b
+
 let tile (browsers : OpenQA.Selenium.IWebDriver list) =   
     let h = System.Windows.Forms.Screen.PrimaryScreen.WorkingArea.Height;
     let w = System.Windows.Forms.Screen.PrimaryScreen.WorkingArea.Width;
@@ -491,9 +458,24 @@ let tile (browsers : OpenQA.Selenium.IWebDriver list) =
     
     setSize browsers 0
 
-let switchTo b = browser <- b
+let quit browser =
+    match box browser with
+    | :? OpenQA.Selenium.IWebDriver as b -> b.Quit()
+    | _ -> browsers |> List.iter (fun b -> b.Quit())
 
-//really need to refactor so there are results for every action
-//function for the action, true message, false message, something like that
-//and it all gets passed into some sort of assertor, will help with code reuse
-//and be able to impliment not this or not that easier
+let currentUrl _ = browser.Url
+
+let on (u: string) = 
+    try
+        wait pageTimeout (fun _ -> (browser.Url.Contains(u)))
+    with
+        | ex -> failwith (String.Format("on check failed, expected {0} got {1}", u, browser.Url));
+    ()
+
+let ( !^ ) (u : string) = browser.Navigate().GoToUrl(u)
+
+let url (u : string) = !^ u
+
+let title _ = browser.Title
+
+let reload _ = url (currentUrl ())

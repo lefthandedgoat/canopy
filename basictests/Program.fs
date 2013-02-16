@@ -6,7 +6,7 @@ open canopy
 open configuration
 open reporters
 
-start firefox
+start chrome
 let mainBrowser = browser
 elementTimeout <- 3.0
 compareTimeout <- 3.0
@@ -365,9 +365,9 @@ test (fun _ ->
 context "tiling windows"
 test (fun _ ->
     describe "start multiple browsers and tile them"
-    start firefox
+    start chrome
     let browser1 = browser
-    start firefox
+    start chrome
     let browser2 = browser
 
     tile [mainBrowser; browser1; browser2]
