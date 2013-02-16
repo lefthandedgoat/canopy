@@ -53,11 +53,19 @@ test (fun _ ->
     "#firstName" == "")
 
 test (fun _ ->
-    describe "writing to #lastName sets text to new Smith"
+    describe "writing to #lastName sets text to Smith"
     !^ testpage
     clear "#lastName"
     "#lastName" << "Smith"
     "#lastName" == "Smith")
+
+test (fun _ ->
+    describe "writing to .lastName sets text to new Smith in both boxes"
+    !^ testpage
+    clear "#lastName"
+    ".lastName" << "Smith"
+    "#lastName" == "Smith"
+    "#lastName2" == "Smith")
 
 test (fun _ ->
     describe "writing to #lastName sets text to new Smith (implicit clear in write)"

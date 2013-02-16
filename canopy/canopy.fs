@@ -142,7 +142,7 @@ let private findByLabel locator f =
     with
         | _ -> null
 
-let findElement cssSelector =
+let private findElement cssSelector =
     try
         let cssResult = findByCss cssSelector browser.FindElement
         if cssResult <> null then
@@ -152,7 +152,7 @@ let findElement cssSelector =
     with
         | _ -> null
 
-let findElements cssSelector =
+let private findElements cssSelector =
     try
         findByCss cssSelector browser.FindElements
     with
@@ -174,7 +174,20 @@ let private find cssSelector timeout =
 
 let private findMany cssSelector timeout =
     Seq.toList (findByFunction cssSelector timeout findElements)
-    
+
+//get elements
+let element cssSelector =  find cssSelector elementTimeout
+
+let elements cssSelector = findMany cssSelector elementTimeout
+
+let exists cssSelector = find cssSelector elementTimeout
+
+let nth index cssSelector = List.nth (elements cssSelector) index
+
+let first cssSelector = (elements cssSelector).Head
+
+let last cssSelector = (List.rev (elements cssSelector)).Head
+   
 //read/write
 let private writeToSelect cssSelector text =
     let element = find cssSelector elementTimeout
@@ -185,17 +198,20 @@ let private writeToSelect cssSelector text =
     else
         option.Head.Click()
 
-let ( << ) (cssSelector : string) (text : string) = 
+let ( << ) cssSelector (text : string) = 
     wait (elementTimeout + 1.0) (fun _ ->
-        let element = find cssSelector elementTimeout
-        if element.TagName = "select" then
-            writeToSelect cssSelector text
-        else
-            let readonly = element.GetAttribute("readonly")
-            if readonly = "true" then
-                raise (CanopyException((String.Format("element {0} is marked as read only, you can not write to read only elements", cssSelector))))
-            try element.Clear() with ex -> ex |> ignore
-            element.SendKeys(text)
+        let elements = elements cssSelector
+        let writeToElement (e : IWebElement) =
+            if e.TagName = "select" then
+                writeToSelect cssSelector text
+            else
+                let readonly = e.GetAttribute("readonly")
+                if readonly = "true" then
+                    raise (CanopyException((String.Format("element {0} is marked as read only, you can not write to read only elements", cssSelector))))
+                try e.Clear() with ex -> ex |> ignore
+                e.SendKeys(text)
+
+        elements |> List.iter writeToElement
         true)
 
 let private textOf (element : IWebElement) =
@@ -253,19 +269,6 @@ let alert() = browser.SwitchTo().Alert()
 let acceptAlert _ = browser.SwitchTo().Alert().Accept()
 
 let dismissAlert _ = browser.SwitchTo().Alert().Dismiss()
-
-//get elements
-let element cssSelector =  find cssSelector elementTimeout
-
-let elements cssSelector = findMany cssSelector elementTimeout
-
-let exists cssSelector = find cssSelector elementTimeout
-
-let nth index cssSelector = List.nth (elements cssSelector) index
-
-let first cssSelector = (elements cssSelector).Head
-
-let last cssSelector = (List.rev (elements cssSelector)).Head
     
 //assertions    
 let ( == ) (item : 'a) value =
