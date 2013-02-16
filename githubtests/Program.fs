@@ -5,7 +5,6 @@ open canopy
 open configuration
 
 before (fun () -> System.Console.WriteLine("This happens before every test"))
-suggestions := false
 start "firefox"
 
 let github = "https://www.github.com"

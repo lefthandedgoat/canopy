@@ -65,15 +65,6 @@ let wip f = (last suites).Wips <- (last suites).Wips @ [f]
 let many count f = [1 .. count] |> List.iter (fun _ -> (last suites).Manys <- (last suites).Manys @ [f])
 let xtest f = ()
 
-let rec private makeSuggestions actions =
-    match actions with
-    | [] -> ()
-    | _ :: action2 :: _ when action2.action = "url" -> makeSuggestions actions.Tail
-    | action1 :: action2 :: _ when action1.action <> "on" && action2.action <> "on" && (action1.url <> action2.url) ->  //suggestion for doing an action one page that transitioned you to another page and performing an action without checking to see if that page loaded with 'on'
-            reporter.write (String.Format("Suggestion: as a best practice you should check that you are on a page before\r\naccessing an element on it\r\nyou were on {0}\r\nthen on {1}", action1.url, action2.url))
-            makeSuggestions actions.Tail
-    | _ -> makeSuggestions actions.Tail
-
 let mutable passedCount = 0
 let mutable failedCount = 0
 let mutable contextFailed = false
@@ -108,11 +99,7 @@ let run () =
                 | ex when failureMessage <> null && failureMessage = ex.Message -> pass()
                 | ex -> fail ex n
             reporter.testEnd n
-                                                
-        if suggestions = ref true then
-            makeSuggestions actions
-
-        actions <- []
+        
         failureMessage <- null            
 
     //run all the suites

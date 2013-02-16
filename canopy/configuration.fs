@@ -3,7 +3,6 @@ open reporters
 
 //runner related
 let failFast = ref false
-let suggestions = ref false
 
 let mutable chromeDir = @"c:\"
 let mutable ieDir = @"c:\"

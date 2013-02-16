@@ -6,7 +6,6 @@ open canopy
 open configuration
 open reporters
 
-suggestions := true
 start firefox
 let mainBrowser = browser
 elementTimeout <- 3.0

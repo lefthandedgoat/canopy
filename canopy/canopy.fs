@@ -10,10 +10,8 @@ open configuration
 open levenshtein
 open reporters
 
-type Action = { action : string; url : string }
 type CanopyException(message) = inherit Exception(message)
 
-let mutable actions = [];
 let mutable (browser : IWebDriver) = null;
 let mutable (failureMessage : string) = null
 let mutable wipTest = false
@@ -81,7 +79,7 @@ let puts (text : string) =
     let info = "
         var infoDiv = document.getElementById('canopy_info_div'); if(!infoDiv) { infoDiv = document.createElement('div'); } infoDiv.id = 'canopy_info_div'; infoDiv.setAttribute('style','position: absolute; border: 1px solid black; bottom: 0px; right: 0px; margin: 3px; padding: 3px; background-color: white; z-index: 99999; font-size: 20px; font-family: monospace; font-weight: bold;'); document.getElementsByTagName('body')[0].appendChild(infoDiv); infoDiv.innerHTML = '" + escapedText + "';";
     swallowedJs info
-    
+
 let private wait timeout f =
     let wait = new WebDriverWait(browser, TimeSpan.FromSeconds(timeout))
     try
@@ -194,13 +192,7 @@ let private findMany cssSelector timeout =
 let currentUrl _ =
     browser.Url
 
-let logAction a = 
-    let action = { action = a; url = (currentUrl ()) }
-    actions <- List.append actions [action]
-    ()
-
 let on (u: string) = 
-    logAction "on"    
     try
         wait pageTimeout (fun _ -> (browser.Url.Contains(u)))
     with
@@ -209,8 +201,6 @@ let on (u: string) =
 
 let ( !^ ) (u : string) = 
     browser.Navigate().GoToUrl(u)
-    logAction "url"
-    ()
 
 let url (u : string) = 
     !^ u
@@ -225,7 +215,6 @@ let private writeToSelect cssSelector text =
         option.Head.Click()
 
 let ( << ) (cssSelector : string) (text : string) = 
-    logAction "write"
     wait (elementTimeout + 1.0) (fun _ ->
         let element = find cssSelector elementTimeout
         if element.TagName = "select" then
@@ -251,7 +240,6 @@ let private textOf (element : IWebElement) =
 
 let read (cssSelector : string) =    
     try
-        logAction "read"
         let element = find cssSelector elementTimeout
         textOf element
     with
@@ -259,7 +247,6 @@ let read (cssSelector : string) =
 
         
 let clear (cssSelector : string) = 
-    logAction "clear"
     let element = find cssSelector elementTimeout
     let readonly = element.GetAttribute("readonly")
     if readonly = "true" then
@@ -268,7 +255,6 @@ let clear (cssSelector : string) =
     
 let click item = 
     try
-        logAction "click"
         match box item with
         | :? IWebElement as element -> element.Click()
         | :? string as cssSelector ->         
@@ -283,7 +269,6 @@ let doubleClick item =
     try
         let js = "var evt = document.createEvent('MouseEvents'); evt.initMouseEvent('dblclick',true, true, window, 0, 0, 0, 0, 0, false, false, false, false, 0,null); arguments[0].dispatchEvent(evt);"
 
-        logAction "doubleClick"
         match box item with
         | :? IWebElement as element -> (browser :?> IJavaScriptExecutor).ExecuteScript(js, element) |> ignore
         | :? string as cssSelector ->         
@@ -295,14 +280,12 @@ let doubleClick item =
         | ex -> failwith ex.Message
 
 let selected (cssSelector : string) = 
-    logAction "selected"
     let element = find cssSelector elementTimeout
     if element.Selected = false then
         failwith (String.Format("element selected failed, {0} not selected.", cssSelector));    
     
 
 let deselected (cssSelector : string) =     
-        logAction "deselected"
         let element = find cssSelector elementTimeout
         if element.Selected then
             failwith (String.Format("element deselected failed, {0} selected.", cssSelector));    
@@ -323,7 +306,6 @@ let ( == ) (item : 'a) value =
                                 alert.Dismiss()
                                 failwith (String.Format("equality check failed.  expected: {0}, got: {1}", value, text));                                
     | :? string as cssSelector -> 
-        logAction "equals"        
         let bestvalue = ref ""
         try
             wait compareTimeout (fun _ -> ( let readvalue = (read cssSelector)
@@ -339,7 +321,6 @@ let ( == ) (item : 'a) value =
     | _ -> failwith (String.Format("Can't check equality on {0} because it is not a string or alert", item.ToString()))
 
 let ( != ) cssSelector value =
-    logAction "notequals"
     try
         wait compareTimeout (fun _ -> (read cssSelector) <> value)
     with
@@ -347,7 +328,6 @@ let ( != ) cssSelector value =
         | ex -> failwith ex.Message
         
 let ( *= ) (cssSelector : string) value =
-    logAction "listed"
     try        
         wait compareTimeout (fun _ -> ( let elements = findMany cssSelector elementTimeout
                                         elements |> Seq.exists(fun element -> (textOf element) = value)))
@@ -359,7 +339,6 @@ let ( *= ) (cssSelector : string) value =
         | ex -> failwith ex.Message
 
 let ( *!= ) (cssSelector : string) value =
-    logAction "notlisted"
     try
         wait compareTimeout (fun _ -> ( let elements = findMany cssSelector elementTimeout
                                         elements |> Seq.exists(fun element -> (textOf element) = value) = false))
@@ -368,13 +347,11 @@ let ( *!= ) (cssSelector : string) value =
         | ex -> failwith ex.Message
     
 let contains (value1 : string) (value2 : string) =
-    logAction "contains"
     if (value2.Contains(value1) <> true) then
         failwith (String.Format("contains check failed.  {0} does not contain {1}", value2, value1));
     ()
 
 let count cssSelector count =
-    logAction "count"
     try        
         wait compareTimeout (fun _ -> ( let elements = findMany cssSelector elementTimeout
                                         elements.Length = count))
@@ -443,7 +420,6 @@ let elementWithText cssSelector regex =
     (elementsWithText cssSelector regex).Head
 
 let ( =~ ) cssSelector pattern =
-    logAction "regex equals"    
     try
         wait compareTimeout (fun _ -> regexMatch pattern (read cssSelector))
     with
