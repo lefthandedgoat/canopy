@@ -10,15 +10,20 @@ let rec last = function
     | hd :: tl -> last tl
     | _ -> failwith "Empty list."
 
+type Test (description: string, func : (unit -> unit), number : int) =
+    member x.Description = description
+    member x.Func = func
+    member x.Number = number
+
 type suite () = class
     let mutable context : string = null
     let mutable once = fun () -> ()
     let mutable before = fun () -> ()
     let mutable after = fun () -> ()
     let mutable lastly = fun () -> () 
-    let mutable tests : (unit -> unit) list = []
-    let mutable wips : (unit -> unit) list = []
-    let mutable manys : (unit -> unit) list = []
+    let mutable tests : Test list = []
+    let mutable wips : Test list = []
+    let mutable manys : Test list = []
 
     member x.Context
         with get() = context
@@ -60,10 +65,13 @@ let context c =
         s.Context <- c
         suites <- suites @ [s]
 
-let test f = (last suites).Tests <- (last suites).Tests @ [f]
-let wip f = (last suites).Wips <- (last suites).Wips @ [f]
-let many count f = [1 .. count] |> List.iter (fun _ -> (last suites).Manys <- (last suites).Manys @ [f])
+let test f = (last suites).Tests <- (last suites).Tests @ [Test(null, f, (last suites).Tests.Length + 1)]
+let ( &&& ) description f = (last suites).Tests <- (last suites).Tests @ [Test(description, f, (last suites).Tests.Length + 1)]
+let ntest description f = description &&& f
+let wip f = (last suites).Wips <- (last suites).Wips @ [Test(null, f, (last suites).Wips.Length + 1)]
+let many count f = [1 .. count] |> List.iter (fun _ -> (last suites).Manys <- (last suites).Manys @ [Test(null, f, (last suites).Manys.Length + 1)])
 let xtest f = ()
+let ( &&! ) description f = ()
 
 let mutable passedCount = 0
 let mutable failedCount = 0
@@ -86,19 +94,19 @@ let run () =
     let stopWatch = new Diagnostics.Stopwatch()
     stopWatch.Start()      
     
-    let runtest (suite : suite) test (number : int) = 
-        let n = (String.Format("Test #{0}", number))
+    let runtest (suite : suite) (test : Test) =
         if failed = false then
-            try
-                reporter.testStart n
+            let desc = if test.Description = null then (String.Format("Test #{0}", test.Number)) else test.Description
+            try                
+                reporter.testStart desc
                 suite.Before ()
-                test ()
+                test.Func ()
                 suite.After ()
                 pass()
             with
                 | ex when failureMessage <> null && failureMessage = ex.Message -> pass()
-                | ex -> fail ex n
-            reporter.testEnd n
+                | ex -> fail ex desc
+            reporter.testEnd desc
         
         failureMessage <- null            
 
@@ -120,15 +128,12 @@ let run () =
         s.Once ()
         if s.Wips.IsEmpty = false then
             wipTest <- true
-            s.Wips |> List.fold (fun acc w -> runtest s w acc
-                                              acc + 1) 1 |> ignore
+            s.Wips |> List.iter (fun w -> runtest s w)
             wipTest <- false
         else if s.Manys.IsEmpty = false then
-            s.Manys |> List.fold (fun acc m -> runtest s m acc
-                                               acc + 1) 1 |> ignore
+            s.Manys |> List.iter (fun m -> runtest s m)
         else
-            s.Tests |> List.fold (fun acc t -> runtest s t acc
-                                               acc + 1) 1 |> ignore 
+            s.Tests |> List.iter (fun t -> runtest s t)
         s.Lastly ()        
         if contextFailed = true then failedContexts <- failedContexts @ [s.Context]
         if s.Context <> null then reporter.contextEnd s.Context

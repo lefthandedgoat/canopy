@@ -55,7 +55,11 @@ type ConsoleReporter() =
             suggestions |> List.iter (fun suggestion -> Console.WriteLine("\t{0}", suggestion))
             Console.ResetColor()
 
-        member this.testStart id = ()
+        member this.testStart id =
+            Console.ForegroundColor <- ConsoleColor.DarkCyan
+            Console.WriteLine("Test: {0}", id)
+            Console.ResetColor()
+
         member this.testEnd id = ()
 
 type TeamCityReporter() =
@@ -99,6 +103,7 @@ type TeamCityReporter() =
 
 type HtmlReporter() =
     let consoleReporter : IReporter = new ConsoleReporter() :> IReporter    
+    let mutable results = String.Empty;
     let mutable html = 
             "<html>
             <!DOCTYPE html>
@@ -196,6 +201,7 @@ type HtmlReporter() =
             html <- html.Replace("{{total}}", (passed + failed).ToString())
             html <- html.Replace("{{passed}}", passed.ToString())
             html <- html.Replace("{{failed}}", failed.ToString())
+            html <- html.Replace("{{results}}", results.ToString())
             let p = Environment.GetFolderPath(Environment.SpecialFolder.ApplicationData) + @"\canopy\" + DateTime.Now.ToString("MMM-d_HH-mm-ss-fff") + ".html"
             using (new System.IO.StreamWriter(p)) (fun writer ->
                 writer.Write(html);
@@ -208,6 +214,8 @@ type HtmlReporter() =
         member this.suggestSelectors selector suggestions = 
             consoleReporter.suggestSelectors selector suggestions
 
-        member this.testStart id = () 
+        member this.testStart id = 
+            consoleReporter.testStart id
+            results <- String.Format("{0}</br>{1}", results, id)
 
         member this.testEnd id = ()
