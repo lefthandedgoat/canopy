@@ -143,12 +143,11 @@ let private findByLabel locator f =
         | _ -> null
 
 let private findByText text =
-    let everything = (findByCss "*" browser.FindElements) |> Seq.toList
-    let textEquals = everything |> List.filter(fun e -> e.Text = text)
-    if textEquals |> List.isEmpty = false then textEquals.Head
+    let byValue = findByCss (sprintf "*[value='%s']" text) browser.FindElement
+    if byValue <> null then
+        byValue
     else
-        let valueEquals = everything |> List.filter(fun e -> e.GetAttribute("value") = text)
-        if valueEquals |> List.isEmpty = false then valueEquals.Head else null
+        browser.FindElement(By.XPath(sprintf ".//*[text() = '%s']" text))        
 
 let private findElement cssSelector =
     try
