@@ -69,17 +69,13 @@ let private wait timeout f =
     | ex -> failwith ex.Message
     ()
 
-let private colorizeAndSleep (cssSelector : string) =
+let private colorizeAndSleep cssSelector =
     puts cssSelector
-    let script = System.String.Format("document.querySelector('{0}').style.backgroundColor = '#FFF467';", cssSelector)
-    swallowedJs script
-    sleep wipSleep
-    let script = System.String.Format("document.querySelector('{0}').style.backgroundColor = '#ACD372';", cssSelector)
-    swallowedJs script
+    swallowedJs (System.String.Format("document.querySelector('{0}').style.border = 'thick solid #FFF467';", cssSelector))
+    sleep wipSleep    
+    swallowedJs (System.String.Format("document.querySelector('{0}').style.border = 'thick solid #ACD372';", cssSelector))
 
-let highlight (cssSelector : string) =
-    let script = System.String.Format("document.querySelector('{0}').style.backgroundColor = '#ACD372';", cssSelector)
-    swallowedJs script
+let highlight (cssSelector : string) = swallowedJs (System.String.Format("document.querySelector('{0}').style.backgroundColor = '#ACD372';", cssSelector))
 
 let suggestOtherSelectors (cssSelector : string) =     
     if not disableSuggestOtherSelectors then
@@ -108,7 +104,6 @@ let waitFor (f : unit -> bool) =
         | ex -> failwith ex.Message
 
 //find related
-
 let browserFindElementsList (b : By) = browser.FindElements b |> List.ofSeq
 
 let private findByCss cssSelector f =
@@ -152,11 +147,30 @@ let private findByText text f =
             f(By.XPath(sprintf ".//*[text() = '%s']" text)) |> List.ofSeq
     with | _ -> []
 
-let rec private findElements cssSelector =
+
+
+let rec private findElements (cssSelector : string) =
+    let findInIFrame () =
+        let iframes = findByCss "iframe" browserFindElementsList
+        if iframes.IsEmpty then 
+            browser.SwitchTo().DefaultContent() |> ignore
+            []
+        else
+            let webElements = ref []
+            iframes |> List.iter (fun frame -> 
+                browser.SwitchTo().Frame(frame) |> ignore
+                webElements := findElements cssSelector
+            )
+            !webElements
+
+    //small optimization to not try text/label searchs if it looks like a css selector
+    let obviousCssSelector = cssSelector.StartsWith(".") || cssSelector.StartsWith("#")
     try
         let cssResult = findByCss cssSelector browserFindElementsList
         if cssResult.IsEmpty = false then
             cssResult
+        else if obviousCssSelector then
+            findInIFrame()
         else
             let labelResult = findByLabel cssSelector browser.FindElement
             if labelResult.IsEmpty = false then
@@ -166,24 +180,14 @@ let rec private findElements cssSelector =
                 if textResult.IsEmpty = false then
                     textResult
                 else
-                    let iframes = findByCss "iframe" browserFindElementsList
-                    if iframes.IsEmpty then 
-                        browser.SwitchTo().DefaultContent() |> ignore
-                        []
-                    else
-                        let webElements = ref []
-                        iframes |> List.iter (fun frame -> 
-                            browser.SwitchTo().Frame(frame) |> ignore
-                            webElements := findElements cssSelector
-                        )
-                        !webElements
+                    findInIFrame()
     with | ex -> []
 
 let private findByFunction cssSelector timeout waitFunc =
-    if wipTest then colorizeAndSleep cssSelector    
+    if wipTest then colorizeAndSleep cssSelector
     let wait = new WebDriverWait(browser, TimeSpan.FromSeconds(elementTimeout))
     try
-        wait.Until(fun _ -> waitFunc cssSelector)
+        wait.Until(fun _ -> waitFunc cssSelector)        
     with
         | :? WebDriverTimeoutException ->   puts "Element not found in the allotted time. If you want to increase the time, put elementTimeout <- 10.0 anywhere before a test to increase the timeout"
                                             suggestOtherSelectors cssSelector

@@ -19,7 +19,7 @@ before (fun _ -> Console.WriteLine "before")
 after (fun _ -> Console.WriteLine "after")
 lastly (fun _ -> Console.WriteLine "lastly")
  
-let testpage = "http://localhost:4567/iframe2" 
+let testpage = "http://localhost:4567/" 
 
 "#welcome should have Welcome" &&& (fun _ ->    
     url testpage
