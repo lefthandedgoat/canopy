@@ -15,6 +15,6 @@
     </dependencies>
   </metadata>
   <files>
-	<file src="canopy\bin\Debug\canopy.dll" target="lib/canopy.dll" />
+	<file src="canopy\bin\Release\canopy.dll" target="lib/canopy.dll" />
   </files>
 </package>
