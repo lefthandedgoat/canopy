@@ -1,0 +1,149 @@
+<html lang="en">
+<head>
+    <meta charset="utf-8">
+    <title>canopy test results</title>
+    <script src="http://code.jquery.com/jquery-1.9.1.min.js"></script>
+    <script src="http://netdna.bootstrapcdn.com/twitter-bootstrap/2.3.0/js/bootstrap.min.js"></script>
+    <link href="http://netdna.bootstrapcdn.com/twitter-bootstrap/2.3.0/css/bootstrap-combined.min.css"
+        rel="stylesheet">
+    <style>
+        .masthead ul, .masthead li
+        {
+            margin-bottom: 0px;
+        }
+        
+        hr
+        {
+            margin: 0px 0px 20px 0px;
+        }
+        .table.results
+        {
+            margin-bottom: 0px;
+        }
+        
+        .table.results td
+        {
+            border-left: 0px solid #dddddd;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <div class="masthead">
+            <ul class="nav nav-pills">
+                <li><a>
+                    <label class="checkbox">
+                        <input type="checkbox" value="">
+                        <span id="passed">0</span>&nbspPassed
+                    </label>
+                </a></li>
+                <li><a>
+                    <label class="checkbox">
+                        <input type="checkbox" value="">
+                        <span id="failed">0</span>&nbspFailed
+                    </label>
+                </a></li>
+                <li><a>
+                    <label class="checkbox">
+                        <input type="checkbox" value="">
+                        <span id="Skipped">0</span>&nbspSkipped
+                    </label>
+                </a></li>
+            </ul>
+        </div>
+        <hr>
+        <table class="table table-bordered table-condensed" id="contexts">
+            <tbody>
+                <tr class="success">
+                    <td>
+                        Context: Google
+                    </td>
+                </tr>
+                <tr class="result success">
+                    <td>
+                        <table class="table results">
+                            <tbody>
+                                <tr class="success">
+                                    <td>
+                                        Test #1
+                                    </td>
+                                </tr>
+                                <tr class="success">
+                                    <td>
+                                        Test #2
+                                    </td>
+                                </tr>
+                                <tr class="success">
+                                    <td>
+                                        Test #3
+                                    </td>
+                                </tr>
+                            </tbody>
+                        </table>
+                    </td>
+                </tr>
+                <tr class="error">
+                    <td>
+                        Context: Yahoo
+                    </td>
+                </tr>
+                <tr class="result error">
+                    <td>
+                        <table class="table results">
+                            <tbody>
+                                <tr class="error">
+                                    <td>
+                                        Test #1
+                                    </td>
+                                </tr>
+                                <tr class="success">
+                                    <td>
+                                        Test #2
+                                    </td>
+                                </tr>
+                                <tr class="error">
+                                    <td>
+                                        Test #3
+                                    </td>
+                                </tr>
+                            </tbody>
+                        </table>
+                    </td>
+                </tr>
+                <tr class="warning">
+                    <td>
+                        Context: Bing
+                    </td>
+                </tr>
+                <tr class="result warning">
+                    <td>
+                        <table class="table results">
+                            <tbody>
+                                <tr class="success">
+                                    <td>
+                                        Test #1
+                                    </td>
+                                </tr>
+                                <tr class="warning">
+                                    <td>
+                                        Test #2
+                                    </td>
+                                </tr>
+                                <tr class="warning">
+                                    <td>
+                                        Test #3
+                                    </td>
+                                </tr>
+                            </tbody>
+                        </table>
+                    </td>
+                </tr>
+            </tbody>
+        </table>
+        <div class="footer">
+            <p>
+                foooooooter</p>
+        </div>
+    </div>
+</body>
+</html>
