@@ -37,7 +37,7 @@ get '/noClickTilVisible' do
   erb :noClickTilVisible
 end
 
-get '/home' do
+get '/home' do  
   erb :home
 end
 
@@ -59,4 +59,12 @@ end
 
 get '/count' do
   erb :count
+end
+
+get '/iframe1' do
+  erb :iframe1
+end
+
+get '/iframe2' do
+  erb :iframe2
 end

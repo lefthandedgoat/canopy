@@ -108,11 +108,13 @@ let waitFor (f : unit -> bool) =
         | ex -> failwith ex.Message
 
 //find related
+
+let browserFindElementsList (b : By) = browser.FindElements b |> List.ofSeq
+
 let private findByCss cssSelector f =
     try
         f(By.CssSelector(cssSelector))
-    with 
-        | _ -> null
+    with | ex -> []
 
 let private findByLabel locator f =
     let isInputField (element : IWebElement) =
@@ -126,48 +128,56 @@ let private findByLabel locator f =
         match followingElements with
             | head :: tail -> 
                 if isField head then
-                    head
+                    [head]
                 else
-                    null
-            | [] -> null
+                    []
+            | [] -> []
     try
         let label = browser.FindElement(By.XPath(sprintf ".//label[text() = '%s']" locator))
         if (label = null) then
-            null
+            []
         else
             let id = label.GetAttribute("for")
             match id with
                 | null -> firstFollowingField label
-                | id -> f(By.Id(id))
-    with
-        | _ -> null
+                | id -> [f(By.Id(id))]
+    with | _ -> []
 
-let private findByText text =
-    let byValue = findByCss (sprintf "*[value='%s']" text) browser.FindElement
-    if byValue <> null then
-        byValue
-    else
-        browser.FindElement(By.XPath(sprintf ".//*[text() = '%s']" text))        
-
-let private findElement cssSelector =
+let private findByText text f =
     try
-        let cssResult = findByCss cssSelector browser.FindElement
-        if cssResult <> null then
+        let byValue = findByCss (sprintf "*[value='%s']" text) f |> List.ofSeq
+        if byValue.Length > 0 then
+            byValue
+        else
+            f(By.XPath(sprintf ".//*[text() = '%s']" text)) |> List.ofSeq
+    with | _ -> []
+
+let rec private findElements cssSelector =
+    try
+        let cssResult = findByCss cssSelector browserFindElementsList
+        if cssResult.IsEmpty = false then
             cssResult
         else
             let labelResult = findByLabel cssSelector browser.FindElement
-            if labelResult <> null then
+            if labelResult.IsEmpty = false then
                 labelResult
             else
-                findByText cssSelector
-    with
-        | _ -> null
-
-let private findElements cssSelector =
-    try
-        findByCss cssSelector browser.FindElements
-    with
-        | _ -> null
+                let textResult = findByText cssSelector browserFindElementsList
+                if textResult.IsEmpty = false then
+                    textResult
+                else
+                    let iframes = findByCss "iframe" browserFindElementsList
+                    if iframes.IsEmpty then 
+                        browser.SwitchTo().DefaultContent() |> ignore
+                        []
+                    else
+                        let webElements = ref []
+                        iframes |> List.iter (fun frame -> 
+                            browser.SwitchTo().Frame(frame) |> ignore
+                            webElements := findElements cssSelector
+                        )
+                        !webElements
+    with | ex -> []
 
 let private findByFunction cssSelector timeout waitFunc =
     if wipTest then colorizeAndSleep cssSelector    
@@ -181,10 +191,10 @@ let private findByFunction cssSelector timeout waitFunc =
         | ex -> failwith ex.Message
 
 let private find cssSelector timeout =
-    findByFunction cssSelector timeout findElement
+    (findByFunction cssSelector timeout findElements).Head
 
 let private findMany cssSelector timeout =
-    Seq.toList (findByFunction cssSelector timeout findElements)
+    findByFunction cssSelector timeout findElements
 
 //get elements
 let element cssSelector =  find cssSelector elementTimeout
