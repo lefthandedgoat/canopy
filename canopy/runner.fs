@@ -69,6 +69,7 @@ let test f = (last suites).Tests <- (last suites).Tests @ [Test(null, f, (last s
 let ( &&& ) description f = (last suites).Tests <- (last suites).Tests @ [Test(description, f, (last suites).Tests.Length + 1)]
 let ntest description f = description &&& f
 let wip f = (last suites).Wips <- (last suites).Wips @ [Test(null, f, (last suites).Wips.Length + 1)]
+let ( &&&& ) description f = (last suites).Wips <- (last suites).Wips @ [Test(description, f, (last suites).Wips.Length + 1)]
 let many count f = [1 .. count] |> List.iter (fun _ -> (last suites).Manys <- (last suites).Manys @ [Test(null, f, (last suites).Manys.Length + 1)])
 let xtest f = ()
 let ( &&! ) description f = ()

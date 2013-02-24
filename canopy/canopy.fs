@@ -50,7 +50,7 @@ let puts (text : string) =
     reporter.write text
     let escapedText = text.Replace("'", @"\'");
     let info = "
-        var infoDiv = document.getElementById('canopy_info_div'); if(!infoDiv) { infoDiv = document.createElement('div'); } infoDiv.id = 'canopy_info_div'; infoDiv.setAttribute('style','position: absolute; border: 1px solid black; bottom: 0px; right: 0px; margin: 3px; padding: 3px; background-color: white; z-index: 99999; font-size: 20px; font-family: monospace; font-weight: bold;'); document.getElementsByTagName('body')[0].appendChild(infoDiv); infoDiv.innerHTML = '" + escapedText + "';";
+        var infoDiv = document.getElementById('canopy_info_div'); if(!infoDiv) { infoDiv = document.createElement('div'); } infoDiv.id = 'canopy_info_div'; infoDiv.setAttribute('style','position: absolute; border: 1px solid black; bottom: 0px; right: 0px; margin: 3px; padding: 3px; background-color: white; z-index: 99999; font-size: 20px; font-family: monospace; font-weight: bold;'); document.getElementsByTagName('body')[0].appendChild(infoDiv); infoDiv.innerHTML = 'locating: " + escapedText + "';";
     swallowedJs info
 
 let private wait timeout f =
@@ -142,13 +142,25 @@ let private findByLabel locator f =
     with
         | _ -> null
 
+let private findByText text =
+    let everything = (findByCss "*" browser.FindElements) |> Seq.toList
+    let textEquals = everything |> List.filter(fun e -> e.Text = text)
+    if textEquals |> List.isEmpty = false then textEquals.Head
+    else
+        let valueEquals = everything |> List.filter(fun e -> e.GetAttribute("value") = text)
+        if valueEquals |> List.isEmpty = false then valueEquals.Head else null
+
 let private findElement cssSelector =
     try
         let cssResult = findByCss cssSelector browser.FindElement
         if cssResult <> null then
             cssResult
         else
-            findByLabel cssSelector browser.FindElement
+            let labelResult = findByLabel cssSelector browser.FindElement
+            if labelResult <> null then
+                labelResult
+            else
+                findByText cssSelector
     with
         | _ -> null
 
@@ -164,9 +176,9 @@ let private findByFunction cssSelector timeout waitFunc =
     try
         wait.Until(fun _ -> waitFunc cssSelector)
     with
-        | :? System.TimeoutException -> puts "Element not found in the allotted time. If you want to increase the time, put elementTimeout <- 10.0 anywhere before a test to increase the timeout"
-                                        suggestOtherSelectors cssSelector
-                                        failwith (String.Format("cant find element {0}", cssSelector))
+        | :? WebDriverTimeoutException ->   puts "Element not found in the allotted time. If you want to increase the time, put elementTimeout <- 10.0 anywhere before a test to increase the timeout"
+                                            suggestOtherSelectors cssSelector
+                                            failwith (String.Format("cant find element {0}", cssSelector))
         | ex -> failwith ex.Message
 
 let private find cssSelector timeout =
