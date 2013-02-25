@@ -11,7 +11,7 @@ let mainBrowser = browser
 elementTimeout <- 3.0
 compareTimeout <- 3.0
 runFailedContextsFirst <- true
-reporter <- new HtmlReporter() :> IReporter
+reporter <- new LiveHtmlReporter() :> IReporter
 
 context "context1"
 once (fun _ -> Console.WriteLine "once")

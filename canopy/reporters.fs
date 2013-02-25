@@ -1,6 +1,7 @@
 ﻿module reporters
 
 open System
+open OpenQA.Selenium
 
 type IReporter =
    abstract member testStart : string -> unit
@@ -13,9 +14,10 @@ type IReporter =
    abstract member summary : int -> int -> int -> int -> unit
    abstract member write : string -> unit
    abstract member suggestSelectors : string -> string list -> unit
-
-type ConsoleReporter() =
-    interface IReporter with       
+   abstract member quit : unit -> unit
+   
+type ConsoleReporter() =   
+    interface IReporter with               
         member this.pass () = 
             Console.ForegroundColor <- ConsoleColor.Green
             Console.WriteLine("Passed");
@@ -29,12 +31,12 @@ type ConsoleReporter() =
             Console.WriteLine("Stack: ");
             Console.WriteLine(ex.StackTrace);
 
-        member this.describe d = Console.WriteLine d
-          
-        member this.contextStart c = Console.WriteLine (String.Format("context: {0}", c))
+        member this.describe d = Console.WriteLine d          
+        
+        member this.contextStart c = Console.WriteLine (String.Format("context: {0}", c))        
         
         member this.contextEnd c = ()
-
+        
         member this.summary minutes seconds passed failed =
             Console.WriteLine()
             Console.WriteLine("{0} minutes {1} seconds to execute", minutes, seconds)
@@ -45,61 +47,57 @@ type ConsoleReporter() =
             if failed > 0 then
                 Console.ForegroundColor <- ConsoleColor.Red        
             Console.WriteLine("{0} failed", failed)    
-            Console.ResetColor()
+            Console.ResetColor()        
         
-        member this.write w = Console.WriteLine w
+        member this.write w = Console.WriteLine w        
         
         member this.suggestSelectors selector suggestions = 
             Console.ForegroundColor <- ConsoleColor.DarkYellow                    
             Console.WriteLine("Couldnt find any elements with selector '{0}', did you mean:", selector)
             suggestions |> List.iter (fun suggestion -> Console.WriteLine("\t{0}", suggestion))
             Console.ResetColor()
-
         member this.testStart id =
             Console.ForegroundColor <- ConsoleColor.DarkCyan
             Console.WriteLine("Test: {0}", id)
             Console.ResetColor()
 
         member this.testEnd id = ()
+        
+        member this.quit () = ()
 
 type TeamCityReporter() =
     let consoleReporter : IReporter = new ConsoleReporter() :> IReporter
-    
+        
     interface IReporter with               
-        member this.pass () = 
-            
-            consoleReporter.pass ()
-
+        member this.pass () = consoleReporter.pass ()
+    
         member this.fail ex id =         
             consoleReporter.describe (String.Format("##teamcity[testFailed name='{0}' message='{1}']", id, ex.Message))
             consoleReporter.fail ex id
-
+    
         member this.describe d = 
             consoleReporter.describe (String.Format("##teamcity[message text='{0}' status='NORMAL']", d))
-            consoleReporter.describe d
-          
+            consoleReporter.describe d          
+    
         member this.contextStart c = 
             consoleReporter.describe (String.Format("##teamcity[testSuiteStarted name='{0}']", c))
             consoleReporter.contextStart c
-
+    
         member this.contextEnd c = 
             consoleReporter.describe (String.Format("##teamcity[testSuiteFinished name='{0}']", c))
             consoleReporter.contextEnd c
+    
+        member this.summary minutes seconds passed failed =consoleReporter.summary minutes seconds passed failed        
+    
+        member this.write w = consoleReporter.write w        
+    
+        member this.suggestSelectors selector suggestions = consoleReporter.suggestSelectors selector suggestions
+    
+        member this.testStart id = consoleReporter.describe (String.Format("##teamcity[testStarted name='{0}']", id))
+    
+        member this.testEnd id = consoleReporter.describe (String.Format("##teamcity[testFinished name='{0}']", id))
 
-        member this.summary minutes seconds passed failed =
-            consoleReporter.summary minutes seconds passed failed
-        
-        member this.write w = 
-            consoleReporter.write w
-        
-        member this.suggestSelectors selector suggestions = 
-            consoleReporter.suggestSelectors selector suggestions
-
-        member this.testStart id = 
-            consoleReporter.describe (String.Format("##teamcity[testStarted name='{0}']", id))
-
-        member this.testEnd id =
-            consoleReporter.describe (String.Format("##teamcity[testFinished name='{0}']", id))
+        member this.quit () = ()
 
 type HtmlReporter() =
     let consoleReporter : IReporter = new ConsoleReporter() :> IReporter    
@@ -180,20 +178,15 @@ type HtmlReporter() =
             </html>"
     
     interface IReporter with               
-        member this.pass () =
-            consoleReporter.pass ()
+        member this.pass () =consoleReporter.pass ()
 
-        member this.fail ex id =
-            consoleReporter.fail ex id
+        member this.fail ex id =consoleReporter.fail ex id
 
-        member this.describe d = 
-            consoleReporter.describe d
+        member this.describe d = consoleReporter.describe d
           
-        member this.contextStart c = 
-            consoleReporter.contextStart c
+        member this.contextStart c = consoleReporter.contextStart c
 
-        member this.contextEnd c = 
-            consoleReporter.contextEnd c
+        member this.contextEnd c = consoleReporter.contextEnd c
 
         member this.summary minutes seconds passed failed =
             html <- html.Replace("{{minutes}}", minutes.ToString())
@@ -208,6 +201,52 @@ type HtmlReporter() =
             )
             consoleReporter.summary minutes seconds passed failed
         
+        member this.write w = consoleReporter.write w
+        
+        member this.suggestSelectors selector suggestions = consoleReporter.suggestSelectors selector suggestions
+
+        member this.testStart id = 
+            consoleReporter.testStart id
+            results <- String.Format("{0}</br>{1}", results, id)
+
+        member this.testEnd id = ()
+
+        member this.quit () = ()
+
+type LiveHtmlReporter() =
+    let consoleReporter : IReporter = new ConsoleReporter() :> IReporter    
+    let browser = new OpenQA.Selenium.Firefox.FirefoxDriver() :> IWebDriver    
+    let js script = try (browser :?> IJavaScriptExecutor).ExecuteScript(script) |> ignore with | ex -> ()
+    let mutable context = System.String.Empty;
+    let mutable test = System.String.Empty;
+
+    do
+        browser.Navigate().GoToUrl(@"file:///C:/projects/canopy/reporttemplate.html")
+        
+    interface IReporter with               
+        member this.pass () =
+            js (sprintf "addToContext('%s', 'Pass', '%s');" context test)
+            consoleReporter.pass ()
+
+        member this.fail ex id =
+            js (sprintf "addToContext('%s', 'Fail', '%s');" context test)
+            consoleReporter.fail ex id
+
+        member this.describe d = 
+            consoleReporter.describe d
+          
+        member this.contextStart c = 
+            context <- c
+            js (sprintf "addContext('%s');" context)
+            js (sprintf "collapseContextsExcept('%s');" context)
+            consoleReporter.contextStart c
+
+        member this.contextEnd c = 
+            consoleReporter.contextEnd c
+
+        member this.summary minutes seconds passed failed =                        
+            consoleReporter.summary minutes seconds passed failed
+        
         member this.write w = 
             consoleReporter.write w
         
@@ -215,7 +254,9 @@ type HtmlReporter() =
             consoleReporter.suggestSelectors selector suggestions
 
         member this.testStart id = 
+            test <- id
             consoleReporter.testStart id
-            results <- String.Format("{0}</br>{1}", results, id)
-
+            
         member this.testEnd id = ()
+
+        member this.quit () = browser.Quit()

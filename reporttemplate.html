@@ -29,13 +29,7 @@
 </head>
 <body>
     <div class="container">
-        <div class="masthead">
-            <a class="btn" id="Context">New Context</a>
-            <a class="btn" id="AddToContext">Add To Context</a>
-            <a class="btn" id="Google">Google</a>
-            <a class="btn" id="Yahoo">Yahoo</a>  
-            <a class="btn" id="Bing">Bing</a>          
-            
+        <div class="masthead">            
             <ul class="nav nav-pills">
                 <li><a>
                     <label class="checkbox">
@@ -60,155 +54,55 @@
         <hr>
         <table class="table table-bordered table-condensed" id="contexts">
             <tbody>
-                <tr class="success context" data-context="Google">
-                    <td>
-                        Context: Google
-                    </td>
-                </tr>
-                <tr class="result">
-                    <td>
-                        <table class="table results">
-                            <tbody>
-                                <tr class="success">
-                                    <td>
-                                        Test #1
-                                    </td>
-                                </tr>
-                                <tr class="success">
-                                    <td>
-                                        Test #2
-                                    </td>
-                                </tr>
-                                <tr class="success">
-                                    <td>
-                                        Test #3
-                                    </td>
-                                </tr>
-                            </tbody>
-                        </table>
-                    </td>
-                </tr>
-                <tr class="error context" data-context="Yahoo">
-                    <td>
-                        Context: Yahoo
-                    </td>
-                </tr>
-                <tr class="result">
-                    <td>
-                        <table class="table results">
-                            <tbody>
-                                <tr class="error">
-                                    <td>
-                                        Test #1
-                                    </td>
-                                </tr>
-                                <tr class="success">
-                                    <td>
-                                        Test #2
-                                    </td>
-                                </tr>
-                                <tr class="error">
-                                    <td>
-                                        Test #3
-                                    </td>
-                                </tr>
-                            </tbody>
-                        </table>
-                    </td>
-                </tr>
-                <tr class="warning context" data-context="Bing">
-                    <td>
-                        Context: Bing
-                    </td>
-                </tr>
-                <tr class="result">
-                    <td>
-                        <table class="table results">
-                            <tbody>
-                                <tr class="success">
-                                    <td>
-                                        Test #1
-                                    </td>
-                                </tr>
-                                <tr class="warning">
-                                    <td>
-                                        Test #2
-                                    </td>
-                                </tr>
-                                <tr class="warning">
-                                    <td>
-                                        Test #3
-                                    </td>
-                                </tr>
-                            </tbody>
-                        </table>
-                    </td>
-                </tr>
             </tbody>
         </table>
     </div>
-<script type="text/javascript">
+    <script type="text/javascript">
 
-    var beginContextResults = function (context) {
-        var ctx = $("#contexts").find('tr[data-context="' + context + '"]');
-        ctx.after('<tr class="result"><td><table class="table results"><tbody></tbody></table></td></tr>');
-    };
+        var beginContextResults = function (context) {
+            var ctx = $("#contexts").find('tr[data-context="' + context + '"]');
+            ctx.after('<tr class="result" data-owning-context="' + context + '"><td><table class="table results"><tbody></tbody></table></td></tr>');
+        };
 
-    var addContext = function (context) {
-        $("#contexts").last('tr').append('<tr class="context" data-context="' + context + '"><td>Context: ' + context + '</td></tr>');
-        beginContextResults(context);
-    };
+        var addContext = function (context) {
+            $("#contexts").last('tr').append('<tr class="context" data-context="' + context + '"><td>Context: ' + context + '</td></tr>');
+            beginContextResults(context);
+        };
 
-    var recalculateTotals = function () {
-        $("#passed").text($(".results .success").length);
-        $("#failed").text($(".results .error").length);
-        $("#skipped").text($(".results .warning").length);
-    };
+        var recalculateTotals = function () {
+            $("#passed").text($(".results .success").length);
+            $("#failed").text($(".results .error").length);
+            $("#skipped").text($(".results .warning").length);
+        };
 
-    var addToContext = function (context, passFailSkip) {
-        var ctx = $("#contexts").find('tr[data-context="' + context + '"]');
-        if (passFailSkip === "Pass") {
-            ctx.next('tr').find('table').last('tr').append('<tr class="success"><td>Test #4</td></tr>');
-            if (ctx.hasClass("error") === false && ctx.hasClass("warning") === false) {
-                ctx.addClass("success");
+        var addToContext = function (context, passFailSkip, testName) {
+            var ctx = $("#contexts").find('tr[data-context="' + context + '"]');
+            if (passFailSkip === "Pass") {
+                ctx.next('tr').find('table').last('tr').append('<tr class="success"><td>' + testName + '</td></tr>');
+                if (ctx.hasClass("error") === false && ctx.hasClass("warning") === false) {
+                    ctx.addClass("success");
+                }
             }
-        }
-        if (passFailSkip === "Fail") {
-            ctx.next('tr').find('table').last('tr').append('<tr class="error"><td>Test #4</td></tr>');
-            ctx.removeClass("success").removeClass("warning").addClass("error");
-        }
-        if (passFailSkip === "Skip") {
-            ctx.next('tr').find('table').last('tr').append('<tr class="warning"><td>Test #4</td></tr>');
-            if (ctx.hasClass("error") === false) {
-                ctx.removeClass("success").addClass("warning");
-            };
-        }
+            if (passFailSkip === "Fail") {
+                ctx.next('tr').find('table').last('tr').append('<tr class="error"><td>' + testName + '</td></tr>');
+                ctx.removeClass("success").removeClass("warning").addClass("error");
+            }
+            if (passFailSkip === "Skip") {
+                ctx.next('tr').find('table').last('tr').append('<tr class="warning"><td>' + testName + '</td></tr>');
+                if (ctx.hasClass("error") === false) {
+                    ctx.removeClass("success").addClass("warning");
+                };
+            }
 
-        recalculateTotals();
-    };
+            recalculateTotals();
+        };
 
-    $(document).ready(function () {
-        var random = Math.floor(Math.random() * 1001);
-
-        $("#Context").click(function () {
-            addContext("Context " + random);
-            addToContext("Context " + random, "Pass");
-        });
-        $("#AddToContext").click(function () {
-            addToContext("Context " + random, "Pass");
-        });
-        $("#Google").click(function () {
-            addToContext("Google", "Fail")
-        });
-        $("#Yahoo").click(function () {
-            addToContext("Yahoo", "Fail")
-        });
-        $("#Bing").click(function () {
-            addToContext("Bing", "Fail")
-        });
-        
-        recalculateTotals();
-    });
-</script>
+        var collapseContextsExcept = function (context) {
+            var ctxs = $('#contexts tr.result[data-owning-context !="' + context + '"]');
+            ctxs.each(function () {
+                $(this).hide();
+            });
+        };
+    </script>
 </body>
 </html>

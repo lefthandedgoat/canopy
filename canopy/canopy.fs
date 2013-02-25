@@ -487,6 +487,7 @@ let tile (browsers : OpenQA.Selenium.IWebDriver list) =
     setSize browsers 0
 
 let quit browser =
+    reporter.quit()
     match box browser with
     | :? OpenQA.Selenium.IWebDriver as b -> b.Quit()
     | _ -> browsers |> List.iter (fun b -> b.Quit())
