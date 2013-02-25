@@ -6,7 +6,7 @@ open canopy
 open configuration
 open reporters
 
-start chrome
+start firefox
 let mainBrowser = browser
 elementTimeout <- 3.0
 compareTimeout <- 3.0
@@ -319,6 +319,14 @@ context "other tests"
 "displayed test" &&& (fun _ ->
     !^ "http://localhost:4567/displayed"
     displayed "#displayed")
+
+"displayed test2" &&& (fun _ ->
+    !^ "http://localhost:4567/displayed"
+    waitFor (fun _ -> (element "#displayed").Displayed))
+
+"displayed test3" &&& (fun _ ->
+    !^ "http://localhost:4567/waitFor"
+    waitFor (fun _ -> (element "#wait_for_2").Displayed))
 
 "notDisplayed test" &&& (fun _ ->
     !^ "http://localhost:4567/notDisplayed"
