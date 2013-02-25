@@ -221,7 +221,7 @@ type LiveHtmlReporter() =
     let mutable test = System.String.Empty;
 
     do
-        browser.Navigate().GoToUrl(@"file:///C:/projects/canopy/reporttemplate.html")
+        browser.Navigate().GoToUrl(@"http://lefthandedgoat.github.com/canopy/reporttemplate.html")
         
     interface IReporter with               
         member this.pass () =
