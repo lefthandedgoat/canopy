@@ -30,6 +30,12 @@
 <body>
     <div class="container">
         <div class="masthead">
+            <a class="btn" id="Context">New Context</a>
+            <a class="btn" id="AddToContext">Add To Context</a>
+            <a class="btn" id="Google">Google</a>
+            <a class="btn" id="Yahoo">Yahoo</a>  
+            <a class="btn" id="Bing">Bing</a>          
+            
             <ul class="nav nav-pills">
                 <li><a>
                     <label class="checkbox">
@@ -46,7 +52,7 @@
                 <li><a>
                     <label class="checkbox">
                         <input type="checkbox" value="">
-                        <span id="Skipped">0</span>&nbspSkipped
+                        <span id="skipped">0</span>&nbspSkipped
                     </label>
                 </a></li>
             </ul>
@@ -54,7 +60,7 @@
         <hr>
         <table class="table table-bordered table-condensed" id="contexts">
             <tbody>
-                <tr class="success">
+                <tr class="success context" data-context="Google">
                     <td>
                         Context: Google
                     </td>
@@ -82,7 +88,7 @@
                         </table>
                     </td>
                 </tr>
-                <tr class="error">
+                <tr class="error context" data-context="Yahoo">
                     <td>
                         Context: Yahoo
                     </td>
@@ -110,7 +116,7 @@
                         </table>
                     </td>
                 </tr>
-                <tr class="warning">
+                <tr class="warning context" data-context="Bing">
                     <td>
                         Context: Bing
                     </td>
@@ -141,5 +147,68 @@
             </tbody>
         </table>
     </div>
+<script type="text/javascript">
+
+    var beginContextResults = function (context) {
+        var ctx = $("#contexts").find('tr[data-context="' + context + '"]');
+        ctx.after('<tr class="result"><td><table class="table results"><tbody></tbody></table></td></tr>');
+    };
+
+    var addContext = function (context) {
+        $("#contexts").last('tr').append('<tr class="context" data-context="' + context + '"><td>Context: ' + context + '</td></tr>');
+        beginContextResults(context);
+    };
+
+    var recalculateTotals = function () {
+        $("#passed").text($(".results .success").length);
+        $("#failed").text($(".results .error").length);
+        $("#skipped").text($(".results .warning").length);
+    };
+
+    var addToContext = function (context, passFailSkip) {
+        var ctx = $("#contexts").find('tr[data-context="' + context + '"]');
+        if (passFailSkip === "Pass") {
+            ctx.next('tr').find('table').last('tr').append('<tr class="success"><td>Test #4</td></tr>');
+            if (ctx.hasClass("error") === false && ctx.hasClass("warning") === false) {
+                ctx.addClass("success");
+            }
+        }
+        if (passFailSkip === "Fail") {
+            ctx.next('tr').find('table').last('tr').append('<tr class="error"><td>Test #4</td></tr>');
+            ctx.removeClass("success").removeClass("warning").addClass("error");
+        }
+        if (passFailSkip === "Skip") {
+            ctx.next('tr').find('table').last('tr').append('<tr class="warning"><td>Test #4</td></tr>');
+            if (ctx.hasClass("error") === false) {
+                ctx.removeClass("success").addClass("warning");
+            };
+        }
+
+        recalculateTotals();
+    };
+
+    $(document).ready(function () {
+        var random = Math.floor(Math.random() * 1001);
+
+        $("#Context").click(function () {
+            addContext("Context " + random);
+            addToContext("Context " + random, "Pass");
+        });
+        $("#AddToContext").click(function () {
+            addToContext("Context " + random, "Pass");
+        });
+        $("#Google").click(function () {
+            addToContext("Google", "Fail")
+        });
+        $("#Yahoo").click(function () {
+            addToContext("Yahoo", "Fail")
+        });
+        $("#Bing").click(function () {
+            addToContext("Bing", "Fail")
+        });
+        
+        recalculateTotals();
+    });
+</script>
 </body>
 </html>
