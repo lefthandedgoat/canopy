@@ -1,0 +1,108 @@
+<html lang="en">
+<head>
+    <meta charset="utf-8">
+    <title>canopy test results</title>
+    <script src="http://code.jquery.com/jquery-1.9.1.min.js"></script>
+    <script src="http://netdna.bootstrapcdn.com/twitter-bootstrap/2.3.0/js/bootstrap.min.js"></script>
+    <link href="http://netdna.bootstrapcdn.com/twitter-bootstrap/2.3.0/css/bootstrap-combined.min.css"
+        rel="stylesheet">
+    <style>
+        .masthead ul, .masthead li
+        {
+            margin-bottom: 0px;
+        }
+        
+        hr
+        {
+            margin: 0px 0px 20px 0px;
+        }
+        .table.results
+        {
+            margin-bottom: 0px;
+        }
+        
+        .table.results td
+        {
+            border-left: 0px solid #dddddd;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <div class="masthead">            
+            <ul class="nav nav-pills">
+                <li><a>
+                    <label class="checkbox">
+                        <input type="checkbox" value="">
+                        <span id="passed">0</span>&nbspPassed
+                    </label>
+                </a></li>
+                <li><a>
+                    <label class="checkbox">
+                        <input type="checkbox" value="">
+                        <span id="failed">0</span>&nbspFailed
+                    </label>
+                </a></li>
+                <li><a>
+                    <label class="checkbox">
+                        <input type="checkbox" value="">
+                        <span id="skipped">0</span>&nbspSkipped
+                    </label>
+                </a></li>
+            </ul>
+        </div>
+        <hr>
+        <table class="table table-bordered table-condensed" id="contexts">
+            <tbody>
+            </tbody>
+        </table>
+    </div>
+    <script type="text/javascript">
+
+        var beginContextResults = function (context) {
+            var ctx = $("#contexts").find('tr[data-context="' + context + '"]');
+            ctx.after('<tr class="result" data-owning-context="' + context + '"><td><table class="table results"><tbody></tbody></table></td></tr>');
+        };
+
+        var addContext = function (context) {
+            $("#contexts").last('tr').append('<tr class="context" data-context="' + context + '"><td>Context: ' + context + '</td></tr>');
+            beginContextResults(context);
+        };
+
+        var recalculateTotals = function () {
+            $("#passed").text($(".results .success").length);
+            $("#failed").text($(".results .error").length);
+            $("#skipped").text($(".results .warning").length);
+        };
+
+        var addToContext = function (context, passFailSkip, testName) {
+            var ctx = $("#contexts").find('tr[data-context="' + context + '"]');
+            if (passFailSkip === "Pass") {
+                ctx.next('tr').find('table').last('tr').append('<tr class="success"><td>' + testName + '</td></tr>');
+                if (ctx.hasClass("error") === false && ctx.hasClass("warning") === false) {
+                    ctx.addClass("success");
+                }
+            }
+            if (passFailSkip === "Fail") {
+                ctx.next('tr').find('table').last('tr').append('<tr class="error"><td>' + testName + '</td></tr>');
+                ctx.removeClass("success").removeClass("warning").addClass("error");
+            }
+            if (passFailSkip === "Skip") {
+                ctx.next('tr').find('table').last('tr').append('<tr class="warning"><td>' + testName + '</td></tr>');
+                if (ctx.hasClass("error") === false) {
+                    ctx.removeClass("success").addClass("warning");
+                };
+            }
+
+            recalculateTotals();
+        };
+
+        var collapseContextsExcept = function (context) {
+            var ctxs = $('#contexts tr.result[data-owning-context !="' + context + '"]');
+            ctxs.each(function () {
+                $(this).hide();
+            });
+        };
+    </script>
+</body>
+</html>
