@@ -36,6 +36,7 @@ let screenshot _ =
     let p = Environment.GetFolderPath(Environment.SpecialFolder.ApplicationData) + @"\canopy\"
     if Directory.Exists(p) = false then Directory.CreateDirectory(p) |> ignore
     IO.File.WriteAllBytes(p + DateTime.Now.ToString("MMM-d_HH-mm-ss-fff") + ".png", pic)
+    pic
 
 let js script = (browser :?> IJavaScriptExecutor).ExecuteScript(script)
 

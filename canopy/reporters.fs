@@ -6,7 +6,7 @@ open OpenQA.Selenium
 type IReporter =
    abstract member testStart : string -> unit
    abstract member pass : unit -> unit
-   abstract member fail : Exception -> string -> unit
+   abstract member fail : Exception -> string -> byte [] -> unit
    abstract member testEnd : string -> unit
    abstract member describe : string -> unit
    abstract member contextStart : string -> unit
@@ -25,7 +25,7 @@ type ConsoleReporter() =
             Console.WriteLine("Passed");
             Console.ResetColor()
 
-        member this.fail ex id = 
+        member this.fail ex id ss = 
             Console.ForegroundColor <- ConsoleColor.Red
             Console.WriteLine("Error: ");
             Console.ResetColor()
@@ -70,16 +70,16 @@ type ConsoleReporter() =
         member this.suiteBegin () = ()
 
         member this.suiteEnd () = ()
-
+        
 type TeamCityReporter() =
     let consoleReporter : IReporter = new ConsoleReporter() :> IReporter
         
     interface IReporter with               
         member this.pass () = consoleReporter.pass ()
     
-        member this.fail ex id =         
+        member this.fail ex id ss =         
             consoleReporter.describe (String.Format("##teamcity[testFailed name='{0}' message='{1}']", id, ex.Message))
-            consoleReporter.fail ex id
+            consoleReporter.fail ex id ss
     
         member this.describe d = 
             consoleReporter.describe (String.Format("##teamcity[message text='{0}' status='NORMAL']", d))
@@ -108,7 +108,7 @@ type TeamCityReporter() =
         member this.suiteBegin () = ()
 
         member this.suiteEnd () = ()
-
+        
 type HtmlReporter() =
     let consoleReporter : IReporter = new ConsoleReporter() :> IReporter    
     let mutable results = String.Empty;
@@ -190,7 +190,7 @@ type HtmlReporter() =
     interface IReporter with               
         member this.pass () =consoleReporter.pass ()
 
-        member this.fail ex id =consoleReporter.fail ex id
+        member this.fail ex id ss= consoleReporter.fail ex id ss
 
         member this.describe d = consoleReporter.describe d
           
@@ -226,7 +226,7 @@ type HtmlReporter() =
         member this.suiteBegin () = ()
 
         member this.suiteEnd () = ()
-
+        
 type LiveHtmlReporter() =
     let consoleReporter : IReporter = new ConsoleReporter() :> IReporter    
     let browser = new OpenQA.Selenium.Firefox.FirefoxDriver() :> IWebDriver    
@@ -237,12 +237,12 @@ type LiveHtmlReporter() =
             
     interface IReporter with               
         member this.pass () =
-            js (sprintf "addToContext('%s', 'Pass', '%s');" context test)
+            js (sprintf "addToContext('%s', 'Pass', '%s', '%s');" context test "")
             consoleReporter.pass ()
 
-        member this.fail ex id =
-            js (sprintf "addToContext('%s', 'Fail', '%s');" context test)
-            consoleReporter.fail ex id
+        member this.fail ex id ss =
+            js (sprintf "addToContext('%s', 'Fail', '%s', '%s');" context test (Convert.ToBase64String(ss)))
+            consoleReporter.fail ex id ss
 
         member this.describe d = 
             consoleReporter.describe d
@@ -273,6 +273,7 @@ type LiveHtmlReporter() =
 
         member this.quit () = if canQuit then browser.Quit()
         
-        member this.suiteBegin () = browser.Navigate().GoToUrl(@"http://lefthandedgoat.github.com/canopy/reporttemplate.html")
+        //member this.suiteBegin () = browser.Navigate().GoToUrl(@"http://lefthandedgoat.github.com/canopy/reporttemplate.html")
+        member this.suiteBegin () = browser.Navigate().GoToUrl(@"file:///C:/projects/canopy/reporttemplate.html")
 
         member this.suiteEnd () = canQuit <- true

@@ -29,7 +29,7 @@
 </head>
 <body>
     <div class="container">
-        <div class="masthead">            
+        <div class="masthead">        
             <ul class="nav nav-pills">
                 <li><a>
                     <label class="checkbox">
@@ -75,7 +75,7 @@
             $("#skipped").text($(".results .warning").length);
         };
 
-        var addToContext = function (context, passFailSkip, testName) {
+        var addToContext = function (context, passFailSkip, testName, image) {
             var ctx = $("#contexts").find('tr[data-context="' + context + '"]');
             if (passFailSkip === "Pass") {
                 ctx.next('tr').find('table').last('tr').append('<tr class="success"><td>' + testName + '</td></tr>');
@@ -94,6 +94,10 @@
                 };
             }
 
+			if(image !== "") {
+				ctx.next('tr').find('table').find('tr').last().find('td').last().append('<img alt="" src="data:image/jpeg;base64,' + image + '" />')
+			}
+			
             recalculateTotals();
         };
 

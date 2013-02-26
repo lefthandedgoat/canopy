@@ -88,11 +88,11 @@ let fail (ex : Exception) id =
     if failFast = ref true then failed <- true        
     failedCount <- failedCount + 1
     contextFailed <- true
-    screenshot ()
-    reporter.fail ex id
+    let ss = screenshot ()
+    reporter.fail ex id ss
 
 let run () =
-    reporter.suiteBegin ()
+    reporter.suiteBegin()
     let stopWatch = new Diagnostics.Stopwatch()
     stopWatch.Start()      
     
