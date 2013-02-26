@@ -32,12 +32,16 @@ let mutable browsers = []
 //misc
 let failsWith message = failureMessage <- message
 
-let screenshot _ = 
-    let pic = (browser :?> ITakesScreenshot).GetScreenshot().AsByteArray    
-    let p = Environment.GetFolderPath(Environment.SpecialFolder.ApplicationData) + @"\canopy\"
-    if Directory.Exists(p) = false then Directory.CreateDirectory(p) |> ignore
-    IO.File.WriteAllBytes(p + DateTime.Now.ToString("MMM-d_HH-mm-ss-fff") + ".png", pic)
+let takeScreenshot directory filename =
+    let pic = (browser :?> ITakesScreenshot).GetScreenshot().AsByteArray
+    if Directory.Exists(directory) = false then Directory.CreateDirectory(directory) |> ignore
+    IO.File.WriteAllBytes(directory + filename + ".png", pic)
     pic
+
+let screenshot _ =
+    let p = Environment.GetFolderPath(Environment.SpecialFolder.ApplicationData) + @"\canopy\"
+    let f = DateTime.Now.ToString("MMM-d_HH-mm-ss-fff")
+    takeScreenshot p f
 
 let js script = (browser :?> IJavaScriptExecutor).ExecuteScript(script)
 
