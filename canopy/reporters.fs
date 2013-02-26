@@ -15,7 +15,9 @@ type IReporter =
    abstract member write : string -> unit
    abstract member suggestSelectors : string -> string list -> unit
    abstract member quit : unit -> unit
-   
+   abstract member suiteBegin : unit -> unit
+   abstract member suiteEnd : unit -> unit
+
 type ConsoleReporter() =   
     interface IReporter with               
         member this.pass () = 
@@ -64,6 +66,10 @@ type ConsoleReporter() =
         member this.testEnd id = ()
         
         member this.quit () = ()
+        
+        member this.suiteBegin () = ()
+
+        member this.suiteEnd () = ()
 
 type TeamCityReporter() =
     let consoleReporter : IReporter = new ConsoleReporter() :> IReporter
@@ -98,6 +104,10 @@ type TeamCityReporter() =
         member this.testEnd id = consoleReporter.describe (String.Format("##teamcity[testFinished name='{0}']", id))
 
         member this.quit () = ()
+        
+        member this.suiteBegin () = ()
+
+        member this.suiteEnd () = ()
 
 type HtmlReporter() =
     let consoleReporter : IReporter = new ConsoleReporter() :> IReporter    
@@ -212,6 +222,10 @@ type HtmlReporter() =
         member this.testEnd id = ()
 
         member this.quit () = ()
+        
+        member this.suiteBegin () = ()
+
+        member this.suiteEnd () = ()
 
 type LiveHtmlReporter() =
     let consoleReporter : IReporter = new ConsoleReporter() :> IReporter    
@@ -219,10 +233,8 @@ type LiveHtmlReporter() =
     let js script = try (browser :?> IJavaScriptExecutor).ExecuteScript(script) |> ignore with | ex -> ()
     let mutable context = System.String.Empty;
     let mutable test = System.String.Empty;
-
-    do
-        browser.Navigate().GoToUrl(@"http://lefthandedgoat.github.com/canopy/reporttemplate.html")
-        
+    let mutable canQuit = false
+            
     interface IReporter with               
         member this.pass () =
             js (sprintf "addToContext('%s', 'Pass', '%s');" context test)
@@ -259,4 +271,8 @@ type LiveHtmlReporter() =
             
         member this.testEnd id = ()
 
-        member this.quit () = browser.Quit()
+        member this.quit () = if canQuit then browser.Quit()
+        
+        member this.suiteBegin () = browser.Navigate().GoToUrl(@"http://lefthandedgoat.github.com/canopy/reporttemplate.html")
+
+        member this.suiteEnd () = canQuit <- true

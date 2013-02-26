@@ -92,6 +92,7 @@ let fail (ex : Exception) id =
     reporter.fail ex id
 
 let run () =
+    reporter.suiteBegin ()
     let stopWatch = new Diagnostics.Stopwatch()
     stopWatch.Start()      
     
@@ -144,3 +145,4 @@ let run () =
 
     stopWatch.Stop()    
     reporter.summary stopWatch.Elapsed.Minutes stopWatch.Elapsed.Seconds passedCount failedCount 
+    reporter.suiteEnd()
