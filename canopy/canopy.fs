@@ -15,6 +15,7 @@ type CanopyException(message) = inherit Exception(message)
 let mutable (browser : IWebDriver) = null;
 let mutable (failureMessage : string) = null
 let mutable wipTest = false
+let mutable searchedFor : (string * string) list = []
 
 //directions
 type direction =
@@ -76,7 +77,7 @@ let private colorizeAndSleep cssSelector =
     sleep wipSleep    
     swallowedJs (System.String.Format("document.querySelector('{0}').style.border = 'thick solid #ACD372';", cssSelector))
 
-let highlight (cssSelector : string) = swallowedJs (System.String.Format("document.querySelector('{0}').style.backgroundColor = '#ACD372';", cssSelector))
+let highlight (cssSelector : string) = swallowedJs (System.String.Format("document.querySelector('{0}').style.border = 'thick solid #ACD372';", cssSelector))
 
 let suggestOtherSelectors (cssSelector : string) =     
     if not disableSuggestOtherSelectors then
@@ -147,10 +148,9 @@ let private findByText text f =
         else
             f(By.XPath(sprintf ".//*[text() = '%s']" text)) |> List.ofSeq
     with | _ -> []
-
-
-
+    
 let rec private findElements (cssSelector : string) =
+    searchedFor <- (cssSelector, browser.Url) :: searchedFor
     let findInIFrame () =
         let iframes = findByCss "iframe" browserFindElementsList
         if iframes.IsEmpty then 
@@ -509,3 +509,23 @@ let url (u : string) = !^ u
 let title _ = browser.Title
 
 let reload _ = url (currentUrl ())
+
+let coverage url =
+    let selectors = 
+        searchedFor 
+        |> List.filter(fun (c, u) -> u = url) 
+        |> List.map(fun (cssSelector, u) -> cssSelector) 
+        |> Seq.distinct 
+        |> List.ofSeq
+    
+    let script cssSelector = 
+        "var results = document.querySelectorAll('" + cssSelector + "'); \
+        for (var i=0; i < results.length; i++){ \
+            results[i].style.border = 'thick solid #ACD372'; \
+        }"
+    
+    !^ url
+    on url
+    selectors |> List.iter(fun cssSelector -> swallowedJs (script cssSelector))
+    let ss = screenshot ()
+    reporter.coverage url ss

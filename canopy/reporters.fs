@@ -17,6 +17,7 @@ type IReporter =
    abstract member quit : unit -> unit
    abstract member suiteBegin : unit -> unit
    abstract member suiteEnd : unit -> unit
+   abstract member coverage : string -> byte [] -> unit
 
 type ConsoleReporter() =   
     interface IReporter with               
@@ -70,6 +71,8 @@ type ConsoleReporter() =
         member this.suiteBegin () = ()
 
         member this.suiteEnd () = ()
+
+        member this.coverage url ss = ()
         
 type TeamCityReporter() =
     let consoleReporter : IReporter = new ConsoleReporter() :> IReporter
@@ -109,6 +112,8 @@ type TeamCityReporter() =
 
         member this.suiteEnd () = ()
         
+        member this.coverage url ss = ()
+
 type HtmlReporter() =
     let consoleReporter : IReporter = new ConsoleReporter() :> IReporter    
     let mutable results = String.Empty;
@@ -227,6 +232,8 @@ type HtmlReporter() =
 
         member this.suiteEnd () = ()
         
+        member this.coverage url ss = ()
+
 type LiveHtmlReporter() =
     let consoleReporter : IReporter = new ConsoleReporter() :> IReporter    
     let browser = new OpenQA.Selenium.Firefox.FirefoxDriver() :> IWebDriver    
@@ -273,7 +280,10 @@ type LiveHtmlReporter() =
 
         member this.quit () = if canQuit then browser.Quit()
         
-        member this.suiteBegin () = browser.Navigate().GoToUrl(@"http://lefthandedgoat.github.com/canopy/reporttemplate.html")
-        //member this.suiteBegin () = browser.Navigate().GoToUrl(@"file:///C:/projects/canopy/reporttemplate.html")
+        //member this.suiteBegin () = browser.Navigate().GoToUrl(@"http://lefthandedgoat.github.com/canopy/reporttemplate.html")
+        member this.suiteBegin () = browser.Navigate().GoToUrl(@"file:///C:/projects/canopy/reporttemplate.html")
 
         member this.suiteEnd () = canQuit <- true
+
+        member this.coverage url ss = 
+            js (sprintf "addToContext('%s', 'Fail', '%s', '%s');" "tiling windows" "Coverage hack" (Convert.ToBase64String(ss)))

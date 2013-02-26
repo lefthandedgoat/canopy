@@ -357,5 +357,8 @@ context "tiling windows"
     quit browser1
 )
 run ()
+        
+switchTo mainBrowser
+coverage testpage
 
-quit mainBrowser
+//quit mainBrowser
