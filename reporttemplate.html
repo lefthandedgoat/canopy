@@ -95,7 +95,7 @@
             }
 
 			if(image !== "") {
-				ctx.next('tr').find('table').find('tr').last().find('td').last().append('<img alt="" src="data:image/jpeg;base64,' + image + '" />')
+				ctx.next('tr').find('table').find('tr').last().find('td').last().append('<td><img alt="" src="data:image/jpeg;base64,' + image + '" /></td>')
 			}
 			
             recalculateTotals();
