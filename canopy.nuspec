@@ -2,7 +2,7 @@
 <package xmlns="http://schemas.microsoft.com/packaging/2010/07/nuspec.xsd">
   <metadata>
     <id>canopy</id>
-    <version>0.7.0</version>
+    <version>0.7.1</version>
     <authors>Chris Holt</authors>
     <owners>Chris Holt</owners>
     <licenseUrl>https://github.com/lefthandedgoat/canopy/blob/master/license.txt</licenseUrl>
@@ -15,6 +15,6 @@
     </dependencies>
   </metadata>
   <files>
-	<file src="canopy\bin\Release\canopy.dll" target="lib/canopy.dll" />
+	<file src="canopy\bin\debug\canopy.dll" target="lib/canopy.dll" />
   </files>
 </package>
