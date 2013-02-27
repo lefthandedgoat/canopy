@@ -88,7 +88,9 @@ let fail (ex : Exception) id =
     if failFast = ref true then failed <- true        
     failedCount <- failedCount + 1
     contextFailed <- true
-    let ss = screenshot ()
+    let p = Environment.GetFolderPath(Environment.SpecialFolder.ApplicationData) + @"\canopy\"
+    let f = DateTime.Now.ToString("MMM-d_HH-mm-ss-fff")
+    let ss = screenshot p f
     reporter.fail ex id ss
 
 let run () =

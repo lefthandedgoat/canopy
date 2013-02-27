@@ -32,13 +32,12 @@ let mutable browsers = []
 //misc
 let failsWith message = failureMessage <- message
 
-let screenshot _ = 
-    let pic = (browser :?> ITakesScreenshot).GetScreenshot().AsByteArray    
-    let p = Environment.GetFolderPath(Environment.SpecialFolder.ApplicationData) + @"\canopy\"
-    if Directory.Exists(p) = false then Directory.CreateDirectory(p) |> ignore
-    IO.File.WriteAllBytes(p + DateTime.Now.ToString("MMM-d_HH-mm-ss-fff") + ".png", pic)
+let screenshot directory filename =
+    let pic = (browser :?> ITakesScreenshot).GetScreenshot().AsByteArray
+    if Directory.Exists(directory) = false then Directory.CreateDirectory(directory) |> ignore
+    IO.File.WriteAllBytes(directory + filename + ".png", pic)
     pic
-
+    
 let js script = (browser :?> IJavaScriptExecutor).ExecuteScript(script)
 
 let private swallowedJs script = try js script |> ignore with | ex -> ()
@@ -527,5 +526,7 @@ let coverage url =
     !^ url
     on url
     selectors |> List.iter(fun cssSelector -> swallowedJs (script cssSelector))
-    let ss = screenshot ()
+    let p = Environment.GetFolderPath(Environment.SpecialFolder.ApplicationData) + @"\canopy\"
+    let f = DateTime.Now.ToString("MMM-d_HH-mm-ss-fff")
+    let ss = screenshot p f
     reporter.coverage url ss
