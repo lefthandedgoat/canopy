@@ -68,3 +68,7 @@ end
 get '/iframe2' do
   erb :iframe2
 end
+
+get '/ryansError' do
+  erb :ryansError
+end
