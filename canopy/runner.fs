@@ -52,6 +52,7 @@ type suite () = class
 end
 
 let mutable suites = [new suite()]
+let mutable todo = fun () -> ()
 
 let once f = (last suites).Once <- f
 let before f = (last suites).Before <- f
@@ -101,12 +102,15 @@ let run () =
     let runtest (suite : suite) (test : Test) =
         if failed = false then
             let desc = if test.Description = null then (String.Format("Test #{0}", test.Number)) else test.Description
-            try                
-                reporter.testStart desc
-                suite.Before ()
-                test.Func ()
-                suite.After ()
-                pass()
+            try 
+                reporter.testStart desc  
+                if System.Object.ReferenceEquals(test.Func, todo) then 
+                    reporter.todo ()
+                else
+                    suite.Before ()
+                    test.Func ()
+                    suite.After ()
+                    pass()
             with
                 | ex when failureMessage <> null && failureMessage = ex.Message -> pass()
                 | ex -> fail ex desc

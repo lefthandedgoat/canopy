@@ -79,19 +79,19 @@
             var ctx = $("#contexts").find('tr[data-context="' + context + '"]');
             if (passFailSkip === "Pass") {
                 ctx.next('tr').find('table').last('tr').append('<tr class="success"><td>' + testName + '</td></tr>');
-                if (ctx.hasClass("error") === false && ctx.hasClass("warning") === false) {
+                if (ctx.hasClass("error") === false) {
                     ctx.addClass("success");
                 }
             }
             if (passFailSkip === "Fail") {
                 ctx.next('tr').find('table').last('tr').append('<tr class="error"><td>' + testName + '</td></tr>');
-                ctx.removeClass("success").removeClass("warning").addClass("error");
+                ctx.removeClass("success").removeClass("warning").removeClass("info").addClass("error");
+            }
+            if (passFailSkip === "Todo") {
+                ctx.next('tr').find('table').last('tr').append('<tr class="warning"><td>' + testName + '</td></tr>');
             }
             if (passFailSkip === "Skip") {
-                ctx.next('tr').find('table').last('tr').append('<tr class="warning"><td>' + testName + '</td></tr>');
-                if (ctx.hasClass("error") === false) {
-                    ctx.removeClass("success").addClass("warning");
-                };
+                ctx.next('tr').find('table').last('tr').append('<tr class="info"><td>' + testName + '</td></tr>');
             }
 
 			if(image !== "") {

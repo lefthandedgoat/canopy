@@ -7,6 +7,7 @@ type IReporter =
    abstract member testStart : string -> unit
    abstract member pass : unit -> unit
    abstract member fail : Exception -> string -> byte [] -> unit
+   abstract member todo : unit -> unit
    abstract member testEnd : string -> unit
    abstract member describe : string -> unit
    abstract member contextStart : string -> unit
@@ -74,6 +75,8 @@ type ConsoleReporter() =
 
         member this.coverage url ss = ()
         
+        member this.todo () = ()
+
 type TeamCityReporter() =
     let consoleReporter : IReporter = new ConsoleReporter() :> IReporter
         
@@ -113,6 +116,8 @@ type TeamCityReporter() =
         member this.suiteEnd () = ()
         
         member this.coverage url ss = ()
+
+        member this.todo () = ()
 
 type HtmlReporter() =
     let consoleReporter : IReporter = new ConsoleReporter() :> IReporter    
@@ -234,6 +239,8 @@ type HtmlReporter() =
         
         member this.coverage url ss = ()
 
+        member this.todo () = ()
+
 type LiveHtmlReporter() =
     let consoleReporter : IReporter = new ConsoleReporter() :> IReporter    
     let browser = new OpenQA.Selenium.Firefox.FirefoxDriver() :> IWebDriver    
@@ -287,3 +294,7 @@ type LiveHtmlReporter() =
 
         member this.coverage url ss = 
             js (sprintf "addToContext('%s', 'Fail', '%s', '%s');" "tiling windows" "Coverage hack" (Convert.ToBase64String(ss)))
+
+        member this.todo () = 
+            js (sprintf "addToContext('%s', 'Todo', '%s', '%s');" context test "")
+            consoleReporter.todo ()

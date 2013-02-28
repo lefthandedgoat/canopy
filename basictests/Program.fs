@@ -356,6 +356,10 @@ context "tiling windows"
     quit browser2
     quit browser1
 )
+
+context "todo tests"
+"write a test that tests the whole internet!" &&& todo
+
 run ()
         
 switchTo mainBrowser
