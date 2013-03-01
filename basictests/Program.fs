@@ -21,6 +21,8 @@ lastly (fun _ -> Console.WriteLine "lastly")
  
 let testpage = "http://localhost:4567/" 
 
+"intentionally skipped shows blue in LiveHtmlReport" &&! skipped
+
 "#welcome should have Welcome" &&& (fun _ ->    
     url testpage
     "#welcome" == "Welcome")
@@ -364,5 +366,6 @@ run ()
         
 switchTo mainBrowser
 coverage testpage
+coverage "http://scrumy.com/silenter39delayed"
 
 //quit mainBrowser

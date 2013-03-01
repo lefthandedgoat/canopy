@@ -8,6 +8,7 @@ type IReporter =
    abstract member pass : unit -> unit
    abstract member fail : Exception -> string -> byte [] -> unit
    abstract member todo : unit -> unit
+   abstract member skip : unit -> unit
    abstract member testEnd : string -> unit
    abstract member describe : string -> unit
    abstract member contextStart : string -> unit
@@ -77,6 +78,8 @@ type ConsoleReporter() =
         
         member this.todo () = ()
 
+        member this.skip () = ()
+
 type TeamCityReporter() =
     let consoleReporter : IReporter = new ConsoleReporter() :> IReporter
         
@@ -118,6 +121,8 @@ type TeamCityReporter() =
         member this.coverage url ss = ()
 
         member this.todo () = ()
+
+        member this.skip () = ()
 
 type HtmlReporter() =
     let consoleReporter : IReporter = new ConsoleReporter() :> IReporter    
@@ -241,6 +246,8 @@ type HtmlReporter() =
 
         member this.todo () = ()
 
+        member this.skip () = ()
+
 type LiveHtmlReporter() =
     let consoleReporter : IReporter = new ConsoleReporter() :> IReporter    
     let browser = new OpenQA.Selenium.Firefox.FirefoxDriver() :> IWebDriver    
@@ -248,7 +255,8 @@ type LiveHtmlReporter() =
     let mutable context = System.String.Empty;
     let mutable test = System.String.Empty;
     let mutable canQuit = false
-            
+    let mutable contexts : string list = []
+
     interface IReporter with               
         member this.pass () =
             js (sprintf "addToContext('%s', 'Pass', '%s', '%s');" context test "")
@@ -262,6 +270,7 @@ type LiveHtmlReporter() =
             consoleReporter.describe d
           
         member this.contextStart c = 
+            contexts <- c :: contexts
             context <- c
             js (sprintf "addContext('%s');" context)
             js (sprintf "collapseContextsExcept('%s');" context)
@@ -290,11 +299,18 @@ type LiveHtmlReporter() =
         //member this.suiteBegin () = browser.Navigate().GoToUrl(@"http://lefthandedgoat.github.com/canopy/reporttemplate.html")
         member this.suiteBegin () = browser.Navigate().GoToUrl(@"file:///C:/projects/canopy/reporttemplate.html")
 
-        member this.suiteEnd () = canQuit <- true
+        member this.suiteEnd () = 
+            canQuit <- true
+            js (sprintf "collapseContextsExcept('%s');" "") //cheap hack to collapse all contexts at the end of a run
 
         member this.coverage url ss = 
-            js (sprintf "addToContext('%s', 'Fail', '%s', '%s');" "tiling windows" "Coverage hack" (Convert.ToBase64String(ss)))
+            if (contexts |> List.exists (fun c -> c = "Coverage Reports")) = false then
+                contexts <- "Coverage Reports" :: contexts
+                js (sprintf "addContext('%s');" "Coverage Reports")
+            js (sprintf "addToContext('%s', 'Pass', '%s', '%s');" "Coverage Reports" url (Convert.ToBase64String(ss)))
 
         member this.todo () = 
             js (sprintf "addToContext('%s', 'Todo', '%s', '%s');" context test "")
-            consoleReporter.todo ()
+
+        member this.skip () = 
+            js (sprintf "addToContext('%s', 'Skip', '%s', '%s');" context test "")

@@ -53,6 +53,7 @@ end
 
 let mutable suites = [new suite()]
 let mutable todo = fun () -> ()
+let mutable skipped = fun () -> ()
 
 let once f = (last suites).Once <- f
 let before f = (last suites).Before <- f
@@ -72,8 +73,8 @@ let ntest description f = description &&& f
 let wip f = (last suites).Wips <- (last suites).Wips @ [Test(null, f, (last suites).Wips.Length + 1)]
 let ( &&&& ) description f = (last suites).Wips <- (last suites).Wips @ [Test(description, f, (last suites).Wips.Length + 1)]
 let many count f = [1 .. count] |> List.iter (fun _ -> (last suites).Manys <- (last suites).Manys @ [Test(null, f, (last suites).Manys.Length + 1)])
-let xtest f = ()
-let ( &&! ) description f = ()
+let xtest f = (last suites).Tests <- (last suites).Tests @ [Test(null, skipped, (last suites).Tests.Length + 1)]
+let ( &&! ) description f = (last suites).Tests <- (last suites).Tests @ [Test(description, skipped, (last suites).Tests.Length + 1)]
 
 let mutable passedCount = 0
 let mutable failedCount = 0
@@ -106,6 +107,8 @@ let run () =
                 reporter.testStart desc  
                 if System.Object.ReferenceEquals(test.Func, todo) then 
                     reporter.todo ()
+                else if System.Object.ReferenceEquals(test.Func, skipped) then 
+                    reporter.skip ()
                 else
                     suite.Before ()
                     test.Func ()
