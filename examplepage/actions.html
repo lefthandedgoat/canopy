@@ -1,0 +1,494 @@
+﻿<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="utf-8">
+    <title>Template &middot; Bootstrap</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="description" content="">
+    <meta name="author" content="">
+    <!-- Le styles -->
+    <link href="http://netdna.bootstrapcdn.com/twitter-bootstrap/2.3.1/css/bootstrap-combined.min.css"
+        rel="stylesheet">
+    <style type="text/css">
+        body
+        {
+            padding-top: 20px;
+            padding-bottom: 60px;
+        }
+        
+        /* Custom container */
+        .container
+        {
+            margin: 0 auto;
+            max-width: 1000px;
+        }
+        .container > hr
+        {
+            margin: 60px 0;
+        }
+        
+        /* Main marketing message and sign up button */
+        .jumbotron
+        {
+            margin: 80px 0;
+            text-align: center;
+        }
+        .jumbotron h1
+        {
+            font-size: 66px;
+            line-height: 1;
+        }
+        .jumbotron .lead
+        {
+            font-size: 24px;
+            line-height: 1.25;
+        }
+        .jumbotron .btn
+        {
+            font-size: 21px;
+            padding: 14px 24px;
+        }
+        
+        /* Supporting marketing content */
+        .marketing
+        {
+            margin: 60px 0;
+        }
+        .marketing p + h4
+        {
+            margin-top: 28px;
+        }
+        
+        
+        /* Customize the navbar links to be fill the entire space of the .navbar */
+        .navbar .navbar-inner
+        {
+            padding: 0;
+        }
+        .navbar .nav
+        {
+            margin: 0;
+            display: table;
+            width: 100%;
+        }
+        .navbar .nav li
+        {
+            display: table-cell;
+            width: 1%;
+            float: none;
+        }
+        .navbar .nav li a
+        {
+            font-weight: bold;
+            text-align: center;
+            border-left: 1px solid rgba(255,255,255,.75);
+            border-right: 1px solid rgba(0,0,0,.1);
+        }
+        .navbar .nav li:first-child a
+        {
+            border-left: 0;
+            border-radius: 3px 0 0 3px;
+        }
+        .navbar .nav li:last-child a
+        {
+            border-right: 0;
+            border-radius: 0 3px 3px 0;
+        }
+        .comment
+        {
+            color: #008000;
+        }
+        
+        .source
+        {
+            font-size: 11.5px;
+        }
+    </style>
+    <link href="http://netdna.bootstrapcdn.com/twitter-bootstrap/2.3.1/css/bootstrap-responsive.min.css"
+        rel="stylesheet">
+    <!-- HTML5 shim, for IE6-8 support of HTML5 elements -->
+    <!--[if lt IE 9]>
+      <script src="../assets/js/html5shiv.js"></script>
+    <![endif]-->
+</head>
+<body>
+    <div class="container">
+        <div class="masthead">
+            <h3 class="muted">
+                canopy test page</h3>
+            <div class="navbar">
+                <div class="navbar-inner">
+                    <div class="container">
+                        <ul class="nav">
+                            <li><a href="index.html">Home</a></li>
+                            <li><a href="http://lefthandedgoat.github.com/canopy/" id="githubSource">Github Page</a></li>
+                            <li><a href="http://github.com/lefthandedgoat/canopy">Github Source</a></li>
+                            <li><a href="http://nuget.org/packages/canopy">canopy on Nuget</a></li>
+                            <li><a href="http://amirrajan.github.com/Oak/">Oak</a></li>
+                            <li><a href="http://nspec.org/">nSpec</a></li>
+                            <li><a href="http://research.microsoft.com/en-us/projects/fsharp/">f#</a></li>
+                        </ul>
+                    </div>
+                </div>
+            </div>
+            <!-- /.navbar -->
+        </div>
+        <div class="row-fluid">
+            <div class="span12">
+                <div class="item">
+                    <h4>
+                        start <a class="source" href="https://github.com/lefthandedgoat/canopy/blob/master/canopy/canopy.fs#L458">
+                            source</a></h4>
+                    start an instance of a browser
+                    <pre>
+start firefox
+start chrome
+start ie
+</pre>
+                </div>
+                <div class="item">
+                    <h4>
+                        switchTo <a class="source" href="https://github.com/lefthandedgoat/canopy/blob/master/canopy/canopy.fs#L471">
+                            source</a></h4>
+                    switch to an existing instance of a browser
+                    <pre>
+start firefox
+let mainBrowser = browser
+start chrome
+let secondBrowser = browser
+<span class="comment">//switch back to mainBrowser after opening secondBrowser</span>
+switchTo mainBrowser
+</pre>
+                </div>
+                <div class="item">
+                    <h4>
+                        screenshot <a class="source" href="https://github.com/lefthandedgoat/canopy/blob/master/canopy/canopy.fs#L35">
+                            source</a></h4>
+                    take a screenshot and save it to the specified path with specified filename. returns
+                    image as byte array
+                    <pre>
+let path = Environment.GetFolderPath(Environment.SpecialFolder.ApplicationData) + @"\canopy\"
+let filename = DateTime.Now.ToString("MMM-d_HH-mm-ss-fff")
+screenshot path filename
+</pre>
+                </div>
+                <div class="item">
+                    <h4>
+                        js <a class="source" href="https://github.com/lefthandedgoat/canopy/blob/master/canopy/canopy.fs#L41">
+                            source</a></h4>
+                    run javscript in the current browser
+                    <pre>
+<span class="comment">//give the title a border</span>
+js "document.querySelector('#title').style.border = 'thick solid #FFF467';"
+</pre>
+                </div>
+                <div class="item">
+                    <h4>
+                        sleep <a class="source" href="https://github.com/lefthandedgoat/canopy/blob/master/canopy/canopy.fs#L45">
+                            source</a></h4>
+                    sleep for X seconds
+                    <pre>
+<span class="comment">//sleep for 1 second</span>
+sleep ()
+<span class="comment">//sleep for 1 second</span>
+sleep 1
+<span class="comment">//sleep for 3 seconds</span>
+sleep 3
+</pre>
+                </div>
+                <div class="item">
+                    <h4>
+                        highlight <a class="source" href="https://github.com/lefthandedgoat/canopy/blob/master/canopy/canopy.fs#L79">
+                            source</a></h4>
+                    place a border around an element to help you identifiy it visually, used in wip
+                    test mode
+                    <pre>
+highlight ".btn"
+</pre>
+                </div>
+                <div class="item">
+                    <h4>
+                        describe <a class="source" href="https://github.com/lefthandedgoat/canopy/blob/master/canopy/canopy.fs#L95">
+                            source</a></h4>
+                    describe something in your test, currently writes desciption to console
+                    <pre>
+describe "on main page, testing logout"
+</pre>
+                </div>
+                <div class="item">
+                    <h4>
+                        waitFor <a class="source" href="https://github.com/lefthandedgoat/canopy/blob/master/canopy/canopy.fs#L99">
+                            source</a></h4>
+                    wait until custom function is true (better alternative to sleeping X seconds)
+                    <pre>
+let fiveNumbersShown () = 
+        (elements ".number").Length = 5
+    
+url "http://somepage.com/countdown"
+waitFor fiveNumbersShown
+<span class="comment">//continue with your test</span>
+</pre>
+                </div>
+                <div class="item">
+                    <h4>
+                        element <a class="source" href="https://github.com/lefthandedgoat/canopy/blob/master/canopy/canopy.fs#L204">
+                            source</a></h4>
+                    get an element (selenium IWebElement) with given css selector or text (built in
+                    waits, automatically searches through iFrames). Most useful if you need to write
+                    some custom helpers to provide functionality that canopy does not currently have
+                    <pre>
+let logoutHref = (element "#logout").GetAttribute("href")
+describe ("logout href is: " + logoutHref) 
+<span class="comment">//continue with your test</span>
+</pre>
+                </div>
+                <div class="item">
+                    <h4>
+                        elements <a class="source" href="https://github.com/lefthandedgoat/canopy/blob/master/canopy/canopy.fs#L206">
+                            source</a></h4>
+                    the same as element except you get all elements that match the css selector or text
+                    <pre>
+let clickAll selector =
+    elements selector
+    |> List.iter (fun element -> click element)
+    
+clickAll ".button"
+</pre>
+                </div>
+                <div class="item">
+                    <h4>
+                        nth <a class="source" href="https://github.com/lefthandedgoat/canopy/blob/master/canopy/canopy.fs#L210">
+                            source</a></h4>
+                    get the nth element
+                    <pre>
+click (nth 4 ".button")
+</pre>
+                </div>
+                <div class="item">
+                    <h4>
+                        first <a class="source" href="https://github.com/lefthandedgoat/canopy/blob/master/canopy/canopy.fs#L212">
+                            source</a></h4>
+                    get the first element
+                    <pre>
+click (first ".button")
+</pre>
+                </div>
+                <div class="item">
+                    <h4>
+                        last <a class="source" href="https://github.com/lefthandedgoat/canopy/blob/master/canopy/canopy.fs#L214">
+                            source</a></h4>
+                    get the last element
+                    <pre>
+click (last ".button")
+</pre>
+                </div>
+                <div class="item">
+                    <h4>
+                        << (write) <a class="source" href="https://github.com/lefthandedgoat/canopy/blob/master/canopy/canopy.fs#L226">
+                            source</a></h4>
+                    write text to element
+                    <pre>
+"#firstName" << "Alex"
+<span class="comment">//if you dont like the << syntax you can alias anyway you like, eg: </span>
+<span class="comment">//let write text selector = selector << text </span>
+</pre>
+                </div>
+                <div class="item">
+                    <h4>
+                        read <a class="source" href="https://github.com/lefthandedgoat/canopy/blob/master/canopy/canopy.fs#L253">
+                            source</a></h4>
+                    read the text (or value or selected option) of an element
+                    <pre>
+let selectedState = read "#states"
+let firstName = read "#firstName"
+let linkText = read "#someLink"
+</pre>
+                </div>
+                <div class="item">
+                    <h4>
+                        clear <a class="source" href="https://github.com/lefthandedgoat/canopy/blob/master/canopy/canopy.fs#L261">
+                            source</a></h4>
+                    clear the text of an element
+                    <pre>
+clear "#firstName"
+</pre>
+                </div>
+                <div class="item">
+                    <h4>
+                        press <a class="source" href="https://github.com/lefthandedgoat/canopy/blob/master/canopy/canopy.fs#L287">
+                            source</a></h4>
+                    simulate a key press
+                    <pre>
+press tab
+press enter
+press down
+press up
+press left
+press right
+</pre>
+                </div>
+                <div class="item">
+                    <h4>
+                        alert <a class="source" href="https://github.com/lefthandedgoat/canopy/blob/master/canopy/canopy.fs#L292">
+                            source</a></h4>
+                    gets the current alert
+                    <pre>
+alert() == "Welcome to Test Page!"
+</pre>
+                </div>
+                <div class="item">
+                    <h4>
+                        acceptAlert <a class="source" href="https://github.com/lefthandedgoat/canopy/blob/master/canopy/canopy.fs#L294">
+                            source</a></h4>
+                    accepts the current alert
+                    <pre>
+acceptAlert()
+</pre>
+                </div>
+                <div class="item">
+                    <h4>
+                        dismissAlert <a class="source" href="https://github.com/lefthandedgoat/canopy/blob/master/canopy/canopy.fs#L296">
+                            source</a></h4>
+                    dismiss the current alert
+                    <pre>
+dismissAlert()
+</pre>
+                </div>
+                <div class="item">
+                    <h4>
+                        click <a class="source" href="https://github.com/lefthandedgoat/canopy/blob/master/canopy/canopy.fs#L408">
+                            source</a></h4>
+                    click an element via selector or text, can also click selenium IWebElements
+                    <pre>
+click "#login"
+click "Login"
+click (element "#login")
+</pre>
+                </div>
+                <div class="item">
+                    <h4>
+                        doubleClick <a class="source" href="https://github.com/lefthandedgoat/canopy/blob/master/canopy/canopy.fs#L420">
+                            source</a></h4>
+                    simulates a double click via javascript
+                    <pre>
+doubleClick "#login"
+</pre>
+                </div>
+                <div class="item">
+                    <h4>
+                        check <a class="source" href="https://github.com/lefthandedgoat/canopy/blob/master/canopy/canopy.fs#L434">
+                            source</a></h4>
+                    checks a checkbox if it is not already checked
+                    <pre>
+check "#yes"
+<span class="comment">//below code will not click the checkbox again, which would uncheck
+    it</span>
+check "#yes"
+</pre>
+                </div>
+                <div class="item">
+                    <h4>
+                        uncheck <a class="source" href="https://github.com/lefthandedgoat/canopy/blob/master/canopy/canopy.fs#L434">
+                            source</a></h4>
+                    unchecks a checkbox if it is not already unchecked
+                    <pre>
+uncheck "#yes"
+<span class="comment">//below code will not click the checkbox again, which would check
+    it</span>
+uncheck "#yes"
+</pre>
+                </div>
+                <div class="item">
+                    <h4>
+                        >> (drag is an alias) <a class="source" href="https://github.com/lefthandedgoat/canopy/blob/master/canopy/canopy.fs#L439">
+                            source</a></h4>
+                    drag on item to another
+                    <pre>
+".todo" >> ".inprogress"
+drag ".todo" ".inprogress"
+</pre>
+                </div>
+                <div class="item">
+                    <h4>
+                        pin <a class="source" href="https://github.com/lefthandedgoat/canopy/blob/master/canopy/canopy.fs#L449">
+                            source</a></h4>
+                    pin a browser to the left or right side of your screen (any browser you start ispinned right automatically)
+                    <pre>
+pin left
+pin right
+</pre>
+                </div>
+                <div class="item">
+                    <h4>
+                        tile <a class="source" href="https://github.com/lefthandedgoat/canopy/blob/master/canopy/canopy.fs#L473">
+                                 source</a></h4>
+                    tile listed browsers equally across your screen.  4 open browsers would each take 25% of the screen
+                    <pre>
+start chrome
+let browser1 = browser
+start chrome
+let browser2 = browser
+start chrome
+let browser3 = browser
+
+tile [browser1; browser2; browser3]
+</pre>
+                </div>
+                    <div class="item">
+                    <h4>
+                        quit <a class="source" href="https://github.com/lefthandedgoat/canopy/blob/master/canopy/canopy.fs#L489">
+                            source</a></h4>
+                    quit the current browser or the specified browser
+                    <pre>
+<span class="comment">//quit current</span>
+quit ()
+<span class="comment">//quit specific</span>
+quit browser1
+</pre>
+                </div>
+                    <div class="item">
+                    <h4>
+                        currentUrl <a class="source" href="https://github.com/lefthandedgoat/canopy/blob/master/canopy/canopy.fs#L495">
+                            source</a></h4>
+                    gets the currentUrl
+                    <pre>
+let u = currentUrl ()
+</pre>
+                </div>
+                <div class="item">
+                    <h4>
+                        !^ (aliased by url) <a class="source" href="https://github.com/lefthandedgoat/canopy/blob/master/canopy/canopy.fs#L504">
+                            source</a></h4>
+                    go to a url
+                    <pre>
+!^ "http://www.google.com"
+url "http://www.google.com"
+</pre>
+                </div>
+                <div class="item">
+                    <h4>
+                        title <a class="source" href="https://github.com/lefthandedgoat/canopy/blob/master/canopy/canopy.fs#L508">
+                            source</a></h4>
+                    gets the title of the current page
+                    <pre>
+let theTitle = title ()
+</pre>
+                </div>
+                <div class="item">
+                    <h4>
+                        reload <a class="source" href="https://github.com/lefthandedgoat/canopy/blob/master/canopy/canopy.fs#L510">
+                            source</a></h4>
+                    reload the current page
+                    <pre>
+reload ()
+</pre>
+                </div>
+
+            </div>
+        </div>
+        <div class="footer">
+        </div>
+    </div>
+    <!-- /container -->
+</body>
+</html>
