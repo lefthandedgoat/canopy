@@ -100,7 +100,7 @@
             color: #008000;
         }
         
-        .source
+        .source, .example
         {
             font-size: 11.5px;
         }
@@ -138,8 +138,14 @@
             <div class="span12">
                 <div class="item">
                     <h4>
-                        on <a class="source" href="https://github.com/lefthandedgoat/canopy/blob/master/canopy/canopy.fs#L497">
-                            source</a></h4>
+                        on <a class="source" href="https://github.com/lefthandedgoat/canopy/blob/master/canopy/canopy.fs#L497">source</a>
+						[
+						<a class="example" href="https://github.com/lefthandedgoat/canopy/blob/master/basictests/Program.fs#L173">1</a>
+						<a class="example" href="https://github.com/amirrajan/Oak/blob/master/Sample%20Apps/BorrowedGames/BorrowedGames.UI.Tests/uimethods.fs#L13">2</a>
+						<a class="example" href="https://github.com/amirrajan/Oak/blob/master/Sample%20Apps/BorrowedGames/BorrowedGames.UI.Tests/uimethods.fs#L35">3</a>
+						<a class="example" href="https://github.com/amirrajan/Oak/blob/master/Sample%20Apps/TaskRabbits/TaskRabbits.UITests/common.fs#L51">4</a>
+						]
+					</h4>
                     assert that the browser is currently on a url (uses string.contains)
                     <pre>
 url "https://duckduckgo.com/?q=canopy+f%23"
@@ -148,8 +154,11 @@ on "https://duckduckgo.com/?q"
                 </div>
                 <div class="item">
                     <h4>
-                        selected <a class="source" href="https://github.com/lefthandedgoat/canopy/blob/master/canopy/canopy.fs#L269">
-                            source</a></h4>
+                        selected <a class="source" href="https://github.com/lefthandedgoat/canopy/blob/master/canopy/canopy.fs#L269">source</a>
+						[
+						<a class="example" href="https://github.com/lefthandedgoat/canopy/blob/master/basictests/Program.fs#L147">1</a>
+						]
+					</h4>
                     assert that a radio or checkbox is selected
                     <pre>
 selected "#yes"
@@ -158,7 +167,11 @@ selected "#yes"
                 <div class="item">
                     <h4>
                         deselected <a class="source" href="https://github.com/lefthandedgoat/canopy/blob/master/canopy/canopy.fs#L274">
-                            source</a></h4>
+                            source</a>
+						[
+						<a class="example" href="https://github.com/lefthandedgoat/canopy/blob/master/basictests/Program.fs#L163">1</a>
+						]
+						</h4>
                     assert that a radio or checkbox is not selected
                     <pre>
 deselected "#yes"
@@ -167,10 +180,17 @@ deselected "#yes"
                 <div class="item">
                     <h4>
                         == (equals) <a class="source" href="https://github.com/lefthandedgoat/canopy/blob/master/canopy/canopy.fs#L299">
-                            source</a></h4>
+                            source</a>
+						[
+						<a class="example" href="https://github.com/lefthandedgoat/canopy/blob/master/basictests/Program.fs#L45">1</a>
+						<a class="example" href="https://github.com/lefthandedgoat/canopy/blob/master/basictests/Program.fs#L49">2</a>
+						<a class="example" href="https://github.com/lefthandedgoat/canopy/blob/master/basictests/Program.fs#L264">3</a>
+						<a class="example" href="https://github.com/amirrajan/Oak/blob/master/Sample%20Apps/TaskRabbits/TaskRabbits.UITests/common.fs#L98">4</a>
+						<a class="example" href="https://github.com/amirrajan/Oak/blob/master/Sample%20Apps/BorrowedGames/BorrowedGames.UI.Tests/uimethods.fs#L44">5</a>
+						]	
+						</h4>
                     assert that the element on the left is equal to the value on the right
                     <pre>
-
 "#firstName" == "Alex"
 (element "#logout") == "Logout"
 </pre>
@@ -178,7 +198,11 @@ deselected "#yes"
                 <div class="item">
                     <h4>
                         != (does not equal) <a class="source" href="https://github.com/lefthandedgoat/canopy/blob/master/canopy/canopy.fs#L322">
-                            source</a></h4>
+                            source</a>
+						[
+						<a class="example" href="https://github.com/lefthandedgoat/canopy/blob/master/basictests/Program.fs#L186">1</a>						
+						]			
+					</h4>
                     assert that the element on the left is not equal to the value on the right
                     <pre>
 "#firstName" != "Tom"
@@ -188,7 +212,13 @@ deselected "#yes"
                 <div class="item">
                     <h4>
                         *= (one of many equals) <a class="source" href="https://github.com/lefthandedgoat/canopy/blob/master/canopy/canopy.fs#L329">
-                            source</a></h4>
+                            source</a>
+						[
+						<a class="example" href="https://github.com/lefthandedgoat/canopy/blob/master/basictests/Program.fs#L84">1</a>						
+						<a class="example" href="https://github.com/amirrajan/Oak/blob/master/Sample%20Apps/TaskRabbits/TaskRabbits.UITests/common.fs#L73">2</a>						
+						<a class="example" href="https://github.com/amirrajan/Oak/blob/master/Sample%20Apps/BorrowedGames/BorrowedGames.UI.Tests/uimethods.fs#L87">3</a>						
+						]	
+					</h4>
                     assert that atleast one element in a list equals a value
                     <pre>
 ".todoItem" *= "Buy milk"
@@ -197,7 +227,11 @@ deselected "#yes"
                 <div class="item">
                     <h4>
                         *!= (none equals) <a class="source" href="https://github.com/lefthandedgoat/canopy/blob/master/canopy/canopy.fs#L340">
-                            source</a></h4>
+                            source</a>
+						[
+						<a class="example" href="https://github.com/lefthandedgoat/canopy/blob/master/basictests/Program.fs#L190">1</a>						
+						]
+					</h4>
                     assert that none of the items in a list equals a value
                     <pre>
 ".todoItem" !*= "Sell everything"
@@ -215,7 +249,12 @@ contains "Log" (read "#logout)
                 <div class="item">
                     <h4>
                         count <a class="source" href="https://github.com/lefthandedgoat/canopy/blob/master/canopy/canopy.fs#L353">
-                            source</a></h4>
+                            source</a>
+					[
+					<a class="example" href="https://github.com/lefthandedgoat/canopy/blob/master/basictests/Program.fs#L339">1</a>						
+					<a class="example" href="https://github.com/amirrajan/Oak/blob/master/Sample%20Apps/TaskRabbits/TaskRabbits.UITests/common.fs#L72">2</a>						
+					]
+					</h4>
                     assert there are X items of given css selector
                     <pre>
 count ".todoItem" 5
@@ -224,7 +263,11 @@ count ".todoItem" 5
                 <div class="item">
                     <h4>
                         =~ (regex match) <a class="source" href="https://github.com/lefthandedgoat/canopy/blob/master/canopy/canopy.fs#L369">
-                            source</a></h4>
+                            source</a>
+					[
+					<a class="example" href="https://github.com/lefthandedgoat/canopy/blob/master/basictests/Program.fs#L294">1</a>
+					]
+					</h4>
                     assert that an element regex matches a value
                     <pre>
 "#lastName" << "Gray"
@@ -236,7 +279,12 @@ count ".todoItem" 5
                 <div class="item">
                     <h4>
                         displayed <a class="source" href="https://github.com/lefthandedgoat/canopy/blob/master/canopy/canopy.fs#L390">
-                            source</a></h4>
+                            source</a>
+					[
+					<a class="example" href="https://github.com/lefthandedgoat/canopy/blob/master/basictests/Program.fs#L323">1</a>
+					<a class="example" href="https://github.com/amirrajan/Oak/blob/master/Sample%20Apps/TaskRabbits/TaskRabbits.UITests/common.fs#L37">2</a>
+					]
+					</h4>
                     assert that an element is displayed on the screen
                     <pre>
 displayed "#modal"
@@ -245,7 +293,11 @@ displayed "#modal"
                 <div class="item">
                     <h4>
                         notDdisplayed <a class="source" href="https://github.com/lefthandedgoat/canopy/blob/master/canopy/canopy.fs#L369">
-                            source</a></h4>
+                            source</a>
+					[
+					<a class="example" href="https://github.com/lefthandedgoat/canopy/blob/master/basictests/Program.fs#L335">1</a>
+					]
+					</h4>
                     assert that an element is not displayed on the screen
                     <pre>
 notDisplayed "#modal"
