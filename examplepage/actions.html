@@ -138,7 +138,13 @@
                 <div class="item">
                     <h4>
                         start <a class="source" href="https://github.com/lefthandedgoat/canopy/blob/master/canopy/canopy.fs#L458">
-                            source</a></h4>
+                            source</a>
+						[
+						<a class="example" href="https://github.com/amirrajan/Oak/blob/master/Sample%20Apps/BorrowedGames/BorrowedGames.UI.Tests/Program.fs#L8">1</a>
+						<a class="example" href="https://github.com/lefthandedgoat/canopy/blob/master/basictests/Program.fs#L351">2</a>
+						<a class="example" href="https://github.com/amirrajan/Oak/blob/master/Sample%20Apps/TaskRabbits/TaskRabbits.UITests/Program.fs#L4">3</a>
+						]
+						</h4>
                     start an instance of a browser
                     <pre>
 start firefox
@@ -149,7 +155,11 @@ start ie
                 <div class="item">
                     <h4>
                         switchTo <a class="source" href="https://github.com/lefthandedgoat/canopy/blob/master/canopy/canopy.fs#L471">
-                            source</a></h4>
+                            source</a>
+						[
+						<a class="example" href="https://github.com/lefthandedgoat/canopy/blob/master/basictests/Program.fs#L367">1</a>
+						]
+						</h4>
                     switch to an existing instance of a browser
                     <pre>
 start firefox
@@ -185,7 +195,11 @@ js "document.querySelector('#title').style.border = 'thick solid #FFF467';"
                 <div class="item">
                     <h4>
                         sleep <a class="source" href="https://github.com/lefthandedgoat/canopy/blob/master/canopy/canopy.fs#L45">
-                            source</a></h4>
+                            source</a>
+						[
+						<a class="example" href="https://github.com/lefthandedgoat/canopy/blob/master/basictests/Program.fs#L214">1</a>
+						]	
+							</h4>
                     sleep for X seconds
                     <pre>
 <span class="comment">//sleep for 1 second</span>
@@ -209,7 +223,11 @@ highlight ".btn"
                 <div class="item">
                     <h4>
                         describe <a class="source" href="https://github.com/lefthandedgoat/canopy/blob/master/canopy/canopy.fs#L95">
-                            source</a></h4>
+                            source</a>
+							[
+						<a class="example" href="https://github.com/lefthandedgoat/canopy/blob/master/basictests/Program.fs#L43">1</a>
+						]	
+							</h4>
                     describe something in your test, currently writes desciption to console
                     <pre>
 describe "on main page, testing logout"
@@ -218,7 +236,11 @@ describe "on main page, testing logout"
                 <div class="item">
                     <h4>
                         waitFor <a class="source" href="https://github.com/lefthandedgoat/canopy/blob/master/canopy/canopy.fs#L99">
-                            source</a></h4>
+                            source</a>
+						[
+						<a class="example" href="https://github.com/lefthandedgoat/canopy/blob/master/basictests/Program.fs#L288">1</a>
+						]	
+							</h4>
                     wait until custom function is true (better alternative to sleeping X seconds)
                     <pre>
 let fiveNumbersShown () = 
@@ -232,7 +254,11 @@ waitFor fiveNumbersShown
                 <div class="item">
                     <h4>
                         element <a class="source" href="https://github.com/lefthandedgoat/canopy/blob/master/canopy/canopy.fs#L204">
-                            source</a></h4>
+                            source</a>
+					[
+						<a class="example" href="https://github.com/lefthandedgoat/canopy/blob/master/basictests/Program.fs#L270">1</a>
+						]	
+					</h4>
                     get an element (selenium IWebElement) with given css selector or text (built in
                     waits, automatically searches through iFrames). Most useful if you need to write
                     some custom helpers to provide functionality that canopy does not currently have
@@ -245,7 +271,12 @@ describe ("logout href is: " + logoutHref)
                 <div class="item">
                     <h4>
                         elements <a class="source" href="https://github.com/lefthandedgoat/canopy/blob/master/canopy/canopy.fs#L206">
-                            source</a></h4>
+                            source</a>
+						[
+						<a class="example" href="https://github.com/lefthandedgoat/canopy/blob/master/basictests/Program.fs#L285">1</a>
+						<a class="example" href="https://github.com/amirrajan/Oak/blob/master/Sample%20Apps/TaskRabbits/TaskRabbits.UITests/common.fs#L41">2</a>
+						]	
+							</h4>
                     the same as element except you get all elements that match the css selector or text
                     <pre>
 let clickAll selector =
@@ -258,7 +289,11 @@ clickAll ".button"
                 <div class="item">
                     <h4>
                         nth <a class="source" href="https://github.com/lefthandedgoat/canopy/blob/master/canopy/canopy.fs#L210">
-                            source</a></h4>
+                            source</a>
+					[
+						<a class="example" href="https://github.com/lefthandedgoat/canopy/blob/master/basictests/Program.fs#L308">1</a>
+						]	
+							</h4>
                     get the nth element
                     <pre>
 click (nth 4 ".button")
@@ -267,7 +302,11 @@ click (nth 4 ".button")
                 <div class="item">
                     <h4>
                         first <a class="source" href="https://github.com/lefthandedgoat/canopy/blob/master/canopy/canopy.fs#L212">
-                            source</a></h4>
+                            source</a>
+							[
+						<a class="example" href="https://github.com/lefthandedgoat/canopy/blob/master/basictests/Program.fs#L300">1</a>
+						]	
+							</h4>
                     get the first element
                     <pre>
 click (first ".button")
@@ -276,7 +315,11 @@ click (first ".button")
                 <div class="item">
                     <h4>
                         last <a class="source" href="https://github.com/lefthandedgoat/canopy/blob/master/canopy/canopy.fs#L214">
-                            source</a></h4>
+                            source</a>
+						[
+						<a class="example" href="https://github.com/lefthandedgoat/canopy/blob/master/basictests/Program.fs#L304">1</a>
+						]	
+							</h4>
                     get the last element
                     <pre>
 click (last ".button")
@@ -285,7 +328,13 @@ click (last ".button")
                 <div class="item">
                     <h4>
                         << (write) <a class="source" href="https://github.com/lefthandedgoat/canopy/blob/master/canopy/canopy.fs#L226">
-                            source</a></h4>
+                            source</a>
+						[
+						<a class="example" href="https://github.com/lefthandedgoat/canopy/blob/master/basictests/Program.fs#L63">1</a>
+						<a class="example" href="https://github.com/amirrajan/Oak/blob/master/Sample%20Apps/BorrowedGames/BorrowedGames.UI.Tests/uimethods.fs#L36">2</a>
+						<a class="example" href="https://github.com/amirrajan/Oak/blob/master/Sample%20Apps/TaskRabbits/TaskRabbits.UITests/common.fs#L84">3</a>
+						]	
+						</h4>
                     write text to element
                     <pre>
 "#firstName" << "Alex"
@@ -307,7 +356,11 @@ let linkText = read "#someLink"
                 <div class="item">
                     <h4>
                         clear <a class="source" href="https://github.com/lefthandedgoat/canopy/blob/master/canopy/canopy.fs#L261">
-                            source</a></h4>
+                            source</a>
+					[
+						<a class="example" href="https://github.com/lefthandedgoat/canopy/blob/master/basictests/Program.fs#L221">1</a>
+						]	
+							</h4>
                     clear the text of an element
                     <pre>
 clear "#firstName"
@@ -316,7 +369,11 @@ clear "#firstName"
                 <div class="item">
                     <h4>
                         press <a class="source" href="https://github.com/lefthandedgoat/canopy/blob/master/canopy/canopy.fs#L287">
-                            source</a></h4>
+                            source</a>
+						[
+						<a class="example" href="https://github.com/lefthandedgoat/canopy/blob/master/basictests/Program.fs#L201">1</a>
+						]
+							</h4>
                     simulate a key press
                     <pre>
 press tab
@@ -330,7 +387,11 @@ press right
                 <div class="item">
                     <h4>
                         alert <a class="source" href="https://github.com/lefthandedgoat/canopy/blob/master/canopy/canopy.fs#L292">
-                            source</a></h4>
+                            source</a>
+						[
+						<a class="example" href="https://github.com/lefthandedgoat/canopy/blob/master/basictests/Program.fs#L238">1</a>
+						]						
+							</h4>
                     gets the current alert
                     <pre>
 alert() == "Welcome to Test Page!"
@@ -339,7 +400,11 @@ alert() == "Welcome to Test Page!"
                 <div class="item">
                     <h4>
                         acceptAlert <a class="source" href="https://github.com/lefthandedgoat/canopy/blob/master/canopy/canopy.fs#L294">
-                            source</a></h4>
+                            source</a>
+						[
+						<a class="example" href="https://github.com/lefthandedgoat/canopy/blob/master/basictests/Program.fs#L239">1</a>
+						]	
+							</h4>
                     accepts the current alert
                     <pre>
 acceptAlert()
@@ -348,7 +413,11 @@ acceptAlert()
                 <div class="item">
                     <h4>
                         dismissAlert <a class="source" href="https://github.com/lefthandedgoat/canopy/blob/master/canopy/canopy.fs#L296">
-                            source</a></h4>
+                            source</a>
+						[
+						<a class="example" href="https://github.com/lefthandedgoat/canopy/blob/master/basictests/Program.fs#L244">1</a>
+						]	
+							</h4>
                     dismiss the current alert
                     <pre>
 dismissAlert()
@@ -357,7 +426,13 @@ dismissAlert()
                 <div class="item">
                     <h4>
                         click <a class="source" href="https://github.com/lefthandedgoat/canopy/blob/master/canopy/canopy.fs#L408">
-                            source</a></h4>
+                            source</a>
+						[
+						<a class="example" href="https://github.com/lefthandedgoat/canopy/blob/master/basictests/Program.fs#L117">1</a>
+						<a class="example" href="https://github.com/amirrajan/Oak/blob/master/Sample%20Apps/BorrowedGames/BorrowedGames.UI.Tests/uimethods.fs#L34">2</a>
+						<a class="example" href="https://github.com/amirrajan/Oak/blob/master/Sample%20Apps/TaskRabbits/TaskRabbits.UITests/common.fs#L34">3</a>
+						]	
+							</h4>
                     click an element via selector or text, can also click selenium IWebElements
                     <pre>
 click "#login"
@@ -368,7 +443,11 @@ click (element "#login")
                 <div class="item">
                     <h4>
                         doubleClick <a class="source" href="https://github.com/lefthandedgoat/canopy/blob/master/canopy/canopy.fs#L420">
-                            source</a></h4>
+                            source</a>
+						[
+						<a class="example" href="https://github.com/lefthandedgoat/canopy/blob/master/basictests/Program.fs#L318">1</a>
+						]	
+							</h4>
                     simulates a double click via javascript
                     <pre>
 doubleClick "#login"
@@ -377,31 +456,41 @@ doubleClick "#login"
                 <div class="item">
                     <h4>
                         check <a class="source" href="https://github.com/lefthandedgoat/canopy/blob/master/canopy/canopy.fs#L434">
-                            source</a></h4>
+                            source</a>
+						[
+						<a class="example" href="https://github.com/lefthandedgoat/canopy/blob/master/basictests/Program.fs#L156">1</a>
+						]	
+							</h4>
                     checks a checkbox if it is not already checked
                     <pre>
 check "#yes"
-<span class="comment">//below code will not click the checkbox again, which would uncheck
-    it</span>
+<span class="comment">//below code will not click the checkbox again, which would uncheck it</span>
 check "#yes"
 </pre>
                 </div>
                 <div class="item">
                     <h4>
                         uncheck <a class="source" href="https://github.com/lefthandedgoat/canopy/blob/master/canopy/canopy.fs#L434">
-                            source</a></h4>
+                            source</a>
+						[
+						<a class="example" href="https://github.com/lefthandedgoat/canopy/blob/master/basictests/Program.fs#L162">1</a>
+						]	
+							</h4>
                     unchecks a checkbox if it is not already unchecked
                     <pre>
 uncheck "#yes"
-<span class="comment">//below code will not click the checkbox again, which would check
-    it</span>
+<span class="comment">//below code will not click the checkbox again, which would check it</span>
 uncheck "#yes"
 </pre>
                 </div>
                 <div class="item">
                     <h4>
                         >> (drag is an alias) <a class="source" href="https://github.com/lefthandedgoat/canopy/blob/master/canopy/canopy.fs#L439">
-                            source</a></h4>
+                            source</a>
+						[
+						<a class="example" href="https://github.com/lefthandedgoat/canopy/blob/master/basictests/Program.fs#L347">1</a>
+						]	
+							</h4>
                     drag on item to another
                     <pre>
 ".todo" >> ".inprogress"
@@ -412,7 +501,7 @@ drag ".todo" ".inprogress"
                     <h4>
                         pin <a class="source" href="https://github.com/lefthandedgoat/canopy/blob/master/canopy/canopy.fs#L449">
                             source</a></h4>
-                    pin a browser to the left or right side of your screen (any browser you start ispinned right automatically)
+                    pin a browser to the left or right side of your screen (any browser you start is pinned right automatically)
                     <pre>
 pin left
 pin right
@@ -421,7 +510,11 @@ pin right
                 <div class="item">
                     <h4>
                         tile <a class="source" href="https://github.com/lefthandedgoat/canopy/blob/master/canopy/canopy.fs#L473">
-                                 source</a></h4>
+                                 source</a>
+						 [
+						<a class="example" href="https://github.com/lefthandedgoat/canopy/blob/master/basictests/Program.fs#L356">1</a>
+						]									 
+								 </h4>
                     tile listed browsers equally across your screen.  4 open browsers would each take 25% of the screen
                     <pre>
 start chrome
@@ -437,7 +530,11 @@ tile [browser1; browser2; browser3]
                     <div class="item">
                     <h4>
                         quit <a class="source" href="https://github.com/lefthandedgoat/canopy/blob/master/canopy/canopy.fs#L489">
-                            source</a></h4>
+                            source</a>
+						[
+						<a class="example" href="https://github.com/lefthandedgoat/canopy/blob/master/basictests/Program.fs#L358">1</a>
+						]								
+							</h4>
                     quit the current browser or the specified browser
                     <pre>
 <span class="comment">//quit current</span>
