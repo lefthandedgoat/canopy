@@ -1,107 +1,294 @@
----
-layout: default
----
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="utf-8">
+    <title>canopy</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="description" content="">
+    <meta name="author" content="">
+    <!-- Le styles -->
+    <link href="http://netdna.bootstrapcdn.com/twitter-bootstrap/2.3.1/css/bootstrap-combined.min.css"
+        rel="stylesheet">
+    <style type="text/css">
+        body
+        {
+            padding-top: 20px;
+            padding-bottom: 60px;
+        }
+        
+        /* Custom container */
+        .container
+        {
+            margin: 0 auto;
+            max-width: 1000px;
+        }
+        .container > hr
+        {
+            margin: 60px 0;
+        }
+        
+        /* Main marketing message and sign up button */
+        .jumbotron
+        {
+            margin: 80px 0;
+            text-align: center;
+        }
+        .jumbotron h1
+        {
+            font-size: 66px;
+            line-height: 1;
+        }
+        .jumbotron .lead
+        {
+            font-size: 24px;
+            line-height: 1.25;
+        }
+        .jumbotron .btn
+        {
+            font-size: 21px;
+            padding: 14px 24px;
+        }
+        
+        /* Supporting marketing content */
+        .marketing
+        {
+            margin: 60px 0;
+        }
+        .marketing p + h4
+        {
+            margin-top: 28px;
+        }
+        
+        
+        /* Customize the navbar links to be fill the entire space of the .navbar */
+        .navbar .navbar-inner
+        {
+            padding: 0;
+        }
+        .navbar .nav
+        {
+            margin: 0;
+            display: table;
+            width: 100%;
+        }
+        .navbar .nav li
+        {
+            display: table-cell;
+            width: 1%;
+            float: none;
+        }
+        .navbar .nav li a
+        {
+            font-weight: bold;
+            text-align: center;
+            border-left: 1px solid rgba(255,255,255,.75);
+            border-right: 1px solid rgba(0,0,0,.1);
+        }
+        .navbar .nav li:first-child a
+        {
+            border-left: 0;
+            border-radius: 3px 0 0 3px;
+        }
+        .navbar .nav li:last-child a
+        {
+            border-right: 0;
+            border-radius: 0 3px 3px 0;
+        }
+		
+		#installModal .modal-body
+		{
+			max-height: 700px;
+		}
+				
+		.documentation 
+		{
+			height:230px;
+		}
+		
+		.readMore
+		{
+			vertical-align:bottom;
+		}
+		
+    </style>
+    <link href="http://netdna.bootstrapcdn.com/twitter-bootstrap/2.3.1/css/bootstrap-responsive.min.css"
+        rel="stylesheet">
+    <!-- HTML5 shim, for IE6-8 support of HTML5 elements -->
+    <!--[if lt IE 9]>
+      <script src="../assets/js/html5shiv.js"></script>
+    <![endif]-->
+</head>
+<body>
+    <div class="container">
+        <div class="masthead">
+            <h3 class="muted">
+                canopy: web testing in f#</h3>
+            <div class="navbar">
+                <div class="navbar-inner">
+                    <div class="container">
+                        <ul class="nav">
+                            <li class="active"><a href="index.html">Home</a></li>
+							<li><a href="about.html">About</a></li>
+                            <li><a href="http://github.com/lefthandedgoat/canopy">Source</a></li>
+                            <li><a href="http://nuget.org/packages/canopy">Nuget</a></li>
+                            <li><a href="http://amirrajan.github.com/Oak/">Oak</a></li>
+                            <li><a href="http://nspec.org/">nSpec</a></li>
+                            <li><a href="http://research.microsoft.com/en-us/projects/fsharp/">f#</a></li>
+                        </ul>
+                    </div>
+                </div>
+            </div>
+            <!-- /.navbar -->
+        </div>
+        <!-- Jumbotron -->
+        <div class="jumbotron">
+            <h2>
+                Welcome to canopy's github page!</h2>
+            <p class="lead">
+                This page contains all of the documentation related to canopy.</p>
+            <div class="row-fluid">
+                <div class="span3">
+                </div>
+                <div class="span2">
+                    <a id="install" class="btn btn-large btn-success btn-block" href="#">Install</a></div>
+                <div class="span2">
+                    <a id="write" class="btn btn-large btn-success btn-block" href="#">Write</a></div>
+                <div class="span2">
+                    <a id="run" class="btn btn-large btn-success btn-block" href="#">Run</a></div>
+                <div class="span3">
+                </div>
+            </div>
+        </div>
+        <hr>
+        <!-- Example row of columns -->
+        <div class="row-fluid">
+            <div class="span3 documentation">			
+                <h2>
+                    Actions</h2>
+                <p>
+                    Actions allow you to interact with the page.  Click, read, write, drag, etc...					
+                </p>
+                <span class="readMore">
+                    <a id="actionsReadMore" class="btn" href="actions.html">Read more &raquo;</a></span>
+            </div>
+            <div class="span3 documentation">
+                <h2>
+                    Assertions</h2>
+                <p>
+                    Assert that you are on the right page, an element has a specific value, an element is visible etc...					
+                </p>
+                <span class="readMore">
+                    <a id="assertionsReadMore" class="btn" href="assertions.html">Read more &raquo;</a></span>
+            </div>
+            <div class="span3 documentation">
+                <h2>
+                    Test Modes</h2>
+                <p>
+                    Run your tests in different modes.  WIP for debugging, Many for ensuring your test passes consistently,
+                    TODO to remind you to write a test later, Skip to not run a test etc..</p>
+                
+                    <a style="position: absolute; bottom: 0;" id="testModesReadMore" class="btn" href="testModes.html">Read more &raquo;</a>
+            </div>
+            <div class="span3 documentation">
+                <h2>
+                    Reporting</h2>
+                <p>
+                    Reports to capture results after a run.					
+					</p>
 
-<h3>What is canopy?</h3>
+                <span class="readMore">
+                    <a id="reportingReadMore" class="btn" href="reporting.html">Read more &raquo;</a></span>
+            </div>
+        </div>
+        <hr>
+        <div class="footer">
+				powered by f#        
+        </div>
+    </div>
+    <!-- /container -->
+    <div id="installModal" class="modal hide fade">
+        <div class="modal-header">
+            <button type="button" class="close" data-dismiss="modal" aria-hidden="true">
+                &times;</button>
+            <h3>
+                Install</h3>
+        </div>
+        <div class="modal-body">
+            <p>
+                Create a new f# console application:<img src="images/newProject.png" /></p>
+            <br />
+            <p>
+                Set target framework to .NET Framework 4:<img src="images/profile.png" /></p>
+            <br />
+            <p>
+                Install canopy via Nuget:<img src="images/installCanopy.png" /></p>
+        </div>
+        <div class="modal-footer">
+        </div>
+    </div>
+    <div id="writeModal" class="modal hide fade">
+        <div class="modal-header">
+            <button type="button" class="close" data-dismiss="modal" aria-hidden="true">
+                &times;</button>
+            <h3>
+                Write</h3>
+        </div>
+        <div class="modal-body">
+            <p>
+                <pre>
+open canopy
+open runner
 
-<p>canopy is a web testing framework with one goal in mind: keep testing simple. canopy is built on top of <a href="http://seleniumhq.org/">selenium</a> and written in <a href="http://en.wikipedia.org/wiki/F_Sharp_(programming_language)">f#</a>. It's syntax is clean and concise.  As an added benefit you can easily leverage your existing .Net code to help you test.</p>
+start firefox
 
-<h3>Getting started</h3>
-<ol>
-	<li>Create new F# console application</li>
-	<li>Open NuGet console</li>
-	<li>Type:
-	<pre><code>PM> Install-Package canopy</code></pre></li>
-	<li>Type in Program.fs:
-	<pre><code>open canopy
-start "firefox"
-url "http://google.com"
-"input[type='text']" << "hello world"</code></pre></li>
-	<li>Run!</li>
-</ol>
+"Go to google and search for hello world" &amp;&amp;&amp; fun _ ->
+    url "http://google.com"
+    "input[type='text']" << "hello world"
 
-<h3>Defeating the Zerg Rush</h3>
+run()
+            </pre>
+            </p>
+        </div>
+        <div class="modal-footer">
+        </div>
+    </div>
+    <div id="runModal" class="modal hide fade">
+        <div class="modal-header">
+            <button type="button" class="close" data-dismiss="modal" aria-hidden="true">
+                &times;</button>
+            <h3>
+                Modal header</h3>
+        </div>
+        <div class="modal-body">
+            <p>
+                Run:<img src="images/run.png" /></p>
+            <p>
+                Or:
+                <pre>
+Create <a href="https://github.com/fsharp/FAKE">FAKE</a> task
+Create <a href="http://rake.rubyforge.org/">Rake</a> task
+</pre>
+            </p>
+        </div>
+        <div class="modal-footer">
+        </div>
+    </div>
+    <script src="http://code.jquery.com/jquery-1.9.1.min.js" type="text/javascript"></script>
+    <script src="http://netdna.bootstrapcdn.com/twitter-bootstrap/2.3.1/js/bootstrap.min.js" type="text/javascript"></script>
+</body>
+<script>
+    $(document).ready(function () {
+        $('#install').click(function () {
+            $("#installModal").modal('show');
+        });
 
-<pre><code>open canopy
-start "firefox"
-elementTimeout <- 20.0 //don't stop after killing first wave!
-url "https://www.google.com/search?q=zerg+rush"
-while (element ".zr_zergling_container").Displayed do
-click ".zr_zergling_container"</code></pre>
+        $('#write').click(function () {
+            $("#writeModal").modal('show');
+        });
 
-<h3>External Examples</h3>
-
-See examples written for other projects <a href="/canopy/moreexamples">here.</a>
-<br>
-<br>
-
-<h3>Support or Feature Requests</h3>
-
-		<p>Having trouble with canopy? Open an <a href="https://github.com/lefthandedgoat/canopy/issues">issue</a> and
-I will see how I can help.  For feature requests you may open an issue or send a pull request.</p>
-
-<h3>Examples</h3>
-
-<p>Below are examples of all the basic commands in the framework.</p>
-
-<h3>Starting a Browser</h3>
-<pre><code>start firefox
-start ie
-start chrome</code></pre>
-
-<h3>Describe the Test</h3>
-<pre><code>describe "some functionality should work"</code></pre>
-
-<h3>Browse to a Url</h3>
-<pre><code>url "http://lefthandedgoat.github.com/canopy/"</code></pre>
-
-<h3>Assert on a Url</h3>
-<pre><code>on "http://lefthandedgoat.github.com/canopy/"</code></pre>
-
-<h3>Clicking an Element</h3>
-Note: Identify the element you want to interact with by using <a href="http://www.w3.org/TR/CSS2/selector.html">CSS Selectors</a>
-<br>
-<br>
-<pre><code>click "#submit"</code></pre>
-
-<h3>Setting a TextBox</h3>
-<pre><code>"#firstName" << "John"</code></pre>
-
-<h3>Clear a TextBox</h3>
-<pre><code>clear "#lastName"</code></pre>
-
-<h3>Assert the Value of an Element</h3>
-<pre><code>"#firstName" == "John"</code></pre>
-
-<h3>Assert the Value of an Element Not Equal</h3>
-<pre><code>"#firstName" != "Johnny"</code></pre>
-
-<h3>Assert One of Many Elements Has a Value</h3>
-<pre><code>".items" *= "Item 1"</code></pre>
-
-<h3>Assert No Elements Have Value</h3>
-<pre><code>".items" !*= "Item 100"</code></pre>
-
-<h3>Assert Element Selected</h3>
-<pre><code>selected "#radio1"</code></pre>
-
-<h3>Assert Element Not Selected</h3>
-<pre><code>deselected "#checkbox"</code></pre>
-
-<h3>Reload Current Page</h3>
-<pre><code>reload ()</code></pre>
-
-<h3>Simulate Key Press</h3>
-<pre><code>press down
-press enter
-press tab</code></pre>
-
-<h3>Alerts</h3>
-<pre><code>alert() == "Alert Test"
-acceptAlert()
-dismissAlert()</code></pre>
-
-
-<a href="examples.html">more examples</a>
-<br>
-<br>
+        $('#run').click(function () {
+            $("#runModal").modal('show');
+        });
+    });
+</script>
+</html>
