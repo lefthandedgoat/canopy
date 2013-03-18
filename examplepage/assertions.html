@@ -146,7 +146,7 @@
 						<a class="example" href="https://github.com/amirrajan/Oak/blob/master/Sample%20Apps/TaskRabbits/TaskRabbits.UITests/common.fs#L51">4</a>
 						]
 					</h4>
-                    assert that the browser is currently on a url (uses string.contains)
+                    Assert that the browser is currently on a url (uses string.contains).
                     <pre>
 url "https://duckduckgo.com/?q=canopy+f%23"
 on "https://duckduckgo.com/?q"
@@ -159,7 +159,7 @@ on "https://duckduckgo.com/?q"
 						<a class="example" href="https://github.com/lefthandedgoat/canopy/blob/master/basictests/Program.fs#L147">1</a>
 						]
 					</h4>
-                    assert that a radio or checkbox is selected
+                    Assert that a radio or checkbox is selected.
                     <pre>
 selected "#yes"
 </pre>
@@ -172,7 +172,7 @@ selected "#yes"
 						<a class="example" href="https://github.com/lefthandedgoat/canopy/blob/master/basictests/Program.fs#L163">1</a>
 						]
 						</h4>
-                    assert that a radio or checkbox is not selected
+                    Assert that a radio or checkbox is not selected.
                     <pre>
 deselected "#yes"
 </pre>
@@ -189,7 +189,7 @@ deselected "#yes"
 						<a class="example" href="https://github.com/amirrajan/Oak/blob/master/Sample%20Apps/BorrowedGames/BorrowedGames.UI.Tests/uimethods.fs#L44">5</a>
 						]	
 						</h4>
-                    assert that the element on the left is equal to the value on the right
+                    Assert that the element on the left is equal to the value on the right.
                     <pre>
 "#firstName" == "Alex"
 (element "#logout") == "Logout"
@@ -203,7 +203,7 @@ deselected "#yes"
 						<a class="example" href="https://github.com/lefthandedgoat/canopy/blob/master/basictests/Program.fs#L186">1</a>						
 						]			
 					</h4>
-                    assert that the element on the left is not equal to the value on the right
+                    Assert that the element on the left is not equal to the value on the right.
                     <pre>
 "#firstName" != "Tom"
 (element "#login") != "Logout"
@@ -219,7 +219,7 @@ deselected "#yes"
 						<a class="example" href="https://github.com/amirrajan/Oak/blob/master/Sample%20Apps/BorrowedGames/BorrowedGames.UI.Tests/uimethods.fs#L87">3</a>						
 						]	
 					</h4>
-                    assert that atleast one element in a list equals a value
+                    Assert that atleast one element in a list equals a value.
                     <pre>
 ".todoItem" *= "Buy milk"
 </pre>
@@ -232,7 +232,7 @@ deselected "#yes"
 						<a class="example" href="https://github.com/lefthandedgoat/canopy/blob/master/basictests/Program.fs#L190">1</a>						
 						]
 					</h4>
-                    assert that none of the items in a list equals a value
+                    Assert that none of the items in a list equals a value.
                     <pre>
 ".todoItem" !*= "Sell everything"
 </pre>
@@ -241,7 +241,7 @@ deselected "#yes"
                     <h4>
                         contains <a class="source" href="https://github.com/lefthandedgoat/canopy/blob/master/canopy/canopy.fs#L348">
                             source</a></h4>
-                    assert that one string contains another
+                    Assert that one string contains another.
                     <pre>
 contains "Log" (read "#logout)
 </pre>
@@ -255,7 +255,7 @@ contains "Log" (read "#logout)
 					<a class="example" href="https://github.com/amirrajan/Oak/blob/master/Sample%20Apps/TaskRabbits/TaskRabbits.UITests/common.fs#L72">2</a>						
 					]
 					</h4>
-                    assert there are X items of given css selector
+                    Assert there are X items of given css selector.
                     <pre>
 count ".todoItem" 5
 </pre>
@@ -268,7 +268,7 @@ count ".todoItem" 5
 					<a class="example" href="https://github.com/lefthandedgoat/canopy/blob/master/basictests/Program.fs#L294">1</a>
 					]
 					</h4>
-                    assert that an element regex matches a value
+                    Assert that an element regex matches a value.
                     <pre>
 "#lastName" << "Gray"
 "#lastName" =~ "Gr[ae]y"
@@ -285,7 +285,7 @@ count ".todoItem" 5
 					<a class="example" href="https://github.com/amirrajan/Oak/blob/master/Sample%20Apps/TaskRabbits/TaskRabbits.UITests/common.fs#L37">2</a>
 					]
 					</h4>
-                    assert that an element is displayed on the screen
+                    Assert that an element is displayed on the screen.
                     <pre>
 displayed "#modal"
 </pre>
@@ -298,7 +298,7 @@ displayed "#modal"
 					<a class="example" href="https://github.com/lefthandedgoat/canopy/blob/master/basictests/Program.fs#L335">1</a>
 					]
 					</h4>
-                    assert that an element is not displayed on the screen
+                    Assert that an element is not displayed on the screen.
                     <pre>
 notDisplayed "#modal"
 </pre>

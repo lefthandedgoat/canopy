@@ -144,7 +144,7 @@
 						<a class="example" href="https://github.com/amirrajan/Oak/blob/master/Sample%20Apps/TaskRabbits/TaskRabbits.UITests/common.fs#L46">2</a>
 						]
 					</h4>
-                    define the context of the tests.  A default context is defined and used if one is not provided.  You can have as many contexts as you like.  Each context gets a new once/before/after/lastly function
+                    Define the context of the tests.  A default context is defined and used if one is not provided.  You can have as many contexts as you like.  Each context gets a new once/before/after/lastly function.
                     <pre>
 context "Login page tests"
 <span class="comment">//some tests</span>
@@ -163,7 +163,7 @@ context "Reset password page tests"
 						<a class="example" href="https://github.com/lefthandedgoat/canopy/blob/master/basictests/Program.fs#L166">1</a>
 						]
 					</h4>
-                    function that is run once time at the beginning of a test suite
+                    Function that is run once time at the beginning of a test suite.
                     <pre>
 once (fun _ -> 
 	<span class="comment">//do this one time at the beginning of the most recently defined context</span>	
@@ -178,7 +178,7 @@ once (fun _ ->
 						<a class="example" href="https://github.com/amirrajan/Oak/blob/master/Sample%20Apps/TaskRabbits/TaskRabbits.UITests/common.fs#L48">2</a>
 						]
 					</h4>
-                    function that is run before each test in a context
+                    Function that is run before each test in a context.
                     <pre>
 before (fun _ -> 
 	<span class="comment">//do this before every test of the most recently defined context</span>	
@@ -192,7 +192,7 @@ before (fun _ ->
 						<a class="example" href="https://github.com/lefthandedgoat/canopy/blob/master/basictests/Program.fs#L168">1</a>
 						]
 					</h4>
-                    function that is run after each test in a context
+                    Function that is run after each test in a context.
                     <pre>
 after (fun _ -> 
 	<span class="comment">//do this after every test of the most recently defined context</span>	
@@ -206,7 +206,7 @@ after (fun _ ->
 						<a class="example" href="https://github.com/lefthandedgoat/canopy/blob/master/basictests/Program.fs#L169">1</a>
 						]
 					</h4>
-                    function that is run once at the end of a context
+                    Function that is run once at the end of a context.
                     <pre>
 lastly (fun _ -> 
 	<span class="comment">//do this after the very last test of the most recently defined context</span>	
@@ -220,7 +220,7 @@ lastly (fun _ ->
 						<a class="example" href="https://github.com/lefthandedgoat/canopy/blob/master/basictests/Program.fs#L42">1</a>
 						]
 					</h4>
-                    standard test definition (name defined automatically by the test number eg: Test #1)
+                    Standard test definition (name defined automatically by the test number eg: Test #1).
                     <pre>
 test (fun _ -><span class="comment">
     //go somewhere
@@ -238,7 +238,7 @@ test (fun _ -><span class="comment">
 						<a class="example" href="https://github.com/lefthandedgoat/canopy/blob/master/basictests/Program.fs#L34">2</a>
 						]
 					</h4>
-                    standard test definition with a name
+                    Standard test definition with a name.
                     <pre>
 "go somewhere, do some stuff, assert" &amp;&amp;&amp; fun _ -><span class="comment">
     //go somewhere
@@ -257,7 +257,7 @@ ntest "go somewhere, do some stuff, assert" (fun _ -><span class="comment">
                     <h4>
                         &amp;&amp;&amp;&amp; (work in progress, aliased as wip) <a class="source" href="https://github.com/lefthandedgoat/canopy/blob/master/canopy/runner.fs#L74">
                                                                                  source</a></h4>
-                    used for debugging.  Test runs slower and highlights the elements that it is interacting with to help debug.  If one test is marked wip, only wip tests are ran.  Other tests are skipped
+                    Used for debugging.  Test runs slower and highlights the elements that it is interacting with to help debug.  If one test is marked wip, only wip tests are ran.  Other tests are skipped.
                     <pre>
 <span class="comment">//this is test is run slow and only with other tests marked as wip</span>
 "go somewhere, do some stuff, assert" &amp;&amp;&amp;&amp; fun _ -><span class="comment">
@@ -277,7 +277,7 @@ wip (fun _ -><span class="comment">
                     <h4>
                         &amp;&amp;! (skip, aliased as xtest) <a class="source" href="https://github.com/lefthandedgoat/canopy/blob/master/canopy/runner.fs#L77">
                             source</a></h4>
-                    do not run a test
+                    Do not run a test.
                     <pre>
 <span class="comment">//skipped</span>
 "go somewhere, do some stuff, assert" &amp;&amp;! fun _ -><span class="comment">
@@ -298,7 +298,7 @@ xtest (fun _ -><span class="comment">
                     <h4>
                         many <a class="source" href="https://github.com/lefthandedgoat/canopy/blob/master/canopy/runner.fs#L75">
                                                                         source</a></h4>
-                    run a single test X times.  Helps with troubleshooting tests that sometimes fail
+                    Run a single test X times.  Helps with troubleshooting tests that sometimes fail.
                     <pre>
 many 20 (fun _ -><span class="comment">
     //go somewhere
@@ -314,7 +314,7 @@ many 20 (fun _ -><span class="comment">
 						<a class="example" href="https://github.com/lefthandedgoat/canopy/blob/master/basictests/Program.fs#L363">1</a>
 						]
 					</h4>
-                    mark a test as todo to fill in later. LiveHtmlReporter will mark todo tests in the output
+                    Mark a test as todo to fill in later. LiveHtmlReporter will mark todo tests in the output.
                     <pre>
 "go somewhere, do some stuff, assert" &amp;&amp;&amp; todo
 </pre>
