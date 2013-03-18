@@ -116,15 +116,15 @@
     <div class="container">
         <div class="masthead">
             <h3 class="muted">
-                canopy test page</h3>
+                canopy: web testing in f#</h3>
             <div class="navbar">
                 <div class="navbar-inner">
                     <div class="container">
                         <ul class="nav">
                             <li><a href="index.html">Home</a></li>
-                            <li><a href="http://lefthandedgoat.github.com/canopy/" id="githubSource">Github Page</a></li>
-                            <li><a href="http://github.com/lefthandedgoat/canopy">Github Source</a></li>
-                            <li><a href="http://nuget.org/packages/canopy">canopy on Nuget</a></li>
+							<li><a href="about.html">About</a></li>
+                            <li><a href="http://github.com/lefthandedgoat/canopy">Source</a></li>
+                            <li><a href="http://nuget.org/packages/canopy">Nuget</a></li>
                             <li><a href="http://amirrajan.github.com/Oak/">Oak</a></li>
                             <li><a href="http://nspec.org/">nSpec</a></li>
                             <li><a href="http://research.microsoft.com/en-us/projects/fsharp/">f#</a></li>
@@ -136,6 +136,83 @@
         </div>
         <div class="row-fluid">
             <div class="span12">
+			<div class="item">
+                    <h4>
+                        context <a class="source" href="https://github.com/lefthandedgoat/canopy/blob/master/canopy/runner.fs#L62">source</a>
+						[
+						<a class="example" href="https://github.com/lefthandedgoat/canopy/blob/master/basictests/Program.fs#L165">1</a>
+						<a class="example" href="https://github.com/amirrajan/Oak/blob/master/Sample%20Apps/TaskRabbits/TaskRabbits.UITests/common.fs#L46">2</a>
+						]
+					</h4>
+                    define the context of the tests.  A default context is defined and used if one is not provided.  You can have as many contexts as you like.  Each context gets a new once/before/after/lastly function
+                    <pre>
+context "Login page tests"
+<span class="comment">//some tests</span>
+
+context "Search page tests"
+<span class="comment">//different tests</span>
+
+context "Reset password page tests"
+<span class="comment">//different tests</span>
+</pre>
+                </div>
+				<div class="item">
+                    <h4>
+                        once <a class="source" href="https://github.com/lefthandedgoat/canopy/blob/master/canopy/runner.fs#L58">source</a>
+						[
+						<a class="example" href="https://github.com/lefthandedgoat/canopy/blob/master/basictests/Program.fs#L166">1</a>
+						]
+					</h4>
+                    function that is run once time at the beginning of a test suite
+                    <pre>
+once (fun _ -> 
+	<span class="comment">//do this one time at the beginning of the most recently defined context</span>	
+)
+</pre>
+                </div>
+				<div class="item">
+                    <h4>
+                        before <a class="source" href="https://github.com/lefthandedgoat/canopy/blob/master/canopy/runner.fs#L59">source</a>
+						[
+						<a class="example" href="https://github.com/lefthandedgoat/canopy/blob/master/basictests/Program.fs#L167">1</a>
+						<a class="example" href="https://github.com/amirrajan/Oak/blob/master/Sample%20Apps/TaskRabbits/TaskRabbits.UITests/common.fs#L48">2</a>
+						]
+					</h4>
+                    function that is run before each test in a context
+                    <pre>
+before (fun _ -> 
+	<span class="comment">//do this before every test of the most recently defined context</span>	
+)
+</pre>
+                </div>
+				<div class="item">
+                    <h4>
+                        after <a class="source" href="https://github.com/lefthandedgoat/canopy/blob/master/canopy/runner.fs#L60">source</a>
+						[
+						<a class="example" href="https://github.com/lefthandedgoat/canopy/blob/master/basictests/Program.fs#L168">1</a>
+						]
+					</h4>
+                    function that is run after each test in a context
+                    <pre>
+after (fun _ -> 
+	<span class="comment">//do this after every test of the most recently defined context</span>	
+)
+</pre>
+                </div>
+				<div class="item">
+                    <h4>
+                        lastly <a class="source" href="https://github.com/lefthandedgoat/canopy/blob/master/canopy/runner.fs#L61">source</a>
+						[
+						<a class="example" href="https://github.com/lefthandedgoat/canopy/blob/master/basictests/Program.fs#L169">1</a>
+						]
+					</h4>
+                    function that is run once at the end of a context
+                    <pre>
+lastly (fun _ -> 
+	<span class="comment">//do this after the very last test of the most recently defined context</span>	
+)
+</pre>
+                </div>
                 <div class="item">
                     <h4>
                         test <a class="source" href="https://github.com/lefthandedgoat/canopy/blob/master/canopy/runner.fs#L70">source</a> 
@@ -152,6 +229,7 @@ test (fun _ -><span class="comment">
 </span>)
 </pre>
                 </div>
+				
                 <div class="item">
                     <h4>
                         &amp;&amp;&amp; (named test, aliased as ntest) <a class="source" href="https://github.com/lefthandedgoat/canopy/blob/master/canopy/runner.fs#L71">source</a>
@@ -245,6 +323,7 @@ many 20 (fun _ -><span class="comment">
             </div>
         </div>
         <div class="footer">
+				powered by f#        
         </div>
     </div>
     <!-- /container -->
