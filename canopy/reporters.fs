@@ -296,8 +296,8 @@ type LiveHtmlReporter() =
 
         member this.quit () = if canQuit then browser.Quit()
         
-        //member this.suiteBegin () = browser.Navigate().GoToUrl(@"http://lefthandedgoat.github.com/canopy/reporttemplate.html")
-        member this.suiteBegin () = browser.Navigate().GoToUrl(@"file:///C:/projects/canopy/reporttemplate.html")
+        member this.suiteBegin () = browser.Navigate().GoToUrl(@"http://lefthandedgoat.github.com/canopy/reporttemplate.html")
+        //member this.suiteBegin () = browser.Navigate().GoToUrl(@"file:///C:/projects/canopy/reporttemplate.html")
 
         member this.suiteEnd () = 
             canQuit <- true

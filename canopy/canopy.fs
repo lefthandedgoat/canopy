@@ -373,6 +373,17 @@ let ( =~ ) cssSelector pattern =
         | :? TimeoutException -> failwith (String.Format("regex equality check failed.  expected: {0}, got: {1}", pattern, (read cssSelector)));
         | ex -> failwith ex.Message
 
+let ( *~ ) (cssSelector : string) pattern =
+    try        
+        wait compareTimeout (fun _ -> ( let elements = findMany cssSelector elementTimeout
+                                        elements |> Seq.exists(fun element -> regexMatch pattern (textOf element))))
+    with
+        | :? TimeoutException -> let sb = new System.Text.StringBuilder()
+                                 let elements = findMany cssSelector elementTimeout
+                                 elements |> List.map (fun e -> sb.Append(String.Format("{0}\r\n", (textOf e)))) |> ignore
+                                 failwith (String.Format("cant regex find {0} in list {1}\r\ngot: {2}", pattern, cssSelector, sb.ToString()));
+        | ex -> failwith ex.Message
+
 let is expected actual =
     if expected = actual then
         ()
