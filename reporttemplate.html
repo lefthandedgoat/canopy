@@ -33,19 +33,25 @@
             <ul class="nav nav-pills">
                 <li><a>
                     <label class="checkbox">
-                        <input type="checkbox" value="">
+                        <input id="passedInput" checked="checked" value="" type="checkbox">
                         <span id="passed">0</span>&nbspPassed
                     </label>
                 </a></li>
                 <li><a>
                     <label class="checkbox">
-                        <input type="checkbox" value="">
+                        <input id="failedInput" checked="checked" value="" type="checkbox">
                         <span id="failed">0</span>&nbspFailed
                     </label>
                 </a></li>
                 <li><a>
                     <label class="checkbox">
-                        <input type="checkbox" value="">
+                        <input id="todoInput" checked="checked" value="" type="checkbox">
+                        <span id="todo">0</span>&nbspTodo
+                    </label>
+                </a></li>
+				<li><a>
+                    <label class="checkbox">
+                        <input id="skippedInput" checked="checked" value="" type="checkbox">
                         <span id="skipped">0</span>&nbspSkipped
                     </label>
                 </a></li>
@@ -58,55 +64,102 @@
         </table>
     </div>
     <script type="text/javascript">
+		var beginContextResults = function (context) {
+				var ctx = $("#contexts").find('tr[data-context="' + context + '"]');
+				ctx.after('<tr class="result" data-owning-context="' + context + '"><td><table class="table results"><tbody></tbody></table></td></tr>');
+				ctx.click(function () {
+					if ($(this).next().is(":visible")) {
+						$(this).next().hide();
+					} else {
+						$(this).next().show();
+					}				
+				});
+			};
 
-        var beginContextResults = function (context) {
-            var ctx = $("#contexts").find('tr[data-context="' + context + '"]');
-            ctx.after('<tr class="result" data-owning-context="' + context + '"><td><table class="table results"><tbody></tbody></table></td></tr>');
-        };
+		var addContext = function (context) {
+			$("#contexts").last('tr').append('<tr class="context" data-context="' + context + '"><td>Context: ' + context + '</td></tr>');
+			beginContextResults(context);
+		};
 
-        var addContext = function (context) {
-            $("#contexts").last('tr').append('<tr class="context" data-context="' + context + '"><td>Context: ' + context + '</td></tr>');
-            beginContextResults(context);
-        };
+		var recalculateTotals = function () {
+			$("#passed").text($(".results .success").length);
+			$("#failed").text($(".results .error").length);
+			$("#todo").text($(".results .warning").length);
+			$("#skipped").text($(".results .info").length);
+		};
 
-        var recalculateTotals = function () {
-            $("#passed").text($(".results .success").length);
-            $("#failed").text($(".results .error").length);
-            $("#skipped").text($(".results .warning").length);
-        };
-
-        var addToContext = function (context, passFailSkip, testName, image) {
-            var ctx = $("#contexts").find('tr[data-context="' + context + '"]');
-            if (passFailSkip === "Pass") {
-                ctx.next('tr').find('table').last('tr').append('<tr class="success"><td>' + testName + '</td></tr>');
-                if (ctx.hasClass("error") === false && ctx.hasClass("warning") === false) {
-                    ctx.addClass("success");
-                }
-            }
-            if (passFailSkip === "Fail") {
-                ctx.next('tr').find('table').last('tr').append('<tr class="error"><td>' + testName + '</td></tr>');
-                ctx.removeClass("success").removeClass("warning").addClass("error");
-            }
-            if (passFailSkip === "Skip") {
-                ctx.next('tr').find('table').last('tr').append('<tr class="warning"><td>' + testName + '</td></tr>');
-                if (ctx.hasClass("error") === false) {
-                    ctx.removeClass("success").addClass("warning");
-                };
-            }
+		var addToContext = function (context, passFailSkip, testName, image) {
+			var ctx = $("#contexts").find('tr[data-context="' + context + '"]');
+			if (passFailSkip === "Pass") {
+				ctx.next('tr').find('table').last('tr').append('<tr class="success"><td>' + testName + '</td></tr>');
+				if (ctx.hasClass("error") === false) {
+					ctx.removeClass("warning").removeClass("info").addClass("success");
+				}
+			}
+			if (passFailSkip === "Fail") {
+				ctx.next('tr').find('table').last('tr').append('<tr class="error"><td>' + testName + '</td></tr>');
+				ctx.removeClass("success").removeClass("warning").removeClass("info").addClass("error");
+			}
+			if (passFailSkip === "Todo") {
+				ctx.next('tr').find('table').last('tr').append('<tr class="warning"><td>' + testName + '</td></tr>');
+				if (ctx.hasClass("error") === false && ctx.hasClass("info") === false && ctx.hasClass("success") === false){
+					ctx.addClass("warning");
+				}
+			}
+			if (passFailSkip === "Skip") {
+				ctx.next('tr').find('table').last('tr').append('<tr class="info"><td>' + testName + '</td></tr>');
+				if (ctx.hasClass("error") === false && ctx.hasClass("warning") === false && ctx.hasClass("success") === false){
+					ctx.addClass("info");
+				}
+			}
 
 			if(image !== "") {
 				ctx.next('tr').find('table').find('tr').last().find('td').last().append('<td><img alt="" src="data:image/jpeg;base64,' + image + '" /></td>')
 			}
 			
-            recalculateTotals();
-        };
+			recalculateTotals();
+		};
 
-        var collapseContextsExcept = function (context) {
-            var ctxs = $('#contexts tr.result[data-owning-context !="' + context + '"]');
-            ctxs.each(function () {
-                $(this).hide();
-            });
-        };
+		var collapseContextsExcept = function (context) {
+			var ctxs = $('#contexts tr.result[data-owning-context !="' + context + '"]');
+			ctxs.each(function () {
+				$(this).hide();
+			});
+		};
+		
+		$(document).ready(function() {			
+			$("#passedInput").change(function () {
+				if ($(this).is(":checked")) {
+					$("tr.result .success").show();
+				} else {
+					$("tr.result .success").hide();
+				}				
+			});
+			
+			$("#failedInput").change(function () {
+				if ($(this).is(":checked")) {
+					$("tr.result .error").show();
+				} else {
+					$("tr.result .error").hide();
+				}				
+			});
+			
+			$("#todoInput").change(function () {
+				if ($(this).is(":checked")) {
+					$("tr.result .warning").show();
+				} else {
+					$("tr.result .warning").hide();
+				}				
+			});
+			
+			$("#skippedInput").change(function () {
+				if ($(this).is(":checked")) {
+					$("tr.result .info").show();
+				} else {
+					$("tr.result .info").hide();
+				}				
+			});
+		});
     </script>
 </body>
 </html>
