@@ -3480,6 +3480,18 @@
             </summary>
       <returns>A <see cref="T:OpenQA.Selenium.Screenshot" /> object containing the image.</returns>
     </member>
+    <member name="P:OpenQA.Selenium.Chrome.ChromeDriver.FileDetector">
+      <summary>
+            Gets or sets the <see cref="T:OpenQA.Selenium.IFileDetector" /> responsible for detecting 
+            sequences of keystrokes representing file paths and names. 
+            </summary>
+      <remarks>The Chrome driver does not allow a file detector to be set,
+            as the server component of the Chrome driver (ChromeDriver.exe) only 
+            allows uploads from the local computer environment. Attempting to set
+            this property has no effect, but does not throw an exception. If you 
+            are attempting to run the Chrome driver remotely, use <see cref="T:OpenQA.Selenium.Remote.RemoteWebDriver" />
+            in conjunction with a standalone WebDriver server.</remarks>
+    </member>
     <member name="T:OpenQA.Selenium.Chrome.ChromeDriverService">
       <summary>
             Exposes the service provided by the native ChromeDriver executable.
@@ -4315,6 +4327,18 @@
       <param name="elementId">The ID of this element.</param>
       <returns>A <see cref="T:OpenQA.Selenium.Remote.RemoteWebElement" /> with the specified ID. For the FirefoxDriver this will be a <see cref="T:OpenQA.Selenium.Firefox.FirefoxWebElement" />.</returns>
     </member>
+    <member name="P:OpenQA.Selenium.Firefox.FirefoxDriver.FileDetector">
+      <summary>
+            Gets or sets the <see cref="T:OpenQA.Selenium.IFileDetector" /> responsible for detecting 
+            sequences of keystrokes representing file paths and names. 
+            </summary>
+      <remarks>The Firefox driver does not allow a file detector to be set,
+            as the server component of the Firefox driver only allows uploads from
+            the local computer environment. Attempting to set this property has no
+            effect, but does not throw an exception. If you  are attempting to run 
+            the Firefox driver remotely, use <see cref="T:OpenQA.Selenium.Remote.RemoteWebDriver" /> in 
+            conjunction with a standalone WebDriver server.</remarks>
+    </member>
     <member name="P:OpenQA.Selenium.Firefox.FirefoxDriver.Binary">
       <summary>
             Gets the FirefoxBinary and its details for subclasses
@@ -4892,6 +4916,18 @@
             </summary>
       <returns>A <see cref="T:OpenQA.Selenium.Screenshot" /> object containing the image.</returns>
     </member>
+    <member name="P:OpenQA.Selenium.IE.InternetExplorerDriver.FileDetector">
+      <summary>
+            Gets or sets the <see cref="T:OpenQA.Selenium.IFileDetector" /> responsible for detecting 
+            sequences of keystrokes representing file paths and names. 
+            </summary>
+      <remarks>The IE driver does not allow a file detector to be set,
+            as the server component of the IE driver (IEDriverServer.exe) only 
+            allows uploads from the local computer environment. Attempting to set
+            this property has no effect, but does not throw an exception. If you 
+            are attempting to run the IE driver remotely, use <see cref="T:OpenQA.Selenium.Remote.RemoteWebDriver" />
+            in conjunction with a standalone WebDriver server.</remarks>
+    </member>
     <member name="T:OpenQA.Selenium.IE.InternetExplorerDriverLogLevel">
       <summary>
             Represents the valid values of logging levels available with the IEDriverServer.exe.
@@ -5119,6 +5155,12 @@
       <summary>
             Gets or sets a value indicating whether to enable persistently sending WM_MOUSEMOVE messages
             to the IE window during a mouse hover.
+            </summary>
+    </member>
+    <member name="P:OpenQA.Selenium.IE.InternetExplorerOptions.BrowserAttachTimeout">
+      <summary>
+            Gets or sets the amount of time the driver will attempt to look for a newly launched instance
+            of Internet Explorer.
             </summary>
     </member>
     <member name="T:OpenQA.Selenium.IE.InternetExplorerWebElement">
@@ -6205,6 +6247,18 @@
             Gets a <see cref="T:OpenQA.Selenium.Screenshot" /> object representing the image of the page on the screen.
             </summary>
       <returns>A <see cref="T:OpenQA.Selenium.Screenshot" /> object containing the image.</returns>
+    </member>
+    <member name="P:OpenQA.Selenium.PhantomJS.PhantomJSDriver.FileDetector">
+      <summary>
+            Gets or sets the <see cref="T:OpenQA.Selenium.IFileDetector" /> responsible for detecting 
+            sequences of keystrokes representing file paths and names. 
+            </summary>
+      <remarks>The PhantomJS driver does not allow a file detector to be set,
+            as PhantomJS only allows uploads from the local computer environment.
+            Attempting to set this property has no effect, but does not throw an
+            exception. If you are attempting to run the PhantomJS driver remotely,
+            use <see cref="T:OpenQA.Selenium.Remote.RemoteWebDriver" /> in conjunction with a standalone
+            WebDriver server.</remarks>
     </member>
     <member name="T:OpenQA.Selenium.PhantomJS.PhantomJSDriverService">
       <summary>
@@ -8009,6 +8063,18 @@
       <summary>
             Stops the command executor, ending further communication with the browser.
             </summary>
+    </member>
+    <member name="P:OpenQA.Selenium.Safari.SafariDriver.FileDetector">
+      <summary>
+            Gets or sets the <see cref="T:OpenQA.Selenium.IFileDetector" /> responsible for detecting 
+            sequences of keystrokes representing file paths and names. 
+            </summary>
+      <remarks>The Safari driver does not allow a file detector to be set,
+            as the server component of the Safari driver (the Safari extension) only 
+            allows uploads from the local computer environment. Attempting to set
+            this property has no effect, but does not throw an exception. If you 
+            are attempting to run the Safari driver remotely, use <see cref="T:OpenQA.Selenium.Remote.RemoteWebDriver" />
+            in conjunction with a standalone WebDriver server.</remarks>
     </member>
     <member name="T:OpenQA.Selenium.Safari.SafariDriverCommandExecutor">
       <summary>
