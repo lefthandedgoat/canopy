@@ -295,7 +295,7 @@ context "other tests"
     "#lastName" << "Grey"
     "#lastName" =~ "Gr[ae]y")
 
-"regex one of many test" &&&& (fun _ ->
+"regex one of many test" &&& (fun _ ->
     url testpage
     "#colors li" *~ "gr[ea]y")    
 
