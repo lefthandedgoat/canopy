@@ -11,4 +11,6 @@ basictests/bin/**/*
 basictests/obj/**/*
 demotests/bin/**/*
 demotests/obj/**/*
+documentationtests/bin/**/*
+documentationtests/obj/**/*
 *.suo
