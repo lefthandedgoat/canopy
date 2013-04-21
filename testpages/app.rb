@@ -72,3 +72,7 @@ end
 get '/ryansError' do
   erb :ryansError
 end
+
+get '/elementWithin' do
+  erb :elementWithin
+end

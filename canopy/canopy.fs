@@ -105,16 +105,14 @@ let waitFor (f : unit -> bool) =
         | ex -> failwith ex.Message
 
 //find related
-let browserFindElementsList (b : By) = browser.FindElements b |> List.ofSeq
-
 let private findByCss cssSelector f =
     try
-        f(By.CssSelector(cssSelector))
+        f(By.CssSelector(cssSelector)) |> List.ofSeq
     with | ex -> []
 
 let private findByXpath xpath f =
     try
-        f(By.XPath(xpath))
+        f(By.XPath(xpath)) |> List.ofSeq
     with | ex -> []
 
 let private findByLabel locator f =
@@ -153,10 +151,10 @@ let private findByText text f =
             f(By.XPath(sprintf ".//*[text() = '%s']" text)) |> List.ofSeq
     with | _ -> []
     
-let rec private findElements (cssSelector : string) =
+let rec private findElements (cssSelector : string) (searchContext : ISearchContext) =
     searchedFor <- (cssSelector, browser.Url) :: searchedFor
     let findInIFrame () =
-        let iframes = findByCss "iframe" browserFindElementsList
+        let iframes = findByCss "iframe" searchContext.FindElements
         if iframes.IsEmpty then 
             browser.SwitchTo().DefaultContent() |> ignore
             []
@@ -164,53 +162,57 @@ let rec private findElements (cssSelector : string) =
             let webElements = ref []
             iframes |> List.iter (fun frame -> 
                 browser.SwitchTo().Frame(frame) |> ignore
-                webElements := findElements cssSelector
+                webElements := findElements cssSelector searchContext
             )
             !webElements
 
     try
-        let cssResult = findByCss cssSelector browserFindElementsList
+        let cssResult = findByCss cssSelector searchContext.FindElements
         if cssResult.IsEmpty = false then
             cssResult
         else            
-            let labelResult = findByLabel cssSelector browser.FindElement
+            let labelResult = findByLabel cssSelector searchContext.FindElement
             if labelResult.IsEmpty = false then
                 labelResult
             else
-                let textResult = findByText cssSelector browserFindElementsList
+                let textResult = findByText cssSelector searchContext.FindElements
                 if textResult.IsEmpty = false then
                     textResult
                 else
-                    let xpathResult = findByXpath cssSelector browserFindElementsList
+                    let xpathResult = findByXpath cssSelector searchContext.FindElements
                     if xpathResult.IsEmpty = false then
                         xpathResult
                     else
                         findInIFrame()
     with | ex -> []
 
-let private findByFunction cssSelector timeout waitFunc =
+let private findByFunction cssSelector (timeout : float) waitFunc (searchContext : ISearchContext) =
     if wipTest then colorizeAndSleep cssSelector
     let wait = new WebDriverWait(browser, TimeSpan.FromSeconds(elementTimeout))
     try
-        wait.Until(fun _ -> waitFunc cssSelector)        
+        wait.Until(fun _ -> waitFunc cssSelector searchContext)        
     with
         | :? WebDriverTimeoutException ->   puts "Element not found in the allotted time. If you want to increase the time, put elementTimeout <- 10.0 anywhere before a test to increase the timeout"
                                             suggestOtherSelectors cssSelector
                                             failwith (String.Format("cant find element {0}", cssSelector))
         | ex -> failwith ex.Message
 
-let private find cssSelector timeout =
-    (findByFunction cssSelector timeout findElements).Head
+let private find (cssSelector : string) (timeout : float) (searchContext : ISearchContext) =
+    (findByFunction cssSelector timeout findElements searchContext).Head
 
-let private findMany cssSelector timeout =
-    findByFunction cssSelector timeout findElements
+let private findMany cssSelector timeout (searchContext : ISearchContext) =
+    findByFunction cssSelector timeout findElements searchContext
 
 //get elements
-let element cssSelector =  find cssSelector elementTimeout
+let element cssSelector = find cssSelector elementTimeout browser
 
-let elements cssSelector = findMany cssSelector elementTimeout
+let elementWithin cssSelector (elem:IWebElement) =  find cssSelector elementTimeout elem
 
-let exists cssSelector = find cssSelector elementTimeout
+let elements cssSelector = findMany cssSelector elementTimeout browser
+
+let elementsWithin cssSelector (elem:IWebElement) = findMany cssSelector elementTimeout elem
+
+let exists cssSelector = find cssSelector elementTimeout browser
 
 let nth index cssSelector = List.nth (elements cssSelector) index
 
@@ -220,8 +222,8 @@ let last cssSelector = (List.rev (elements cssSelector)).Head
    
 //read/write
 let private writeToSelect cssSelector text =
-    let element = find cssSelector elementTimeout
-    let options = Seq.toList (element.FindElements(By.TagName("option")))
+    let elem = element cssSelector
+    let options = Seq.toList (elem.FindElements(By.TagName("option")))
     let option = options |> List.filter (fun e -> e.Text = text)
     if option = [] then
         failwith (String.Format("element {0} does not contain value {1}", cssSelector, text))        
@@ -230,7 +232,7 @@ let private writeToSelect cssSelector text =
 
 let ( << ) cssSelector (text : string) = 
     wait (elementTimeout + 1.0) (fun _ ->
-        let elements = elements cssSelector
+        let elems = elements cssSelector
         let writeToElement (e : IWebElement) =
             if e.TagName = "select" then
                 writeToSelect cssSelector text
@@ -241,7 +243,7 @@ let ( << ) cssSelector (text : string) =
                 try e.Clear() with ex -> ex |> ignore
                 e.SendKeys(text)
 
-        elements |> List.iter writeToElement
+        elems |> List.iter writeToElement
         true)
 
 let private textOf (element : IWebElement) =
@@ -257,28 +259,28 @@ let private textOf (element : IWebElement) =
 
 let read (cssSelector : string) =    
     try
-        let element = find cssSelector elementTimeout
-        textOf element
+        let elem = element cssSelector
+        textOf elem
     with
         | ex -> failwith ex.Message
 
         
 let clear (cssSelector : string) = 
-    let element = find cssSelector elementTimeout
-    let readonly = element.GetAttribute("readonly")
+    let elem = element cssSelector
+    let readonly = elem.GetAttribute("readonly")
     if readonly = "true" then
         failwith (String.Format("element {0} is marked as read only, you can not clear read only elements", cssSelector))        
-    element.Clear()
+    elem.Clear()
 
 //status
 let selected (cssSelector : string) = 
-    let element = find cssSelector elementTimeout
-    if element.Selected = false then
+    let elem = element cssSelector
+    if elem.Selected = false then
         failwith (String.Format("element selected failed, {0} not selected.", cssSelector));    
     
 let deselected (cssSelector : string) =     
-        let element = find cssSelector elementTimeout
-        if element.Selected then
+        let elem = element cssSelector
+        if elem.Selected then
             failwith (String.Format("element deselected failed, {0} selected.", cssSelector));    
 
 //keyboard
@@ -290,8 +292,8 @@ let left = Keys.Left
 let right = Keys.Right
 
 let press key = 
-    let element = ((js "return document.activeElement;") :?> IWebElement)
-    element.SendKeys(key)
+    let elem = ((js "return document.activeElement;") :?> IWebElement)
+    elem.SendKeys(key)
 
 //alerts
 let alert() = browser.SwitchTo().Alert()
@@ -333,19 +335,19 @@ let ( != ) cssSelector value =
         
 let ( *= ) (cssSelector : string) value =
     try        
-        wait compareTimeout (fun _ -> ( let elements = findMany cssSelector elementTimeout
-                                        elements |> Seq.exists(fun element -> (textOf element) = value)))
+        wait compareTimeout (fun _ -> ( let elems = elements cssSelector
+                                        elems |> Seq.exists(fun element -> (textOf element) = value)))
     with
         | :? TimeoutException -> let sb = new System.Text.StringBuilder()
-                                 let elements = findMany cssSelector elementTimeout
-                                 elements |> List.map (fun e -> sb.Append(String.Format("{0}\r\n", (textOf e)))) |> ignore
+                                 let elems = elements cssSelector
+                                 elems |> List.map (fun e -> sb.Append(String.Format("{0}\r\n", (textOf e)))) |> ignore
                                  failwith (String.Format("cant find {0} in list {1}\r\ngot: {2}", value, cssSelector, sb.ToString()));
         | ex -> failwith ex.Message
 
 let ( *!= ) (cssSelector : string) value =
     try
-        wait compareTimeout (fun _ -> ( let elements = findMany cssSelector elementTimeout
-                                        elements |> Seq.exists(fun element -> (textOf element) = value) = false))
+        wait compareTimeout (fun _ -> ( let elems = elements cssSelector
+                                        elems |> Seq.exists(fun element -> (textOf element) = value) = false))
     with
         | :? TimeoutException -> failwith (String.Format("found {0} in list {1}, expected not to", value, cssSelector));
         | ex -> failwith ex.Message
@@ -357,17 +359,17 @@ let contains (value1 : string) (value2 : string) =
 
 let count cssSelector count =
     try        
-        wait compareTimeout (fun _ -> ( let elements = findMany cssSelector elementTimeout
-                                        elements.Length = count))
+        wait compareTimeout (fun _ -> ( let elems = elements cssSelector
+                                        elems.Length = count))
     with
-        | :? TimeoutException -> failwith (String.Format("count failed. expected: {0} got: {1} ", count, (findMany cssSelector elementTimeout).Length));
+        | :? TimeoutException -> failwith (String.Format("count failed. expected: {0} got: {1} ", count, (elements cssSelector).Length));
         | ex -> failwith ex.Message
 
 let private regexMatch pattern input = System.Text.RegularExpressions.Regex.Match(input, pattern).Success
 
 let elementsWithText cssSelector regex =
-    findMany cssSelector elementTimeout
-    |> List.filter (fun element -> regexMatch regex (textOf element))
+    elements cssSelector
+    |> List.filter (fun elem -> regexMatch regex (textOf elem))
 
 let elementWithText cssSelector regex = (elementsWithText cssSelector regex).Head
 
@@ -380,12 +382,12 @@ let ( =~ ) cssSelector pattern =
 
 let ( *~ ) (cssSelector : string) pattern =
     try        
-        wait compareTimeout (fun _ -> ( let elements = findMany cssSelector elementTimeout
-                                        elements |> Seq.exists(fun element -> regexMatch pattern (textOf element))))
+        wait compareTimeout (fun _ -> ( let elems = elements cssSelector
+                                        elems |> Seq.exists(fun element -> regexMatch pattern (textOf element))))
     with
         | :? TimeoutException -> let sb = new System.Text.StringBuilder()
-                                 let elements = findMany cssSelector elementTimeout
-                                 elements |> List.map (fun e -> sb.Append(String.Format("{0}\r\n", (textOf e)))) |> ignore
+                                 let elems = elements cssSelector
+                                 elems |> List.map (fun e -> sb.Append(String.Format("{0}\r\n", (textOf e)))) |> ignore
                                  failwith (String.Format("cant regex find {0} in list {1}\r\ngot: {2}", pattern, cssSelector, sb.ToString()));
         | ex -> failwith ex.Message
 
@@ -398,9 +400,9 @@ let is expected actual =
 let (===) expected actual = is expected actual
 
 let private shown cssSelector =
-    let element = element cssSelector
-    let opacity = element.GetCssValue("opacity")
-    let display = element.GetCssValue("display")
+    let elem = element cssSelector
+    let opacity = elem.GetCssValue("opacity")
+    let display = elem.GetCssValue("display")
     display <> "none" && opacity = "1"
        
 let displayed cssSelector =
@@ -426,8 +428,8 @@ let click item =
         match box item with
         | :? IWebElement as element -> element.Click()
         | :? string as cssSelector ->         
-            wait elementTimeout (fun _ -> let element = find cssSelector elementTimeout
-                                          element.Click()
+            wait elementTimeout (fun _ -> let elem = element cssSelector
+                                          elem.Click()
                                           true)
         | _ -> failwith (String.Format("Can't click {0} because it is not a string or webelement", item.ToString()))
     with
@@ -438,10 +440,10 @@ let doubleClick item =
         let js = "var evt = document.createEvent('MouseEvents'); evt.initMouseEvent('dblclick',true, true, window, 0, 0, 0, 0, 0, false, false, false, false, 0,null); arguments[0].dispatchEvent(evt);"
 
         match box item with
-        | :? IWebElement as element -> (browser :?> IJavaScriptExecutor).ExecuteScript(js, element) |> ignore
+        | :? IWebElement as elem -> (browser :?> IJavaScriptExecutor).ExecuteScript(js, elem) |> ignore
         | :? string as cssSelector ->         
-            wait elementTimeout (fun _ -> ( let element = find cssSelector elementTimeout
-                                            (browser :?> IJavaScriptExecutor).ExecuteScript(js, element) |> ignore
+            wait elementTimeout (fun _ -> ( let elem = element cssSelector
+                                            (browser :?> IJavaScriptExecutor).ExecuteScript(js, elem) |> ignore
                                             true))
         | _ -> failwith (String.Format("Can't doubleClick {0} because it is not a string or webelement", item.ToString()))
     with

@@ -173,6 +173,16 @@ test (fun _ ->
     uncheck "#checkbox"
     deselected "#checkbox")
 
+"element within only searching within the element" &&& (fun _ ->
+    url "http://localhost:4567/elementWithin"
+    count ".item" 5
+    "spanned item 4" === (element "span" |> elementWithin ".item").Text)
+
+"elements within only searching within element" &&& (fun _ ->
+    url "http://localhost:4567/elementWithin"
+    count ".item" 5
+    2 === (element "span" |> elementsWithin ".item" |> List.length))
+
 context "reddit tests"
 once (fun _ -> Console.WriteLine "once: reddit tests")
 before (fun _ -> Console.WriteLine "before: reddit tests")
