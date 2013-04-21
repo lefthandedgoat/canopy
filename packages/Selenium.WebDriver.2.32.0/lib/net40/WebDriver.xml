@@ -4170,6 +4170,11 @@
             Gets or sets the timeout (in milliseconds) to wait for command execution.
             </summary>
     </member>
+    <member name="P:OpenQA.Selenium.Firefox.FirefoxBinary.Timeout">
+      <summary>
+            Gets or sets the timeout to wait for Firefox to be available for command execution.
+            </summary>
+    </member>
     <member name="P:OpenQA.Selenium.Firefox.FirefoxBinary.ConsoleOutput">
       <summary>
             Gets all console output of the binary.
@@ -4759,6 +4764,13 @@
       <param name="timeoutInMilliseconds">The amount of time (in milliseconds) to wait for 
             the mutex port to become available.</param>
     </member>
+    <member name="M:OpenQA.Selenium.Firefox.Internal.ILock.LockObject(System.TimeSpan)">
+      <summary>
+            Locks the mutex port.
+            </summary>
+      <param name="timeout">The <see cref="T:System.TimeSpan" /> describing the amount of time to wait for 
+            the mutex port to become available.</param>
+    </member>
     <member name="M:OpenQA.Selenium.Firefox.Internal.ILock.UnlockObject">
       <summary>
             Unlocks the mutex port.
@@ -4800,6 +4812,13 @@
       <param name="lockPort">Port to use to acquire the lock.</param>
       <remarks>The <see cref="T:OpenQA.Selenium.Firefox.Internal.SocketLock" /> class will attempt to acquire the
             specified port number, and wait for it to become free.</remarks>
+    </member>
+    <member name="M:OpenQA.Selenium.Firefox.Internal.SocketLock.LockObject(System.TimeSpan)">
+      <summary>
+            Locks the mutex port.
+            </summary>
+      <param name="timeout">The <see cref="T:System.TimeSpan" /> describing the amount of time to wait for 
+            the mutex port to become available.</param>
     </member>
     <member name="M:OpenQA.Selenium.Firefox.Internal.SocketLock.LockObject(System.Int64)">
       <summary>
@@ -6151,6 +6170,22 @@
             Gets a value determining if the cookie is secure.
             </summary>
     </member>
+    <member name="T:OpenQA.Selenium.PhantomJS.CommandLineArgumentNameAttribute">
+      <summary>
+            Allows the user to specify the name of an argument to be used on the command line for PhantomJS.
+            </summary>
+    </member>
+    <member name="M:OpenQA.Selenium.PhantomJS.CommandLineArgumentNameAttribute.#ctor(System.String)">
+      <summary>
+            Initializes a new instance of the <see cref="T:OpenQA.Selenium.PhantomJS.CommandLineArgumentNameAttribute" /> class.
+            </summary>
+      <param name="argumentName">The name of the argument to be used in the PhantomJS command line.</param>
+    </member>
+    <member name="P:OpenQA.Selenium.PhantomJS.CommandLineArgumentNameAttribute.Name">
+      <summary>
+            Gets the name of the argument to be used in the PhantomJS command line.
+            </summary>
+    </member>
     <member name="T:OpenQA.Selenium.PhantomJS.PhantomJSDriver">
       <summary>
             Provides a way to access PhantomJS to run your tests by creating a PhantomJSDriver instance
@@ -6201,6 +6236,12 @@
             Initializes a new instance of the <see cref="T:OpenQA.Selenium.PhantomJS.PhantomJSDriver" /> class with the desired options.
             </summary>
       <param name="options">The <see cref="T:OpenQA.Selenium.PhantomJS.PhantomJSOptions" /> used to initialize the driver.</param>
+    </member>
+    <member name="M:OpenQA.Selenium.PhantomJS.PhantomJSDriver.#ctor(OpenQA.Selenium.PhantomJS.PhantomJSDriverService)">
+      <summary>
+            Initializes a new instance of the <see cref="T:OpenQA.Selenium.PhantomJS.PhantomJSDriver" /> class using the specified driver service.
+            </summary>
+      <param name="service">The <see cref="T:OpenQA.Selenium.PhantomJS.PhantomJSDriverService" /> used to initialize the driver.</param>
     </member>
     <member name="M:OpenQA.Selenium.PhantomJS.PhantomJSDriver.#ctor(System.String)">
       <summary>
@@ -6265,6 +6306,15 @@
             Exposes the service provided by the native PhantomJS executable and GhostDriver JavaScript library.
             </summary>
     </member>
+    <member name="M:OpenQA.Selenium.PhantomJS.PhantomJSDriverService.#ctor">
+      <summary>
+            Prevents a default instance of the <see cref="T:OpenQA.Selenium.PhantomJS.PhantomJSDriverService" /> class from being created.
+            </summary>
+      <remarks>
+            This constructor is only used by the unit tests. It should not be
+            used in any other circumstances.
+            </remarks>
+    </member>
     <member name="M:OpenQA.Selenium.PhantomJS.PhantomJSDriverService.#ctor(System.String,System.Int32)">
       <summary>
             Initializes a new instance of the PhantomJSDriverService class.
@@ -6284,6 +6334,140 @@
             </summary>
       <param name="driverPath">The directory containing the PhantomJS executable.</param>
       <returns>A PhantomJSDriverService using a random port.</returns>
+    </member>
+    <member name="M:OpenQA.Selenium.PhantomJS.PhantomJSDriverService.AddArgument(System.String)">
+      <summary>
+            Adds a single argument to the list of arguments to be appended to the PhantomJS.exe command line.
+            </summary>
+      <param name="argument">The argument to add.</param>
+    </member>
+    <member name="M:OpenQA.Selenium.PhantomJS.PhantomJSDriverService.AddArguments(System.String[])">
+      <summary>
+            Adds arguments to be appended to the PhantomJS.exe command line.
+            </summary>
+      <param name="arguments">An array of arguments to add.</param>
+    </member>
+    <member name="M:OpenQA.Selenium.PhantomJS.PhantomJSDriverService.AddArguments(System.Collections.Generic.IEnumerable{System.String})">
+      <summary>
+            Adds arguments to be appended to the PhantomJS.exe command line.
+            </summary>
+      <param name="arguments">An <see cref="T:System.Collections.Generic.IEnumerable`1" /> object of arguments to add.</param>
+    </member>
+    <member name="M:OpenQA.Selenium.PhantomJS.PhantomJSDriverService.ToJson">
+      <summary>
+            Serializes the service options to JSON to be used as a configuration file for PhantomJS.exe (via the --config argument).
+            </summary>
+      <returns>The JSON representation of the configured service options.</returns>
+    </member>
+    <member name="P:OpenQA.Selenium.PhantomJS.PhantomJSDriverService.CookiesFile">
+      <summary>
+            Gets or sets the file name used to store the persistent cookies.
+            </summary>
+    </member>
+    <member name="P:OpenQA.Selenium.PhantomJS.PhantomJSDriverService.DiskCache">
+      <summary>
+            Gets or sets a value indicating whether the disk cache is enabled (at desktop services cache storage location, default is no).
+            </summary>
+    </member>
+    <member name="P:OpenQA.Selenium.PhantomJS.PhantomJSDriverService.IgnoreSslErrors">
+      <summary>
+            Gets or sets a value indicating whether SSL errors are ignored, such as expired or self-signed certificate errors (default is no).
+            </summary>
+    </member>
+    <member name="P:OpenQA.Selenium.PhantomJS.PhantomJSDriverService.LoadImages">
+      <summary>
+            Gets or sets a value indicating whether all inlined images are loaded (default is yes).
+            </summary>
+    </member>
+    <member name="P:OpenQA.Selenium.PhantomJS.PhantomJSDriverService.LocalStoragePath">
+      <summary>
+            Gets or sets the path to save LocalStorage content and WebSQL content.
+            </summary>
+    </member>
+    <member name="P:OpenQA.Selenium.PhantomJS.PhantomJSDriverService.LocalStorageQuota">
+      <summary>
+            Gets or sets the maximum size to allow for data.
+            </summary>
+    </member>
+    <member name="P:OpenQA.Selenium.PhantomJS.PhantomJSDriverService.LocalToRemoteUrlAccess">
+      <summary>
+            Gets or sets a value indicating whether local content is allowed to access remote URL (default is no).
+            </summary>
+    </member>
+    <member name="P:OpenQA.Selenium.PhantomJS.PhantomJSDriverService.MaxDiskCacheSize">
+      <summary>
+            Gets or sets the size limit of the disk cache in KB.
+            </summary>
+    </member>
+    <member name="P:OpenQA.Selenium.PhantomJS.PhantomJSDriverService.OutputEncoding">
+      <summary>
+            Gets or sets the encoding used for terminal output (default is "utf8").
+            </summary>
+    </member>
+    <member name="P:OpenQA.Selenium.PhantomJS.PhantomJSDriverService.Proxy">
+      <summary>
+            Gets or sets the proxy server information (in the format of {address} or {address}:{port}).
+            </summary>
+    </member>
+    <member name="P:OpenQA.Selenium.PhantomJS.PhantomJSDriverService.ProxyType">
+      <summary>
+            Gets or sets the type of the proxy server ('http', 'socks5' or 'none').
+            </summary>
+    </member>
+    <member name="P:OpenQA.Selenium.PhantomJS.PhantomJSDriverService.ScriptEncoding">
+      <summary>
+            Gets or sets the encoding used for the starting script (default is "utf8").
+            </summary>
+    </member>
+    <member name="P:OpenQA.Selenium.PhantomJS.PhantomJSDriverService.SslProtocol">
+      <summary>
+            Gets or sets the SSL protocol for secure connections ('sslv3' (default), 'sslv2', 'tlsv1' or 'any').
+            </summary>
+    </member>
+    <member name="P:OpenQA.Selenium.PhantomJS.PhantomJSDriverService.WebSecurity">
+      <summary>
+            Gets or sets a value indicating whether web security is enabled and forbids cross-domain XHR (default is yes).
+            </summary>
+    </member>
+    <member name="P:OpenQA.Selenium.PhantomJS.PhantomJSDriverService.AdditionalArguments">
+      <summary>
+            Gets the list of arguments appended to the PhantomJS command line as a string array.
+            </summary>
+    </member>
+    <member name="P:OpenQA.Selenium.PhantomJS.PhantomJSDriverService.ConfigFile">
+      <summary>
+            Gets or sets the path to the JSON configuration file (in lieu of providing any other parameters).
+            </summary>
+      <remarks>If a <see cref="T:OpenQA.Selenium.PhantomJS.PhantomJSDriverService" /> instance is serialized to JSON, it can be saved to a 
+            file and used as a JSON configuration source for the PhantomJS.exe process.</remarks>
+      <example>
+        <code>
+            var configOptions = PhantomJSDriverService.CreateDefaultService()
+            {
+                CookiesFile = "cookiesFile",
+                DiskCache = true,
+                IgnoreSslErrors = true,
+                LoadImages = true,
+                LocalToRemoteUrlAccess = true,
+                MaxDiskCacheSize = 1000,
+                OutputEncoding = "abc",
+                Proxy = "address:999",
+                ProxyType = "socks5",
+                ScriptEncoding = "def",
+                SslProtocol = "sslv2",
+                WebSecurity = true,
+            };
+            
+            string json = configOptions.ToJson();
+            
+            File.WriteAllText(@"C:\temp\myconfig.json", json);
+            
+            var driverService = PhantomJSDriver.CreateDefaultService();
+            driverService.ConfigFile = @"C:\temp\myconfig.json";
+            
+            var driver = new PhantomJSDriver(driverService);  // Launches PhantomJS.exe using JSON configuration file.
+            </code>
+      </example>
     </member>
     <member name="P:OpenQA.Selenium.PhantomJS.PhantomJSDriverService.CommandLineArguments">
       <summary>
