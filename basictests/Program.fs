@@ -48,6 +48,10 @@ test (fun _ ->
     url testpage
     "#firstName" == "John")
 
+"id('firstName') should have John (using == infix operator), basic xpath test" &&& (fun _ ->
+    url testpage
+    "id('firstName')" == "John")
+
 "#lastName should have Doe" &&& (fun _ ->
     !^ testpage
     "#lastName" == "Doe")
@@ -67,6 +71,13 @@ test (fun _ ->
     !^ testpage
     clear "#lastName"
     ".lastName" << "Smith"
+    "#lastName" == "Smith"
+    "#lastName2" == "Smith")
+
+"writing to .lastName sets text to new Smith in both boxes, xpath test" &&& (fun _ ->
+    !^ testpage
+    clear "#lastName"
+    "//input[@class='lastName']" << "Smith"
     "#lastName" == "Smith"
     "#lastName2" == "Smith")
 

@@ -112,6 +112,11 @@ let private findByCss cssSelector f =
         f(By.CssSelector(cssSelector))
     with | ex -> []
 
+let private findByXpath xpath f =
+    try
+        f(By.XPath(xpath))
+    with | ex -> []
+
 let private findByLabel locator f =
     let isInputField (element : IWebElement) =
         element.TagName = "input" && element.GetAttribute("type") <> "hidden"
@@ -163,15 +168,11 @@ let rec private findElements (cssSelector : string) =
             )
             !webElements
 
-    //small optimization to not try text/label searchs if it looks like a css selector
-    let obviousCssSelector = cssSelector.StartsWith(".") || cssSelector.StartsWith("#")
     try
         let cssResult = findByCss cssSelector browserFindElementsList
         if cssResult.IsEmpty = false then
             cssResult
-        else if obviousCssSelector then
-            findInIFrame()
-        else
+        else            
             let labelResult = findByLabel cssSelector browser.FindElement
             if labelResult.IsEmpty = false then
                 labelResult
@@ -180,7 +181,11 @@ let rec private findElements (cssSelector : string) =
                 if textResult.IsEmpty = false then
                     textResult
                 else
-                    findInIFrame()
+                    let xpathResult = findByXpath cssSelector browserFindElementsList
+                    if xpathResult.IsEmpty = false then
+                        xpathResult
+                    else
+                        findInIFrame()
     with | ex -> []
 
 let private findByFunction cssSelector timeout waitFunc =
