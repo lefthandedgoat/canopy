@@ -183,9 +183,13 @@ test (fun _ ->
     count ".item" 5
     2 === (element "span" |> elementsWithin ".item" |> List.length))
 
-"parent of firstItem and secondItem is list" &&&& (fun _ ->
+"parent of firstItem and secondItem is list" &&& (fun _ ->
     url "http://localhost:4567/parent"
     "list" === (element "#firstItem" |> parent).GetAttribute("id"))
+
+"someElement returns None when element not found" &&&& (fun _ ->
+    url testpage
+    None === (someElement "#thisIdDoesNotExist"))
 
 context "reddit tests"
 once (fun _ -> Console.WriteLine "once: reddit tests")

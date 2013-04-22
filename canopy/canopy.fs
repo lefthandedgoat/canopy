@@ -204,6 +204,12 @@ let private findMany cssSelector timeout (searchContext : ISearchContext) =
     findByFunction cssSelector timeout findElements searchContext
 
 //get elements
+let private someElementFromList cssSelector elementsList =
+    match elementsList with
+    | [x] -> Some(x)
+    | [] -> None
+    | _ -> failwith ("More than one element was selected when only one was expected for selector: " + cssSelector)
+    
 let element cssSelector = find cssSelector elementTimeout browser
 
 let elementWithin cssSelector (elem:IWebElement) =  find cssSelector elementTimeout elem
@@ -213,6 +219,12 @@ let parent (elem:IWebElement) = elem |> elementWithin ".."
 let elements cssSelector = findMany cssSelector elementTimeout browser
 
 let elementsWithin cssSelector (elem:IWebElement) = findMany cssSelector elementTimeout elem
+
+let someElement cssSelector = cssSelector |> elements |> someElementFromList cssSelector
+
+let someElementWithin cssSelector element = element |> elementsWithin cssSelector |> someElementFromList cssSelector
+
+let someParent (elem:IWebElement) = elem |> elementsWithin ".." |> someElementFromList "provided element"
 
 let exists cssSelector = find cssSelector elementTimeout browser
 
