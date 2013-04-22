@@ -183,13 +183,33 @@ test (fun _ ->
     count ".item" 5
     2 === (element "span" |> elementsWithin ".item" |> List.length))
 
+"someElementWithin only searching within element" &&& (fun _ ->
+    url "http://localhost:4567/elementWithin"
+    count ".item" 5
+    true === (element "span" |> someElementWithin ".specialItem").IsSome)
+
 "parent of firstItem and secondItem is list" &&& (fun _ ->
     url "http://localhost:4567/parent"
     "list" === (element "#firstItem" |> parent).GetAttribute("id"))
 
-"someElement returns None when element not found" &&&& (fun _ ->
+"some parent of firstItem and secondItem is list" &&& (fun _ ->
+    url "http://localhost:4567/parent"
+    true === (element "#firstItem" |> someParent).IsSome
+    "list" === (element "#firstItem" |> someParent).Value.GetAttribute("id"))
+
+"someElement returns Some when element found" &&& (fun _ ->
+    url testpage
+    true === (someElement "#testfield2").IsSome
+    "test value 2" === (someElement "#testfield2").Value.GetAttribute("value"))
+
+"someElement returns None when element not found" &&& (fun _ ->
     url testpage
     None === (someElement "#thisIdDoesNotExist"))
+
+"someElement fails when more than one element found" &&& (fun _ ->
+    url testpage    
+    failsWith "More than one element was selected when only one was expected for selector: .lastName"
+    someElement ".lastName" |> ignore)
 
 context "reddit tests"
 once (fun _ -> Console.WriteLine "once: reddit tests")

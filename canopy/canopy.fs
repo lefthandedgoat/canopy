@@ -214,17 +214,17 @@ let element cssSelector = find cssSelector elementTimeout browser
 
 let elementWithin cssSelector (elem:IWebElement) =  find cssSelector elementTimeout elem
 
-let parent (elem:IWebElement) = elem |> elementWithin ".."
+let parent elem = elem |> elementWithin ".."
 
 let elements cssSelector = findMany cssSelector elementTimeout browser
 
-let elementsWithin cssSelector (elem:IWebElement) = findMany cssSelector elementTimeout elem
+let elementsWithin cssSelector elem = findMany cssSelector elementTimeout elem
 
 let someElement cssSelector = cssSelector |> elements |> someElementFromList cssSelector
 
-let someElementWithin cssSelector element = element |> elementsWithin cssSelector |> someElementFromList cssSelector
+let someElementWithin cssSelector elem = elem |> elementsWithin cssSelector |> someElementFromList cssSelector
 
-let someParent (elem:IWebElement) = elem |> elementsWithin ".." |> someElementFromList "provided element"
+let someParent elem = elem |> elementsWithin ".." |> someElementFromList "provided element"
 
 let exists cssSelector = find cssSelector elementTimeout browser
 
