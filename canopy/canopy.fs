@@ -208,6 +208,8 @@ let element cssSelector = find cssSelector elementTimeout browser
 
 let elementWithin cssSelector (elem:IWebElement) =  find cssSelector elementTimeout elem
 
+let parent (elem:IWebElement) = elem |> elementWithin ".."
+
 let elements cssSelector = findMany cssSelector elementTimeout browser
 
 let elementsWithin cssSelector (elem:IWebElement) = findMany cssSelector elementTimeout elem

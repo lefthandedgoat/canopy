@@ -183,6 +183,10 @@ test (fun _ ->
     count ".item" 5
     2 === (element "span" |> elementsWithin ".item" |> List.length))
 
+"parent of firstItem and secondItem is list" &&&& (fun _ ->
+    url "http://localhost:4567/parent"
+    "list" === (element "#firstItem" |> parent).GetAttribute("id"))
+
 context "reddit tests"
 once (fun _ -> Console.WriteLine "once: reddit tests")
 before (fun _ -> Console.WriteLine "before: reddit tests")

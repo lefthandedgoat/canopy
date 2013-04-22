@@ -76,3 +76,7 @@ end
 get '/elementWithin' do
   erb :elementWithin
 end
+
+get '/parent' do
+  erb :parent
+end
