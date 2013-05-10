@@ -1,8 +1,8 @@
 ﻿module main
 
 open System
-open runner
 open canopy
+open runner
 open configuration
 open reporters
 
@@ -353,7 +353,7 @@ context "other tests"
     (first "#value_list td").Text === "Value 1")
 
 "test for last function" &&& (fun _ ->
-    !^ testpage
+    !^ testpage    
     (last "#value_list td").Text === "Value 4")
 
 "test for nth function" &&& (fun _ ->

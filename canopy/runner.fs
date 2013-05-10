@@ -1,11 +1,11 @@
-﻿module runner
+﻿module canopy.runner
 
 open System
 open configuration
 open canopy
 open reporters
 
-let rec last = function
+let rec private last = function
     | hd :: [] -> hd
     | hd :: tl -> last tl
     | _ -> failwith "Empty list."

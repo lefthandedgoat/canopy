@@ -1,4 +1,4 @@
-﻿module reporters
+﻿module canopy.reporters
 
 open System
 open OpenQA.Selenium

@@ -1,7 +1,7 @@
 ﻿module main
 
-open runner
 open canopy
+open runner
 open configuration
 
 before (fun () -> System.Console.WriteLine("This happens before every test"))

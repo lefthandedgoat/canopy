@@ -1,4 +1,4 @@
-﻿module levenshtein
+﻿module canopy.levenshtein
 
 type result = { selector : string; distance : int }
 

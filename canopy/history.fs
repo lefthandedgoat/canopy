@@ -1,4 +1,4 @@
-﻿module history
+﻿module canopy.history
 
 open System.IO
 open System

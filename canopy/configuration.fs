@@ -1,4 +1,4 @@
-﻿module configuration
+﻿module canopy.configuration
 open reporters
 
 //runner related

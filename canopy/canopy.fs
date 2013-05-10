@@ -1,4 +1,5 @@
-﻿module canopy
+﻿[<AutoOpen>]
+module canopy.core
 
 open OpenQA.Selenium.Firefox
 open OpenQA.Selenium
