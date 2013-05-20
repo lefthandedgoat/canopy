@@ -57,18 +57,14 @@ let puts (text : string) =
 
 let private wait timeout f =
     let wait = new WebDriverWait(browser, TimeSpan.FromSeconds(timeout))
-    try
-        wait.Until(fun _ -> (
-                                try
-                                    (f ()) = true
-                                with
-                                | :? CanopyException as ce -> failwith ce.Message
-                                | _ -> false
-                            )
-                  ) |> ignore        
-    with
-    | :? OpenQA.Selenium.WebDriverTimeoutException as te -> raise (System.TimeoutException(te.Message))
-    | ex -> failwith ex.Message
+    wait.Until(fun _ -> (
+                            try
+                                (f ()) = true
+                            with
+                            | :? CanopyException as ce -> failwith ce.Message
+                            | _ -> false
+                        )
+                ) |> ignore        
     ()
 
 let private colorizeAndSleep cssSelector =
@@ -101,9 +97,9 @@ let waitFor (f : unit -> bool) =
     try        
         wait compareTimeout (fun _ -> (f ()))
     with
-        | :? System.TimeoutException -> puts "Condition not met in given amount of time. If you want to increase the time, put compareTimeout <- 10.0 anywhere before a test to increase the timeout"
-                                        failwith (String.Format("waitFor condition failed to become true in {0} seconds", compareTimeout))
-        | ex -> failwith ex.Message
+        | :? WebDriverTimeoutException -> 
+                puts "Condition not met in given amount of time. If you want to increase the time, put compareTimeout <- 10.0 anywhere before a test to increase the timeout"
+                failwith (String.Format("waitFor condition failed to become true in {0} seconds", compareTimeout))
 
 //find related
 let private findByCss cssSelector f =
@@ -196,7 +192,6 @@ let private findByFunction cssSelector (timeout : float) waitFunc (searchContext
         | :? WebDriverTimeoutException ->   puts "Element not found in the allotted time. If you want to increase the time, put elementTimeout <- 10.0 anywhere before a test to increase the timeout"
                                             suggestOtherSelectors cssSelector
                                             failwith (String.Format("cant find element {0}", cssSelector))
-        | ex -> failwith ex.Message
 
 let private find (cssSelector : string) (timeout : float) (searchContext : ISearchContext) =
     (findByFunction cssSelector timeout findElements searchContext).Head
@@ -273,12 +268,8 @@ let private textOf (element : IWebElement) =
         element.Text    
 
 let read (cssSelector : string) =    
-    try
-        let elem = element cssSelector
-        textOf elem
-    with
-        | ex -> failwith ex.Message
-
+    let elem = element cssSelector
+    textOf elem
         
 let clear (cssSelector : string) = 
     let elem = element cssSelector
@@ -336,36 +327,33 @@ let ( == ) (item : 'a) value =
                                             else
                                                 readvalue = value))
         with
-            | :? TimeoutException -> failwith (String.Format("equality check failed.  expected: {0}, got: {1}", value, !bestvalue));
-            | ex -> System.Console.WriteLine(ex.GetType());
-                    failwith ex.Message
+            | :? WebDriverTimeoutException -> failwith (String.Format("equality check failed.  expected: {0}, got: {1}", value, !bestvalue));
+
     | _ -> failwith (String.Format("Can't check equality on {0} because it is not a string or alert", item.ToString()))
 
 let ( != ) cssSelector value =
     try
         wait compareTimeout (fun _ -> (read cssSelector) <> value)
     with
-        | :? TimeoutException -> failwith (String.Format("not equals check failed.  expected NOT: {0}, got: {1}", value, (read cssSelector)));
-        | ex -> failwith ex.Message
+        | :? WebDriverTimeoutException -> failwith (String.Format("not equals check failed.  expected NOT: {0}, got: {1}", value, (read cssSelector)));
         
 let ( *= ) (cssSelector : string) value =
     try        
         wait compareTimeout (fun _ -> ( let elems = elements cssSelector
                                         elems |> Seq.exists(fun element -> (textOf element) = value)))
     with
-        | :? TimeoutException -> let sb = new System.Text.StringBuilder()
-                                 let elems = elements cssSelector
-                                 elems |> List.map (fun e -> sb.Append(String.Format("{0}\r\n", (textOf e)))) |> ignore
-                                 failwith (String.Format("cant find {0} in list {1}\r\ngot: {2}", value, cssSelector, sb.ToString()));
-        | ex -> failwith ex.Message
+        | :? WebDriverTimeoutException -> 
+                let sb = new System.Text.StringBuilder()
+                let elems = elements cssSelector
+                elems |> List.map (fun e -> sb.Append(String.Format("{0}\r\n", (textOf e)))) |> ignore
+                failwith (String.Format("cant find {0} in list {1}\r\ngot: {2}", value, cssSelector, sb.ToString()));
 
 let ( *!= ) (cssSelector : string) value =
     try
         wait compareTimeout (fun _ -> ( let elems = elements cssSelector
                                         elems |> Seq.exists(fun element -> (textOf element) = value) = false))
     with
-        | :? TimeoutException -> failwith (String.Format("found {0} in list {1}, expected not to", value, cssSelector));
-        | ex -> failwith ex.Message
+        | :? WebDriverTimeoutException -> failwith (String.Format("found {0} in list {1}, expected not to", value, cssSelector));
     
 let contains (value1 : string) (value2 : string) =
     if (value2.Contains(value1) <> true) then
@@ -377,8 +365,7 @@ let count cssSelector count =
         wait compareTimeout (fun _ -> ( let elems = elements cssSelector
                                         elems.Length = count))
     with
-        | :? TimeoutException -> failwith (String.Format("count failed. expected: {0} got: {1} ", count, (elements cssSelector).Length));
-        | ex -> failwith ex.Message
+        | :? WebDriverTimeoutException -> failwith (String.Format("count failed. expected: {0} got: {1} ", count, (elements cssSelector).Length));
 
 let private regexMatch pattern input = System.Text.RegularExpressions.Regex.Match(input, pattern).Success
 
@@ -392,19 +379,18 @@ let ( =~ ) cssSelector pattern =
     try
         wait compareTimeout (fun _ -> regexMatch pattern (read cssSelector))
     with
-        | :? TimeoutException -> failwith (String.Format("regex equality check failed.  expected: {0}, got: {1}", pattern, (read cssSelector)));
-        | ex -> failwith ex.Message
+        | :? WebDriverTimeoutException -> failwith (String.Format("regex equality check failed.  expected: {0}, got: {1}", pattern, (read cssSelector)));
 
 let ( *~ ) (cssSelector : string) pattern =
     try        
         wait compareTimeout (fun _ -> ( let elems = elements cssSelector
                                         elems |> Seq.exists(fun element -> regexMatch pattern (textOf element))))
     with
-        | :? TimeoutException -> let sb = new System.Text.StringBuilder()
-                                 let elems = elements cssSelector
-                                 elems |> List.map (fun e -> sb.Append(String.Format("{0}\r\n", (textOf e)))) |> ignore
-                                 failwith (String.Format("cant regex find {0} in list {1}\r\ngot: {2}", pattern, cssSelector, sb.ToString()));
-        | ex -> failwith ex.Message
+        | :? WebDriverTimeoutException -> 
+                let sb = new System.Text.StringBuilder()
+                let elems = elements cssSelector
+                elems |> List.map (fun e -> sb.Append(String.Format("{0}\r\n", (textOf e)))) |> ignore
+                failwith (String.Format("cant regex find {0} in list {1}\r\ngot: {2}", pattern, cssSelector, sb.ToString()));
 
 let is expected actual =
     if expected = actual then
@@ -424,45 +410,38 @@ let displayed cssSelector =
     try
         wait compareTimeout (fun _ ->  shown cssSelector = true)
     with
-        | :? TimeoutException -> failwith (String.Format("display checked for {0} failed.", cssSelector));
-        | ex -> failwith ex.Message
+        | :? WebDriverTimeoutException -> failwith (String.Format("display checked for {0} failed.", cssSelector));
 
 let notDisplayed cssSelector =
     try
         wait compareTimeout (fun _ -> shown cssSelector = false)
         ()
     with
-        | :? TimeoutException -> failwith (String.Format("notDisplay checked for {0} failed.", cssSelector));
-        | ex -> failwith ex.Message    
+        | :? WebDriverTimeoutException -> failwith (String.Format("notDisplay checked for {0} failed.", cssSelector));
 
 let fadedIn cssSelector = (fun _ -> shown cssSelector)
 
 //clicking/checking
-let click item = 
-    try
-        match box item with
-        | :? IWebElement as element -> element.Click()
-        | :? string as cssSelector ->         
-            wait elementTimeout (fun _ -> let elem = element cssSelector
-                                          elem.Click()
-                                          true)
-        | _ -> failwith (String.Format("Can't click {0} because it is not a string or webelement", item.ToString()))
-    with
-        | ex -> failwith ex.Message
-
+let click item =     
+    match box item with
+    | :? IWebElement as element -> element.Click()
+    | :? string as cssSelector ->         
+        wait elementTimeout (fun _ -> let elem = element cssSelector
+                                      elem.Click()
+                                      true)
+    | _ -> failwith (String.Format("Can't click {0} because it is not a string or webelement", item.ToString()))
+    
 let doubleClick item =
-    try
-        let js = "var evt = document.createEvent('MouseEvents'); evt.initMouseEvent('dblclick',true, true, window, 0, 0, 0, 0, 0, false, false, false, false, 0,null); arguments[0].dispatchEvent(evt);"
+    let js = "var evt = document.createEvent('MouseEvents'); evt.initMouseEvent('dblclick',true, true, window, 0, 0, 0, 0, 0, false, false, false, false, 0,null); arguments[0].dispatchEvent(evt);"
 
-        match box item with
-        | :? IWebElement as elem -> (browser :?> IJavaScriptExecutor).ExecuteScript(js, elem) |> ignore
-        | :? string as cssSelector ->         
-            wait elementTimeout (fun _ -> ( let elem = element cssSelector
-                                            (browser :?> IJavaScriptExecutor).ExecuteScript(js, elem) |> ignore
-                                            true))
-        | _ -> failwith (String.Format("Can't doubleClick {0} because it is not a string or webelement", item.ToString()))
-    with
-        | ex -> failwith ex.Message
+    match box item with
+    | :? IWebElement as elem -> (browser :?> IJavaScriptExecutor).ExecuteScript(js, elem) |> ignore
+    | :? string as cssSelector ->         
+        wait elementTimeout (fun _ -> ( let elem = element cssSelector
+                                        (browser :?> IJavaScriptExecutor).ExecuteScript(js, elem) |> ignore
+                                        true))
+    | _ -> failwith (String.Format("Can't doubleClick {0} because it is not a string or webelement", item.ToString()))
+
 
 let check cssSelector = if (element cssSelector).Selected = false then click cssSelector
 
