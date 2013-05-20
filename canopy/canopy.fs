@@ -21,6 +21,14 @@ type CanopyElementNotFoundException(message) = inherit CanopyException(message)
 type CanopyMoreThanOneElementFoundException(message) = inherit CanopyException(message)
 type CanopyEqualityFailedException(message) = inherit CanopyException(message)
 type CanopyNotEqualsFailedException(message) = inherit CanopyException(message)
+type CanopyValueNotInListException(message) = inherit CanopyException(message)
+type CanopyValueInListException(message) = inherit CanopyException(message)
+type CanopyContainsFailedException(message) = inherit CanopyException(message)
+type CanopyCountException(message) = inherit CanopyException(message)
+type CanopyDisplayedFailedException(message) = inherit CanopyException(message)
+type CanopyNotDisplayedFailedException(message) = inherit CanopyException(message)
+type CanopyNotStringOrElementException(message) = inherit CanopyException(message)
+type CanopyOnException(message) = inherit CanopyException(message)
 
 let mutable (browser : IWebDriver) = null;
 let mutable (failureMessage : string) = null
@@ -338,7 +346,7 @@ let ( == ) (item : 'a) value =
         with
             | :? WebDriverTimeoutException -> raise (CanopyEqualityFailedException(sprintf "equality check failed.  expected: %s, got: %s" value !bestvalue))
 
-    | _ -> raise (CanopyEqualityFailedException(sprintf "Can't check equality on %s because it is not a string or alert" (item.ToString())))
+    | _ -> raise (CanopyNotStringOrElementException(sprintf "Can't check equality on %s because it is not a string or alert" (item.ToString())))
 
 let ( != ) cssSelector value =
     try
@@ -355,18 +363,18 @@ let ( *= ) (cssSelector : string) value =
                 let sb = new System.Text.StringBuilder()
                 let elems = elements cssSelector
                 elems |> List.map (fun e -> sb.Append(String.Format("{0}\r\n", (textOf e)))) |> ignore
-                failwith (String.Format("cant find {0} in list {1}\r\ngot: {2}", value, cssSelector, sb.ToString()));
+                raise (CanopyValueNotInListException(sprintf "cant find %s in list %s\r\ngot: %s" value cssSelector (sb.ToString())))
 
 let ( *!= ) (cssSelector : string) value =
     try
         wait compareTimeout (fun _ -> ( let elems = elements cssSelector
                                         elems |> Seq.exists(fun element -> (textOf element) = value) = false))
     with
-        | :? WebDriverTimeoutException -> failwith (String.Format("found {0} in list {1}, expected not to", value, cssSelector));
+        | :? WebDriverTimeoutException -> raise (CanopyValueInListException(sprintf "found %s in list %s, expected not to" value cssSelector))
     
 let contains (value1 : string) (value2 : string) =
     if (value2.Contains(value1) <> true) then
-        failwith (String.Format("contains check failed.  {0} does not contain {1}", value2, value1));
+        raise (CanopyContainsFailedException(sprintf "contains check failed.  %s does not contain %s" value2 value1))
     ()
 
 let count cssSelector count =
@@ -374,7 +382,7 @@ let count cssSelector count =
         wait compareTimeout (fun _ -> ( let elems = elements cssSelector
                                         elems.Length = count))
     with
-        | :? WebDriverTimeoutException -> failwith (String.Format("count failed. expected: {0} got: {1} ", count, (elements cssSelector).Length));
+        | :? WebDriverTimeoutException -> raise (CanopyCountException(sprintf "count failed. expected: %i got: %i" count (elements cssSelector).Length));
 
 let private regexMatch pattern input = System.Text.RegularExpressions.Regex.Match(input, pattern).Success
 
@@ -388,7 +396,7 @@ let ( =~ ) cssSelector pattern =
     try
         wait compareTimeout (fun _ -> regexMatch pattern (read cssSelector))
     with
-        | :? WebDriverTimeoutException -> failwith (String.Format("regex equality check failed.  expected: {0}, got: {1}", pattern, (read cssSelector)));
+        | :? WebDriverTimeoutException -> raise (CanopyEqualityFailedException(sprintf "regex equality check failed.  expected: %s, got: %s" pattern (read cssSelector)))
 
 let ( *~ ) (cssSelector : string) pattern =
     try        
@@ -399,13 +407,13 @@ let ( *~ ) (cssSelector : string) pattern =
                 let sb = new System.Text.StringBuilder()
                 let elems = elements cssSelector
                 elems |> List.map (fun e -> sb.Append(String.Format("{0}\r\n", (textOf e)))) |> ignore
-                failwith (String.Format("cant regex find {0} in list {1}\r\ngot: {2}", pattern, cssSelector, sb.ToString()));
+                raise (CanopyValueNotInListException(sprintf "cant regex find %s in list %s\r\ngot: %s" pattern cssSelector (sb.ToString())))
 
 let is expected actual =
     if expected = actual then
         ()
     else
-        failwith (String.Format("equality check failed.  expected: {0}, got: {1}", expected, actual));
+        raise (CanopyEqualityFailedException(sprintf "equality check failed.  expected: %s, got: %s" (expected.ToString()) (actual.ToString())))
 
 let (===) expected actual = is expected actual
 
@@ -419,14 +427,14 @@ let displayed cssSelector =
     try
         wait compareTimeout (fun _ ->  shown cssSelector = true)
     with
-        | :? WebDriverTimeoutException -> failwith (String.Format("display checked for {0} failed.", cssSelector));
+        | :? WebDriverTimeoutException -> raise (CanopyDisplayedFailedException(sprintf "display checked for %s failed." cssSelector))
 
 let notDisplayed cssSelector =
     try
         wait compareTimeout (fun _ -> shown cssSelector = false)
         ()
     with
-        | :? WebDriverTimeoutException -> failwith (String.Format("notDisplay checked for {0} failed.", cssSelector));
+        | :? WebDriverTimeoutException -> raise (CanopyNotDisplayedFailedException(sprintf "notDisplay checked for %s failed." cssSelector));
 
 let fadedIn cssSelector = (fun _ -> shown cssSelector)
 
@@ -438,7 +446,7 @@ let click item =
         wait elementTimeout (fun _ -> let elem = element cssSelector
                                       elem.Click()
                                       true)
-    | _ -> failwith (String.Format("Can't click {0} because it is not a string or webelement", item.ToString()))
+    | _ -> raise (CanopyNotStringOrElementException(sprintf "Can't click %s because it is not a string or webelement" (item.ToString())))
     
 let doubleClick item =
     let js = "var evt = document.createEvent('MouseEvents'); evt.initMouseEvent('dblclick',true, true, window, 0, 0, 0, 0, 0, false, false, false, false, 0,null); arguments[0].dispatchEvent(evt);"
@@ -449,7 +457,7 @@ let doubleClick item =
         wait elementTimeout (fun _ -> ( let elem = element cssSelector
                                         (browser :?> IJavaScriptExecutor).ExecuteScript(js, elem) |> ignore
                                         true))
-    | _ -> failwith (String.Format("Can't doubleClick {0} because it is not a string or webelement", item.ToString()))
+    | _ -> raise (CanopyNotStringOrElementException(sprintf "Can't doubleClick %s because it is not a string or webelement" (item.ToString())))
 
 
 let check cssSelector = if (element cssSelector).Selected = false then click cssSelector
@@ -519,7 +527,7 @@ let on (u: string) =
     try
         wait pageTimeout (fun _ -> (browser.Url.Contains(u)))
     with
-        | ex -> failwith (String.Format("on check failed, expected {0} got {1}", u, browser.Url));
+        | ex -> raise (CanopyOnException(sprintf "on check failed, expected %s got %s" u browser.Url));
     ()
 
 let ( !^ ) (u : string) = browser.Navigate().GoToUrl(u)
