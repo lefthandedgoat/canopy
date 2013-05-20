@@ -5,6 +5,7 @@ open OpenQA.Selenium.Firefox
 open OpenQA.Selenium
 open OpenQA.Selenium.Support.UI
 open OpenQA.Selenium.Interactions
+open Microsoft.FSharp.Core.Printf
 open System.IO
 open System
 open configuration
@@ -52,8 +53,9 @@ let failsWith message = failureMessage <- message
 
 let screenshot directory filename =
     let pic = (browser :?> ITakesScreenshot).GetScreenshot().AsByteArray
-    if Directory.Exists(directory) = false then Directory.CreateDirectory(directory) |> ignore
-    IO.File.WriteAllBytes(directory + filename + ".png", pic)
+    if not <| Directory.Exists(directory) 
+        then Directory.CreateDirectory(directory) |> ignore
+    IO.File.WriteAllBytes(Path.Combine(directory,filename + ".png"), pic)
     pic
     
 let js script = (browser :?> IJavaScriptExecutor).ExecuteScript(script)
@@ -69,7 +71,12 @@ let puts (text : string) =
     reporter.write text
     let escapedText = text.Replace("'", @"\'");
     let info = "
-        var infoDiv = document.getElementById('canopy_info_div'); if(!infoDiv) { infoDiv = document.createElement('div'); } infoDiv.id = 'canopy_info_div'; infoDiv.setAttribute('style','position: absolute; border: 1px solid black; bottom: 0px; right: 0px; margin: 3px; padding: 3px; background-color: white; z-index: 99999; font-size: 20px; font-family: monospace; font-weight: bold;'); document.getElementsByTagName('body')[0].appendChild(infoDiv); infoDiv.innerHTML = 'locating: " + escapedText + "';";
+        var infoDiv = document.getElementById('canopy_info_div'); 
+        if(!infoDiv) { infoDiv = document.createElement('div'); } 
+        infoDiv.id = 'canopy_info_div'; 
+        infoDiv.setAttribute('style','position: absolute; border: 1px solid black; bottom: 0px; right: 0px; margin: 3px; padding: 3px; background-color: white; z-index: 99999; font-size: 20px; font-family: monospace; font-weight: bold;'); 
+        document.getElementsByTagName('body')[0].appendChild(infoDiv); 
+        infoDiv.innerHTML = 'locating: " + escapedText + "';";
     swallowedJs info
 
 let private wait timeout f =
@@ -78,7 +85,7 @@ let private wait timeout f =
                             try
                                 (f ()) = true
                             with
-                            | :? CanopyException as ce -> failwith ce.Message
+                            | :? CanopyException as ce -> raise(ce)
                             | _ -> false
                         )
                 ) |> ignore        
@@ -86,11 +93,12 @@ let private wait timeout f =
 
 let private colorizeAndSleep cssSelector =
     puts cssSelector
-    swallowedJs (System.String.Format("document.querySelector('{0}').style.border = 'thick solid #FFF467';", cssSelector))
+    swallowedJs <| sprintf "document.querySelector('%s').style.border = 'thick solid #FFF467';" cssSelector
     sleep wipSleep    
-    swallowedJs (System.String.Format("document.querySelector('{0}').style.border = 'thick solid #ACD372';", cssSelector))
+    swallowedJs <| sprintf "document.querySelector('%s').style.border = 'thick solid #ACD372';" cssSelector
 
-let highlight (cssSelector : string) = swallowedJs (System.String.Format("document.querySelector('{0}').style.border = 'thick solid #ACD372';", cssSelector))
+let highlight (cssSelector : string) = 
+    swallowedJs <| sprintf "document.querySelector('%s').style.border = 'thick solid #ACD372';" cssSelector
 
 let suggestOtherSelectors (cssSelector : string) =     
     if not disableSuggestOtherSelectors then
@@ -108,11 +116,10 @@ let suggestOtherSelectors (cssSelector : string) =
 
 let describe (text : string) =
     puts text
-    ()
 
 let waitFor (f : unit -> bool) =
     try        
-        wait compareTimeout (fun _ -> (f ()))
+        wait compareTimeout f
     with
         | :? WebDriverTimeoutException -> 
                 puts "Condition not met in given amount of time. If you want to increase the time, put compareTimeout <- 10.0 anywhere before a test to increase the timeout"
@@ -139,21 +146,16 @@ let private findByLabel locator f =
     let firstFollowingField (label : IWebElement) =
         let followingElements = label.FindElements(By.XPath("./following-sibling::*[1]")) |> Seq.toList
         match followingElements with
-            | head :: tail -> 
-                if isField head then
-                    [head]
-                else
-                    []
-            | [] -> []
+            | head :: tail when isField head-> [head]
+            | _ -> []
     try
         let label = browser.FindElement(By.XPath(sprintf ".//label[text() = '%s']" locator))
         if (label = null) then
             []
         else
-            let id = label.GetAttribute("for")
-            match id with
-                | null -> firstFollowingField label
-                | id -> [f(By.Id(id))]
+            match label.GetAttribute("for") with
+            | null -> firstFollowingField label
+            | id -> [f(By.Id(id))]
     with | _ -> []
 
 let private findByText text f =
@@ -181,23 +183,15 @@ let rec private findElements (cssSelector : string) (searchContext : ISearchCont
             !webElements
 
     try
-        let cssResult = findByCss cssSelector searchContext.FindElements
-        if cssResult.IsEmpty = false then
-            cssResult
-        else            
-            let labelResult = findByLabel cssSelector searchContext.FindElement
-            if labelResult.IsEmpty = false then
-                labelResult
-            else
-                let textResult = findByText cssSelector searchContext.FindElements
-                if textResult.IsEmpty = false then
-                    textResult
-                else
-                    let xpathResult = findByXpath cssSelector searchContext.FindElements
-                    if xpathResult.IsEmpty = false then
-                        xpathResult
-                    else
-                        findInIFrame()
+        seq {
+            yield (findByCss    cssSelector searchContext.FindElements)
+            yield (findByLabel  cssSelector searchContext.FindElement)
+            yield (findByText   cssSelector searchContext.FindElements)
+            yield (findByXpath  cssSelector searchContext.FindElements)
+            yield (findInIFrame())
+        }
+        |> Seq.filter(fun list -> not(list.IsEmpty))
+        |> Seq.head
     with | ex -> []
 
 let private findByFunction cssSelector (timeout : float) waitFunc (searchContext : ISearchContext) =
@@ -206,9 +200,10 @@ let private findByFunction cssSelector (timeout : float) waitFunc (searchContext
     try
         wait.Until(fun _ -> waitFunc cssSelector searchContext)        
     with
-        | :? WebDriverTimeoutException ->   puts "Element not found in the allotted time. If you want to increase the time, put elementTimeout <- 10.0 anywhere before a test to increase the timeout"
-                                            suggestOtherSelectors cssSelector
-                                            raise (CanopyElementNotFoundException(sprintf "cant find element %s" cssSelector))
+        | :? WebDriverTimeoutException ->   
+            puts "Element not found in the allotted time. If you want to increase the time, put elementTimeout <- 10.0 anywhere before a test to increase the timeout"
+            suggestOtherSelectors cssSelector
+            raise (CanopyElementNotFoundException(sprintf "cant find element %s" cssSelector))
 
 let private find (cssSelector : string) (timeout : float) (searchContext : ISearchContext) =
     (findByFunction cssSelector timeout findElements searchContext).Head
@@ -252,10 +247,9 @@ let private writeToSelect cssSelector text =
     let elem = element cssSelector
     let options = Seq.toList (elem.FindElements(By.TagName("option")))
     let option = options |> List.filter (fun e -> e.Text = text)
-    if option = [] then
-        raise (CanopyOptionNotFoundException(sprintf "element %s does not contain value %s" cssSelector text))
-    else
-        option.Head.Click()
+    match option with
+    | [] -> raise (CanopyOptionNotFoundException(sprintf "element %s does not contain value %s" cssSelector text))
+    | head::tail -> head.Click()
 
 let ( << ) cssSelector (text : string) = 
     wait (elementTimeout + 1.0) (fun _ ->
@@ -274,14 +268,15 @@ let ( << ) cssSelector (text : string) =
         true)
 
 let private textOf (element : IWebElement) =
-    if element.TagName = "input" then
+    match element.TagName  with
+    | "input" ->
         element.GetAttribute("value")
-    else if element.TagName = "select" then
+    | "select" ->
         let value = element.GetAttribute("value")
         let options = Seq.toList (element.FindElements(By.TagName("option")))
         let option = options |> List.filter (fun e -> e.GetAttribute("value") = value)
         option.Head.Text
-    else
+    | _ ->
         element.Text    
 
 let read (cssSelector : string) =    
@@ -298,13 +293,13 @@ let clear (cssSelector : string) =
 //status
 let selected (cssSelector : string) = 
     let elem = element cssSelector
-    if elem.Selected = false then
-        raise (CanopySelectionFailedExeception(sprintf "element selected failed, %s not selected." cssSelector))    
+    if not <| elem.Selected then
+        raise (CanopySelectionFailedExeception(sprintf "element selected failed, %s not selected." cssSelector))
     
-let deselected (cssSelector : string) =     
-        let elem = element cssSelector
-        if elem.Selected then
-            raise (CanopyDeselectionFailedException(sprintf "element deselected failed, %s selected." cssSelector))
+let deselected (cssSelector : string) = 
+    let elem = element cssSelector
+    if elem.Selected then
+        raise (CanopyDeselectionFailedException(sprintf "element deselected failed, %s selected." cssSelector))
 
 //keyboard
 let tab = Keys.Tab
@@ -321,19 +316,18 @@ let press key =
 //alerts
 let alert() = browser.SwitchTo().Alert()
 
-let acceptAlert _ = browser.SwitchTo().Alert().Accept()
+let acceptAlert() = browser.SwitchTo().Alert().Accept()
 
-let dismissAlert _ = browser.SwitchTo().Alert().Dismiss()
+let dismissAlert() = browser.SwitchTo().Alert().Dismiss()
     
 //assertions    
 let ( == ) (item : 'a) value =
     match box item with
-    | :? IAlert as alert -> let text = alert.Text
-                            if text = value then   
-                                ()           
-                            else
-                                alert.Dismiss()
-                                raise (CanopyEqualityFailedException(sprintf "equality check failed.  expected: %s, got: %s" value text))
+    | :? IAlert as alert -> 
+        let text = alert.Text
+        if text <> value then   
+            alert.Dismiss()
+            raise (CanopyEqualityFailedException(sprintf "equality check failed.  expected: %s, got: %s" value text))
     | :? string as cssSelector -> 
         let bestvalue = ref ""
         try
@@ -346,7 +340,7 @@ let ( == ) (item : 'a) value =
         with
             | :? WebDriverTimeoutException -> raise (CanopyEqualityFailedException(sprintf "equality check failed.  expected: %s, got: %s" value !bestvalue))
 
-    | _ -> raise (CanopyNotStringOrElementException(sprintf "Can't check equality on %s because it is not a string or alert" (item.ToString())))
+    | _ -> raise (CanopyNotStringOrElementException(sprintf "Can't check equality on %O because it is not a string or alert" item))
 
 let ( != ) cssSelector value =
     try
@@ -356,26 +350,22 @@ let ( != ) cssSelector value =
         
 let ( *= ) (cssSelector : string) value =
     try        
-        wait compareTimeout (fun _ -> ( let elems = elements cssSelector
-                                        elems |> Seq.exists(fun element -> (textOf element) = value)))
+        wait compareTimeout (fun _ -> ( cssSelector |> elements |> Seq.exists(fun element -> (textOf element) = value)))
     with
         | :? WebDriverTimeoutException -> 
                 let sb = new System.Text.StringBuilder()
-                let elems = elements cssSelector
-                elems |> List.map (fun e -> sb.Append(String.Format("{0}\r\n", (textOf e)))) |> ignore
+                cssSelector |> elements |> List.iter (fun e -> bprintf sb "%s\r\n" (textOf e))
                 raise (CanopyValueNotInListException(sprintf "cant find %s in list %s\r\ngot: %s" value cssSelector (sb.ToString())))
 
 let ( *!= ) (cssSelector : string) value =
     try
-        wait compareTimeout (fun _ -> ( let elems = elements cssSelector
-                                        elems |> Seq.exists(fun element -> (textOf element) = value) = false))
+        wait compareTimeout (fun _ -> ( cssSelector |> elements |> Seq.exists(fun element -> (textOf element) = value) |> not))
     with
         | :? WebDriverTimeoutException -> raise (CanopyValueInListException(sprintf "found %s in list %s, expected not to" value cssSelector))
     
 let contains (value1 : string) (value2 : string) =
     if (value2.Contains(value1) <> true) then
         raise (CanopyContainsFailedException(sprintf "contains check failed.  %s does not contain %s" value2 value1))
-    ()
 
 let count cssSelector count =
     try        
@@ -400,20 +390,16 @@ let ( =~ ) cssSelector pattern =
 
 let ( *~ ) (cssSelector : string) pattern =
     try        
-        wait compareTimeout (fun _ -> ( let elems = elements cssSelector
-                                        elems |> Seq.exists(fun element -> regexMatch pattern (textOf element))))
+        wait compareTimeout (fun _ -> ( cssSelector |> elements |> Seq.exists(fun element -> regexMatch pattern (textOf element))))
     with
         | :? WebDriverTimeoutException -> 
                 let sb = new System.Text.StringBuilder()
-                let elems = elements cssSelector
-                elems |> List.map (fun e -> sb.Append(String.Format("{0}\r\n", (textOf e)))) |> ignore
+                cssSelector |> elements |> List.iter (fun e -> bprintf sb "%s\r\n" (textOf e))
                 raise (CanopyValueNotInListException(sprintf "cant regex find %s in list %s\r\ngot: %s" pattern cssSelector (sb.ToString())))
 
 let is expected actual =
-    if expected = actual then
-        ()
-    else
-        raise (CanopyEqualityFailedException(sprintf "equality check failed.  expected: %s, got: %s" (expected.ToString()) (actual.ToString())))
+    if expected <> actual then
+        raise (CanopyEqualityFailedException(sprintf "equality check failed.  expected: %O, got: %O" expected actual))
 
 let (===) expected actual = is expected actual
 
@@ -425,13 +411,13 @@ let private shown cssSelector =
        
 let displayed cssSelector =
     try
-        wait compareTimeout (fun _ ->  shown cssSelector = true)
+        wait compareTimeout (fun _ -> shown cssSelector)
     with
         | :? WebDriverTimeoutException -> raise (CanopyDisplayedFailedException(sprintf "display checked for %s failed." cssSelector))
 
 let notDisplayed cssSelector =
     try
-        wait compareTimeout (fun _ -> shown cssSelector = false)
+        wait compareTimeout (fun _ -> not(shown cssSelector))
         ()
     with
         | :? WebDriverTimeoutException -> raise (CanopyNotDisplayedFailedException(sprintf "notDisplay checked for %s failed." cssSelector));
@@ -446,7 +432,7 @@ let click item =
         wait elementTimeout (fun _ -> let elem = element cssSelector
                                       elem.Click()
                                       true)
-    | _ -> raise (CanopyNotStringOrElementException(sprintf "Can't click %s because it is not a string or webelement" (item.ToString())))
+    | _ -> raise (CanopyNotStringOrElementException(sprintf "Can't click %O because it is not a string or webelement" item))
     
 let doubleClick item =
     let js = "var evt = document.createEvent('MouseEvents'); evt.initMouseEvent('dblclick',true, true, window, 0, 0, 0, 0, 0, false, false, false, false, 0,null); arguments[0].dispatchEvent(evt);"
@@ -457,22 +443,22 @@ let doubleClick item =
         wait elementTimeout (fun _ -> ( let elem = element cssSelector
                                         (browser :?> IJavaScriptExecutor).ExecuteScript(js, elem) |> ignore
                                         true))
-    | _ -> raise (CanopyNotStringOrElementException(sprintf "Can't doubleClick %s because it is not a string or webelement" (item.ToString())))
+    | _ -> raise (CanopyNotStringOrElementException(sprintf "Can't doubleClick %O because it is not a string or webelement" item))
 
 
-let check cssSelector = if (element cssSelector).Selected = false then click cssSelector
+let check cssSelector = if not <| (element cssSelector).Selected then click cssSelector
 
-let uncheck cssSelector = if (element cssSelector).Selected = true then click cssSelector
+let uncheck cssSelector = if (element cssSelector).Selected then click cssSelector
 
 //draggin
-let (>>) cssSelectorA cssSelectorB =
+let (-->) cssSelectorA cssSelectorB =
     wait elementTimeout (fun _ ->
         let a = element cssSelectorA
         let b = element cssSelectorB
         (new Actions(browser)).DragAndDrop(a, b).Perform()
         true)
 
-let drag cssSelectorA cssSelectorB = cssSelectorA >> cssSelectorB
+let drag cssSelectorA cssSelectorB = cssSelectorA --> cssSelectorB
     
 //browser related
 let pin direction =   
@@ -521,22 +507,21 @@ let quit browser =
     | :? OpenQA.Selenium.IWebDriver as b -> b.Quit()
     | _ -> browsers |> List.iter (fun b -> b.Quit())
 
-let currentUrl _ = browser.Url
+let currentUrl() = browser.Url
 
 let on (u: string) = 
     try
         wait pageTimeout (fun _ -> (browser.Url.Contains(u)))
     with
         | ex -> raise (CanopyOnException(sprintf "on check failed, expected %s got %s" u browser.Url));
-    ()
 
 let ( !^ ) (u : string) = browser.Navigate().GoToUrl(u)
 
-let url (u : string) = !^ u
+let url u = !^ u
 
-let title _ = browser.Title
+let title() = browser.Title
 
-let reload _ = url (currentUrl ())
+let reload = currentUrl >> url
 
 let coverage url =
     let selectors = 
@@ -555,7 +540,7 @@ let coverage url =
     !^ url
     on url
     selectors |> List.iter(fun cssSelector -> swallowedJs (script cssSelector))
-    let p = Environment.GetFolderPath(Environment.SpecialFolder.ApplicationData) + @"\canopy\"
+    let p = Path.Combine(Environment.GetFolderPath(Environment.SpecialFolder.ApplicationData), @"\canopy\")
     let f = DateTime.Now.ToString("MMM-d_HH-mm-ss-fff")
     let ss = screenshot p f
     reporter.coverage url ss

@@ -397,7 +397,7 @@ context "dragging"
     click ".plus-button a img"
     "#task_title" << "Demo"
     click "#task_editor_buttons .save_button"
-    ".handle" >> ".inprogress")
+    ".handle" --> ".inprogress")
 
 context "tiling windows"
 "start multiple browsers and tile them" &&& (fun _ ->
