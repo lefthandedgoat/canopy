@@ -12,6 +12,15 @@ open levenshtein
 open reporters
 
 type CanopyException(message) = inherit Exception(message)
+type CanopyReadOnlyException(message) = inherit CanopyException(message)
+type CanopyOptionNotFoundException(message) = inherit CanopyException(message)
+type CanopySelectionFailedExeception(message) = inherit CanopyException(message)
+type CanopyDeselectionFailedException(message) = inherit CanopyException(message)
+type CanopyWaitForException(message) = inherit CanopyException(message)
+type CanopyElementNotFoundException(message) = inherit CanopyException(message)
+type CanopyMoreThanOneElementFoundException(message) = inherit CanopyException(message)
+type CanopyEqualityFailedException(message) = inherit CanopyException(message)
+type CanopyNotEqualsFailedException(message) = inherit CanopyException(message)
 
 let mutable (browser : IWebDriver) = null;
 let mutable (failureMessage : string) = null
@@ -99,7 +108,7 @@ let waitFor (f : unit -> bool) =
     with
         | :? WebDriverTimeoutException -> 
                 puts "Condition not met in given amount of time. If you want to increase the time, put compareTimeout <- 10.0 anywhere before a test to increase the timeout"
-                failwith (String.Format("waitFor condition failed to become true in {0} seconds", compareTimeout))
+                raise (CanopyWaitForException(sprintf "waitFor condition failed to become true in %.1f seconds" compareTimeout))
 
 //find related
 let private findByCss cssSelector f =
@@ -191,7 +200,7 @@ let private findByFunction cssSelector (timeout : float) waitFunc (searchContext
     with
         | :? WebDriverTimeoutException ->   puts "Element not found in the allotted time. If you want to increase the time, put elementTimeout <- 10.0 anywhere before a test to increase the timeout"
                                             suggestOtherSelectors cssSelector
-                                            failwith (String.Format("cant find element {0}", cssSelector))
+                                            raise (CanopyElementNotFoundException(sprintf "cant find element %s" cssSelector))
 
 let private find (cssSelector : string) (timeout : float) (searchContext : ISearchContext) =
     (findByFunction cssSelector timeout findElements searchContext).Head
@@ -204,7 +213,7 @@ let private someElementFromList cssSelector elementsList =
     match elementsList with
     | [x] -> Some(x)
     | [] -> None
-    | _ -> failwith ("More than one element was selected when only one was expected for selector: " + cssSelector)
+    | _ -> raise (CanopyMoreThanOneElementFoundException(sprintf "More than one element was selected when only one was expected for selector: %s" cssSelector))
     
 let element cssSelector = find cssSelector elementTimeout browser
 
@@ -236,7 +245,7 @@ let private writeToSelect cssSelector text =
     let options = Seq.toList (elem.FindElements(By.TagName("option")))
     let option = options |> List.filter (fun e -> e.Text = text)
     if option = [] then
-        failwith (String.Format("element {0} does not contain value {1}", cssSelector, text))        
+        raise (CanopyOptionNotFoundException(sprintf "element %s does not contain value %s" cssSelector text))
     else
         option.Head.Click()
 
@@ -249,7 +258,7 @@ let ( << ) cssSelector (text : string) =
             else
                 let readonly = e.GetAttribute("readonly")
                 if readonly = "true" then
-                    raise (CanopyException((String.Format("element {0} is marked as read only, you can not write to read only elements", cssSelector))))
+                    raise (CanopyReadOnlyException(sprintf "element %s is marked as read only, you can not write to read only elements" cssSelector))
                 try e.Clear() with ex -> ex |> ignore
                 e.SendKeys(text)
 
@@ -275,19 +284,19 @@ let clear (cssSelector : string) =
     let elem = element cssSelector
     let readonly = elem.GetAttribute("readonly")
     if readonly = "true" then
-        failwith (String.Format("element {0} is marked as read only, you can not clear read only elements", cssSelector))        
+        raise (CanopyReadOnlyException(sprintf "element %s is marked as read only, you can not clear read only elements" cssSelector))
     elem.Clear()
 
 //status
 let selected (cssSelector : string) = 
     let elem = element cssSelector
     if elem.Selected = false then
-        failwith (String.Format("element selected failed, {0} not selected.", cssSelector));    
+        raise (CanopySelectionFailedExeception(sprintf "element selected failed, %s not selected." cssSelector))    
     
 let deselected (cssSelector : string) =     
         let elem = element cssSelector
         if elem.Selected then
-            failwith (String.Format("element deselected failed, {0} selected.", cssSelector));    
+            raise (CanopyDeselectionFailedException(sprintf "element deselected failed, %s selected." cssSelector))
 
 //keyboard
 let tab = Keys.Tab
@@ -316,7 +325,7 @@ let ( == ) (item : 'a) value =
                                 ()           
                             else
                                 alert.Dismiss()
-                                failwith (String.Format("equality check failed.  expected: {0}, got: {1}", value, text));                                
+                                raise (CanopyEqualityFailedException(sprintf "equality check failed.  expected: %s, got: %s" value text))
     | :? string as cssSelector -> 
         let bestvalue = ref ""
         try
@@ -327,15 +336,15 @@ let ( == ) (item : 'a) value =
                                             else
                                                 readvalue = value))
         with
-            | :? WebDriverTimeoutException -> failwith (String.Format("equality check failed.  expected: {0}, got: {1}", value, !bestvalue));
+            | :? WebDriverTimeoutException -> raise (CanopyEqualityFailedException(sprintf "equality check failed.  expected: %s, got: %s" value !bestvalue))
 
-    | _ -> failwith (String.Format("Can't check equality on {0} because it is not a string or alert", item.ToString()))
+    | _ -> raise (CanopyEqualityFailedException(sprintf "Can't check equality on %s because it is not a string or alert" (item.ToString())))
 
 let ( != ) cssSelector value =
     try
         wait compareTimeout (fun _ -> (read cssSelector) <> value)
     with
-        | :? WebDriverTimeoutException -> failwith (String.Format("not equals check failed.  expected NOT: {0}, got: {1}", value, (read cssSelector)));
+        | :? WebDriverTimeoutException -> raise (CanopyNotEqualsFailedException(sprintf "not equals check failed.  expected NOT: %s, got: %s" value (read cssSelector)))
         
 let ( *= ) (cssSelector : string) value =
     try        
