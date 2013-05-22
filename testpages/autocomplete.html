@@ -22,14 +22,18 @@
       }
 
       function search(results) {
-        $.getJSON('/search', function(data) { 
-          for(var i = 0; i < data.results.length; i++) {
-            var row = $("<tr><td>" + data.results[i].first_name + " " + data.results[i].last_name + "</td></tr>");
+	  setTimeout(function () { $("#wait_for").html("Done!"); 
+		var data = [
+			{ first_name: "Jane", last_name: "Doe" },
+			{ first_name: "John", last_name: "Smith" }
+		]
+		for(var i = 0; i < data.length; i++) {
+            var row = $("<tr><td>" + data[i].first_name + " " + data[i].last_name + "</td></tr>");
             row.click(function() { $("#console").html("worked"); });
             results.append(row);
-          }
-          results.css({ display: "block" });
-        });
+		}
+		results.css({ display: "block" });
+	  }, 2000)        
       }
     </script>
   </body>
