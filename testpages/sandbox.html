@@ -1,0 +1,19 @@
+<html>
+  <head>
+    <title>sandbox</title>
+    <script src="http://code.jquery.com/jquery-1.9.1.min.js"></script>
+  </head>
+  <body>
+    <div id="canopy_info_div"></div>
+    <script>
+      $(function() {
+        var infoDiv = document.getElementById('canopy_info_div');
+        if(!infoDiv) { infoDiv = document.createElement('div'); }
+        infoDiv.id = 'canopy_info_div'
+        infoDiv.setAttribute('style','position: absolute; border: 1px solid black; left: 0px; top: 0px; margin: 3px; padding: 3px; background-color: white; z-index: 99999'); 
+        document.getElementsByTagName('body')[0].appendChild(infoDiv);
+        infoDiv.innerHTML = "some css selector"
+      });
+    </script>
+  </body>
+</html>
