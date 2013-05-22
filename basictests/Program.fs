@@ -19,7 +19,7 @@ before (fun _ -> Console.WriteLine "before")
 after (fun _ -> Console.WriteLine "after")
 lastly (fun _ -> Console.WriteLine "lastly")
  
-let testpage = "http://localhost:4567/" 
+let testpage = "http://lefthandedgoat.github.io/canopy/testpages/" 
 
 "intentionally skipped shows blue in LiveHtmlReport" &&! skipped
 
@@ -174,26 +174,26 @@ test (fun _ ->
     deselected "#checkbox")
 
 "element within only searching within the element" &&& (fun _ ->
-    url "http://localhost:4567/elementWithin"
+    url "http://lefthandedgoat.github.io/canopy/testpages/elementWithin"
     count ".item" 5
     "spanned item 4" === (element "span" |> elementWithin ".item").Text)
 
 "elements within only searching within element" &&& (fun _ ->
-    url "http://localhost:4567/elementWithin"
+    url "http://lefthandedgoat.github.io/canopy/testpages/elementWithin"
     count ".item" 5
     2 === (element "span" |> elementsWithin ".item" |> List.length))
 
 "someElementWithin only searching within element" &&& (fun _ ->
-    url "http://localhost:4567/elementWithin"
+    url "http://lefthandedgoat.github.io/canopy/testpages/elementWithin"
     count ".item" 5
     true === (element "span" |> someElementWithin ".specialItem").IsSome)
 
 "parent of firstItem and secondItem is list" &&& (fun _ ->
-    url "http://localhost:4567/parent"
+    url "http://lefthandedgoat.github.io/canopy/testpages/parent"
     "list" === (element "#firstItem" |> parent).GetAttribute("id"))
 
 "some parent of firstItem and secondItem is list" &&& (fun _ ->
-    url "http://localhost:4567/parent"
+    url "http://lefthandedgoat.github.io/canopy/testpages/parent"
     true === (element "#firstItem" |> someParent).IsSome
     "list" === (element "#firstItem" |> someParent).Value.GetAttribute("id"))
 
@@ -252,7 +252,7 @@ before (fun _ -> Console.WriteLine "only before set now")
     press down)
 
 "click polling" &&& (fun _ -> 
-    url "http://localhost:4567/autocomplete"
+    url "http://lefthandedgoat.github.io/canopy/testpages/autocomplete"
     click "#search"
     click "table tr td"
     "#console" == "worked")
@@ -266,12 +266,12 @@ before (fun _ -> Console.WriteLine "only before set now")
 
 "readonly should throw error on read only field with clear" &&& (fun _ ->
     failsWith "element #read_only is marked as read only, you can not clear read only elements"
-    !^ "http://localhost:4567/readonly"    
+    !^ "http://lefthandedgoat.github.io/canopy/testpages/readonly"    
     clear "#read_only")
         
 "readonly should throw error on read only field with write" &&& (fun _ ->
     failsWith "element #read_only is marked as read only, you can not write to read only elements"
-    !^ "http://localhost:4567/readonly"    
+    !^ "http://lefthandedgoat.github.io/canopy/testpages/readonly"    
     "#read_only" << "new text")
 
 "when value is wrong and changes to empty string prior to time out, it should show wrong value, not empty string" &&& (fun _ ->
@@ -280,7 +280,7 @@ before (fun _ -> Console.WriteLine "only before set now")
     "#firstName" == "John1")
 
 context "alert tests"
-before (fun _ -> !^ "http://localhost:4567/alert")
+before (fun _ -> !^ "http://lefthandedgoat.github.io/canopy/testpages/alert")
 
 "alert box should have 'Alert Test'" &&& (fun _ ->    
     click "#alert_test"
@@ -318,22 +318,22 @@ context "other tests"
     let pageLoaded () = 
         (element "#wait_for").Text = "Done!"
     
-    !^ "http://localhost:4567/waitFor"
+    !^ "http://lefthandedgoat.github.io/canopy/testpages/waitFor"
     waitFor pageLoaded
     "#wait_for" == "Done!")
 
 "another example of another wait for, waiting on opacity to be 100% before clicking" &&& (fun _ ->
     compareTimeout <- 10.0
-    !^ "http://localhost:4567/noClickTilVisible"
+    !^ "http://lefthandedgoat.github.io/canopy/testpages/noClickTilVisible"
     waitFor (fadedIn "#link")
     click "#link"
-    on "http://localhost:4567/home")
+    on "http://lefthandedgoat.github.io/canopy/testpages/home")
 
 "define a custom wait for using any function that takes in unit and returns bool, example using lists" &&& (fun _ ->
     let fiveNumbersShown () = 
         (elements ".number").Length = 5
     
-    !^ "http://localhost:4567/waitFor"
+    !^ "http://lefthandedgoat.github.io/canopy/testpages/waitFor"
     waitFor fiveNumbersShown
     (elements ".number").Length === 5)
 
@@ -366,29 +366,29 @@ context "other tests"
     "#item_list" == "Item 2")
 
 "double clicking" &&& (fun _ ->
-    !^ "http://localhost:4567/doubleClick"
+    !^ "http://lefthandedgoat.github.io/canopy/testpages/doubleClick"
     "#clicked" == "Not Clicked"
     doubleClick "#double_click"
     "#clicked" == "Clicked")
 
 "displayed test" &&& (fun _ ->
-    !^ "http://localhost:4567/displayed"
+    !^ "http://lefthandedgoat.github.io/canopy/testpages/displayed"
     displayed "#displayed")
 
 "displayed test2" &&& (fun _ ->
-    !^ "http://localhost:4567/displayed"
+    !^ "http://lefthandedgoat.github.io/canopy/testpages/displayed"
     waitFor (fun _ -> (element "#displayed").Displayed))
 
 "displayed test3" &&& (fun _ ->
-    !^ "http://localhost:4567/waitFor"
+    !^ "http://lefthandedgoat.github.io/canopy/testpages/waitFor"
     waitFor (fun _ -> (element "#wait_for_2").Displayed))
 
 "notDisplayed test" &&& (fun _ ->
-    !^ "http://localhost:4567/notDisplayed"
+    !^ "http://lefthandedgoat.github.io/canopy/testpages/notDisplayed"
     notDisplayed "#notDisplayed")
 
 "count test" &&& (fun _ ->
-    !^ "http://localhost:4567/count"
+    !^ "http://lefthandedgoat.github.io/canopy/testpages/count"
     count ".number" 5)
 
 context "dragging"
