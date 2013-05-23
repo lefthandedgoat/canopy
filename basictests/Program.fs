@@ -410,6 +410,7 @@ context "tiling windows"
     sleep 1
     quit browser2
     quit browser1
+    switchTo mainBrowser
 )
 
 context "todo tests"
