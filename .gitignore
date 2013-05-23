@@ -13,4 +13,8 @@ demotests/bin/**/*
 demotests/obj/**/*
 documentationtests/bin/**/*
 documentationtests/obj/**/*
+tools/*
+nuget/*
+build/*
+tests/*
 *.suo
