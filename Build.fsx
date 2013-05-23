@@ -63,6 +63,10 @@ Target "CleanNuGet" (fun _ ->
 // Create NuGet package
 Target "CreateNuGet" (fun _ ->     
     XCopy @".\build\" (nugetDir @@ "lib")
+    !+ @"nuget/lib/*.*"
+        -- @"nuget/lib/canopy*.*"
+        |> ScanImmediately
+        |> Seq.iter (System.IO.File.Delete)
 
     "canopy.nuspec"
       |> NuGet (fun p -> 
