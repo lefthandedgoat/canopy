@@ -40,6 +40,7 @@ let mutable searchedFor : (string * string) list = []
 type direction =
     | Left
     | Right
+    | FullScreen
 
 //browser
 let firefox = "firefox"
@@ -469,6 +470,7 @@ let pin direction =
     match direction with
     | Left -> browser.Manage().Window.Position <- new System.Drawing.Point((maxWidth * 0),0);   
     | Right -> browser.Manage().Window.Position <- new System.Drawing.Point((maxWidth * 1),0);   
+    | FullScreen -> browser.Manage().Window.Maximize()
 
 let start (b : string) =    
     //for chrome you need to download chromedriver.exe from http://code.google.com/p/chromedriver/wiki/GettingStarted
