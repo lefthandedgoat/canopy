@@ -10,8 +10,8 @@
     <description>@description@</description>
     <tags>f# canopy selenium ui automation tests</tags>
     <dependencies>
-      <dependency id="Selenium.WebDriver" version="2.32.1" />
-      <dependency id="Selenium.Support" version="2.32.1" />
+      <dependency id="Selenium.WebDriver" version="2.33.0" />
+      <dependency id="Selenium.Support" version="2.33.0" />
     </dependencies>
   </metadata>
 </package>
