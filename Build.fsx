@@ -6,7 +6,7 @@ open Fake.AssemblyInfoFile
 // Assembly / NuGet package properties
 let projectName = "canopy"
 let version = "0.7.6"
-let projectDescription = "A simple framework in f# on top of selenium for writing UI automation tests."
+let projectDescription = "A simple framework in f# on top of selenium for writing UI automation and tests. https://github.com/lefthandedgoat/canopy/wiki/Change-Log"
 let authors = ["Chris Holt"]
 
 // Folders
@@ -14,12 +14,6 @@ let buildDir = @".\build\"
 let testDir = @".\tests\"
 let nugetDir = @".\nuget\"
 
-// Restore NuGet packages
-!! "./**/packages.config"
-    |> Seq.iter (RestorePackage (fun p -> 
-        {p with 
-            ToolPath = "./.NuGet/NuGet.exe"}))
-  
 // Targets
 
 // Update assembly info
@@ -82,7 +76,7 @@ Target "CreateNuGet" (fun _ ->
                 Version = version
                 Description = projectDescription
                 NoPackageAnalysis = true
-                ToolPath = @".\.Nuget\Nuget.exe"
+                ToolPath = @".\tools\Nuget\Nuget.exe" 
                 OutputPath = nugetDir })
 )
 
