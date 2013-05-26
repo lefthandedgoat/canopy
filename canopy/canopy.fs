@@ -235,8 +235,6 @@ let someElementWithin cssSelector elem = elem |> elementsWithin cssSelector |> s
 
 let someParent elem = elem |> elementsWithin ".." |> someElementFromList "provided element"
 
-let exists cssSelector = find cssSelector elementTimeout browser
-
 let nth index cssSelector = List.nth (elements cssSelector) index
 
 let first cssSelector = (elements cssSelector).Head
