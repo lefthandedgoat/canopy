@@ -43,9 +43,20 @@ type direction =
     | FullScreen
 
 //browser
-let firefox = "firefox"
-let ie = "ie"
-let chrome = "chrome"
+type BrowserStartMode =
+    | Firefox
+    | FirefoxWithProfile of Firefox.FirefoxProfile
+    | IE
+    | IEWithOptions of IE.InternetExplorerOptions
+    | IEWithOptionsAndTimeSpan of IE.InternetExplorerOptions * TimeSpan
+    | Chrome
+    | ChromeWithOptions of Chrome.ChromeOptions
+    | ChromeWithOptionsAndTimeSpan of Chrome.ChromeOptions * TimeSpan
+
+let firefox = Firefox
+let ie = IE
+let chrome = Chrome
+
   
 let mutable browsers = []
 
@@ -470,16 +481,30 @@ let pin direction =
     | Right -> browser.Manage().Window.Position <- new System.Drawing.Point((maxWidth * 1),0);   
     | FullScreen -> browser.Manage().Window.Maximize()
 
-let start (b : string) =    
+let start b =    
     //for chrome you need to download chromedriver.exe from http://code.google.com/p/chromedriver/wiki/GettingStarted
     //place chromedriver.exe in c:\ or you can place it in a customer location and change chromeDir value above
     //for ie you need to set Settings -> Advance -> Security Section -> Check-Allow active content to run files on My Computer*
     //also download IEDriverServer and place in c:\ or configure with ieDir
     //firefox just works
-    match b with
-    | "ie" -> browser <- new OpenQA.Selenium.IE.InternetExplorerDriver(ieDir) :> IWebDriver
-    | "chrome" -> browser <- new OpenQA.Selenium.Chrome.ChromeDriver(chromeDir) :> IWebDriver
-    | _ -> browser <- new OpenQA.Selenium.Firefox.FirefoxDriver() :> IWebDriver
+    browser <-
+        match b with
+        | IE -> 
+            new OpenQA.Selenium.IE.InternetExplorerDriver(ieDir) :> IWebDriver
+        | IEWithOptions options ->
+            new OpenQA.Selenium.IE.InternetExplorerDriver(ieDir, options) :> IWebDriver
+        | IEWithOptionsAndTimeSpan(options, timeSpan) ->
+            new OpenQA.Selenium.IE.InternetExplorerDriver(ieDir, options, timeSpan) :> IWebDriver
+        | Chrome -> 
+            new OpenQA.Selenium.Chrome.ChromeDriver(chromeDir) :> IWebDriver
+        | ChromeWithOptions options ->
+            new OpenQA.Selenium.Chrome.ChromeDriver(chromeDir, options) :> IWebDriver
+        | ChromeWithOptionsAndTimeSpan(options, timeSpan) ->
+            new OpenQA.Selenium.Chrome.ChromeDriver(chromeDir, options, timeSpan) :> IWebDriver
+        | Firefox -> 
+            new OpenQA.Selenium.Firefox.FirefoxDriver() :> IWebDriver
+        | FirefoxWithProfile profile -> 
+            new OpenQA.Selenium.Firefox.FirefoxDriver(profile) :> IWebDriver
     if autoPinBrowserRightOnLaunch = true then pin Right
     browsers <- browsers @ [browser]
 
