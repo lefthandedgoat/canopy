@@ -3225,6 +3225,9 @@
 <member name="">
 
 </member>
+<member name="">
+
+</member>
 <member name="P:Fake.RestorePackageHelper.RestorePackageDefaults">
 <summary>
  RestorePackage defaults params  
