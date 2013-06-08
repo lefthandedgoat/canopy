@@ -5,7 +5,7 @@ open runner
 
 start firefox
 
-let page = "http://lefthandedgoat.github.com/canopy/demo/amir.html"
+let page = "http://lefthandedgoat.github.io/canopy/demo/amir.html"
 
 context "demo tests"
 before (fun _ -> url page

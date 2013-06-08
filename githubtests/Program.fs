@@ -5,7 +5,7 @@ open runner
 open configuration
 
 before (fun () -> System.Console.WriteLine("This happens before every test"))
-start "firefox"
+start firefox
 
 let github = "https://www.github.com"
 
