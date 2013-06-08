@@ -26,6 +26,11 @@ test(fun _ ->
     
     click ".optin input"
     click ".agree input"
+
+    "#address" == "The Big Screen"
+    "#city" == "Holywood"
+    "#state" == "CA"
+    "#zip" == "91601"
 )
 
 run ()
