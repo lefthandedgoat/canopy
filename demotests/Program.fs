@@ -5,7 +5,7 @@ open runner
 
 start firefox
 
-let page = "http://lefthandedgoat.github.com/canopy/demo/amir.html"
+let page = "http://skalinets.github.io/canopy/demo/amir.html"
 
 context "demo tests"
 before (fun _ -> url page
@@ -26,6 +26,11 @@ test(fun _ ->
     
     click ".optin input"
     click ".agree input"
+
+    "#address" == "The Big Screen"
+    "#city" == "Holywood"
+    "#state" == "CA"
+    "#zip" == "91601"
 )
 
 run ()

@@ -270,6 +270,8 @@ let private textOf (element : IWebElement) =
     match element.TagName  with
     | "input" ->
         element.GetAttribute("value")
+    | "textarea" ->
+        element.GetAttribute("value")
     | "select" ->
         let value = element.GetAttribute("value")
         let options = Seq.toList (element.FindElements(By.TagName("option")))
