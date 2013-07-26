@@ -574,6 +574,18 @@
 <member name="">
 
 </member>
+<member name="">
+
+</member>
+<member name="">
+
+</member>
+<member name="">
+
+</member>
+<member name="">
+
+</member>
 <member name="M:Fake.DynamicsNav.CloseAllNavProcesses(System.Boolean)">
 <summary>
  Closes all running Dynamics NAV instances
@@ -1125,6 +1137,14 @@
 <member name="T:Fake.FileSetHelper">
 
 </member>
+<member name="M:Fake.FileSystemHelper.isFile(System.String)">
+ <summary>Detects whether it the given path is a file</summary>
+ <user/>
+</member>
+<member name="M:Fake.FileSystemHelper.isDirectory(System.String)">
+ <summary>Detects whether it the given path is a directory</summary>
+ <user/>
+</member>
 <member name="M:Fake.FileSystemHelper.ensureDirectory(System.String)">
  <summary>Checks if the given directory exists. If not then this functions creates the directory.</summary>
  <user/>
@@ -1136,6 +1156,18 @@
 <member name="M:Fake.FileSystemHelper.directoryExists(System.String)">
  <summary>Checks if the directory exists on disk.</summary>
  <user/>
+</member>
+<member name="M:Fake.FileSystemHelper.isInFolder(System.IO.DirectoryInfo,System.IO.FileInfo)">
+ <summary>Checks if the file is in a subfolder of the dir.</summary>
+ <user />
+</member>
+<member name="M:Fake.FileSystemHelper.isSubfolderOf(System.IO.DirectoryInfo,System.IO.DirectoryInfo)">
+ <summary>Checks if dir1 is a subfolder of dir2. If dir1 equals dir2 the function returns also true.</summary>
+ <user />
+</member>
+<member name="M:Fake.FileSystemHelper.normalizeFileName(System.String)">
+ <summary>Normalizes a filename.</summary>
+ <user />
 </member>
 <member name="M:Fake.FileSystemHelper.allFilesExist(System.Collections.Generic.IEnumerable{System.String})">
  <summary>Checks if all given files exist</summary>
@@ -1261,6 +1293,12 @@
  Shell-like functions. 
  Similar to Ruby&apos;s FileUtils: http://ruby-doc.org/core/classes/FileUtils.htm
 </summary>
+</member>
+<member name="">
+
+</member>
+<member name="">
+
 </member>
 <member name="">
 
@@ -2889,6 +2927,162 @@
 <member name="T:Fake.NuGetHelper">
 
 </member>
+<member name="">
+
+</member>
+<member name="">
+
+</member>
+<member name="">
+
+</member>
+<member name="">
+
+</member>
+<member name="">
+
+</member>
+<member name="">
+
+</member>
+<member name="T:Fake.OctoTools.OctoParams">
+<summary>
+ Complete Octo.exe CLI params
+</summary>
+</member>
+<member name="">
+
+</member>
+<member name="">
+
+</member>
+<member name="">
+
+</member>
+<member name="">
+
+</member>
+<member name="T:Fake.OctoTools.OctoCommand">
+<summary>
+ DU for selecting one command
+</summary>
+</member>
+<member name="">
+
+</member>
+<member name="">
+
+</member>
+<member name="">
+
+</member>
+<member name="T:Fake.OctoTools.DeleteReleaseOptions">
+<summary>
+ Options for deleting a range of releases in a project
+</summary>
+</member>
+<member name="">
+
+</member>
+<member name="">
+
+</member>
+<member name="">
+
+</member>
+<member name="">
+
+</member>
+<member name="">
+
+</member>
+<member name="">
+
+</member>
+<member name="">
+
+</member>
+<member name="T:Fake.OctoTools.DeployReleaseOptions">
+<summary>
+ Options for deploying a release to an environment
+</summary>
+</member>
+<member name="">
+
+</member>
+<member name="">
+
+</member>
+<member name="">
+
+</member>
+<member name="">
+
+</member>
+<member name="">
+
+</member>
+<member name="">
+
+</member>
+<member name="">
+
+</member>
+<member name="T:Fake.OctoTools.CreateReleaseOptions">
+<summary>
+ Options for creating a new release
+</summary>
+</member>
+<member name="">
+
+</member>
+<member name="">
+
+</member>
+<member name="T:Fake.OctoTools.OctoServerOptions">
+<summary>
+ Octo.exe server options
+</summary>
+</member>
+<member name="M:Fake.OctoTools.Octo(Microsoft.FSharp.Core.FSharpFunc`2{Fake.OctoTools.OctoParams,Fake.OctoTools.OctoParams})">
+<summary>
+ Calls the Octo.exe CLI.
+</summary>
+</member>
+<member name="">
+
+</member>
+<member name="">
+
+</member>
+<member name="P:Fake.OctoTools.octoParams">
+<summary>
+ Default parameters to call octo.exe.
+</summary>
+</member>
+<member name="P:Fake.OctoTools.deleteOptions">
+<summary>
+ Default options for &apos;DeleteReleases&apos;
+</summary>
+</member>
+<member name="P:Fake.OctoTools.deployOptions">
+<summary>
+ Default options for &apos;DeployRelease&apos;
+</summary>
+</member>
+<member name="P:Fake.OctoTools.releaseOptions">
+<summary>
+ Default options for &apos;CreateRelease&apos;
+</summary>
+</member>
+<member name="P:Fake.OctoTools.serverOptions">
+<summary>
+ Default server options.
+</summary>
+</member>
+<member name="T:Fake.OctoTools">
+
+</member>
 <member name="M:Fake.Option.toNullable``1(Microsoft.FSharp.Core.FSharpOption{``0})">
 <summary>
  Converts an F# option into a nullable object
@@ -3272,6 +3466,24 @@
 <member name="">
 
 </member>
+<member name="">
+
+</member>
+<member name="">
+
+</member>
+<member name="">
+
+</member>
+<member name="">
+
+</member>
+<member name="">
+
+</member>
+<member name="">
+
+</member>
 <member name="T:Fake.ServiceControllerHelpers">
 
 </member>
@@ -3539,7 +3751,7 @@
  <user/>
 </member>
 <member name="M:Fake.StringHelper.WriteStringToFile(System.Boolean,System.String,System.String)">
- <summary>Writes string to a file</summary>
+ <summary>Writes a string to a file</summary>
  <user/>
 </member>
 <member name="M:Fake.StringHelper.WriteBytesToFile(System.String,System.Byte[])">
@@ -4316,6 +4528,12 @@
 
 </member>
 <member name="T:Fake.VSSHelper">
+
+</member>
+<member name="">
+
+</member>
+<member name="">
 
 </member>
 <member name="">
