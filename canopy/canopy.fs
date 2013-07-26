@@ -255,9 +255,8 @@ let last cssSelector = (List.rev (elements cssSelector)).Head
 //read/write
 let private writeToSelect cssSelector text =
     let elem = element cssSelector
-    let options = Seq.toList (elem.FindElements(By.TagName("option")))
-    let option = options |> List.filter (fun e -> e.Text = text)
-    match option with
+    let options = Seq.toList (elem.FindElements(By.XPath(sprintf "option[text()='%s']" text)))
+    match options with
     | [] -> raise (CanopyOptionNotFoundException(sprintf "element %s does not contain value %s" cssSelector text))
     | head::tail -> head.Click()
 

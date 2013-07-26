@@ -365,6 +365,11 @@ context "other tests"
     "#item_list" << "Item 2"
     "#item_list" == "Item 2")
 
+"writting (selecting) to drop down test, many options" &&& (fun _ ->
+    !^ testpage
+    "#states" << "Kingman Reef"
+    "#states" == "Kingman Reef")
+
 "double clicking" &&& (fun _ ->
     !^ "http://lefthandedgoat.github.io/canopy/testpages/doubleClick"
     "#clicked" == "Not Clicked"
