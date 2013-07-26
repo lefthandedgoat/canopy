@@ -124,133 +124,16 @@ type TeamCityReporter() =
 
         member this.skip () = ()
 
-type HtmlReporter() =
-    let consoleReporter : IReporter = new ConsoleReporter() :> IReporter    
-    let mutable results = String.Empty;
-    let mutable html = 
-            "<html>
-            <!DOCTYPE html>
-            <head>
-                <title>canopy html report</title>
-                <style type='text/css'>
-                    div
-                    {
-                        border-style: solid;
-                        border-width: 1px;
-                    }
-                    div.passed, div.passedContext
-                    {
-                        border-color: Green;
-                        border-width: 3px;
-                    }
-                    div.failed, div.failedContext
-                    {
-                        border-color: Red;
-                        border-width: 3px;
-                    }
-                    div.skipped, div.skippedContext
-                    {
-                        border-color: Orange;
-                        border-width: 3px;
-                    }
-                </style>
-            </head>
-            <body>
-                <div id='report'>
-                    <div id='top'>
-                        <div id='checkboxes'>
-                            <input type='checkbox' id='passed' checked='checked'/>Passed
-                            <input type='checkbox' id='failed' checked='checked'/>Failed
-                            <input type='checkbox' id='skipped' checked='checked'/>Skipped
-                        </div>
-                        <div id='summary'>
-                            <span>{{total}} total</span> <span>{{passed}} passed</span> <span>{{failed}} failed</span> <span>{{skipped}} skipped</span>
-                        </div>
-                        <div id='time'>
-                            <span>{{minutes}} minutes</span>
-                            <span>{{seconds}} seconds</span>
-                        </div>
-                    </div>
-                    <div id='results'>
-                        {{results}}
-                    </div>
-                </div>
-                <script type='text/javascript' src='http://ajax.googleapis.com/ajax/libs/jquery/1.8.2/jquery.min.js'></script>
-                <script type='text/javascript'>
-                    $('#passed').change(function () {
-                        if ($(this).is(':checked')) {
-                            $('.passed').show();
-                        } else {
-                            $('.passed').hide();
-                        }
-                    });
-                    $('#failed').change(function () {
-                        if ($(this).is(':checked')) {
-                            $('.failed').show();
-                        } else {
-                            $('.failed').hide();
-                        }
-                    });
-                    $('#skipped').change(function () {
-                        if ($(this).is(':checked')) {
-                            $('.skipped').show();
-                        } else {
-                            $('.skipped').hide();
-                        }
-                    });
-                </script>
-            </body>
-            </html>"
-    
-    interface IReporter with               
-        member this.pass () =consoleReporter.pass ()
-
-        member this.fail ex id ss= consoleReporter.fail ex id ss
-
-        member this.describe d = consoleReporter.describe d
-          
-        member this.contextStart c = consoleReporter.contextStart c
-
-        member this.contextEnd c = consoleReporter.contextEnd c
-
-        member this.summary minutes seconds passed failed =
-            html <- html.Replace("{{minutes}}", minutes.ToString())
-            html <- html.Replace("{{seconds}}", seconds.ToString())
-            html <- html.Replace("{{total}}", (passed + failed).ToString())
-            html <- html.Replace("{{passed}}", passed.ToString())
-            html <- html.Replace("{{failed}}", failed.ToString())
-            html <- html.Replace("{{results}}", results.ToString())
-            let p = Environment.GetFolderPath(Environment.SpecialFolder.ApplicationData) + @"\canopy\" + DateTime.Now.ToString("MMM-d_HH-mm-ss-fff") + ".html"
-            using (new System.IO.StreamWriter(p)) (fun writer ->
-                writer.Write(html);
-            )
-            consoleReporter.summary minutes seconds passed failed
-        
-        member this.write w = consoleReporter.write w
-        
-        member this.suggestSelectors selector suggestions = consoleReporter.suggestSelectors selector suggestions
-
-        member this.testStart id = 
-            consoleReporter.testStart id
-            results <- String.Format("{0}</br>{1}", results, id)
-
-        member this.testEnd id = ()
-
-        member this.quit () = ()
-        
-        member this.suiteBegin () = ()
-
-        member this.suiteEnd () = ()
-        
-        member this.coverage url ss = ()
-
-        member this.todo () = ()
-
-        member this.skip () = ()
-
 type LiveHtmlReporter() =
     let consoleReporter : IReporter = new ConsoleReporter() :> IReporter    
     let browser = new OpenQA.Selenium.Firefox.FirefoxDriver() :> IWebDriver    
+    let pin () =   
+        let h = System.Windows.Forms.Screen.PrimaryScreen.WorkingArea.Height;
+        let w = System.Windows.Forms.Screen.PrimaryScreen.WorkingArea.Width;
+        let maxWidth = w / 2    
+        browser.Manage().Window.Size <- new System.Drawing.Size(maxWidth,h);        
+        browser.Manage().Window.Position <- new System.Drawing.Point((maxWidth * 0),0);
+    do pin()
     let js script = try (browser :?> IJavaScriptExecutor).ExecuteScript(script) |> ignore with | ex -> ()
     let mutable context = System.String.Empty;
     let mutable test = System.String.Empty;
@@ -297,7 +180,6 @@ type LiveHtmlReporter() =
         member this.quit () = if canQuit then browser.Quit()
         
         member this.suiteBegin () = browser.Navigate().GoToUrl(@"http://lefthandedgoat.github.com/canopy/reporttemplate.html")
-        //member this.suiteBegin () = browser.Navigate().GoToUrl(@"file:///C:/projects/canopy/reporttemplate.html")
 
         member this.suiteEnd () = 
             canQuit <- true
