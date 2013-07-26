@@ -549,10 +549,16 @@ let title() = browser.Title
 
 let reload = currentUrl >> url
 
-let coverage url =
+let coverage (url : 'a) =    
+    let mutable innerUrl = ""
+    match box url with    
+    | :? string as u -> innerUrl <- u
+    | _ -> innerUrl <- currentUrl()
+    let nonMutableInnerUrl = innerUrl
+
     let selectors = 
         searchedFor 
-        |> List.filter(fun (c, u) -> u = url) 
+        |> List.filter(fun (c, u) -> u = nonMutableInnerUrl) 
         |> List.map(fun (cssSelector, u) -> cssSelector) 
         |> Seq.distinct 
         |> List.ofSeq
@@ -563,10 +569,14 @@ let coverage url =
             results[i].style.border = 'thick solid #ACD372'; \
         }"
     
-    !^ url
-    on url
+    //kinda silly but the app I am current working on will redirect you to login if you try to access a url directly, so dont try if one isnt passed in
+    match box url with    
+    | :? string as u -> !^ nonMutableInnerUrl
+    |_ -> ()
+
+    on nonMutableInnerUrl
     selectors |> List.iter(fun cssSelector -> swallowedJs (script cssSelector))
     let p = Path.Combine(Environment.GetFolderPath(Environment.SpecialFolder.ApplicationData), @"\canopy\")
     let f = DateTime.Now.ToString("MMM-d_HH-mm-ss-fff")
     let ss = screenshot p f
-    reporter.coverage url ss
+    reporter.coverage nonMutableInnerUrl ss
