@@ -13,6 +13,8 @@ compareTimeout <- 3.0
 runFailedContextsFirst <- true
 reporter <- new LiveHtmlReporter() :> IReporter
 
+failFast := true
+
 context "context1"
 once (fun _ -> Console.WriteLine "once")
 before (fun _ -> Console.WriteLine "before")
@@ -219,7 +221,7 @@ lastly (fun _ -> Console.WriteLine "lastly: reddit tests")
 
 "browsing to redit should be on reddit" &&& (fun _ ->
     url "http://www.reddit.com/"
-    on "http://www.reddit.com/")
+    on "http://fuffuasdjsaflskjfl")
 
 "reloading redit should be on reddit" &&& (fun _ ->
     url "http://www.reddit.com/"
