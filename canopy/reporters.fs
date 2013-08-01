@@ -34,7 +34,6 @@ type ConsoleReporter() =
             Console.ResetColor()
             Console.WriteLine(ex.Message);
             Console.WriteLine("Stack: ");
-            let a = System.Environment.NewLine;
             ex.StackTrace.Split([| "\r\n"; "\n" |], StringSplitOptions.None)
             |> Array.iter (fun trace -> 
                 Console.ResetColor()
