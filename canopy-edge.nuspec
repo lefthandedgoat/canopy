@@ -1,0 +1,29 @@
+<?xml version="1.0"?>
+<package xmlns="http://schemas.microsoft.com/packaging/2010/07/nuspec.xsd">
+  <metadata>
+    <id>canopy-edge</id>
+    <version>0.7.6.1</version>
+    <authors>@authors@</authors>
+    <owners>Chris Holt</owners>
+    <licenseUrl>https://github.com/lefthandedgoat/canopy/blob/master/license.txt</licenseUrl>
+	<iconUrl>http://lefthandedgoat.github.io/canopy/canopy_orig.jpg</iconUrl>
+    <projectUrl>http://lefthandedgoat.github.com/canopy</projectUrl>
+    <description>@description@</description>
+    <tags>f# fsharp canopy selenium ui automation tests</tags>
+	<dependencies>
+      <dependency id="Selenium.WebDriver" version="2.33.0" />
+      <dependency id="Selenium.Support" version="2.33.0" />
+    </dependencies>
+	<frameworkAssemblies>
+      <frameworkAssembly assemblyName="System.Windows.Forms" targetFramework="" />
+    </frameworkAssemblies>
+  </metadata>
+  <files>
+	<file src="..\canopy\reporters.fs" target="content\canopy\reporters.fs" />
+	<file src="..\canopy\configuration.fs" target="content\canopy\configuration.fs" />
+	<file src="..\canopy\levenshtein.fs" target="content\canopy\levenshtein.fs" />
+	<file src="..\canopy\canopy.fs" target="content\canopy\canopy.fs" />
+	<file src="..\canopy\history.fs" target="content\canopy\history.fs" />
+	<file src="..\canopy\runner.fs" target="content\canopy\runner.fs" />
+  </files>
+</package>
