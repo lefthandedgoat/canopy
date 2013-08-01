@@ -334,9 +334,15 @@ let press key =
 //alerts
 let alert() = browser.SwitchTo().Alert()
 
-let acceptAlert() = browser.SwitchTo().Alert().Accept()
+let acceptAlert() = 
+    wait compareTimeout (fun _ ->
+        browser.SwitchTo().Alert().Accept()
+        true)
 
-let dismissAlert() = browser.SwitchTo().Alert().Dismiss()
+let dismissAlert() = 
+    wait compareTimeout (fun _ ->
+        browser.SwitchTo().Alert().Dismiss()
+        true)
     
 //assertions    
 let ( == ) (item : 'a) value =
