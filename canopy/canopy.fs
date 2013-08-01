@@ -447,9 +447,15 @@ let click item =
     match box item with
     | :? IWebElement as element -> element.Click()
     | :? string as cssSelector ->         
-        wait elementTimeout (fun _ -> let elem = element cssSelector
-                                      elem.Click()
-                                      true)
+        wait elementTimeout (fun _ -> 
+                                let atleastOneItemClicked = ref false
+                                elements cssSelector
+                                |> List.iter (fun elem ->                                 
+                                    try
+                                        elem.Click()
+                                        atleastOneItemClicked := true
+                                    with | ex -> ())
+                                !atleastOneItemClicked)
     | _ -> raise (CanopyNotStringOrElementException(sprintf "Can't click %O because it is not a string or webelement" item))
     
 let doubleClick item =
