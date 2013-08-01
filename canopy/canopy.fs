@@ -262,7 +262,7 @@ let private writeToSelect cssSelector text =
 
 let ( << ) cssSelector (text : string) = 
     wait (elementTimeout + 1.0) (fun _ ->
-        let elems = elements cssSelector
+        
         let writeToElement (e : IWebElement) =
             if e.TagName = "select" then
                 writeToSelect cssSelector text
@@ -270,11 +270,18 @@ let ( << ) cssSelector (text : string) =
                 let readonly = e.GetAttribute("readonly")
                 if readonly = "true" then
                     raise (CanopyReadOnlyException(sprintf "element %s is marked as read only, you can not write to read only elements" cssSelector))
-                try e.Clear() with ex -> ex |> ignore //these can blow up if something is disabled etc which will throw this into a infinite loop until timeout
-                try e.SendKeys(text) with ex -> ex |> ignore
+                try e.Clear() with ex -> ex |> ignore
+                e.SendKeys(text)
 
-        elems |> List.iter writeToElement
-        true)
+        let atleastOneItemWritten = ref false
+        elements cssSelector
+        |> List.iter (fun elem -> 
+            try  
+                writeToElement elem
+                atleastOneItemWritten := true
+            with
+                | ex -> ())
+        !atleastOneItemWritten)
 
 let private textOf (element : IWebElement) =
     match element.TagName  with
