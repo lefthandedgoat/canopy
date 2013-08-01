@@ -34,7 +34,23 @@ type ConsoleReporter() =
             Console.ResetColor()
             Console.WriteLine(ex.Message);
             Console.WriteLine("Stack: ");
-            Console.WriteLine(ex.StackTrace);
+            let a = System.Environment.NewLine;
+            ex.StackTrace.Split([| "\r\n"; "\n" |], StringSplitOptions.None)
+            |> Array.iter (fun trace -> 
+                Console.ResetColor()
+                if trace.Contains(".FSharp.") || trace.Contains("canopy.core") || trace.Contains("OpenQA.Selenium") then
+                    Console.WriteLine(trace)
+                else
+                    if trace.Contains(":line") then
+                        let beginning = trace.Split([| ":line" |], StringSplitOptions.None).[0]
+                        let line = trace.Split([| ":line" |], StringSplitOptions.None).[1]
+                        Console.Write(beginning)
+                        Console.ForegroundColor <- ConsoleColor.DarkGreen
+                        Console.WriteLine(":line" + line)
+                    else
+                        Console.ForegroundColor <- ConsoleColor.DarkGreen
+                        Console.WriteLine(trace)
+                Console.ResetColor())
 
         member this.describe d = Console.WriteLine d          
         
