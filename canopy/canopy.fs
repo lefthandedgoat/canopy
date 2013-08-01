@@ -270,8 +270,8 @@ let ( << ) cssSelector (text : string) =
                 let readonly = e.GetAttribute("readonly")
                 if readonly = "true" then
                     raise (CanopyReadOnlyException(sprintf "element %s is marked as read only, you can not write to read only elements" cssSelector))
-                try e.Clear() with ex -> ex |> ignore
-                e.SendKeys(text)
+                try e.Clear() with ex -> ex |> ignore //these can blow up if something is disabled etc which will throw this into a infinite loop until timeout
+                try e.SendKeys(text) with ex -> ex |> ignore
 
         elems |> List.iter writeToElement
         true)
