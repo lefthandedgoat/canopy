@@ -161,7 +161,7 @@ let private findByLabel locator f =
             | head :: tail when isField head-> [head]
             | _ -> []
     try
-        let label = browser.FindElement(By.XPath(sprintf ".//label[text() = '%s']" locator))
+        let label : IWebElement = f(By.XPath(sprintf ".//label[text() = '%s']" locator))
         if (label = null) then
             []
         else
@@ -172,11 +172,12 @@ let private findByLabel locator f =
 
 let private findByText text f =
     try
-        let byValue = findByCss (sprintf "*[value='%s']" text) f |> List.ofSeq
-        if byValue.Length > 0 then
-            byValue
-        else
-            f(By.XPath(sprintf ".//*[text() = '%s']" text)) |> List.ofSeq
+        f(By.XPath(sprintf ".//*[text() = '%s']" text)) |> List.ofSeq
+    with | _ -> []
+
+let private findByValue value f =
+    try
+        findByCss (sprintf "*[value='%s']" value) f |> List.ofSeq        
     with | _ -> []
     
 let rec private findElements (cssSelector : string) (searchContext : ISearchContext) =
@@ -196,10 +197,11 @@ let rec private findElements (cssSelector : string) (searchContext : ISearchCont
 
     try
         seq {
-            yield (findByCss    cssSelector searchContext.FindElements)
-            yield (findByLabel  cssSelector searchContext.FindElement)
-            yield (findByText   cssSelector searchContext.FindElements)
+            yield (findByCss    cssSelector searchContext.FindElements)                        
+            yield (findByValue  cssSelector searchContext.FindElements)
             yield (findByXpath  cssSelector searchContext.FindElements)
+            yield (findByLabel  cssSelector searchContext.FindElement)            
+            yield (findByText   cssSelector searchContext.FindElements)
             yield (findInIFrame())
         }
         |> Seq.filter(fun list -> not(list.IsEmpty))
