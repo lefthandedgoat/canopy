@@ -574,18 +574,6 @@
 <member name="">
 
 </member>
-<member name="">
-
-</member>
-<member name="">
-
-</member>
-<member name="">
-
-</member>
-<member name="">
-
-</member>
 <member name="M:Fake.DynamicsNav.CloseAllNavProcesses(System.Boolean)">
 <summary>
  Closes all running Dynamics NAV instances
@@ -648,6 +636,88 @@
 
 </member>
 <member name="T:Fake.DynamicsNav">
+
+</member>
+<member name="M:Fake.DynamicsNavFile.setVersionTags(System.Collections.Generic.IEnumerable{System.String},System.Boolean,System.Collections.Generic.IEnumerable{System.String},System.String,System.String,System.Boolean,System.DateTime,System.Collections.Generic.IEnumerable{System.String})">
+<summary>
+ Checks a Dynamics NAV object for missing required and invalid tags and raises this as errors.
+ It also changes the given tag, resets the modified flag and time stamp.
+</summary>
+</member>
+<member name="M:Fake.DynamicsNavFile.modifyNavisionFiles(System.Collections.Generic.IEnumerable{System.String},System.Boolean,System.Collections.Generic.IEnumerable{System.String},System.String,System.String,System.Boolean,System.DateTime,System.Collections.Generic.IEnumerable{System.String})">
+<summary>
+ Checks a Dynamics NAV object for missing required and invalid tags and raises this as errors.
+ It also changes the given tag, resets the modified flag and time stamp.
+</summary>
+</member>
+<member name="M:Fake.DynamicsNavFile.checkTagsInFile(System.Collections.Generic.IEnumerable{System.String},System.Boolean,System.Collections.Generic.IEnumerable{System.String},System.String)">
+<summary>
+ Checks a Dynamics NAV file for missing required and invalid tags and raises this as errors
+</summary>
+</member>
+<member name="M:Fake.DynamicsNavFile.checkTagsInObjectString(System.Collections.Generic.IEnumerable{System.String},System.Boolean,System.Collections.Generic.IEnumerable{System.String},System.String,System.String)">
+<summary>
+ Checks a Dynamics NAV object for missing required andinvalid tags and raises this as errors
+</summary>
+</member>
+<member name="M:Fake.DynamicsNavFile.getInvalidTags(System.Collections.Generic.IEnumerable{System.String},System.Collections.Generic.IEnumerable{System.String})">
+<summary>
+ Get all invalid tags from a Dynamics NAV version tag list
+</summary>
+</member>
+<member name="M:Fake.DynamicsNavFile.getMissingRequiredTags(System.Collections.Generic.IEnumerable{System.String},System.Collections.Generic.IEnumerable{System.String})">
+<summary>
+ Get all missing required tags from a Dynamics NAV version tag list
+</summary>
+</member>
+<member name="M:Fake.DynamicsNavFile.replaceVersionTag(System.String,System.String,System.String)">
+<summary>
+ Splits a version tag list from Dynamics NAV object into single tags
+</summary>
+</member>
+<member name="M:Fake.DynamicsNavFile.replaceVersionTagList(System.String,System.String)">
+<summary>
+ Replaces a version tag list from complete Dynamics NAV object with a new one
+</summary>
+</member>
+<member name="M:Fake.DynamicsNavFile.replaceInVersionTag(System.String,System.String,System.String)">
+<summary>
+ Replaces a version tag in a version tag list from Dynamics NAV object
+</summary>
+</member>
+<member name="M:Fake.DynamicsNavFile.splitVersionTags(System.String)">
+<summary>
+ Splits a version tag list from Dynamics NAV object into single tags
+</summary>
+</member>
+<member name="M:Fake.DynamicsNavFile.getVersionTagList(System.String)">
+<summary>
+ Returns the version tag list from Dynamics NAV object
+</summary>
+</member>
+<member name="M:Fake.DynamicsNavFile.removeModifiedFlag(System.String)">
+<summary>
+ Removes the modified flag from a Dynamics NAV object
+</summary>
+</member>
+<member name="M:Fake.DynamicsNavFile.replaceDateTimeInString(System.DateTime,System.String)">
+<summary>
+ Replaces the timestamp in a Dynamics NAV object
+</summary>
+</member>
+<member name="">
+
+</member>
+<member name="">
+
+</member>
+<member name="">
+
+</member>
+<member name="">
+
+</member>
+<member name="T:Fake.DynamicsNavFile">
 
 </member>
 <member name="">
@@ -3049,6 +3119,26 @@
  Calls the Octo.exe CLI.
 </summary>
 </member>
+<member name="M:Fake.OctoTools.commandLine(Fake.OctoTools.OctoCommand)">
+<summary>
+ Maps an command to string input for the octopus tools cli.
+</summary>
+</member>
+<member name="">
+
+</member>
+<member name="">
+
+</member>
+<member name="">
+
+</member>
+<member name="">
+
+</member>
+<member name="">
+
+</member>
 <member name="">
 
 </member>
@@ -3422,6 +3512,50 @@
 <member name="">
 
 </member>
+<member name="">
+
+</member>
+<member name="">
+
+</member>
+<member name="">
+
+</member>
+<member name="">
+
+</member>
+<member name="">
+
+</member>
+<member name="">
+
+</member>
+<member name="M:Fake.RestorePackageHelper.RestorePackages">
+<summary>
+ Restores all packages from NuGet to the default directories
+</summary>
+</member>
+<member name="M:Fake.RestorePackageHelper.RestorePackage(Microsoft.FSharp.Core.FSharpFunc`2{Fake.RestorePackageHelper.RestorePackageParams,Fake.RestorePackageHelper.RestorePackageParams},System.String)">
+<summary>
+ Restores the given package from NuGet
+</summary>
+</member>
+<member name="M:Fake.RestorePackageHelper.RestorePackageId(Microsoft.FSharp.Core.FSharpFunc`2{Fake.RestorePackageHelper.RestoreSinglePackageParams,Fake.RestorePackageHelper.RestoreSinglePackageParams},System.String)">
+<summary>
+ Restores the given package from NuGet
+</summary>
+</member>
+<member name="">
+
+</member>
+<member name="">
+
+</member>
+<member name="P:Fake.RestorePackageHelper.RestoreSinglePackageDefaults">
+<summary>
+ RestoreSinglePackageParams defaults params  
+</summary>
+</member>
 <member name="P:Fake.RestorePackageHelper.RestorePackageDefaults">
 <summary>
  RestorePackage defaults params  
@@ -3531,6 +3665,11 @@
 </member>
 <member name="T:Fake.SpecFlowHelper">
 
+</member>
+<member name="M:Fake.StringHelper.liftString(System.String)">
+<summary>
+ Lifts a string to an option
+</summary>
 </member>
 <member name="M:Fake.StringHelper.DecodeBase64Utf8String(System.String)">
 <summary>
@@ -3770,7 +3909,11 @@
  <summary>Reads a file line by line</summary>
  <user/>
 </member>
-<member name="P:Fake.StringHelper.isNotNullOrEmpty">
+<member name="M:Fake.StringHelper.isNullOrWhiteSpace(System.String)">
+ <summary>Returns if the string is null or empty or completely whitespace</summary>
+ <user/>
+</member>
+<member name="M:Fake.StringHelper.isNotNullOrEmpty(System.String)">
  <summary>Returns if the string is not null or empty</summary>
  <user/>
 </member>

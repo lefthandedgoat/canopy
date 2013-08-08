@@ -54,11 +54,11 @@
     <Reference Include="System.Core" />
     <Reference Include="System.Drawing" />
     <Reference Include="System.Numerics" />
-    <Reference Include="WebDriver, Version=2.33.0.0, Culture=neutral, PublicKeyToken=null">
-      <Private>True</Private>
+    <Reference Include="WebDriver">
+      <HintPath>..\packages\Selenium.WebDriver.2.34.0\lib\net40\WebDriver.dll</HintPath>
     </Reference>
-    <Reference Include="WebDriver.Support, Version=2.33.0.0, Culture=neutral, PublicKeyToken=null">
-      <Private>True</Private>
+    <Reference Include="WebDriver.Support">
+      <HintPath>..\packages\Selenium.Support.2.34.0\lib\net40\WebDriver.Support.dll</HintPath>
     </Reference>
   </ItemGroup>
   <ItemGroup>
