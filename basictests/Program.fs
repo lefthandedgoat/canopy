@@ -221,7 +221,7 @@ lastly (fun _ -> Console.WriteLine "lastly: reddit tests")
 
 "browsing to redit should be on reddit" &&& (fun _ ->
     url "http://www.reddit.com/"
-    on "http://fuffuasdjsaflskjfl")
+    on "http://www.reddit.com/")
 
 "reloading redit should be on reddit" &&& (fun _ ->
     url "http://www.reddit.com/"

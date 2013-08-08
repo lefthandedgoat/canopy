@@ -282,7 +282,8 @@ let ( << ) cssSelector (text : string) =
                 writeToElement elem
                 atleastOneItemWritten := true
             with
-                | ex -> ())
+                | :? CanopyReadOnlyException as ex -> raise ex
+                | _ -> ())
         !atleastOneItemWritten)
 
 let private textOf (element : IWebElement) =
