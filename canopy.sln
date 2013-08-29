@@ -18,6 +18,8 @@ Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = ".nuget", ".nuget", "{51B54B
 		.NuGet\NuGet.targets = .NuGet\NuGet.targets
 	EndProjectSection
 EndProject
+Project("{F2A71F9B-5D33-465A-A702-920D77279786}") = "sampleprojectstructure", "sampleprojectstructure\sampleprojectstructure.fsproj", "{9DE5614C-8D7F-4BBD-A6A0-24AABD76796C}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -82,6 +84,16 @@ Global
 		{A39AE288-5534-43ED-ADFD-2E401E2C25BA}.Release|Mixed Platforms.Build.0 = Release|x86
 		{A39AE288-5534-43ED-ADFD-2E401E2C25BA}.Release|x86.ActiveCfg = Release|x86
 		{A39AE288-5534-43ED-ADFD-2E401E2C25BA}.Release|x86.Build.0 = Release|x86
+		{9DE5614C-8D7F-4BBD-A6A0-24AABD76796C}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{9DE5614C-8D7F-4BBD-A6A0-24AABD76796C}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{9DE5614C-8D7F-4BBD-A6A0-24AABD76796C}.Debug|Mixed Platforms.ActiveCfg = Debug|Any CPU
+		{9DE5614C-8D7F-4BBD-A6A0-24AABD76796C}.Debug|Mixed Platforms.Build.0 = Debug|Any CPU
+		{9DE5614C-8D7F-4BBD-A6A0-24AABD76796C}.Debug|x86.ActiveCfg = Debug|Any CPU
+		{9DE5614C-8D7F-4BBD-A6A0-24AABD76796C}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{9DE5614C-8D7F-4BBD-A6A0-24AABD76796C}.Release|Any CPU.Build.0 = Release|Any CPU
+		{9DE5614C-8D7F-4BBD-A6A0-24AABD76796C}.Release|Mixed Platforms.ActiveCfg = Release|Any CPU
+		{9DE5614C-8D7F-4BBD-A6A0-24AABD76796C}.Release|Mixed Platforms.Build.0 = Release|Any CPU
+		{9DE5614C-8D7F-4BBD-A6A0-24AABD76796C}.Release|x86.ActiveCfg = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
