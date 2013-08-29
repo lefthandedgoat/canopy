@@ -2,7 +2,7 @@
 <package xmlns="http://schemas.microsoft.com/packaging/2011/08/nuspec.xsd">
   <metadata>
     <id>Selenium.Support</id>
-    <version>2.34.0</version>
+    <version>2.35.0</version>
     <title>Selenium WebDriver Support Classes</title>
     <authors>Selenium Committers</authors>
     <owners>Selenium Committers</owners>
@@ -14,7 +14,7 @@
     <summary>Support classes for the .NET bindings of the Selenium WebDriver API</summary>
     <tags>Selenium WebDriver browser automation support</tags>
     <dependencies>
-      <dependency id="Selenium.WebDriver" version="2.34.0" />
+      <dependency id="Selenium.WebDriver" version="2.35.0" />
     </dependencies>
     <frameworkAssemblies>
       <frameworkAssembly assemblyName="System.Drawing" targetFramework="" />

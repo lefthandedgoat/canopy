@@ -5223,8 +5223,10 @@
       <summary>
             Gets or sets a value indicating whether to use the supplied <see cref="P:OpenQA.Selenium.IE.InternetExplorerOptions.Proxy" />
             settings on a per-process basis, not updating the system installed proxy setting.
-            This property is only valid when setting a <see cref="P:OpenQA.Selenium.IE.InternetExplorerOptions.Proxy" />, and is otherwise
-            ignored. Defaults to <see langword="false" />.
+            This property is only valid when setting a <see cref="P:OpenQA.Selenium.IE.InternetExplorerOptions.Proxy" />, where the
+            <see cref="P:OpenQA.Selenium.Proxy.Kind" /> property is either <see cref="F:OpenQA.Selenium.ProxyKind.Direct" />,
+            <see cref="F:OpenQA.Selenium.ProxyKind.System" />, or <see cref="F:OpenQA.Selenium.ProxyKind.Manual" />, and is
+            otherwise ignored. Defaults to <see langword="false" />.
             </summary>
     </member>
     <member name="P:OpenQA.Selenium.IE.InternetExplorerOptions.EnsureCleanSession">
@@ -8150,36 +8152,6 @@
       <param name="writer">JSON Writer instance</param>
       <param name="value">the platform</param>
       <param name="serializer">JSON Serializer Instance</param>
-    </member>
-    <member name="T:OpenQA.Selenium.Remote.ProxyJsonConverter">
-      <summary>
-            Provides a way to convert a <see cref="T:OpenQA.Selenium.Proxy" /> array to JSON
-            </summary>
-    </member>
-    <member name="M:OpenQA.Selenium.Remote.ProxyJsonConverter.CanConvert(System.Type)">
-      <summary>
-            Checks if the object can be converted
-            </summary>
-      <param name="objectType">Type of the object</param>
-      <returns>A value indicating if it can be converted</returns>
-    </member>
-    <member name="M:OpenQA.Selenium.Remote.ProxyJsonConverter.ReadJson(Newtonsoft.Json.JsonReader,System.Type,System.Object,Newtonsoft.Json.JsonSerializer)">
-      <summary>
-            Get the platform from the JSON reader
-            </summary>
-      <param name="reader">JSON Reader instance</param>
-      <param name="objectType">Object type being read</param>
-      <param name="existingValue">The existing value of the object</param>
-      <param name="serializer">JSON Serializer instance</param>
-      <returns>Platform from JSON reader</returns>
-    </member>
-    <member name="M:OpenQA.Selenium.Remote.ProxyJsonConverter.WriteJson(Newtonsoft.Json.JsonWriter,System.Object,Newtonsoft.Json.JsonSerializer)">
-      <summary>
-            Create a JSON string representation of the Proxy
-            </summary>
-      <param name="writer">The JSON writer with a string</param>
-      <param name="value">Value of the string</param>
-      <param name="serializer">JSON serializer instance</param>
     </member>
     <member name="T:OpenQA.Selenium.Remote.ResponseValueJsonConverter">
       <summary>
