@@ -6,7 +6,7 @@ open runner
 open configuration
 open reporters
 
-start firefox
+start chrome
 let mainBrowser = browser
 elementTimeout <- 3.0
 compareTimeout <- 3.0
@@ -281,39 +281,6 @@ before (fun _ -> Console.WriteLine "only before set now")
     url testpage    
     "#firstName" == "John1")
 
-context "alert tests"
-before (fun _ -> !^ "http://lefthandedgoat.github.io/canopy/testpages/alert")
-
-"alert box should have 'Alert Test'" &&& (fun _ ->    
-    click "#alert_test"
-    alert() == "Alert Test"
-    acceptAlert())
-
-"alert box should have 'Alert Test'" &&& (fun _ ->
-    click "#alert_test"
-    alert() == "Alert Test"
-    dismissAlert())
-
-"alert box should fail correctly when expecting wrong message" &&& (fun _ -> 
-    failsWith "equality check failed.  expected: Not the message, got: Alert Test"    
-    click "#alert_test"
-    alert() == "Not the message")
-
-"confirmation box should have 'Confirmation Test'" &&& (fun _ ->
-    click "#confirmation_test"
-    alert() == "Confirmation Test"
-    acceptAlert())
-
-"confirmation box should have 'Confirmation Test'" &&& (fun _ ->
-    click "#confirmation_test"
-    alert() == "Confirmation Test"
-    dismissAlert())
-
-"confirmation box should fail correctly when expecting wrong message" &&& (fun _ ->
-    failsWith "equality check failed.  expected: Not the message, got: Confirmation Test"
-    click "#confirmation_test"
-    alert() == "Not the message")
-
 context "other tests"
 
 "define a custom wait for using any function that takes in unit and returns bool" &&& (fun _ ->    
@@ -405,6 +372,41 @@ context "dragging"
     "#task_title" << "Demo"
     click "#task_editor_buttons .save_button"
     ".handle" --> ".inprogress")
+
+if not (browser :? OpenQA.Selenium.PhantomJS.PhantomJSDriver) then
+    context "alert tests"
+
+    before (fun _ -> !^ "http://lefthandedgoat.github.io/canopy/testpages/alert")
+
+    "alert box should have 'Alert Test'" &&& (fun _ ->    
+        click "#alert_test"
+        alert() == "Alert Test"
+        acceptAlert())
+
+    "alert box should have 'Alert Test'" &&& (fun _ ->
+        click "#alert_test"
+        alert() == "Alert Test"
+        dismissAlert())
+
+    "alert box should fail correctly when expecting wrong message" &&& (fun _ -> 
+        failsWith "equality check failed.  expected: Not the message, got: Alert Test"    
+        click "#alert_test"
+        alert() == "Not the message")
+
+    "confirmation box should have 'Confirmation Test'" &&& (fun _ ->
+        click "#confirmation_test"
+        alert() == "Confirmation Test"
+        acceptAlert())
+
+    "confirmation box should have 'Confirmation Test'" &&& (fun _ ->
+        click "#confirmation_test"
+        alert() == "Confirmation Test"
+        dismissAlert())
+
+    "confirmation box should fail correctly when expecting wrong message" &&& (fun _ ->
+        failsWith "equality check failed.  expected: Not the message, got: Confirmation Test"
+        click "#confirmation_test"
+        alert() == "Not the message")
 
 context "tiling windows"
 "start multiple browsers and tile them" &&& (fun _ ->

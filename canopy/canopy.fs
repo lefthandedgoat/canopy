@@ -52,11 +52,12 @@ type BrowserStartMode =
     | Chrome
     | ChromeWithOptions of Chrome.ChromeOptions
     | ChromeWithOptionsAndTimeSpan of Chrome.ChromeOptions * TimeSpan
+    | PhantomJS
 
 let firefox = Firefox
 let ie = IE
 let chrome = Chrome
-
+let phantomJS = PhantomJS
   
 let mutable browsers = []
 
@@ -510,6 +511,7 @@ let start b =
     //for ie you need to set Settings -> Advance -> Security Section -> Check-Allow active content to run files on My Computer*
     //also download IEDriverServer and place in c:\ or configure with ieDir
     //firefox just works
+    //for phantomjs download it and put in c:\ or configure with phantomJSDir
     browser <-
         match b with
         | IE -> 
@@ -528,6 +530,9 @@ let start b =
             new OpenQA.Selenium.Firefox.FirefoxDriver() :> IWebDriver
         | FirefoxWithProfile profile -> 
             new OpenQA.Selenium.Firefox.FirefoxDriver(profile) :> IWebDriver
+        | PhantomJS -> 
+            new OpenQA.Selenium.PhantomJS.PhantomJSDriver(phantomJSDir) :> IWebDriver
+
     if autoPinBrowserRightOnLaunch = true then pin Right
     browsers <- browsers @ [browser]
 

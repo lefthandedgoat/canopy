@@ -6,6 +6,7 @@ let failFast = ref false
 
 let mutable chromeDir = @"c:\"
 let mutable ieDir = @"c:\"
+let mutable phantomJSDir = @"c:\"
 let mutable elementTimeout = 10.0
 let mutable compareTimeout = 10.0
 let mutable pageTimeout = 10.0
