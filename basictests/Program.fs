@@ -58,9 +58,22 @@ test (fun _ ->
     !^ testpage
     "#lastName" == "Doe")
 
+"#lastName should have Doe via read cssSelector" &&& fun _ ->
+    !^ testpage
+    read "#lastName" |> is "Doe"
+
+"#lastName should have Doe via read IWebElements" &&& fun _ ->
+    !^ testpage
+    element "#lastname" |> read |> is "Doe"
+
 "clearing #firstName sets text to new empty string" &&& (fun _ ->
     !^ testpage
     clear "#firstName"
+    "#firstName" == "")
+
+"clearing #firstName sets text to new empty string via IWebElement" &&& (fun _ ->
+    !^ testpage
+    element "#firstName" |> clear
     "#firstName" == "")
 
 "writing to #lastName sets text to Smith" &&& (fun _ ->
@@ -159,6 +172,11 @@ test (fun _ ->
     click "#radio1"
     selected "#radio1")
 
+"clicking #radio1 selects it via IWebElement" &&& (fun _ ->
+    !^ testpage
+    click "#radio1"
+    element "#radio1" |> selected)
+
 "clicking #radio2 selects it" &&& (fun _ ->
     !^ testpage
     click "#radio2"
@@ -174,6 +192,12 @@ test (fun _ ->
     check "#checkbox"
     uncheck "#checkbox"
     deselected "#checkbox")
+
+"clicking selected #checkbox deselects it via IWebElement" &&& (fun _ ->
+    !^ testpage
+    check "#checkbox"
+    uncheck "#checkbox"
+    element "#checkbox" |> deselected)
 
 "element within only searching within the element" &&& (fun _ ->
     url "http://lefthandedgoat.github.io/canopy/testpages/elementWithin"

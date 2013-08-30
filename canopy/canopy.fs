@@ -301,27 +301,41 @@ let private textOf (element : IWebElement) =
     | _ ->
         element.Text    
 
-let read (cssSelector : string) =    
-    let elem = element cssSelector
-    textOf elem
+let read item =
+    match box item with
+    | :? IWebElement as elem -> textOf elem
+    | :? string as cssSelector -> element cssSelector |> textOf
+    | _ -> raise (CanopyNotStringOrElementException(sprintf "Can't read %O because it is not a string or element" item))
         
-let clear (cssSelector : string) = 
-    let elem = element cssSelector
-    let readonly = elem.GetAttribute("readonly")
-    if readonly = "true" then
-        raise (CanopyReadOnlyException(sprintf "element %s is marked as read only, you can not clear read only elements" cssSelector))
-    elem.Clear()
+let clear item =
+    let clear cssSelector (elem : IWebElement) =
+        let readonly = elem.GetAttribute("readonly")
+        if readonly = "true" then raise (CanopyReadOnlyException(sprintf "element %s is marked as read only, you can not clear read only elements" cssSelector))
+        elem.Clear()
+    
+    match box item with
+    | :? IWebElement as elem -> clear elem.TagName elem
+    | :? string as cssSelector -> element cssSelector |> clear cssSelector 
+    | _ -> raise (CanopyNotStringOrElementException(sprintf "Can't clear %O because it is not a string or element" item))
 
 //status
-let selected (cssSelector : string) = 
-    let elem = element cssSelector
-    if not <| elem.Selected then
-        raise (CanopySelectionFailedExeception(sprintf "element selected failed, %s not selected." cssSelector))
+let selected item = 
+    let selected cssSelector (elem : IWebElement) =
+        if not <| elem.Selected then raise (CanopySelectionFailedExeception(sprintf "element selected failed, %s not selected." cssSelector))
+
+    match box item with
+    | :? IWebElement as elem -> selected elem.TagName elem
+    | :? string as cssSelector -> element cssSelector |> selected cssSelector
+    | _ -> raise (CanopyNotStringOrElementException(sprintf "Can't checked selected on %O because it is not a string or element" item))
     
-let deselected (cssSelector : string) = 
-    let elem = element cssSelector
-    if elem.Selected then
-        raise (CanopyDeselectionFailedException(sprintf "element deselected failed, %s selected." cssSelector))
+let deselected item =     
+    let deselected cssSelector (elem : IWebElement) =
+        if elem.Selected then raise (CanopyDeselectionFailedException(sprintf "element deselected failed, %s selected." cssSelector))
+
+    match box item with
+    | :? IWebElement as elem -> deselected elem.TagName elem
+    | :? string as cssSelector -> element cssSelector |> deselected cssSelector
+    | _ -> raise (CanopyNotStringOrElementException(sprintf "Can't checked deselected on %O because it is not a string or element" item))
 
 //keyboard
 let tab = Keys.Tab
@@ -349,7 +363,7 @@ let dismissAlert() =
         true)
     
 //assertions    
-let ( == ) (item : 'a) value =
+let ( == ) item value =
     match box item with
     | :? IAlert as alert -> 
         let text = alert.Text
