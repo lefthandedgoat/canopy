@@ -545,6 +545,7 @@ let start b =
         | FirefoxWithProfile profile -> 
             new OpenQA.Selenium.Firefox.FirefoxDriver(profile) :> IWebDriver
         | PhantomJS -> 
+            autoPinBrowserRightOnLaunch <- false
             new OpenQA.Selenium.PhantomJS.PhantomJSDriver(phantomJSDir) :> IWebDriver
 
     if autoPinBrowserRightOnLaunch = true then pin Right
