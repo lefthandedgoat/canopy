@@ -2,7 +2,7 @@
 <package xmlns="http://schemas.microsoft.com/packaging/2010/07/nuspec.xsd">
   <metadata>
     <id>canopy</id>
-    <version>0.7.6</version>
+    <version>0.8.0</version>
     <authors>@authors@</authors>
     <owners>Chris Holt</owners>
     <licenseUrl>https://github.com/lefthandedgoat/canopy/blob/master/license.txt</licenseUrl>
@@ -11,8 +11,8 @@
     <description>@description@</description>
     <tags>f# fsharp canopy selenium ui automation tests</tags>
     <dependencies>
-      <dependency id="Selenium.WebDriver" version="2.34.0" />
-      <dependency id="Selenium.Support" version="2.34.0" />
+      <dependency id="Selenium.WebDriver" version="2.35.0" />
+      <dependency id="Selenium.Support" version="2.35.0" />
     </dependencies>
   </metadata>
 </package>
