@@ -53,11 +53,13 @@ type BrowserStartMode =
     | ChromeWithOptions of Chrome.ChromeOptions
     | ChromeWithOptionsAndTimeSpan of Chrome.ChromeOptions * TimeSpan
     | PhantomJS
+    | PhantomJSProxyNone
 
 let firefox = Firefox
 let ie = IE
 let chrome = Chrome
 let phantomJS = PhantomJS
+let phantomJSProxyNone = PhantomJSProxyNone
   
 let mutable browsers = []
 
@@ -547,6 +549,11 @@ let start b =
         | PhantomJS -> 
             autoPinBrowserRightOnLaunch <- false
             new OpenQA.Selenium.PhantomJS.PhantomJSDriver(phantomJSDir) :> IWebDriver
+        | PhantomJSProxyNone -> 
+            autoPinBrowserRightOnLaunch <- false
+            let service = OpenQA.Selenium.PhantomJS.PhantomJSDriverService.CreateDefaultService(canopy.configuration.phantomJSDir)
+            service.ProxyType <- "none"
+            new OpenQA.Selenium.PhantomJS.PhantomJSDriver(service) :> IWebDriver            
 
     if autoPinBrowserRightOnLaunch = true then pin Right
     browsers <- browsers @ [browser]
