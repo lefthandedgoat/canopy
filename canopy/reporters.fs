@@ -140,28 +140,42 @@ type TeamCityReporter() =
         member this.skip () = ()
 
 type LiveHtmlReporter() =
-    let consoleReporter : IReporter = new ConsoleReporter() :> IReporter    
-    let browser = new OpenQA.Selenium.Firefox.FirefoxDriver() :> IWebDriver    
+    let consoleReporter : IReporter = new ConsoleReporter() :> IReporter
+     
+    let _browser = new OpenQA.Selenium.Firefox.FirefoxDriver() :> IWebDriver
     let pin () =   
         let h = System.Windows.Forms.Screen.PrimaryScreen.WorkingArea.Height;
         let w = System.Windows.Forms.Screen.PrimaryScreen.WorkingArea.Width;
         let maxWidth = w / 2    
-        browser.Manage().Window.Size <- new System.Drawing.Size(maxWidth,h);        
-        browser.Manage().Window.Position <- new System.Drawing.Point((maxWidth * 0),0);
+        _browser.Manage().Window.Size <- new System.Drawing.Size(maxWidth,h);        
+        _browser.Manage().Window.Position <- new System.Drawing.Point((maxWidth * 0),0);
     do pin()
-    let js script = try (browser :?> IJavaScriptExecutor).ExecuteScript(script) |> ignore with | ex -> ()
+       
     let mutable context = System.String.Empty;
     let mutable test = System.String.Empty;
     let mutable canQuit = false
     let mutable contexts : string list = []
 
+    member this.browser
+        with get () = _browser
+
+    member val reportPath = @"http://lefthandedgoat.github.com/canopy/reporttemplate.html" with get, set
+    member this.js script = (_browser :?> IJavaScriptExecutor).ExecuteScript(script)
+    member this.reportHtml () = (this.js "return $('*').html();").ToString()
+    member private this.swallowedJS script = try (_browser :?> IJavaScriptExecutor).ExecuteScript(script) |> ignore with | ex -> ()
+    member this.saveReportHtml directory filename =    
+        if not <| System.IO.Directory.Exists(directory) 
+            then System.IO.Directory.CreateDirectory(directory) |> ignore
+        IO.File.WriteAllText(System.IO.Path.Combine(directory,filename + ".html"), this.reportHtml())
+    
+
     interface IReporter with               
         member this.pass () =
-            js (sprintf "addToContext('%s', 'Pass', '%s', '%s');" context test "")
+            this.swallowedJS (sprintf "addToContext('%s', 'Pass', '%s', '%s');" context test "")
             consoleReporter.pass ()
 
         member this.fail ex id ss =
-            js (sprintf "addToContext('%s', 'Fail', '%s', '%s');" context test (Convert.ToBase64String(ss)))
+            this.swallowedJS (sprintf "addToContext('%s', 'Fail', '%s', '%s');" context test (Convert.ToBase64String(ss)))
             consoleReporter.fail ex id ss
 
         member this.describe d = 
@@ -170,8 +184,8 @@ type LiveHtmlReporter() =
         member this.contextStart c = 
             contexts <- c :: contexts
             context <- c
-            js (sprintf "addContext('%s');" context)
-            js (sprintf "collapseContextsExcept('%s');" context)
+            this.swallowedJS (sprintf "addContext('%s');" context)
+            this.swallowedJS (sprintf "collapseContextsExcept('%s');" context)
             consoleReporter.contextStart c
 
         member this.contextEnd c = 
@@ -192,22 +206,22 @@ type LiveHtmlReporter() =
             
         member this.testEnd id = ()
 
-        member this.quit () = if canQuit then browser.Quit()
+        member this.quit () = if canQuit then _browser.Quit()
         
-        member this.suiteBegin () = browser.Navigate().GoToUrl(@"http://lefthandedgoat.github.com/canopy/reporttemplate.html")
+        member this.suiteBegin () = _browser.Navigate().GoToUrl(this.reportPath)
 
         member this.suiteEnd () = 
             canQuit <- true
-            js (sprintf "collapseContextsExcept('%s');" "") //cheap hack to collapse all contexts at the end of a run
+            this.swallowedJS (sprintf "collapseContextsExcept('%s');" "") //cheap hack to collapse all contexts at the end of a run
 
         member this.coverage url ss = 
             if (contexts |> List.exists (fun c -> c = "Coverage Reports")) = false then
                 contexts <- "Coverage Reports" :: contexts
-                js (sprintf "addContext('%s');" "Coverage Reports")
-            js (sprintf "addToContext('%s', 'Pass', '%s', '%s');" "Coverage Reports" url (Convert.ToBase64String(ss)))
+                this.swallowedJS (sprintf "addContext('%s');" "Coverage Reports")
+            this.swallowedJS (sprintf "addToContext('%s', 'Pass', '%s', '%s');" "Coverage Reports" url (Convert.ToBase64String(ss)))
 
         member this.todo () = 
-            js (sprintf "addToContext('%s', 'Todo', '%s', '%s');" context test "")
+            this.swallowedJS (sprintf "addToContext('%s', 'Todo', '%s', '%s');" context test "")
 
         member this.skip () = 
-            js (sprintf "addToContext('%s', 'Skip', '%s', '%s');" context test "")
+            this.swallowedJS (sprintf "addToContext('%s', 'Skip', '%s', '%s');" context test "")
