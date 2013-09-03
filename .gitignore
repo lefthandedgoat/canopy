@@ -13,6 +13,8 @@ demotests/bin/**/*
 demotests/obj/**/*
 documentationtests/bin/**/*
 documentationtests/obj/**/*
+sampleprojectstructure/bin/**/*
+sampleprojectstructure/obj/**/*
 nuget/*
 build/*
 tests/*
