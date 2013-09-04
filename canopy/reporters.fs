@@ -159,7 +159,8 @@ type LiveHtmlReporter() =
     member this.browser
         with get () = _browser
 
-    member val reportPath = @"http://lefthandedgoat.github.com/canopy/reporttemplate.html" with get, set
+    member val reportPath = None with get, set
+    member val reportTemplateUrl = @"http://lefthandedgoat.github.com/canopy/reporttemplate.html" with get, set
     member this.js script = (_browser :?> IJavaScriptExecutor).ExecuteScript(script)
     member this.reportHtml () = (this.js "return $('*').html();").ToString()
     member private this.swallowedJS script = try (_browser :?> IJavaScriptExecutor).ExecuteScript(script) |> ignore with | ex -> ()
@@ -206,9 +207,16 @@ type LiveHtmlReporter() =
             
         member this.testEnd id = ()
 
-        member this.quit () = if canQuit then _browser.Quit()
+        member this.quit () = 
+          match this.reportPath with
+            | Some(string) ->
+              let reportFileInfo = new IO.FileInfo(this.reportPath.Value)
+              this.saveReportHtml reportFileInfo.Directory.FullName reportFileInfo.Name
+            | None -> Console.WriteLine("Not saving report")
+
+          if canQuit then _browser.Quit()
         
-        member this.suiteBegin () = _browser.Navigate().GoToUrl(this.reportPath)
+        member this.suiteBegin () = _browser.Navigate().GoToUrl(this.reportTemplateUrl)
 
         member this.suiteEnd () = 
             canQuit <- true
