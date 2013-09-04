@@ -1,0 +1,26 @@
+<?xml version="1.0"?>
+<package xmlns="http://schemas.microsoft.com/packaging/2011/08/nuspec.xsd">
+  <metadata>
+    <id>SizSelCsZzz</id>
+    <version>0.3.34.0</version>
+    <title>SizSelCsZzz</title>
+    <authors>Frank Schwieterman</authors>
+    <owners>Frank Schwieterman</owners>
+    <licenseUrl>https://raw.github.com/fschwiet/SizSelCsZzz/master/LICENSE.txt</licenseUrl>
+    <projectUrl>https://raw.github.com/fschwiet/SizSelCsZzz/</projectUrl>
+    <requireLicenseAcceptance>false</requireLicenseAcceptance>
+    <description>Various utility methods for Selenium from .NET.  (Use jQuery or Sizzle css selectors, wait on ajax operations, check client-side exceptions, switch to/from new window)</description>
+    <releaseNotes>Built against Selenium Webdriver 2.35</releaseNotes>
+    <copyright>Copyright 2012</copyright>
+    <language />
+    <tags>Selenium WebDriver Browser Automation</tags>
+    <dependencies>
+      <dependency id="Newtonsoft.Json" version="5.0" />
+      <dependency id="Selenium.WebDriver" version="2.35" />
+      <dependency id="Selenium.Support" version="2.35" />
+    </dependencies>
+    <references>
+      <reference file="SizSelCsZzz.dll" />
+    </references>
+  </metadata>
+</package>

@@ -6,7 +6,7 @@ open runner
 open configuration
 open reporters
 
-start chrome
+start phantomJS
 let mainBrowser = browser
 elementTimeout <- 3.0
 compareTimeout <- 3.0
@@ -187,6 +187,11 @@ test (fun _ ->
     check "#checkbox"
     selected "#checkbox")
 
+"clicking #checkbox selects it via sizzle" &&& (fun _ ->
+    !^ testpage
+    check "#checkbox"
+    count "input:checked" 1)
+
 "clicking selected #checkbox deselects it" &&& (fun _ ->
     !^ testpage
     check "#checkbox"
@@ -362,7 +367,7 @@ context "other tests"
     !^ testpage
     "#states" << "Kingman Reef"
     "#states" == "Kingman Reef")
-
+    
 "double clicking" &&& (fun _ ->
     !^ "http://lefthandedgoat.github.io/canopy/testpages/doubleClick"
     "#clicked" == "Not Clicked"
@@ -388,6 +393,10 @@ context "other tests"
 "count test" &&& (fun _ ->
     !^ "http://lefthandedgoat.github.io/canopy/testpages/count"
     count ".number" 5)
+
+"count test via sizzle" &&& (fun _ ->
+    !^ testpage
+    count "option:selected" 2)
 
 context "dragging"
 "draging works" &&& (fun _ ->

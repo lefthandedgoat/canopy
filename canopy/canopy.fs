@@ -144,7 +144,17 @@ let waitFor (f : unit -> bool) =
 //find related
 let private findByCss cssSelector f =
     try
+        f(By.CssSelector(cssSelector)) |> List.ofSeq
+    with | ex -> []
+
+let private findBySizzle cssSelector f =
+    try
         f(BySizzle.CssSelector(cssSelector)) |> List.ofSeq
+    with | ex -> []
+
+let private findByJQuery cssSelector f =
+    try
+        f(ByJQuery.CssSelector(cssSelector)) |> List.ofSeq
     with | ex -> []
 
 let private findByXpath xpath f =
@@ -206,6 +216,8 @@ let rec private findElements (cssSelector : string) (searchContext : ISearchCont
             yield (findByXpath  cssSelector searchContext.FindElements)
             yield (findByLabel  cssSelector searchContext.FindElement)            
             yield (findByText   cssSelector searchContext.FindElements)
+            yield (findBySizzle cssSelector searchContext.FindElements)
+            yield (findByJQuery cssSelector searchContext.FindElements)
             yield (findInIFrame())
         }
         |> Seq.filter(fun list -> not(list.IsEmpty))
