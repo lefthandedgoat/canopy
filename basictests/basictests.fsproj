@@ -69,8 +69,7 @@
       <Project>{63135cf6-70a9-4382-851d-4b679ee0cbf8}</Project>
       <Private>True</Private>
     </ProjectReference>
-  </ItemGroup>
-  <Import Project="$(SolutionDir)\.nuget\NuGet.targets" Condition="Exists('$(SolutionDir)\.nuget\NuGet.targets')" />
+  </ItemGroup>  
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 
 	     Other similar extension points exist, see Microsoft.Common.targets.
 	<Target Name="BeforeBuild">
