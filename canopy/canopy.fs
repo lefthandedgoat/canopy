@@ -474,7 +474,7 @@ let displayed cssSelector =
 
 let notDisplayed cssSelector =
     try
-        wait compareTimeout (fun _ -> not(shown cssSelector))
+        wait compareTimeout (fun _ -> (elements cssSelector |> List.isEmpty) || not(shown cssSelector))
         ()
     with
         | :? WebDriverTimeoutException -> raise (CanopyNotDisplayedFailedException(sprintf "notDisplay checked for %s failed." cssSelector));

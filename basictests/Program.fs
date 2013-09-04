@@ -6,7 +6,7 @@ open runner
 open configuration
 open reporters
 
-start phantomJS
+start chrome
 let mainBrowser = browser
 elementTimeout <- 3.0
 compareTimeout <- 3.0
@@ -389,6 +389,10 @@ context "other tests"
 "notDisplayed test" &&& (fun _ ->
     !^ "http://lefthandedgoat.github.io/canopy/testpages/notDisplayed"
     notDisplayed "#notDisplayed")
+
+"notDisplayed test for element that is not on the screen" &&& (fun _ ->
+    !^ "http://lefthandedgoat.github.io/canopy/testpages/notDisplayed"
+    notDisplayed "#nalsjdfalfalsdjfalsjfaljsflsjf")
 
 "count test" &&& (fun _ ->
     !^ "http://lefthandedgoat.github.io/canopy/testpages/count"
