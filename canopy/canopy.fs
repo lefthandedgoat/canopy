@@ -5,6 +5,7 @@ open OpenQA.Selenium.Firefox
 open OpenQA.Selenium
 open OpenQA.Selenium.Support.UI
 open OpenQA.Selenium.Interactions
+open SizSelCsZzz
 open Microsoft.FSharp.Core.Printf
 open System.IO
 open System
@@ -143,7 +144,7 @@ let waitFor (f : unit -> bool) =
 //find related
 let private findByCss cssSelector f =
     try
-        f(By.CssSelector(cssSelector)) |> List.ofSeq
+        f(BySizzle.CssSelector(cssSelector)) |> List.ofSeq
     with | ex -> []
 
 let private findByXpath xpath f =
