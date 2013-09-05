@@ -408,7 +408,8 @@ context "dragging"
     click ".plus-button a img"
     "#task_title" << "Demo"
     click "#task_editor_buttons .save_button"
-    ".handle" --> ".inprogress")
+    ".handle" --> ".inprogress"
+    click "Blog")
 
 if not (browser :? OpenQA.Selenium.PhantomJS.PhantomJSDriver) then
     context "alert tests"
@@ -469,4 +470,4 @@ coverage testpage
 coverage()
 coverage "http://scrumy.com/silenter39delayed"
 
-//quit mainBrowser
+quit()

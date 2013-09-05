@@ -209,10 +209,10 @@ type LiveHtmlReporter() =
 
         member this.quit () = 
           match this.reportPath with
-            | Some(string) ->
-              let reportFileInfo = new IO.FileInfo(this.reportPath.Value)
+            | Some(path) ->
+              let reportFileInfo = new IO.FileInfo(path)
               this.saveReportHtml reportFileInfo.Directory.FullName reportFileInfo.Name
-            | None -> Console.WriteLine("Not saving report")
+            | None -> consoleReporter.write "Not saving report"
 
           if canQuit then _browser.Quit()
         
