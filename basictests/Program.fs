@@ -291,7 +291,7 @@ before (fun _ -> Console.WriteLine "only before set now")
 "ajax button should click after sleep" &&& (fun _ ->
     !^ testpage
     "#ajax_button_clicked" == "ajax button not clicked"
-    sleep 3
+    sleep 2.5
     click "#ajax_button"
     "#ajax_button_clicked" == "ajax button clicked")
 

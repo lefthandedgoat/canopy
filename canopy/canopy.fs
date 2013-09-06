@@ -79,9 +79,11 @@ let js script = (browser :?> IJavaScriptExecutor).ExecuteScript(script)
 let private swallowedJs script = try js script |> ignore with | ex -> ()
 
 let sleep seconds =
-    match box seconds with
-    | :? int as i -> System.Threading.Thread.Sleep(i * 1000)
-    | _ -> System.Threading.Thread.Sleep(1 * 1000)
+    let ms = match box seconds with
+              | :? int as i -> i * 1000
+              | :? float as i -> Convert.ToInt32(i * 1000.0)
+              | _ -> 1000
+    System.Threading.Thread.Sleep(ms)
 
 let puts (text : string) = 
     reporter.write text
