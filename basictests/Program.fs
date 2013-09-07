@@ -446,6 +446,19 @@ if not (browser :? OpenQA.Selenium.PhantomJS.PhantomJSDriver) then
         click "#confirmation_test"
         alert() == "Not the message")
 
+context "multiple elements test"
+
+before (fun _ -> !^ "http://lefthandedgoat.github.io/canopy/testpages/")
+
+"no error with multiple elements" &&&& fun _ ->
+    read (element "input") === "test value 1"
+
+"error with multiple elements" &&&& fun _ ->
+    throwIfMoreThanOneElement <- true
+    failsWith "More than one element was selected when only one was expected for selector: input"
+    read (element "input") === "test value 1"
+        
+
 context "tiling windows"
 "start multiple browsers and tile them" &&& (fun _ ->
     start chrome
@@ -461,6 +474,7 @@ context "tiling windows"
 )
 
 context "todo tests"
+
 "write a test that tests the whole internet!" &&& todo
 
 run ()

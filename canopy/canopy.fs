@@ -244,19 +244,30 @@ let private findMany cssSelector timeout (searchContext : ISearchContext) =
     findByFunction cssSelector timeout findElements searchContext
 
 //get elements
+
+let private elementFromList cssSelector elementsList =
+    match elementsList with
+    | [] -> null
+    | x :: [] -> x    
+    | x :: y :: _ -> 
+        if throwIfMoreThanOneElement then raise (CanopyMoreThanOneElementFoundException(sprintf "More than one element was selected when only one was expected for selector: %s" cssSelector))
+        else x
+
 let private someElementFromList cssSelector elementsList =
     match elementsList with
-    | [x] -> Some(x)
-    | [] -> None
-    | _ -> raise (CanopyMoreThanOneElementFoundException(sprintf "More than one element was selected when only one was expected for selector: %s" cssSelector))
+    | [] -> None    
+    | x :: [] -> Some(x)
+    | x :: y :: _ -> 
+        if throwIfMoreThanOneElement then raise (CanopyMoreThanOneElementFoundException(sprintf "More than one element was selected when only one was expected for selector: %s" cssSelector))
+        else Some(x)
+
+let elements cssSelector = findMany cssSelector elementTimeout browser
     
-let element cssSelector = find cssSelector elementTimeout browser
+let element cssSelector = cssSelector |> elements |> elementFromList cssSelector
 
 let elementWithin cssSelector (elem:IWebElement) =  find cssSelector elementTimeout elem
 
 let parent elem = elem |> elementWithin ".."
-
-let elements cssSelector = findMany cssSelector elementTimeout browser
 
 let elementsWithin cssSelector elem = findMany cssSelector elementTimeout elem
 
