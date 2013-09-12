@@ -378,6 +378,10 @@ context "other tests"
     !^ "http://lefthandedgoat.github.io/canopy/testpages/displayed"
     displayed "#displayed")
 
+"displayed test via element" &&& (fun _ ->
+    !^ "http://lefthandedgoat.github.io/canopy/testpages/displayed"
+    element "#displayed" |> displayed)
+
 "displayed test2" &&& (fun _ ->
     !^ "http://lefthandedgoat.github.io/canopy/testpages/displayed"
     waitFor (fun _ -> (element "#displayed").Displayed))
@@ -389,6 +393,10 @@ context "other tests"
 "notDisplayed test" &&& (fun _ ->
     !^ "http://lefthandedgoat.github.io/canopy/testpages/notDisplayed"
     notDisplayed "#notDisplayed")
+
+"notDisplayed test via element" &&& (fun _ ->
+    !^ "http://lefthandedgoat.github.io/canopy/testpages/notDisplayed"
+    element "#notDisplayed" |> notDisplayed)
 
 "notDisplayed test for element that is not on the screen" &&& (fun _ ->
     !^ "http://lefthandedgoat.github.io/canopy/testpages/notDisplayed"
@@ -450,10 +458,10 @@ context "multiple elements test"
 
 before (fun _ -> !^ "http://lefthandedgoat.github.io/canopy/testpages/")
 
-"no error with multiple elements" &&&& fun _ ->
+"no error with multiple elements" &&& fun _ ->
     read (element "input") === "test value 1"
 
-"error with multiple elements" &&&& fun _ ->
+"error with multiple elements" &&& fun _ ->
     throwIfMoreThanOneElement <- true
     failsWith "More than one element was selected when only one was expected for selector: input"
     read (element "input") === "test value 1"
