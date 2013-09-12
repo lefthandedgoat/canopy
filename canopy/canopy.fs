@@ -473,41 +473,47 @@ let is expected actual =
 
 let (===) expected actual = is expected actual
 
-let private shown cssSelector =
-    let elem = element cssSelector
+let private shown (elem : IWebElement) =    
     let opacity = elem.GetCssValue("opacity")
     let display = elem.GetCssValue("display")
     display <> "none" && opacity = "1"
        
-let displayed cssSelector =
+let displayed item =
     try
-        wait compareTimeout (fun _ -> shown cssSelector)
+        wait compareTimeout (fun _ -> 
+            match box item with
+            | :? IWebElement as element ->  shown element
+            | :? string as cssSelector -> element cssSelector |> shown
+            | _ -> raise (CanopyNotStringOrElementException(sprintf "Can't click %O because it is not a string or webelement" item)))
     with
-        | :? WebDriverTimeoutException -> raise (CanopyDisplayedFailedException(sprintf "display checked for %s failed." cssSelector))
+        | :? WebDriverTimeoutException -> raise (CanopyDisplayedFailedException(sprintf "display checked for %O failed." item))
 
-let notDisplayed cssSelector =
+let notDisplayed item =
     try
-        wait compareTimeout (fun _ -> (elements cssSelector |> List.isEmpty) || not(shown cssSelector))
-        ()
+        wait compareTimeout (fun _ -> 
+            match box item with
+            | :? IWebElement as element -> not(shown element)
+            | :? string as cssSelector -> (elements cssSelector |> List.isEmpty) || not(element cssSelector |> shown)
+            | _ -> raise (CanopyNotStringOrElementException(sprintf "Can't click %O because it is not a string or webelement" item)))
     with
-        | :? WebDriverTimeoutException -> raise (CanopyNotDisplayedFailedException(sprintf "notDisplay checked for %s failed." cssSelector));
+        | :? WebDriverTimeoutException -> raise (CanopyNotDisplayedFailedException(sprintf "notDisplay checked for %O failed." item));
 
-let fadedIn cssSelector = (fun _ -> shown cssSelector)
+let fadedIn cssSelector = fun _ -> element cssSelector |> shown
 
 //clicking/checking
 let click item =     
     match box item with
     | :? IWebElement as element -> element.Click()
-    | :? string as cssSelector ->         
+    | :? string as cssSelector ->
         wait elementTimeout (fun _ -> 
-                                let atleastOneItemClicked = ref false
-                                elements cssSelector
-                                |> List.iter (fun elem ->                                 
-                                    try
-                                        elem.Click()
-                                        atleastOneItemClicked := true
-                                    with | ex -> ())
-                                !atleastOneItemClicked)
+            let atleastOneItemClicked = ref false
+            elements cssSelector
+            |> List.iter (fun elem ->                                 
+                try
+                    elem.Click()
+                    atleastOneItemClicked := true
+                with | ex -> ())
+            !atleastOneItemClicked)
     | _ -> raise (CanopyNotStringOrElementException(sprintf "Can't click %O because it is not a string or webelement" item))
     
 let doubleClick item =
