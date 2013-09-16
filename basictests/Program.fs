@@ -242,6 +242,29 @@ test (fun _ ->
     failsWith "More than one element was selected when only one was expected for selector: .lastName"
     someElement ".lastName" |> ignore)
 
+"Navigating to a url should be on url" &&& fun _ ->
+    url testpage
+    on testpage
+
+"Navigating to a url with query string should be on url with and without a query string" &&& fun _ ->
+    let testpageWithQueryString = testpage + "?param1=weeeee"
+    let subtestpage = "http://lefthandedgoat.github.io/canopy"
+    url testpageWithQueryString
+    on testpageWithQueryString //with query string
+    on testpage //without query string
+
+"Should not be on partial url" &&& fun _ ->
+    url testpage
+    let partialUrl = "http://lefthandedgoat.github.io/canopy"
+    failsWith ("on check failed, expected expression '" + partialUrl + "' got " + testpage)
+    on partialUrl
+
+"Should not be on child url" &&& fun _ ->
+    url testpage
+    let childUrl = testpage + "notatthspath/"
+    failsWith ("on check failed, expected expression '" + childUrl + "' got " + testpage)
+    on childUrl
+
 context "reddit tests"
 once (fun _ -> Console.WriteLine "once: reddit tests")
 before (fun _ -> Console.WriteLine "before: reddit tests")

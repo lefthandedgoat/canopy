@@ -616,11 +616,14 @@ let quit browser =
 
 let currentUrl() = browser.Url
 
-let on (u: string) = 
+let on (u: string) =
+    let urlSansQueryString u =
+      let uri = new System.Uri(u)
+      uri.GetLeftPart(System.UriPartial.Path)
     try
-        wait pageTimeout (fun _ -> (browser.Url.Contains(u)))
+        wait pageTimeout (fun _ -> if browser.Url = u then true else urlSansQueryString(browser.Url) = u)
     with
-        | ex -> raise (CanopyOnException(sprintf "on check failed, expected %s got %s" u browser.Url));
+        | ex -> if browser.Url.Contains(u) = false then raise (CanopyOnException(sprintf "on check failed, expected expression '%s' got %s" u browser.Url));
 
 let ( !^ ) (u : string) = browser.Navigate().GoToUrl(u)
 
