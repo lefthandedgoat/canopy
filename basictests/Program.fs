@@ -10,6 +10,7 @@ start chrome
 let mainBrowser = browser
 elementTimeout <- 3.0
 compareTimeout <- 3.0
+pageTimeout <- 3.0
 runFailedContextsFirst <- true
 reporter <- new LiveHtmlReporter() :> IReporter
 
