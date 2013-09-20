@@ -14,6 +14,12 @@ let buildDir = @".\build\"
 let testDir = @".\tests\"
 let nugetDir = @".\nuget\"
 
+// Restore NuGet packages
+!! "./**/packages.config"
+    |> Seq.iter (RestorePackage (fun p -> 
+        {p with 
+            ToolPath = "./.nuget/NuGet.exe"}))
+
 // Targets
 
 // Update assembly info
@@ -51,7 +57,7 @@ Target "TestCanopy" (fun _ ->
     let result =
         ExecProcess (fun info -> 
             info.FileName <- (testDir @@ "basictests.exe")
-        ) (System.TimeSpan.FromMinutes 3.)
+        ) (System.TimeSpan.FromMinutes 5.)
     if result <> 0 then failwith "Failed result from basictests"
 )
 
@@ -76,7 +82,8 @@ Target "CreateNuGet" (fun _ ->
                 Version = version
                 Description = projectDescription
                 NoPackageAnalysis = true
-                ToolPath = @".\tools\Nuget\Nuget.exe" 
+                ToolPath = @".\.Nuget\Nuget.exe" 
+                WorkingDir = nugetDir
                 OutputPath = nugetDir })
 )
 
