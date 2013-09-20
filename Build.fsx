@@ -5,7 +5,7 @@ open Fake.AssemblyInfoFile
 
 // Assembly / NuGet package properties
 let projectName = "canopy"
-let version = "0.8.6"
+let version = "0.8.7"
 let projectDescription = "A simple framework in f# on top of selenium for writing UI automation and tests. Change Log at https://github.com/lefthandedgoat/canopy/wiki/Change-Log"
 let authors = ["Chris Holt"]
 
