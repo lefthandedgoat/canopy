@@ -617,11 +617,14 @@ let quit browser =
 let currentUrl() = browser.Url
 
 let on (u: string) =
-    let urlSansQueryString u =
-        let uri = new System.Uri(u)
-        uri.GetLeftPart(System.UriPartial.Path)
+    let urlPath (u : string) =
+        let url = match u with
+                  | x when x.StartsWith("http") -> u //leave absolute urls alone
+                  | _ -> "http://host/" + u.Trim('/') + "/" //ensure valid uri
+        let uriBuilder = new System.UriBuilder(url)
+        uriBuilder.Path
     try
-        wait pageTimeout (fun _ -> browser.Url = u || urlSansQueryString(browser.Url) = u)
+        wait pageTimeout (fun _ -> if browser.Url = u then true else urlPath(browser.Url) = urlPath(u))
     with
         | ex -> if browser.Url.Contains(u) = false then raise (CanopyOnException(sprintf "on check failed, expected expression '%s' got %s" u browser.Url));
 
