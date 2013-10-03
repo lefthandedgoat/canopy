@@ -619,10 +619,10 @@ let currentUrl() = browser.Url
 let on (u: string) =
     let urlPath (u : string) =
         let url = match u with
-                  | x when x.StartsWith("http") -> u //leave absolute urls alone
-                  | _ -> "http://host/" + u.Trim('/') + "/" //ensure valid uri
+                  | x when x.StartsWith("http") -> u  //leave absolute urls alone 
+                  | _ -> "http://host/" + u.Trim('/') //ensure valid uri
         let uriBuilder = new System.UriBuilder(url)
-        uriBuilder.Path
+        uriBuilder.Path.TrimEnd('/') //get the path part removing trailing slashes
     try
         wait pageTimeout (fun _ -> if browser.Url = u then true else urlPath(browser.Url) = urlPath(u))
     with
