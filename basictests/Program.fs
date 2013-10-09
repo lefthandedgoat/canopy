@@ -253,7 +253,7 @@ test (fun _ ->
     on testpageWithQueryString //with query string
     on testpage //without query string
 
-"Should be on a non absolute url" &&&& fun _ ->
+"Should be on a non absolute url" &&& fun _ ->
     let testpageWithQueryString = testpage + "?param1=weeeee"
     url testpageWithQueryString
 
