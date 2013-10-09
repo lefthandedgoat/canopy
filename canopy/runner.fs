@@ -67,14 +67,14 @@ let context c =
         s.Context <- c
         suites <- suites @ [s]
 
-let test f = (last suites).Tests <- (last suites).Tests @ [Test(null, f, (last suites).Tests.Length + 1)]
 let ( &&& ) description f = (last suites).Tests <- (last suites).Tests @ [Test(description, f, (last suites).Tests.Length + 1)]
+let test f = null &&& f
 let ntest description f = description &&& f
-let wip f = (last suites).Wips <- (last suites).Wips @ [Test(null, f, (last suites).Wips.Length + 1)]
 let ( &&&& ) description f = (last suites).Wips <- (last suites).Wips @ [Test(description, f, (last suites).Wips.Length + 1)]
+let wip f = null &&&& f
 let many count f = [1 .. count] |> List.iter (fun _ -> (last suites).Manys <- (last suites).Manys @ [Test(null, f, (last suites).Manys.Length + 1)])
-let xtest f = (last suites).Tests <- (last suites).Tests @ [Test(null, skipped, (last suites).Tests.Length + 1)]
 let ( &&! ) description f = (last suites).Tests <- (last suites).Tests @ [Test(description, skipped, (last suites).Tests.Length + 1)]
+let xtest f = null &&! f
 
 let mutable passedCount = 0
 let mutable failedCount = 0
