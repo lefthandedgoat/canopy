@@ -29,10 +29,14 @@ type CanopyContainsFailedException(message) = inherit CanopyException(message)
 type CanopyCountException(message) = inherit CanopyException(message)
 type CanopyDisplayedFailedException(message) = inherit CanopyException(message)
 type CanopyNotDisplayedFailedException(message) = inherit CanopyException(message)
+type CanopyEnabledFailedException(message) = inherit CanopyException(message)
+type CanopyDisabledFailedException(message) = inherit CanopyException(message)
 type CanopyNotStringOrElementException(message) = inherit CanopyException(message)
 type CanopyOnException(message) = inherit CanopyException(message)
+type CanopyCheckFailedException(message) = inherit CanopyException(message)
+type CanopyUncheckFailedException(message) = inherit CanopyException(message)
 
-let mutable (browser : IWebDriver) = null;
+let mutable (browser : IWebDriver) = null
 let mutable (failureMessage : string) = null
 let mutable wipTest = false
 let mutable searchedFor : (string * string) list = []
@@ -87,14 +91,14 @@ let sleep seconds =
 
 let puts (text : string) = 
     reporter.write text
-    let escapedText = text.Replace("'", @"\'");
+    let escapedText = text.Replace("'", @"\'")
     let info = "
         var infoDiv = document.getElementById('canopy_info_div'); 
         if(!infoDiv) { infoDiv = document.createElement('div'); } 
         infoDiv.id = 'canopy_info_div'; 
         infoDiv.setAttribute('style','position: absolute; border: 1px solid black; bottom: 0px; right: 0px; margin: 3px; padding: 3px; background-color: white; z-index: 99999; font-size: 20px; font-family: monospace; font-weight: bold;'); 
         document.getElementsByTagName('body')[0].appendChild(infoDiv); 
-        infoDiv.innerHTML = 'locating: " + escapedText + "';";
+        infoDiv.innerHTML = 'locating: " + escapedText + "';"
     swallowedJs info
 
 let private wait timeout f =
@@ -354,7 +358,7 @@ let selected item =
     match box item with
     | :? IWebElement as elem -> selected elem.TagName elem
     | :? string as cssSelector -> element cssSelector |> selected cssSelector
-    | _ -> raise (CanopyNotStringOrElementException(sprintf "Can't checked selected on %O because it is not a string or element" item))
+    | _ -> raise (CanopyNotStringOrElementException(sprintf "Can't check selected on %O because it is not a string or element" item))
     
 let deselected item =     
     let deselected cssSelector (elem : IWebElement) =
@@ -363,7 +367,7 @@ let deselected item =
     match box item with
     | :? IWebElement as elem -> deselected elem.TagName elem
     | :? string as cssSelector -> element cssSelector |> deselected cssSelector
-    | _ -> raise (CanopyNotStringOrElementException(sprintf "Can't checked deselected on %O because it is not a string or element" item))
+    | _ -> raise (CanopyNotStringOrElementException(sprintf "Can't check deselected on %O because it is not a string or element" item))
 
 //keyboard
 let tab = Keys.Tab
@@ -378,7 +382,11 @@ let press key =
     elem.SendKeys(key)
 
 //alerts
-let alert() = browser.SwitchTo().Alert()
+let alert() = 
+    waitFor (fun _ ->
+        browser.SwitchTo().Alert() |> ignore
+        true)
+    browser.SwitchTo().Alert()
 
 let acceptAlert() = 
     wait compareTimeout (fun _ ->
@@ -442,7 +450,7 @@ let count cssSelector count =
         wait compareTimeout (fun _ -> ( let elems = elements cssSelector
                                         elems.Length = count))
     with
-        | :? WebDriverTimeoutException -> raise (CanopyCountException(sprintf "count failed. expected: %i got: %i" count (elements cssSelector).Length));
+        | :? WebDriverTimeoutException -> raise (CanopyCountException(sprintf "count failed. expected: %i got: %i" count (elements cssSelector).Length))
 
 let private regexMatch pattern input = System.Text.RegularExpressions.Regex.Match(input, pattern).Success
 
@@ -486,7 +494,7 @@ let displayed item =
             | :? string as cssSelector -> element cssSelector |> shown
             | _ -> raise (CanopyNotStringOrElementException(sprintf "Can't click %O because it is not a string or webelement" item)))
     with
-        | :? WebDriverTimeoutException -> raise (CanopyDisplayedFailedException(sprintf "display checked for %O failed." item))
+        | :? WebDriverTimeoutException -> raise (CanopyDisplayedFailedException(sprintf "display check for %O failed." item))
 
 let notDisplayed item =
     try
@@ -496,7 +504,27 @@ let notDisplayed item =
             | :? string as cssSelector -> (elements cssSelector |> List.isEmpty) || not(element cssSelector |> shown)
             | _ -> raise (CanopyNotStringOrElementException(sprintf "Can't click %O because it is not a string or webelement" item)))
     with
-        | :? WebDriverTimeoutException -> raise (CanopyNotDisplayedFailedException(sprintf "notDisplay checked for %O failed." item));
+        | :? WebDriverTimeoutException -> raise (CanopyNotDisplayedFailedException(sprintf "notDisplay check for %O failed." item))
+
+let enabled item = 
+    try
+        wait compareTimeout (fun _ -> 
+            match box item with
+            | :? IWebElement as element -> element.Enabled = true
+            | :? string as cssSelector -> (element cssSelector).Enabled = true
+            | _ -> raise (CanopyNotStringOrElementException(sprintf "Can't click %O because it is not a string or webelement" item)))
+    with
+        | :? WebDriverTimeoutException -> raise (CanopyEnabledFailedException(sprintf "enabled check for %O failed." item))
+
+let disabled item = 
+    try
+        wait compareTimeout (fun _ -> 
+            match box item with
+            | :? IWebElement as element -> element.Enabled = false
+            | :? string as cssSelector -> (element cssSelector).Enabled = false
+            | _ -> raise (CanopyNotStringOrElementException(sprintf "Can't click %O because it is not a string or webelement" item)))
+    with
+        | :? WebDriverTimeoutException -> raise (CanopyDisabledFailedException(sprintf "disabled check for %O failed." item))
 
 let fadedIn cssSelector = fun _ -> element cssSelector |> shown
 
@@ -528,9 +556,29 @@ let doubleClick item =
     | _ -> raise (CanopyNotStringOrElementException(sprintf "Can't doubleClick %O because it is not a string or webelement" item))
 
 
-let check cssSelector = if not <| (element cssSelector).Selected then click cssSelector
+let check item = 
+    try
+        match box item with
+        | :? IWebElement as elem -> if not <| elem.Selected then click elem
+        | :? string as cssSelector -> 
+            waitFor (fun _ -> 
+                if not <| (element cssSelector).Selected then click cssSelector
+                (element cssSelector).Selected)        
+        | _ -> raise (CanopyNotStringOrElementException(sprintf "Can't read %O because it is not a string or element" item))
+    with
+        | :? WebDriverTimeoutException -> raise (CanopyCheckFailedException(sprintf "failed to check %O." item))
 
-let uncheck cssSelector = if (element cssSelector).Selected then click cssSelector
+let uncheck item = 
+    try
+        match box item with
+        | :? IWebElement as elem -> if elem.Selected then click elem
+        | :? string as cssSelector -> 
+            waitFor (fun _ -> 
+                if (element cssSelector).Selected then click cssSelector
+                (element cssSelector).Selected = false)        
+        | _ -> raise (CanopyNotStringOrElementException(sprintf "Can't read %O because it is not a string or element" item))
+    with
+        | :? WebDriverTimeoutException -> raise (CanopyUncheckFailedException(sprintf "failed to uncheck %O." item))
 
 //draggin
 let (-->) cssSelectorA cssSelectorB =
@@ -544,13 +592,13 @@ let drag cssSelectorA cssSelectorB = cssSelectorA --> cssSelectorB
     
 //browser related
 let pin direction =   
-    let h = System.Windows.Forms.Screen.PrimaryScreen.WorkingArea.Height;
-    let w = System.Windows.Forms.Screen.PrimaryScreen.WorkingArea.Width;
+    let h = System.Windows.Forms.Screen.PrimaryScreen.WorkingArea.Height
+    let w = System.Windows.Forms.Screen.PrimaryScreen.WorkingArea.Width
     let maxWidth = w / 2    
-    browser.Manage().Window.Size <- new System.Drawing.Size(maxWidth,h);        
+    browser.Manage().Window.Size <- new System.Drawing.Size(maxWidth,h)        
     match direction with
-    | Left -> browser.Manage().Window.Position <- new System.Drawing.Point((maxWidth * 0),0);   
-    | Right -> browser.Manage().Window.Position <- new System.Drawing.Point((maxWidth * 1),0);   
+    | Left -> browser.Manage().Window.Position <- new System.Drawing.Point((maxWidth * 0),0)
+    | Right -> browser.Manage().Window.Position <- new System.Drawing.Point((maxWidth * 1),0)
     | FullScreen -> browser.Manage().Window.Maximize()
 
 let start b =    
@@ -593,8 +641,8 @@ let start b =
 let switchTo b = browser <- b
 
 let tile (browsers : OpenQA.Selenium.IWebDriver list) =   
-    let h = System.Windows.Forms.Screen.PrimaryScreen.WorkingArea.Height;
-    let w = System.Windows.Forms.Screen.PrimaryScreen.WorkingArea.Width;
+    let h = System.Windows.Forms.Screen.PrimaryScreen.WorkingArea.Height
+    let w = System.Windows.Forms.Screen.PrimaryScreen.WorkingArea.Width
     let count = browsers.Length
     let maxWidth = w / count
 
@@ -602,8 +650,8 @@ let tile (browsers : OpenQA.Selenium.IWebDriver list) =
         match browsers with
         | [] -> ()
         | b :: tail -> 
-            b.Manage().Window.Size <- new System.Drawing.Size(maxWidth,h);        
-            b.Manage().Window.Position <- new System.Drawing.Point((maxWidth * c),0);
+            b.Manage().Window.Size <- new System.Drawing.Size(maxWidth,h)        
+            b.Manage().Window.Position <- new System.Drawing.Point((maxWidth * c),0)
             setSize tail (c + 1)
     
     setSize browsers 0
@@ -626,7 +674,7 @@ let on (u: string) =
     try
         wait pageTimeout (fun _ -> if browser.Url = u then true else urlPath(browser.Url) = urlPath(u))
     with
-        | ex -> if browser.Url.Contains(u) = false then raise (CanopyOnException(sprintf "on check failed, expected expression '%s' got %s" u browser.Url));
+        | ex -> if browser.Url.Contains(u) = false then raise (CanopyOnException(sprintf "on check failed, expected expression '%s' got %s" u browser.Url))
 
 let ( !^ ) (u : string) = browser.Navigate().GoToUrl(u)
 
