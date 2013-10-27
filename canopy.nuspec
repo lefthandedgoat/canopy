@@ -13,6 +13,7 @@
     <dependencies>
       <dependency id="Selenium.WebDriver" version="2.35.0" />
       <dependency id="Selenium.Support" version="2.35.0" />
+      <dependency id="SizSelCsZzz" version="0.3.34.0" />
     </dependencies>
   </metadata>
 </package>
