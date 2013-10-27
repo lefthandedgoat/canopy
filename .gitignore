@@ -1,3 +1,5 @@
+packages/
+tools/
 _Resharper.canopy
 *.ReSharper.user
 *.pdb
