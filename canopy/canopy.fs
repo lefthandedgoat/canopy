@@ -638,6 +638,29 @@ let start b =
     if autoPinBrowserRightOnLaunch = true then pin Right
     browsers <- browsers @ [browser]
 
+type UserAgent = 
+    | IPhone
+    | IPad
+
+let iphone = IPhone
+let ipad = IPad
+
+let startAs ua b =
+    let appleUserAgent = "Mozilla/5.0 ({0}; CPU OS 5_0 like Mac OS X) AppleWebKit/534.46 (KHTML, like Gecko) Version/5.1 Mobile/9A334 Safari/7534.48.3"
+    let userAgent = match ua with
+                    | IPhone -> String.Format(appleUserAgent, "iPhone")
+                    | IPad -> String.Format(appleUserAgent, "iPad")
+
+    let browser = match b with
+                  | Firefox -> let profile = FirefoxProfile()
+                               profile.SetPreference("general.useragent.override", userAgent)
+                               FirefoxWithProfile profile
+                  | Chrome -> let options = Chrome.ChromeOptions()
+                              options.AddArgument ("--user-agent=" + userAgent)
+                              ChromeWithOptions options
+                  | _ -> b
+    start browser
+
 let switchTo b = browser <- b
 
 let tile (browsers : OpenQA.Selenium.IWebDriver list) =   
