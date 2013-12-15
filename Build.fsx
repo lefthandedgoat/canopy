@@ -5,7 +5,7 @@ open Fake.AssemblyInfoFile
 
 // Assembly / NuGet package properties
 let projectName = "canopy"
-let version = "0.8.9"
+let version = "0.9.0"
 let projectDescription = "A simple framework in f# on top of selenium for writing UI automation and tests. Change Log at https://github.com/lefthandedgoat/canopy/wiki/Change-Log"
 let authors = ["Chris Holt"]
 
@@ -69,7 +69,7 @@ Target "CleanNuGet" (fun _ ->
 // Create NuGet package
 Target "CreateNuGet" (fun _ ->     
     XCopy @".\build\" (nugetDir @@ "lib")
-    !+ @"nuget/lib/*.*"
+    !! @"nuget/lib/*.*"
         -- @"nuget/lib/canopy*.*"
         |> ScanImmediately
         |> Seq.iter (System.IO.File.Delete)

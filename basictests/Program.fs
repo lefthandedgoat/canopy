@@ -503,7 +503,7 @@ before (fun _ -> !^ "http://lefthandedgoat.github.io/canopy/testpages/")
         
 
 context "tiling windows"
-"start multiple browsers and tile them" &&& (fun _ ->
+"start multiple browsers and tile them" &&& fun _ ->
     start chrome
     let browser1 = browser
     start chrome
@@ -514,11 +514,23 @@ context "tiling windows"
     quit browser2
     quit browser1
     switchTo mainBrowser
-)
+
+context "User Agents tests"
+
+"ChromeDevice IPad should show as iPad" &&& fun _ ->
+    start <| ChromeDevice IPad
+    url "http://whatsmyuseragent.com/"
+    "#body_lbUserAgent" =~ "iPad"
+
+"FirefoxDevice IPhone should show as iPhone" &&& fun _ ->
+    start <| FirefoxDevice IPhone
+    url "http://whatsmyuseragent.com/"
+    "#body_lbUserAgent" =~ "iPhone"
 
 context "todo tests"
 
 "write a test that tests the whole internet!" &&& todo
+
 
 run ()
         

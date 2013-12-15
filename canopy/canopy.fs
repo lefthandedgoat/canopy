@@ -47,15 +47,22 @@ type direction =
     | Right
     | FullScreen
 
+//devices
+type Device = 
+    | IPhone
+    | IPad
+
 //browser
 type BrowserStartMode =
     | Firefox
     | FirefoxWithProfile of Firefox.FirefoxProfile
+    | FirefoxDevice of Device
     | IE
     | IEWithOptions of IE.InternetExplorerOptions
     | IEWithOptionsAndTimeSpan of IE.InternetExplorerOptions * TimeSpan
     | Chrome
     | ChromeWithOptions of Chrome.ChromeOptions
+    | ChromeDevice of Device
     | ChromeWithOptionsAndTimeSpan of Chrome.ChromeOptions * TimeSpan
     | PhantomJS
     | PhantomJSProxyNone
@@ -65,6 +72,8 @@ let ie = IE
 let chrome = Chrome
 let phantomJS = PhantomJS
 let phantomJSProxyNone = PhantomJSProxyNone
+let iphone = IPhone
+let ipad = IPad
   
 let mutable browsers = []
 
@@ -608,7 +617,14 @@ let start b =
     //also download IEDriverServer and place in c:\ or configure with ieDir
     //firefox just works
     //for phantomjs download it and put in c:\ or configure with phantomJSDir
-    browser <-
+    
+    let userAgent device =
+        let appleUserAgent = "Mozilla/5.0 ({0}; CPU OS 5_0 like Mac OS X) AppleWebKit/534.46 (KHTML, like Gecko) Version/5.1 Mobile/9A334 Safari/7534.48.3"
+        match device with
+            | IPhone -> String.Format(appleUserAgent, "iPhone")
+            | IPad -> String.Format(appleUserAgent, "iPad")   
+    
+    browser <-        
         match b with
         | IE -> 
             new OpenQA.Selenium.IE.InternetExplorerDriver(ieDir) :> IWebDriver
@@ -620,11 +636,19 @@ let start b =
             new OpenQA.Selenium.Chrome.ChromeDriver(chromeDir) :> IWebDriver
         | ChromeWithOptions options ->
             new OpenQA.Selenium.Chrome.ChromeDriver(chromeDir, options) :> IWebDriver
+        | ChromeDevice device ->
+            let options = Chrome.ChromeOptions()
+            options.AddArgument("--user-agent=" + (userAgent device))
+            new OpenQA.Selenium.Chrome.ChromeDriver(chromeDir, options) :> IWebDriver
         | ChromeWithOptionsAndTimeSpan(options, timeSpan) ->
             new OpenQA.Selenium.Chrome.ChromeDriver(chromeDir, options, timeSpan) :> IWebDriver
         | Firefox -> 
             new OpenQA.Selenium.Firefox.FirefoxDriver() :> IWebDriver
         | FirefoxWithProfile profile -> 
+            new OpenQA.Selenium.Firefox.FirefoxDriver(profile) :> IWebDriver
+        | FirefoxDevice device ->
+            let profile = FirefoxProfile()
+            profile.SetPreference("general.useragent.override", (userAgent device))
             new OpenQA.Selenium.Firefox.FirefoxDriver(profile) :> IWebDriver
         | PhantomJS -> 
             autoPinBrowserRightOnLaunch <- false
@@ -637,29 +661,6 @@ let start b =
 
     if autoPinBrowserRightOnLaunch = true then pin Right
     browsers <- browsers @ [browser]
-
-type UserAgent = 
-    | IPhone
-    | IPad
-
-let iphone = IPhone
-let ipad = IPad
-
-let startAs ua b =
-    let appleUserAgent = "Mozilla/5.0 ({0}; CPU OS 5_0 like Mac OS X) AppleWebKit/534.46 (KHTML, like Gecko) Version/5.1 Mobile/9A334 Safari/7534.48.3"
-    let userAgent = match ua with
-                    | IPhone -> String.Format(appleUserAgent, "iPhone")
-                    | IPad -> String.Format(appleUserAgent, "iPad")
-
-    let browser = match b with
-                  | Firefox -> let profile = FirefoxProfile()
-                               profile.SetPreference("general.useragent.override", userAgent)
-                               FirefoxWithProfile profile
-                  | Chrome -> let options = Chrome.ChromeOptions()
-                              options.AddArgument ("--user-agent=" + userAgent)
-                              ChromeWithOptions options
-                  | _ -> b
-    start browser
 
 let switchTo b = browser <- b
 
