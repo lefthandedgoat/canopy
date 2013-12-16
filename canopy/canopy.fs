@@ -680,6 +680,23 @@ let tile (browsers : OpenQA.Selenium.IWebDriver list) =
     
     setSize browsers 0
 
+let innerSize() =
+    let jsBrowser = browser :?> OpenQA.Selenium.IJavaScriptExecutor
+    let innerWidth = System.Int32.Parse(jsBrowser.ExecuteScript("return window.innerWidth").ToString())
+    let innerHeight = System.Int32.Parse(jsBrowser.ExecuteScript("return window.innerHeight").ToString())
+    innerWidth, innerHeight
+
+let resize size =
+    let width,height = size
+    let innerWidth, innerHeight = innerSize()
+    let newWidth = browser.Manage().Window.Size.Width - innerWidth + width
+    let newHeight = browser.Manage().Window.Size.Height - innerHeight + height
+    browser.Manage().Window.Size <- System.Drawing.Size(newWidth, newHeight)   
+
+let rotate() =
+    let innerWidth, innerHeight = innerSize()
+    resize(innerHeight, innerWidth)
+
 let quit browser =
     reporter.quit()
     match box browser with
