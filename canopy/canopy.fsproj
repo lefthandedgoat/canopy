@@ -51,6 +51,7 @@
     <Compile Include="history.fs" />
     <Compile Include="runner.fs" />
     <None Include="packages.config" />
+    <Compile Include="ScreenSize.fs" />
   </ItemGroup>
   <ItemGroup>
     <Reference Include="mscorlib" />

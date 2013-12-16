@@ -527,6 +527,23 @@ context "User Agents tests"
     url "http://whatsmyuseragent.com/"
     "#body_lbUserAgent" =~ "iPhone"
 
+context "Resize tests"
+
+"browser should be resized to iPhone4" &&& fun _ ->
+    start firefox
+    url "http://resizemybrowser.com/"
+    resize screenSize.iPhone4
+    "#cWidth" == "320"
+    "#cHeight" == "480"
+
+"browser should be resized and rotated to iPhone4" &&& fun _ ->
+    start firefox
+    url "http://resizemybrowser.com/"
+    resize screenSize.iPhone4
+    rotate()
+    "#cHeight" == "320"
+    "#cWidth" == "480"
+
 context "todo tests"
 
 "write a test that tests the whole internet!" &&& todo
