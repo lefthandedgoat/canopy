@@ -529,20 +529,35 @@ context "User Agents tests"
 
 context "Resize tests"
 
-"browser should be resized to iPhone4" &&& fun _ ->
-    start firefox
+"Chrome should be resized to iPhone4" &&& fun _ ->
+    start chrome
     url "http://resizemybrowser.com/"
-    resize screenSize.iPhone4
+    resize screenSizes.iPhone4
     "#cWidth" == "320"
     "#cHeight" == "480"
 
-"browser should be resized and rotated to iPhone4" &&& fun _ ->
+"Firefox should be resized to 400,400" &&& fun _ ->
     start firefox
     url "http://resizemybrowser.com/"
-    resize screenSize.iPhone4
+    resize (400,400)
+    "#cWidth" == "400"
+    "#cHeight" == "400"
+
+"Chrome should be resized and rotated to iPhone4" &&& fun _ ->
+    start chrome
+    url "http://resizemybrowser.com/"
+    resize screenSizes.iPhone4
     rotate()
     "#cHeight" == "320"
     "#cWidth" == "480"
+    
+"Firefox should be resized to 400,500 then rotated to 500,400" &&& fun _ ->
+    start firefox
+    url "http://resizemybrowser.com/"
+    resize (400,500)
+    rotate()
+    "#cHeight" == "400"
+    "#cWidth" == "500"
 
 context "todo tests"
 
