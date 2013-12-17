@@ -517,15 +517,20 @@ context "tiling windows"
 
 context "User Agents tests"
 
-"ChromeDevice IPad should show as iPad" &&& fun _ ->
-    start <| ChromeDevice IPad
+"ChromeWithUserAgent userAgents.iPad should show as iPad" &&& fun _ ->
+    start <| ChromeWithUserAgent userAgents.iPad
     url "http://whatsmyuseragent.com/"
     "#body_lbUserAgent" =~ "iPad"
 
-"FirefoxDevice IPhone should show as iPhone" &&& fun _ ->
-    start <| FirefoxDevice IPhone
+"FirefoxDeviceWithUserAgent userAgents.iPhone should show as iPhone" &&& fun _ ->
+    start <| FirefoxWithUserAgent userAgents.iPhone
     url "http://whatsmyuseragent.com/"
     "#body_lbUserAgent" =~ "iPhone"
+
+"FirefoxDeviceWithUserAgent myagent should show as myagent" &&& fun _ ->
+    start <| FirefoxWithUserAgent "myagent"
+    url "http://whatsmyuseragent.com/"
+    "#body_lbUserAgent" == "myagent"
 
 context "Resize tests"
 
