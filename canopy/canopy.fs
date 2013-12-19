@@ -91,7 +91,7 @@ let sleep seconds =
               | _ -> 1000
     System.Threading.Thread.Sleep(ms)
 
-let puts (text : string) = 
+let puts text = 
     reporter.write text
     let escapedText = text.Replace("'", @"\'")
     let info = "
@@ -121,10 +121,10 @@ let private colorizeAndSleep cssSelector =
     sleep wipSleep    
     swallowedJs <| sprintf "document.querySelector('%s').style.border = 'thick solid #ACD372';" cssSelector
 
-let highlight (cssSelector : string) = 
+let highlight cssSelector = 
     swallowedJs <| sprintf "document.querySelector('%s').style.border = 'thick solid #ACD372';" cssSelector
 
-let suggestOtherSelectors (cssSelector : string) =     
+let suggestOtherSelectors cssSelector =     
     if not disableSuggestOtherSelectors then
         let allElements = browser.FindElements(By.CssSelector("html *")) |> Array.ofSeq
         let classes = allElements |> Array.Parallel.map (fun e -> "." + e.GetAttribute("class"))
@@ -138,7 +138,7 @@ let suggestOtherSelectors (cssSelector : string) =
             |> Seq.map (fun r -> r.selector) |> List.ofSeq
             |> (fun suggestions -> reporter.suggestSelectors cssSelector suggestions)    
 
-let describe (text : string) =
+let describe text =
     puts text
 
 let waitFor (f : unit -> bool) =
@@ -202,7 +202,7 @@ let private findByValue value f =
         findByCss (sprintf "*[value='%s']" value) f |> List.ofSeq        
     with | _ -> []
     
-let rec private findElements (cssSelector : string) (searchContext : ISearchContext) =
+let rec private findElements cssSelector (searchContext : ISearchContext) =
     searchedFor <- (cssSelector, browser.Url) :: searchedFor
     let findInIFrame () =
         let iframes = findByCss "iframe" searchContext.FindElements
@@ -232,7 +232,7 @@ let rec private findElements (cssSelector : string) (searchContext : ISearchCont
         |> Seq.head
     with | ex -> []
 
-let private findByFunction cssSelector (timeout : float) waitFunc (searchContext : ISearchContext) =
+let private findByFunction cssSelector timeout waitFunc searchContext =
     if wipTest then colorizeAndSleep cssSelector
     let wait = new WebDriverWait(browser, TimeSpan.FromSeconds(elementTimeout))
     try
@@ -243,10 +243,10 @@ let private findByFunction cssSelector (timeout : float) waitFunc (searchContext
             suggestOtherSelectors cssSelector
             raise (CanopyElementNotFoundException(sprintf "cant find element %s" cssSelector))
 
-let private find (cssSelector : string) (timeout : float) (searchContext : ISearchContext) =
+let private find cssSelector timeout searchContext =
     (findByFunction cssSelector timeout findElements searchContext).Head
 
-let private findMany cssSelector timeout (searchContext : ISearchContext) =
+let private findMany cssSelector timeout searchContext =
     findByFunction cssSelector timeout findElements searchContext
 
 //get elements
@@ -297,7 +297,7 @@ let private writeToSelect cssSelector text =
     | [] -> raise (CanopyOptionNotFoundException(sprintf "element %s does not contain value %s" cssSelector text))
     | head::tail -> head.Click()
 
-let ( << ) cssSelector (text : string) = 
+let ( << ) cssSelector text = 
     wait (elementTimeout + 1.0) (fun _ ->
         
         let writeToElement (e : IWebElement) =
@@ -428,7 +428,7 @@ let ( != ) cssSelector value =
     with
         | :? WebDriverTimeoutException -> raise (CanopyNotEqualsFailedException(sprintf "not equals check failed.  expected NOT: %s, got: %s" value (read cssSelector)))
         
-let ( *= ) (cssSelector : string) value =
+let ( *= ) cssSelector value =
     try        
         wait compareTimeout (fun _ -> ( cssSelector |> elements |> Seq.exists(fun element -> (textOf element) = value)))
     with
@@ -437,7 +437,7 @@ let ( *= ) (cssSelector : string) value =
                 cssSelector |> elements |> List.iter (fun e -> bprintf sb "%s\r\n" (textOf e))
                 raise (CanopyValueNotInListException(sprintf "cant find %s in list %s\r\ngot: %s" value cssSelector (sb.ToString())))
 
-let ( *!= ) (cssSelector : string) value =
+let ( *!= ) cssSelector value =
     try
         wait compareTimeout (fun _ -> ( cssSelector |> elements |> Seq.exists(fun element -> (textOf element) = value) |> not))
     with
@@ -468,7 +468,7 @@ let ( =~ ) cssSelector pattern =
     with
         | :? WebDriverTimeoutException -> raise (CanopyEqualityFailedException(sprintf "regex equality check failed.  expected: %s, got: %s" pattern (read cssSelector)))
 
-let ( *~ ) (cssSelector : string) pattern =
+let ( *~ ) cssSelector pattern =
     try        
         wait compareTimeout (fun _ -> ( cssSelector |> elements |> Seq.exists(fun element -> regexMatch pattern (textOf element))))
     with
