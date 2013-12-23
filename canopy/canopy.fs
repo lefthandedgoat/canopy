@@ -603,12 +603,12 @@ let pin direction =
     | Right -> browser.Manage().Window.Position <- new System.Drawing.Point((maxWidth * 1),0)
     | FullScreen -> browser.Manage().Window.Maximize()
 
-let chromeWithUserAgent userAgent =
+let private chromeWithUserAgent userAgent =
     let options = Chrome.ChromeOptions()
     options.AddArgument("--user-agent=" + userAgent)
     new OpenQA.Selenium.Chrome.ChromeDriver(chromeDir, options) :> OpenQA.Selenium.IWebDriver
 
-let firefoxWithUserAgent (userAgent : string) = 
+let private firefoxWithUserAgent (userAgent : string) = 
     let profile = FirefoxProfile()
     profile.SetPreference("general.useragent.override", userAgent)
     new OpenQA.Selenium.Firefox.FirefoxDriver(profile) :> OpenQA.Selenium.IWebDriver
