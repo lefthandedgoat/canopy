@@ -55,6 +55,7 @@
     <Compile Include="..\AssemblyInfo.fs">
       <Link>AssemblyInfo.fs</Link>
     </Compile>
+    <Compile Include="types.fs" />
     <Compile Include="reporters.fs" />
     <Compile Include="configuration.fs" />
     <Compile Include="levenshtein.fs" />

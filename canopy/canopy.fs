@@ -12,55 +12,12 @@ open System
 open configuration
 open levenshtein
 open reporters
-
-type CanopyException(message) = inherit Exception(message)
-type CanopyReadOnlyException(message) = inherit CanopyException(message)
-type CanopyOptionNotFoundException(message) = inherit CanopyException(message)
-type CanopySelectionFailedExeception(message) = inherit CanopyException(message)
-type CanopyDeselectionFailedException(message) = inherit CanopyException(message)
-type CanopyWaitForException(message) = inherit CanopyException(message)
-type CanopyElementNotFoundException(message) = inherit CanopyException(message)
-type CanopyMoreThanOneElementFoundException(message) = inherit CanopyException(message)
-type CanopyEqualityFailedException(message) = inherit CanopyException(message)
-type CanopyNotEqualsFailedException(message) = inherit CanopyException(message)
-type CanopyValueNotInListException(message) = inherit CanopyException(message)
-type CanopyValueInListException(message) = inherit CanopyException(message)
-type CanopyContainsFailedException(message) = inherit CanopyException(message)
-type CanopyCountException(message) = inherit CanopyException(message)
-type CanopyDisplayedFailedException(message) = inherit CanopyException(message)
-type CanopyNotDisplayedFailedException(message) = inherit CanopyException(message)
-type CanopyEnabledFailedException(message) = inherit CanopyException(message)
-type CanopyDisabledFailedException(message) = inherit CanopyException(message)
-type CanopyNotStringOrElementException(message) = inherit CanopyException(message)
-type CanopyOnException(message) = inherit CanopyException(message)
-type CanopyCheckFailedException(message) = inherit CanopyException(message)
-type CanopyUncheckFailedException(message) = inherit CanopyException(message)
+open types
 
 let mutable (browser : IWebDriver) = null
 let mutable (failureMessage : string) = null
 let mutable wipTest = false
 let mutable searchedFor : (string * string) list = []
-
-//directions
-type direction =
-    | Left
-    | Right
-    | FullScreen
-
-//browser
-type BrowserStartMode =
-    | Firefox
-    | FirefoxWithProfile of Firefox.FirefoxProfile
-    | FirefoxWithUserAgent of string
-    | IE
-    | IEWithOptions of IE.InternetExplorerOptions
-    | IEWithOptionsAndTimeSpan of IE.InternetExplorerOptions * TimeSpan
-    | Chrome
-    | ChromeWithOptions of Chrome.ChromeOptions
-    | ChromeWithOptionsAndTimeSpan of Chrome.ChromeOptions * TimeSpan
-    | ChromeWithUserAgent of string
-    | PhantomJS
-    | PhantomJSProxyNone
 
 let firefox = Firefox
 let ie = IE

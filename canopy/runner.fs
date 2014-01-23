@@ -4,52 +4,12 @@ open System
 open configuration
 open canopy
 open reporters
+open types
 
 let rec private last = function
     | hd :: [] -> hd
     | hd :: tl -> last tl
     | _ -> failwith "Empty list."
-
-type Test (description: string, func : (unit -> unit), number : int) =
-    member x.Description = description
-    member x.Func = func
-    member x.Number = number
-
-type suite () = class
-    let mutable context : string = null
-    let mutable once = fun () -> ()
-    let mutable before = fun () -> ()
-    let mutable after = fun () -> ()
-    let mutable lastly = fun () -> () 
-    let mutable tests : Test list = []
-    let mutable wips : Test list = []
-    let mutable manys : Test list = []
-
-    member x.Context
-        with get() = context
-        and set(value) = context <- value
-    member x.Once
-        with get() = once
-        and set(value) = once <- value
-    member x.Before
-        with get() = before
-        and set(value) = before <- value
-    member x.After
-        with get() = after
-        and set(value) = after <- value
-    member x.Lastly
-        with get() = lastly
-        and set(value) = lastly <- value
-    member x.Tests
-        with get() = tests
-        and set(value) = tests <- value
-    member x.Wips
-        with get() = wips
-        and set(value) = wips <- value
-    member x.Manys
-        with get() = manys
-        and set(value) = manys <- value
-end
 
 let mutable suites = [new suite()]
 let mutable todo = fun () -> ()

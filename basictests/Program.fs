@@ -5,6 +5,7 @@ open canopy
 open runner
 open configuration
 open reporters
+open types
 
 start chrome
 let mainBrowser = browser
@@ -13,6 +14,7 @@ compareTimeout <- 3.0
 pageTimeout <- 3.0
 runFailedContextsFirst <- true
 reporter <- new LiveHtmlReporter() :> IReporter
+//reporter <- new LiveHtmlReporter(Chrome, configuration.chromeDir) :> IReporter 
 
 failFast := true
 

@@ -2,6 +2,7 @@
 
 open System
 open OpenQA.Selenium
+open types
 
 type IReporter =
    abstract member testStart : string -> unit
@@ -139,10 +140,24 @@ type TeamCityReporter() =
 
         member this.skip () = ()
 
-type LiveHtmlReporter() =
+type LiveHtmlReporter(browser : BrowserStartMode, driverPath : string) =
     let consoleReporter : IReporter = new ConsoleReporter() :> IReporter
-     
-    let _browser = new OpenQA.Selenium.Firefox.FirefoxDriver() :> IWebDriver
+    
+    let _browser =    
+        //copy pasta!
+        match browser with
+        | IE -> new OpenQA.Selenium.IE.InternetExplorerDriver(driverPath) :> IWebDriver
+        | IEWithOptions options ->new OpenQA.Selenium.IE.InternetExplorerDriver(driverPath, options) :> IWebDriver
+        | IEWithOptionsAndTimeSpan(options, timeSpan) -> new OpenQA.Selenium.IE.InternetExplorerDriver(driverPath, options, timeSpan) :> IWebDriver
+        | Chrome -> new OpenQA.Selenium.Chrome.ChromeDriver(driverPath) :> IWebDriver
+        | ChromeWithOptions options -> new OpenQA.Selenium.Chrome.ChromeDriver(driverPath, options) :> IWebDriver        
+        | ChromeWithOptionsAndTimeSpan(options, timeSpan) -> new OpenQA.Selenium.Chrome.ChromeDriver(driverPath, options, timeSpan) :> IWebDriver
+        | Firefox -> new OpenQA.Selenium.Firefox.FirefoxDriver() :> IWebDriver
+        | FirefoxWithProfile profile -> new OpenQA.Selenium.Firefox.FirefoxDriver(profile) :> IWebDriver
+        | ChromeWithUserAgent userAgent -> raise(System.Exception("Sorry ChromeWithUserAgent can't be used for LiveHtmlReporter"))
+        | FirefoxWithUserAgent userAgent -> raise(System.Exception("Sorry FirefoxWithUserAgent can't be used for LiveHtmlReporter"))
+        | PhantomJS | PhantomJSProxyNone -> raise(System.Exception("Sorry PhantomJS can't be used for LiveHtmlReporter"))
+                
     let pin () =   
         let h = System.Windows.Forms.Screen.PrimaryScreen.WorkingArea.Height;
         let w = System.Windows.Forms.Screen.PrimaryScreen.WorkingArea.Width;
@@ -155,6 +170,8 @@ type LiveHtmlReporter() =
     let mutable test = System.String.Empty;
     let mutable canQuit = false
     let mutable contexts : string list = []
+
+    new() = LiveHtmlReporter(Firefox, @"c:\")
 
     member this.browser
         with get () = _browser
