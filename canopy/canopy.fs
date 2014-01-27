@@ -50,7 +50,7 @@ let sleep seconds =
 
 let puts text = 
     reporter.write text
-    let escapedText = text.Replace("'", @"\'")
+    let escapedText = System.Web.HttpUtility.JavaScriptStringEncode(text)
     let info = "
         var infoDiv = document.getElementById('canopy_info_div'); 
         if(!infoDiv) { infoDiv = document.createElement('div'); } 

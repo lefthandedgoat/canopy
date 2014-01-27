@@ -189,11 +189,15 @@ type LiveHtmlReporter(browser : BrowserStartMode, driverPath : string) =
 
     interface IReporter with               
         member this.pass () =
-            this.swallowedJS (sprintf "addToContext('%s', 'Pass', '%s', '%s');" context test "")
+            let escapedContext = System.Web.HttpUtility.JavaScriptStringEncode(context)
+            let escapedTest = System.Web.HttpUtility.JavaScriptStringEncode(test)
+            this.swallowedJS (sprintf "addToContext('%s', 'Pass', '%s', '%s');" escapedContext escapedTest "")
             consoleReporter.pass ()
 
         member this.fail ex id ss =
-            this.swallowedJS (sprintf "addToContext('%s', 'Fail', '%s', '%s');" context test (Convert.ToBase64String(ss)))
+            let escapedContext = System.Web.HttpUtility.JavaScriptStringEncode(context)
+            let escapedTest = System.Web.HttpUtility.JavaScriptStringEncode(test)
+            this.swallowedJS (sprintf "addToContext('%s', 'Fail', '%s', '%s');" escapedContext escapedTest (Convert.ToBase64String(ss)))
             consoleReporter.fail ex id ss
 
         member this.describe d = 
