@@ -59,7 +59,6 @@ let findByValue value f =
     with | _ -> []
 
 //you can use this as an example to how to extend canopy by creating your own set of finders, tweaking the current collection, or adding/removing
-//(string -> (By -> seq<IWebElement>) -> seq<IWebElement list>)
 let mutable defaultFinders = 
     (fun cssSelector f ->
         seq {

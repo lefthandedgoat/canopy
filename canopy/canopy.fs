@@ -13,6 +13,7 @@ open configuration
 open levenshtein
 open reporters
 open types
+open finders
 
 let mutable (browser : IWebDriver) = null
 let mutable (failureMessage : string) = null
@@ -110,7 +111,7 @@ let waitFor (f : unit -> bool) =
 let rec private findElements cssSelector (searchContext : ISearchContext) : IWebElement list =
     searchedFor <- (cssSelector, browser.Url) :: searchedFor
     let findInIFrame () =
-        let iframes = finders.findByCss "iframe" searchContext.FindElements
+        let iframes = findByCss "iframe" searchContext.FindElements
         if iframes.IsEmpty then 
             browser.SwitchTo().DefaultContent() |> ignore
             []
@@ -123,10 +124,13 @@ let rec private findElements cssSelector (searchContext : ISearchContext) : IWeb
             !webElements
 
     try
-        configuredFinders cssSelector searchContext.FindElements
-        |> Seq.append (seq { yield (findInIFrame()) })
-        |> Seq.filter(fun list -> not(list.IsEmpty))
-        |> Seq.head
+        let results =
+            configuredFinders cssSelector searchContext.FindElements        
+            |> Seq.filter(fun list -> not(list.IsEmpty))
+        if Seq.isEmpty results then
+            findInIFrame()
+        else
+           results |> Seq.head
     with | ex -> []
 
 let private findByFunction cssSelector timeout waitFunc searchContext =
@@ -644,3 +648,9 @@ let coverage (url : 'a) =
     let f = DateTime.Now.ToString("MMM-d_HH-mm-ss-fff")
     let ss = screenshot p f
     reporter.coverage nonMutableInnerUrl ss
+
+let addFinder finder =
+    let currentFinders = configuredFinders
+    configuredFinders <- (fun cssSelector f ->
+        currentFinders cssSelector f
+        |> Seq.append (seq { yield finder cssSelector f }))

@@ -1,6 +1,7 @@
 ﻿module main
 
 open System
+open OpenQA.Selenium
 open canopy
 open runner
 open configuration
@@ -545,13 +546,6 @@ context "User Agents tests"
 
 context "Resize tests"
 
-"Chrome should be resized to iPhone4" &&& fun _ ->
-    start chrome
-    url "http://resizemybrowser.com/"
-    resize screenSizes.iPhone4
-    "#cWidth" == "320"
-    "#cHeight" == "480"
-
 "Firefox should be resized to 400,400" &&& fun _ ->
     start firefox
     url "http://resizemybrowser.com/"
@@ -559,14 +553,13 @@ context "Resize tests"
     "#cWidth" == "400"
     "#cHeight" == "400"
 
-"Chrome should be resized and rotated to iPhone4" &&& fun _ ->
+"Chrome should be resized to iPhone4" &&& fun _ ->
     start chrome
     url "http://resizemybrowser.com/"
     resize screenSizes.iPhone4
-    rotate()
-    "#cHeight" == "320"
-    "#cWidth" == "480"
-    
+    "#cWidth" == "320"
+    "#cHeight" == "480"
+
 "Firefox should be resized to 400,500 then rotated to 500,400" &&& fun _ ->
     start firefox
     url "http://resizemybrowser.com/"
@@ -575,10 +568,34 @@ context "Resize tests"
     "#cHeight" == "400"
     "#cWidth" == "500"
 
+"Chrome should be resized and rotated to iPhone4" &&& fun _ ->
+    start chrome
+    url "http://resizemybrowser.com/"
+    resize screenSizes.iPhone4
+    rotate()
+    "#cHeight" == "320"
+    "#cWidth" == "480"
+
+context "pluggable finders tests"
+
+//example of a finder you could write so you didnt have to write boring selectors, just add this
+//and let canopy do the work of trying to find something by convention
+let findByHref href f =
+    try
+        let cssSelector = sprintf "a[href='%s']" href
+        f(By.CssSelector(cssSelector)) |> List.ofSeq
+    with | ex -> []
+
+addFinder findByHref
+
+"Firefox should be resized to 400,500 then rotated to 500,400" &&& fun _ ->
+    url "http://lefthandedgoat.github.io/canopy/index.html"
+    click "about.html"
+    on "http://lefthandedgoat.github.io/canopy/about.html"
+
 context "todo tests"
 
 "write a test that tests the whole internet!" &&& todo
-
 
 run ()
         
