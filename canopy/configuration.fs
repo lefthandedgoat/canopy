@@ -16,3 +16,4 @@ let mutable reporter : IReporter = new ConsoleReporter() :> IReporter
 let mutable disableSuggestOtherSelectors = false
 let mutable autoPinBrowserRightOnLaunch = true
 let mutable throwIfMoreThanOneElement = false
+let mutable configuredFinders = finders.defaultFinders

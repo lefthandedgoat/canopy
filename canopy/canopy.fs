@@ -106,63 +106,11 @@ let waitFor (f : unit -> bool) =
                 puts "Condition not met in given amount of time. If you want to increase the time, put compareTimeout <- 10.0 anywhere before a test to increase the timeout"
                 raise (CanopyWaitForException(sprintf "waitFor condition failed to become true in %.1f seconds" compareTimeout))
 
-//find related
-let private findByCss cssSelector f =
-    try
-        f(By.CssSelector(cssSelector)) |> List.ofSeq
-    with | ex -> []
-
-let private findBySizzle cssSelector f =
-    try
-        f(BySizzle.CssSelector(cssSelector)) |> List.ofSeq
-    with | ex -> []
-
-let private findByJQuery cssSelector f =
-    try
-        f(ByJQuery.CssSelector(cssSelector)) |> List.ofSeq
-    with | ex -> []
-
-let private findByXpath xpath f =
-    try
-        f(By.XPath(xpath)) |> List.ofSeq
-    with | ex -> []
-
-let private findByLabel locator f =
-    let isInputField (element : IWebElement) =
-        element.TagName = "input" && element.GetAttribute("type") <> "hidden"
-    
-    let isField (element : IWebElement) =
-        element.TagName = "select" || element.TagName = "textarea" || isInputField element
-
-    let firstFollowingField (label : IWebElement) =
-        let followingElements = label.FindElements(By.XPath("./following-sibling::*[1]")) |> Seq.toList
-        match followingElements with
-            | head :: tail when isField head-> [head]
-            | _ -> []
-    try
-        let label : IWebElement = f(By.XPath(sprintf ".//label[text() = '%s']" locator))
-        if (label = null) then
-            []
-        else
-            match label.GetAttribute("for") with
-            | null -> firstFollowingField label
-            | id -> [f(By.Id(id))]
-    with | _ -> []
-
-let private findByText text f =
-    try
-        f(By.XPath(sprintf ".//*[text() = '%s']" text)) |> List.ofSeq
-    with | _ -> []
-
-let private findByValue value f =
-    try
-        findByCss (sprintf "*[value='%s']" value) f |> List.ofSeq        
-    with | _ -> []
-    
-let rec private findElements cssSelector (searchContext : ISearchContext) =
+//find related    
+let rec private findElements cssSelector (searchContext : ISearchContext) : IWebElement list =
     searchedFor <- (cssSelector, browser.Url) :: searchedFor
     let findInIFrame () =
-        let iframes = findByCss "iframe" searchContext.FindElements
+        let iframes = finders.findByCss "iframe" searchContext.FindElements
         if iframes.IsEmpty then 
             browser.SwitchTo().DefaultContent() |> ignore
             []
@@ -175,16 +123,8 @@ let rec private findElements cssSelector (searchContext : ISearchContext) =
             !webElements
 
     try
-        seq {
-            yield (findByCss    cssSelector searchContext.FindElements)                        
-            yield (findByValue  cssSelector searchContext.FindElements)
-            yield (findByXpath  cssSelector searchContext.FindElements)
-            yield (findByLabel  cssSelector searchContext.FindElement)            
-            yield (findByText   cssSelector searchContext.FindElements)
-            yield (findBySizzle cssSelector searchContext.FindElements)
-            yield (findByJQuery cssSelector searchContext.FindElements)
-            yield (findInIFrame())
-        }
+        configuredFinders cssSelector searchContext.FindElements
+        |> Seq.append (seq { yield (findInIFrame()) })
         |> Seq.filter(fun list -> not(list.IsEmpty))
         |> Seq.head
     with | ex -> []
