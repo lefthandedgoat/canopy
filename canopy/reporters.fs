@@ -74,7 +74,7 @@ type ConsoleReporter() =
         
         member this.suggestSelectors selector suggestions = 
             Console.ForegroundColor <- ConsoleColor.DarkYellow                    
-            Console.WriteLine("Couldnt find any elements with selector '{0}', did you mean:", selector)
+            Console.WriteLine("Couldn't find any elements with selector '{0}', did you mean:", selector)
             suggestions |> List.iter (fun suggestion -> Console.WriteLine("\t{0}", suggestion))
             Console.ResetColor()
         member this.testStart id =
