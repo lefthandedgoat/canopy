@@ -108,16 +108,38 @@ let suggestOtherSelectors cssSelector =
 	            }   
             }
             return ids;"""
-        let classes = js classesViaJs :?> System.Collections.ObjectModel.ReadOnlyCollection<System.Object> |> Seq.map (fun item -> item.ToString()) |> Array.ofSeq
-        let ids = js idsViaJs :?> System.Collections.ObjectModel.ReadOnlyCollection<System.Object> |> Seq.map (fun item -> item.ToString()) |> Array.ofSeq
-        Array.append classes ids 
-            |> Seq.distinct |> List.ofSeq 
-            |> remove "." |> remove "#" |> Array.ofList
-            |> Array.Parallel.map (fun u -> levenshtein cssSelector u)
-            |> Array.sortBy (fun r -> r.distance)
-            |> Seq.take 5
-            |> Seq.map (fun r -> r.selector) |> List.ofSeq
-            |> (fun suggestions -> reporter.suggestSelectors cssSelector suggestions)    
+        let valuesViaJs = """
+            var values = [];
+            var all = document.getElementsByTagName('*');
+            for (var i=0, max=all.length; i < max; i++) {
+	            if(all[i].value && all[i].value !== "") {
+		            values.push(all[i].value);
+	            }   
+            }
+            return values;"""
+        let textsViaJs = """
+            var texts = [];
+            var all = document.getElementsByTagName('*');
+            for (var i=0, max=all.length; i < max; i++) {
+	            if(all[i].text && all[i].tagName !== 'SCRIPT' && all[i].text !== "") {
+		            texts.push(all[i].text);
+	            }   
+            }
+            return texts;"""
+        let classes = js classesViaJs :?> System.Collections.ObjectModel.ReadOnlyCollection<System.Object> |> Seq.map (fun item -> "." + item.ToString()) |> Array.ofSeq
+        let ids = js idsViaJs :?> System.Collections.ObjectModel.ReadOnlyCollection<System.Object> |> Seq.map (fun item -> "#" + item.ToString()) |> Array.ofSeq
+        let values = js valuesViaJs :?> System.Collections.ObjectModel.ReadOnlyCollection<System.Object> |> Seq.map (fun item -> item.ToString()) |> Array.ofSeq
+        let texts = js textsViaJs :?> System.Collections.ObjectModel.ReadOnlyCollection<System.Object> |> Seq.map (fun item -> item.ToString()) |> Array.ofSeq
+        Array.append classes ids
+        |> Array.append values
+        |> Array.append texts
+        |> Seq.distinct |> List.ofSeq 
+        |> remove "." |> remove "#" |> Array.ofList
+        |> Array.Parallel.map (fun u -> levenshtein cssSelector u)
+        |> Array.sortBy (fun r -> r.distance)
+        |> Seq.take 5
+        |> Seq.map (fun r -> r.selector) |> List.ofSeq
+        |> (fun suggestions -> reporter.suggestSelectors cssSelector suggestions)    
 
 let describe text =
     puts text
