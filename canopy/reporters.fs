@@ -189,15 +189,11 @@ type LiveHtmlReporter(browser : BrowserStartMode, driverPath : string) =
 
     interface IReporter with               
         member this.pass () =
-            let escapedContext = System.Web.HttpUtility.JavaScriptStringEncode(context)
-            let escapedTest = System.Web.HttpUtility.JavaScriptStringEncode(test)
-            this.swallowedJS (sprintf "addToContext('%s', 'Pass', '%s', '%s');" escapedContext escapedTest "")
+            this.swallowedJS (sprintf "addToContext('%s', 'Pass', '%s', '%s');" context test "")
             consoleReporter.pass ()
 
         member this.fail ex id ss =
-            let escapedContext = System.Web.HttpUtility.JavaScriptStringEncode(context)
-            let escapedTest = System.Web.HttpUtility.JavaScriptStringEncode(test)
-            this.swallowedJS (sprintf "addToContext('%s', 'Fail', '%s', '%s');" escapedContext escapedTest (Convert.ToBase64String(ss)))
+            this.swallowedJS (sprintf "addToContext('%s', 'Fail', '%s', '%s');" context test (Convert.ToBase64String(ss)))
             consoleReporter.fail ex id ss
 
         member this.describe d = 
@@ -205,7 +201,7 @@ type LiveHtmlReporter(browser : BrowserStartMode, driverPath : string) =
           
         member this.contextStart c = 
             contexts <- c :: contexts
-            context <- c
+            context <- System.Web.HttpUtility.JavaScriptStringEncode(c)
             this.swallowedJS (sprintf "addContext('%s');" context)
             this.swallowedJS (sprintf "collapseContextsExcept('%s');" context)
             consoleReporter.contextStart c
@@ -223,7 +219,7 @@ type LiveHtmlReporter(browser : BrowserStartMode, driverPath : string) =
             consoleReporter.suggestSelectors selector suggestions
 
         member this.testStart id = 
-            test <- id
+            test <- System.Web.HttpUtility.JavaScriptStringEncode(id)
             consoleReporter.testStart id
             
         member this.testEnd id = ()

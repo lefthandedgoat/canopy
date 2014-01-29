@@ -280,13 +280,13 @@ test (fun _ ->
     failsWith ("on check failed, expected expression '" + childUrl + "' got " + testpage)
     on childUrl
 
-context "reddit tests"
+context "reddit tests '"
 once (fun _ -> Console.WriteLine "once: reddit tests")
 before (fun _ -> Console.WriteLine "before: reddit tests")
 after (fun _ -> Console.WriteLine "after: reddit tests")
 lastly (fun _ -> Console.WriteLine "lastly: reddit tests")
 
-"browsing to redit should be on reddit" &&& fun _ ->
+"browsing to redit should be on reddit '" &&& fun _ ->
     url "http://www.reddit.com/"
     on "http://www.reddit.com/"
 
@@ -587,7 +587,7 @@ let findByHref href f =
 
 addFinder findByHref
 
-"Firefox should be resized to 400,500 then rotated to 500,400" &&& fun _ ->
+"test new findByHref by clicking an href" &&& fun _ ->
     url "http://lefthandedgoat.github.io/canopy/index.html"
     click "about.html"
     on "http://lefthandedgoat.github.io/canopy/about.html"
