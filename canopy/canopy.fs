@@ -223,6 +223,8 @@ let elements cssSelector = findMany cssSelector elementTimeout browser true
 
 let unreliableElements cssSelector = findMany cssSelector elementTimeout browser false
     
+let unreliableElement cssSelector = cssSelector |> unreliableElements |> elementFromList cssSelector
+
 let element cssSelector = cssSelector |> elements |> elementFromList cssSelector
 
 let elementWithin cssSelector (elem:IWebElement) =  find cssSelector elementTimeout elem true
@@ -254,8 +256,7 @@ let private writeToSelect cssSelector text =
     | head::tail -> head.Click()
 
 let ( << ) cssSelector text = 
-    wait elementTimeout (fun _ ->
-        
+    wait elementTimeout (fun _ ->        
         let writeToElement (e : IWebElement) =
             if e.TagName = "select" then
                 writeToSelect cssSelector text
@@ -409,16 +410,15 @@ let contains (value1 : string) (value2 : string) =
 
 let count cssSelector count =
     try        
-        wait compareTimeout (fun _ -> ( let elems = elements cssSelector
-                                        elems.Length = count))
+        wait compareTimeout (fun _ -> (unreliableElements cssSelector).Length = count)
     with
         | :? CanopyElementNotFoundException as ex -> raise (CanopyCountException(sprintf "%s\r\ncount failed. expected: %i got: %i" ex.Message count 0))
-        | :? WebDriverTimeoutException -> raise (CanopyCountException(sprintf "count failed. expected: %i got: %i" count (elements cssSelector).Length))
+        | :? WebDriverTimeoutException -> raise (CanopyCountException(sprintf "count failed. expected: %i got: %i" count (unreliableElements cssSelector).Length))
 
 let private regexMatch pattern input = System.Text.RegularExpressions.Regex.Match(input, pattern).Success
 
 let elementsWithText cssSelector regex =
-    elements cssSelector
+    unreliableElements cssSelector
     |> List.filter (fun elem -> regexMatch regex (textOf elem))
 
 let elementWithText cssSelector regex = (elementsWithText cssSelector regex).Head
@@ -467,7 +467,7 @@ let notDisplayed item =
         wait compareTimeout (fun _ -> 
             match box item with
             | :? IWebElement as element -> not(shown element)
-            | :? string as cssSelector -> (unreliableElements cssSelector |> List.isEmpty) || not(element cssSelector |> shown)
+            | :? string as cssSelector -> (unreliableElements cssSelector |> List.isEmpty) || not(unreliableElement cssSelector |> shown)
             | _ -> raise (CanopyNotStringOrElementException(sprintf "Can't click %O because it is not a string or webelement" item)))
     with
         | :? CanopyElementNotFoundException as ex -> raise (CanopyNotDisplayedFailedException(sprintf "%s\r\nnotDisplay check for %O failed." ex.Message item))
