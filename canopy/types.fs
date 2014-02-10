@@ -53,37 +53,13 @@ type Test (description: string, func : (unit -> unit), number : int) =
     member x.Number = number
 
 type suite () = class
-    let mutable context : string = null
-    let mutable once = fun () -> ()
-    let mutable before = fun () -> ()
-    let mutable after = fun () -> ()
-    let mutable lastly = fun () -> () 
-    let mutable tests : Test list = []
-    let mutable wips : Test list = []
-    let mutable manys : Test list = []
-
-    member x.Context
-        with get() = context
-        and set(value) = context <- value
-    member x.Once
-        with get() = once
-        and set(value) = once <- value
-    member x.Before
-        with get() = before
-        and set(value) = before <- value
-    member x.After
-        with get() = after
-        and set(value) = after <- value
-    member x.Lastly
-        with get() = lastly
-        and set(value) = lastly <- value
-    member x.Tests
-        with get() = tests
-        and set(value) = tests <- value
-    member x.Wips
-        with get() = wips
-        and set(value) = wips <- value
-    member x.Manys
-        with get() = manys
-        and set(value) = manys <- value
+    member val Context : string = null with get, set
+    member val Once = fun () -> () with get, set
+    member val Before = fun () -> () with get, set
+    member val After = fun () -> () with get, set
+    member val Lastly = fun () -> () with get, set
+    member val Tests : Test list = [] with get, set
+    member val Wips : Test list = [] with get, set
+    member val Manys : Test list = [] with get, set
+    member val IsParallel = false with get, set
 end
