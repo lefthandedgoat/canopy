@@ -31,13 +31,18 @@ let mutable browsers = []
 //misc
 let failsWith message = failureMessage <- message
 
-let screenshot directory filename =
+let private takeScreenshot directory filename =
     let pic = (browser :?> ITakesScreenshot).GetScreenshot().AsByteArray
     if not <| Directory.Exists(directory) 
         then Directory.CreateDirectory(directory) |> ignore
     IO.File.WriteAllBytes(Path.Combine(directory,filename + ".png"), pic)
     pic
-    
+
+let screenshot directory filename =
+    match box browser with 
+        | :? ITakesScreenshot -> takeScreenshot directory filename
+        | _ -> Array.empty<byte>
+
 let js script = (browser :?> IJavaScriptExecutor).ExecuteScript(script)
 
 let private swallowedJs script = try js script |> ignore with | ex -> ()
