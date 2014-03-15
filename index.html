@@ -145,12 +145,8 @@ start firefox
     //verify another element's value, click a button,
     //verify the element is updated
     "#button_clicked" == "button not clicked"
-    click "Click Me!!"
-    "#button_clicked" == "button clicked" 
-
-    //assert that at least one value in the collection of elements
-    //has the value 'Item 1'
-    "#value_list td" *= "Item 1"
+    click "#button"
+    "#button_clicked" == "button clicked"
 
 //run all tests
 run()
