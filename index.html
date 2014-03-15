@@ -1,319 +1,159 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-    <meta charset="utf-8">
-    <title>canopy</title>
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <meta name="description" content="">
-    <meta name="author" content="">
-    <!-- Le styles -->
-    <link href="http://netdna.bootstrapcdn.com/twitter-bootstrap/2.3.1/css/bootstrap-combined.min.css"
-        rel="stylesheet">
-    <style type="text/css">
-        body
-        {
-            padding-top: 20px;
-            padding-bottom: 60px;
-        }
-        
-        /* Custom container */
-        .container
-        {
-            margin: 0 auto;
-            max-width: 1000px;
-        }
-        .container > hr
-        {
-            margin: 60px 0;
-        }
-        
-        /* Main marketing message and sign up button */
-        .jumbotron
-        {
-            margin: 80px 0;
-            text-align: center;
-        }
-        .jumbotron h1
-        {
-            font-size: 66px;
-            line-height: 1;
-        }
-        .jumbotron .lead
-        {
-            font-size: 24px;
-            line-height: 1.25;
-        }
-        .jumbotron .btn
-        {
-            font-size: 21px;
-            padding: 14px 24px;
-        }
-        
-        /* Supporting marketing content */
-        .marketing
-        {
-            margin: 60px 0;
-        }
-        .marketing p + h4
-        {
-            margin-top: 28px;
-        }
-        
-        
-        /* Customize the navbar links to be fill the entire space of the .navbar */
-        .navbar .navbar-inner
-        {
-            padding: 0;
-        }
-        .navbar .nav
-        {
-            margin: 0;
-            display: table;
-            width: 100%;
-        }
-        .navbar .nav li
-        {
-            display: table-cell;
-            width: 1%;
-            float: none;
-        }
-        .navbar .nav li a
-        {
-            font-weight: bold;
-            text-align: center;
-            border-left: 1px solid rgba(255,255,255,.75);
-            border-right: 1px solid rgba(0,0,0,.1);
-        }
-        .navbar .nav li:first-child a
-        {
-            border-left: 0;
-            border-radius: 3px 0 0 3px;
-        }
-        .navbar .nav li:last-child a
-        {
-            border-right: 0;
-            border-radius: 0 3px 3px 0;
-        }
-		
-		#installModal .modal-body
-		{
-			max-height: 700px;
-		}
-				
-		.documentation 
-		{
-			height:230px;
-		}
-		
-		.readMore
-		{
-			height: 125px;
-		}
-		
-		.banner
-		{
-			padding-top: 60px;
-		}
-		
-    </style>
-    <link href="http://netdna.bootstrapcdn.com/twitter-bootstrap/2.3.1/css/bootstrap-responsive.min.css"
-        rel="stylesheet">
-    <!-- HTML5 shim, for IE6-8 support of HTML5 elements -->
-    <!--[if lt IE 9]>
-      <script src="../assets/js/html5shiv.js"></script>
-    <![endif]-->
+  <meta charset="utf-8">
+  <title>canopy</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta name="description" content="">
+  <meta name="author" content="">
+  <!-- Le styles -->
+  <link href="http://netdna.bootstrapcdn.com/twitter-bootstrap/2.3.1/css/bootstrap-combined.min.css" rel="stylesheet">
+  <style type="text/css">
+  </style>
+  <link href="http://netdna.bootstrapcdn.com/twitter-bootstrap/2.3.1/css/bootstrap-responsive.min.css" rel="stylesheet">
+  <link href="/stylesheets/canopy.css" rel="stylesheet">
+  <!-- HTML5 shim, for IE6-8 support of HTML5 elements -->
+  <!--[if lt IE 9]>
+  <script src="../assets/js/html5shiv.js"></script>
+  <![endif]-->
+  <script type="text/javascript">
+    var _gaq = _gaq || [];
+    _gaq.push(['_setAccount', 'UA-39340599-2']);
+    _gaq.push(['_setDomainName', 'github.com']);
+    _gaq.push(['_trackPageview']);
 
-	<script type="text/javascript">
-
-  var _gaq = _gaq || [];
-  _gaq.push(['_setAccount', 'UA-39340599-2']);
-  _gaq.push(['_setDomainName', 'github.com']);
-  _gaq.push(['_trackPageview']);
-
-  (function() {
-    var ga = document.createElement('script'); ga.type = 'text/javascript'; ga.async = true;
-    ga.src = ('https:' == document.location.protocol ? 'https://ssl' : 'http://www') + '.google-analytics.com/ga.js';
-    var s = document.getElementsByTagName('script')[0]; s.parentNode.insertBefore(ga, s);
-  })();
-
-</script>
+    (function() {
+      var ga = document.createElement('script'); ga.type = 'text/javascript'; ga.async = true;
+      ga.src = ('https:' == document.location.protocol ? 'https://ssl' : 'http://www') + '.google-analytics.com/ga.js';
+      var s = document.getElementsByTagName('script')[0]; s.parentNode.insertBefore(ga, s);
+    })();
+    </script>
 	</head>
-<body>
+  <body>
     <div class="container">
-        <div class="masthead">            
-            <div class="navbar">
-                <div class="navbar-inner">
-                    <div class="container">
-                        <ul class="nav">
-                            <li class="active"><a href="index.html">Home</a></li>
-							<li><a href="about.html">About</a></li>
-                            <li><a href="http://github.com/lefthandedgoat/canopy">Source</a></li>
-                            <li><a href="http://nuget.org/packages/canopy">Nuget</a></li>
-                            <li><a href="http://amirrajan.github.com/Oak/">Oak</a></li>
-                            <li><a href="http://www.fsharp.org/">f#</a></li>
-                            <li><a href="http://www.tryfsharp.org/">try f#</a></li>
-                        </ul>
-                    </div>
-                </div>
-            </div>
-            <!-- /.navbar -->
+      <div class="navbar">
+        <div class="navbar-inner">
+          <ul class="nav">
+            <li class="active"><a href="index.html">Home</a></li>
+            <li><a href="actions.html">Actions</a></li>
+            <li><a href="assertions.html">Assertions</a></li>
+            <li><a href="testModes.html">Testing</a></li>
+            <li><a href="reporting.html">Reporting</a></li>
+            <li><a href="links.html">Links</a></li>
+          </ul>
         </div>
-        <!-- Jumbotron -->
-        <div class="jumbotron">
-            <div class="row-fluid">
-				<div class="span6 banner">
-					<h1>
-						canopy</h1>
-					<h3 class="muted">
-						f#rictionless web testing</h3>
-					<div class="row-fluid">
-						
-						<div class="span4">
-							<a id="install" class="btn btn-large btn-success btn-block" href="#">Install</a></div>
-						<div class="span4">
-							<a id="write" class="btn btn-large btn-success btn-block" href="#">Write</a></div>
-						<div class="span4">
-							<a id="run" class="btn btn-large btn-success btn-block" href="#">Run</a></div>
-						
-					</div>
-				</div>
-				<div class="span6">
-				<img src="canopy_orig.jpg"></img>
-				</div>
-				
-			</div>
+        <!-- /.navbar -->
+      </div>
+      <div class="row">
+        <div class="span6">
+          <h1>canopy</h1>
+          <div class="tagline">f#rictionless web testing</div>
         </div>
-        <hr>
-        <!-- Example row of columns -->
-        <div class="row-fluid">
-            <div class="span3 documentation">			
-                <h2>
-                    Actions</h2>
-                <p class="readMore">
-                    Actions allow you to interact with the page.  Click, read, write, drag, etc...					
-                </p>
-                
-                    <a id="actionsReadMore" class="btn" href="actions.html">Read more &raquo;</a>
-            </div>
-            <div class="span3 documentation">
-                <h2>
-                    Assertions</h2>
-                <p class="readMore">
-                    Assert that you are on the right page, an element has a specific value, an element is visible etc...					
-                </p>
-                
-                    <a id="assertionsReadMore" class="btn" href="assertions.html">Read more &raquo;</a>
-            </div>
-            <div class="span3 documentation">
-                <h2>
-                    Test Modes</h2>
-                <p class="readMore">
-                    Run your tests in different modes.  WIP for debugging, Many for ensuring your test passes consistently,
-                    TODO to remind you to write a test later, Skip to not run a test etc..</p>
-                <span class="readMore">
-                    <a id="testModesReadMore" class="btn" href="testModes.html">Read more &raquo;</a>
-            </div>
-            <div class="span3 documentation">
-                <h2>
-                    Reporting</h2>
-                <p class="readMore">
-                    Reports to capture results after a run.					
-					</p>
-
-                
-                    <a id="reportingReadMore" class="btn" href="reporting.html">Read more &raquo;</a>
-            </div>
+        <img class="span3" style="margin-top: 10px" src="canopy_orig.jpg"></img>
+      </div>
+      <div class="row">
+      </div>
+      <div class="row" style="margin-top: 10px">
+        <div class="span12">
+          canopy is a web testing framework with one goal in mind, make UI testing simple:
+        <br />
+        <br />
+        - Solid stabilization layer built on top of Selenium. Death to "brittle, quirky, UI tests".<br />
+        - Quick to learn. Even if you've never done UI Automation, and don't know F#.<br />
+        - Clean, consise API.<br />
+        - MIT License.<br />
         </div>
-        <hr>
-        <div class="footer">
-				powered by f#        
-        </div>
-    </div>
-    <!-- /container -->
-    <div id="installModal" class="modal hide fade">
-        <div class="modal-header">
-            <button type="button" class="close" data-dismiss="modal" aria-hidden="true">
-                &times;</button>
-            <h3>
-                Install</h3>
-        </div>
-        <div class="modal-body">
-            <p>
-                Create a new f# console application:<img src="images/newProject.png" /></p>
+      </div>
+      
+      <div class="row">
+        <div class="span12">
+          <h2>Getting Started</h1>
+          <div>
+            <p style="font-weight: bold">
+              1. Create a new f# console application<br/><br/>
+              <img class="screenshot" src="images/newProject.png" />
+            </p>
+            <p style="font-weight: bold">
+              2. Set target framework to .NET Framework 4<br/><br/>
+              <img class="screenshot" src="images/profile.png" />
+            </p>
             <br />
-            <p>
-                Set target framework to .NET Framework 4:<img src="images/profile.png" /></p>
-            <br />
-            <p>
-                Install canopy via Nuget:<img src="images/installCanopy.png" /></p>
-        </div>
-        <div class="modal-footer">
-        </div>
-    </div>
-    <div id="writeModal" class="modal hide fade">
-        <div class="modal-header">
-            <button type="button" class="close" data-dismiss="modal" aria-hidden="true">
-                &times;</button>
-            <h3>
-                Write</h3>
-        </div>
-        <div class="modal-body">
-            <p>
-                <pre>
+            <p style="font-weight: bold">
+              3. Install canopy via Nuget<br/><br/>
+              <img class="screenshot" src="images/installCanopy.png" />
+            </p>
+            <br/>
+            <p style="font-weight: bold">
+              4. Paste the following code into Program.fs<br/>
+            </p>
+            <pre style="max-width: 550px">
+//these are similar to C# using statements
 open canopy
 open runner
+open System
 
+//start an instance of the firefox browser
 start firefox
 
-"Go to google and search for hello world" &amp;&amp;&amp; fun _ ->
-    url "http://google.com"
-    "input[type='text']" << "hello world"
+//this is how you define a test
+"taking canopy for a spin" &amp;&amp;&amp; fun _ ->
+    //this is an F# function body, it's whitespace enforced
 
+    //go to url
+    url "http://lefthandedgoat.github.io/canopy/testpages/"
+
+    //assert that the element with an id of 'welcome' has
+    //the text 'Welcome'
+    "#welcome" == "Welcome"
+
+    //assert that the element with an id of 'firstName' has the value 'John'
+    "#firstName" == "John"
+
+    //change the value of element with
+    //an id of 'firstName' to 'Something Else'
+    "#firstName" &lt;&lt; "Something Else"
+
+    //verify another element's value, click a button,
+    //verify the element is updated
+    "#button_clicked" == "button not clicked"
+    click "Click Me!!"
+    "#button_clicked" == "button clicked" 
+
+    //assert that at least one value in the collection of elements
+    //has the value 'Item 1'
+    "#value_list td" *= "Item 1"
+
+//run all tests
 run()
-            </pre>
-            </p>
+
+System.Console.WriteLine("press [enter] to exit")
+System.Console.ReadLine() |> ignore
+
+quit()
+          </pre>
+          <p style="font-weight: bold">
+            5. Run<br/><br/><img src="images/run.png" /></p>
+          </p>
+
+          <p style="font-weight: bold">
+            6. Explore the rest of canopy's api
+            <br/><br/>
+            <a href="actions.html">Actions: documentation of everything you can do on a page</a>
+            <br/>
+            <a href="assertions.html">Assertions: all the ways you can verify what's on the page is correct</a>
+            <br/>
+            <a href="testModes.html">Testing: different ways to orchestrate tests and troubleshoot issues with a page</a>
+            <br/>
+            <a href="reporting.html">Reporting: different ways to output the results of your test suite</a>
+          </p>
         </div>
-        <div class="modal-footer">
-        </div>
-    </div>
-    <div id="runModal" class="modal hide fade">
-        <div class="modal-header">
-            <button type="button" class="close" data-dismiss="modal" aria-hidden="true">
-                &times;</button>
-            <h3>
-                Run</h3>
-        </div>
-        <div class="modal-body">
-            <p>
-                Run:<img src="images/run.png" /></p>
-            <p>
-                Or:
-                <pre>
-Create <a href="https://github.com/fsharp/FAKE">FAKE</a> task
-Create <a href="http://rake.rubyforge.org/">Rake</a> task
-</pre>
-            </p>
-        </div>
-        <div class="modal-footer">
-        </div>
+      </div>
+      <hr style="width: 100%" />
+      <div class="footer">
+      powered by f#        
+      </div>
     </div>
     <script src="http://code.jquery.com/jquery-1.9.1.min.js" type="text/javascript"></script>
     <script src="http://netdna.bootstrapcdn.com/twitter-bootstrap/2.3.1/js/bootstrap.min.js" type="text/javascript"></script>
-
-<script>
-    $(document).ready(function () {
-        $('#install').click(function () {
-            $("#installModal").modal('show');
-        });
-
-        $('#write').click(function () {
-            $("#writeModal").modal('show');
-        });
-
-        $('#run').click(function () {
-            $("#runModal").modal('show');
-        });
-    });
-</script>
 </body>
 </html>
