@@ -1,343 +1,196 @@
-
 <!DOCTYPE html>
 <html lang="en">
 <head>
-    <meta charset="utf-8">
-    <title>canopy</title>
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <meta name="description" content="">
-    <meta name="author" content="">
-    <!-- Le styles -->
-    <link href="http://netdna.bootstrapcdn.com/twitter-bootstrap/2.3.1/css/bootstrap-combined.min.css"
-        rel="stylesheet">
-    <style type="text/css">
-        body
-        {
-            padding-top: 20px;
-            padding-bottom: 60px;
-        }
-        
-        /* Custom container */
-        .container
-        {
-            margin: 0 auto;
-            max-width: 1000px;
-        }
-        .container > hr
-        {
-            margin: 60px 0;
-        }
-        
-        /* Main marketing message and sign up button */
-        .jumbotron
-        {
-            margin: 80px 0;
-            text-align: center;
-        }
-        .jumbotron h1
-        {
-            font-size: 66px;
-            line-height: 1;
-        }
-        .jumbotron .lead
-        {
-            font-size: 24px;
-            line-height: 1.25;
-        }
-        .jumbotron .btn
-        {
-            font-size: 21px;
-            padding: 14px 24px;
-        }
-        
-        /* Supporting marketing content */
-        .marketing
-        {
-            margin: 60px 0;
-        }
-        .marketing p + h4
-        {
-            margin-top: 28px;
-        }
-        
-        
-        /* Customize the navbar links to be fill the entire space of the .navbar */
-        .navbar .navbar-inner
-        {
-            padding: 0;
-        }
-        .navbar .nav
-        {
-            margin: 0;
-            display: table;
-            width: 100%;
-        }
-        .navbar .nav li
-        {
-            display: table-cell;
-            width: 1%;
-            float: none;
-        }
-        .navbar .nav li a
-        {
-            font-weight: bold;
-            text-align: center;
-            border-left: 1px solid rgba(255,255,255,.75);
-            border-right: 1px solid rgba(0,0,0,.1);
-        }
-        .navbar .nav li:first-child a
-        {
-            border-left: 0;
-            border-radius: 3px 0 0 3px;
-        }
-        .navbar .nav li:last-child a
-        {
-            border-right: 0;
-            border-radius: 0 3px 3px 0;
-        }
-        
-        .comment
-        {
-            color: #008000;
-        }
-        
-        .source, .example
-        {
-            font-size: 11.5px;
-        }
-    </style>
-    <link href="http://netdna.bootstrapcdn.com/twitter-bootstrap/2.3.1/css/bootstrap-responsive.min.css"
-        rel="stylesheet">
-    <!-- HTML5 shim, for IE6-8 support of HTML5 elements -->
-    <!--[if lt IE 9]>
-      <script src="../assets/js/html5shiv.js"></script>
-    <![endif]-->
-<script type="text/javascript">
+  <meta charset="utf-8">
+  <title>canopy</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta name="description" content="">
+  <meta name="author" content="">
+  <!-- Le styles -->
 
-  var _gaq = _gaq || [];
-  _gaq.push(['_setAccount', 'UA-39340599-2']);
-  _gaq.push(['_setDomainName', 'github.com']);
-  _gaq.push(['_trackPageview']);
+  <script type="text/javascript" async="" src="http://www.google-analytics.com/ga.js"></script><script src="http://code.jquery.com/jquery-1.9.1.min.js" type="text/javascript"></script>
+  <script src="http://cdn.foundation5.zurb.com/foundation.js"></script><meta class="foundation-data-attribute-namespace"><meta class="foundation-mq-xxlarge"><meta class="foundation-mq-xlarge"><meta class="foundation-mq-large"><meta class="foundation-mq-medium"><meta class="foundation-mq-small"><style></style>
+  <link href="http://cdn.foundation5.zurb.com/foundation.css" rel="stylesheet">
+  <style type="text/css">
+    .screenshot { border: solid 1px silver; padding: 5px; margin: 3px; }
+    pre {
+      white-space: pre-wrap;       /* css-3 */
+      white-space: -moz-pre-wrap;  /* Mozilla, since 1999 */
+      white-space: -pre-wrap;      /* Opera 4-6 */
+      white-space: -o-pre-wrap;    /* Opera 7 */
+      word-wrap: break-word;       /* Internet Explorer 5.5+ */
+      border: solid 1px silver;
+      padding: 10px;
+      background-color: #f3f3f3;
+      font-weight: bold;
+      margin: 10px;
+    }
+  </style>
+  <!-- HTML5 shim, for IE6-8 support of HTML5 elements -->
+  <!--[if lt IE 9]>
+  <script src="../assets/js/html5shiv.js"></script>
+  <![endif]-->
+  <script type="text/javascript">
+    var _gaq = _gaq || [];
+    _gaq.push(['_setAccount', 'UA-39340599-2']);
+    _gaq.push(['_setDomainName', 'github.com']);
+    _gaq.push(['_trackPageview']);
 
-  (function() {
-    var ga = document.createElement('script'); ga.type = 'text/javascript'; ga.async = true;
-    ga.src = ('https:' == document.location.protocol ? 'https://ssl' : 'http://www') + '.google-analytics.com/ga.js';
-    var s = document.getElementsByTagName('script')[0]; s.parentNode.insertBefore(ga, s);
-  })();
-
-</script>
-	</head>
+    (function() {
+      var ga = document.createElement('script'); ga.type = 'text/javascript'; ga.async = true;
+      ga.src = ('https:' == document.location.protocol ? 'https://ssl' : 'http://www') + '.google-analytics.com/ga.js';
+      var s = document.getElementsByTagName('script')[0]; s.parentNode.insertBefore(ga, s);
+    })();
+  </script>
+  <meta class="foundation-mq-topbar">
+</head>
 <body>
-    <div class="container">
-        <div class="masthead">
-            <h3 class="muted">
-                canopy: f#rictionless web testing</h3>
-            <div class="navbar">
-                <div class="navbar-inner">
-                    <div class="container">
-                        <ul class="nav">
-                          <li><a href="index.html">Home</a></li>
-                          <li><a href="actions.html">Actions</a></li>
-                          <li class="active"><a href="assertions.html">Assertions</a></li>
-                          <li><a href="testModes.html">Testing</a></li>
-                          <li><a href="reporting.html">Reporting</a></li>
-                          <li><a href="links.html">Links</a></li>
-                        </ul>
-                    </div>
-                </div>
-            </div>
-            <!-- /.navbar -->
-        </div>
-        <div class="row-fluid">
-            <div class="span12">
-                <div class="item">
-                    <h4>
-                        on <a class="source" data-for="on" data-line="512" href="https://github.com/lefthandedgoat/canopy/blob/master/canopy/canopy.fs#L512">source</a>
-						[
-						<a class="example" href="https://github.com/lefthandedgoat/canopy/blob/master/basictests/Program.fs#L173">1</a>
-						<a class="example" href="https://github.com/amirrajan/Oak/blob/master/Sample%20Apps/BorrowedGames/BorrowedGames.UI.Tests/uimethods.fs#L13">2</a>
-						<a class="example" href="https://github.com/amirrajan/Oak/blob/master/Sample%20Apps/BorrowedGames/BorrowedGames.UI.Tests/uimethods.fs#L35">3</a>
-						<a class="example" href="https://github.com/amirrajan/Oak/blob/master/Sample%20Apps/TaskRabbits/TaskRabbits.UITests/common.fs#L51">4</a>
-						]
-					</h4>
-                    Assert that the browser is currently on a url (uses string.contains).
-                    <pre>
+    <nav class="top-bar" data-topbar="">
+      <ul class="title-area">
+        <li><div style="margin: 0px 13px; color: white; font-size: 28px">canopy</div></li>
+        <li class="toggle-topbar menu-icon"><a href="#">Menu</a></li>
+      </ul>
+      <section class="top-bar-section">
+        <ul class="right">
+          <li><a href="index.html">Home</a></li>
+          <li><a href="actions.html">Actions</a></li>
+          <li class="active"><a href="assertions.html">Assertions</a></li>
+          <li><a href="testModes.html">Testing</a></li>
+          <li><a href="reporting.html">Reporting</a></li>
+          <li><a href="links.html">Links</a></li>
+        </ul>
+      </section>
+    </nav>
+
+    <div class="row">
+      <div class="columns large-12">
+        <h4> <code>on</code> </h4>
+        Assert that the browser is currently on a url (uses string.contains).
+        <pre>
 url "https://duckduckgo.com/?q=canopy+f%23"
 on "https://duckduckgo.com/?q"
 </pre>
-                </div>
-                <div class="item">
-                    <h4>
-                        selected <a class="source" data-for="selected" data-line="293" href="https://github.com/lefthandedgoat/canopy/blob/master/canopy/canopy.fs#L293">source</a>
-						[
-						<a class="example" href="https://github.com/lefthandedgoat/canopy/blob/master/basictests/Program.fs#L147">1</a>
-						]
-					</h4>
-                    Assert that a radio or checkbox is selected.
-                    <pre>
+      </div>
+      <div class="columns large-12">
+        <h4> <code>selected</code> </h4>
+        Assert that a radio or checkbox is selected.
+        <pre>
 selected "#yes"
 </pre>
-                </div>
-                <div class="item">
-                    <h4>
-                        deselected <a class="source" data-for="deselected" data-line="298" href="https://github.com/lefthandedgoat/canopy/blob/master/canopy/canopy.fs#L298">
-                            source</a>
-						[
-						<a class="example" href="https://github.com/lefthandedgoat/canopy/blob/master/basictests/Program.fs#L163">1</a>
-						]
-						</h4>
-                    Assert that a radio or checkbox is not selected.
-                    <pre>
+      </div>
+      <div class="columns large-12">
+        <h4>
+          <code>deselected</code> </h4>
+        Assert that a radio or checkbox is not selected.
+        <pre>
 deselected "#yes"
 </pre>
-                </div>
-                <div class="item">
-                    <h4>
-                        == (equals) <a class="source" data-for="==" data-line="323" href="https://github.com/lefthandedgoat/canopy/blob/master/canopy/canopy.fs#L323">
-                            source</a>
-						[
-						<a class="example" href="https://github.com/lefthandedgoat/canopy/blob/master/basictests/Program.fs#L45">1</a>
-						<a class="example" href="https://github.com/lefthandedgoat/canopy/blob/master/basictests/Program.fs#L49">2</a>
-						<a class="example" href="https://github.com/lefthandedgoat/canopy/blob/master/basictests/Program.fs#L264">3</a>
-						<a class="example" href="https://github.com/amirrajan/Oak/blob/master/Sample%20Apps/TaskRabbits/TaskRabbits.UITests/common.fs#L98">4</a>
-						<a class="example" href="https://github.com/amirrajan/Oak/blob/master/Sample%20Apps/BorrowedGames/BorrowedGames.UI.Tests/uimethods.fs#L44">5</a>
-						]	
-						</h4>
-                    Assert that the element on the left is equal to the value on the right.
-                    <pre>
+      </div>
+      <div class="columns large-12">
+        <h4>
+          <code>== (equals)</code>
+        </h4>
+        Assert that the element on the left is equal to the value on the right.
+        <pre>
 "#firstName" == "Alex"
 (element "#logout") == "Logout"
 </pre>
-                </div>
-                <div class="item">
-                    <h4>
-                        != (does not equal) <a class="source" data-for="!=" data-line="344" href="https://github.com/lefthandedgoat/canopy/blob/master/canopy/canopy.fs#L344">
-                            source</a>
-						[
-						<a class="example" href="https://github.com/lefthandedgoat/canopy/blob/master/basictests/Program.fs#L186">1</a>						
-						]			
-					</h4>
-                    Assert that the element on the left is not equal to the value on the right.
-                    <pre>
+        </div>
+        <div class="columns large-12">
+          <h4>
+            <code>!= (does not equal)</code>
+          </h4>
+          Assert that the element on the left is not equal to the value on the right.
+          <pre>
 "#firstName" != "Tom"
 (element "#login") != "Logout"
 </pre>
-                </div>
-                <div class="item">
-                    <h4>
-                        *= (one of many equals) <a class="source" data-for="*=" data-line="350" href="https://github.com/lefthandedgoat/canopy/blob/master/canopy/canopy.fs#L350">
-                            source</a>
-						[
-						<a class="example" href="https://github.com/lefthandedgoat/canopy/blob/master/basictests/Program.fs#L84">1</a>						
-						<a class="example" href="https://github.com/amirrajan/Oak/blob/master/Sample%20Apps/TaskRabbits/TaskRabbits.UITests/common.fs#L73">2</a>						
-						<a class="example" href="https://github.com/amirrajan/Oak/blob/master/Sample%20Apps/BorrowedGames/BorrowedGames.UI.Tests/uimethods.fs#L87">3</a>						
-						]	
-					</h4>
-                    Assert that atleast one element in a list equals a value.
-                    <pre>
+        </div>
+        <div class="columns large-12">
+          <h4>
+            <code>*= (one of many equals)</code>
+          </h4>
+          Assert that atleast one element in a list equals a value.
+          <pre>
 ".todoItem" *= "Buy milk"
 </pre>
-                </div>
-                <div class="item">
-                    <h4>
-                        *!= (none equals) <a class="source" data-for="*!=" data-line="359" href="https://github.com/lefthandedgoat/canopy/blob/master/canopy/canopy.fs#L359">
-                            source</a>
-						[
-						<a class="example" href="https://github.com/lefthandedgoat/canopy/blob/master/basictests/Program.fs#L190">1</a>						
-						]
-					</h4>
-                    Assert that none of the items in a list equals a value.
-                    <pre>
+        </div>
+        <div class="columns large-12">
+          <h4>
+            <code>*!= (none equals)</code>
+          </h4>
+          Assert that none of the items in a list equals a value.
+          <pre>
 ".todoItem" !*= "Sell everything"
 </pre>
-                </div>
-                <div class="item">
-                    <h4>
-                        contains <a class="source" data-for="contains" data-line="365" href="https://github.com/lefthandedgoat/canopy/blob/master/canopy/canopy.fs#L365">
-                            source</a></h4>
-                    Assert that one string contains another.
-                    <pre>
+        </div>
+        <div class="columns large-12">
+          <h4>
+            <code>contains</code></h4>
+          Assert that one string contains another.
+          <pre>
 contains "Log" (read "#logout)
 </pre>
-                </div>
-                <div class="item">
-                    <h4>
-                        count <a class="source" data-for="count" data-line="369" href="https://github.com/lefthandedgoat/canopy/blob/master/canopy/canopy.fs#L369">
-                            source</a>
-					[
-					<a class="example" href="https://github.com/lefthandedgoat/canopy/blob/master/basictests/Program.fs#L339">1</a>						
-					<a class="example" href="https://github.com/amirrajan/Oak/blob/master/Sample%20Apps/TaskRabbits/TaskRabbits.UITests/common.fs#L72">2</a>						
-					]
-					</h4>
-                    Assert there are X items of given css selector.
-                    <pre>
+        </div>
+        <div class="columns large-12">
+          <h4>
+            <code>count</code>
+          </h4>
+          Assert there are X items of given css selector.
+          <pre>
 count ".todoItem" 5
 </pre>
-                </div>
-                <div class="item">
-                    <h4>
-                        =~ (regex match) <a class="source" data-for="=~" data-line="384" href="https://github.com/lefthandedgoat/canopy/blob/master/canopy/canopy.fs#L384">
-                            source</a>
-					[
-					<a class="example" href="https://github.com/lefthandedgoat/canopy/blob/master/basictests/Program.fs#L294">1</a>
-					]
-					</h4>
-                    Assert that an element regex matches a value.
-                    <pre>
+        </div>
+        <div class="columns large-12">
+          <h4>
+            <code>=~ (regex match)</code>
+          </h4>
+          Assert that an element regex matches a value.
+          <pre>
 "#lastName" << "Gray"
 "#lastName" =~ "Gr[ae]y"
 "#lastName" << "Grey"
 "#lastName" =~ "Gr[ae]y"
 </pre>
-                </div>
-				<div class="item">
-                    <h4>
-                        *~ (one of many regex match) <a class="source" data-for="*~" data-line="390" href="https://github.com/lefthandedgoat/canopy/blob/master/canopy/canopy.fs#L390">
-                            source</a>
-					[
-					<a class="example" href="https://github.com/lefthandedgoat/canopy/blob/master/basictests/Program.fs#L300">1</a>
-					]
-					</h4>
-                    Assert that one of many element regex matches a value.
-                    <pre>
+        </div>
+        <div class="columns large-12">
+          <h4>
+            <code>*~ (one of many regex match)</code>
+          </h4>
+          Assert that one of many element regex matches a value.
+          <pre>
 "#colors li" *~ "gr[ea]y" 
 </pre>
-                </div>				
-                <div class="item">
-                    <h4>
-                        displayed <a class="source" data-for="displayed" data-line="411" href="https://github.com/lefthandedgoat/canopy/blob/master/canopy/canopy.fs#L411">
-                            source</a>
-					[
-					<a class="example" href="https://github.com/lefthandedgoat/canopy/blob/master/basictests/Program.fs#L323">1</a>
-					<a class="example" href="https://github.com/amirrajan/Oak/blob/master/Sample%20Apps/TaskRabbits/TaskRabbits.UITests/common.fs#L37">2</a>
-					]
-					</h4>
-                    Assert that an element is displayed on the screen.
-                    <pre>
+        </div>				
+        <div class="columns large-12">
+          <h4>
+            <code>displayed</code>
+          </h4>
+          Assert that an element is displayed on the screen.
+          <pre>
 displayed "#modal"
 </pre>
-                </div>
-                <div class="item">
-                    <h4>
-                        notDisplayed <a class="source" data-for="notDisplayed" data-line="417" href="https://github.com/lefthandedgoat/canopy/blob/master/canopy/canopy.fs#L417">
-                            source</a>
-					[
-					<a class="example" href="https://github.com/lefthandedgoat/canopy/blob/master/basictests/Program.fs#L335">1</a>
-					]
-					</h4>
-                    Assert that an element is not displayed on the screen.
-                    <pre>
+        </div>
+        <div class="columns large-12">
+          <h4>
+            <code>notDisplayed</code>
+          </h4>
+          Assert that an element is not displayed on the screen.
+          <pre>
 notDisplayed "#modal"
 </pre>
-                </div>
-            </div>
         </div>
-        <div class="footer">
-		powered by f#
-        </div>
-    </div>
-    <!-- /container -->
 
-	
+      <hr class="large-12 columns">
+
+      <div class="large-12 columns" style="margin-bottom: 20px">
+        powered by f#        
+      </div>
+    </div>
+	</body>
+
+    <script>
+      $(document).foundation();
+    </script>
 	</body>
 </html>
