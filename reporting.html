@@ -1,211 +1,125 @@
 ﻿<!DOCTYPE html>
 <html lang="en">
 <head>
-    <meta charset="utf-8">
-    <title>canopy</title>
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <meta name="description" content="">
-    <meta name="author" content="">
-    <!-- Le styles -->
-    <link href="http://netdna.bootstrapcdn.com/twitter-bootstrap/2.3.1/css/bootstrap-combined.min.css"
-        rel="stylesheet">
-    <style type="text/css">
-        body
-        {
-            padding-top: 20px;
-            padding-bottom: 60px;
-        }
-        
-        /* Custom container */
-        .container
-        {
-            margin: 0 auto;
-            max-width: 1000px;
-        }
-        .container > hr
-        {
-            margin: 60px 0;
-        }
-        
-        /* Main marketing message and sign up button */
-        .jumbotron
-        {
-            margin: 80px 0;
-            text-align: center;
-        }
-        .jumbotron h1
-        {
-            font-size: 66px;
-            line-height: 1;
-        }
-        .jumbotron .lead
-        {
-            font-size: 24px;
-            line-height: 1.25;
-        }
-        .jumbotron .btn
-        {
-            font-size: 21px;
-            padding: 14px 24px;
-        }
-        
-        /* Supporting marketing content */
-        .marketing
-        {
-            margin: 60px 0;
-        }
-        .marketing p + h4
-        {
-            margin-top: 28px;
-        }
-        
-        
-        /* Customize the navbar links to be fill the entire space of the .navbar */
-        .navbar .navbar-inner
-        {
-            padding: 0;
-        }
-        .navbar .nav
-        {
-            margin: 0;
-            display: table;
-            width: 100%;
-        }
-        .navbar .nav li
-        {
-            display: table-cell;
-            width: 1%;
-            float: none;
-        }
-        .navbar .nav li a
-        {
-            font-weight: bold;
-            text-align: center;
-            border-left: 1px solid rgba(255,255,255,.75);
-            border-right: 1px solid rgba(0,0,0,.1);
-        }
-        .navbar .nav li:first-child a
-        {
-            border-left: 0;
-            border-radius: 3px 0 0 3px;
-        }
-        .navbar .nav li:last-child a
-        {
-            border-right: 0;
-            border-radius: 0 3px 3px 0;
-        }
-        .comment
-        {
-            color: #008000;
-        }
-        
-        .source, .example
-        {
-            font-size: 11.5px;
-        }
-    </style>
-    <link href="http://netdna.bootstrapcdn.com/twitter-bootstrap/2.3.1/css/bootstrap-responsive.min.css"
-        rel="stylesheet">
-    <!-- HTML5 shim, for IE6-8 support of HTML5 elements -->
-    <!--[if lt IE 9]>
-      <script src="../assets/js/html5shiv.js"></script>
-    <![endif]-->
-<script type="text/javascript">
+  <meta charset="utf-8">
+  <title>canopy</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta name="description" content="">
+  <meta name="author" content="">
+  <!-- Le styles -->
 
-  var _gaq = _gaq || [];
-  _gaq.push(['_setAccount', 'UA-39340599-2']);
-  _gaq.push(['_setDomainName', 'github.com']);
-  _gaq.push(['_trackPageview']);
+  <script type="text/javascript" async="" src="http://www.google-analytics.com/ga.js"></script><script src="http://code.jquery.com/jquery-1.9.1.min.js" type="text/javascript"></script>
+  <script src="http://cdn.foundation5.zurb.com/foundation.js"></script><meta class="foundation-data-attribute-namespace"><meta class="foundation-mq-xxlarge"><meta class="foundation-mq-xlarge"><meta class="foundation-mq-large"><meta class="foundation-mq-medium"><meta class="foundation-mq-small"><style></style>
+  <link href="http://cdn.foundation5.zurb.com/foundation.css" rel="stylesheet">
+  <style type="text/css">
+    .screenshot { border: solid 1px silver; padding: 5px; margin: 3px; }
+    pre {
+      white-space: pre-wrap;       /* css-3 */
+      white-space: -moz-pre-wrap;  /* Mozilla, since 1999 */
+      white-space: -pre-wrap;      /* Opera 4-6 */
+      white-space: -o-pre-wrap;    /* Opera 7 */
+      word-wrap: break-word;       /* Internet Explorer 5.5+ */
+      font-weight: 700;
+      font-family: Consolas, monospace;
+      border: solid 1px silver;
+      padding: 10px;
+      margin-bottom: 15px;
+      background-color: #f3f3f3;
+      margin-top: 10px;
+    }
+  </style>
+  <!-- HTML5 shim, for IE6-8 support of HTML5 elements -->
+  <!--[if lt IE 9]>
+  <script src="../assets/js/html5shiv.js"></script>
+  <![endif]-->
+  <script type="text/javascript">
+    var _gaq = _gaq || [];
+    _gaq.push(['_setAccount', 'UA-39340599-2']);
+    _gaq.push(['_setDomainName', 'github.com']);
+    _gaq.push(['_trackPageview']);
 
-  (function() {
-    var ga = document.createElement('script'); ga.type = 'text/javascript'; ga.async = true;
-    ga.src = ('https:' == document.location.protocol ? 'https://ssl' : 'http://www') + '.google-analytics.com/ga.js';
-    var s = document.getElementsByTagName('script')[0]; s.parentNode.insertBefore(ga, s);
-  })();
-
-</script>
-	</head>
+    (function() {
+      var ga = document.createElement('script'); ga.type = 'text/javascript'; ga.async = true;
+      ga.src = ('https:' == document.location.protocol ? 'https://ssl' : 'http://www') + '.google-analytics.com/ga.js';
+      var s = document.getElementsByTagName('script')[0]; s.parentNode.insertBefore(ga, s);
+    })();
+  </script>
+  <meta class="foundation-mq-topbar">
+</head>
 <body>
-    <div class="container">
-        <div class="masthead">
-            <h3 class="muted">
-                canopy: f#rictionless web testing</h3>
-            <div class="navbar">
-                <div class="navbar-inner">
-                    <div class="container">
-                        <ul class="nav">
-                          <li><a href="index.html">Home</a></li>
-                          <li><a href="actions.html">Actions</a></li>
-                          <li><a href="assertions.html">Assertions</a></li>
-                          <li><a href="testModes.html">Testing</a></li>
-                          <li class="active"><a href="reporting.html">Reporting</a></li>
-                          <li><a href="links.html">Links</a></li>
-                        </ul>
-                    </div>
-                </div>
-            </div>
-            <!-- /.navbar -->
-        </div>
-        <div class="row-fluid">
-            <div class="span12">
-                <div class="item">
-                    <h4>
-                        console reporter <a class="source" href="https://github.com/lefthandedgoat/canopy/blob/master/canopy/reporters.fs#L24">
-                            source</a></h4>
-                    The default reporter. Prints results to console.
-                    <pre>
+    <nav class="top-bar" data-topbar="">
+      <ul class="title-area">
+        <li><div style="margin: 0px 13px; color: white; font-size: 28px">canopy</div></li>
+        <li class="toggle-topbar menu-icon"><a href="#">Menu</a></li>
+      </ul>
+      <section class="top-bar-section">
+        <ul class="right">
+          <li><a href="index.html">Home</a></li>
+          <li><a href="actions.html">Actions</a></li>
+          <li><a href="assertions.html">Assertions</a></li>
+          <li><a href="testModes.html">Testing</a></li>
+          <li class="active"><a href="reporting.html">Reporting</a></li>
+          <li><a href="links.html">Links</a></li>
+        </ul>
+      </section>
+    </nav>
+
+    <div class="row">
+      <div class="columns large-12">
+        <h4> <code>console reporter</code></h4>
+        The default reporter. Prints results to console.
+        <pre>
 <img src="images/console.png" />
 </pre>
-                </div>
-                <div class="item">
-                    <h4>
-                        live html reporter <a class="source" href="https://github.com/lefthandedgoat/canopy/blob/master/canopy/reporters.fs#L251">source</a>
-						[
-						<a class="example" href="https://github.com/lefthandedgoat/canopy/blob/master/basictests/Program.fs#L14">1</a>
-						]
-					</h4>
-                    Prints results to an html page. Support images. Screenshots on error, supports coverage
-                    reports.
-                    <pre>
+      </div>
+      <div class="columns large-12">
+        <h4>
+          <code>live html reporter</code>
+        </h4>
+        Prints results to an html page. Support images. Screenshots on error, supports coverage
+        reports.
+        <pre>
 open configuration
 open reporters
 reporter &lt;- new LiveHtmlReporter() :> IReporter
 
 <img src="images/livehtmlreport.png" />
 </pre>
-                </div>
-                <div class="item">
-                    <h4>
-                        coverage <a class="source" href="https://github.com/lefthandedgoat/canopy/blob/master/canopy/canopy.fs#L512">
-                            source</a></h4>
-                    Builds up selectors used for a given url, goes to that page and highlights all elements you have interacted with there.  Good for visual reference to what has and has not been tested.
-                    <pre>
+      </div>
+      <div class="columns large-12">
+        <h4>
+          <code>coverage</code>
+        </h4>
+        Builds up selectors used for a given url, goes to that page and highlights all elements you have interacted with there.  Good for visual reference to what has and has not been tested.
+        <pre>
 coverage "http://a-page-you-tested.com/"
 
 <img src="images/coverage.png" />
 </pre>
-                </div>
-                <div class="item">
-                    <h4>
-                        team city reporter <a class="source" href="https://github.com/lefthandedgoat/canopy/blob/master/canopy/reporters.fs#L83">
-                            source</a></h4>
-                    Prints special outputs that are compatible with team city.
-                    <pre>
+      </div>
+      <div class="columns large-12">
+        <h4>
+          <code>team city reporter</code>
+        </h4>
+        Prints special outputs that are compatible with team city.
+        <pre>
 open configuration
 open reporters
 reporter &lt;- new TeamCityReporter() :> IReporter
 
 screenshot is TODO
 </pre>
-                </div>
-            </div>
-        </div>
-        <div class="footer">
-			powered by f#        
-        </div>
-    </div>
-    <!-- /container -->
+      </div>
 
-	
+      <hr class="large-12 columns">
+
+      <div class="large-12 columns" style="margin-bottom: 20px">
+        powered by f#        
+      </div>
+    </div>
+
+    <script>
+      $(document).foundation();
+    </script>
 	</body>
 </html>
