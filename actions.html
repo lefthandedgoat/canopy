@@ -1,220 +1,120 @@
 ﻿<!DOCTYPE html>
 <html lang="en">
 <head>
-    <meta charset="utf-8">    
-    <title>canopy</title>
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <meta name="description" content="">
-    <meta name="author" content="">
-    <!-- Le styles -->
-    <link href="http://netdna.bootstrapcdn.com/twitter-bootstrap/2.3.1/css/bootstrap-combined.min.css"
-        rel="stylesheet">
-    <style type="text/css">
-        body
-        {
-            padding-top: 20px;
-            padding-bottom: 60px;
-        }
-        
-        /* Custom container */
-        .container
-        {
-            margin: 0 auto;
-            max-width: 1000px;
-        }
-        .container > hr
-        {
-            margin: 60px 0;
-        }
-        
-        /* Main marketing message and sign up button */
-        .jumbotron
-        {
-            margin: 80px 0;
-            text-align: center;
-        }
-        .jumbotron h1
-        {
-            font-size: 66px;
-            line-height: 1;
-        }
-        .jumbotron .lead
-        {
-            font-size: 24px;
-            line-height: 1.25;
-        }
-        .jumbotron .btn
-        {
-            font-size: 21px;
-            padding: 14px 24px;
-        }
-        
-        /* Supporting marketing content */
-        .marketing
-        {
-            margin: 60px 0;
-        }
-        .marketing p + h4
-        {
-            margin-top: 28px;
-        }
-        
-        
-        /* Customize the navbar links to be fill the entire space of the .navbar */
-        .navbar .navbar-inner
-        {
-            padding: 0;
-        }
-        .navbar .nav
-        {
-            margin: 0;
-            display: table;
-            width: 100%;
-        }
-        .navbar .nav li
-        {
-            display: table-cell;
-            width: 1%;
-            float: none;
-        }
-        .navbar .nav li a
-        {
-            font-weight: bold;
-            text-align: center;
-            border-left: 1px solid rgba(255,255,255,.75);
-            border-right: 1px solid rgba(0,0,0,.1);
-        }
-        .navbar .nav li:first-child a
-        {
-            border-left: 0;
-            border-radius: 3px 0 0 3px;
-        }
-        .navbar .nav li:last-child a
-        {
-            border-right: 0;
-            border-radius: 0 3px 3px 0;
-        }
-        .comment
-        {
-            color: #008000;
-        }
-        
-        .source, .example
-        {
-            font-size: 11.5px;
-        }
-    </style>
-    <link href="http://netdna.bootstrapcdn.com/twitter-bootstrap/2.3.1/css/bootstrap-responsive.min.css"
-        rel="stylesheet">
-    <!-- HTML5 shim, for IE6-8 support of HTML5 elements -->
-    <!--[if lt IE 9]>
-      <script src="../assets/js/html5shiv.js"></script>
-    <![endif]-->
-<script type="text/javascript">
+  <meta charset="utf-8">
+  <title>canopy</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta name="description" content="">
+  <meta name="author" content="">
+  <!-- Le styles -->
 
-  var _gaq = _gaq || [];
-  _gaq.push(['_setAccount', 'UA-39340599-2']);
-  _gaq.push(['_setDomainName', 'github.com']);
-  _gaq.push(['_trackPageview']);
+  <script type="text/javascript" async="" src="http://www.google-analytics.com/ga.js"></script><script src="http://code.jquery.com/jquery-1.9.1.min.js" type="text/javascript"></script>
+  <script src="http://cdn.foundation5.zurb.com/foundation.js"></script><meta class="foundation-data-attribute-namespace"><meta class="foundation-mq-xxlarge"><meta class="foundation-mq-xlarge"><meta class="foundation-mq-large"><meta class="foundation-mq-medium"><meta class="foundation-mq-small"><style></style>
+  <link href="http://cdn.foundation5.zurb.com/foundation.css" rel="stylesheet">
+  <style type="text/css">
+    .screenshot { border: solid 1px silver; padding: 5px; margin: 3px; }
+    pre {
+      white-space: pre-wrap;       /* css-3 */
+      white-space: -moz-pre-wrap;  /* Mozilla, since 1999 */
+      white-space: -pre-wrap;      /* Opera 4-6 */
+      white-space: -o-pre-wrap;    /* Opera 7 */
+      word-wrap: break-word;       /* Internet Explorer 5.5+ */
+      border: solid 1px silver;
+      padding: 10px;
+      background-color: #f3f3f3;
+      font-weight: bold;
+      margin: 10px;
+    }
+  </style>
+  <!-- HTML5 shim, for IE6-8 support of HTML5 elements -->
+  <!--[if lt IE 9]>
+  <script src="../assets/js/html5shiv.js"></script>
+  <![endif]-->
+  <script type="text/javascript">
+    var _gaq = _gaq || [];
+    _gaq.push(['_setAccount', 'UA-39340599-2']);
+    _gaq.push(['_setDomainName', 'github.com']);
+    _gaq.push(['_trackPageview']);
 
-  (function() {
-    var ga = document.createElement('script'); ga.type = 'text/javascript'; ga.async = true;
-    ga.src = ('https:' == document.location.protocol ? 'https://ssl' : 'http://www') + '.google-analytics.com/ga.js';
-    var s = document.getElementsByTagName('script')[0]; s.parentNode.insertBefore(ga, s);
-  })();
-
-</script>
-	</head>
+    (function() {
+      var ga = document.createElement('script'); ga.type = 'text/javascript'; ga.async = true;
+      ga.src = ('https:' == document.location.protocol ? 'https://ssl' : 'http://www') + '.google-analytics.com/ga.js';
+      var s = document.getElementsByTagName('script')[0]; s.parentNode.insertBefore(ga, s);
+    })();
+  </script>
+  <meta class="foundation-mq-topbar">
+</head>
 <body>
-    <div class="container">
-        <div class="masthead">
-            <h3 class="muted">
-                canopy: f#rictionless web testing</h3>
-            <div class="navbar">
-                <div class="navbar-inner">
-                    <div class="container">
-                        <ul class="nav">
-                          <li><a href="index.html">Home</a></li>
-                          <li class="active"><a href="actions.html">Actions</a></li>
-                          <li><a href="assertions.html">Assertions</a></li>
-                          <li><a href="testModes.html">Testing</a></li>
-                          <li><a href="reporting.html">Reporting</a></li>
-                          <li><a href="links.html">Links</a></li>
-                        </ul>
-                    </div>
-                </div>
-            </div>
-            <!-- /.navbar -->
-        </div>
-        <div class="row-fluid">
-            <div class="span12">
-                <div class="item">
-                    <h4>
-                        start <a class="source" data-for="start" data-line="473" href="https://github.com/lefthandedgoat/canopy/blob/master/canopy/canopy.fs#L473">
-                            source</a>
-						[
-						<a class="example" data-for="start" href="https://github.com/amirrajan/Oak/blob/master/Sample%20Apps/BorrowedGames/BorrowedGames.UI.Tests/Program.fs#L8">1</a>
-						<a class="example" data-for="start" href="https://github.com/lefthandedgoat/canopy/blob/master/basictests/Program.fs#L404">2</a>
-						<a class="example" data-for="start" href="https://github.com/amirrajan/Oak/blob/master/Sample%20Apps/TaskRabbits/TaskRabbits.UITests/Program.fs#L4">3</a>
-						]
-						</h4>
-                    Start an instance of a browser.
-                    <pre>
-start firefox
-start chrome
-start ie
-</pre>
-                </div>
-                <div class="item">
-                    <h4>
-                        switchTo <a class="source" data-for="switchTo" data-line="486" href="https://github.com/lefthandedgoat/canopy/blob/master/canopy/canopy.fs#L486">
-                            source</a>
-						[
-						<a class="example" href="https://github.com/lefthandedgoat/canopy/blob/master/basictests/Program.fs#L367">1</a>
-						]
-						</h4>
-                    Switch to an existing instance of a browser.
-                    <pre>
+    <nav class="top-bar" data-topbar="">
+      <ul class="title-area">
+        <li><div style="margin: 0px 13px; color: white; font-size: 28px">canopy</div></li>
+        <li class="toggle-topbar menu-icon"><a href="#">Menu</a></li>
+      </ul>
+      <section class="top-bar-section">
+        <ul class="right">
+          <li><a href="index.html">Home</a></li>
+          <li class="active"><a href="actions.html">Actions</a></li>
+          <li><a href="assertions.html">Assertions</a></li>
+          <li><a href="testModes.html">Testing</a></li>
+          <li><a href="reporting.html">Reporting</a></li>
+          <li><a href="links.html">Links</a></li>
+        </ul>
+      </section>
+    </nav>
+
+    <div class="row">
+      <div class="columns large-12">
+        <h4>
+          <code>start</code>
+        </h4>
+        Start an instance of a browser.
+        <pre>
+  start firefox
+  start chrome
+  start ie
+        </pre>
+      </div>
+
+      <div class="columns large-12">
+        <h4><code>switchTo</code></h4>
+        Switch to an existing instance of a browser.
+        <pre>
 start firefox
 let mainBrowser = browser
 start chrome
 let secondBrowser = browser
 <span class="comment">//switch back to mainBrowser after opening secondBrowser</span>
 switchTo mainBrowser
+        </pre>
+      </div>
+
+      <div class="columns large-12">
+        <h4>
+          <code>js</code></h4>
+        Run javscript in the current browser.
+        <pre>
+<span class="comment">//give the title a border</span>
+js "document.querySelector('#title').style.border = 'thick solid #FFF467';"
 </pre>
-                </div>
-                <div class="item">
-                    <h4>
-                        screenshot <a class="source" data-for="screenshot" data-line="55" href="https://github.com/lefthandedgoat/canopy/blob/master/canopy/canopy.fs#L55">
-                            source</a></h4>
-                    Take a screenshot and save it to the specified path with specified filename. Returns
-                    image as byte array.
-                    <pre>
+        </div>
+
+      <div class="columns large-12">
+        <h4>
+          <code>screenshot</code></h4>
+        Take a screenshot and save it to the specified path with specified filename. Returns
+        image as byte array.
+        <pre>
 let path = Environment.GetFolderPath(Environment.SpecialFolder.ApplicationData) + @"\canopy\"
 let filename = DateTime.Now.ToString("MMM-d_HH-mm-ss-fff")
 screenshot path filename
 </pre>
-                </div>
-                <div class="item">
-                    <h4>
-                        js <a class="source" data-for="js" data-line="62" href="https://github.com/lefthandedgoat/canopy/blob/master/canopy/canopy.fs#L62">
-                            source</a></h4>
-                    Run javscript in the current browser.
-                    <pre>
-<span class="comment">//give the title a border</span>
-js "document.querySelector('#title').style.border = 'thick solid #FFF467';"
-</pre>
-                </div>
-                <div class="item">
-                    <h4>
-                        sleep <a class="source" data-for="sleep" data-line="66" href="https://github.com/lefthandedgoat/canopy/blob/master/canopy/canopy.fs#L66">
-                            source</a>
-						[
-						<a class="example" href="https://github.com/lefthandedgoat/canopy/blob/master/basictests/Program.fs#L214">1</a>
-						]	
-							</h4>
-                    Sleep for X seconds.
-                    <pre>
+      </div>
+
+      <div class="columns large-12">
+          <h4>
+            <code>sleep</code> </h4>
+          Sleep for X seconds.
+          <pre>
 <span class="comment">//sleep for 1 second</span>
 sleep ()
 <span class="comment">//sleep for 1 second</span>
@@ -222,87 +122,65 @@ sleep 1
 <span class="comment">//sleep for 3 seconds</span>
 sleep 3
 </pre>
-                </div>
-                <div class="item">
-                    <h4>
-                        highlight <a class="source" data-for="highlight" data-line="101" href="https://github.com/lefthandedgoat/canopy/blob/master/canopy/canopy.fs#L101">
-                            source</a></h4>
-                    Place a border around an element to help you identifiy it visually, used in wip
-                    test mode.
-                    <pre>
+      </div>
+
+      <div class="columns large-12">
+        <h4>
+          <code>highlight</code></h4>
+        Place a border around an element to help you identifiy it visually, used in wip
+        test mode.
+        <pre>
 highlight ".btn"
 </pre>
-                </div>
-                <div class="item">
-                    <h4>
-                        describe <a class="source" data-for="describe" data-line="118" href="https://github.com/lefthandedgoat/canopy/blob/master/canopy/canopy.fs#L118">
-                            source</a>
-							[
-						<a class="example" href="https://github.com/lefthandedgoat/canopy/blob/master/basictests/Program.fs#L43">1</a>
-						]	
-							</h4>
-                    Describe something in your test, currently writes desciption to console.
-                    <pre>
+      </div>
+      <div class="columns large-12">
+        <h4>
+          <code>describe</code> </h4>
+        Describe something in your test, currently writes desciption to console.
+        <pre>
 describe "on main page, testing logout"
 </pre>
-                </div>
-                <div class="item">
-                    <h4>
-                        waitFor <a class="source" data-for="waitFor" data-line="121" href="https://github.com/lefthandedgoat/canopy/blob/master/canopy/canopy.fs#L121">
-                            source</a>
-						[
-						<a class="example" href="https://github.com/lefthandedgoat/canopy/blob/master/basictests/Program.fs#L288">1</a>
-						]	
-							</h4>
-                    Wait until custom function is true (better alternative to sleeping X seconds).
-                    <pre>
+      </div>
+      <div class="columns large-12">
+        <h4>
+          <code>waitFor</code> </h4>
+        Wait until custom function is true (better alternative to sleeping X seconds).
+        <pre>
 let fiveNumbersShown () = 
         (elements ".number").Length = 5
-    
+
 url "http://somepage.com/countdown"
 waitFor fiveNumbersShown
 <span class="comment">//continue with your test</span>
 </pre>
-                </div>
-                <div class="item">
-                    <h4>
-                        element <a class="source" data-for="element" data-line="222" href="https://github.com/lefthandedgoat/canopy/blob/master/canopy/canopy.fs#L222">
-                            source</a>
-					[
-						<a class="example" href="https://github.com/lefthandedgoat/canopy/blob/master/basictests/Program.fs#L270">1</a>
-						]	
-					</h4>
-                    Get an element (selenium IWebElement) with given css selector or text (built in
-                    waits, automatically searches through iFrames). Most useful if you need to write
-                    some custom helpers to provide functionality that canopy does not currently have.
-                    <pre>
+      </div>
+      <div class="columns large-12">
+        <h4>
+          <code>element</code> </h4>
+        Get an element (selenium IWebElement) with given css selector or text (built in
+        waits, automatically searches through iFrames). Most useful if you need to write
+        some custom helpers to provide functionality that canopy does not currently have.
+        <pre>
 let logoutHref = (element "#logout").GetAttribute("href")
 describe ("logout href is: " + logoutHref) 
 <span class="comment">//continue with your test</span>
 </pre>
-                </div>
-				
-				<div class="item">
-                    <h4>
-                        elementWithin <a class="source" data-for="elementWithin" data-line="224" href="https://github.com/lefthandedgoat/canopy/blob/master/canopy/canopy.fs#L224">
-                            source</a>
-					[
-						<a class="example" href="https://github.com/lefthandedgoat/canopy/blob/master/basictests/Program.fs#L184">1</a>
-						]	
-					</h4>
-                    Get an element by searching within another element (nested).
-                    <pre>
+      </div>
+
+      <div class="columns large-12">
+        <h4>
+          <code>elementWithin</code> </h4>
+        Get an element by searching within another element (nested).
+        <pre>
 let name = element "#header" |> elementWithin ".name"
 </pre>
-                </div>
-				
-				<div class="item">
-                    <h4>
-                        someElement <a class="source" data-for="someElement" data-line="232" href="https://github.com/lefthandedgoat/canopy/blob/master/canopy/canopy.fs#L232">
-                            source</a>
-					</h4>
-                    Like 'element' function except it runs a Some(IWebElement) or None.  Read more about Option types <a href="http://en.wikibooks.org/wiki/F_Sharp_Programming/Option_Types">here</a>.
-                    <pre>
+      </div>
+
+      <div class="columns large-12">
+        <h4>
+          <code>someElement</code> </h4>
+        Like 'element' function except it runs a Some(IWebElement) or None.  Read more about Option types <a href="http://en.wikibooks.org/wiki/F_Sharp_Programming/Option_Types">here</a>.
+        <pre>
 <span class="comment">//create your own exists helper function</span>
 let exists selector = 
     let someEle = someElement selector
@@ -310,171 +188,125 @@ let exists selector =
     | Some(_) -> true
     | None -> false
 </pre>
-                </div>
-				
-				<div class="item">
-                    <h4>
-                        someElementWithin <a class="source" data-for="someElementWithin" data-line="234" href="https://github.com/lefthandedgoat/canopy/blob/master/canopy/canopy.fs#L234">
-                            source</a>
-					</h4>
-                    Like 'elementWithin' function except it runs a Some(IWebElement) or None.  Read more about Option types <a href="http://en.wikibooks.org/wiki/F_Sharp_Programming/Option_Types">here</a>.
-                    <pre>
+      </div>
+
+      <div class="columns large-12">
+        <h4>
+          <code>someElementWithin</code>
+        </h4>
+        Like 'elementWithin' function except it runs a Some(IWebElement) or None.  Read more about Option types <a href="http://en.wikibooks.org/wiki/F_Sharp_Programming/Option_Types">here</a>.
+        <pre>
 <span class="comment">//create your own exists helper function</span>
 let someName = element "#header" |> someElementWithin ".name"
 </pre>
-                </div>
-				
-				<div class="item">
-                    <h4>
-                        parent <a class="source" data-for="parent" data-line="226" href="https://github.com/lefthandedgoat/canopy/blob/master/canopy/canopy.fs#L226">
-                            source</a>
-					[
-						<a class="example" href="https://github.com/lefthandedgoat/canopy/blob/master/basictests/Program.fs#L193">1</a>
-						]	
-					</h4>
-                    Get the parent element of provided element.
-                    <pre>
+      </div>
+
+      <div class="columns large-12">
+        <h4> <code>parent</code> </h4>
+        Get the parent element of provided element.
+        <pre>
 element "#firstName" |> parent
 </pre>
-                </div>
-				
-				<div class="item">
-                    <h4>
-                        someParent  <a class="source" data-for="someParent" data-line="236" href="https://github.com/lefthandedgoat/canopy/blob/master/canopy/canopy.fs#L236">
-                            source</a>
-					[
-						<a class="example" href="https://github.com/lefthandedgoat/canopy/blob/master/basictests/Program.fs#L197">1</a>
-						]	
-					</h4>
-                    Get the Some/None parent element of provided element.
-                    <pre>
+      </div>
+
+      <div class="columns large-12">
+        <h4>
+          <code>someParent</code> 
+        </h4>
+        Get the Some/None parent element of provided element.
+        <pre>
 element "#firstName" |> someParent
 </pre>
-                </div>
-				
-                <div class="item">
-                    <h4>
-                        elements <a class="source" data-for="elements" data-line="228" href="https://github.com/lefthandedgoat/canopy/blob/master/canopy/canopy.fs#L228">
-                            source</a>
-						[
-						<a class="example" href="https://github.com/lefthandedgoat/canopy/blob/master/basictests/Program.fs#L285">1</a>
-						<a class="example" href="https://github.com/amirrajan/Oak/blob/master/Sample%20Apps/TaskRabbits/TaskRabbits.UITests/common.fs#L41">2</a>
-						]	
-							</h4>
-                    The same as element except you get all elements that match the css selector or text.
-                    <pre>
+      </div>
+
+      <div class="columns large-12">
+        <h4>
+          <code>elements</code>
+        </h4>
+        The same as element except you get all elements that match the css selector or text.
+        <pre>
 let clickAll selector =
-    elements selector
-    |> List.iter (fun element -> click element)
-    
+  elements selector
+  |> List.iter (fun element -> click element)
+
 clickAll ".button"
 </pre>
-                </div>
-				
-				<div class="item">
-                    <h4>
-                        elementsWithin <a class="source" data-for="elementsWithin" data-line="230" href="https://github.com/lefthandedgoat/canopy/blob/master/canopy/canopy.fs#L230">
-                            source</a>
-					[
-						<a class="example" href="https://github.com/lefthandedgoat/canopy/blob/master/basictests/Program.fs#L184">1</a>
-						]	
-					</h4>
-                    Get elements by searching within another element (nested).
-                    <pre>
+      </div>
+
+      <div class="columns large-12">
+        <h4>
+          <code>elementsWithin</code>
+        </h4>
+        Get elements by searching within another element (nested).
+        <pre>
 let names = element "#header" |> elementsWithin ".name"
 </pre>
-                </div>
-				
-                <div class="item">
-                    <h4>
-                        nth <a class="source" data-for="nth" data-line="238" href="https://github.com/lefthandedgoat/canopy/blob/master/canopy/canopy.fs#L238">
-                            source</a>
-					[
-						<a class="example" href="https://github.com/lefthandedgoat/canopy/blob/master/basictests/Program.fs#L308">1</a>
-						]	
-							</h4>
-                    Get the nth element.
-                    <pre>
+      </div>
+
+      <div class="columns large-12">
+        <h4>
+          <code>nth</code>
+        </h4>
+        Get the nth element.
+        <pre>
 click (nth 4 ".button")
 </pre>
-                </div>
-                <div class="item">
-                    <h4>
-                        first <a class="source" data-for="first" data-line="240" href="https://github.com/lefthandedgoat/canopy/blob/master/canopy/canopy.fs#L240">
-                            source</a>
-							[
-						<a class="example" href="https://github.com/lefthandedgoat/canopy/blob/master/basictests/Program.fs#L300">1</a>
-						]	
-							</h4>
-                    Get the first element.
-                    <pre>
+      </div>
+      <div class="columns large-12">
+        <h4>
+          <code>first</code>
+        </h4>
+        Get the first element.
+        <pre>
 click (first ".button")
 </pre>
-                </div>
-                <div class="item">
-                    <h4>
-                        last <a class="source" data-for="last" data-line="242" href="https://github.com/lefthandedgoat/canopy/blob/master/canopy/canopy.fs#L242">
-                            source</a>
-						[
-						<a class="example" href="https://github.com/lefthandedgoat/canopy/blob/master/basictests/Program.fs#L304">1</a>
-						]	
-							</h4>
-                    Get the last element.
-                    <pre>
+      </div>
+      <div class="columns large-12">
+        <h4>
+          <code>last</code>
+        </h4>
+        Get the last element.
+        <pre>
 click (last ".button")
 </pre>
-                </div>
-                <div class="item">
-                    <h4>
-                        << (write) <a class="source" data-for="<<" data-line="253" href="https://github.com/lefthandedgoat/canopy/blob/master/canopy/canopy.fs#L253">
-                            source</a>
-						[
-						<a class="example" href="https://github.com/lefthandedgoat/canopy/blob/master/basictests/Program.fs#L63">1</a>
-						<a class="example" href="https://github.com/amirrajan/Oak/blob/master/Sample%20Apps/BorrowedGames/BorrowedGames.UI.Tests/uimethods.fs#L36">2</a>
-						<a class="example" href="https://github.com/amirrajan/Oak/blob/master/Sample%20Apps/TaskRabbits/TaskRabbits.UITests/common.fs#L84">3</a>
-						]	
-						</h4>
-                    Write text to element.
-                    <pre>
+      </div>
+      <div class="columns large-12">
+        <h4>
+          <code><< (write)</code>
+        </h4>
+        Write text to element.
+        <pre>
 "#firstName" << "Alex"
 <span class="comment">//if you dont like the << syntax you can alias anyway you like, eg: </span>
 <span class="comment">//let write text selector = selector << text </span>
 </pre>
-                </div>
-                <div class="item">
-                    <h4>
-                        read <a class="source" data-for="read" data-line="281" href="https://github.com/lefthandedgoat/canopy/blob/master/canopy/canopy.fs#L281">
-                            source</a></h4>
-                    Read the text (or value or selected option) of an element.
-                    <pre>
+      </div>
+      <div class="columns large-12">
+        <h4>
+          <code>read</code>
+        </h4>
+        Read the text (or value or selected option) of an element.
+        <pre>
 let selectedState = read "#states"
 let firstName = read "#firstName"
 let linkText = read "#someLink"
 </pre>
-                </div>
-                <div class="item">
-                    <h4>
-                        clear <a class="source" data-for="clear" data-line="285" href="https://github.com/lefthandedgoat/canopy/blob/master/canopy/canopy.fs#L285">
-                            source</a>
-					[
-						<a class="example" href="https://github.com/lefthandedgoat/canopy/blob/master/basictests/Program.fs#L221">1</a>
-						]	
-							</h4>
-                    Clear the text of an element.
-                    <pre>
+      </div>
+      <div class="columns large-12">
+        <h4>
+          <code>clear</code>
+        </h4>
+        Clear the text of an element.
+        <pre>
 clear "#firstName"
 </pre>
-                </div>
-                <div class="item">
-                    <h4>
-                        press <a class="source" data-for="press" data-line="311" href="https://github.com/lefthandedgoat/canopy/blob/master/canopy/canopy.fs#L311">
-                            source</a>
-						[
-						<a class="example" href="https://github.com/lefthandedgoat/canopy/blob/master/basictests/Program.fs#L201">1</a>
-						]
-							</h4>
-                    Simulate a key press.
-                    <pre>
+      </div>
+      <div class="columns large-12">
+        <h4>
+          <code>press</code>
+        </h4>
+        Simulate a key press.
+        <pre>
 press tab
 press enter
 press down
@@ -482,141 +314,103 @@ press up
 press left
 press right
 </pre>
-                </div>
-                <div class="item">
-                    <h4>
-                        alert <a class="source" data-for="alert" data-line="316" href="https://github.com/lefthandedgoat/canopy/blob/master/canopy/canopy.fs#L316">
-                            source</a>
-						[
-						<a class="example" href="https://github.com/lefthandedgoat/canopy/blob/master/basictests/Program.fs#L238">1</a>
-						]						
-							</h4>
-                    Gets the current alert.
-                    <pre>
+      </div>
+      <div class="columns large-12">
+        <h4>
+          <code>alert</code>
+        </h4>
+        Gets the current alert.
+        <pre>
 alert() == "Welcome to Test Page!"
 </pre>
-                </div>
-                <div class="item">
-                    <h4>
-                        acceptAlert <a class="source" data-for="acceptAlert" data-line="318" href="https://github.com/lefthandedgoat/canopy/blob/master/canopy/canopy.fs#L318">
-                            source</a>
-						[
-						<a class="example" href="https://github.com/lefthandedgoat/canopy/blob/master/basictests/Program.fs#L239">1</a>
-						]	
-							</h4>
-                    Accepts the current alert.
-                    <pre>
+      </div>
+      <div class="columns large-12">
+        <h4>
+          <code>acceptAlert</code>
+        </h4>
+        Accepts the current alert.
+        <pre>
 acceptAlert()
 </pre>
-                </div>
-                <div class="item">
-                    <h4>
-                        dismissAlert <a class="source" data-for="dismissAlert" data-line="320" href="https://github.com/lefthandedgoat/canopy/blob/master/canopy/canopy.fs#L320">
-                            source</a>
-						[
-						<a class="example" href="https://github.com/lefthandedgoat/canopy/blob/master/basictests/Program.fs#L244">1</a>
-						]	
-							</h4>
-                    Dismiss the current alert.
-                    <pre>
+      </div>
+      <div class="columns large-12">
+        <h4>
+          <code>dismissAlert</code>
+        </h4>
+        Dismiss the current alert.
+        <pre>
 dismissAlert()
 </pre>
-                </div>
-                <div class="item">
-                    <h4>
-                        click <a class="source" data-for="click" data-line="427" href="https://github.com/lefthandedgoat/canopy/blob/master/canopy/canopy.fs#427">
-                            source</a>
-						[
-						<a class="example" href="https://github.com/lefthandedgoat/canopy/blob/master/basictests/Program.fs#L117">1</a>
-						<a class="example" href="https://github.com/amirrajan/Oak/blob/master/Sample%20Apps/BorrowedGames/BorrowedGames.UI.Tests/uimethods.fs#L34">2</a>
-						<a class="example" href="https://github.com/amirrajan/Oak/blob/master/Sample%20Apps/TaskRabbits/TaskRabbits.UITests/common.fs#L34">3</a>
-						]	
-							</h4>
-                    Click an element via selector or text, can also click selenium IWebElements.
-                    <pre>
+      </div>
+      <div class="columns large-12">
+        <h4>
+          <code>click</code>
+        </h4>
+        Click an element via selector or text, can also click selenium IWebElements.
+        <pre>
 click "#login"
 click "Login"
 click (element "#login")
 </pre>
-                </div>
-                <div class="item">
-                    <h4>
-                        doubleClick <a class="source" data-for="doubleClick" data-line="436" href="https://github.com/lefthandedgoat/canopy/blob/master/canopy/canopy.fs#L436">
-                            source</a>
-						[
-						<a class="example" href="https://github.com/lefthandedgoat/canopy/blob/master/basictests/Program.fs#L318">1</a>
-						]	
-							</h4>
-                    Simulates a double click via javascript.
-                    <pre>
+      </div>
+      <div class="columns large-12">
+        <h4>
+          <code>doubleClick</code>
+        </h4>
+        Simulates a double click via javascript.
+        <pre>
 doubleClick "#login"
 </pre>
-                </div>
-                <div class="item">
-                    <h4>
-                        check <a class="source" data-for="check" data-line="448" href="https://github.com/lefthandedgoat/canopy/blob/master/canopy/canopy.fs#L448">
-                            source</a>
-						[
-						<a class="example" href="https://github.com/lefthandedgoat/canopy/blob/master/basictests/Program.fs#L156">1</a>
-						]	
-							</h4>
-                    Checks a checkbox if it is not already checked.
-                    <pre>
+      </div>
+      <div class="columns large-12">
+        <h4>
+          <code>check</code>
+        </h4>
+        Checks a checkbox if it is not already checked.
+        <pre>
 check "#yes"
 <span class="comment">//below code will not click the checkbox again, which would uncheck it</span>
 check "#yes"
 </pre>
-                </div>
-                <div class="item">
-                    <h4>
-                        uncheck <a class="source" data-for="uncheck" data-line="450" href="https://github.com/lefthandedgoat/canopy/blob/master/canopy/canopy.fs#450">
-                            source</a>
-						[
-						<a class="example" href="https://github.com/lefthandedgoat/canopy/blob/master/basictests/Program.fs#L162">1</a>
-						]	
-							</h4>
-                    Unchecks a checkbox if it is not already unchecked.
-                    <pre>
+      </div>
+      <div class="columns large-12">
+        <h4>
+          <code>uncheck</code>
+        </h4>
+        Unchecks a checkbox if it is not already unchecked.
+        <pre>
 uncheck "#yes"
 <span class="comment">//below code will not click the checkbox again, which would check it</span>
 uncheck "#yes"
 </pre>
-                </div>
-                <div class="item">
-                    <h4>
-                        --> (drag is an alias) <a class="source" data-for="(-->)" data-line="453" href="https://github.com/lefthandedgoat/canopy/blob/master/canopy/canopy.fs#L453">
-                            source</a>
-						[
-						<a class="example" href="https://github.com/lefthandedgoat/canopy/blob/master/basictests/Program.fs#L347">1</a>
-						]	
-							</h4>
-                    Drag on item to another.
-                    <pre>
-".todo" >> ".inprogress"
+      </div>
+      <div class="columns large-12">
+        <h4>
+          <code>--> (drag is an alias)</code>
+        </h4>
+        Drag on item to another.
+        <pre>
+".todo" --> ".inprogress"
 drag ".todo" ".inprogress"
 </pre>
-                </div>
-                <div class="item">
-                    <h4>
-                        pin <a class="source" data-for="pin" data-line="463" href="https://github.com/lefthandedgoat/canopy/blob/master/canopy/canopy.fs#L463">
-                            source</a></h4>
-                    Pin a browser to the left, right, or fullscreen (any browser you start is pinned right automatically).
-                    <pre>
+      </div>
+      <div class="columns large-12">
+        <h4>
+          <code>pin</code>
+        </h4>
+        Pin a browser to the left, right, or fullscreen (any browser you start is pinned right automatically).
+        <pre>
 pin Left
 pin Right
 pin FullScreen 
 </pre>
-                </div>
-                <div class="item">
-                    <h4>
-                        tile <a class="source" data-for="tile" data-line="488" href="https://github.com/lefthandedgoat/canopy/blob/master/canopy/canopy.fs#L488">
-                                 source</a>
-						 [
-						<a class="example" href="https://github.com/lefthandedgoat/canopy/blob/master/basictests/Program.fs#L356">1</a>
-						]									 
-								 </h4>
-                    Tile listed browsers equally across your screen.  4 open browsers would each take 25% of the screen.
-                    <pre>
+      </div>
+      <div class="columns large-12">
+        <h4>
+          <code>tile</code>	 
+        </h4>
+        Tile listed browsers equally across your screen.  4 open browsers would each take 25% of the screen.
+        <pre>
 start chrome
 let browser1 = browser
 start chrome
@@ -626,69 +420,63 @@ let browser3 = browser
 
 tile [browser1; browser2; browser3]
 </pre>
-                </div>
-                    <div class="item">
-                    <h4>
-                        quit <a class="source" data-for="quit" data-line="504" href="https://github.com/lefthandedgoat/canopy/blob/master/canopy/canopy.fs#L504">
-                            source</a>
-						[
-						<a class="example" href="https://github.com/lefthandedgoat/canopy/blob/master/basictests/Program.fs#L358">1</a>
-						]								
-							</h4>
-                    Quit the current browser or the specified browser.
-                    <pre>
+      </div>
+      <div class="columns large-12">
+        <h4>
+          <code>quit</code>
+        </h4>
+        Quit the current browser or the specified browser.
+        <pre>
 <span class="comment">//quit current</span>
 quit ()
 <span class="comment">//quit specific</span>
 quit browser1
 </pre>
-                </div>
-                    <div class="item">
-                    <h4>
-                        currentUrl <a class="source" data-for="currentUrl" data-line="510" href="https://github.com/lefthandedgoat/canopy/blob/master/canopy/canopy.fs#L510">
-                            source</a></h4>
-                    Gets the current url.
-                    <pre>
+      </div>
+      <div class="columns large-12">
+        <h4>
+          <code>currentUrl</code></h4>
+        Gets the current url.
+        <pre>
 let u = currentUrl ()
 </pre>
-                </div>
-                <div class="item">
-                    <h4>
-                        !^ (aliased by url) <a class="source" data-for="!^" data-line="518" href="https://github.com/lefthandedgoat/canopy/blob/master/canopy/canopy.fs#L518">
-                            source</a></h4>
-                    Go to a url.
-                    <pre>
+      </div>
+      <div class="columns large-12">
+        <h4>
+          <code>!^ (aliased by url)</code></h4>
+        Go to a url.
+        <pre>
 !^ "http://www.google.com"
 url "http://www.google.com"
 </pre>
-                </div>
-                <div class="item">
-                    <h4>
-                        title <a class="source" data-for="title" data-line="522" href="https://github.com/lefthandedgoat/canopy/blob/master/canopy/canopy.fs#L522">
-                            source</a></h4>
-                    Gets the title of the current page.
-                    <pre>
+      </div>
+      <div class="columns large-12">
+        <h4>
+          <code>title</code></h4>
+        Gets the title of the current page.
+        <pre>
 let theTitle = title ()
 </pre>
-                </div>
-                <div class="item">
-                    <h4>
-                        reload <a class="source" data-for="reload" data-line="524" href="https://github.com/lefthandedgoat/canopy/blob/master/canopy/canopy.fs#L524">
-                            source</a></h4>
-                    Reload the current page.
-                    <pre>
+      </div>
+      <div class="columns large-12">
+        <h4>
+          <code>reload</code></h4>
+        Reload the current page.
+        <pre>
 reload ()
 </pre>
-                </div>
+        </div>
 
-            </div>
-        </div>
-        <div class="footer">
-			powered by f#        
-        </div>
+      <hr class="large-12 columns">
+
+      <div class="large-12 columns" style="margin-bottom: 20px">
+        powered by f#        
+      </div>
     </div>
-    <!-- /container -->
 
-	
+
+    <script>
+      $(document).foundation();
+    </script>
 	</body>
 </html>
