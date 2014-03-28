@@ -14,6 +14,8 @@ open levenshtein
 open reporters
 open types
 open finders
+open System.Drawing
+open System.Drawing.Imaging
 
 let mutable (browser : IWebDriver) = null
 let mutable (failureMessage : string) = null
@@ -31,12 +33,33 @@ let mutable browsers = []
 //misc
 let failsWith message = failureMessage <- message
 
-let private takeScreenshot directory filename =
-    let pic = (browser :?> ITakesScreenshot).GetScreenshot().AsByteArray
+let private saveScreenshot directory filename pic =
     if not <| Directory.Exists(directory) 
         then Directory.CreateDirectory(directory) |> ignore
     IO.File.WriteAllBytes(Path.Combine(directory,filename + ".png"), pic)
-    pic
+
+let private takeScreenShotIfAlertUp () =
+    let bitmap = new Bitmap(width= System.Windows.Forms.Screen.PrimaryScreen.Bounds.Width, height= System.Windows.Forms.Screen.PrimaryScreen.Bounds.Height, format=PixelFormat.Format32bppArgb); 
+    use graphics = Graphics.FromImage(bitmap)
+    graphics.CopyFromScreen(System.Windows.Forms.Screen.PrimaryScreen.Bounds.X, System.Windows.Forms.Screen.PrimaryScreen.Bounds.Y, 0, 0, System.Windows.Forms.Screen.PrimaryScreen.Bounds.Size, CopyPixelOperation.SourceCopy);    
+    use stream = new MemoryStream()
+    bitmap.Save(stream, ImageFormat.Png)
+    stream.Close()
+    stream.ToArray()
+
+
+let private takeScreenshot directory filename =    
+    try
+        let pic = (browser :?> ITakesScreenshot).GetScreenshot().AsByteArray
+        saveScreenshot directory filename pic        
+        pic
+    with 
+        | :? OpenQA.Selenium.UnhandledAlertException as ex->                     
+            let pic = takeScreenShotIfAlertUp()
+            saveScreenshot directory filename pic        
+            let alert = browser.SwitchTo().Alert()
+            alert.Accept()
+            pic
 
 let screenshot directory filename =
     match box browser with 
