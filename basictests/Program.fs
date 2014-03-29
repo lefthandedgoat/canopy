@@ -589,8 +589,8 @@ addFinder findByHref
 
 "test new findByHref by clicking an href" &&& fun _ ->
     url "http://lefthandedgoat.github.io/canopy/index.html"
-    click "about.html"
-    on "http://lefthandedgoat.github.io/canopy/about.html"
+    click "actions.html"
+    on "http://lefthandedgoat.github.io/canopy/actions.html"
 
 context "todo tests"
 

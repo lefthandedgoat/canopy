@@ -39,7 +39,7 @@ Target "Clean" (fun _ ->
 // Build Canopy
 Target "BuildCanopy" (fun _ ->
     !! @"canopy\canopy.fsproj"
-      |> MSBuildDebug buildDir "Build"
+      |> MSBuildRelease buildDir "Build"
       |> Log "AppBuild-Output: "
 )
 
@@ -51,7 +51,7 @@ Target "CleanTests" (fun _ ->
 // Test Canopy
 Target "TestCanopy" (fun _ ->
     !! @"basictests\basictests.fsproj"
-      |> MSBuildDebug testDir "Build"
+      |> MSBuildRelease testDir "Build"
       |> Log "AppBuild-Output: "
       
     let result =
