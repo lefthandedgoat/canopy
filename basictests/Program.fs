@@ -533,24 +533,24 @@ context "User Agents tests"
     url "http://whatsmyuseragent.com/"
     "#body_lbUserAgent" =~ "iPad"
 
-"FirefoxDeviceWithUserAgent userAgents.iPhone should show as iPhone" &&& fun _ ->
-    start <| FirefoxWithUserAgent userAgents.iPhone
-    url "http://whatsmyuseragent.com/"
-    "#body_lbUserAgent" =~ "iPhone"
-
-"FirefoxDeviceWithUserAgent myagent should show as myagent" &&& fun _ ->
-    start <| FirefoxWithUserAgent "myagent"
-    url "http://whatsmyuseragent.com/"
-    "#body_lbUserAgent" == "myagent"
+//"FirefoxDeviceWithUserAgent userAgents.iPhone should show as iPhone" &&& fun _ ->
+//    start <| FirefoxWithUserAgent userAgents.iPhone
+//    url "http://whatsmyuseragent.com/"
+//    "#body_lbUserAgent" =~ "iPhone"
+//
+//"FirefoxDeviceWithUserAgent myagent should show as myagent" &&& fun _ ->
+//    start <| FirefoxWithUserAgent "myagent"
+//    url "http://whatsmyuseragent.com/"
+//    "#body_lbUserAgent" == "myagent"
 
 context "Resize tests"
 
-"Firefox should be resized to 400,400" &&& fun _ ->
-    start firefox
-    url "http://resizemybrowser.com/"
-    resize (400,400)
-    "#cWidth" == "400"
-    "#cHeight" == "400"
+//"Firefox should be resized to 400,400" &&& fun _ ->
+//    start firefox
+//    url "http://resizemybrowser.com/"
+//    resize (400,400)
+//    "#cWidth" == "400"
+//    "#cHeight" == "400"
 
 "Chrome should be resized to iPhone4" &&& fun _ ->
     start chrome
@@ -559,13 +559,13 @@ context "Resize tests"
     "#cWidth" == "320"
     "#cHeight" == "480"
 
-"Firefox should be resized to 400,500 then rotated to 500,400" &&& fun _ ->
-    start firefox
-    url "http://resizemybrowser.com/"
-    resize (400,500)
-    rotate()
-    "#cHeight" == "400"
-    "#cWidth" == "500"
+//"Firefox should be resized to 400,500 then rotated to 500,400" &&& fun _ ->
+//    start firefox
+//    url "http://resizemybrowser.com/"
+//    resize (400,500)
+//    rotate()
+//    "#cHeight" == "400"
+//    "#cWidth" == "500"
 
 "Chrome should be resized and rotated to iPhone4" &&& fun _ ->
     start chrome

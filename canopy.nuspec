@@ -11,9 +11,9 @@
     <description>@description@</description>
     <tags>f# fsharp canopy selenium ui automation tests</tags>
     <dependencies>
-      <dependency id="Selenium.WebDriver" version="2.38.0" />
-      <dependency id="Selenium.Support" version="2.38.0" />
-      <dependency id="SizSelCsZzz" version="0.3.34.0" />
+      <dependency id="Selenium.WebDriver" version="[2.40.0]" />
+      <dependency id="Selenium.Support" version="[2.40.0]" />
+      <dependency id="SizSelCsZzz" version="[0.3.35.0]" />
     </dependencies>
   </metadata>
 </package>
