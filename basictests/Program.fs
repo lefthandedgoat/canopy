@@ -358,6 +358,15 @@ context "other tests"
     waitFor pageLoaded
     "#wait_for" == "Done!"
 
+"define a custom wait for using any function that takes in unit and returns bool" &&& fun _ ->    
+    failsWith "waiting for page to load
+waitFor condition failed to become true in 3.0 seconds"
+    let pageLoaded () = 
+        (element "#wait_for").Text = "Done!!!"
+    
+    !^ "http://lefthandedgoat.github.io/canopy/testpages/waitFor"
+    waitFor2 "waiting for page to load" pageLoaded
+
 "another example of another wait for, waiting on opacity to be 100% before clicking" &&& fun _ ->
     compareTimeout <- 10.0
     !^ "http://lefthandedgoat.github.io/canopy/testpages/noClickTilVisible"

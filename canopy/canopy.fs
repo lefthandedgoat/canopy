@@ -172,14 +172,15 @@ let suggestOtherSelectors cssSelector =
 let describe text =
     puts text
 
-let waitFor (f : unit -> bool) =
+let waitFor2 message (f : unit -> bool) =
     try        
         wait compareTimeout f
     with
-        | :? WebDriverTimeoutException -> 
-                puts "Condition not met in given amount of time. If you want to increase the time, put compareTimeout <- 10.0 anywhere before a test to increase the timeout"
-                raise (CanopyWaitForException(sprintf "waitFor condition failed to become true in %.1f seconds" compareTimeout))
+        | :? WebDriverTimeoutException ->
+                raise (CanopyWaitForException(sprintf "%s%swaitFor condition failed to become true in %.1f seconds" message System.Environment.NewLine compareTimeout))
 
+let waitFor = waitFor2 "Condition not met in given amount of time. If you want to increase the time, put compareTimeout <- 10.0 anywhere before a test to increase the timeout"
+    
 //find related    
 let rec private findElements cssSelector (searchContext : ISearchContext) : IWebElement list =
     searchedFor <- (cssSelector, browser.Url) :: searchedFor
