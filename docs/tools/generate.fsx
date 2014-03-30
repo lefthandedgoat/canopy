@@ -4,11 +4,12 @@
 // --------------------------------------------------------------------------------------
 
 // Binaries that have XML documentation (in a corresponding generated XML file)
-let referenceBinaries = [ "FSharp.ProjectTemplate.dll" ]
+let referenceBinaries = [ "canopy.dll" ]
+    //[ "WebDriver.dll"; "WebDriver.Support.dll"; "Newtonsoft.Json.dll"; "SizSelCsZzz.dll"; "canopy.dll" ]
 // Web site location for the generated documentation
 let website = "/canopy"
 
-let githubLink = "https://github.com/lefthandedgoat/canopy"
+let githubLink = "https://github.com/sergey-tihon/canopy" // TODO: change it
 
 // Specify more information about your project
 let info =
@@ -22,7 +23,7 @@ let info =
 // For typical project, no changes are needed below
 // --------------------------------------------------------------------------------------
 
-#I "../../packages/FSharp.Formatting.2.4.1/lib/net40"
+#I "../../packages/FSharp.Formatting.2.4.2/lib/net40"
 #I "../../packages/RazorEngine.3.3.0/lib/net40"
 #I "../../packages/FSharp.Compiler.Service.0.0.36/lib/net40"
 #r "../../packages/Microsoft.AspNet.Razor.2.0.30506.0/lib/net40/System.Web.Razor.dll"
@@ -51,7 +52,7 @@ let content    = __SOURCE_DIRECTORY__ @@ "../content"
 let output     = __SOURCE_DIRECTORY__ @@ "../output"
 let files      = __SOURCE_DIRECTORY__ @@ "../files"
 let templates  = __SOURCE_DIRECTORY__ @@ "templates"
-let formatting = __SOURCE_DIRECTORY__ @@ "../../packages/FSharp.Formatting.2.4.1/"
+let formatting = __SOURCE_DIRECTORY__ @@ "../../packages/FSharp.Formatting.2.4.2/"
 let docTemplate = formatting @@ "templates/docpage.cshtml"
 
 // Where to look for *.csproj templates (in this order)
@@ -73,9 +74,10 @@ let buildReference () =
     MetadataFormat.Generate
       ( bin @@ lib, output @@ "reference", layoutRoots, 
         parameters = ("root", root)::info,
-        sourceRepo = githubLink @@ "tree/master",
+        sourceRepo = githubLink @@ "tree/scaffold", // TODO: revert to "tree/master"
         sourceFolder = __SOURCE_DIRECTORY__ @@ ".." @@ "..",
-        publicOnly = true )
+        publicOnly = true,
+        libDirs = [__SOURCE_DIRECTORY__ @@ ".." @@ ".." @@ "bin"])
 
 // Build documentation from `fsx` and `md` files in `docs/content`
 let buildDocumentation () =

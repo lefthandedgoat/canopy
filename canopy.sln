@@ -34,7 +34,6 @@ EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "content", "content", "{A94D736A-68EB-4D7B-A761-DF6B1EEAE24C}"
 	ProjectSection(SolutionItems) = preProject
 		docs\content\index.fsx = docs\content\index.fsx
-		docs\content\tutorial.fsx = docs\content\tutorial.fsx
 	EndProjectSection
 EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "tools", "tools", "{3C3590B5-4CC8-49D1-A2CE-4FDFA73ADB53}"

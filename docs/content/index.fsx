@@ -4,64 +4,91 @@
 #I "../../bin"
 
 (**
-F# Project Scaffold
+f#rictionless web testing
 ===================
 
-Documentation
+f#rictionless web testing
 
 <div class="row">
   <div class="span1"></div>
   <div class="span6">
     <div class="well well-small" id="nuget">
-      The F# ProjectTemplate library can be <a href="https://nuget.org/packages/FSharp.ProjectTemplate">installed from NuGet</a>:
-      <pre>PM> Install-Package FSharp.ProjectTemplate</pre>
+      The Canopy library can be <a href="https://www.nuget.org/packages/canopy/">installed from NuGet</a>:
+      <pre>PM> Install-Package canopy</pre>
     </div>
   </div>
   <div class="span1"></div>
 </div>
 
-Example
--------
+Canopy is a web testing framework with one goal in mind, make UI testing simple:
+* Solid stabilization layer built on top of Selenium. Death to "brittle, quirky, UI tests". 
+* Quick to learn. Even if you've never done UI Automation, and don't know F#. 
+* Clean, consise API. 
+* MIT License.
+   
+Getting Started
+---------------
+1. Create a new F# console application
+<img src="img/newProject.png" alt="F# New Project" style="display: inherit;"/>
 
-This example demonstrates using a function defined in this sample library.
+2. Set target framework to .NET Framework 4
+<img src="img/profile.png" alt="Change target framework" style="display: inherit;"/>
+
+3. Install Canopy via Nuget
+<img src="img/installCanopy.png" alt="Install Canopy" style="display: inherit;"/>
+
+4. Paste the following code into `Program.fs`
 
 *)
-#r "FSharp.ProjectTemplate.dll"
-open FSharp.ProjectTemplate
+#r "canopy.dll"
+//these are similar to C# using statements
+open canopy
+open runner
+open System
 
-printfn "hello = %i" <| Library.hello 0
+//start an instance of the firefox browser
+start firefox
 
+//this is how you define a test
+"taking canopy for a spin" &&& fun _ ->
+    //this is an F# function body, it's whitespace enforced
+
+    //go to url
+    url "http://lefthandedgoat.github.io/canopy/testpages/"
+
+    //assert that the element with an id of 'welcome' has
+    //the text 'Welcome'
+    "#welcome" == "Welcome"
+
+    //assert that the element with an id of 'firstName' has the value 'John'
+    "#firstName" == "John"
+
+    //change the value of element with
+    //an id of 'firstName' to 'Something Else'
+    "#firstName" << "Something Else"
+
+    //verify another element's value, click a button,
+    //verify the element is updated
+    "#button_clicked" == "button not clicked"
+    click "#button"
+    "#button_clicked" == "button clicked"
+
+//run all tests
+run()
+
+printfn "press [enter] to exit"
+System.Console.ReadLine() |> ignore
+
+quit()
 (**
-Some more info
+5. Run
+<img src="img/run.png" alt="Run" style="display: inherit;"/>
 
-Samples & documentation
------------------------
+6. Explore the rest of canopy's api 
 
-The library comes with comprehensible documentation. 
-It can include a tutorials automatically generated from `*.fsx` files in [the content folder][content]. 
-The API reference is automatically generated from Markdown comments in the library implementation.
+    * [Actions: documentation of everything you can do on a page]()
+    * [Assertions: all the ways you can verify what's on the page is correct]()
+    * [Testing: different ways to orchestrate tests and troubleshoot issues with a page]()
+    * [Reporting: different ways to output the results of your test suite]()
 
- * [Tutorial](tutorial.html) contains a further explanation of this sample library.
-
- * [API Reference](reference/index.html) contains automatically generated documentation for all types, modules
-   and functions in the library. This includes additional brief samples on using most of the
-   functions.
- 
-Contributing and copyright
---------------------------
-
-The project is hosted on [GitHub][gh] where you can [report issues][issues], fork 
-the project and submit pull requests. If you're adding new public API, please also 
-consider adding [samples][content] that can be turned into a documentation. You might
-also want to read [library design notes][readme] to understand how it works.
-
-The library is available under Public Domain license, which allows modification and 
-redistribution for both commercial and non-commercial purposes. For more information see the 
-[License file][license] in the GitHub repository. 
-
-  [content]: https://github.com/fsprojects/FSharp.ProjectScaffold/tree/master/docs/content
-  [gh]: https://github.com/fsprojects/FSharp.ProjectScaffold
-  [issues]: https://github.com/fsprojects/FSharp.ProjectScaffold/issues
-  [readme]: https://github.com/fsprojects/FSharp.ProjectScaffold/blob/master/README.md
-  [license]: https://github.com/fsprojects/FSharp.ProjectScaffold/blob/master/LICENSE.txt
 *)
