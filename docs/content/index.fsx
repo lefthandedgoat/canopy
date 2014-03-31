@@ -86,7 +86,7 @@ quit()
 ####5\. Run
 <img src="img/run.png" alt="Run" style="display: inherit;"/>
 
-####6\. Explore the rest of canopy's api 
+####6\. Explore the rest of Canopy's API 
 
 * [Actions](/canopy/actions.html): documentation of everything you can do on a page
 * [Assertions](/canopy/assertions.html): all the ways you can verify what's on the page is correct

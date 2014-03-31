@@ -33,8 +33,7 @@ once
 Function that is run once time at the beginning of a test suite. 
 *)
 once (fun _ -> 
-    //do this one time at the beginning of the most recently defined context
-    ()
+    ()//do this one time at the beginning of the most recently defined context
 )
 
 (**
@@ -43,8 +42,7 @@ before
 Function that is run before each test in a context. 
 *)
 before (fun _ -> 
-    //do this before every test of the most recently defined context
-    ()
+    ()//do this before every test of the most recently defined context
 )
 
 (**
@@ -53,8 +51,7 @@ after
 Function that is run after each test in a context. 
 *)
 after (fun _ -> 
-    //do this after every test of the most recently defined context
-    ()
+    ()//do this after every test of the most recently defined context
 )
 
 (**
@@ -63,8 +60,7 @@ lastly
 Function that is run once at the end of a context. 
 *)
 lastly (fun _ -> 
-    //do this after the very last test of the most recently defined context
-    ()
+    ()//do this after the very last test of the most recently defined context
 )
 
 (**
@@ -84,12 +80,11 @@ test (fun _ ->
 ----------------------------------
 Standard test definition with a name. 
 *)
-"go somewhere, do some stuff, assert" &&& (fun _ ->
+"go somewhere, do some stuff, assert" &&& fun _ ->
     //go somewhere
     //interact with page
     //assert
     ()
-)
 //Or
 ntest "go somewhere, do some stuff, assert" (fun _ ->
     //go somewhere
@@ -105,12 +100,11 @@ Used for debugging. Test runs slower and highlights the elements that it is inte
 If one test is marked wip, only wip tests are ran. Other tests are skipped. 
 *)
 //this is test is run slow and only with other tests marked as wip
-"go somewhere, do some stuff, assert" &&&& (fun _ ->
+"go somewhere, do some stuff, assert" &&&& fun _ ->
     //go somewhere
     //interact with page
     //assert
     ()
-)
 //Or
 wip (fun _ ->
     //go somewhere
@@ -125,12 +119,11 @@ wip (fun _ ->
 Do not run a test. 
 *)
 //skipped
-"go somewhere, do some stuff, assert" &&! (fun _ ->
+"go somewhere, do some stuff, assert" &&! fun _ ->
     //go somewhere
     //interact with page
     //assert
     ()
-)
 //Or
 xtest (fun _ ->
     //go somewhere
