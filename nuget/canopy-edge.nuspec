@@ -2,14 +2,15 @@
 <package xmlns="http://schemas.microsoft.com/packaging/2010/07/nuspec.xsd">
   <metadata>
     <id>canopy-edge</id>
-    <version>0.0.1</version>
+    <version>@build.number@</version>
     <authors>@authors@</authors>
-    <owners>Chris Holt</owners>
+    <owners>@authors@</owners>
     <licenseUrl>https://github.com/lefthandedgoat/canopy/blob/master/license.txt</licenseUrl>
-	<iconUrl>http://lefthandedgoat.github.io/canopy/canopy_orig.jpg</iconUrl>
+	  <iconUrl>http://lefthandedgoat.github.io/canopy/canopy_orig.jpg</iconUrl>
     <projectUrl>http://lefthandedgoat.github.com/canopy</projectUrl>
     <description>@description@</description>
-    <tags>f# fsharp canopy selenium ui automation tests</tags>
+    <releaseNotes>@releaseNotes@</releaseNotes>
+    <tags>@tags@</tags>
 	<dependencies>
       <dependency id="Selenium.WebDriver" version="2.35.0" />
       <dependency id="Selenium.Support" version="2.35.0" />

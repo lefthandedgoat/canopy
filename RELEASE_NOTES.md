@@ -24,35 +24,35 @@
 
 #### 0.8.0 - August 29 2013
 * Updated to Selenium 2.35.0. (http://selenium.googlecode.com/git/dotnet/CHANGELOG)
-* Added phantomJS as start option [Issue #94] (https://github.com/lefthandedgoat/canopy/issues/94)
-* read, clear, selected, and deselected can now take a cssSelector/xpath/etc or an IWebElement [Issue #93] (https://github.com/lefthandedgoat/canopy/issues/93)
+* Added phantomJS as start option [Issue #94](https://github.com/lefthandedgoat/canopy/issues/94)
+* read, clear, selected, and deselected can now take a cssSelector/xpath/etc or an IWebElement [Issue #93](https://github.com/lefthandedgoat/canopy/issues/93)
 
 #### 0.8.1 - Septemer 2 2013
-* Added phantomJSProxyNone as start option to work around phantom performance problem [Issue #94] (https://github.com/lefthandedgoat/canopy/issues/94)
+* Added phantomJSProxyNone as start option to work around phantom performance problem [Issue #94](https://github.com/lefthandedgoat/canopy/issues/94)
 * When using PhantomJS, no longer auto pin browser as it causes a slow down [Issue #96] (https://github.com/lefthandedgoat/canopy/issues/96)
 
 #### 0.8.2 - Septemer 2 2013
-* Added several methods to LiveHtmlReport class allowing access to the report browser, execution of javascript, accessing the html of the report and saving the html [Issue #97] (https://github.com/lefthandedgoat/canopy/issues/97)
+* Added several methods to LiveHtmlReport class allowing access to the report browser, execution of javascript, accessing the html of the report and saving the html [Issue #97](https://github.com/lefthandedgoat/canopy/issues/97)
 
 #### 0.8.3 - Septemer 3 2013
-* notDisplayed now correctly passes when checking for an element that does not exist [Issue #99] (https://github.com/lefthandedgoat/canopy/issues/99)
-* jquery and sizzle css selectors are now supported (:not, :checked, :selected etc...) [Pull Request #98] (https://github.com/lefthandedgoat/canopy/pull/98)
+* notDisplayed now correctly passes when checking for an element that does not exist [Issue #99](https://github.com/lefthandedgoat/canopy/issues/99)
+* jquery and sizzle css selectors are now supported (:not, :checked, :selected etc...) [Pull Request #98](https://github.com/lefthandedgoat/canopy/pull/98)
 
 #### 0.8.4 - Septemer 4 2013
-* (Breaking) renamed reportPath to reportTemplateUrl when adding a new feature.  New feature will automatically save a report to specified path on quit() when using LiveHtmlReporter [Pull Request #103] (https://github.com/lefthandedgoat/canopy/pull/103)
+* (Breaking) renamed reportPath to reportTemplateUrl when adding a new feature.  New feature will automatically save a report to specified path on quit() when using LiveHtmlReporter [Pull Request #103](https://github.com/lefthandedgoat/canopy/pull/103)
 
 #### 0.8.5 - Septemer 7 2013
-* (Breaking) previously element/elementWithin would return the first satisfactory element.  someElementWithin would throw an exception if there was more than one element.  Now all three will return first element.  If you want it to throw an exception if more than one is found, set 'throwIfMoreThanOneElement' configuration setting to true [Issue #105] (https://github.com/lefthandedgoat/canopy/issues/105)
-* sleep now accepts floats instead of integers [Pull Request #106] (https://github.com/lefthandedgoat/canopy/pull/106)
+* (Breaking) previously element/elementWithin would return the first satisfactory element.  someElementWithin would throw an exception if there was more than one element.  Now all three will return first element.  If you want it to throw an exception if more than one is found, set 'throwIfMoreThanOneElement' configuration setting to true [Issue #105](https://github.com/lefthandedgoat/canopy/issues/105)
+* sleep now accepts floats instead of integers [Pull Request #106](https://github.com/lefthandedgoat/canopy/pull/106)
 
 #### 0.8.6 - Septemer 11 2013
-* displayed and notDisplayed can now take a cssSelector/xpath/etc or an IWebElement [Issue #93] (https://github.com/lefthandedgoat/canopy/issues/93)
+* displayed and notDisplayed can now take a cssSelector/xpath/etc or an IWebElement [Issue #93](https://github.com/lefthandedgoat/canopy/issues/93)
 
 #### 0.8.7 - Septemer 20 2013
-* (Semi-Breaking) on check for url is now smarter. The original intention for using contains instead of equality was to disregard query strings.  That is now done more intelligently [Pull Request #107] (https://github.com/lefthandedgoat/canopy/pull/107)
+* (Semi-Breaking) on check for url is now smarter. The original intention for using contains instead of equality was to disregard query strings.  That is now done more intelligently [Pull Request #107](https://github.com/lefthandedgoat/canopy/pull/107)
 
 #### 0.8.8 - October 7 2013
-* Improvements to on [Pull Request #108] (https://github.com/lefthandedgoat/canopy/pull/108)
+* Improvements to on [Pull Request #108](https://github.com/lefthandedgoat/canopy/pull/108)
 
 #### 0.9.0 - December 15 2013
 * Updated to Selenium 2.38.0
@@ -60,16 +60,16 @@
 * General updates/improvements
 
 #### 0.9.2 - January 23 2014
-* Made the browser used for the html reporter configureable [Issue #126] (https://github.com/lefthandedgoat/canopy/issues/126)
+* Made the browser used for the html reporter configureable [Issue #126](https://github.com/lefthandedgoat/canopy/issues/126)
 * (Semi-Breaking) Moved all the types to a new module: canopy.types.  You may need to add an open statement if you are referencing any of those types.
 
 #### 0.9.3 - January 27 2014
-* Fixed bug in html reporter if your test name had single ticks in it [Issue #127] (https://github.com/lefthandedgoat/canopy/issues/127)
+* Fixed bug in html reporter if your test name had single ticks in it [Issue #127](https://github.com/lefthandedgoat/canopy/issues/127)
 * Fix for #127 took a dependency on System.Web so make sure your canopy projects are not Client Profiles!
 * (Semi-Breaking) Fixed [Issue #85] (https://github.com/lefthandedgoat/canopy/issues/85) 'element' and 'elements' are now reliable, meaning that they will try over and over until an element exists.
 * Added 'unreliableElements' which has the same behavior that 'elements' had if you relied on it
-* Fixed [Issue #91] (https://github.com/lefthandedgoat/canopy/issues/91) so that there are better error messages.  Suggestions for mistyped selectors is now back and improved!
-* Fixed [Issue #128] (https://github.com/lefthandedgoat/canopy/issues/128).  You can now add finders to canopy and it will search for things by you via your defined conventions.  Check the bottom of the basicTests/Program.fs for an example.
+* Fixed [Issue #91](https://github.com/lefthandedgoat/canopy/issues/91) so that there are better error messages.  Suggestions for mistyped selectors is now back and improved!
+* Fixed [Issue #128](https://github.com/lefthandedgoat/canopy/issues/128).  You can now add finders to canopy and it will search for things by you via your defined conventions.  Check the bottom of the basicTests/Program.fs for an example.
 
 #### 0.9.5 - February 7 2014
-* Fixed subtle bugs in some actions [Issue #130] (https://github.com/lefthandedgoat/canopy/issues/130)
+* Fixed subtle bugs in some actions [Issue #130](https://github.com/lefthandedgoat/canopy/issues/130)
