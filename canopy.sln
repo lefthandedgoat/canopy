@@ -36,7 +36,6 @@ Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "content", "content", "{A94D
 		docs\content\actions.fsx = docs\content\actions.fsx
 		docs\content\assertions.fsx = docs\content\assertions.fsx
 		docs\content\index.fsx = docs\content\index.fsx
-		docs\content\links.fsx = docs\content\links.fsx
 		docs\content\reporting.fsx = docs\content\reporting.fsx
 		docs\content\testing.fsx = docs\content\testing.fsx
 	EndProjectSection

@@ -91,21 +91,47 @@ Target "Build" (fun _ ->
 // Run the unit tests using test runner
 
 Target "RunTests" (fun _ ->
-    ()
-//    !! testAssemblies 
-//    |> Seq.iter (fun testFile ->
-//        let result =
-//            ExecProcess 
-//                (fun info -> info.FileName <- testFile) 
-//                (System.TimeSpan.FromMinutes 5.)
-//        if result <> 0 then failwith "Failed result from basictests"
-//    )
+//    ()
+    !! testAssemblies 
+    |> Seq.iter (fun testFile ->
+        let result =
+            ExecProcess 
+                (fun info -> info.FileName <- testFile) 
+                (System.TimeSpan.FromMinutes 5.)
+        if result <> 0 then failwith "Failed result from basictests"
+    )
 )
 
 // --------------------------------------------------------------------------------------
 // Build a NuGet package
 
 Target "NuGet" (fun _ ->
+    CleanDirs ["temp"]
+    CreateDir "temp/lib"
+    
+    XCopy @"./bin" "temp/lib"
+    !! @"temp/lib/*.*"
+      -- @"temp/lib/canopy.???"
+      |> Seq.iter (System.IO.File.Delete)
+
+    NuGet (fun p -> 
+        { p with   
+            Authors = authors
+            Project = project
+            Summary = summary
+            Description = description
+            Version = release.NugetVersion
+            ReleaseNotes = String.Join(Environment.NewLine, release.Notes)
+            Tags = tags
+            WorkingDir = "temp"
+            OutputPath = "bin"
+            AccessKey = getBuildParamOrDefault "nugetkey" ""
+            Publish = hasBuildParam "nugetkey"
+            Dependencies = [] })
+        ("nuget/" + project + ".nuspec")
+)
+
+Target "NuGet-edge" (fun _ ->
     NuGet (fun p -> 
         { p with   
             Authors = authors
@@ -119,7 +145,7 @@ Target "NuGet" (fun _ ->
             AccessKey = getBuildParamOrDefault "nugetkey" ""
             Publish = hasBuildParam "nugetkey"
             Dependencies = [] })
-        ("nuget/" + project + ".nuspec")
+        ("nuget/" + project + "-edge.nuspec")
 )
 
 // --------------------------------------------------------------------------------------
@@ -163,6 +189,7 @@ Target "All" DoNothing
   ==> "GenerateDocs"
   ==> "ReleaseDocs"
   ==> "NuGet"
+  ==> "NuGet-edge"
   ==> "Release"
 
 RunTargetOrDefault "All"

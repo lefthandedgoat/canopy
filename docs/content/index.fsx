@@ -30,16 +30,16 @@ Canopy is a web testing framework with one goal in mind, make UI testing simple:
    
 Getting Started
 ---------------
-1. Create a new F# console application
+####1\. Create a new F# console application
 <img src="img/newProject.png" alt="F# New Project" style="display: inherit;"/>
 
-2. Set target framework to .NET Framework 4
+####2\. Set target framework to .NET Framework 4
 <img src="img/profile.png" alt="Change target framework" style="display: inherit;"/>
 
-3. Install Canopy via Nuget
+####3\. Install Canopy via Nuget
 <img src="img/installCanopy.png" alt="Install Canopy" style="display: inherit;"/>
 
-4. Paste the following code into `Program.fs`
+####4\. Paste the following code into `Program.fs`
 
 *)
 #r "canopy.dll"
@@ -83,14 +83,14 @@ System.Console.ReadLine() |> ignore
 
 quit()
 (**
-5. Run
+####5\. Run
 <img src="img/run.png" alt="Run" style="display: inherit;"/>
 
-6. Explore the rest of canopy's api 
+####6\. Explore the rest of canopy's api 
 
-    * [Actions](/canopy/actions.html): documentation of everything you can do on a page
-    * [Assertions](/canopy/assertions.html): all the ways you can verify what's on the page is correct
-    * [Testing](/canopy/testing.html): different ways to orchestrate tests and troubleshoot issues with a page
-    * [Reporting](/canopy/reporting.html): different ways to output the results of your test suite
+* [Actions](/canopy/actions.html): documentation of everything you can do on a page
+* [Assertions](/canopy/assertions.html): all the ways you can verify what's on the page is correct
+* [Testing](/canopy/testing.html): different ways to orchestrate tests and troubleshoot issues with a page
+* [Reporting](/canopy/reporting.html): different ways to output the results of your test suite
 
 *)
