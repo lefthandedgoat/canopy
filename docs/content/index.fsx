@@ -4,7 +4,7 @@
 #I "../../bin"
 
 (**
-f#rictionless web testing
+Canopy - f#rictionless web testing
 ===================
 
 <div class="row">
@@ -88,9 +88,9 @@ quit()
 
 6. Explore the rest of canopy's api 
 
-    * [Actions: documentation of everything you can do on a page]()
-    * [Assertions: all the ways you can verify what's on the page is correct]()
-    * [Testing: different ways to orchestrate tests and troubleshoot issues with a page]()
-    * [Reporting: different ways to output the results of your test suite]()
+    * [Actions](/canopy/actions.html): documentation of everything you can do on a page
+    * [Assertions](/canopy/assertions.html): all the ways you can verify what's on the page is correct
+    * [Testing](/canopy/testing.html): different ways to orchestrate tests and troubleshoot issues with a page
+    * [Reporting](/canopy/reporting.html): different ways to output the results of your test suite
 
 *)
