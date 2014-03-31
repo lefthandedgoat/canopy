@@ -1,0 +1,40 @@
+<html>
+  <head>
+    <title>autocomplete</title>
+    <script src="http://code.jquery.com/jquery-1.9.1.min.js"></script>
+  </head>
+  <body>
+    <div id="console"></div>
+    <input id="search" type="button" value="search"></input>
+    <script>
+      $(function() { 
+        initializeSearch();
+      });
+
+      function initializeSearch() {
+        var results = $("<table></table>");
+
+        results.css({ display: "none" });
+
+        $("body").append(results);
+
+        $("#search").click(function() { search(results); });
+      }
+
+      function search(results) {
+	  setTimeout(function () { $("#wait_for").html("Done!"); 
+		var data = [
+			{ first_name: "Jane", last_name: "Doe" },
+			{ first_name: "John", last_name: "Smith" }
+		]
+		for(var i = 0; i < data.length; i++) {
+            var row = $("<tr><td>" + data[i].first_name + " " + data[i].last_name + "</td></tr>");
+            row.click(function() { $("#console").html("worked"); });
+            results.append(row);
+		}
+		results.css({ display: "block" });
+	  }, 2000)        
+      }
+    </script>
+  </body>
+</html>

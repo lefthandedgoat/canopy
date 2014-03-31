@@ -7,8 +7,6 @@
 f#rictionless web testing
 ===================
 
-f#rictionless web testing
-
 <div class="row">
   <div class="span1"></div>
   <div class="span6">
@@ -21,9 +19,13 @@ f#rictionless web testing
 </div>
 
 Canopy is a web testing framework with one goal in mind, make UI testing simple:
+
 * Solid stabilization layer built on top of Selenium. Death to "brittle, quirky, UI tests". 
+
 * Quick to learn. Even if you've never done UI Automation, and don't know F#. 
+
 * Clean, consise API. 
+
 * MIT License.
    
 Getting Started
