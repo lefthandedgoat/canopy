@@ -36,6 +36,7 @@ type direction =
 type BrowserStartMode =
     | Firefox
     | FirefoxWithProfile of Firefox.FirefoxProfile
+    | FirefoxWithPath of string
     | FirefoxWithUserAgent of string
     | IE
     | IEWithOptions of IE.InternetExplorerOptions
