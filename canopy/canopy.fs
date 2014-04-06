@@ -297,16 +297,16 @@ let ( << ) cssSelector text =
                 try e.Clear() with ex -> ex |> ignore
                 e.SendKeys(text)
 
-        let atleastOneItemWritten = ref false
         elements cssSelector
-        |> List.iter (fun elem -> 
-            try  
-                writeToElement elem
-                atleastOneItemWritten := true
-            with
-                | :? CanopyReadOnlyException as ex -> raise ex
-                | _ -> ())
-        !atleastOneItemWritten)
+            |> List.map (fun elem -> 
+                try  
+                    writeToElement elem
+                    true
+                with
+                    | :? CanopyReadOnlyException as ex -> reraise()
+                    | _ -> false)
+            |> List.exists (fun elem -> elem = true)
+        )
 
 let private textOf (element : IWebElement) =
     match element.TagName  with
