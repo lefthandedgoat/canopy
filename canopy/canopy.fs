@@ -298,13 +298,14 @@ let ( << ) cssSelector text =
                 e.SendKeys(text)
 
         elements cssSelector
-            |> List.exists (fun elem -> 
+            |> List.map (fun elem -> 
                 try  
                     writeToElement elem
                     true
                 with
                     | :? CanopyReadOnlyException as ex -> reraise()
                     | _ -> false)
+            |> List.exists (fun elem -> elem = true)
         )
 
 let private textOf (element : IWebElement) =
