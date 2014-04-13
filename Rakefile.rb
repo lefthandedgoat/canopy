@@ -6,5 +6,5 @@ task :build do
 end
 
 task :ui do
-  sh 'basictests\bin\debug\basictests.exe'
+  sh 'tests\basictests\bin\debug\basictests.exe'
 end
