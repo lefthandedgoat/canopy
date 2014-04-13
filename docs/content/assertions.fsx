@@ -62,7 +62,7 @@ Assert that at least one element in a list equals a value.
 -----------------
 Assert that none of the items in a list equals a value. 
 *)
-".todoItem" !*= "Sell everything"
+".todoItem" *!= "Sell everything"
 
 (**
 contains

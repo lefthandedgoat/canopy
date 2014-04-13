@@ -5,6 +5,7 @@
 #r "canopy.dll"
 #r "WebDriver.dll"
 open canopy
+open canopy.types
 open runner
 open System
 
