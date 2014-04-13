@@ -1,4 +1,4 @@
-﻿module canopy.reporters
+module canopy.reporters
 
 open System
 open OpenQA.Selenium
@@ -154,6 +154,7 @@ type LiveHtmlReporter(browser : BrowserStartMode, driverPath : string) =
         | ChromeWithOptionsAndTimeSpan(options, timeSpan) -> new OpenQA.Selenium.Chrome.ChromeDriver(driverPath, options, timeSpan) :> IWebDriver
         | Firefox -> new OpenQA.Selenium.Firefox.FirefoxDriver() :> IWebDriver
         | FirefoxWithProfile profile -> new OpenQA.Selenium.Firefox.FirefoxDriver(profile) :> IWebDriver
+        | FirefoxWithPath path -> new OpenQA.Selenium.Firefox.FirefoxDriver(Firefox.FirefoxBinary(path), Firefox.FirefoxProfile()) :> IWebDriver
         | ChromeWithUserAgent userAgent -> raise(System.Exception("Sorry ChromeWithUserAgent can't be used for LiveHtmlReporter"))
         | FirefoxWithUserAgent userAgent -> raise(System.Exception("Sorry FirefoxWithUserAgent can't be used for LiveHtmlReporter"))
         | PhantomJS | PhantomJSProxyNone -> raise(System.Exception("Sorry PhantomJS can't be used for LiveHtmlReporter"))
@@ -171,7 +172,8 @@ type LiveHtmlReporter(browser : BrowserStartMode, driverPath : string) =
     let mutable canQuit = false
     let mutable contexts : string list = []
 
-    new() = LiveHtmlReporter(Firefox, @"c:\")
+    new() = LiveHtmlReporter(Firefox, String.Empty)
+    new(browser : BrowserStartMode) = LiveHtmlReporter(browser, String.Empty)
 
     member this.browser
         with get () = _browser

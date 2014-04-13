@@ -1,4 +1,4 @@
-﻿[<AutoOpen>]
+[<AutoOpen>]
 module canopy.core
 
 open OpenQA.Selenium.Firefox
@@ -23,6 +23,7 @@ let mutable wipTest = false
 let mutable searchedFor : (string * string) list = []
 
 let firefox = Firefox
+let aurora = FirefoxWithPath(@"C:\Program Files (x86)\Aurora\firefox.exe")
 let ie = IE
 let chrome = Chrome
 let phantomJS = PhantomJS
@@ -54,7 +55,7 @@ let private takeScreenshot directory filename =
         saveScreenshot directory filename pic        
         pic
     with 
-        | :? OpenQA.Selenium.UnhandledAlertException as ex->                     
+        | :? UnhandledAlertException as ex->                     
             let pic = takeScreenShotIfAlertUp()
             saveScreenshot directory filename pic        
             let alert = browser.SwitchTo().Alert()
@@ -172,14 +173,15 @@ let suggestOtherSelectors cssSelector =
 let describe text =
     puts text
 
-let waitFor (f : unit -> bool) =
+let waitFor2 message (f : unit -> bool) =
     try        
         wait compareTimeout f
     with
-        | :? WebDriverTimeoutException -> 
-                puts "Condition not met in given amount of time. If you want to increase the time, put compareTimeout <- 10.0 anywhere before a test to increase the timeout"
-                raise (CanopyWaitForException(sprintf "waitFor condition failed to become true in %.1f seconds" compareTimeout))
+        | :? WebDriverTimeoutException ->
+                raise (CanopyWaitForException(sprintf "%s%swaitFor condition failed to become true in %.1f seconds" message System.Environment.NewLine compareTimeout))
 
+let waitFor = waitFor2 "Condition not met in given amount of time. If you want to increase the time, put compareTimeout <- 10.0 anywhere before a test to increase the timeout"
+    
 //find related    
 let rec private findElements cssSelector (searchContext : ISearchContext) : IWebElement list =
     searchedFor <- (cssSelector, browser.Url) :: searchedFor
@@ -295,16 +297,16 @@ let ( << ) cssSelector text =
                 try e.Clear() with ex -> ex |> ignore
                 e.SendKeys(text)
 
-        let atleastOneItemWritten = ref false
         elements cssSelector
-        |> List.iter (fun elem -> 
-            try  
-                writeToElement elem
-                atleastOneItemWritten := true
-            with
-                | :? CanopyReadOnlyException as ex -> raise ex
-                | _ -> ())
-        !atleastOneItemWritten)
+            |> List.map (fun elem -> 
+                try  
+                    writeToElement elem
+                    true
+                with
+                    | :? CanopyReadOnlyException as ex -> reraise()
+                    | _ -> false)
+            |> List.exists (fun elem -> elem = true)
+        )
 
 let private textOf (element : IWebElement) =
     match element.TagName  with
@@ -603,12 +605,12 @@ let pin direction =
 let private chromeWithUserAgent userAgent =
     let options = Chrome.ChromeOptions()
     options.AddArgument("--user-agent=" + userAgent)
-    new OpenQA.Selenium.Chrome.ChromeDriver(chromeDir, options) :> OpenQA.Selenium.IWebDriver
+    new Chrome.ChromeDriver(chromeDir, options) :> IWebDriver
 
 let private firefoxWithUserAgent (userAgent : string) = 
     let profile = FirefoxProfile()
     profile.SetPreference("general.useragent.override", userAgent)
-    new OpenQA.Selenium.Firefox.FirefoxDriver(profile) :> OpenQA.Selenium.IWebDriver
+    new FirefoxDriver(profile) :> IWebDriver
 
 let start b =    
     //for chrome you need to download chromedriver.exe from http://code.google.com/p/chromedriver/wiki/GettingStarted
@@ -620,45 +622,38 @@ let start b =
        
     browser <-        
         match b with
-        | IE -> 
-            new OpenQA.Selenium.IE.InternetExplorerDriver(ieDir) :> IWebDriver
-        | IEWithOptions options ->
-            new OpenQA.Selenium.IE.InternetExplorerDriver(ieDir, options) :> IWebDriver
-        | IEWithOptionsAndTimeSpan(options, timeSpan) ->
-            new OpenQA.Selenium.IE.InternetExplorerDriver(ieDir, options, timeSpan) :> IWebDriver
-        | Chrome -> 
-            new OpenQA.Selenium.Chrome.ChromeDriver(chromeDir) :> IWebDriver
-        | ChromeWithOptions options ->
-            new OpenQA.Selenium.Chrome.ChromeDriver(chromeDir, options) :> IWebDriver
+        | IE -> new IE.InternetExplorerDriver(ieDir) :> IWebDriver
+        | IEWithOptions options -> new IE.InternetExplorerDriver(ieDir, options) :> IWebDriver
+        | IEWithOptionsAndTimeSpan(options, timeSpan) -> new IE.InternetExplorerDriver(ieDir, options, timeSpan) :> IWebDriver
+        | Chrome -> new Chrome.ChromeDriver(chromeDir) :> IWebDriver
+        | ChromeWithOptions options -> new Chrome.ChromeDriver(chromeDir, options) :> IWebDriver
         | ChromeWithUserAgent userAgent -> chromeWithUserAgent userAgent
-        | ChromeWithOptionsAndTimeSpan(options, timeSpan) ->
-            new OpenQA.Selenium.Chrome.ChromeDriver(chromeDir, options, timeSpan) :> IWebDriver
-        | Firefox -> 
-            new OpenQA.Selenium.Firefox.FirefoxDriver() :> IWebDriver
-        | FirefoxWithProfile profile -> 
-            new OpenQA.Selenium.Firefox.FirefoxDriver(profile) :> IWebDriver
+        | ChromeWithOptionsAndTimeSpan(options, timeSpan) -> new Chrome.ChromeDriver(chromeDir, options, timeSpan) :> IWebDriver
+        | Firefox -> new FirefoxDriver() :> IWebDriver
+        | FirefoxWithProfile profile -> new FirefoxDriver(profile) :> IWebDriver
+        | FirefoxWithPath path -> new FirefoxDriver(Firefox.FirefoxBinary(path), Firefox.FirefoxProfile()) :> IWebDriver
         | FirefoxWithUserAgent userAgent -> firefoxWithUserAgent userAgent
         | PhantomJS -> 
             autoPinBrowserRightOnLaunch <- false
-            new OpenQA.Selenium.PhantomJS.PhantomJSDriver(phantomJSDir) :> IWebDriver
+            new PhantomJS.PhantomJSDriver(phantomJSDir) :> IWebDriver
         | PhantomJSProxyNone -> 
             autoPinBrowserRightOnLaunch <- false
-            let service = OpenQA.Selenium.PhantomJS.PhantomJSDriverService.CreateDefaultService(canopy.configuration.phantomJSDir)
+            let service = PhantomJS.PhantomJSDriverService.CreateDefaultService(canopy.configuration.phantomJSDir)
             service.ProxyType <- "none"
-            new OpenQA.Selenium.PhantomJS.PhantomJSDriver(service) :> IWebDriver            
+            new PhantomJS.PhantomJSDriver(service) :> IWebDriver            
 
     if autoPinBrowserRightOnLaunch = true then pin Right
     browsers <- browsers @ [browser]
 
 let switchTo b = browser <- b
 
-let tile (browsers : OpenQA.Selenium.IWebDriver list) =   
+let tile (browsers : IWebDriver list) =   
     let h = System.Windows.Forms.Screen.PrimaryScreen.WorkingArea.Height
     let w = System.Windows.Forms.Screen.PrimaryScreen.WorkingArea.Width
     let count = browsers.Length
     let maxWidth = w / count
 
-    let rec setSize (browsers : OpenQA.Selenium.IWebDriver list) c =
+    let rec setSize (browsers : IWebDriver list) c =
         match browsers with
         | [] -> ()
         | b :: tail -> 
@@ -669,7 +664,7 @@ let tile (browsers : OpenQA.Selenium.IWebDriver list) =
     setSize browsers 0
 
 let innerSize() =
-    let jsBrowser = browser :?> OpenQA.Selenium.IJavaScriptExecutor
+    let jsBrowser = browser :?> IJavaScriptExecutor
     let innerWidth = System.Int32.Parse(jsBrowser.ExecuteScript("return window.innerWidth").ToString())
     let innerHeight = System.Int32.Parse(jsBrowser.ExecuteScript("return window.innerHeight").ToString())
     innerWidth, innerHeight
@@ -688,7 +683,7 @@ let rotate() =
 let quit browser =
     reporter.quit()
     match box browser with
-    | :? OpenQA.Selenium.IWebDriver as b -> b.Quit()
+    | :? IWebDriver as b -> b.Quit()
     | _ -> browsers |> List.iter (fun b -> b.Quit())
 
 let currentUrl() = browser.Url
