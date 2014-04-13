@@ -70,11 +70,11 @@
     </Reference>
     <Reference Include="mscorlib" />
     <Reference Include="Newtonsoft.Json">
-      <HintPath>..\..\packages\Newtonsoft.Json.5.0.1\lib\net40\Newtonsoft.Json.dll</HintPath>
+      <HintPath>..\..\packages\Newtonsoft.Json.6.0.2\lib\net40\Newtonsoft.Json.dll</HintPath>
       <Private>True</Private>
     </Reference>
     <Reference Include="SizSelCsZzz">
-      <HintPath>..\..\packages\SizSelCsZzz.0.3.35.0\lib\SizSelCsZzz.dll</HintPath>
+      <HintPath>..\..\packages\SizSelCsZzz.0.3.36.0\lib\SizSelCsZzz.dll</HintPath>
       <Private>True</Private>
     </Reference>
     <Reference Include="System" />
