@@ -37,7 +37,7 @@ Getting Started
 <img src="img/profile.png" alt="Change target framework" style="display: inherit;"/>
 
 ####3\. Install canopy via Nuget
-<img src="img/installcanopy.png" alt="Install canopy" style="display: inherit;"/>
+<img src="img/installCanopy.png" alt="Install canopy" style="display: inherit;"/>
 
 ####4\. Paste the following code into `Program.fs`
 
