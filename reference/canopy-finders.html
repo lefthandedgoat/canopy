@@ -1,0 +1,230 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+	<STYLE type="text/css">
+	   h4 + img { margin-top: 20px; margin-bottom: 20px;}
+	</STYLE>
+    <meta charset="utf-8">
+    <title>finders - canopy</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="description" content="">
+    <meta name="author" content="Chris Holt">
+
+    <script src="http://code.jquery.com/jquery-1.8.0.js"></script>
+    <script src="http://code.jquery.com/ui/1.8.23/jquery-ui.js"></script>
+    <script src="http://netdna.bootstrapcdn.com/twitter-bootstrap/2.2.1/js/bootstrap.min.js"></script>
+    <link href="http://netdna.bootstrapcdn.com/twitter-bootstrap/2.2.1/css/bootstrap-combined.min.css" rel="stylesheet">
+
+    <link type="text/css" rel="stylesheet" href="/canopy/content/style.css" />
+    <script type="text/javascript" src="/canopy/content/tips.js"></script>
+    <!-- HTML5 shim, for IE6-8 support of HTML5 elements -->
+    <!--[if lt IE 9]>
+      <script src="http://html5shim.googlecode.com/svn/trunk/html5.js"></script>
+    <![endif]-->
+  </head>
+  <body>
+    <div class="container">
+      <div class="masthead">
+        <ul class="nav nav-pills pull-right">
+          <li><a href="http://fsharp.org">fsharp.org</a></li>
+          <li><a href="http://www.tryfsharp.org/">tryfsharp.org</a></li>
+          <li><a href="https://github.com/lefthandedgoat/canopy">github page</a></li>
+        </ul>
+        <h3 class="muted"><a href="/canopy/index.html">canopy</a></h3>
+      </div>
+      <hr />
+      <div class="row">
+        <div class="span9" id="main">
+          
+
+
+
+<h1>finders</h1>
+<div class="xmldoc">
+</div>
+
+<!-- Render nested types and modules, if there are any -->
+
+  <h3>Functions and values</h3>
+  <table class="table table-bordered member-list">
+    <thead>
+      <tr><td>Function or value</td><td>Description</td></tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td class="member-name">
+
+          <code onmouseout="hideTip(event, '120', 120)" onmouseover="showTip(event, '120', 120)">
+            defaultFinders 
+          </code>
+          <div class="tip" id="120">
+            <strong>Signature:</strong> string -&gt; (By -&gt; ReadOnlyCollection&lt;IWebElement&gt;) -&gt; seq&lt;IWebElement list&gt;<br />
+                      </div>
+        </td>
+        <td class="xmldoc">
+            <a href="https://github.com/lefthandedgoat/canopy/tree/scaffold/src/canopy/finders.fs#L62-62" class="github-link">
+              <img src="../content/img/github.png" class="normal" />
+              <img src="../content/img/github-blue.png" class="hover" />
+            </a>
+          
+        </td>
+      </tr>
+      <tr>
+        <td class="member-name">
+
+          <code onmouseout="hideTip(event, '124', 124)" onmouseover="showTip(event, '124', 124)">
+            findByCss cssSelector f
+          </code>
+          <div class="tip" id="124">
+            <strong>Signature:</strong> cssSelector:string -&gt; f:(By -&gt; ReadOnlyCollection&lt;IWebElement&gt;) -&gt; IWebElement list<br />
+                      </div>
+        </td>
+        <td class="xmldoc">
+            <a href="https://github.com/lefthandedgoat/canopy/tree/scaffold/src/canopy/finders.fs#L8-8" class="github-link">
+              <img src="../content/img/github.png" class="normal" />
+              <img src="../content/img/github-blue.png" class="hover" />
+            </a>
+          
+        </td>
+      </tr>
+      <tr>
+        <td class="member-name">
+
+          <code onmouseout="hideTip(event, '125', 125)" onmouseover="showTip(event, '125', 125)">
+            findByJQuery cssSelector f
+          </code>
+          <div class="tip" id="125">
+            <strong>Signature:</strong> cssSelector:string -&gt; f:(By -&gt; &#39;?29342) -&gt; &#39;?29343 list<br />
+                          <strong>Type parameters:</strong> '?29342, '?29343          </div>
+        </td>
+        <td class="xmldoc">
+            <a href="https://github.com/lefthandedgoat/canopy/tree/scaffold/src/canopy/finders.fs#L18-18" class="github-link">
+              <img src="../content/img/github.png" class="normal" />
+              <img src="../content/img/github-blue.png" class="hover" />
+            </a>
+          
+        </td>
+      </tr>
+      <tr>
+        <td class="member-name">
+
+          <code onmouseout="hideTip(event, '126', 126)" onmouseover="showTip(event, '126', 126)">
+            findByLabel locator f
+          </code>
+          <div class="tip" id="126">
+            <strong>Signature:</strong> locator:string -&gt; f:(By -&gt; &#39;?29348) -&gt; IWebElement list<br />
+                          <strong>Type parameters:</strong> '?29348          </div>
+        </td>
+        <td class="xmldoc">
+            <a href="https://github.com/lefthandedgoat/canopy/tree/scaffold/src/canopy/finders.fs#L28-28" class="github-link">
+              <img src="../content/img/github.png" class="normal" />
+              <img src="../content/img/github-blue.png" class="hover" />
+            </a>
+          
+        </td>
+      </tr>
+      <tr>
+        <td class="member-name">
+
+          <code onmouseout="hideTip(event, '127', 127)" onmouseover="showTip(event, '127', 127)">
+            findBySizzle cssSelector f
+          </code>
+          <div class="tip" id="127">
+            <strong>Signature:</strong> cssSelector:string -&gt; f:(By -&gt; &#39;?29339) -&gt; &#39;?29340 list<br />
+                          <strong>Type parameters:</strong> '?29339, '?29340          </div>
+        </td>
+        <td class="xmldoc">
+            <a href="https://github.com/lefthandedgoat/canopy/tree/scaffold/src/canopy/finders.fs#L13-13" class="github-link">
+              <img src="../content/img/github.png" class="normal" />
+              <img src="../content/img/github-blue.png" class="hover" />
+            </a>
+          
+        </td>
+      </tr>
+      <tr>
+        <td class="member-name">
+
+          <code onmouseout="hideTip(event, '128', 128)" onmouseover="showTip(event, '128', 128)">
+            findByText text f
+          </code>
+          <div class="tip" id="128">
+            <strong>Signature:</strong> text:string -&gt; f:(By -&gt; &#39;?29350) -&gt; &#39;?29351 list<br />
+                          <strong>Type parameters:</strong> '?29350, '?29351          </div>
+        </td>
+        <td class="xmldoc">
+            <a href="https://github.com/lefthandedgoat/canopy/tree/scaffold/src/canopy/finders.fs#L51-51" class="github-link">
+              <img src="../content/img/github.png" class="normal" />
+              <img src="../content/img/github-blue.png" class="hover" />
+            </a>
+          
+        </td>
+      </tr>
+      <tr>
+        <td class="member-name">
+
+          <code onmouseout="hideTip(event, '129', 129)" onmouseover="showTip(event, '129', 129)">
+            findByValue value f
+          </code>
+          <div class="tip" id="129">
+            <strong>Signature:</strong> value:string -&gt; f:(By -&gt; ReadOnlyCollection&lt;IWebElement&gt;) -&gt; IWebElement list<br />
+                      </div>
+        </td>
+        <td class="xmldoc">
+            <a href="https://github.com/lefthandedgoat/canopy/tree/scaffold/src/canopy/finders.fs#L56-56" class="github-link">
+              <img src="../content/img/github.png" class="normal" />
+              <img src="../content/img/github-blue.png" class="hover" />
+            </a>
+          
+        </td>
+      </tr>
+      <tr>
+        <td class="member-name">
+
+          <code onmouseout="hideTip(event, '130', 130)" onmouseover="showTip(event, '130', 130)">
+            findByXpath xpath f
+          </code>
+          <div class="tip" id="130">
+            <strong>Signature:</strong> xpath:string -&gt; f:(By -&gt; &#39;?29345) -&gt; &#39;?29346 list<br />
+                          <strong>Type parameters:</strong> '?29345, '?29346          </div>
+        </td>
+        <td class="xmldoc">
+            <a href="https://github.com/lefthandedgoat/canopy/tree/scaffold/src/canopy/finders.fs#L23-23" class="github-link">
+              <img src="../content/img/github.png" class="normal" />
+              <img src="../content/img/github-blue.png" class="hover" />
+            </a>
+          
+        </td>
+      </tr>
+    </tbody>
+  </table>
+
+        </div>
+        <div class="span3">
+          <img src="/canopy/img/logo.jpg" alt="F# Project" style="width:250px;margin:10px" />  
+          <ul class="nav nav-list" id="menu" style="margin-top: 20px;">
+            <li class="nav-header">canopy</li>
+            <li><a href="/canopy/index.html">Home page</a></li>
+            <li class="divider"></li>
+            <li><a href="https://www.nuget.org/packages/canopy/">Get Library via NuGet</a></li>
+            <li><a href="https://github.com/lefthandedgoat/canopy">Source Code on GitHub</a></li>
+            <li><a href="https://github.com/lefthandedgoat/canopy/blob/master/LICENSE.txt">License</a></li>
+            <li><a href="https://github.com/lefthandedgoat/canopy/blob/master/RELEASE_NOTES.md">Release Notes</a></li>
+            
+            <li class="nav-header">Getting started</li>
+            <li><a href="/canopy/actions.html">Actions</a></li>
+            <li><a href="/canopy/assertions.html">Assertions</a></li>
+            <li><a href="/canopy/testing.html">Testing</a></li>
+            <li><a href="/canopy/reporting.html">Reporting</a></li>
+
+            <li class="nav-header">Documentation</li>
+            <li><a href="/canopy/reference/index.html">API Reference</a></li>
+
+            <li class="nav-header">Testimonials</li>
+            <li><a href="http://amirrajan.github.com/Oak/">Oak MVC</a></li>
+          </ul>
+        </div>
+      </div>
+    </div>
+    
+  </body>
+  </html>
