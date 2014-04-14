@@ -9,7 +9,7 @@ let referenceBinaries = [ "canopy.dll" ]
 // Web site location for the generated documentation
 let website = "/canopy"
 
-let githubLink = "https://github.com/sergey-tihon/canopy" // TODO: change it
+let githubLink = "https://github.com/lefthandedgoat/canopy"
 
 // Specify more information about your project
 let info =

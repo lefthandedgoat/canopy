@@ -42,7 +42,7 @@ let testAssemblies = "tests/**/bin/Release/*basictests*.exe"
 
 // Git configuration (used for publishing documentation in gh-pages branch)
 // The profile where the project is posted 
-let gitHome = "https://github.com/sergey-tihon" // TODO: change it
+let gitHome = "https://github.com/lefthandedgoat"
 // The name of the project on GitHub
 let gitName = "canopy"
 

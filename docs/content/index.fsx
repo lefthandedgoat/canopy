@@ -4,21 +4,21 @@
 #I "../../bin"
 
 (**
-Canopy - f#rictionless web testing
+canopy - f#rictionless web testing
 ===================
 
 <div class="row">
   <div class="span1"></div>
   <div class="span6">
     <div class="well well-small" id="nuget">
-      The Canopy library can be <a href="https://www.nuget.org/packages/canopy/">installed from NuGet</a>:
+      The canopy library can be <a href="https://www.nuget.org/packages/canopy/">installed from NuGet</a>:
       <pre>PM> Install-Package canopy</pre>
     </div>
   </div>
   <div class="span1"></div>
 </div>
 
-Canopy is a web testing framework with one goal in mind, make UI testing simple:
+canopy is a web testing framework with one goal in mind, make UI testing simple:
 
 * Solid stabilization layer built on top of Selenium. Death to "brittle, quirky, UI tests". 
 
@@ -36,8 +36,8 @@ Getting Started
 ####2\. Set target framework to .NET Framework 4
 <img src="img/profile.png" alt="Change target framework" style="display: inherit;"/>
 
-####3\. Install Canopy via Nuget
-<img src="img/installCanopy.png" alt="Install Canopy" style="display: inherit;"/>
+####3\. Install canopy via Nuget
+<img src="img/installcanopy.png" alt="Install canopy" style="display: inherit;"/>
 
 ####4\. Paste the following code into `Program.fs`
 
@@ -86,7 +86,7 @@ quit()
 ####5\. Run
 <img src="img/run.png" alt="Run" style="display: inherit;"/>
 
-####6\. Explore the rest of Canopy's API 
+####6\. Explore the rest of canopy's API 
 
 * [Actions](/canopy/actions.html): documentation of everything you can do on a page
 * [Assertions](/canopy/assertions.html): all the ways you can verify what's on the page is correct
