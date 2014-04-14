@@ -73,3 +73,11 @@
 
 #### 0.9.5 - February 7 2014
 * Fixed subtle bugs in some actions [Issue #130](https://github.com/lefthandedgoat/canopy/issues/130)
+
+#### 0.9.8 - March 31 2014
+* Fixed bug when a modal was open and would cause an error, would cause the runner to fail [Issue #135](https://github.com/lefthandedgoat/canopy/issues/135)
+* Added `waitFor2` which takes a message and function and uses the message as the error message if waitFor fails [Issue #136](https://github.com/lefthandedgoat/canopy/issues/136)
+* Fixed problem where canopy would not work with VS 2010 [Issue #137](https://github.com/lefthandedgoat/canopy/issues/137)
+* Updated to Selenium 2.41 [Issue #138](https://github.com/lefthandedgoat/canopy/issues/138)
+* Now built in Release mode [Issue #139](https://github.com/lefthandedgoat/canopy/issues/139)
+* Added support for Firefox Aurora (nightly build) [Issue #141](https://github.com/lefthandedgoat/canopy/issues/141)
