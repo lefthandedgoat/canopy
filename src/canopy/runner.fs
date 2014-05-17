@@ -55,7 +55,6 @@ let fail (ex : Exception) id =
         let f = DateTime.Now.ToString("MMM-d_HH-mm-ss-fff")
         let ss = screenshot configuration.failScheenshotPath f
         reporter.fail ex id ss
-
     with 
         | :? WebDriverException as failExc -> 
             //Fail during error report (likely  OpenQA.Selenium.WebDriverException.WebDriverTimeoutException ). 
