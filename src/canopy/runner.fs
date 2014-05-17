@@ -53,7 +53,7 @@ let fail (ex : Exception) id =
         failedCount <- failedCount + 1
         contextFailed <- true
         let f = DateTime.Now.ToString("MMM-d_HH-mm-ss-fff")
-        let ss = screenshot configuration.failScheenshotPath f
+        let ss = screenshot configuration.failScreenshotPath f
         reporter.fail ex id ss
     with 
         | :? WebDriverException as failExc -> 
