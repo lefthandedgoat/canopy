@@ -5,6 +5,7 @@ open configuration
 open canopy
 open reporters
 open types
+open OpenQA.Selenium
 
 let rec private last = function
     | hd :: [] -> hd
@@ -47,13 +48,19 @@ let pass () =
     reporter.pass ()
 
 let fail (ex : Exception) id =
-    if failFast = ref true then failed <- true        
-    failedCount <- failedCount + 1
-    contextFailed <- true
-    let p = Environment.GetFolderPath(Environment.SpecialFolder.ApplicationData) + @"\canopy\"
-    let f = DateTime.Now.ToString("MMM-d_HH-mm-ss-fff")
-    let ss = screenshot p f
-    reporter.fail ex id ss
+    try
+        if failFast = ref true then failed <- true        
+        failedCount <- failedCount + 1
+        contextFailed <- true
+        let f = DateTime.Now.ToString("MMM-d_HH-mm-ss-fff")
+        let ss = screenshot configuration.failScheenshotPath f
+        reporter.fail ex id ss
+    with 
+        | :? WebDriverException as failExc -> 
+            //Fail during error report (likely  OpenQA.Selenium.WebDriverException.WebDriverTimeoutException ). 
+            // Don't fail the runner itself, but report it.
+            reporter.write (sprintf "Error during fail reporting: %s" (failExc.ToString()))
+            reporter.fail ex id null
 
 let run () =
     reporter.suiteBegin()
