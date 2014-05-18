@@ -278,35 +278,41 @@ let first cssSelector = (elements cssSelector).Head
 let last cssSelector = (List.rev (elements cssSelector)).Head
    
 //read/write
-let private writeToSelect cssSelector text =
-    let elem = element cssSelector
+let private writeToSelect (elem:IWebElement) (text:string) =
     let options = Seq.toList (elem.FindElements(By.XPath(sprintf "option[text()='%s']" text)))
     match options with
-    | [] -> raise (CanopyOptionNotFoundException(sprintf "element %s does not contain value %s" cssSelector text))
+    | [] -> raise (CanopyOptionNotFoundException(sprintf "element %s does not contain value %s" (elem.ToString()) text))
     | head::tail -> head.Click()
 
-let ( << ) cssSelector text = 
-    wait elementTimeout (fun _ ->        
-        let writeToElement (e : IWebElement) =
-            if e.TagName = "select" then
-                writeToSelect cssSelector text
-            else
-                let readonly = e.GetAttribute("readonly")
-                if readonly = "true" then
-                    raise (CanopyReadOnlyException(sprintf "element %s is marked as read only, you can not write to read only elements" cssSelector))
-                try e.Clear() with ex -> ex |> ignore
-                e.SendKeys(text)
+let private writeToElement (e : IWebElement) (text:string) =
+    if e.TagName = "select" then
+        writeToSelect e text
+    else
+        let readonly = e.GetAttribute("readonly")
+        if readonly = "true" then
+            raise (CanopyReadOnlyException(sprintf "element %s is marked as read only, you can not write to read only elements" (e.ToString())))
+        try e.Clear() with ex -> ex |> ignore
+        e.SendKeys(text)
 
-        elements cssSelector
-            |> List.map (fun elem -> 
-                try  
-                    writeToElement elem
-                    true
-                with
-                    | :? CanopyReadOnlyException as ex -> reraise()
-                    | _ -> false)
-            |> List.exists (fun elem -> elem = true)
+let ( << ) item text = 
+    match box item with
+    | :? IWebElement as elem ->  writeToElement elem text
+    | :? string as cssSelector -> 
+        wait elementTimeout (fun _ ->        
+            elements cssSelector
+                |> List.map (fun elem -> 
+                    try  
+                        writeToElement elem text
+                        true
+                    with
+                        //Note: Enrich exception with proper cssSelector description
+                        | :? CanopyReadOnlyException -> raise (CanopyReadOnlyException(sprintf "element %s is marked as read only, you can not write to read only elements" cssSelector))
+                        | _ -> false)
+                |> List.exists (fun elem -> elem = true)
         )
+    | _ -> raise (CanopyNotStringOrElementException(sprintf "Can't read %O because it is not a string or element" item))    
+   
+
 
 let private textOf (element : IWebElement) =
     match element.TagName  with
