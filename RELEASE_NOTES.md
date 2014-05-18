@@ -81,3 +81,11 @@
 * Updated to Selenium 2.41 [Issue #138](https://github.com/lefthandedgoat/canopy/issues/138)
 * Now built in Release mode [Issue #139](https://github.com/lefthandedgoat/canopy/issues/139)
 * Added support for Firefox Aurora (nightly build) [Issue #141](https://github.com/lefthandedgoat/canopy/issues/141)
+
+#### 0.9.9 - May 18 2014
+* Accepted @rachelreese refactor.  Thanks Rachel! [Issue #143](https://github.com/lefthandedgoat/canopy/issues/143)
+* Improved behaviour of << for writing to options to now also look by options value [Issue #144](https://github.com/lefthandedgoat/canopy/issues/144)
+* Removed redundant Sizzle finder [Issue #145](https://github.com/lefthandedgoat/canopy/issues/145)
+* Updated to the lastest version of SizSelCsZzz [Issue #146](https://github.com/lefthandedgoat/canopy/issues/146)
+* Accepted reporter bug fix by soerennielsen.  Thanks! [Issue #150](https://github.com/lefthandedgoat/canopy/issues/150)
+* Accepted improvement to << by soerennielsen. Thanks! [Issue #151](https://github.com/lefthandedgoat/canopy/issues/151)
