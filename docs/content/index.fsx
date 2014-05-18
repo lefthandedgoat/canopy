@@ -42,7 +42,6 @@ Getting Started
 ####4\. Paste the following code into `Program.fs`
 
 *)
-#r "canopy.dll"
 //these are similar to C# using statements
 open canopy
 open runner
