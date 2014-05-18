@@ -85,6 +85,13 @@ test (fun _ ->
     "#lastName" << "Smith"
     "#lastName" == "Smith"
 
+"writing to #lastName (as element) sets text to John" &&& fun _ ->
+    !^ testpage
+    let lastname = element "#lastname"
+    clear lastname   
+    lastname << "John"
+    lastname == "John"
+
 "writing to .lastName sets text to new Smith in both boxes" &&& fun _ ->
     !^ testpage
     clear "#lastName"
@@ -590,7 +597,7 @@ context "pluggable finders tests"
 //and let canopy do the work of trying to find something by convention
 let findByHref href f =
     try
-        let cssSelector = sprintf "a[href='%s']" href
+        let cssSelector = sprintf "a[href*='%s']" href
         f(By.CssSelector(cssSelector)) |> List.ofSeq
     with | ex -> []
 
