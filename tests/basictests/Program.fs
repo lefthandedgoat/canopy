@@ -90,7 +90,7 @@ test (fun _ ->
     let lastname = element "#lastname"
     clear lastname   
     lastname << "John"
-    lastname == "John"
+    "#lastname" == "John"
 
 "writing to .lastName sets text to new Smith in both boxes" &&& fun _ ->
     !^ testpage
