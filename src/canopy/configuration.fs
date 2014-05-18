@@ -19,3 +19,4 @@ let mutable disableSuggestOtherSelectors = false
 let mutable autoPinBrowserRightOnLaunch = true
 let mutable throwIfMoreThanOneElement = false
 let mutable configuredFinders = finders.defaultFinders
+let mutable writeToSelectWithOptionValue = true
