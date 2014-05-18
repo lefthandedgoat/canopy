@@ -9,12 +9,7 @@ let findByCss (cssSelector : string) (f : (By -> System.Collections.ObjectModel.
     try
         f(By.CssSelector(cssSelector)) |> List.ofSeq
     with | ex -> []
-
-let findBySizzle cssSelector f =
-    try
-        f(BySizzle.CssSelector(cssSelector)) |> List.ofSeq
-    with | ex -> []
-
+    
 let findByJQuery cssSelector f =
     try
         f(ByJQuery.CssSelector(cssSelector)) |> List.ofSeq
@@ -67,7 +62,6 @@ let mutable defaultFinders =
             yield findByXpath   cssSelector f
             yield findByLabel   cssSelector f
             yield findByText    cssSelector f
-            yield findBySizzle  cssSelector f
             yield findByJQuery  cssSelector f
         }
     )
