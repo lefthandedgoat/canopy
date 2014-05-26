@@ -82,7 +82,7 @@
 * Now built in Release mode [Issue #139](https://github.com/lefthandedgoat/canopy/issues/139)
 * Added support for Firefox Aurora (nightly build) [Issue #141](https://github.com/lefthandedgoat/canopy/issues/141)
 
-#### 0.9.9 - May 18 2014
+#### 0.9.10 - May 26 2014
 * Accepted @rachelreese refactor.  Thanks Rachel! [Issue #143](https://github.com/lefthandedgoat/canopy/issues/143)
 * Improved behaviour of << for writing to options to now also look by options value [Issue #144](https://github.com/lefthandedgoat/canopy/issues/144)
 * Removed redundant Sizzle finder [Issue #145](https://github.com/lefthandedgoat/canopy/issues/145)
