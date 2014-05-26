@@ -83,7 +83,7 @@ Target "CleanDocs" (fun _ ->
 
 Target "Build" (fun _ ->
     !! (solutionFile + "*.sln")
-    |> MSBuildRelease "" "Rebuild"
+    |> MSBuild "" "Rebuild" [ "Configuration", "Release"; "VisualStudioVersion", "11.0" ]
     |> ignore
 )
 
@@ -186,8 +186,8 @@ Target "All" DoNothing
 
 "All" 
   ==> "CleanDocs"
-  ==> "GenerateDocs"
-  ==> "ReleaseDocs"
+  //==> "GenerateDocs"
+  //==> "ReleaseDocs"
   ==> "NuGet"
   ==> "NuGet-edge"
   ==> "Release"

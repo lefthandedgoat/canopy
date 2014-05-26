@@ -43,18 +43,9 @@
       </PropertyGroup>
     </When>
     <Otherwise>
-		<Choose>
-			<When Condition="'$(VisualStudioVersion)' == '12.0'">
-				<PropertyGroup>
-					<FSharpTargetsPath>$(MSBuildExtensionsPath32)\Microsoft\VisualStudio\v$(VisualStudioVersion)\FSharp\Microsoft.FSharp.Targets</FSharpTargetsPath>
-				</PropertyGroup>
-			</When>
-			<Otherwise>
-				<PropertyGroup>
-				  <FSharpTargetsPath>$(MSBuildExtensionsPath32)\..\Microsoft SDKs\F#\3.0\Framework\v4.0\Microsoft.FSharp.Targets</FSharpTargetsPath>
-				</PropertyGroup>
-			</Otherwise>
-		  </Choose>
+      <PropertyGroup>
+        <FSharpTargetsPath>$(MSBuildExtensionsPath32)\Microsoft\VisualStudio\v$(VisualStudioVersion)\FSharp\Microsoft.FSharp.Targets</FSharpTargetsPath>
+      </PropertyGroup>
     </Otherwise>
   </Choose>
   <Import Project="$(FSharpTargetsPath)" Condition="Exists('$(FSharpTargetsPath)')" />
