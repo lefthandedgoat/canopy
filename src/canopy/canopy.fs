@@ -418,7 +418,7 @@ let ( == ) item value =
                                             else
                                                 readvalue = value))
         with
-            | :? CanopyElementNotFoundException as ex -> raise (CanopyEqualityFailedException(sprintf "%s\r\nequality check failed.  expected: %s, got: %s" ex.Message value !bestvalue))
+            | :? CanopyElementNotFoundException as ex -> raise (CanopyEqualityFailedException(sprintf "%s%sequality check failed.  expected: %s, got: %s" ex.Message Environment.NewLine value !bestvalue))
             | :? WebDriverTimeoutException -> raise (CanopyEqualityFailedException(sprintf "equality check failed.  expected: %s, got: %s" value !bestvalue))
 
     | _ -> raise (CanopyNotStringOrElementException(sprintf "Can't check equality on %O because it is not a string or alert" item))
@@ -427,24 +427,24 @@ let ( != ) cssSelector value =
     try
         wait compareTimeout (fun _ -> (read cssSelector) <> value)
     with
-        | :? CanopyElementNotFoundException as ex -> raise (CanopyNotEqualsFailedException(sprintf "%s\r\nnot equals check failed.  expected NOT: %s, got: " ex.Message value))
+        | :? CanopyElementNotFoundException as ex -> raise (CanopyNotEqualsFailedException(sprintf "%s%snot equals check failed.  expected NOT: %s, got: " ex.Message Environment.NewLine value))
         | :? WebDriverTimeoutException -> raise (CanopyNotEqualsFailedException(sprintf "not equals check failed.  expected NOT: %s, got: %s" value (read cssSelector)))
         
 let ( *= ) cssSelector value =
     try        
         wait compareTimeout (fun _ -> ( cssSelector |> elements |> Seq.exists(fun element -> (textOf element) = value)))
     with
-        | :? CanopyElementNotFoundException as ex -> raise (CanopyValueNotInListException(sprintf "%s\r\ncan't find %s in list %s\r\ngot: " ex.Message value cssSelector))
+        | :? CanopyElementNotFoundException as ex -> raise (CanopyValueNotInListException(sprintf "%s%scan't find %s in list %s%sgot: " ex.Message Environment.NewLine value cssSelector Environment.NewLine))
         | :? WebDriverTimeoutException -> 
             let sb = new System.Text.StringBuilder()
-            cssSelector |> elements |> List.iter (fun e -> bprintf sb "%s\r\n" (textOf e))
-            raise (CanopyValueNotInListException(sprintf "can't find %s in list %s\r\ngot: %s" value cssSelector (sb.ToString())))
+            cssSelector |> elements |> List.iter (fun e -> bprintf sb "%s%s" (textOf e) Environment.NewLine)
+            raise (CanopyValueNotInListException(sprintf "can't find %s in list %s%sgot: %s" value cssSelector Environment.NewLine (sb.ToString())))
 
 let ( *!= ) cssSelector value =
     try
         wait compareTimeout (fun _ -> ( cssSelector |> elements |> Seq.exists(fun element -> (textOf element) = value) |> not))
     with
-        | :? CanopyElementNotFoundException as ex -> raise (CanopyValueInListException(sprintf "%s\r\nfound check failed" ex.Message))
+        | :? CanopyElementNotFoundException as ex -> raise (CanopyValueInListException(sprintf "%s%sfound check failed" ex.Message Environment.NewLine))
         | :? WebDriverTimeoutException -> raise (CanopyValueInListException(sprintf "found %s in list %s, expected not to" value cssSelector))
     
 let contains (value1 : string) (value2 : string) =
@@ -455,7 +455,7 @@ let count cssSelector count =
     try        
         wait compareTimeout (fun _ -> (unreliableElements cssSelector).Length = count)
     with
-        | :? CanopyElementNotFoundException as ex -> raise (CanopyCountException(sprintf "%s\r\ncount failed. expected: %i got: %i" ex.Message count 0))
+        | :? CanopyElementNotFoundException as ex -> raise (CanopyCountException(sprintf "%s%scount failed. expected: %i got: %i" ex.Message Environment.NewLine count 0))
         | :? WebDriverTimeoutException -> raise (CanopyCountException(sprintf "count failed. expected: %i got: %i" count (unreliableElements cssSelector).Length))
 
 let private regexMatch pattern input = System.Text.RegularExpressions.Regex.Match(input, pattern).Success
@@ -470,18 +470,18 @@ let ( =~ ) cssSelector pattern =
     try
         wait compareTimeout (fun _ -> regexMatch pattern (read cssSelector))
     with
-        | :? CanopyElementNotFoundException as ex -> raise (CanopyEqualityFailedException(sprintf "%s\r\nregex equality check failed.  expected: %s, got:" ex.Message pattern))
+        | :? CanopyElementNotFoundException as ex -> raise (CanopyEqualityFailedException(sprintf "%s%sregex equality check failed.  expected: %s, got:" ex.Message Environment.NewLine pattern))
         | :? WebDriverTimeoutException -> raise (CanopyEqualityFailedException(sprintf "regex equality check failed.  expected: %s, got: %s" pattern (read cssSelector)))
 
 let ( *~ ) cssSelector pattern =
     try        
         wait compareTimeout (fun _ -> ( cssSelector |> elements |> Seq.exists(fun element -> regexMatch pattern (textOf element))))
     with
-        | :? CanopyElementNotFoundException as ex -> raise (CanopyValueNotInListException(sprintf "%s\r\ncan't regex find %s in list %s\r\ngot: " ex.Message pattern cssSelector))
+        | :? CanopyElementNotFoundException as ex -> raise (CanopyValueNotInListException(sprintf "%s%scan't regex find %s in list %s%sgot: " ex.Message Environment.NewLine pattern cssSelector Environment.NewLine))
         | :? WebDriverTimeoutException -> 
             let sb = new System.Text.StringBuilder()
-            cssSelector |> elements |> List.iter (fun e -> bprintf sb "%s\r\n" (textOf e))
-            raise (CanopyValueNotInListException(sprintf "can't regex find %s in list %s\r\ngot: %s" pattern cssSelector (sb.ToString())))
+            cssSelector |> elements |> List.iter (fun e -> bprintf sb "%s%s" (textOf e) Environment.NewLine)
+            raise (CanopyValueNotInListException(sprintf "can't regex find %s in list %s%sgot: %s" pattern cssSelector Environment.NewLine (sb.ToString())))
 
 let is expected actual =
     if expected <> actual then
@@ -502,7 +502,7 @@ let displayed item =
             | :? string as cssSelector -> element cssSelector |> shown
             | _ -> raise (CanopyNotStringOrElementException(sprintf "Can't click %O because it is not a string or webelement" item)))
     with
-        | :? CanopyElementNotFoundException as ex -> raise (CanopyDisplayedFailedException(sprintf "%s\r\ndisplay check for %O failed." ex.Message item))
+        | :? CanopyElementNotFoundException as ex -> raise (CanopyDisplayedFailedException(sprintf "%s%sdisplay check for %O failed." ex.Message Environment.NewLine item))
         | :? WebDriverTimeoutException -> raise (CanopyDisplayedFailedException(sprintf "display check for %O failed." item))
 
 let notDisplayed item =
@@ -513,7 +513,7 @@ let notDisplayed item =
             | :? string as cssSelector -> (unreliableElements cssSelector |> List.isEmpty) || not(unreliableElement cssSelector |> shown)
             | _ -> raise (CanopyNotStringOrElementException(sprintf "Can't click %O because it is not a string or webelement" item)))
     with
-        | :? CanopyElementNotFoundException as ex -> raise (CanopyNotDisplayedFailedException(sprintf "%s\r\nnotDisplay check for %O failed." ex.Message item))
+        | :? CanopyElementNotFoundException as ex -> raise (CanopyNotDisplayedFailedException(sprintf "%s%snotDisplay check for %O failed." ex.Message Environment.NewLine item))
         | :? WebDriverTimeoutException -> raise (CanopyNotDisplayedFailedException(sprintf "notDisplay check for %O failed." item))
 
 let enabled item = 
@@ -524,7 +524,7 @@ let enabled item =
             | :? string as cssSelector -> (element cssSelector).Enabled = true
             | _ -> raise (CanopyNotStringOrElementException(sprintf "Can't click %O because it is not a string or webelement" item)))
     with
-        | :? CanopyElementNotFoundException as ex -> raise (CanopyEnabledFailedException(sprintf "%s\r\nenabled check for %O failed." ex.Message item))
+        | :? CanopyElementNotFoundException as ex -> raise (CanopyEnabledFailedException(sprintf "%s%senabled check for %O failed." ex.Message Environment.NewLine item))
         | :? WebDriverTimeoutException -> raise (CanopyEnabledFailedException(sprintf "enabled check for %O failed." item))
 
 let disabled item = 
@@ -535,7 +535,7 @@ let disabled item =
             | :? string as cssSelector -> (element cssSelector).Enabled = false
             | _ -> raise (CanopyNotStringOrElementException(sprintf "Can't click %O because it is not a string or webelement" item)))
     with
-        | :? CanopyElementNotFoundException as ex -> raise (CanopyDisabledFailedException(sprintf "%s\r\ndisabled check for %O failed." ex.Message item))
+        | :? CanopyElementNotFoundException as ex -> raise (CanopyDisabledFailedException(sprintf "%s%sdisabled check for %O failed." ex.Message Environment.NewLine item))
         | :? WebDriverTimeoutException -> raise (CanopyDisabledFailedException(sprintf "disabled check for %O failed." item))
 
 let fadedIn cssSelector = fun _ -> element cssSelector |> shown
@@ -578,7 +578,7 @@ let check item =
                 (element cssSelector).Selected)        
         | _ -> raise (CanopyNotStringOrElementException(sprintf "Can't read %O because it is not a string or element" item))
     with
-        | :? CanopyElementNotFoundException as ex -> raise (CanopyCheckFailedException(sprintf "%s\r\nfailed to check %O." ex.Message item))
+        | :? CanopyElementNotFoundException as ex -> raise (CanopyCheckFailedException(sprintf "%s%sfailed to check %O." ex.Message Environment.NewLine item))
         | :? WebDriverTimeoutException -> raise (CanopyCheckFailedException(sprintf "failed to check %O." item))
 
 let uncheck item = 
@@ -591,7 +591,7 @@ let uncheck item =
                 (element cssSelector).Selected = false)        
         | _ -> raise (CanopyNotStringOrElementException(sprintf "Can't read %O because it is not a string or element" item))
     with
-        | :? CanopyElementNotFoundException as ex -> raise (CanopyUncheckFailedException(sprintf "%s\r\nfailed to uncheck %O." ex.Message item))
+        | :? CanopyElementNotFoundException as ex -> raise (CanopyUncheckFailedException(sprintf "%s%sfailed to uncheck %O." ex.Message Environment.NewLine item))
         | :? WebDriverTimeoutException -> raise (CanopyUncheckFailedException(sprintf "failed to uncheck %O." item))
 
 //draggin

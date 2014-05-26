@@ -278,13 +278,13 @@ test (fun _ ->
 "Should not be on partial url" &&& fun _ ->
     url testpage
     let partialUrl = "http://lefthandedgoat.github.io/canopy"
-    failsWith ("on check failed, expected expression '" + partialUrl + "' got " + testpage)
+    failsWith <| sprintf "on check failed, expected expression '%s' got %s" partialUrl testpage
     on partialUrl
 
 "Should not be on child url" &&& fun _ ->
     url testpage
     let childUrl = testpage + "notatthspath/"
-    failsWith ("on check failed, expected expression '" + childUrl + "' got " + testpage)
+    failsWith <| sprintf "on check failed, expected expression '%s' got %s" childUrl testpage
     on childUrl
 
 context "reddit tests '"
@@ -366,8 +366,7 @@ context "other tests"
     "#wait_for" == "Done!"
 
 "define a custom wait for using any function that takes in unit and returns bool" &&& fun _ ->    
-    failsWith "waiting for page to load
-waitFor condition failed to become true in 3.0 seconds"
+    failsWith <| sprintf "waiting for page to load%swaitFor condition failed to become true in 3.0 seconds" System.Environment.NewLine
     let pageLoaded () = 
         (element "#wait_for").Text = "Done!!!"
     
@@ -555,24 +554,24 @@ context "User Agents tests"
     url "http://whatsmyuseragent.com/"
     "#body_lbUserAgent" =~ "iPad"
 
-//"FirefoxDeviceWithUserAgent userAgents.iPhone should show as iPhone" &&& fun _ ->
-//    start <| FirefoxWithUserAgent userAgents.iPhone
-//    url "http://whatsmyuseragent.com/"
-//    "#body_lbUserAgent" =~ "iPhone"
-//
-//"FirefoxDeviceWithUserAgent myagent should show as myagent" &&& fun _ ->
-//    start <| FirefoxWithUserAgent "myagent"
-//    url "http://whatsmyuseragent.com/"
-//    "#body_lbUserAgent" == "myagent"
+"FirefoxDeviceWithUserAgent userAgents.iPhone should show as iPhone" &&& fun _ ->
+    start <| FirefoxWithUserAgent userAgents.iPhone
+    url "http://whatsmyuseragent.com/"
+    "#body_lbUserAgent" =~ "iPhone"
+
+"FirefoxDeviceWithUserAgent myagent should show as myagent" &&& fun _ ->
+    start <| FirefoxWithUserAgent "myagent"
+    url "http://whatsmyuseragent.com/"
+    "#body_lbUserAgent" == "myagent"
 
 context "Resize tests"
 
-//"Firefox should be resized to 400,400" &&& fun _ ->
-//    start firefox
-//    url "http://resizemybrowser.com/"
-//    resize (400,400)
-//    "#cWidth" == "400"
-//    "#cHeight" == "400"
+"Firefox should be resized to 400,400" &&& fun _ ->
+    start firefox
+    url "http://resizemybrowser.com/"
+    resize (400,400)
+    "#cWidth" == "400"
+    "#cHeight" == "400"
 
 "Chrome should be resized to iPhone4" &&& fun _ ->
     start chrome
@@ -581,13 +580,13 @@ context "Resize tests"
     "#cWidth" == "320"
     "#cHeight" == "480"
 
-//"Firefox should be resized to 400,500 then rotated to 500,400" &&& fun _ ->
-//    start firefox
-//    url "http://resizemybrowser.com/"
-//    resize (400,500)
-//    rotate()
-//    "#cHeight" == "400"
-//    "#cWidth" == "500"
+"Firefox should be resized to 400,500 then rotated to 500,400" &&& fun _ ->
+    start firefox
+    url "http://resizemybrowser.com/"
+    resize (400,500)
+    rotate()
+    "#cHeight" == "400"
+    "#cWidth" == "500"
 
 "Chrome should be resized and rotated to iPhone4" &&& fun _ ->
     start chrome
