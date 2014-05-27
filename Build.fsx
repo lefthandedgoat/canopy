@@ -186,8 +186,8 @@ Target "All" DoNothing
 
 "All" 
   ==> "CleanDocs"
-  //==> "GenerateDocs"
-  //==> "ReleaseDocs"
+  ==> "GenerateDocs"
+  ==> "ReleaseDocs"
   ==> "NuGet"
   ==> "NuGet-edge"
   ==> "Release"
