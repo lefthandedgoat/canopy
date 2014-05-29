@@ -89,3 +89,7 @@
 * Updated to the lastest version of SizSelCsZzz [Issue #146](https://github.com/lefthandedgoat/canopy/issues/146)
 * Accepted reporter bug fix by soerennielsen.  Thanks! [Issue #150](https://github.com/lefthandedgoat/canopy/issues/150)
 * Accepted improvement to << by soerennielsen. Thanks! [Issue #151](https://github.com/lefthandedgoat/canopy/issues/151)
+
+#### 0.9.11 - May 28 2014
+* Upgraded to Selenium 2.42 [Issue #152](https://github.com/lefthandedgoat/canopy/issues/152)
+* Chrome is now launched with --test-type flag to hide warning message of deprecated flags [Issue #153](https://github.com/lefthandedgoat/canopy/issues/153)
