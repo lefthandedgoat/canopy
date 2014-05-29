@@ -149,7 +149,10 @@ type LiveHtmlReporter(browser : BrowserStartMode, driverPath : string) =
         | IE -> new OpenQA.Selenium.IE.InternetExplorerDriver(driverPath) :> IWebDriver
         | IEWithOptions options ->new OpenQA.Selenium.IE.InternetExplorerDriver(driverPath, options) :> IWebDriver
         | IEWithOptionsAndTimeSpan(options, timeSpan) -> new OpenQA.Selenium.IE.InternetExplorerDriver(driverPath, options, timeSpan) :> IWebDriver
-        | Chrome -> new OpenQA.Selenium.Chrome.ChromeDriver(driverPath) :> IWebDriver
+        | Chrome -> 
+                let options = OpenQA.Selenium.Chrome.ChromeOptions()
+                options.AddArgument("test-type") //https://code.google.com/p/chromedriver/issues/detail?id=799
+                new OpenQA.Selenium.Chrome.ChromeDriver(driverPath, options) :> IWebDriver
         | ChromeWithOptions options -> new OpenQA.Selenium.Chrome.ChromeDriver(driverPath, options) :> IWebDriver        
         | ChromeWithOptionsAndTimeSpan(options, timeSpan) -> new OpenQA.Selenium.Chrome.ChromeDriver(driverPath, options, timeSpan) :> IWebDriver
         | Firefox -> new OpenQA.Selenium.Firefox.FirefoxDriver() :> IWebDriver

@@ -638,7 +638,10 @@ let start b =
         | IE -> new IE.InternetExplorerDriver(ieDir) :> IWebDriver
         | IEWithOptions options -> new IE.InternetExplorerDriver(ieDir, options) :> IWebDriver
         | IEWithOptionsAndTimeSpan(options, timeSpan) -> new IE.InternetExplorerDriver(ieDir, options, timeSpan) :> IWebDriver
-        | Chrome -> new Chrome.ChromeDriver(chromeDir) :> IWebDriver
+        | Chrome -> 
+                let options = OpenQA.Selenium.Chrome.ChromeOptions()
+                options.AddArgument("test-type") //https://code.google.com/p/chromedriver/issues/detail?id=799
+                new Chrome.ChromeDriver(chromeDir, options) :> IWebDriver
         | ChromeWithOptions options -> new Chrome.ChromeDriver(chromeDir, options) :> IWebDriver
         | ChromeWithUserAgent userAgent -> chromeWithUserAgent userAgent
         | ChromeWithOptionsAndTimeSpan(options, timeSpan) -> new Chrome.ChromeDriver(chromeDir, options, timeSpan) :> IWebDriver
