@@ -93,3 +93,6 @@
 #### 0.9.11 - May 28 2014
 * Upgraded to Selenium 2.42 [Issue #152](https://github.com/lefthandedgoat/canopy/issues/152)
 * Chrome is now launched with --test-type flag to hide warning message of deprecated flags [Issue #153](https://github.com/lefthandedgoat/canopy/issues/153)
+
+#### 0.9.12 - July 2 2014
+* Accepted TeamCity Report fix by mattsonlyattack and incorporated other fixes to TC Reporter.  Thanks! [Issue #154](https://github.com/lefthandedgoat/canopy/issues/154)
