@@ -473,9 +473,17 @@ context "other tests"
     url "http://lefthandedgoat.github.io/canopy/testpages/iframe1"
     "#firstName" == "John"
 
+"elementWithin will find iFrame inside of outter element properly, iframe1" &&& fun _ ->
+    url "http://lefthandedgoat.github.io/canopy/testpages/iframe1"
+    first "body" |> elementWithin "#states" |> elementWithin "1" |> read |> is "Alabama" 
+
 "#firstName should have John (using == infix operator), iframe2" &&& fun _ ->
     url "http://lefthandedgoat.github.io/canopy/testpages/iframe2"
     "#firstName" == "John"
+
+"elementWithin will find iFrame inside of outter element properly, iframe2" &&& fun _ ->
+    url "http://lefthandedgoat.github.io/canopy/testpages/iframe2"
+    first "body" |> elementWithin "#states" |> elementWithin "1" |> read |> is "Alabama" 
 
 context "dragging"
 "draging works" &&& fun _ ->

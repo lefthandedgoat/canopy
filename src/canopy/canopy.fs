@@ -159,16 +159,25 @@ let suggestOtherSelectors cssSelector =
         let ids = js idsViaJs :?> System.Collections.ObjectModel.ReadOnlyCollection<System.Object> |> Seq.map (fun item -> "#" + item.ToString()) |> Array.ofSeq
         let values = js valuesViaJs :?> System.Collections.ObjectModel.ReadOnlyCollection<System.Object> |> Seq.map (fun item -> item.ToString()) |> Array.ofSeq
         let texts = js textsViaJs :?> System.Collections.ObjectModel.ReadOnlyCollection<System.Object> |> Seq.map (fun item -> item.ToString()) |> Array.ofSeq
-        Array.append classes ids
-        |> Array.append values
-        |> Array.append texts
-        |> Seq.distinct |> List.ofSeq 
-        |> remove "." |> remove "#" |> Array.ofList
-        |> Array.Parallel.map (fun u -> levenshtein cssSelector u)
-        |> Array.sortBy (fun r -> r.distance)
-        |> Seq.take 5
-        |> Seq.map (fun r -> r.selector) |> List.ofSeq
-        |> (fun suggestions -> reporter.suggestSelectors cssSelector suggestions)    
+        
+        let results =
+            Array.append classes ids
+            |> Array.append values
+            |> Array.append texts
+            |> Seq.distinct |> List.ofSeq 
+            |> remove "." |> remove "#" |> Array.ofList
+            |> Array.Parallel.map (fun u -> levenshtein cssSelector u)
+            |> Array.sortBy (fun r -> r.distance)
+
+        if results.Length >= 5 then
+            results
+            |> Seq.take 5
+            |> Seq.map (fun r -> r.selector) |> List.ofSeq
+            |> (fun suggestions -> reporter.suggestSelectors cssSelector suggestions)    
+        else
+            results
+            |> Seq.map (fun r -> r.selector) |> List.ofSeq
+            |> (fun suggestions -> reporter.suggestSelectors cssSelector suggestions)    
 
 let describe text =
     puts text
@@ -194,7 +203,8 @@ let rec private findElements cssSelector (searchContext : ISearchContext) : IWeb
             let webElements = ref []
             iframes |> List.iter (fun frame -> 
                 browser.SwitchTo().Frame(frame) |> ignore
-                webElements := findElements cssSelector searchContext
+                let root = browser.FindElement(By.CssSelector("html"))
+                webElements := findElements cssSelector root
             )
             !webElements
 
