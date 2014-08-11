@@ -47,6 +47,7 @@ type BrowserStartMode =
     | ChromeWithUserAgent of string
     | PhantomJS
     | PhantomJSProxyNone
+    | Remote of string * ICapabilities
 
 type Test (description: string, func : (unit -> unit), number : int) =
     member x.Description = description

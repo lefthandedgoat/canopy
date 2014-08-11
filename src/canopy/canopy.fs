@@ -666,7 +666,8 @@ let start b =
             autoPinBrowserRightOnLaunch <- false
             let service = PhantomJS.PhantomJSDriverService.CreateDefaultService(canopy.configuration.phantomJSDir)
             service.ProxyType <- "none"
-            new PhantomJS.PhantomJSDriver(service) :> IWebDriver            
+            new PhantomJS.PhantomJSDriver(service) :> IWebDriver
+        | Remote(url, capabilities) -> new OpenQA.Selenium.Remote.RemoteWebDriver(new Uri(url), capabilities) :> IWebDriver
 
     if autoPinBrowserRightOnLaunch = true then pin Right
     browsers <- browsers @ [browser]
