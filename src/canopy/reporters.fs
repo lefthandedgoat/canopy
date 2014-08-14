@@ -101,10 +101,10 @@ type TeamCityReporter() =
     let tcFriendlyMessage (message : string) = 
         let message = message.Replace("|", "||")
         let message = message.Replace("'", "|'")
-        let message = message.Replace(@"\n", "|n")
-        let message = message.Replace(@"\r", "|r")
+        let message = message.Replace("\n", "|n")
+        let message = message.Replace("\r", "|r")
         let message = message.Replace(System.Environment.NewLine, "|r|n")
-        let message = message.Replace(@"\u", "|u")
+        let message = message.Replace("\u", "|u")
         let message = message.Replace("[", "|[")
         let message = message.Replace("]", "|]")
         message
