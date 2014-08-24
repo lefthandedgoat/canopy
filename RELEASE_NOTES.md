@@ -96,3 +96,7 @@
 
 #### 0.9.12 - July 2 2014
 * Accepted TeamCity Report fix by mattsonlyattack and incorporated other fixes to TC Reporter.  Thanks! [Issue #154](https://github.com/lefthandedgoat/canopy/issues/154)
+
+#### 0.9.13 - August 10 2014
+* Fix issue with iframes [Issue #161](https://github.com/lefthandedgoat/canopy/issues/161)
+* Added sugar for Remote web driver [Issue #159](https://github.com/lefthandedgoat/canopy/issues/159)
