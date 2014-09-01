@@ -193,7 +193,7 @@ let waitFor = waitFor2 "Condition not met in given amount of time. If you want t
     
 //find related    
 let rec private findElements cssSelector (searchContext : ISearchContext) : IWebElement list =
-    searchedFor <- (cssSelector, browser.Url) :: searchedFor
+    if optmizeByDisablingCoverageReport = false then searchedFor <- (cssSelector, browser.Url) :: searchedFor
     let findInIFrame () =
         let iframes = findByCss "iframe" searchContext.FindElements
         if iframes.IsEmpty then 
@@ -210,10 +210,14 @@ let rec private findElements cssSelector (searchContext : ISearchContext) : IWeb
 
     try
         let results =
-            configuredFinders cssSelector searchContext.FindElements        
-            |> Seq.filter(fun list -> not(list.IsEmpty))
+            if (hints.ContainsKey cssSelector) then
+                let finder = hints.[cssSelector]
+                seq { yield finder cssSelector searchContext.FindElements }
+            else
+                configuredFinders cssSelector searchContext.FindElements        
+                |> Seq.filter(fun list -> not(list.IsEmpty))
         if Seq.isEmpty results then
-            findInIFrame()
+            if optimizeBySkippingIFrameCheck then [] else findInIFrame()
         else
            results |> Seq.head
     with | ex -> []
@@ -772,3 +776,11 @@ let addFinder finder =
     configuredFinders <- (fun cssSelector f ->
         currentFinders cssSelector f
         |> Seq.append (seq { yield finder cssSelector f }))
+    
+//hints    
+let css selector = hints.[selector] <- findByCss; selector
+let xpath selector = hints.[selector] <- findByXpath; selector
+let jquery selector = hints.[selector] <- findByJQuery; selector
+let label selector = hints.[selector] <- findByLabel; selector
+let text selector = hints.[selector] <- findByText; selector
+let value selector = hints.[selector] <- findByValue; selector

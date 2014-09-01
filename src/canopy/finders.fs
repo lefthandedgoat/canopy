@@ -65,3 +65,5 @@ let mutable defaultFinders =
             yield findByJQuery  cssSelector f
         }
     )
+
+let hints = new System.Collections.Generic.Dictionary<string, (string -> (By -> System.Collections.ObjectModel.ReadOnlyCollection<IWebElement>) -> IWebElement list)>()
