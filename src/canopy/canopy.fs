@@ -781,7 +781,7 @@ let addFinder finder =
     
 //hints    
 let private addHintFinder hints finder = hints |> Seq.append (seq { yield finder })
-let private addSelector finder selector hintType =
+let private addSelector finder hintType selector =
     //gaurd against adding same hintType multipe times and increase size of finder seq
     if not <| (hints.ContainsKey(selector) && addedHints.[selector] |> List.exists (fun hint -> hint = hintType)) then
         if hints.ContainsKey(selector) then 
