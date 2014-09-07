@@ -21,4 +21,4 @@ let mutable throwIfMoreThanOneElement = false
 let mutable configuredFinders = finders.defaultFinders
 let mutable writeToSelectWithOptionValue = true
 let mutable optimizeBySkippingIFrameCheck = false
-let mutable optmizeByDisablingCoverageReport = false
+let mutable optimizeByDisablingCoverageReport = false
