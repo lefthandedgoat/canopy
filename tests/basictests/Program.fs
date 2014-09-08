@@ -485,6 +485,33 @@ context "other tests"
     url "http://lefthandedgoat.github.io/canopy/testpages/iframe2"
     first "body" |> elementWithin "#states" |> elementWithin "1" |> read |> is "Alabama" 
 
+context "hints tests"
+"css hint" &&& fun _ ->
+    url testpage
+    let firstName = css "#firstName"
+    firstName == "John"
+    css "#lastName" == "Doe"
+
+"xpath hint" &&& fun _ ->
+    url testpage
+    let firstName = xpath "id('firstName')"
+    firstName == "John"
+    xpath "id('lastName')" == "Doe"
+
+"jquery hint" &&& fun _ ->
+    url testpage
+    let firstName = jquery "#firstName"
+    firstName == "John"
+    jquery "#lastName" == "Doe"
+
+"value hint" &&& fun _ ->
+    url testpage
+    value "Click Me!!" == "Click Me!!"
+
+"text hint" &&& fun _ ->
+    url testpage
+    text "ajax button not clicked" == "ajax button not clicked"
+
 context "dragging"
 "draging works" &&& fun _ ->
     url "http://scrumy.com/silenter39delayed"

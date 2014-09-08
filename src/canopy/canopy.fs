@@ -193,7 +193,7 @@ let waitFor = waitFor2 "Condition not met in given amount of time. If you want t
     
 //find related    
 let rec private findElements cssSelector (searchContext : ISearchContext) : IWebElement list =
-    searchedFor <- (cssSelector, browser.Url) :: searchedFor
+    if optimizeByDisablingCoverageReport = false then searchedFor <- (cssSelector, browser.Url) :: searchedFor
     let findInIFrame () =
         let iframes = findByCss "iframe" searchContext.FindElements
         if iframes.IsEmpty then 
@@ -210,10 +210,16 @@ let rec private findElements cssSelector (searchContext : ISearchContext) : IWeb
 
     try
         let results =
-            configuredFinders cssSelector searchContext.FindElements        
-            |> Seq.filter(fun list -> not(list.IsEmpty))
+            if (hints.ContainsKey cssSelector) then
+                let finders = hints.[cssSelector]
+                finders
+                |> Seq.map (fun finder -> finder cssSelector searchContext.FindElements)
+                |> Seq.filter(fun list -> not(list.IsEmpty))
+            else
+                configuredFinders cssSelector searchContext.FindElements        
+                |> Seq.filter(fun list -> not(list.IsEmpty))
         if Seq.isEmpty results then
-            findInIFrame()
+            if optimizeBySkippingIFrameCheck then [] else findInIFrame()
         else
            results |> Seq.head
     with | ex -> []
@@ -772,3 +778,23 @@ let addFinder finder =
     configuredFinders <- (fun cssSelector f ->
         currentFinders cssSelector f
         |> Seq.append (seq { yield finder cssSelector f }))
+    
+//hints    
+let private addHintFinder hints finder = hints |> Seq.append (seq { yield finder })
+let private addSelector finder hintType selector =
+    //gaurd against adding same hintType multipe times and increase size of finder seq
+    if not <| (hints.ContainsKey(selector) && addedHints.[selector] |> List.exists (fun hint -> hint = hintType)) then
+        if hints.ContainsKey(selector) then 
+            hints.[selector] <- addHintFinder hints.[selector] finder
+            addedHints.[selector] <- [hintType] @ addedHints.[selector]
+        else 
+            hints.[selector] <- seq { yield finder }  
+            addedHints.[selector] <- [hintType]
+    selector
+
+let css = addSelector findByCss "css"
+let xpath = addSelector findByXpath "xpath"
+let jquery = addSelector findByJQuery "jquery"
+let label = addSelector findByLabel "label"
+let text = addSelector findByText "text"
+let value = addSelector findByValue "value"
