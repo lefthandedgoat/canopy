@@ -104,3 +104,6 @@
 #### 0.9.14 - September 7 2014
 * Added the ability to provide hints to a selector to say what finder to use.  Helps with performance in some scenarios.  Also added two configuration options to help with performance.  One to turn off implicit iFrame searching and one to turn off logging used for coverage report. [Issue #163](https://github.com/lefthandedgoat/canopy/issues/163)
 * Fixed an issue with Team City reporter character escaping 
+
+#### 0.9.15 - September 17 2014
+* Updated to latest Selenium for issue [Issue #166](https://github.com/lefthandedgoat/canopy/issues/166)
