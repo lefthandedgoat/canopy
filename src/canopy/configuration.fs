@@ -4,7 +4,7 @@ open System
 
 //runner related
 let failFast = ref false
-let failScreenshotPath = Environment.GetFolderPath(Environment.SpecialFolder.ApplicationData) + @"\canopy\"
+let mutable failScreenshotPath = Environment.GetFolderPath(Environment.SpecialFolder.ApplicationData) + @"\canopy\"
 
 let mutable chromeDir = @"c:\"
 let mutable ieDir = @"c:\"
