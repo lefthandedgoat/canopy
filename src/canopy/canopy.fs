@@ -741,6 +741,17 @@ let title() = browser.Title
 
 let reload = currentUrl >> url
 
+type Navigate = 
+  | Back
+  | Forward
+
+let back = Back
+let forward = Forward
+
+let navigate = function
+  | Back -> browser.Navigate().Back()
+  | Forward -> browser.Navigate().Forward()
+
 let coverage (url : 'a) =    
     let mutable innerUrl = ""
     match box url with    
