@@ -588,16 +588,22 @@ context "User Agents tests"
     start <| ChromeWithUserAgent userAgents.iPad
     url "http://whatsmyuseragent.com/"
     ".info" *~ "iPad"
+    quit browser
+    switchTo mainBrowser
 
 "FirefoxDeviceWithUserAgent userAgents.iPhone should show as iPhone" &&& fun _ ->
     start <| FirefoxWithUserAgent userAgents.iPhone
     url "http://whatsmyuseragent.com/"
     ".info" *~ "iPhone"
+    quit browser
+    switchTo mainBrowser
 
 "FirefoxDeviceWithUserAgent myagent should show as myagent" &&& fun _ ->
     start <| FirefoxWithUserAgent "myagent"
     url "http://whatsmyuseragent.com/"
     ".info" *~ "myagent"
+    quit browser
+    switchTo mainBrowser
 
 context "Resize tests"
 
@@ -607,6 +613,8 @@ context "Resize tests"
     resize (400,400)
     "#cWidth" == "400"
     "#cHeight" == "400"
+    quit browser
+    switchTo mainBrowser
 
 "Chrome should be resized to iPhone4" &&& fun _ ->
     start chrome
@@ -614,6 +622,8 @@ context "Resize tests"
     resize screenSizes.iPhone4
     "#cWidth" == "320"
     "#cHeight" == "480"
+    quit browser
+    switchTo mainBrowser
 
 "Firefox should be resized to 400,500 then rotated to 500,400" &&& fun _ ->
     start firefox
@@ -622,6 +632,8 @@ context "Resize tests"
     rotate()
     "#cHeight" == "400"
     "#cWidth" == "500"
+    quit browser
+    switchTo mainBrowser
 
 "Chrome should be resized and rotated to iPhone4" &&& fun _ ->
     start chrome
@@ -630,6 +642,8 @@ context "Resize tests"
     rotate()
     "#cHeight" == "320"
     "#cWidth" == "480"
+    quit browser
+    switchTo mainBrowser
 
 context "pluggable finders tests"
 
@@ -647,6 +661,16 @@ addFinder findByHref
     url "http://lefthandedgoat.github.io/canopy/index.html"
     click "actions.html"
     on "http://lefthandedgoat.github.io/canopy/actions.html"
+
+context "Navigate tests"
+
+"Browser should navigate back and forward" &&& fun _ ->
+  url "http://lefthandedgoat.github.io/canopy/index.html"
+  click "actions.html"
+  navigate back
+  on "http://lefthandedgoat.github.io/canopy/index.html"
+  navigate forward
+  on "http://lefthandedgoat.github.io/canopy/actions.html"
 
 context "todo tests"
 
