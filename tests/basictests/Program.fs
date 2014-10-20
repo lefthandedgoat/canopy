@@ -485,6 +485,14 @@ context "other tests"
     url "http://lefthandedgoat.github.io/canopy/testpages/iframe2"
     first "body" |> elementWithin "#states" |> elementWithin "1" |> read |> is "Alabama" 
 
+"selecting option in iframe works by text and value" &&& fun _ ->
+    url "http://lefthandedgoat.github.io/canopy/testpages/iframe1"    
+    
+    "#item_list" << "Item 2"
+    "#item_list" == "Item 2"
+    "#item_list" << "3"    
+    "#item_list" == "Item 3"
+
 context "hints tests"
 "css hint" &&& fun _ ->
     url testpage
