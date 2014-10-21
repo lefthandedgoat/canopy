@@ -107,3 +107,11 @@
 
 #### 0.9.15 - September 17 2014
 * Updated to latest Selenium for issue [Issue #166](https://github.com/lefthandedgoat/canopy/issues/166)
+
+#### 0.9.16 - September 28 2014
+* Updated to latest Selenium 2.43.1
+* Made path for failed screen shots mutable.  Thanks soerennielsen! [Pull Request #168](https://github.com/lefthandedgoat/canopy/pull/168)
+
+#### 0.9.17 - October 20 2014
+* Added back and forward via pull request from @JonCanning, thanks! [Pull Request #169](https://github.com/lefthandedgoat/canopy/pull/169)
+* Fixed issue with using select/options in iframes, thanks @lokki [Issue #170](https://github.com/lefthandedgoat/canopy/issues/170)
