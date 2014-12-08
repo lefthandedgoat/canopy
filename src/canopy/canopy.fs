@@ -608,6 +608,12 @@ let uncheck item =
         | :? CanopyElementNotFoundException as ex -> raise (CanopyUncheckFailedException(sprintf "%s%sfailed to uncheck %O." ex.Message Environment.NewLine item))
         | :? WebDriverTimeoutException -> raise (CanopyUncheckFailedException(sprintf "failed to uncheck %O." item))
 
+//hoverin
+let hover selector = 
+    let actions = Actions(browser)
+    let e = element selector
+    actions.MoveToElement(e).Perform()
+
 //draggin
 let (-->) cssSelectorA cssSelectorB =
     wait elementTimeout (fun _ ->
