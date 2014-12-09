@@ -521,11 +521,11 @@ context "hints tests"
     text "ajax button not clicked" == "ajax button not clicked"
 
 context "hovering"
-"hover works" &&&& fun _ ->
-    url "http://api.jquery.com/hover/"
-    (someElement "body ul li span").IsNone === true
+"hover works" &&& fun _ ->
+    url testpage
+    "#hover" == "not hovered"
     hover "Milk"
-    (someElement "body ul li span").IsNone === false
+    "#hover" == "hovered"
     
 context "dragging"
 "draging works" &&& fun _ ->

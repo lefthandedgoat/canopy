@@ -115,3 +115,8 @@
 #### 0.9.17 - October 20 2014
 * Added back and forward via pull request from @JonCanning, thanks! [Pull Request #169](https://github.com/lefthandedgoat/canopy/pull/169)
 * Fixed issue with using select/options in iframes, thanks @lokki [Issue #170](https://github.com/lefthandedgoat/canopy/issues/170)
+
+#### 0.9.18 - December 8 2014
+* Added switchToTab and closeTab [Issue #165](https://github.com/lefthandedgoat/canopy/issues/165)
+* Added hover [Issue #172](https://github.com/lefthandedgoat/canopy/issues/172)
+* Updated to latest Selenium 2.44.0

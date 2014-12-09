@@ -684,6 +684,14 @@ let start b =
 
 let switchTo b = browser <- b
 
+let switchToTab number =
+    let tabs = browser.WindowHandles;
+    browser.SwitchTo().Window(tabs.[(number - 1)]) |> ignore
+
+let closeTab number =
+    switchToTab number
+    browser.Close()
+
 let tile (browsers : IWebDriver list) =   
     let h = System.Windows.Forms.Screen.PrimaryScreen.WorkingArea.Height
     let w = System.Windows.Forms.Screen.PrimaryScreen.WorkingArea.Width
