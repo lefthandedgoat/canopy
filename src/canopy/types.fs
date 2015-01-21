@@ -53,6 +53,7 @@ type Test (description: string, func : (unit -> unit), number : int) =
     member x.Description = description
     member x.Func = func
     member x.Number = number
+    member x.Id = if description = null then (String.Format("Test #{0}", number)) else description
 
 type suite () = class
     member val Context : string = null with get, set
