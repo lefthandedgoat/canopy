@@ -165,6 +165,15 @@
 	   <option value="95">Palmyra Atoll</option>
 	</select>
 
+	<br>
+	<ul id="hoverList">
+		<li>Eggs</li>
+		<li>Butter</li>
+		<li>Milk</li>
+		<li>Cheese</li>		
+	</ul>
+	<label id="hover">not hovered</label>
+	
     <script type="text/javascript">
         $(document).ready(function () {
             setTimeout(function () { $("#ajax").html("ajax loaded"); }, 2000)
@@ -176,6 +185,11 @@
                     $('#ajax_button_clicked').text('ajax button clicked');
                 });
              }, 2000)
+
+			 $("#hoverList li").hover(function() {				
+				$("#hover").text("hovered");
+			  }
+			);
         });        
     </script>
 

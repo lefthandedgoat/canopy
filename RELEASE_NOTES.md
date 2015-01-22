@@ -120,3 +120,7 @@
 * Added switchToTab and closeTab [Issue #165](https://github.com/lefthandedgoat/canopy/issues/165)
 * Added hover [Issue #172](https://github.com/lefthandedgoat/canopy/issues/172)
 * Updated to latest Selenium 2.44.0
+
+#### 0.9.19 - January 22 2015
+* Exceptions blowing up 'once' now fixed, thanks ludekcakl! [Issue #178](https://github.com/lefthandedgoat/canopy/issues/178)
+* Improvements to team city reporting enabling parallel reporting, thanks again ludekcakl! [Pull Request #180] (https://github.com/lefthandedgoat/canopy/pull/180)
