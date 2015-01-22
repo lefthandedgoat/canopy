@@ -97,6 +97,9 @@ type ConsoleReporter() =
         member this.skip () = ()
 
 type TeamCityReporter() =
+
+    let flowId = System.Guid.NewGuid().ToString()
+
     let consoleReporter : IReporter = new ConsoleReporter() :> IReporter
     let tcFriendlyMessage (message : string) = 
         let message = message.Replace("|", "||")
@@ -109,6 +112,10 @@ type TeamCityReporter() =
         let message = message.Replace("]", "|]")
         message
 
+    let teamcityReport text =
+        let temcityReport = sprintf "##teamcity[%s flowId='%s']" text flowId
+        consoleReporter.describe temcityReport
+
     interface IReporter with               
         member this.pass () = consoleReporter.pass ()
     
@@ -117,23 +124,22 @@ type TeamCityReporter() =
             if not (Array.isEmpty ss) then
                 image <- String.Format("canopy-image({0})", Convert.ToBase64String(ss))
                 
-            consoleReporter.describe (String.Format("##teamcity[testFailed name='{0}' message='{1}' details='{3}']",
-                (tcFriendlyMessage id),
-                (tcFriendlyMessage ex.Message),
-                (tcFriendlyMessage ex.StackTrace),
-                (tcFriendlyMessage image)))
+            teamcityReport (sprintf "testFailed name='%s' message='%s' details='%s'"
+                                (tcFriendlyMessage id) 
+                                (tcFriendlyMessage ex.Message)    
+                                (tcFriendlyMessage image))
             consoleReporter.fail ex id ss
     
         member this.describe d = 
-            consoleReporter.describe (String.Format("##teamcity[message text='{0}' status='NORMAL']", (tcFriendlyMessage d)))
+            teamcityReport (sprintf "message text='%s' status='NORMAL'" (tcFriendlyMessage d))
             consoleReporter.describe d          
     
         member this.contextStart c = 
-            consoleReporter.describe (String.Format("##teamcity[testSuiteStarted name='{0}']", (tcFriendlyMessage c)))
+            teamcityReport (sprintf "testSuiteStarted name='%s'" (tcFriendlyMessage c))
             consoleReporter.contextStart c
     
         member this.contextEnd c = 
-            consoleReporter.describe (String.Format("##teamcity[testSuiteFinished name='{0}']", (tcFriendlyMessage c)))
+            teamcityReport (sprintf "testSuiteFinished name='%s'" (tcFriendlyMessage c))
             consoleReporter.contextEnd c
     
         member this.summary minutes seconds passed failed = consoleReporter.summary minutes seconds passed failed        
@@ -142,9 +148,9 @@ type TeamCityReporter() =
     
         member this.suggestSelectors selector suggestions = consoleReporter.suggestSelectors selector suggestions
     
-        member this.testStart id = consoleReporter.describe (String.Format("##teamcity[testStarted name='{0}']", (tcFriendlyMessage id)))
+        member this.testStart id = teamcityReport (sprintf "testStarted name='%s'" (tcFriendlyMessage id))
     
-        member this.testEnd id = consoleReporter.describe (String.Format("##teamcity[testFinished name='{0}']", (tcFriendlyMessage id)))
+        member this.testEnd id = teamcityReport (sprintf "testFinished name='%s'" (tcFriendlyMessage id))
 
         member this.quit () = ()
         

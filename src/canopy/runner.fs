@@ -60,7 +60,14 @@ let fail (ex : Exception) id =
             //Fail during error report (likely  OpenQA.Selenium.WebDriverException.WebDriverTimeoutException ). 
             // Don't fail the runner itself, but report it.
             reporter.write (sprintf "Error during fail reporting: %s" (failExc.ToString()))
-            reporter.fail ex id null
+            reporter.fail ex id Array.empty
+
+let failSuite (ex: Exception) (suite : suite) =    
+    let reportFailedTest (ex: Exception) (test : Test) =
+        reporter.testStart test.Id  
+        fail ex test.Id
+        reporter.testEnd test.Id 
+    suite.Tests |> List.iter (fun test -> reportFailedTest ex test)
 
 let run () =
     reporter.suiteBegin()
@@ -68,10 +75,9 @@ let run () =
     stopWatch.Start()      
     
     let runtest (suite : suite) (test : Test) =
-        if failed = false then
-            let desc = if test.Description = null then (String.Format("Test #{0}", test.Number)) else test.Description
+        if failed = false then            
             try 
-                reporter.testStart desc  
+                reporter.testStart test.Id  
                 if System.Object.ReferenceEquals(test.Func, todo) then 
                     reporter.todo ()
                 else if System.Object.ReferenceEquals(test.Func, skipped) then 
@@ -83,8 +89,8 @@ let run () =
                     pass()
             with
                 | ex when failureMessage <> null && failureMessage = ex.Message -> pass()
-                | ex -> fail ex desc
-            reporter.testEnd desc
+                | ex -> fail ex test.Id 
+            reporter.testEnd test.Id 
         
         failureMessage <- null            
 
@@ -104,16 +110,20 @@ let run () =
         if failed = false then
             contextFailed <- false
             if s.Context <> null then reporter.contextStart s.Context
-            s.Once ()
-            if s.Wips.IsEmpty = false then
-                wipTest <- true
-                s.Wips |> List.iter (fun w -> runtest s w)
-                wipTest <- false
-            else if s.Manys.IsEmpty = false then
-                s.Manys |> List.iter (fun m -> runtest s m)
-            else
-                s.Tests |> List.iter (fun t -> runtest s t)
-            s.Lastly ()        
+            try
+                s.Once ()
+                if s.Wips.IsEmpty = false then
+                    wipTest <- true
+                    s.Wips |> List.iter (fun w -> runtest s w)
+                    wipTest <- false
+                else if s.Manys.IsEmpty = false then
+                    s.Manys |> List.iter (fun m -> runtest s m)
+                else
+                    s.Tests |> List.iter (fun t -> runtest s t)
+                s.Lastly ()        
+            with 
+                | ex -> failSuite ex s                    
+
             if contextFailed = true then failedContexts <- failedContexts @ [s.Context]
             if s.Context <> null then reporter.contextEnd s.Context
     )
