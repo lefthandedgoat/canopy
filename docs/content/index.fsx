@@ -24,7 +24,7 @@ canopy is a web testing framework with one goal in mind, make UI testing simple:
 
 * Quick to learn. Even if you've never done UI Automation, and don't know F#. 
 
-* Clean, consise API. 
+* Clean, concise API. 
 
 * MIT License.
    
