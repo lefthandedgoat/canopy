@@ -113,7 +113,6 @@ let highlight cssSelector =
 
 let suggestOtherSelectors cssSelector =     
     if not disableSuggestOtherSelectors then
-        let allElements = browser.FindElements(By.CssSelector("html *")) |> Array.ofSeq
         let classesViaJs = """
             var classes = [];
             var all = document.getElementsByTagName('*');
