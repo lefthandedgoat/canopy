@@ -127,4 +127,7 @@
 
 #### 0.9.20 - February 10 2015
 * Improvements to pin screen for multi monitors
-* Switch FShare.Core nuget packages
+* Switched FSharp.Core nuget packages
+
+#### 0.9.21 - February 10 2015
+* Changed nuget dependency from = to >= for Fsharp.Core

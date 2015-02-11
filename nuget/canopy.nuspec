@@ -12,7 +12,7 @@
     <releaseNotes>@releaseNotes@</releaseNotes>
     <tags>@tags@</tags>
     <dependencies>
-	  <dependency id="FSharp.Core" version="[3.0.2]" />
+	  <dependency id="FSharp.Core" version="3.0.2" />
       <dependency id="Selenium.WebDriver" version="[2.44.0]" />
       <dependency id="Selenium.Support" version="[2.44.0]" />
       <dependency id="SizSelCsZzz" version="[0.3.36.0]" />
