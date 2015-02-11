@@ -124,3 +124,7 @@
 #### 0.9.19 - January 22 2015
 * Exceptions blowing up 'once' now fixed, thanks ludekcakl! [Issue #178](https://github.com/lefthandedgoat/canopy/issues/178)
 * Improvements to team city reporting enabling parallel reporting, thanks again ludekcakl! [Pull Request #180] (https://github.com/lefthandedgoat/canopy/pull/180)
+
+#### 0.9.20 - February 10 2015
+* Improvements to pin screen for multi monitors
+* Switch FShare.Core nuget packages
