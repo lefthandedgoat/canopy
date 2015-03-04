@@ -131,3 +131,6 @@
 
 #### 0.9.21 - February 10 2015
 * Changed nuget dependency from = to >= for Fsharp.Core
+
+#### 0.9.22 - March 4 2015
+* Updated to Selenium 2.45, thanks @pottereric

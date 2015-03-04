@@ -13,8 +13,8 @@
     <tags>@tags@</tags>
     <dependencies>
 	  <dependency id="FSharp.Core" version="3.0.2" />
-      <dependency id="Selenium.WebDriver" version="[2.44.0]" />
-      <dependency id="Selenium.Support" version="[2.44.0]" />
+      <dependency id="Selenium.WebDriver" version="[2.45.0]" />
+      <dependency id="Selenium.Support" version="[2.45.0]" />
       <dependency id="SizSelCsZzz" version="[0.3.36.0]" />
     </dependencies>
   </metadata>
