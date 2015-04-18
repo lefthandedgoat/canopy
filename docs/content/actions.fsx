@@ -284,6 +284,16 @@ Drag on item to another.
 drag ".todo" ".inprogress"
 
 (**
+hover
+----------------------
+Hover over an element.
+*)
+url "http://lefthandedgoat.github.io/canopy/testpages/"
+"#hover" == "not hovered"
+hover "Milk"
+"#hover" == "hovered"
+
+(**
 pin 
 ---
 Pin a browser to the left, right, or fullscreen (any browser you start is pinned right automatically). 
