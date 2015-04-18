@@ -133,3 +133,26 @@ let run () =
     stopWatch.Stop()    
     reporter.summary stopWatch.Elapsed.Minutes stopWatch.Elapsed.Seconds passedCount failedCount 
     reporter.suiteEnd()
+
+let runFor browsers =
+    let currentSuites = suites
+    suites <- [new suite()]
+    match box browsers with
+        | :? (types.BrowserStartMode list) as browsers -> 
+            browsers
+            |> List.iter (fun browser ->
+                toString browser
+                |> sprintf "Running tests with %s browser"
+                |> context
+                once (fun _ -> start browser)
+                suites <- suites @ currentSuites)
+        | :? (IWebDriver list) as browsers ->
+            browsers
+            |> List.iter (fun browser ->
+                browser.ToString()
+                |> sprintf "Running tests with %s browser"
+                |> context
+                once (fun _ -> switchTo browser)
+                suites <- suites @ currentSuites)
+        | _ -> raise <| Exception "I dont know what you have given me"
+    run ()

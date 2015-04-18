@@ -2,6 +2,7 @@ module canopy.types
 
 open System
 open OpenQA.Selenium
+open Microsoft.FSharp.Reflection
 
 type CanopyException(message) = inherit Exception(message)
 type CanopyReadOnlyException(message) = inherit CanopyException(message)
@@ -48,6 +49,10 @@ type BrowserStartMode =
     | PhantomJS
     | PhantomJSProxyNone
     | Remote of string * ICapabilities
+  
+let toString (x:'a) = 
+    match FSharpValue.GetUnionFields(x, typeof<'a>) with
+    | case, _ -> case.Name
 
 type Test (description: string, func : (unit -> unit), number : int) =
     member x.Description = description
