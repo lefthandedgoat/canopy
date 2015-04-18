@@ -584,6 +584,26 @@ Read more about Option types <a href="http://en.wikibooks.org/wiki/F_Sharp_Progr
 </tr>
 </table>
 
+<h2>hover</h2>
+
+<p>Hover over an element.</p>
+
+<table class="pre"><tr><td class="lines"><pre class="fssnip">
+<span class="l">1: </span>
+<span class="l">2: </span>
+<span class="l">3: </span>
+<span class="l">4: </span>
+</pre>
+</td>
+<td class="snippet"><pre class="fssnip">
+<span onmouseout="hideTip(event, 'fs29', 124)" onmouseover="showTip(event, 'fs29', 124)" class="i">url</span> <span class="s">&quot;</span><span class="s">http</span><span class="s">:</span><span class="s">/</span><span class="s">/</span><span class="s">lefthandedgoat</span><span class="s">.</span><span class="s">github</span><span class="s">.</span><span class="s">io</span><span class="s">/</span><span class="s">canopy</span><span class="s">/</span><span class="s">testpages</span><span class="s">/</span><span class="s">&quot;</span>
+<span class="s">&quot;</span><span class="s">#</span><span class="s">hover</span><span class="s">&quot;</span> <span class="o">==</span> <span class="s">&quot;</span><span class="s">not</span><span class="s"> </span><span class="s">hovered</span><span class="s">&quot;</span>
+<span onmouseout="hideTip(event, 'fs77', 125)" onmouseover="showTip(event, 'fs77', 125)" class="i">hover</span> <span class="s">&quot;</span><span class="s">Milk</span><span class="s">&quot;</span>
+<span class="s">&quot;</span><span class="s">#</span><span class="s">hover</span><span class="s">&quot;</span> <span class="o">==</span> <span class="s">&quot;</span><span class="s">hovered</span><span class="s">&quot;</span></pre>
+</td>
+</tr>
+</table>
+
 <h2>pin</h2>
 
 <p>Pin a browser to the left, right, or fullscreen (any browser you start is pinned right automatically).</p>
@@ -595,9 +615,9 @@ Read more about Option types <a href="http://en.wikibooks.org/wiki/F_Sharp_Progr
 </pre>
 </td>
 <td class="snippet"><pre class="fssnip">
-<span onmouseout="hideTip(event, 'fs77', 124)" onmouseover="showTip(event, 'fs77', 124)" class="i">pin</span> <span onmouseout="hideTip(event, 'fs78', 125)" onmouseover="showTip(event, 'fs78', 125)" class="i">Left</span>
-<span onmouseout="hideTip(event, 'fs77', 126)" onmouseover="showTip(event, 'fs77', 126)" class="i">pin</span> <span onmouseout="hideTip(event, 'fs79', 127)" onmouseover="showTip(event, 'fs79', 127)" class="i">Right</span>
-<span onmouseout="hideTip(event, 'fs77', 128)" onmouseover="showTip(event, 'fs77', 128)" class="i">pin</span> <span onmouseout="hideTip(event, 'fs80', 129)" onmouseover="showTip(event, 'fs80', 129)" class="i">FullScreen</span> </pre>
+<span onmouseout="hideTip(event, 'fs78', 126)" onmouseover="showTip(event, 'fs78', 126)" class="i">pin</span> <span onmouseout="hideTip(event, 'fs79', 127)" onmouseover="showTip(event, 'fs79', 127)" class="i">Left</span>
+<span onmouseout="hideTip(event, 'fs78', 128)" onmouseover="showTip(event, 'fs78', 128)" class="i">pin</span> <span onmouseout="hideTip(event, 'fs80', 129)" onmouseover="showTip(event, 'fs80', 129)" class="i">Right</span>
+<span onmouseout="hideTip(event, 'fs78', 130)" onmouseover="showTip(event, 'fs78', 130)" class="i">pin</span> <span onmouseout="hideTip(event, 'fs81', 131)" onmouseover="showTip(event, 'fs81', 131)" class="i">FullScreen</span> </pre>
 </td>
 </tr>
 </table>
@@ -618,14 +638,14 @@ Read more about Option types <a href="http://en.wikibooks.org/wiki/F_Sharp_Progr
 </pre>
 </td>
 <td class="snippet"><pre class="fssnip">
-<span onmouseout="hideTip(event, 'fs5', 130)" onmouseover="showTip(event, 'fs5', 130)" class="i">start</span> <span onmouseout="hideTip(event, 'fs7', 131)" onmouseover="showTip(event, 'fs7', 131)" class="i">chrome</span>
-<span class="k">let</span> <span onmouseout="hideTip(event, 'fs81', 132)" onmouseover="showTip(event, 'fs81', 132)" class="i">browser1</span> <span class="o">=</span> <span onmouseout="hideTip(event, 'fs10', 133)" onmouseover="showTip(event, 'fs10', 133)" class="i">browser</span>
-<span onmouseout="hideTip(event, 'fs5', 134)" onmouseover="showTip(event, 'fs5', 134)" class="i">start</span> <span onmouseout="hideTip(event, 'fs7', 135)" onmouseover="showTip(event, 'fs7', 135)" class="i">chrome</span>
-<span class="k">let</span> <span onmouseout="hideTip(event, 'fs82', 136)" onmouseover="showTip(event, 'fs82', 136)" class="i">browser2</span> <span class="o">=</span> <span onmouseout="hideTip(event, 'fs10', 137)" onmouseover="showTip(event, 'fs10', 137)" class="i">browser</span>
-<span onmouseout="hideTip(event, 'fs5', 138)" onmouseover="showTip(event, 'fs5', 138)" class="i">start</span> <span onmouseout="hideTip(event, 'fs7', 139)" onmouseover="showTip(event, 'fs7', 139)" class="i">chrome</span>
-<span class="k">let</span> <span onmouseout="hideTip(event, 'fs83', 140)" onmouseover="showTip(event, 'fs83', 140)" class="i">browser3</span> <span class="o">=</span> <span onmouseout="hideTip(event, 'fs10', 141)" onmouseover="showTip(event, 'fs10', 141)" class="i">browser</span>
+<span onmouseout="hideTip(event, 'fs5', 132)" onmouseover="showTip(event, 'fs5', 132)" class="i">start</span> <span onmouseout="hideTip(event, 'fs7', 133)" onmouseover="showTip(event, 'fs7', 133)" class="i">chrome</span>
+<span class="k">let</span> <span onmouseout="hideTip(event, 'fs82', 134)" onmouseover="showTip(event, 'fs82', 134)" class="i">browser1</span> <span class="o">=</span> <span onmouseout="hideTip(event, 'fs10', 135)" onmouseover="showTip(event, 'fs10', 135)" class="i">browser</span>
+<span onmouseout="hideTip(event, 'fs5', 136)" onmouseover="showTip(event, 'fs5', 136)" class="i">start</span> <span onmouseout="hideTip(event, 'fs7', 137)" onmouseover="showTip(event, 'fs7', 137)" class="i">chrome</span>
+<span class="k">let</span> <span onmouseout="hideTip(event, 'fs83', 138)" onmouseover="showTip(event, 'fs83', 138)" class="i">browser2</span> <span class="o">=</span> <span onmouseout="hideTip(event, 'fs10', 139)" onmouseover="showTip(event, 'fs10', 139)" class="i">browser</span>
+<span onmouseout="hideTip(event, 'fs5', 140)" onmouseover="showTip(event, 'fs5', 140)" class="i">start</span> <span onmouseout="hideTip(event, 'fs7', 141)" onmouseover="showTip(event, 'fs7', 141)" class="i">chrome</span>
+<span class="k">let</span> <span onmouseout="hideTip(event, 'fs84', 142)" onmouseover="showTip(event, 'fs84', 142)" class="i">browser3</span> <span class="o">=</span> <span onmouseout="hideTip(event, 'fs10', 143)" onmouseover="showTip(event, 'fs10', 143)" class="i">browser</span>
 
-<span onmouseout="hideTip(event, 'fs84', 142)" onmouseover="showTip(event, 'fs84', 142)" class="i">tile</span> [<span onmouseout="hideTip(event, 'fs81', 143)" onmouseover="showTip(event, 'fs81', 143)" class="i">browser1</span>; <span onmouseout="hideTip(event, 'fs82', 144)" onmouseover="showTip(event, 'fs82', 144)" class="i">browser2</span>; <span onmouseout="hideTip(event, 'fs83', 145)" onmouseover="showTip(event, 'fs83', 145)" class="i">browser3</span>]</pre>
+<span onmouseout="hideTip(event, 'fs85', 144)" onmouseover="showTip(event, 'fs85', 144)" class="i">tile</span> [<span onmouseout="hideTip(event, 'fs82', 145)" onmouseover="showTip(event, 'fs82', 145)" class="i">browser1</span>; <span onmouseout="hideTip(event, 'fs83', 146)" onmouseover="showTip(event, 'fs83', 146)" class="i">browser2</span>; <span onmouseout="hideTip(event, 'fs84', 147)" onmouseover="showTip(event, 'fs84', 147)" class="i">browser3</span>]</pre>
 </td>
 </tr>
 </table>
@@ -643,9 +663,9 @@ Read more about Option types <a href="http://en.wikibooks.org/wiki/F_Sharp_Progr
 </td>
 <td class="snippet"><pre class="fssnip">
 <span class="c">//quit current</span>
-<span onmouseout="hideTip(event, 'fs85', 146)" onmouseover="showTip(event, 'fs85', 146)" class="i">quit</span> ()
+<span onmouseout="hideTip(event, 'fs86', 148)" onmouseover="showTip(event, 'fs86', 148)" class="i">quit</span> ()
 <span class="c">//quit specific</span>
-<span onmouseout="hideTip(event, 'fs85', 147)" onmouseover="showTip(event, 'fs85', 147)" class="i">quit</span> <span onmouseout="hideTip(event, 'fs81', 148)" onmouseover="showTip(event, 'fs81', 148)" class="i">browser1</span></pre>
+<span onmouseout="hideTip(event, 'fs86', 149)" onmouseover="showTip(event, 'fs86', 149)" class="i">quit</span> <span onmouseout="hideTip(event, 'fs82', 150)" onmouseover="showTip(event, 'fs82', 150)" class="i">browser1</span></pre>
 </td>
 </tr>
 </table>
@@ -659,7 +679,7 @@ Read more about Option types <a href="http://en.wikibooks.org/wiki/F_Sharp_Progr
 </pre>
 </td>
 <td class="snippet"><pre class="fssnip">
-<span class="k">let</span> <span onmouseout="hideTip(event, 'fs86', 149)" onmouseover="showTip(event, 'fs86', 149)" class="i">u</span> <span class="o">=</span> <span onmouseout="hideTip(event, 'fs87', 150)" onmouseover="showTip(event, 'fs87', 150)" class="i">currentUrl</span> ()</pre>
+<span class="k">let</span> <span onmouseout="hideTip(event, 'fs87', 151)" onmouseover="showTip(event, 'fs87', 151)" class="i">u</span> <span class="o">=</span> <span onmouseout="hideTip(event, 'fs88', 152)" onmouseover="showTip(event, 'fs88', 152)" class="i">currentUrl</span> ()</pre>
 </td>
 </tr>
 </table>
@@ -675,7 +695,7 @@ Read more about Option types <a href="http://en.wikibooks.org/wiki/F_Sharp_Progr
 </td>
 <td class="snippet"><pre class="fssnip">
 <span class="o">!^</span> <span class="s">&quot;</span><span class="s">http</span><span class="s">:</span><span class="s">/</span><span class="s">/</span><span class="s">www</span><span class="s">.</span><span class="s">google</span><span class="s">.</span><span class="s">com</span><span class="s">&quot;</span>
-<span onmouseout="hideTip(event, 'fs29', 151)" onmouseover="showTip(event, 'fs29', 151)" class="i">url</span> <span class="s">&quot;</span><span class="s">http</span><span class="s">:</span><span class="s">/</span><span class="s">/</span><span class="s">www</span><span class="s">.</span><span class="s">google</span><span class="s">.</span><span class="s">com</span><span class="s">&quot;</span></pre>
+<span onmouseout="hideTip(event, 'fs29', 153)" onmouseover="showTip(event, 'fs29', 153)" class="i">url</span> <span class="s">&quot;</span><span class="s">http</span><span class="s">:</span><span class="s">/</span><span class="s">/</span><span class="s">www</span><span class="s">.</span><span class="s">google</span><span class="s">.</span><span class="s">com</span><span class="s">&quot;</span></pre>
 </td>
 </tr>
 </table>
@@ -689,7 +709,7 @@ Read more about Option types <a href="http://en.wikibooks.org/wiki/F_Sharp_Progr
 </pre>
 </td>
 <td class="snippet"><pre class="fssnip">
-<span class="k">let</span> <span onmouseout="hideTip(event, 'fs88', 152)" onmouseover="showTip(event, 'fs88', 152)" class="i">theTitle</span> <span class="o">=</span> <span onmouseout="hideTip(event, 'fs89', 153)" onmouseover="showTip(event, 'fs89', 153)" class="i">title</span> ()</pre>
+<span class="k">let</span> <span onmouseout="hideTip(event, 'fs89', 154)" onmouseover="showTip(event, 'fs89', 154)" class="i">theTitle</span> <span class="o">=</span> <span onmouseout="hideTip(event, 'fs90', 155)" onmouseover="showTip(event, 'fs90', 155)" class="i">title</span> ()</pre>
 </td>
 </tr>
 </table>
@@ -703,7 +723,7 @@ Read more about Option types <a href="http://en.wikibooks.org/wiki/F_Sharp_Progr
 </pre>
 </td>
 <td class="snippet"><pre class="fssnip">
-<span onmouseout="hideTip(event, 'fs90', 154)" onmouseover="showTip(event, 'fs90', 154)" class="i">reload</span> ()</pre>
+<span onmouseout="hideTip(event, 'fs91', 156)" onmouseover="showTip(event, 'fs91', 156)" class="i">reload</span> ()</pre>
 </td>
 </tr>
 </table>
@@ -784,20 +804,21 @@ Read more about Option types <a href="http://en.wikibooks.org/wiki/F_Sharp_Progr
 <div class="tip" id="fs74">val check : item:&#39;a -&gt; unit<br /><br />Full name: canopy.core.check</div>
 <div class="tip" id="fs75">val uncheck : item:&#39;a -&gt; unit<br /><br />Full name: canopy.core.uncheck</div>
 <div class="tip" id="fs76">val drag : cssSelectorA:string -&gt; cssSelectorB:string -&gt; unit<br /><br />Full name: canopy.core.drag</div>
-<div class="tip" id="fs77">val pin : direction:direction -&gt; unit<br /><br />Full name: canopy.core.pin</div>
-<div class="tip" id="fs78">union case direction.Left: direction</div>
-<div class="tip" id="fs79">union case direction.Right: direction</div>
-<div class="tip" id="fs80">union case direction.FullScreen: direction</div>
-<div class="tip" id="fs81">val browser1 : OpenQA.Selenium.IWebDriver<br /><br />Full name: Actions.browser1</div>
-<div class="tip" id="fs82">val browser2 : OpenQA.Selenium.IWebDriver<br /><br />Full name: Actions.browser2</div>
-<div class="tip" id="fs83">val browser3 : OpenQA.Selenium.IWebDriver<br /><br />Full name: Actions.browser3</div>
-<div class="tip" id="fs84">val tile : browsers:OpenQA.Selenium.IWebDriver list -&gt; unit<br /><br />Full name: canopy.core.tile</div>
-<div class="tip" id="fs85">val quit : browser:&#39;a -&gt; unit<br /><br />Full name: canopy.core.quit</div>
-<div class="tip" id="fs86">val u : string<br /><br />Full name: Actions.u</div>
-<div class="tip" id="fs87">val currentUrl : unit -&gt; string<br /><br />Full name: canopy.core.currentUrl</div>
-<div class="tip" id="fs88">val theTitle : string<br /><br />Full name: Actions.theTitle</div>
-<div class="tip" id="fs89">val title : unit -&gt; string<br /><br />Full name: canopy.core.title</div>
-<div class="tip" id="fs90">val reload : (unit -&gt; unit)<br /><br />Full name: canopy.core.reload</div>
+<div class="tip" id="fs77">val hover : selector:string -&gt; unit<br /><br />Full name: canopy.core.hover</div>
+<div class="tip" id="fs78">val pin : direction:direction -&gt; unit<br /><br />Full name: canopy.core.pin</div>
+<div class="tip" id="fs79">union case direction.Left: direction</div>
+<div class="tip" id="fs80">union case direction.Right: direction</div>
+<div class="tip" id="fs81">union case direction.FullScreen: direction</div>
+<div class="tip" id="fs82">val browser1 : OpenQA.Selenium.IWebDriver<br /><br />Full name: Actions.browser1</div>
+<div class="tip" id="fs83">val browser2 : OpenQA.Selenium.IWebDriver<br /><br />Full name: Actions.browser2</div>
+<div class="tip" id="fs84">val browser3 : OpenQA.Selenium.IWebDriver<br /><br />Full name: Actions.browser3</div>
+<div class="tip" id="fs85">val tile : browsers:OpenQA.Selenium.IWebDriver list -&gt; unit<br /><br />Full name: canopy.core.tile</div>
+<div class="tip" id="fs86">val quit : browser:&#39;a -&gt; unit<br /><br />Full name: canopy.core.quit</div>
+<div class="tip" id="fs87">val u : string<br /><br />Full name: Actions.u</div>
+<div class="tip" id="fs88">val currentUrl : unit -&gt; string<br /><br />Full name: canopy.core.currentUrl</div>
+<div class="tip" id="fs89">val theTitle : string<br /><br />Full name: Actions.theTitle</div>
+<div class="tip" id="fs90">val title : unit -&gt; string<br /><br />Full name: canopy.core.title</div>
+<div class="tip" id="fs91">val reload : (unit -&gt; unit)<br /><br />Full name: canopy.core.reload</div>
 
         </div>
         <div class="span3">
