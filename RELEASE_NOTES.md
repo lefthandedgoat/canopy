@@ -134,3 +134,7 @@
 
 #### 0.9.22 - March 4 2015
 * Updated to Selenium 2.45, thanks @pottereric
+
+#### 0.9.23 - May 15 2015
+* Added &&&&& (always) tests which will run in both normal mode and wip mode [Issue #195](https://github.com/lefthandedgoat/canopy/issues/195)
+* Added runFor which lets you run the same set of tests for multiple browsers [Issue #190](https://github.com/lefthandedgoat/canopy/issues/190)
