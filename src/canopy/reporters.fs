@@ -185,6 +185,7 @@ type LiveHtmlReporter(browser : BrowserStartMode, driverPath : string) =
         | ChromeWithUserAgent userAgent -> raise(System.Exception("Sorry ChromeWithUserAgent can't be used for LiveHtmlReporter"))
         | FirefoxWithUserAgent userAgent -> raise(System.Exception("Sorry FirefoxWithUserAgent can't be used for LiveHtmlReporter"))
         | PhantomJS | PhantomJSProxyNone -> raise(System.Exception("Sorry PhantomJS can't be used for LiveHtmlReporter"))
+        | Remote(_,_) -> raise(System.Exception("Sorry Remote can't be used for LiveHtmlReporter"))
                 
     let pin () =   
         let h = System.Windows.Forms.Screen.PrimaryScreen.WorkingArea.Height;
