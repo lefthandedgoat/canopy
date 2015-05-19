@@ -62,6 +62,7 @@ type Test (description: string, func : (unit -> unit), number : int) =
 
 type suite () = class
     member val Context : string = null with get, set
+    member val TotalTestsCount : int = 0 with get, set
     member val Once = fun () -> () with get, set
     member val Before = fun () -> () with get, set
     member val After = fun () -> () with get, set
@@ -69,5 +70,6 @@ type suite () = class
     member val Tests : Test list = [] with get, set
     member val Wips : Test list = [] with get, set
     member val Manys : Test list = [] with get, set
+    member val Always : Test list = [] with get, set
     member val IsParallel = false with get, set
 end

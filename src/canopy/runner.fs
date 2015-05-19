@@ -27,16 +27,29 @@ let context c =
         let s = new suite()
         s.Context <- c
         suites <- suites @ [s]
-
-let ( &&& ) description f = (last suites).Tests <- (last suites).Tests @ [Test(description, f, (last suites).Tests.Length + 1)]
+let private incrementLastTestSuite () =
+    let lastSuite = last suites
+    lastSuite.TotalTestsCount <- lastSuite.TotalTestsCount + 1
+    lastSuite
+let ( &&& ) description f = 
+    let lastSuite = incrementLastTestSuite()
+    lastSuite.Tests <- lastSuite.Tests @ [Test(description, f, lastSuite.TotalTestsCount)]
 let test f = null &&& f
 let ntest description f = description &&& f
-let ( &&&& ) description f = (last suites).Wips <- (last suites).Wips @ [Test(description, f, (last suites).Wips.Length + 1)]
+let ( &&&& ) description f = 
+    let lastSuite = incrementLastTestSuite()
+    lastSuite.Wips <- lastSuite.Wips @ [Test(description, f, lastSuite.TotalTestsCount)]
 let wip f = null &&&& f
-let many count f = [1 .. count] |> List.iter (fun _ -> (last suites).Manys <- (last suites).Manys @ [Test(null, f, (last suites).Manys.Length + 1)])
-let ( &&! ) description f = (last suites).Tests <- (last suites).Tests @ [Test(description, skipped, (last suites).Tests.Length + 1)]
+let many count f = 
+    let lastSuite = incrementLastTestSuite()
+    [1 .. count] |> List.iter (fun _ -> lastSuite.Manys <- lastSuite.Manys @ [Test(null, f, lastSuite.TotalTestsCount)])
+let ( &&! ) description f = 
+    let lastSuite = incrementLastTestSuite()
+    lastSuite.Tests <- lastSuite.Tests @ [Test(description, skipped, lastSuite.TotalTestsCount)]
 let xtest f = null &&! f
-
+let ( &&&&& ) description f = 
+    let lastSuite = incrementLastTestSuite()
+    lastSuite.Always <- lastSuite.Always @ [Test(description, f, lastSuite.TotalTestsCount)]
 let mutable passedCount = 0
 let mutable failedCount = 0
 let mutable contextFailed = false
@@ -114,12 +127,14 @@ let run () =
                 s.Once ()
                 if s.Wips.IsEmpty = false then
                     wipTest <- true
-                    s.Wips |> List.iter (fun w -> runtest s w)
+                    let tests = s.Wips @ s.Always |> List.sortBy (fun t -> t.Number)
+                    tests |> List.iter (fun w -> runtest s w)
                     wipTest <- false
                 else if s.Manys.IsEmpty = false then
                     s.Manys |> List.iter (fun m -> runtest s m)
                 else
-                    s.Tests |> List.iter (fun t -> runtest s t)
+                    let tests = s.Tests @ s.Always |> List.sortBy (fun t -> t.Number)
+                    tests |> List.iter (fun t -> runtest s t)
                 s.Lastly ()        
             with 
                 | ex -> failSuite ex s                    
