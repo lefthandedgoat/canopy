@@ -18,6 +18,9 @@ reporter <- new LiveHtmlReporter(Chrome, configuration.chromeDir) :> IReporter
 
 failFast := true
 
+file1.all()
+file2.all()
+
 context "context1"
 once (fun _ -> Console.WriteLine "once")
 before (fun _ -> Console.WriteLine "before")

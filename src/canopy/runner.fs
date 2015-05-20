@@ -116,7 +116,7 @@ let run () =
 
     //run only wips if there are any
     if suites |> List.exists (fun s -> s.Wips.IsEmpty = false) then
-        suites <- suites |> List.filter (fun s -> s.Wips.IsEmpty = false)
+        suites <- suites |> List.filter (fun s -> s.Wips.IsEmpty = false || s.Always.IsEmpty = false)
 
     suites
     |> List.iter (fun s ->
