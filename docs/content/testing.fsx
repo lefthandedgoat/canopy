@@ -99,7 +99,7 @@ ntest "go somewhere, do some stuff, assert" (fun _ ->
 Used for debugging. Test runs slower and highlights the elements that it is interacting with to help debug. 
 If one test is marked wip, only wip tests are ran. Other tests are skipped. 
 *)
-//this is test is run slow and only with other tests marked as wip
+//this test is run slow and only with other tests marked as wip
 "go somewhere, do some stuff, assert" &&&& fun _ ->
     //go somewhere
     //interact with page
@@ -131,6 +131,19 @@ xtest (fun _ ->
     //assert
     ()
 )
+
+(**
+&&&&& (always run, in both standard and wip modes) 
+---------------------------------------
+Test will always be run.  If some tests are marked work in progress, tests marked as always will also run.  
+The test will run slow with wip tests, but run at normal speed when there are no wip tests.
+*)
+//this test is run slow with wip test and regular speed with standard tests, test will always run.
+"go somewhere, do some stuff, assert" &&&&& fun _ ->
+    //go somewhere
+    //interact with page
+    //assert
+    ()
 
 (**
 many 
