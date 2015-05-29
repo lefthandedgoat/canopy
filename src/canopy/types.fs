@@ -66,6 +66,7 @@ type suite () = class
     member val Once = fun () -> () with get, set
     member val Before = fun () -> () with get, set
     member val After = fun () -> () with get, set
+    member val AfterFail = fun () -> () with get, set
     member val Lastly = fun () -> () with get, set
     member val Tests : Test list = [] with get, set
     member val Wips : Test list = [] with get, set
