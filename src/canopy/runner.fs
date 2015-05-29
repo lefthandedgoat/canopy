@@ -96,9 +96,11 @@ let run () =
                 else if System.Object.ReferenceEquals(test.Func, skipped) then 
                     reporter.skip ()
                 else
-                    suite.Before ()
-                    test.Func ()
-                    suite.After ()
+                    try
+                        suite.Before ()
+                        test.Func ()
+                    finally
+                        suite.After ()
                     pass()
             with
                 | ex when failureMessage <> null && failureMessage = ex.Message -> pass()
