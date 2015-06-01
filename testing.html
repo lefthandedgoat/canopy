@@ -232,7 +232,7 @@ If one test is marked wip, only wip tests are ran. Other tests are skipped.</p>
 </pre>
 </td>
 <td class="snippet"><pre class="fssnip">
-<span class="c">//this is test is run slow and only with other tests marked as wip</span>
+<span class="c">//this test is run slow and only with other tests marked as wip</span>
 <span class="s">&quot;</span><span class="s">go</span><span class="s"> </span><span class="s">somewhere</span><span class="s">,</span><span class="s"> </span><span class="s">do</span><span class="s"> </span><span class="s">some</span><span class="s"> </span><span class="s">stuff</span><span class="s">,</span><span class="s"> </span><span class="s">assert</span><span class="s">&quot;</span> <span class="o">&amp;&amp;&amp;&amp;</span> <span class="k">fun</span> _ <span class="k">-&gt;</span>
     <span class="c">//go somewhere</span>
     <span class="c">//interact with page</span>
@@ -283,6 +283,31 @@ If one test is marked wip, only wip tests are ran. Other tests are skipped.</p>
     <span class="c">//assert</span>
     ()
 )</pre>
+</td>
+</tr>
+</table>
+
+<h2>&amp;&amp;&amp;&amp;&amp; (always run, in both standard and wip modes)</h2>
+
+<p>Test will always be run.  If some tests are marked work in progress, tests marked as always will also run.<br />
+The test will run slow with wip tests, but run at normal speed when there are no wip tests.</p>
+
+<table class="pre"><tr><td class="lines"><pre class="fssnip">
+<span class="l">1: </span>
+<span class="l">2: </span>
+<span class="l">3: </span>
+<span class="l">4: </span>
+<span class="l">5: </span>
+<span class="l">6: </span>
+</pre>
+</td>
+<td class="snippet"><pre class="fssnip">
+<span class="c">//this test is run slow with wip test and regular speed with standard tests, test will always run.</span>
+<span class="s">&quot;</span><span class="s">go</span><span class="s"> </span><span class="s">somewhere</span><span class="s">,</span><span class="s"> </span><span class="s">do</span><span class="s"> </span><span class="s">some</span><span class="s"> </span><span class="s">stuff</span><span class="s">,</span><span class="s"> </span><span class="s">assert</span><span class="s">&quot;</span> <span class="o">&amp;&amp;&amp;&amp;&amp;</span> <span class="k">fun</span> _ <span class="k">-&gt;</span>
+    <span class="c">//go somewhere</span>
+    <span class="c">//interact with page</span>
+    <span class="c">//assert</span>
+    ()</pre>
 </td>
 </tr>
 </table>
