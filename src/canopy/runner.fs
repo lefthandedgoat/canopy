@@ -19,6 +19,7 @@ let mutable skipped = fun () -> ()
 let once f = (last suites).Once <- f
 let before f = (last suites).Before <- f
 let after f = (last suites).After <- f
+let afterFail f = (last suites).AfterFail <- f
 let lastly f = (last suites).Lastly <- f
 let context c = 
     if (last suites).Context = null then 
@@ -81,6 +82,7 @@ let failSuite (ex: Exception) (suite : suite) =
         fail ex test.Id
         reporter.testEnd test.Id 
     suite.Tests |> List.iter (fun test -> reportFailedTest ex test)
+    suite.AfterFail ()
 
 let run () =
     reporter.suiteBegin()

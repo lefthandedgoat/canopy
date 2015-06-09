@@ -25,6 +25,7 @@ context "context1"
 once (fun _ -> Console.WriteLine "once")
 before (fun _ -> Console.WriteLine "before")
 after (fun _ -> Console.WriteLine "after")
+afterFail (fun _ -> Console.WriteLine "after Fail")
 lastly (fun _ -> Console.WriteLine "lastly")
  
 let testpage = "http://lefthandedgoat.github.io/canopy/testpages/" 
