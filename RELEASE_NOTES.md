@@ -142,5 +142,5 @@
 #### 0.9.24 - May 19 2015
 * Fixed bug related to new &&&&& (always) operator [Issue #195](https://github.com/lefthandedgoat/canopy/issues/195)
 
-#### 0.9.25 - June 1 2015
+#### 0.9.26 - June 1 2015
 * Fixed bug where after wouldn't run following a failed test [Issue #197](https://github.com/lefthandedgoat/canopy/issues/197)
