@@ -148,3 +148,6 @@
 #### 0.9.27 - June 15 2015
 * Improved Html reporter to have stack trace, error message and url of failing page [Issue #202](https://github.com/lefthandedgoat/canopy/issues/202)
 * Updated to Selenium 2.46
+
+#### 0.9.28 - June 16 2015
+* Fix broken link to html reporter introduced in 0.9.27
