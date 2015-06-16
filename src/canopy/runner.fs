@@ -78,7 +78,7 @@ let fail (ex : Exception) id =
 let failSuite (ex: Exception) (suite : suite) =    
     let reportFailedTest (ex: Exception) (test : Test) =
         reporter.testStart test.Id  
-        fail ex test.Id
+        fail ex test.Id browser.Url
         reporter.testEnd test.Id 
     suite.Tests |> List.iter (fun test -> reportFailedTest ex test)
 
@@ -104,7 +104,7 @@ let run () =
                     pass()
             with
                 | ex when failureMessage <> null && failureMessage = ex.Message -> pass()
-                | ex -> fail ex test.Id 
+                | ex -> fail ex test.Id browser.Url
             reporter.testEnd test.Id 
         
         failureMessage <- null            

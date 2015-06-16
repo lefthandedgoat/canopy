@@ -7,7 +7,7 @@ open types
 type IReporter =
    abstract member testStart : string -> unit
    abstract member pass : unit -> unit
-   abstract member fail : Exception -> string -> byte [] -> unit
+   abstract member fail : Exception -> string -> byte [] -> string -> unit
    abstract member todo : unit -> unit
    abstract member skip : unit -> unit
    abstract member testEnd : string -> unit
@@ -29,11 +29,13 @@ type ConsoleReporter() =
             Console.WriteLine("Passed");
             Console.ResetColor()
 
-        member this.fail ex id ss = 
+        member this.fail ex id ss url = 
             Console.ForegroundColor <- ConsoleColor.Red
             Console.WriteLine("Error: ");
             Console.ResetColor()
             Console.WriteLine(ex.Message);
+            Console.Write("Url: ");
+            Console.WriteLine(url);
             Console.WriteLine("Stack: ");
             ex.StackTrace.Split([| "\r\n"; "\n" |], StringSplitOptions.None)
             |> Array.iter (fun trace -> 
@@ -119,7 +121,7 @@ type TeamCityReporter() =
     interface IReporter with               
         member this.pass () = consoleReporter.pass ()
     
-        member this.fail ex id ss =
+        member this.fail ex id ss url =
             let mutable image = ""
             if not (Array.isEmpty ss) then
                 image <- String.Format("canopy-image({0})", Convert.ToBase64String(ss))
@@ -128,7 +130,7 @@ type TeamCityReporter() =
                                 (tcFriendlyMessage id) 
                                 (tcFriendlyMessage ex.Message)    
                                 (tcFriendlyMessage image))
-            consoleReporter.fail ex id ss
+            consoleReporter.fail ex id ss url
     
         member this.describe d = 
             teamcityReport (sprintf "message text='%s' status='NORMAL'" (tcFriendlyMessage d))
@@ -207,7 +209,7 @@ type LiveHtmlReporter(browser : BrowserStartMode, driverPath : string) =
         with get () = _browser
 
     member val reportPath = None with get, set
-    member val reportTemplateUrl = @"http://lefthandedgoat.github.com/canopy/reporttemplate.html" with get, set
+    member val reportTemplateUrl = @"file:///C:/projects/canopy/docs/files/reporttemplate.html" with get, set
     member this.js script = (_browser :?> IJavaScriptExecutor).ExecuteScript(script)
     member this.reportHtml () = (this.js "return $('*').html();").ToString()
     member private this.swallowedJS script = try (_browser :?> IJavaScriptExecutor).ExecuteScript(script) |> ignore with | ex -> ()
@@ -222,9 +224,13 @@ type LiveHtmlReporter(browser : BrowserStartMode, driverPath : string) =
             this.swallowedJS (sprintf "addToContext('%s', 'Pass', '%s', '%s');" context test "")
             consoleReporter.pass ()
 
-        member this.fail ex id ss =
+        member this.fail ex id ss url =
             this.swallowedJS (sprintf "addToContext('%s', 'Fail', '%s', '%s');" context test (Convert.ToBase64String(ss)))
-            consoleReporter.fail ex id ss
+            let stack = sprintf "%s%s%s" ex.Message System.Environment.NewLine ex.StackTrace
+            let stack = System.Web.HttpUtility.JavaScriptStringEncode(stack)
+            this.swallowedJS (sprintf "addStackToTest ('%s', '%s');" context stack)
+            this.swallowedJS (sprintf "addUrlToTest ('%s', '%s');" context url)
+            consoleReporter.fail ex id ss url
 
         member this.describe d = 
             consoleReporter.describe d

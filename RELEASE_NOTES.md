@@ -144,3 +144,7 @@
 
 #### 0.9.26 - June 1 2015
 * Fixed bug where after wouldn't run following a failed test [Issue #197](https://github.com/lefthandedgoat/canopy/issues/197)
+
+#### 0.9.27 - June 15 2015
+* Improved Html reporter to have stack trace, error message and url of failing page [Issue #202](https://github.com/lefthandedgoat/canopy/issues/202)
+* Updated to Selenium 2.46
