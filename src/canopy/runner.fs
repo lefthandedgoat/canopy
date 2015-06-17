@@ -74,11 +74,12 @@ let fail (ex : Exception) id =
             // Don't fail the runner itself, but report it.
             reporter.write (sprintf "Error during fail reporting: %s" (failExc.ToString()))
             reporter.fail ex id Array.empty
+let safelyGetUrl () = if browser = null then "no browser = no url" else browser.Url
 
 let failSuite (ex: Exception) (suite : suite) =    
     let reportFailedTest (ex: Exception) (test : Test) =
         reporter.testStart test.Id  
-        fail ex test.Id browser.Url
+        fail ex test.Id <| safelyGetUrl()
         reporter.testEnd test.Id 
     suite.Tests |> List.iter (fun test -> reportFailedTest ex test)
 
@@ -104,7 +105,7 @@ let run () =
                     pass()
             with
                 | ex when failureMessage <> null && failureMessage = ex.Message -> pass()
-                | ex -> fail ex test.Id browser.Url
+                | ex -> fail ex test.Id <| safelyGetUrl()
             reporter.testEnd test.Id 
         
         failureMessage <- null            
@@ -172,4 +173,4 @@ let runFor browsers =
                 once (fun _ -> switchTo browser)
                 suites <- suites @ currentSuites)
         | _ -> raise <| Exception "I dont know what you have given me"
-    run ()
+  

@@ -151,3 +151,6 @@
 
 #### 0.9.28 - June 16 2015
 * Fix broken link to html reporter introduced in 0.9.27
+
+#### 0.9.29 - June 17 2015
+* Fix issue 203, using canopy for unit tests [Issue #203](https://github.com/lefthandedgoat/canopy/issues/203)
