@@ -33,6 +33,13 @@ type direction =
     | Right
     | FullScreen
 
+type Navigate =
+  | Back
+  | Forward
+
+let back = Back
+let forward = Forward
+
 //browser
 type BrowserStartMode =
     | Firefox
@@ -49,8 +56,8 @@ type BrowserStartMode =
     | PhantomJS
     | PhantomJSProxyNone
     | Remote of string * ICapabilities
-  
-let toString (x:'a) = 
+
+let toString (x:'a) =
     match FSharpValue.GetUnionFields(x, typeof<'a>) with
     | case, _ -> case.Name
 

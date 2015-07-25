@@ -504,7 +504,7 @@ let __enabled browser item =
         | :? CanopyElementNotFoundException as ex -> raise (CanopyEnabledFailedException(sprintf "%s%senabled check for %O failed." ex.Message Environment.NewLine item))
         | :? WebDriverTimeoutException -> raise (CanopyEnabledFailedException(sprintf "enabled check for %O failed." item))
 
-let disabled browser item =
+let __disabled browser item =
     try
         __wait browser compareTimeout (fun _ ->
             match box item with
@@ -692,15 +692,15 @@ let __rotate browser =
     let innerWidth, innerHeight = __innerSize browser
     __resize browser (innerHeight, innerWidth)
 
-let __quit (browser : IWebDriver) (browsers : IWebDriver list) =
+let __quit browser (browsers : IWebDriver list) =
     reporter.quit()
     match box browser with
     | :? IWebDriver as b -> b.Quit()
     | _ -> browsers |> List.iter (fun b -> b.Quit())
 
-let currentUrl (browser : IWebDriver) = browser.Url
+let __currentUrl (browser : IWebDriver) = browser.Url
 
-let on browser (u: string) =
+let __on browser (u: string) =
     let urlPath (u : string) =
         let url = match u with
                   | x when x.StartsWith("http") -> u  //leave absolute urls alone
@@ -712,20 +712,14 @@ let on browser (u: string) =
     with
         | ex -> if browser.Url.Contains(u) = false then raise (CanopyOnException(sprintf "on check failed, expected expression '%s' got %s" u browser.Url))
 
-let url (browser : IWebDriver) (u : string) = browser.Navigate().GoToUrl(u)
+let __url (browser : IWebDriver) (u : string) = browser.Navigate().GoToUrl(u)
 
-let title (browser : IWebDriver) = browser.Title
+let __title (browser : IWebDriver) = browser.Title
 
-let reload (browser : IWebDriver) = currentUrl browser |> url browser
+let __reload (browser : IWebDriver) = __currentUrl browser |> __url browser
 
-type Navigate =
-  | Back
-  | Forward
-
-let back = Back
-let forward = Forward
-
-let navigate (browser : IWebDriver) = function
+let __navigate (browser : IWebDriver) direction =
+  match direction with
   | Back -> browser.Navigate().Back()
   | Forward -> browser.Navigate().Forward()
 
