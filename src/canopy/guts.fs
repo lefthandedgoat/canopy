@@ -516,3 +516,266 @@ let disabled browser item =
         | :? WebDriverTimeoutException -> raise (CanopyDisabledFailedException(sprintf "disabled check for %O failed." item))
 
 let __fadedIn browser cssSelector = fun _ -> __element browser cssSelector |> __shown
+
+//clicking/checking
+let __click browser item =
+    match box item with
+    | :? IWebElement as element -> element.Click()
+    | :? string as cssSelector ->
+        __wait browser elementTimeout (fun _ ->
+            let atleastOneItemClicked = ref false
+            __elements browser cssSelector
+            |> List.iter (fun elem ->
+                try
+                    elem.Click()
+                    atleastOneItemClicked := true
+                with | ex -> ())
+            !atleastOneItemClicked)
+    | _ -> raise (CanopyNotStringOrElementException(sprintf "Can't click %O because it is not a string or webelement" item))
+
+let __doubleClick (browser : IWebDriver) item =
+    let js = "var evt = document.createEvent('MouseEvents'); evt.initMouseEvent('dblclick',true, true, window, 0, 0, 0, 0, 0, false, false, false, false, 0,null); arguments[0].dispatchEvent(evt);"
+
+    match box item with
+    | :? IWebElement as elem -> (browser :?> IJavaScriptExecutor).ExecuteScript(js, elem) |> ignore
+    | :? string as cssSelector ->
+        __wait browser elementTimeout (fun _ -> ( let elem = __element browser cssSelector
+                                                  (browser :?> IJavaScriptExecutor).ExecuteScript(js, elem) |> ignore
+                                                  true))
+    | _ -> raise (CanopyNotStringOrElementException(sprintf "Can't doubleClick %O because it is not a string or webelement" item))
+
+let __check browser item =
+    try
+        match box item with
+        | :? IWebElement as elem -> if not <| elem.Selected then __click browser elem
+        | :? string as cssSelector ->
+            __waitFor browser (fun _ ->
+                                        if not <| (__element browser cssSelector).Selected then __click browser cssSelector
+                                        (__element browser cssSelector).Selected)
+        | _ -> raise (CanopyNotStringOrElementException(sprintf "Can't read %O because it is not a string or element" item))
+    with
+        | :? CanopyElementNotFoundException as ex -> raise (CanopyCheckFailedException(sprintf "%s%sfailed to check %O." ex.Message Environment.NewLine item))
+        | :? WebDriverTimeoutException -> raise (CanopyCheckFailedException(sprintf "failed to check %O." item))
+
+let __uncheck browser item =
+    try
+        match box item with
+        | :? IWebElement as elem -> if elem.Selected then __click browser elem
+        | :? string as cssSelector ->
+            __waitFor browser (fun _ ->
+                if (__element browser cssSelector).Selected then __click browser cssSelector
+                (__element browser cssSelector).Selected = false)
+        | _ -> raise (CanopyNotStringOrElementException(sprintf "Can't read %O because it is not a string or element" item))
+    with
+        | :? CanopyElementNotFoundException as ex -> raise (CanopyUncheckFailedException(sprintf "%s%sfailed to uncheck %O." ex.Message Environment.NewLine item))
+        | :? WebDriverTimeoutException -> raise (CanopyUncheckFailedException(sprintf "failed to uncheck %O." item))
+
+//hoverin
+let __hover browser selector =
+    let actions = Actions(browser)
+    let e = __element browser selector
+    actions.MoveToElement(e).Perform()
+
+//draggin
+let __drag browser cssSelectorA cssSelectorB =
+    __wait browser elementTimeout (fun _ ->
+        let a = __element browser cssSelectorA
+        let b = __element browser cssSelectorB
+        (new Actions(browser)).DragAndDrop(a, b).Perform()
+        true)
+
+//browser related
+let __pin (browser : IWebDriver) direction =
+    let h = System.Windows.Forms.Screen.PrimaryScreen.WorkingArea.Height
+    let w = System.Windows.Forms.Screen.PrimaryScreen.WorkingArea.Width
+    let maxWidth = w / 2
+    browser.Manage().Window.Size <- new System.Drawing.Size(maxWidth,h)
+    match direction with
+    | Left -> browser.Manage().Window.Position <- new System.Drawing.Point((maxWidth * 0),0)
+    | Right -> browser.Manage().Window.Position <- new System.Drawing.Point((maxWidth * 1),0)
+    | FullScreen -> browser.Manage().Window.Maximize()
+
+let __pinToMonitor (browser : IWebDriver) n =
+    let n' = if n < 1 then 1 else n
+    if System.Windows.Forms.SystemInformation.MonitorCount >= n' then
+        let workingArea = System.Windows.Forms.Screen.AllScreens.[n'-1].WorkingArea
+        browser.Manage().Window.Position <- new System.Drawing.Point(workingArea.X, 0)
+        browser.Manage().Window.Maximize()
+    else
+        raise(CanopyException(sprintf "Monitor %d is not detected" n))
+
+let private __chromeWithUserAgent userAgent =
+    let options = Chrome.ChromeOptions()
+    options.AddArgument("--user-agent=" + userAgent)
+    new Chrome.ChromeDriver(chromeDir, options) :> IWebDriver
+
+let private __firefoxWithUserAgent (userAgent : string) =
+    let profile = FirefoxProfile()
+    profile.SetPreference("general.useragent.override", userAgent)
+    new FirefoxDriver(profile) :> IWebDriver
+
+let __start b =
+    //for chrome you need to download chromedriver.exe from http://code.google.com/p/chromedriver/wiki/GettingStarted
+    //place chromedriver.exe in c:\ or you can place it in a customer location and change chromeDir value above
+    //for ie you need to set Settings -> Advance -> Security Section -> Check-Allow active content to run files on My Computer*
+    //also download IEDriverServer and place in c:\ or configure with ieDir
+    //firefox just works
+    //for phantomjs download it and put in c:\ or configure with phantomJSDir
+
+    let browser =
+        match b with
+        | IE -> new IE.InternetExplorerDriver(ieDir) :> IWebDriver
+        | IEWithOptions options -> new IE.InternetExplorerDriver(ieDir, options) :> IWebDriver
+        | IEWithOptionsAndTimeSpan(options, timeSpan) -> new IE.InternetExplorerDriver(ieDir, options, timeSpan) :> IWebDriver
+        | Chrome ->
+                let options = OpenQA.Selenium.Chrome.ChromeOptions()
+                options.AddArgument("test-type") //https://code.google.com/p/chromedriver/issues/detail?id=799
+                new Chrome.ChromeDriver(chromeDir, options) :> IWebDriver
+        | ChromeWithOptions options -> new Chrome.ChromeDriver(chromeDir, options) :> IWebDriver
+        | ChromeWithUserAgent userAgent -> __chromeWithUserAgent userAgent
+        | ChromeWithOptionsAndTimeSpan(options, timeSpan) -> new Chrome.ChromeDriver(chromeDir, options, timeSpan) :> IWebDriver
+        | Firefox -> new FirefoxDriver() :> IWebDriver
+        | FirefoxWithProfile profile -> new FirefoxDriver(profile) :> IWebDriver
+        | FirefoxWithPath path -> new FirefoxDriver(Firefox.FirefoxBinary(path), Firefox.FirefoxProfile()) :> IWebDriver
+        | FirefoxWithUserAgent userAgent -> __firefoxWithUserAgent userAgent
+        | PhantomJS ->
+            autoPinBrowserRightOnLaunch <- false
+            new PhantomJS.PhantomJSDriver(phantomJSDir) :> IWebDriver
+        | PhantomJSProxyNone ->
+            autoPinBrowserRightOnLaunch <- false
+            let service = PhantomJS.PhantomJSDriverService.CreateDefaultService(canopy.configuration.phantomJSDir)
+            service.ProxyType <- "none"
+            new PhantomJS.PhantomJSDriver(service) :> IWebDriver
+        | Remote(url, capabilities) -> new OpenQA.Selenium.Remote.RemoteWebDriver(new Uri(url), capabilities) :> IWebDriver
+
+    if autoPinBrowserRightOnLaunch = true then __pin browser Right
+    browser
+
+let __switchToTab (browser: IWebDriver) number =
+    let tabs = browser.WindowHandles;
+    browser.SwitchTo().Window(tabs.[(number - 1)]) |> ignore
+
+let __closeTab (browser: IWebDriver) number =
+    __switchToTab browser number
+    browser.Close()
+
+let __tile (browsers : IWebDriver list) =
+    let h = System.Windows.Forms.Screen.PrimaryScreen.WorkingArea.Height
+    let w = System.Windows.Forms.Screen.PrimaryScreen.WorkingArea.Width
+    let count = browsers.Length
+    let maxWidth = w / count
+
+    let rec setSize (browsers : IWebDriver list) c =
+        match browsers with
+        | [] -> ()
+        | b :: tail ->
+            b.Manage().Window.Size <- new System.Drawing.Size(maxWidth,h)
+            b.Manage().Window.Position <- new System.Drawing.Point((maxWidth * c),0)
+            setSize tail (c + 1)
+
+    setSize browsers 0
+
+let __innerSize (browser: IWebDriver) =
+    let jsBrowser = browser :?> IJavaScriptExecutor
+    let innerWidth = System.Int32.Parse(jsBrowser.ExecuteScript("return window.innerWidth").ToString())
+    let innerHeight = System.Int32.Parse(jsBrowser.ExecuteScript("return window.innerHeight").ToString())
+    innerWidth, innerHeight
+
+let __resize browser size =
+    let width,height = size
+    let innerWidth, innerHeight = __innerSize browser
+    let newWidth = browser.Manage().Window.Size.Width - innerWidth + width
+    let newHeight = browser.Manage().Window.Size.Height - innerHeight + height
+    browser.Manage().Window.Size <- System.Drawing.Size(newWidth, newHeight)
+
+let __rotate browser =
+    let innerWidth, innerHeight = __innerSize browser
+    __resize browser (innerHeight, innerWidth)
+
+let __quit (browser : IWebDriver) (browsers : IWebDriver list) =
+    reporter.quit()
+    match box browser with
+    | :? IWebDriver as b -> b.Quit()
+    | _ -> browsers |> List.iter (fun b -> b.Quit())
+
+let currentUrl (browser : IWebDriver) = browser.Url
+
+let on browser (u: string) =
+    let urlPath (u : string) =
+        let url = match u with
+                  | x when x.StartsWith("http") -> u  //leave absolute urls alone
+                  | _ -> "http://host/" + u.Trim('/') //ensure valid uri
+        let uriBuilder = new System.UriBuilder(url)
+        uriBuilder.Path.TrimEnd('/') //get the path part removing trailing slashes
+    try
+        __wait browser pageTimeout (fun _ -> if browser.Url = u then true else urlPath(browser.Url) = urlPath(u))
+    with
+        | ex -> if browser.Url.Contains(u) = false then raise (CanopyOnException(sprintf "on check failed, expected expression '%s' got %s" u browser.Url))
+
+let url (browser : IWebDriver) (u : string) = browser.Navigate().GoToUrl(u)
+
+let title (browser : IWebDriver) = browser.Title
+
+let reload (browser : IWebDriver) = currentUrl browser |> url browser
+
+type Navigate =
+  | Back
+  | Forward
+
+let back = Back
+let forward = Forward
+
+let navigate (browser : IWebDriver) = function
+  | Back -> browser.Navigate().Back()
+  | Forward -> browser.Navigate().Forward()
+
+//let coverage (url : 'a) =
+//    let mutable innerUrl = ""
+//    match box url with
+//    | :? string as u -> innerUrl <- u
+//    | _ -> innerUrl <- currentUrl()
+//    let nonMutableInnerUrl = innerUrl
+//
+//    let selectors =
+//        searchedFor
+//        |> List.filter(fun (c, u) -> u = nonMutableInnerUrl)
+//        |> List.map(fun (cssSelector, u) -> cssSelector)
+//        |> Seq.distinct
+//        |> List.ofSeq
+//
+//    let script cssSelector =
+//        "var results = document.querySelectorAll('" + cssSelector + "'); \
+//        for (var i=0; i < results.length; i++){ \
+//            results[i].style.border = 'thick solid #ACD372'; \
+//        }"
+//
+//    //kinda silly but the app I am current working on will redirect you to login if you try to access a url directly, so dont try if one isnt passed in
+//    match box url with
+//    | :? string as u -> !^ nonMutableInnerUrl
+//    |_ -> ()
+//
+//    on nonMutableInnerUrl
+//    selectors |> List.iter(fun cssSelector -> swallowedJs (script cssSelector))
+//    let p = Path.Combine(Environment.GetFolderPath(Environment.SpecialFolder.ApplicationData), @"canopy\")
+//    let f = DateTime.Now.ToString("MMM-d_HH-mm-ss-fff")
+//    let ss = screenshot p f
+//    reporter.coverage nonMutableInnerUrl ss
+
+let addFinder finder =
+    let currentFinders = configuredFinders
+    configuredFinders <- (fun cssSelector f ->
+        currentFinders cssSelector f
+        |> Seq.append (seq { yield finder cssSelector f }))
+
+//hints
+let private addHintFinder hints finder = hints |> Seq.append (seq { yield finder })
+let private addSelector finder hintType selector =
+    //gaurd against adding same hintType multipe times and increase size of finder seq
+    if not <| (hints.ContainsKey(selector) && addedHints.[selector] |> List.exists (fun hint -> hint = hintType)) then
+        if hints.ContainsKey(selector) then
+            hints.[selector] <- addHintFinder hints.[selector] finder
+            addedHints.[selector] <- [hintType] @ addedHints.[selector]
+        else
+            hints.[selector] <- seq { yield finder }
+            addedHints.[selector] <- [hintType]
+    selector
