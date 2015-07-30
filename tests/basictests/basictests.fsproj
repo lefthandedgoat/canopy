@@ -54,13 +54,15 @@
   </Choose>
   <Import Project="$(FSharpTargetsPath)" Condition="Exists('$(FSharpTargetsPath)')" />
   <ItemGroup>
+    <Compile Include="file1.fs" />
+    <Compile Include="file2.fs" />
     <Compile Include="Program.fs" />
     <None Include="app.config" />
     <None Include="packages.config" />
   </ItemGroup>
   <ItemGroup>
     <Reference Include="FSharp.Core">
-      <HintPath>..\..\packages\FSharp.Core.3.0.0.2\lib\net40\FSharp.Core.dll</HintPath>
+      <HintPath>..\..\packages\FSharp.Core.3.0.2\lib\net40\FSharp.Core.dll</HintPath>
       <Private>True</Private>
     </Reference>
     <Reference Include="mscorlib" />
@@ -68,20 +70,16 @@
       <HintPath>..\..\packages\Newtonsoft.Json.6.0.6\lib\net40\Newtonsoft.Json.dll</HintPath>
       <Private>True</Private>
     </Reference>
-    <Reference Include="policy.2.3.FSharp.Core">
-      <HintPath>..\..\packages\FSharp.Core.3.0.0.2\lib\net40\policy.2.3.FSharp.Core.dll</HintPath>
-      <Private>True</Private>
-    </Reference>
     <Reference Include="System" />
     <Reference Include="System.Core" />
     <Reference Include="System.Drawing" />
     <Reference Include="System.Numerics" />
     <Reference Include="WebDriver">
-      <HintPath>..\..\packages\Selenium.WebDriver.2.44.0\lib\net40\WebDriver.dll</HintPath>
+      <HintPath>..\..\packages\Selenium.WebDriver.2.46.0\lib\net40\WebDriver.dll</HintPath>
       <Private>True</Private>
     </Reference>
     <Reference Include="WebDriver.Support">
-      <HintPath>..\..\packages\Selenium.Support.2.44.0\lib\net40\WebDriver.Support.dll</HintPath>
+      <HintPath>..\..\packages\Selenium.Support.2.46.0\lib\net40\WebDriver.Support.dll</HintPath>
       <Private>True</Private>
     </Reference>
   </ItemGroup>

@@ -124,3 +124,33 @@
 #### 0.9.19 - January 22 2015
 * Exceptions blowing up 'once' now fixed, thanks ludekcakl! [Issue #178](https://github.com/lefthandedgoat/canopy/issues/178)
 * Improvements to team city reporting enabling parallel reporting, thanks again ludekcakl! [Pull Request #180] (https://github.com/lefthandedgoat/canopy/pull/180)
+
+#### 0.9.20 - February 10 2015
+* Improvements to pin screen for multi monitors
+* Switched FSharp.Core nuget packages
+
+#### 0.9.21 - February 10 2015
+* Changed nuget dependency from = to >= for Fsharp.Core
+
+#### 0.9.22 - March 4 2015
+* Updated to Selenium 2.45, thanks @pottereric
+
+#### 0.9.23 - May 18 2015
+* Added &&&&& (always) tests which will run in both normal mode and wip mode [Issue #195](https://github.com/lefthandedgoat/canopy/issues/195)
+* Added runFor which lets you run the same set of tests for multiple browsers [Issue #190](https://github.com/lefthandedgoat/canopy/issues/190)
+
+#### 0.9.24 - May 19 2015
+* Fixed bug related to new &&&&& (always) operator [Issue #195](https://github.com/lefthandedgoat/canopy/issues/195)
+
+#### 0.9.26 - June 1 2015
+* Fixed bug where after wouldn't run following a failed test [Issue #197](https://github.com/lefthandedgoat/canopy/issues/197)
+
+#### 0.9.27 - June 15 2015
+* Improved Html reporter to have stack trace, error message and url of failing page [Issue #202](https://github.com/lefthandedgoat/canopy/issues/202)
+* Updated to Selenium 2.46
+
+#### 0.9.28 - June 16 2015
+* Fix broken link to html reporter introduced in 0.9.27
+
+#### 0.9.29 - June 17 2015
+* Fix issue 203, using canopy for unit tests [Issue #203](https://github.com/lefthandedgoat/canopy/issues/203)

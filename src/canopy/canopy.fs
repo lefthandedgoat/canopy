@@ -634,6 +634,15 @@ let pin direction =
     | Right -> browser.Manage().Window.Position <- new System.Drawing.Point((maxWidth * 1),0)
     | FullScreen -> browser.Manage().Window.Maximize()
 
+let pinToMonitor n =
+    let n' = if n < 1 then 1 else n
+    if System.Windows.Forms.SystemInformation.MonitorCount >= n' then
+        let workingArea = System.Windows.Forms.Screen.AllScreens.[n'-1].WorkingArea
+        browser.Manage().Window.Position <- new System.Drawing.Point(workingArea.X, 0)
+        browser.Manage().Window.Maximize()
+    else
+        raise(CanopyException(sprintf "Monitor %d is not detected" n))
+
 let private chromeWithUserAgent userAgent =
     let options = Chrome.ChromeOptions()
     options.AddArgument("--user-agent=" + userAgent)

@@ -27,16 +27,29 @@ let context c =
         let s = new suite()
         s.Context <- c
         suites <- suites @ [s]
-
-let ( &&& ) description f = (last suites).Tests <- (last suites).Tests @ [Test(description, f, (last suites).Tests.Length + 1)]
+let private incrementLastTestSuite () =
+    let lastSuite = last suites
+    lastSuite.TotalTestsCount <- lastSuite.TotalTestsCount + 1
+    lastSuite
+let ( &&& ) description f = 
+    let lastSuite = incrementLastTestSuite()
+    lastSuite.Tests <- lastSuite.Tests @ [Test(description, f, lastSuite.TotalTestsCount)]
 let test f = null &&& f
 let ntest description f = description &&& f
-let ( &&&& ) description f = (last suites).Wips <- (last suites).Wips @ [Test(description, f, (last suites).Wips.Length + 1)]
+let ( &&&& ) description f = 
+    let lastSuite = incrementLastTestSuite()
+    lastSuite.Wips <- lastSuite.Wips @ [Test(description, f, lastSuite.TotalTestsCount)]
 let wip f = null &&&& f
-let many count f = [1 .. count] |> List.iter (fun _ -> (last suites).Manys <- (last suites).Manys @ [Test(null, f, (last suites).Manys.Length + 1)])
-let ( &&! ) description f = (last suites).Tests <- (last suites).Tests @ [Test(description, skipped, (last suites).Tests.Length + 1)]
+let many count f = 
+    let lastSuite = incrementLastTestSuite()
+    [1 .. count] |> List.iter (fun _ -> lastSuite.Manys <- lastSuite.Manys @ [Test(null, f, lastSuite.TotalTestsCount)])
+let ( &&! ) description f = 
+    let lastSuite = incrementLastTestSuite()
+    lastSuite.Tests <- lastSuite.Tests @ [Test(description, skipped, lastSuite.TotalTestsCount)]
 let xtest f = null &&! f
-
+let ( &&&&& ) description f = 
+    let lastSuite = incrementLastTestSuite()
+    lastSuite.Always <- lastSuite.Always @ [Test(description, f, lastSuite.TotalTestsCount)]
 let mutable passedCount = 0
 let mutable failedCount = 0
 let mutable contextFailed = false
@@ -61,11 +74,12 @@ let fail (ex : Exception) id =
             // Don't fail the runner itself, but report it.
             reporter.write (sprintf "Error during fail reporting: %s" (failExc.ToString()))
             reporter.fail ex id Array.empty
+let safelyGetUrl () = if browser = null then "no browser = no url" else browser.Url
 
 let failSuite (ex: Exception) (suite : suite) =    
     let reportFailedTest (ex: Exception) (test : Test) =
         reporter.testStart test.Id  
-        fail ex test.Id
+        fail ex test.Id <| safelyGetUrl()
         reporter.testEnd test.Id 
     suite.Tests |> List.iter (fun test -> reportFailedTest ex test)
 
@@ -83,13 +97,15 @@ let run () =
                 else if System.Object.ReferenceEquals(test.Func, skipped) then 
                     reporter.skip ()
                 else
-                    suite.Before ()
-                    test.Func ()
-                    suite.After ()
+                    try
+                        suite.Before ()
+                        test.Func ()
+                    finally
+                        suite.After ()
                     pass()
             with
                 | ex when failureMessage <> null && failureMessage = ex.Message -> pass()
-                | ex -> fail ex test.Id 
+                | ex -> fail ex test.Id <| safelyGetUrl()
             reporter.testEnd test.Id 
         
         failureMessage <- null            
@@ -103,7 +119,7 @@ let run () =
 
     //run only wips if there are any
     if suites |> List.exists (fun s -> s.Wips.IsEmpty = false) then
-        suites <- suites |> List.filter (fun s -> s.Wips.IsEmpty = false)
+        suites <- suites |> List.filter (fun s -> s.Wips.IsEmpty = false || s.Always.IsEmpty = false)
 
     suites
     |> List.iter (fun s ->
@@ -114,12 +130,14 @@ let run () =
                 s.Once ()
                 if s.Wips.IsEmpty = false then
                     wipTest <- true
-                    s.Wips |> List.iter (fun w -> runtest s w)
+                    let tests = s.Wips @ s.Always |> List.sortBy (fun t -> t.Number)
+                    tests |> List.iter (fun w -> runtest s w)
                     wipTest <- false
                 else if s.Manys.IsEmpty = false then
                     s.Manys |> List.iter (fun m -> runtest s m)
                 else
-                    s.Tests |> List.iter (fun t -> runtest s t)
+                    let tests = s.Tests @ s.Always |> List.sortBy (fun t -> t.Number)
+                    tests |> List.iter (fun t -> runtest s t)
                 s.Lastly ()        
             with 
                 | ex -> failSuite ex s                    
@@ -133,3 +151,26 @@ let run () =
     stopWatch.Stop()    
     reporter.summary stopWatch.Elapsed.Minutes stopWatch.Elapsed.Seconds passedCount failedCount 
     reporter.suiteEnd()
+
+let runFor browsers =
+    let currentSuites = suites
+    suites <- [new suite()]
+    match box browsers with
+        | :? (types.BrowserStartMode list) as browsers -> 
+            browsers
+            |> List.iter (fun browser ->
+                toString browser
+                |> sprintf "Running tests with %s browser"
+                |> context
+                once (fun _ -> start browser)
+                suites <- suites @ currentSuites)
+        | :? (IWebDriver list) as browsers ->
+            browsers
+            |> List.iter (fun browser ->
+                browser.ToString()
+                |> sprintf "Running tests with %s browser"
+                |> context
+                once (fun _ -> switchTo browser)
+                suites <- suites @ currentSuites)
+        | _ -> raise <| Exception "I dont know what you have given me"
+  
