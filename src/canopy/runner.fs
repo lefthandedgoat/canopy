@@ -128,6 +128,9 @@ let run () =
             if s.Context <> null then reporter.contextStart s.Context
             try
                 s.Once ()
+            with 
+                | ex -> failSuite ex s
+            if failed = false then
                 if s.Wips.IsEmpty = false then
                     wipTest <- true
                     let tests = s.Wips @ s.Always |> List.sortBy (fun t -> t.Number)
@@ -138,9 +141,7 @@ let run () =
                 else
                     let tests = s.Tests @ s.Always |> List.sortBy (fun t -> t.Number)
                     tests |> List.iter (fun t -> runtest s t)
-                s.Lastly ()        
-            with 
-                | ex -> failSuite ex s                    
+            s.Lastly ()                  
 
             if contextFailed = true then failedContexts <- failedContexts @ [s.Context]
             if s.Context <> null then reporter.contextEnd s.Context
