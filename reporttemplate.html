@@ -87,27 +87,32 @@
 			$("#todo").text($(".results .warning").length);
 			$("#skipped").text($(".results .info").length);
 		};
-
-		var addToContext = function (context, passFailSkip, testName, image) {
+		
+        var addToContext = function (context, testName) {
+			var ctx = $('#contexts tr[data-context="' + context + '"]');
+			ctx.next('tr').find('table').append('<tr><td><div class="test">' + testName + '</div></td></tr>');	
+		};
+		
+		var updateTestInContext = function (context, passFailSkip, image) {
 			var ctx = $('#contexts tr[data-context="' + context + '"]');
 			if (passFailSkip === "Pass") {
-				ctx.next('tr').find('table').last('tr').append('<tr class="success"><td><div class="test">' + testName + '</div></td></tr>');
+				ctx.next('tr').find('table').find('tr').last().addClass('success');
 				if (ctx.hasClass("error") === false) {
 					ctx.removeClass("warning").removeClass("info").addClass("success");
 				}
 			}
 			if (passFailSkip === "Fail") {
-				ctx.next('tr').find('table').last('tr').append('<tr class="error"><td><div class="test">' + testName + '</div></td></tr>');
+				ctx.next('tr').find('table').find('tr').last().addClass('error');
 				ctx.removeClass("success").removeClass("warning").removeClass("info").addClass("error");
 			}
 			if (passFailSkip === "Todo") {
-				ctx.next('tr').find('table').last('tr').append('<tr class="warning"><td><div class="test">' + testName + '</div></td></tr>');
+				ctx.next('tr').find('table').find('tr').last().addClass('warning');
 				if (ctx.hasClass("error") === false && ctx.hasClass("info") === false && ctx.hasClass("success") === false){
 					ctx.addClass("warning");
 				}
 			}
 			if (passFailSkip === "Skip") {
-				ctx.next('tr').find('table').last('tr').append('<tr class="info"><td><div class="test">' + testName + '</div></td></tr>');
+				ctx.next('tr').find('table').find('tr').last().addClass('info');
 				if (ctx.hasClass("error") === false && ctx.hasClass("warning") === false && ctx.hasClass("success") === false){
 					ctx.addClass("info");
 				}
@@ -128,6 +133,15 @@
 		var addStackToTest = function (context, stack) {
 			var ctx = $('#contexts tr[data-context="' + context + '"]');
 			ctx.next('tr').find('table').last('tr').find('.test').last().after('<div class="stack"><pre>' + stack + '</pre></div>');
+		};
+		
+		var addMessageToTest = function (context, message) {
+			var ctx = $('#contexts tr[data-context="' + context + '"]');
+			if(ctx.next('tr').find('table').last('tr').find('.test').last().siblings('pre').length === 0) {
+				ctx.next('tr').find('table').last('tr').find('.test').last().after('<pre><ol class="message"><li>' + message + '</li></ol></pre>');
+			} else {
+				ctx.next('tr').find('table').last('tr').find('.test').last().siblings('pre').find('ol').append('<li>' + message + '</li>');
+			}
 		};
 		
 		var collapseContextsExcept = function (context) {
