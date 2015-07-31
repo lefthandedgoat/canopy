@@ -154,3 +154,9 @@
 
 #### 0.9.29 - June 17 2015
 * Fix issue 203, using canopy for unit tests [Issue #203](https://github.com/lefthandedgoat/canopy/issues/203)
+
+#### 0.9.30 - July 30 2015
+* Updated to Selenium 2.47
+* Fix issue 205, making switchToTab more reliable [Issue #205](https://github.com/lefthandedgoat/canopy/issues/205)
+* Improve LiveHtmlReporter so that puts and describe will add ordered messages to the output
+* Improved behaviour for failing all tests if on failed.  Changed it to only fail all tests if the 'once' function fails

@@ -221,18 +221,19 @@ type LiveHtmlReporter(browser : BrowserStartMode, driverPath : string) =
 
     interface IReporter with               
         member this.pass () =
-            this.swallowedJS (sprintf "addToContext('%s', 'Pass', '%s', '%s');" context test "")
+            this.swallowedJS (sprintf "updateTestInContext('%s', 'Pass', '%s');" context "")
             consoleReporter.pass ()
 
         member this.fail ex id ss url =
-            this.swallowedJS (sprintf "addToContext('%s', 'Fail', '%s', '%s');" context test (Convert.ToBase64String(ss)))
+            this.swallowedJS (sprintf "updateTestInContext('%s', 'Fail', '%s');" context (Convert.ToBase64String(ss)))
             let stack = sprintf "%s%s%s" ex.Message System.Environment.NewLine ex.StackTrace
             let stack = System.Web.HttpUtility.JavaScriptStringEncode(stack)
             this.swallowedJS (sprintf "addStackToTest ('%s', '%s');" context stack)
             this.swallowedJS (sprintf "addUrlToTest ('%s', '%s');" context url)
             consoleReporter.fail ex id ss url
 
-        member this.describe d = 
+        member this.describe d =
+            this.swallowedJS (sprintf "addMessageToTest ('%s', '%s');" context d) 
             consoleReporter.describe d
           
         member this.contextStart c = 
@@ -249,6 +250,7 @@ type LiveHtmlReporter(browser : BrowserStartMode, driverPath : string) =
             consoleReporter.summary minutes seconds passed failed
         
         member this.write w = 
+            this.swallowedJS (sprintf "addMessageToTest ('%s', '%s');" context w)
             consoleReporter.write w
         
         member this.suggestSelectors selector suggestions = 
@@ -256,6 +258,7 @@ type LiveHtmlReporter(browser : BrowserStartMode, driverPath : string) =
 
         member this.testStart id = 
             test <- System.Web.HttpUtility.JavaScriptStringEncode(id)
+            this.swallowedJS (sprintf "addToContext ('%s', '%s');" context test)
             consoleReporter.testStart id
             
         member this.testEnd id = ()
@@ -279,10 +282,11 @@ type LiveHtmlReporter(browser : BrowserStartMode, driverPath : string) =
             if (contexts |> List.exists (fun c -> c = "Coverage Reports")) = false then
                 contexts <- "Coverage Reports" :: contexts
                 this.swallowedJS (sprintf "addContext('%s');" "Coverage Reports")
-            this.swallowedJS (sprintf "addToContext('%s', 'Pass', '%s', '%s');" "Coverage Reports" url (Convert.ToBase64String(ss)))
+            this.swallowedJS (sprintf "addToContext ('%s', '%s');" "Coverage Reports" url)
+            this.swallowedJS (sprintf "updateTestInContext('%s', 'Pass', '%s');" "Coverage Reports" (Convert.ToBase64String(ss)))
 
         member this.todo () = 
-            this.swallowedJS (sprintf "addToContext('%s', 'Todo', '%s', '%s');" context test "")
+            this.swallowedJS (sprintf "updateTestInContext('%s', 'Todo', '%s');" context "")
 
         member this.skip () = 
-            this.swallowedJS (sprintf "addToContext('%s', 'Skip', '%s', '%s');" context test "")
+            this.swallowedJS (sprintf "updateTestInContext('%s', 'Skip', '%s');" context "")

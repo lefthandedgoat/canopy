@@ -693,8 +693,14 @@ let start b =
 let switchTo b = browser <- b
 
 let switchToTab number =
-    let tabs = browser.WindowHandles;
-    browser.SwitchTo().Window(tabs.[(number - 1)]) |> ignore
+    wait pageTimeout (fun _ ->
+        let number = number - 1
+        let tabs = browser.WindowHandles;
+        if tabs |> Seq.length >= number then
+            browser.SwitchTo().Window(tabs.[number]) |> ignore
+            true
+        else
+            false)
 
 let closeTab number =
     switchToTab number
