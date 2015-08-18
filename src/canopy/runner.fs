@@ -89,23 +89,24 @@ let run () =
     stopWatch.Start()      
     
     let runtest (suite : suite) (test : Test) =
-        if failed = false then            
-            try 
-                reporter.testStart test.Id  
-                if System.Object.ReferenceEquals(test.Func, todo) then 
-                    reporter.todo ()
-                else if System.Object.ReferenceEquals(test.Func, skipped) then 
-                    reporter.skip ()
-                else
+        if failed = false then             
+            reporter.testStart test.Id  
+            if System.Object.ReferenceEquals(test.Func, todo) then 
+                reporter.todo ()
+            else if System.Object.ReferenceEquals(test.Func, skipped) then 
+                reporter.skip ()
+            else
+                try
                     try
                         suite.Before ()
                         test.Func ()
-                    finally
-                        suite.After ()
-                    pass()
-            with
-                | ex when failureMessage <> null && failureMessage = ex.Message -> pass()
-                | ex -> fail ex test.Id <| safelyGetUrl()
+                    with
+                        | ex when failureMessage <> null && failureMessage = ex.Message -> pass()
+                        | ex -> fail ex test.Id <| safelyGetUrl()
+                finally
+                    suite.After ()
+                pass()
+
             reporter.testEnd test.Id 
         
         failureMessage <- null            
