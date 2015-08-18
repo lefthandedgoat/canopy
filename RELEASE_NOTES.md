@@ -160,3 +160,7 @@
 * Fix issue 205, making switchToTab more reliable [Issue #205](https://github.com/lefthandedgoat/canopy/issues/205)
 * Improve LiveHtmlReporter so that puts and describe will add ordered messages to the output
 * Improved behaviour for failing all tests if on failed.  Changed it to only fail all tests if the 'once' function fails
+
+#### 0.9.31 - August 18 2015
+* Fix issue 209, screenshot being taken too late in some cases [Issue #209](https://github.com/lefthandedgoat/canopy/issues/209)
+* Fix issue 210, text based selector with apostrophes were not working [Issue #205](https://github.com/lefthandedgoat/canopy/issues/210)
