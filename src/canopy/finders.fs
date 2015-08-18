@@ -33,7 +33,7 @@ let findByLabel locator f =
             | head :: tail when isField head-> [head]
             | _ -> []
     try
-        let labels = f(By.XPath(sprintf ".//label[text() = '%s']" locator))
+        let labels = f(By.XPath(sprintf """.//label[text() = "%s"]""" locator))
         if (Seq.isEmpty labels) then
             []
         else
@@ -45,12 +45,12 @@ let findByLabel locator f =
 
 let findByText text f =
     try
-        f(By.XPath(sprintf ".//*[text() = '%s']" text)) |> List.ofSeq
+        f(By.XPath(sprintf """.//*[text() = "%s"]""" text)) |> List.ofSeq
     with | _ -> []
 
 let findByValue value f =
     try
-        findByCss (sprintf "*[value='%s']" value) f |> List.ofSeq        
+        findByCss (sprintf """*[value="%s"]""" value) f |> List.ofSeq        
     with | _ -> []
 
 //you can use this as an example to how to extend canopy by creating your own set of finders, tweaking the current collection, or adding/removing

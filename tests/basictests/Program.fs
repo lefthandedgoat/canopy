@@ -31,6 +31,10 @@ let testpage = "http://lefthandedgoat.github.io/canopy/testpages/"
 
 "intentionally skipped shows blue in LiveHtmlReport" &&! skipped
 
+"Apostrophes don't break anything" &&& fun _ ->    
+    url testpage
+    count "I've got an apostrophe" 1
+
 "#welcome should have Welcome" &&& fun _ ->    
     url testpage
     "#welcome" == "Welcome"
