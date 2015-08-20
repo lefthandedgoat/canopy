@@ -27,6 +27,7 @@ let aurora = FirefoxWithPath(@"C:\Program Files (x86)\Aurora\firefox.exe")
 let ie = IE
 let chrome = Chrome
 let phantomJS = PhantomJS
+let safari = Safari
 let phantomJSProxyNone = PhantomJSProxyNone
   
 let mutable browsers = []
@@ -660,6 +661,7 @@ let start b =
     //also download IEDriverServer and place in c:\ or configure with ieDir
     //firefox just works
     //for phantomjs download it and put in c:\ or configure with phantomJSDir
+    //for Safari download it and put in c:\ or configure with safariDir
        
     browser <-        
         match b with
@@ -677,6 +679,7 @@ let start b =
         | FirefoxWithProfile profile -> new FirefoxDriver(profile) :> IWebDriver
         | FirefoxWithPath path -> new FirefoxDriver(Firefox.FirefoxBinary(path), Firefox.FirefoxProfile()) :> IWebDriver
         | FirefoxWithUserAgent userAgent -> firefoxWithUserAgent userAgent
+        | Safari ->new Safari.SafariDriver() :> IWebDriver
         | PhantomJS -> 
             autoPinBrowserRightOnLaunch <- false
             new PhantomJS.PhantomJSDriver(phantomJSDir) :> IWebDriver
