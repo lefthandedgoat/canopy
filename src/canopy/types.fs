@@ -46,6 +46,7 @@ type BrowserStartMode =
     | ChromeWithOptions of Chrome.ChromeOptions
     | ChromeWithOptionsAndTimeSpan of Chrome.ChromeOptions * TimeSpan
     | ChromeWithUserAgent of string
+    | Safari    
     | PhantomJS
     | PhantomJSProxyNone
     | Remote of string * ICapabilities
