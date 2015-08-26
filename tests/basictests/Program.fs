@@ -8,8 +8,7 @@ open configuration
 open reporters
 open types
 
-//start chrome
-start Safari
+start chrome
 let mainBrowser = browser
 elementTimeout <- 3.0
 compareTimeout <- 3.0

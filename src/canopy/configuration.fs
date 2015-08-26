@@ -3,22 +3,20 @@ open reporters
 open System
 
 //location of drivers depending on OS
-let FolderByOSType = 
-    if System.Environment.OSVersion.Platform = PlatformID.MacOSX then
-        @"/usr/bin/"
-    elif  System.Environment.OSVersion.Platform = PlatformID.Unix then
-        @"/usr/bin/"
-    else
-        @"c:\"
+let folderByOSType = 
+    match System.Environment.OSVersion.Platform with
+    | PlatformID.MacOSX 
+    | PlatformID.Unix -> @"/usr/bin/"
+    | _ -> @"c:\"
 
 //runner related
 let failFast = ref false
 let mutable failScreenshotPath = Environment.GetFolderPath(Environment.SpecialFolder.ApplicationData) + @"\canopy\"
 
-let mutable chromeDir = FolderByOSType
-let mutable ieDir = FolderByOSType
-let mutable phantomJSDir = FolderByOSType
-let mutable safariDir = FolderByOSType
+let mutable chromeDir = folderByOSType
+let mutable ieDir = folderByOSType
+let mutable phantomJSDir = folderByOSType
+let mutable safariDir = folderByOSType
 let mutable elementTimeout = 10.0
 let mutable compareTimeout = 10.0
 let mutable pageTimeout = 10.0

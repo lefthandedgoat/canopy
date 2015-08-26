@@ -164,3 +164,6 @@
 #### 0.9.31 - August 18 2015
 * Fix issue 209, screenshot being taken too late in some cases [Issue #209](https://github.com/lefthandedgoat/canopy/issues/209)
 * Fix issue 210, text based selector with apostrophes were not working [Issue #205](https://github.com/lefthandedgoat/canopy/issues/210)
+
+#### 0.9.32 - August 25 2015
+* Accept PR adding better support for OSX and Safari.  Thanks to Pedro Ramirez! [Issue #211](https://github.com/lefthandedgoat/canopy/pull/211)
