@@ -144,7 +144,7 @@ writeToSelectWithOptionValue
 TODO
 Default is true
 *)
-writeToSelectWithOptionValue <- false
+writeToSelectWithOptionValue <- true
 
 (**
 optimizeBySkippingIFrameCheck 
