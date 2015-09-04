@@ -168,4 +168,4 @@ showInfoDiv
 Allows information to be displayed on the browser when the puts function is called
 Default is true
 *)
-showInfoDiv <- false
+showInfoDiv <- true
