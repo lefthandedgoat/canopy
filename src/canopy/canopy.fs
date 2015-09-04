@@ -81,15 +81,16 @@ let sleep seconds =
 
 let puts text = 
     reporter.write text
-    let escapedText = System.Web.HttpUtility.JavaScriptStringEncode(text)
-    let info = "
-        var infoDiv = document.getElementById('canopy_info_div'); 
-        if(!infoDiv) { infoDiv = document.createElement('div'); } 
-        infoDiv.id = 'canopy_info_div'; 
-        infoDiv.setAttribute('style','position: absolute; border: 1px solid black; bottom: 0px; right: 0px; margin: 3px; padding: 3px; background-color: white; z-index: 99999; font-size: 20px; font-family: monospace; font-weight: bold;'); 
-        document.getElementsByTagName('body')[0].appendChild(infoDiv); 
-        infoDiv.innerHTML = 'locating: " + escapedText + "';"
-    swallowedJs info
+    if (showInfoDiv) then
+        let escapedText = System.Web.HttpUtility.JavaScriptStringEncode(text)
+        let info = "
+            var infoDiv = document.getElementById('canopy_info_div'); 
+            if(!infoDiv) { infoDiv = document.createElement('div'); } 
+            infoDiv.id = 'canopy_info_div'; 
+            infoDiv.setAttribute('style','position: absolute; border: 1px solid black; bottom: 0px; right: 0px; margin: 3px; padding: 3px; background-color: white; z-index: 99999; font-size: 20px; font-family: monospace; font-weight: bold;'); 
+            document.getElementsByTagName('body')[0].appendChild(infoDiv); 
+            infoDiv.innerHTML = 'locating: " + escapedText + "';"
+        swallowedJs info
 
 let private wait timeout f =
     let wait = new WebDriverWait(browser, TimeSpan.FromSeconds(timeout))
