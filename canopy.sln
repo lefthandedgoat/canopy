@@ -1,7 +1,7 @@
 ﻿
 Microsoft Visual Studio Solution File, Format Version 12.00
 # Visual Studio 2013
-VisualStudioVersion = 12.0.30324.0
+VisualStudioVersion = 12.0.31101.0
 MinimumVisualStudioVersion = 10.0.40219.1
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = ".nuget", ".nuget", "{51B54B14-A7C3-450B-A722-159E9CD3010F}"
 	ProjectSection(SolutionItems) = preProject
@@ -35,6 +35,7 @@ Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "content", "content", "{A94D
 	ProjectSection(SolutionItems) = preProject
 		docs\content\actions.fsx = docs\content\actions.fsx
 		docs\content\assertions.fsx = docs\content\assertions.fsx
+		docs\content\configuration.fsx = docs\content\configuration.fsx
 		docs\content\index.fsx = docs\content\index.fsx
 		docs\content\reporting.fsx = docs\content\reporting.fsx
 		docs\content\testing.fsx = docs\content\testing.fsx

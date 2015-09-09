@@ -89,6 +89,7 @@ quit()
 
 * [Actions](/canopy/actions.html): documentation of everything you can do on a page
 * [Assertions](/canopy/assertions.html): all the ways you can verify what's on the page is correct
+* [Configuration](/canopy/configuration.html): configure and fine tune canopy
 * [Testing](/canopy/testing.html): different ways to orchestrate tests and troubleshoot issues with a page
 * [Reporting](/canopy/reporting.html): different ways to output the results of your test suite
 
