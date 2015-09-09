@@ -1,0 +1,392 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+	<STYLE type="text/css">
+	   h4 + img { margin-top: 20px; margin-bottom: 20px;}
+	</STYLE>
+    <meta charset="utf-8">
+    <title>Configuration
+</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="description" content="A simple framework in f# on top of selenium for writing UI automation and tests.">
+    <meta name="author" content="Chris Holt">
+
+    <script src="//code.jquery.com/jquery-1.8.0.js"></script>
+    <script src="//code.jquery.com/ui/1.8.23/jquery-ui.js"></script>
+    <script src="//netdna.bootstrapcdn.com/twitter-bootstrap/2.2.1/js/bootstrap.min.js"></script>
+    <link href="//netdna.bootstrapcdn.com/twitter-bootstrap/2.2.1/css/bootstrap-combined.min.css" rel="stylesheet">
+
+    <link type="text/css" rel="stylesheet" href="/canopy/content/style.css" />
+    <script type="text/javascript" src="/canopy/content/tips.js"></script>
+    <!-- HTML5 shim, for IE6-8 support of HTML5 elements -->
+    <!--[if lt IE 9]>
+      <script src="//html5shim.googlecode.com/svn/trunk/html5.js"></script>
+    <![endif]-->
+    <script>
+      (function(i,s,o,g,r,a,m){i['GoogleAnalyticsObject']=r;i[r]=i[r]||function(){
+      (i[r].q=i[r].q||[]).push(arguments)},i[r].l=1*new Date();a=s.createElement(o),
+      m=s.getElementsByTagName(o)[0];a.async=1;a.src=g;m.parentNode.insertBefore(a,m)
+      })(window,document,'script','//www.google-analytics.com/analytics.js','ga');
+
+      ga('create', 'UA-50003332-1', 'lefthandedgoat.github.io');
+      ga('send', 'pageview');
+
+    </script>
+  </head>
+  <body>
+    <div class="container">
+      <div class="masthead">
+        <ul class="nav nav-pills pull-right">
+          <li><a href="http://fsharp.org">fsharp.org</a></li>
+          <li><a href="http://www.tryfsharp.org/">tryfsharp.org</a></li>
+          <li><a href="https://github.com/lefthandedgoat/canopy">github page</a></li>
+        </ul>
+        <h3 class="muted"><a href="/canopy/index.html">canopy</a></h3>
+      </div>
+      <hr />
+      <div class="row">
+        <div class="span9" id="main">
+          
+<h1>Configuration</h1>
+
+<h2>chromeDir</h2>
+
+<p>Directory for the chromedriver.
+Defaults to pre-set OS paths
+OSX: /usr/bin/
+Windows: C:\</p>
+
+<table class="pre"><tr><td class="lines"><pre class="fssnip">
+<span class="l">1: </span>
+</pre>
+</td>
+<td class="snippet"><pre class="fssnip">
+<span onmouseout="hideTip(event, 'fs3', 4)" onmouseover="showTip(event, 'fs3', 4)" class="i">chromeDir</span> <span class="o">&lt;-</span> <span class="s">&quot;</span><span class="s">C</span><span class="s">:</span><span class="s">\\</span><span class="s">&quot;</span></pre>
+</td>
+</tr>
+</table>
+
+<h2>ieDir</h2>
+
+<p>Directory for Internet Explorer. 
+Defaults to pre-set OS paths
+OSX: /usr/bin/
+Windows: C:\</p>
+
+<table class="pre"><tr><td class="lines"><pre class="fssnip">
+<span class="l">1: </span>
+</pre>
+</td>
+<td class="snippet"><pre class="fssnip">
+<span onmouseout="hideTip(event, 'fs4', 5)" onmouseover="showTip(event, 'fs4', 5)" class="i">ieDir</span> <span class="o">&lt;-</span> <span class="s">&quot;</span><span class="s">C</span><span class="s">:</span><span class="s">\\</span><span class="s">&quot;</span></pre>
+</td>
+</tr>
+</table>
+
+<h2>phantomJSDir</h2>
+
+<p>Directory for phantomJS
+Defaults to pre-set OS paths
+OSX: /usr/bin/
+Windows: C:\</p>
+
+<table class="pre"><tr><td class="lines"><pre class="fssnip">
+<span class="l">1: </span>
+</pre>
+</td>
+<td class="snippet"><pre class="fssnip">
+<span onmouseout="hideTip(event, 'fs5', 6)" onmouseover="showTip(event, 'fs5', 6)" class="i">phantomJSDir</span> <span class="o">&lt;-</span> <span class="s">&quot;</span><span class="s">C</span><span class="s">:</span><span class="s">\\</span><span class="s">&quot;</span></pre>
+</td>
+</tr>
+</table>
+
+<h2>safariDir</h2>
+
+<p>Directory for Safari
+Defaults to pre-set OS paths
+OSX: /usr/bin/
+Windows: C:\</p>
+
+<table class="pre"><tr><td class="lines"><pre class="fssnip">
+<span class="l">1: </span>
+</pre>
+</td>
+<td class="snippet"><pre class="fssnip">
+<span onmouseout="hideTip(event, 'fs6', 7)" onmouseover="showTip(event, 'fs6', 7)" class="i">safariDir</span> <span class="o">&lt;-</span> <span class="s">&quot;</span><span class="s">C</span><span class="s">:</span><span class="s">\\</span><span class="s">&quot;</span></pre>
+</td>
+</tr>
+</table>
+
+<h2>elementTimeout</h2>
+
+<p>Amount of time for the test runner to search for an element.
+Default is 10.0 seconds</p>
+
+<table class="pre"><tr><td class="lines"><pre class="fssnip">
+<span class="l">1: </span>
+</pre>
+</td>
+<td class="snippet"><pre class="fssnip">
+<span onmouseout="hideTip(event, 'fs7', 8)" onmouseover="showTip(event, 'fs7', 8)" class="i">elementTimeout</span> <span class="o">&lt;-</span> <span class="n">10.0</span></pre>
+</td>
+</tr>
+</table>
+
+<h2>compareTimeout</h2>
+
+<p>Amount of time for the test runner to spend comparing elements.
+Default is 10.0 seconds</p>
+
+<table class="pre"><tr><td class="lines"><pre class="fssnip">
+<span class="l">1: </span>
+</pre>
+</td>
+<td class="snippet"><pre class="fssnip">
+<span onmouseout="hideTip(event, 'fs8', 9)" onmouseover="showTip(event, 'fs8', 9)" class="i">compareTimeout</span> <span class="o">&lt;-</span> <span class="n">10.0</span></pre>
+</td>
+</tr>
+</table>
+
+<h2>pageTimeout</h2>
+
+<p>Amount of time for the test runner to wait for the page to load.
+Default is 10.0 seconds</p>
+
+<table class="pre"><tr><td class="lines"><pre class="fssnip">
+<span class="l">1: </span>
+</pre>
+</td>
+<td class="snippet"><pre class="fssnip">
+<span onmouseout="hideTip(event, 'fs9', 10)" onmouseover="showTip(event, 'fs9', 10)" class="i">pageTimeout</span> <span class="o">&lt;-</span> <span class="n">10.0</span></pre>
+</td>
+</tr>
+</table>
+
+<h2>wipSleep</h2>
+
+<p>Amount of time to spend between WIP tests (Tests marked with &amp;&amp;&amp;&amp;)
+Default is 1.0 seconds</p>
+
+<table class="pre"><tr><td class="lines"><pre class="fssnip">
+<span class="l">1: </span>
+</pre>
+</td>
+<td class="snippet"><pre class="fssnip">
+<span onmouseout="hideTip(event, 'fs10', 11)" onmouseover="showTip(event, 'fs10', 11)" class="i">wipSleep</span> <span class="o">&lt;-</span> <span class="n">1.0</span></pre>
+</td>
+</tr>
+</table>
+
+<h2>runFailedContextsFirst</h2>
+
+<p>Runs failed contexts first if the test suite has already executed.
+Defaults is false</p>
+
+<table class="pre"><tr><td class="lines"><pre class="fssnip">
+<span class="l">1: </span>
+</pre>
+</td>
+<td class="snippet"><pre class="fssnip">
+<span onmouseout="hideTip(event, 'fs11', 12)" onmouseover="showTip(event, 'fs11', 12)" class="i">runFailedContextsFirst</span> <span class="o">&lt;-</span> <span class="k">false</span></pre>
+</td>
+</tr>
+</table>
+
+<h2>reporter</h2>
+
+<p>Reporter object that will handle how logs should be stored.
+Must inherit IReporter
+Default is ConsoleReporter</p>
+
+<table class="pre"><tr><td class="lines"><pre class="fssnip">
+<span class="l">1: </span>
+</pre>
+</td>
+<td class="snippet"><pre class="fssnip">
+<span onmouseout="hideTip(event, 'fs12', 13)" onmouseover="showTip(event, 'fs12', 13)" class="i">reporter</span> <span class="o">&lt;-</span> <span class="k">new</span> <span onmouseout="hideTip(event, 'fs13', 14)" onmouseover="showTip(event, 'fs13', 14)" class="i">reporters</span><span class="o">.</span><span onmouseout="hideTip(event, 'fs14', 15)" onmouseover="showTip(event, 'fs14', 15)" class="i">ConsoleReporter</span>() <span class="o">:&gt;</span> <span onmouseout="hideTip(event, 'fs13', 16)" onmouseover="showTip(event, 'fs13', 16)" class="i">reporters</span><span class="o">.</span><span onmouseout="hideTip(event, 'fs15', 17)" onmouseover="showTip(event, 'fs15', 17)" class="i">IReporter</span></pre>
+</td>
+</tr>
+</table>
+
+<h2>disableSuggestOtherSelectors</h2>
+
+<p>Option that will disable selector suggestion if a selector fails to execute
+Defaults is false</p>
+
+<table class="pre"><tr><td class="lines"><pre class="fssnip">
+<span class="l">1: </span>
+</pre>
+</td>
+<td class="snippet"><pre class="fssnip">
+<span onmouseout="hideTip(event, 'fs16', 18)" onmouseover="showTip(event, 'fs16', 18)" class="i">disableSuggestOtherSelectors</span> <span class="o">&lt;-</span> <span class="k">false</span></pre>
+</td>
+</tr>
+</table>
+
+<h2>autoPinBrowserRightOnLaunch</h2>
+
+<p>Automatically pins the browser to the right of the screen on launch
+Default is true</p>
+
+<table class="pre"><tr><td class="lines"><pre class="fssnip">
+<span class="l">1: </span>
+</pre>
+</td>
+<td class="snippet"><pre class="fssnip">
+<span onmouseout="hideTip(event, 'fs17', 19)" onmouseover="showTip(event, 'fs17', 19)" class="i">autoPinBrowserRightOnLaunch</span> <span class="o">&lt;-</span> <span class="k">true</span></pre>
+</td>
+</tr>
+</table>
+
+<h2>throwIfMoreThanOneElement</h2>
+
+<p>Throws a CanopyMoreThanOneElementFoundException if more than one element is found using a selector
+Default is false</p>
+
+<table class="pre"><tr><td class="lines"><pre class="fssnip">
+<span class="l">1: </span>
+</pre>
+</td>
+<td class="snippet"><pre class="fssnip">
+<span onmouseout="hideTip(event, 'fs18', 20)" onmouseover="showTip(event, 'fs18', 20)" class="i">throwIfMoreThanOneElement</span> <span class="o">&lt;-</span> <span class="k">false</span></pre>
+</td>
+</tr>
+</table>
+
+<h2>configuredFinders</h2>
+
+<p>Defines functions for finding elements based on selectors
+Default is the following sequence
+findByCss
+findByValue
+findByXpath
+findByLabel
+findByText
+findByJQuery</p>
+
+<table class="pre"><tr><td class="lines"><pre class="fssnip">
+<span class="l">1: </span>
+</pre>
+</td>
+<td class="snippet"><pre class="fssnip">
+<span onmouseout="hideTip(event, 'fs19', 21)" onmouseover="showTip(event, 'fs19', 21)" class="i">configuredFinders</span> <span class="o">&lt;-</span> <span onmouseout="hideTip(event, 'fs20', 22)" onmouseover="showTip(event, 'fs20', 22)" class="i">finders</span><span class="o">.</span><span onmouseout="hideTip(event, 'fs21', 23)" onmouseover="showTip(event, 'fs21', 23)" class="i">defaultFinders</span></pre>
+</td>
+</tr>
+</table>
+
+<h2>writeToSelectWithOptionValue</h2>
+
+<p>TODO
+Default is true</p>
+
+<table class="pre"><tr><td class="lines"><pre class="fssnip">
+<span class="l">1: </span>
+</pre>
+</td>
+<td class="snippet"><pre class="fssnip">
+<span onmouseout="hideTip(event, 'fs22', 24)" onmouseover="showTip(event, 'fs22', 24)" class="i">writeToSelectWithOptionValue</span> <span class="o">&lt;-</span> <span class="k">true</span></pre>
+</td>
+</tr>
+</table>
+
+<h2>optimizeBySkippingIFrameCheck</h2>
+
+<p>TODO
+Default is false</p>
+
+<table class="pre"><tr><td class="lines"><pre class="fssnip">
+<span class="l">1: </span>
+</pre>
+</td>
+<td class="snippet"><pre class="fssnip">
+<span onmouseout="hideTip(event, 'fs23', 25)" onmouseover="showTip(event, 'fs23', 25)" class="i">optimizeBySkippingIFrameCheck</span> <span class="o">&lt;-</span> <span class="k">false</span></pre>
+</td>
+</tr>
+</table>
+
+<h2>optimizeByDisablingCoverageReport</h2>
+
+<p>TODO
+Default is false</p>
+
+<table class="pre"><tr><td class="lines"><pre class="fssnip">
+<span class="l">1: </span>
+</pre>
+</td>
+<td class="snippet"><pre class="fssnip">
+<span onmouseout="hideTip(event, 'fs24', 26)" onmouseover="showTip(event, 'fs24', 26)" class="i">optimizeByDisablingCoverageReport</span> <span class="o">&lt;-</span> <span class="k">false</span></pre>
+</td>
+</tr>
+</table>
+
+<h2>showInfoDiv</h2>
+
+<p>Allows information to be displayed on the browser when the puts function is called
+Default is true</p>
+
+<table class="pre"><tr><td class="lines"><pre class="fssnip">
+<span class="l">1: </span>
+</pre>
+</td>
+<td class="snippet"><pre class="fssnip">
+<span onmouseout="hideTip(event, 'fs25', 27)" onmouseover="showTip(event, 'fs25', 27)" class="i">showInfoDiv</span> <span class="o">&lt;-</span> <span class="k">true</span></pre>
+</td>
+</tr>
+</table>
+
+<div class="tip" id="fs1">namespace canopy</div>
+<div class="tip" id="fs2">module configuration<br /><br />from canopy</div>
+<div class="tip" id="fs3">val mutable chromeDir : string<br /><br />Full name: canopy.configuration.chromeDir</div>
+<div class="tip" id="fs4">val mutable ieDir : string<br /><br />Full name: canopy.configuration.ieDir</div>
+<div class="tip" id="fs5">val mutable phantomJSDir : string<br /><br />Full name: canopy.configuration.phantomJSDir</div>
+<div class="tip" id="fs6">val mutable safariDir : string<br /><br />Full name: canopy.configuration.safariDir</div>
+<div class="tip" id="fs7">val mutable elementTimeout : float<br /><br />Full name: canopy.configuration.elementTimeout</div>
+<div class="tip" id="fs8">val mutable compareTimeout : float<br /><br />Full name: canopy.configuration.compareTimeout</div>
+<div class="tip" id="fs9">val mutable pageTimeout : float<br /><br />Full name: canopy.configuration.pageTimeout</div>
+<div class="tip" id="fs10">val mutable wipSleep : float<br /><br />Full name: canopy.configuration.wipSleep</div>
+<div class="tip" id="fs11">val mutable runFailedContextsFirst : bool<br /><br />Full name: canopy.configuration.runFailedContextsFirst</div>
+<div class="tip" id="fs12">val mutable reporter : reporters.IReporter<br /><br />Full name: canopy.configuration.reporter</div>
+<div class="tip" id="fs13">module reporters<br /><br />from canopy</div>
+<div class="tip" id="fs14">Multiple items<br />type ConsoleReporter =<br />&#160;&#160;interface IReporter<br />&#160;&#160;new : unit -&gt; ConsoleReporter<br /><br />Full name: canopy.reporters.ConsoleReporter<br /><br />--------------------<br />new : unit -&gt; reporters.ConsoleReporter</div>
+<div class="tip" id="fs15">type IReporter =<br />&#160;&#160;interface<br />&#160;&#160;&#160;&#160;abstract member contextEnd : string -&gt; unit<br />&#160;&#160;&#160;&#160;abstract member contextStart : string -&gt; unit<br />&#160;&#160;&#160;&#160;abstract member coverage : string -&gt; byte [] -&gt; unit<br />&#160;&#160;&#160;&#160;abstract member describe : string -&gt; unit<br />&#160;&#160;&#160;&#160;abstract member fail : Exception -&gt; string -&gt; byte [] -&gt; string -&gt; unit<br />&#160;&#160;&#160;&#160;abstract member pass : unit -&gt; unit<br />&#160;&#160;&#160;&#160;abstract member quit : unit -&gt; unit<br />&#160;&#160;&#160;&#160;abstract member skip : unit -&gt; unit<br />&#160;&#160;&#160;&#160;abstract member suggestSelectors : string -&gt; string list -&gt; unit<br />&#160;&#160;&#160;&#160;abstract member suiteBegin : unit -&gt; unit<br />&#160;&#160;&#160;&#160;...<br />&#160;&#160;end<br /><br />Full name: canopy.reporters.IReporter</div>
+<div class="tip" id="fs16">val mutable disableSuggestOtherSelectors : bool<br /><br />Full name: canopy.configuration.disableSuggestOtherSelectors</div>
+<div class="tip" id="fs17">val mutable autoPinBrowserRightOnLaunch : bool<br /><br />Full name: canopy.configuration.autoPinBrowserRightOnLaunch</div>
+<div class="tip" id="fs18">val mutable throwIfMoreThanOneElement : bool<br /><br />Full name: canopy.configuration.throwIfMoreThanOneElement</div>
+<div class="tip" id="fs19">val mutable configuredFinders : (string -&gt; (OpenQA.Selenium.By -&gt; System.Collections.ObjectModel.ReadOnlyCollection&lt;OpenQA.Selenium.IWebElement&gt;) -&gt; seq&lt;OpenQA.Selenium.IWebElement list&gt;)<br /><br />Full name: canopy.configuration.configuredFinders</div>
+<div class="tip" id="fs20">module finders<br /><br />from canopy</div>
+<div class="tip" id="fs21">val mutable defaultFinders : (string -&gt; (OpenQA.Selenium.By -&gt; System.Collections.ObjectModel.ReadOnlyCollection&lt;OpenQA.Selenium.IWebElement&gt;) -&gt; seq&lt;OpenQA.Selenium.IWebElement list&gt;)<br /><br />Full name: canopy.finders.defaultFinders</div>
+<div class="tip" id="fs22">val mutable writeToSelectWithOptionValue : bool<br /><br />Full name: canopy.configuration.writeToSelectWithOptionValue</div>
+<div class="tip" id="fs23">val mutable optimizeBySkippingIFrameCheck : bool<br /><br />Full name: canopy.configuration.optimizeBySkippingIFrameCheck</div>
+<div class="tip" id="fs24">val mutable optimizeByDisablingCoverageReport : bool<br /><br />Full name: canopy.configuration.optimizeByDisablingCoverageReport</div>
+<div class="tip" id="fs25">val mutable showInfoDiv : bool<br /><br />Full name: canopy.configuration.showInfoDiv</div>
+
+        </div>
+        <div class="span3">
+          <img src="/canopy/img/logo.jpg" alt="F# Project" style="width:250px;margin:10px" />  
+          <ul class="nav nav-list" id="menu" style="margin-top: 20px;">
+            <li class="nav-header">canopy</li>
+            <li><a href="/canopy/index.html">Home page</a></li>
+            <li class="divider"></li>
+            <li><a href="https://www.nuget.org/packages/canopy/">Get Library via NuGet</a></li>
+            <li><a href="https://github.com/lefthandedgoat/canopy">Source Code on GitHub</a></li>
+            <li><a href="https://github.com/lefthandedgoat/canopy/blob/master/LICENSE.txt">License</a></li>
+            <li><a href="https://github.com/lefthandedgoat/canopy/blob/master/RELEASE_NOTES.md">Release Notes</a></li>
+            
+            <li class="nav-header">Getting started</li>
+            <li><a href="/canopy/actions.html">Actions</a></li>
+            <li><a href="/canopy/assertions.html">Assertions</a></li>
+            <li><a href="/canopy/testing.html">Testing</a></li>
+            <li><a href="/canopy/reporting.html">Reporting</a></li>
+
+            <li class="nav-header">Documentation</li>
+            <li><a href="/canopy/reference/index.html">API Reference</a></li>
+
+            <li class="nav-header">Testimonials</li>
+            <li><a href="http://amirrajan.github.com/Oak/">Oak MVC</a></li>
+          </ul>
+        </div>
+      </div>
+    </div>
+    
+  </body>
+  </html>
