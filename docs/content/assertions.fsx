@@ -40,7 +40,6 @@ deselected "#yes"
 Assert that the element on the left is equal to the value on the right. 
 *)
 "#firstName" == "Alex"
-(element "#logout") == "Logout"
 
 (**
 != (does not equal) 
@@ -48,7 +47,6 @@ Assert that the element on the left is equal to the value on the right.
 Assert that the element on the left is not equal to the value on the right. 
 *)
 "#firstName" != "Tom"
-(element "#login") != "Logout"
 
 (**
 *= (one of many equals) 
