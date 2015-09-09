@@ -100,17 +100,17 @@ let run () =
                     try
                         suite.Before ()
                         test.Func ()
-                    with
-                        | ex when failureMessage <> null && failureMessage = ex.Message -> pass()
-                        | ex -> fail ex test.Id <| safelyGetUrl()
-                finally
-                    suite.After ()
-                pass()
-
+                    finally
+                        suite.After ()
+                    pass()
+                with
+                    | ex when failureMessage <> null && failureMessage = ex.Message -> pass()
+                    | ex -> fail ex test.Id <| safelyGetUrl()
+                
             reporter.testEnd test.Id 
         
         failureMessage <- null            
-
+        
     //run all the suites
     if runFailedContextsFirst = true then
         let failedContexts = history.get()
