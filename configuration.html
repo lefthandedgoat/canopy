@@ -51,10 +51,12 @@
 
 <h2>chromeDir</h2>
 
-<p>Directory for the chromedriver
-Defaults to pre-set OS paths
-OSX: /usr/bin/
-Windows: C:\</p>
+<ul>
+<li>Directory for the chromedriver</li>
+<li>Defaults to pre-set OS paths
+O* SX: /usr/bin/</li>
+<li>Windows: C:\</li>
+</ul>
 
 <table class="pre"><tr><td class="lines"><pre class="fssnip">
 <span class="l">1: </span>
@@ -87,10 +89,12 @@ Windows: C:\</p>
 
 <h2>phantomJSDir</h2>
 
-<p>Directory for phantomJS
-Defaults to pre-set OS paths
-OSX: /usr/bin/
-Windows: C:\</p>
+<ul>
+<li>Directory for phantomJS</li>
+<li>Defaults to pre-set OS paths</li>
+<li>OSX: /usr/bin/</li>
+<li>Windows: C:\</li>
+</ul>
 
 <table class="pre"><tr><td class="lines"><pre class="fssnip">
 <span class="l">1: </span>
@@ -104,10 +108,12 @@ Windows: C:\</p>
 
 <h2>safariDir</h2>
 
-<p>Directory for Safari
-Defaults to pre-set OS paths
-OSX: /usr/bin/
-Windows: C:\</p>
+<ul>
+<li>Directory for Safari</li>
+<li>Defaults to pre-set OS paths</li>
+<li>OSX: /usr/bin/</li>
+<li>Windows: C:\</li>
+</ul>
 
 <table class="pre"><tr><td class="lines"><pre class="fssnip">
 <span class="l">1: </span>
@@ -121,8 +127,10 @@ Windows: C:\</p>
 
 <h2>elementTimeout</h2>
 
-<p>Amount of time for the test runner to search for an element.
-Default is 10.0 seconds</p>
+<ul>
+<li>Amount of time for the test runner to search for an element.</li>
+<li>Default is 10.0 seconds</li>
+</ul>
 
 <table class="pre"><tr><td class="lines"><pre class="fssnip">
 <span class="l">1: </span>
@@ -136,8 +144,10 @@ Default is 10.0 seconds</p>
 
 <h2>compareTimeout</h2>
 
-<p>Amount of time for the test runner to spend comparing elements.
-Default is 10.0 seconds</p>
+<ul>
+<li>Amount of time for the test runner to spend comparing elements.</li>
+<li>Default is 10.0 seconds</li>
+</ul>
 
 <table class="pre"><tr><td class="lines"><pre class="fssnip">
 <span class="l">1: </span>
@@ -151,8 +161,10 @@ Default is 10.0 seconds</p>
 
 <h2>pageTimeout</h2>
 
-<p>Amount of time for the test runner to wait for the page to load.
-Default is 10.0 seconds</p>
+<ul>
+<li>Amount of time for the test runner to wait for the page to load.</li>
+<li>Default is 10.0 seconds</li>
+</ul>
 
 <table class="pre"><tr><td class="lines"><pre class="fssnip">
 <span class="l">1: </span>
@@ -166,8 +178,10 @@ Default is 10.0 seconds</p>
 
 <h2>wipSleep</h2>
 
-<p>Amount of time to spend between WIP tests (Tests marked with &amp;&amp;&amp;&amp;)
-Default is 1.0 seconds</p>
+<ul>
+<li>Amount of time to spend between WIP tests (Tests marked with &amp;&amp;&amp;&amp;)</li>
+<li>Default is 1.0 seconds</li>
+</ul>
 
 <table class="pre"><tr><td class="lines"><pre class="fssnip">
 <span class="l">1: </span>
@@ -181,8 +195,10 @@ Default is 1.0 seconds</p>
 
 <h2>runFailedContextsFirst</h2>
 
-<p>Runs failed contexts first if the test suite has already executed.
-Defaults is false</p>
+<ul>
+<li>Runs failed contexts first if the test suite has already executed.</li>
+<li>Defaults is false</li>
+</ul>
 
 <table class="pre"><tr><td class="lines"><pre class="fssnip">
 <span class="l">1: </span>
@@ -196,9 +212,11 @@ Defaults is false</p>
 
 <h2>reporter</h2>
 
-<p>Reporter object that will handle how logs should be stored.
-Must inherit IReporter
-Default is ConsoleReporter</p>
+<ul>
+<li>Reporter object that will handle how logs should be stored.</li>
+<li>Must inherit IReporter</li>
+<li>Default is ConsoleReporter</li>
+</ul>
 
 <table class="pre"><tr><td class="lines"><pre class="fssnip">
 <span class="l">1: </span>
@@ -212,8 +230,10 @@ Default is ConsoleReporter</p>
 
 <h2>disableSuggestOtherSelectors</h2>
 
-<p>Option that will disable selector suggestion if a selector fails to execute
-Defaults is false</p>
+<ul>
+<li>Option that will disable selector suggestion if a selector fails to execute</li>
+<li>Defaults is false</li>
+</ul>
 
 <table class="pre"><tr><td class="lines"><pre class="fssnip">
 <span class="l">1: </span>
@@ -227,8 +247,10 @@ Defaults is false</p>
 
 <h2>autoPinBrowserRightOnLaunch</h2>
 
-<p>Automatically pins the browser to the right of the screen on launch
-Default is true</p>
+<ul>
+<li>Automatically pins the browser to the right of the screen on launch</li>
+<li>Default is true</li>
+</ul>
 
 <table class="pre"><tr><td class="lines"><pre class="fssnip">
 <span class="l">1: </span>
@@ -242,8 +264,10 @@ Default is true</p>
 
 <h2>throwIfMoreThanOneElement</h2>
 
-<p>Throws a CanopyMoreThanOneElementFoundException if more than one element is found using a selector
-Default is false</p>
+<ul>
+<li>Throws a CanopyMoreThanOneElementFoundException if more than one element is found using a selector</li>
+<li>Default is false</li>
+</ul>
 
 <table class="pre"><tr><td class="lines"><pre class="fssnip">
 <span class="l">1: </span>
@@ -257,14 +281,16 @@ Default is false</p>
 
 <h2>configuredFinders</h2>
 
-<p>Defines functions for finding elements based on selectors
-Default is the following sequence
-findByCss
-findByValue
-findByXpath
-findByLabel
-findByText
-findByJQuery</p>
+<ul>
+<li>Defines functions for finding elements based on selectors</li>
+<li>Default is the following sequence</li>
+<li>findByCss</li>
+<li>findByValue</li>
+<li>findByXpath</li>
+<li>findByLabel</li>
+<li>findByText</li>
+<li>findByJQuery</li>
+</ul>
 
 <table class="pre"><tr><td class="lines"><pre class="fssnip">
 <span class="l">1: </span>
@@ -278,8 +304,10 @@ findByJQuery</p>
 
 <h2>writeToSelectWithOptionValue</h2>
 
-<p>TODO
-Default is true</p>
+<ul>
+<li>Provided to preserve previous behaviour of not using the options value to write to a select</li>
+<li>Default is true</li>
+</ul>
 
 <table class="pre"><tr><td class="lines"><pre class="fssnip">
 <span class="l">1: </span>
@@ -293,8 +321,10 @@ Default is true</p>
 
 <h2>optimizeBySkippingIFrameCheck</h2>
 
-<p>TODO
-Default is false</p>
+<ul>
+<li>If you need your tests to be faster and don't have any iframes you can turn this to true</li>
+<li>Default is false</li>
+</ul>
 
 <table class="pre"><tr><td class="lines"><pre class="fssnip">
 <span class="l">1: </span>
@@ -308,8 +338,10 @@ Default is false</p>
 
 <h2>optimizeByDisablingCoverageReport</h2>
 
-<p>TODO
-Default is false</p>
+<ul>
+<li>If you need your tests to be faster and don't use coverage report you can turn this to true</li>
+<li>Default is false</li>
+</ul>
 
 <table class="pre"><tr><td class="lines"><pre class="fssnip">
 <span class="l">1: </span>
@@ -324,7 +356,7 @@ Default is false</p>
 <h2>showInfoDiv</h2>
 
 <p>Allows information to be displayed on the browser when the puts function is called
-Default is true</p>
+* Default is true</p>
 
 <table class="pre"><tr><td class="lines"><pre class="fssnip">
 <span class="l">1: </span>
