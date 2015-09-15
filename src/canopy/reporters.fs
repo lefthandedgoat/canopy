@@ -21,6 +21,7 @@ type IReporter =
    abstract member suiteBegin : unit -> unit
    abstract member suiteEnd : unit -> unit
    abstract member coverage : string -> byte [] -> unit
+   abstract member setEnvironment : string -> unit
 
 type ConsoleReporter() =   
     interface IReporter with               
@@ -98,6 +99,8 @@ type ConsoleReporter() =
 
         member this.skip () = ()
 
+        member this.setEnvironment env = ()
+
 type TeamCityReporter() =
 
     let flowId = System.Guid.NewGuid().ToString()
@@ -166,6 +169,8 @@ type TeamCityReporter() =
 
         member this.skip () = ()
 
+        member this.setEnvironment env = ()
+
 type LiveHtmlReporter(browser : BrowserStartMode, driverPath : string) =
     let consoleReporter : IReporter = new ConsoleReporter() :> IReporter
     
@@ -198,10 +203,13 @@ type LiveHtmlReporter(browser : BrowserStartMode, driverPath : string) =
         _browser.Manage().Window.Position <- new System.Drawing.Point((maxWidth * 0),0);
     do pin()
        
-    let mutable context = System.String.Empty;
-    let mutable test = System.String.Empty;
+    let mutable context = System.String.Empty
+    let mutable test = System.String.Empty
     let mutable canQuit = false
     let mutable contexts : string list = []
+    let mutable environment = System.String.Empty
+    let testStopWatch = System.Diagnostics.Stopwatch()
+    let contextStopWatch = System.Diagnostics.Stopwatch()
 
     new() = LiveHtmlReporter(Firefox, String.Empty)
     new(browser : BrowserStartMode) = LiveHtmlReporter(browser, String.Empty)
@@ -238,6 +246,8 @@ type LiveHtmlReporter(browser : BrowserStartMode, driverPath : string) =
             consoleReporter.describe d
           
         member this.contextStart c = 
+            contextStopWatch.Reset()
+            contextStopWatch.Start()
             contexts <- c :: contexts
             context <- System.Web.HttpUtility.JavaScriptStringEncode(c)
             this.swallowedJS (sprintf "addContext('%s');" context)
@@ -245,9 +255,13 @@ type LiveHtmlReporter(browser : BrowserStartMode, driverPath : string) =
             consoleReporter.contextStart c
 
         member this.contextEnd c = 
+            contextStopWatch.Stop()
+            let ellapsed = contextStopWatch.Elapsed
+            this.swallowedJS (sprintf "addTimeToContext ('%s', '%im %is');" context ellapsed.Minutes ellapsed.Seconds)
             consoleReporter.contextEnd c
 
-        member this.summary minutes seconds passed failed =                        
+        member this.summary minutes seconds passed failed =
+            this.swallowedJS (sprintf "setTotalTime ('%im %is');" minutes seconds)                        
             consoleReporter.summary minutes seconds passed failed
         
         member this.write w = 
@@ -258,11 +272,16 @@ type LiveHtmlReporter(browser : BrowserStartMode, driverPath : string) =
             consoleReporter.suggestSelectors selector suggestions
 
         member this.testStart id = 
+            testStopWatch.Reset()
+            testStopWatch.Start()
             test <- System.Web.HttpUtility.JavaScriptStringEncode(id)
             this.swallowedJS (sprintf "addToContext ('%s', '%s');" context test)
             consoleReporter.testStart id
             
-        member this.testEnd id = ()
+        member this.testEnd id =
+            testStopWatch.Stop()
+            let ellapsed = testStopWatch.Elapsed
+            this.swallowedJS (sprintf "addTimeToTest ('%s', '%im %is');" context ellapsed.Minutes ellapsed.Seconds)
 
         member this.quit () = 
           match this.reportPath with
@@ -273,7 +292,10 @@ type LiveHtmlReporter(browser : BrowserStartMode, driverPath : string) =
 
           if canQuit then _browser.Quit()
         
-        member this.suiteBegin () = _browser.Navigate().GoToUrl(this.reportTemplateUrl)
+        member this.suiteBegin () = 
+            _browser.Navigate().GoToUrl(this.reportTemplateUrl)
+            this.swallowedJS (sprintf "setStartTime ('%s');" (String.Format("{0:F}", System.DateTime.Now)))    
+            if environment <> String.Empty then this.swallowedJS (sprintf "setEnvironment ('%s');" environment)             
 
         member this.suiteEnd () = 
             canQuit <- true
@@ -291,3 +313,6 @@ type LiveHtmlReporter(browser : BrowserStartMode, driverPath : string) =
 
         member this.skip () = 
             this.swallowedJS (sprintf "updateTestInContext('%s', 'Skip', '%s');" context "")
+
+        member this.setEnvironment env =
+            environment <- env

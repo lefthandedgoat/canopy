@@ -1,11 +1,10 @@
-<html lang="en">
+﻿<html lang="en">
 <head>
     <meta charset="utf-8">
     <title>canopy test results</title>
     <script src="http://code.jquery.com/jquery-1.9.1.min.js"></script>
     <script src="http://netdna.bootstrapcdn.com/twitter-bootstrap/2.3.0/js/bootstrap.min.js"></script>
-    <link href="http://netdna.bootstrapcdn.com/twitter-bootstrap/2.3.0/css/bootstrap-combined.min.css"
-        rel="stylesheet">
+    <link href="http://netdna.bootstrapcdn.com/twitter-bootstrap/2.3.0/css/bootstrap-combined.min.css"rel="stylesheet">
     <style>
         .masthead ul, .masthead li
         {
@@ -24,6 +23,32 @@
         .table.results td
         {
             border-left: 0px solid #dddddd;
+        }
+
+        .black {
+            margin-left: 5px;
+            color: black;
+        }
+
+        .well.mini {
+            min-height: 0px;
+            margin-bottom: 0px;
+            padding: 2px;
+            position: relative;
+            top: -3px;
+        }
+
+        .well.mini.clear {
+            background-color: inherit;
+            border: none;
+            -webkit-box-shadow: inherit;
+            -moz-box-shadow: inherit;
+            box-shadow: inherit;
+            top: 0px;
+        }
+
+        .test, .context {
+            padding: 2px 0 6px 0;
         }
     </style>
 </head>
@@ -55,6 +80,18 @@
                         <span id="skipped">0</span>&nbspSkipped
                     </label>
                 </a></li>
+                <li class="pull-right" id="start"><a>
+                    <label>Start:<span class="black"></span>
+                    </label>
+                </a></li>
+                <li class="pull-right" id="total"><a>
+                    <label>Total:<span class="black"></span>
+                    </label>
+                </a></li>
+                <li class="pull-right hidden" id="environment"><a>
+                    <label>Environment:<span class="black"></span>
+                    </label>
+                </a></li>
             </ul>
         </div>
         <hr>
@@ -77,7 +114,7 @@
 			};
 
 		var addContext = function (context) {
-			$("#contexts").last('tr').append('<tr class="context" data-context="' + context + '"><td>Context: ' + context + '</td></tr>');
+		    $("#contexts").last('tr').append('<tr data-context="' + context + '"><td><div class="context"><span class="mini well clear">Context: ' + context + '</span><span class="pull-right mini well hidden context-time">0m 0s</span></div></td></tr>');
 			beginContextResults(context);
 		};
 
@@ -90,7 +127,7 @@
 		
         var addToContext = function (context, testName) {
 			var ctx = $('#contexts tr[data-context="' + context + '"]');
-			ctx.next('tr').find('table').append('<tr><td><div class="test">' + testName + '</div></td></tr>');	
+			ctx.next('tr').find('table').append('<tr><td><div class="test"><span class="mini well clear">' + testName + '</span><span class="pull-right mini well hidden test-time"></span></div></td></tr>');	
 		};
 		
 		var updateTestInContext = function (context, passFailSkip, image) {
@@ -135,6 +172,28 @@
 			ctx.next('tr').find('table').last('tr').find('.test').last().after('<div class="stack"><pre>' + stack + '</pre></div>');
 		};
 		
+		var addTimeToTest = function (context, time) {
+		    var ctx = $('#contexts tr[data-context="' + context + '"]');
+		    ctx.next('tr').find('table').last('tr').find('.test').last().find('.test-time').removeClass('hidden').text(time);
+		};
+
+		var addTimeToContext = function (context, time) {
+		    var ctx = $('#contexts tr[data-context="' + context + '"]');
+		    ctx.find('.context-time').removeClass('hidden').text(time);
+		};
+
+		var setTotalTime = function (time) {
+		    $("#total .black").text(time);
+		};
+
+		var setStartTime = function (time) {
+		    $("#start .black").text(time);
+		};
+
+		var setEnvironment = function (environment) {
+		    $("#environment").removeClass('hidden').find(".black").text(environment);
+		};
+
 		var addMessageToTest = function (context, message) {
 			var ctx = $('#contexts tr[data-context="' + context + '"]');
 			if(ctx.next('tr').find('table').last('tr').find('.test').last().siblings('pre').length === 0) {

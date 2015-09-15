@@ -171,3 +171,6 @@
 #### 0.9.33 - September 9 2015
 * Fix bug were failing tests were marked as passed [Issue #212](https://github.com/lefthandedgoat/canopy/issues/212)
 * Make print info displayed in bottom right of page optional, thanks Jeremy Bellows! [Issue #213](https://github.com/lefthandedgoat/canopy/issues/213)
+
+#### 0.9.34 - September 15 2015
+* Improved the HTML reporter to have environment, total time, start date, time per context, and time per test

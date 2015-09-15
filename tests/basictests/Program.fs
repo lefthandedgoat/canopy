@@ -15,6 +15,7 @@ compareTimeout <- 3.0
 pageTimeout <- 3.0
 runFailedContextsFirst <- true
 reporter <- new LiveHtmlReporter(Chrome, configuration.chromeDir) :> IReporter 
+reporter.setEnvironment "My Machine"
 
 failFast := true
 
