@@ -61,13 +61,16 @@ let pass () =
     reporter.pass ()
 
 let fail (ex : Exception) id =
+    if skipAllTestsOnFailure = true || skipRemainingTestsInContextOnFailure = true then skipNextTest <- true
     try
         if failFast = ref true then failed <- true        
         failedCount <- failedCount + 1
         contextFailed <- true
         let f = DateTime.Now.ToString("MMM-d_HH-mm-ss-fff")
-        let ss = screenshot configuration.failScreenshotPath f
-        reporter.fail ex id ss
+        if failureScreenshotsEnabled = true then
+          let ss = screenshot configuration.failScreenshotPath f
+          reporter.fail ex id ss
+        else reporter.fail ex id Array.empty<byte>
     with 
         | :? WebDriverException as failExc -> 
             //Fail during error report (likely  OpenQA.Selenium.WebDriverException.WebDriverTimeoutException ). 
@@ -94,6 +97,8 @@ let run () =
             if System.Object.ReferenceEquals(test.Func, todo) then 
                 reporter.todo ()
             else if System.Object.ReferenceEquals(test.Func, skipped) then 
+                reporter.skip ()
+            else if skipNextTest = true then 
                 reporter.skip ()
             else
                 try
@@ -124,6 +129,7 @@ let run () =
 
     suites
     |> List.iter (fun s ->
+        if skipRemainingTestsInContextOnFailure = true && skipAllTestsOnFailure = false then skipNextTest <- false
         if failed = false then
             contextFailed <- false
             if s.Context <> null then reporter.contextStart s.Context

@@ -31,3 +31,7 @@ let mutable writeToSelectWithOptionValue = true
 let mutable optimizeBySkippingIFrameCheck = false
 let mutable optimizeByDisablingCoverageReport = false
 let mutable showInfoDiv = true
+let mutable failureScreenshotsEnabled = true
+let mutable skipAllTestsOnFailure = false
+let mutable skipRemainingTestsInContextOnFailure = false
+let mutable skipNextTest = false
