@@ -174,3 +174,10 @@
 
 #### 0.9.34 - September 15 2015
 * Improved the HTML reporter to have environment, total time, start date, time per context, and time per test
+
+#### 0.9.35 - October 7 2015
+Added features to improve granularity for skipping tests after a failure and skipping individual tests [Issue #215](https://github.com/lefthandedgoat/canopy/issues/215)
+Updated to Selenium 2.48
+
+#### 0.9.36 - October 13 2015
+Improve reporting skip for console and TeamCity reporter [Issue #215](https://github.com/lefthandedgoat/canopy/issues/215)
