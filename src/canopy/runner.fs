@@ -51,6 +51,7 @@ let ( &&&&& ) description f =
     let lastSuite = incrementLastTestSuite()
     lastSuite.Always <- lastSuite.Always @ [Test(description, f, lastSuite.TotalTestsCount)]
 let mutable passedCount = 0
+let mutable skippedCount = 0
 let mutable failedCount = 0
 let mutable contextFailed = false
 let mutable failedContexts : string list = []
@@ -59,6 +60,10 @@ let mutable failed = false
 let pass () =    
     passedCount <- passedCount + 1
     reporter.pass ()
+
+let skip id =    
+    skippedCount <- skippedCount + 1
+    reporter.skip id
 
 let fail (ex : Exception) id =
     if skipAllTestsOnFailure = true || skipRemainingTestsInContextOnFailure = true then skipNextTest <- true
@@ -97,9 +102,9 @@ let run () =
             if System.Object.ReferenceEquals(test.Func, todo) then 
                 reporter.todo ()
             else if System.Object.ReferenceEquals(test.Func, skipped) then 
-                reporter.skip ()
+                skip test.Id
             else if skipNextTest = true then 
-                reporter.skip ()
+                skip test.Id
             else
                 try
                     try
@@ -157,7 +162,7 @@ let run () =
     history.save failedContexts
 
     stopWatch.Stop()    
-    reporter.summary stopWatch.Elapsed.Minutes stopWatch.Elapsed.Seconds passedCount failedCount 
+    reporter.summary stopWatch.Elapsed.Minutes stopWatch.Elapsed.Seconds passedCount failedCount skippedCount 
     reporter.suiteEnd()
 
 let runFor browsers =
