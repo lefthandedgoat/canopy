@@ -9,12 +9,12 @@ type IReporter =
    abstract member pass : unit -> unit
    abstract member fail : Exception -> string -> byte [] -> string -> unit
    abstract member todo : unit -> unit
-   abstract member skip : unit -> unit
+   abstract member skip : string -> unit
    abstract member testEnd : string -> unit
    abstract member describe : string -> unit
    abstract member contextStart : string -> unit
    abstract member contextEnd : string -> unit
-   abstract member summary : int -> int -> int -> int -> unit
+   abstract member summary : int -> int -> int -> int -> int -> unit
    abstract member write : string -> unit
    abstract member suggestSelectors : string -> string list -> unit
    abstract member quit : unit -> unit
@@ -61,12 +61,16 @@ type ConsoleReporter() =
         
         member this.contextEnd c = ()
         
-        member this.summary minutes seconds passed failed =
+        member this.summary minutes seconds passed failed skipped =
             Console.WriteLine()
             Console.WriteLine("{0} minutes {1} seconds to execute", minutes, seconds)
             if failed = 0 then
                 Console.ForegroundColor <- ConsoleColor.Green
             Console.WriteLine("{0} passed", passed)
+            Console.ResetColor()
+            if skipped > 0 then
+                Console.ForegroundColor <- ConsoleColor.Yellow        
+            Console.WriteLine("{0} skipped", skipped)    
             Console.ResetColor()
             if failed > 0 then
                 Console.ForegroundColor <- ConsoleColor.Red        
@@ -76,7 +80,7 @@ type ConsoleReporter() =
         member this.write w = Console.WriteLine w        
         
         member this.suggestSelectors selector suggestions = 
-            Console.ForegroundColor <- ConsoleColor.DarkYellow                    
+            Console.ForegroundColor <- ConsoleColor.Yellow                    
             Console.WriteLine("Couldn't find any elements with selector '{0}', did you mean:", selector)
             suggestions |> List.iter (fun suggestion -> Console.WriteLine("\t{0}", suggestion))
             Console.ResetColor()
@@ -97,7 +101,10 @@ type ConsoleReporter() =
         
         member this.todo () = ()
 
-        member this.skip () = ()
+        member this.skip id =
+            Console.ForegroundColor <- ConsoleColor.Yellow
+            Console.WriteLine("Skipped");
+            Console.ResetColor()
 
         member this.setEnvironment env = ()
 
@@ -147,7 +154,7 @@ type TeamCityReporter() =
             teamcityReport (sprintf "testSuiteFinished name='%s'" (tcFriendlyMessage c))
             consoleReporter.contextEnd c
     
-        member this.summary minutes seconds passed failed = consoleReporter.summary minutes seconds passed failed        
+        member this.summary minutes seconds passed failed skipped = consoleReporter.summary minutes seconds passed failed skipped        
     
         member this.write w = consoleReporter.write w        
     
@@ -167,7 +174,7 @@ type TeamCityReporter() =
 
         member this.todo () = ()
 
-        member this.skip () = ()
+        member this.skip id = teamcityReport (sprintf "testIgnored name='%s'" (tcFriendlyMessage id))
 
         member this.setEnvironment env = ()
 
@@ -260,9 +267,9 @@ type LiveHtmlReporter(browser : BrowserStartMode, driverPath : string) =
             this.swallowedJS (sprintf "addTimeToContext ('%s', '%im %is');" context ellapsed.Minutes ellapsed.Seconds)
             consoleReporter.contextEnd c
 
-        member this.summary minutes seconds passed failed =
+        member this.summary minutes seconds passed failed skipped =
             this.swallowedJS (sprintf "setTotalTime ('%im %is');" minutes seconds)                        
-            consoleReporter.summary minutes seconds passed failed
+            consoleReporter.summary minutes seconds passed failed skipped
         
         member this.write w = 
             this.swallowedJS (sprintf "addMessageToTest ('%s', '%s');" context w)
@@ -311,8 +318,9 @@ type LiveHtmlReporter(browser : BrowserStartMode, driverPath : string) =
         member this.todo () = 
             this.swallowedJS (sprintf "updateTestInContext('%s', 'Todo', '%s');" context "")
 
-        member this.skip () = 
+        member this.skip id = 
             this.swallowedJS (sprintf "updateTestInContext('%s', 'Skip', '%s');" context "")
+            consoleReporter.skip id
 
         member this.setEnvironment env =
             environment <- env
