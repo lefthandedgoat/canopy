@@ -643,7 +643,7 @@ context "Resize tests"
     start chrome
     url "http://resizemybrowser.com/"
     resize screenSizes.iPhone4
-    "#cWidth" == "320"
+    "#cWidth" == "357"
     "#cHeight" == "480"
     quit browser
     switchTo mainBrowser
@@ -663,7 +663,7 @@ context "Resize tests"
     url "http://resizemybrowser.com/"
     resize screenSizes.iPhone4
     rotate()
-    "#cHeight" == "320"
+    "#cHeight" == "357"
     "#cWidth" == "480"
     quit browser
     switchTo mainBrowser
@@ -698,6 +698,26 @@ context "Navigate tests"
 context "todo tests"
 
 "write a test that tests the whole internet!" &&& todo
+
+let createTest n =
+    let testName = sprintf "Testing welcome %i" n
+
+    let testBody _ = 
+        url testpage
+        "#welcome" == "Welcome"
+
+    testName &&& todo
+
+
+let createTestSuite contextName n =
+    context contextName
+
+    [1..n]
+    |> Seq.iter createTest
+
+start chrome
+
+createTestSuite "Add test performance" 100000
 
 run ()
         
