@@ -7,10 +7,9 @@ open reporters
 open types
 open OpenQA.Selenium
 
-let rec private last = function
-    | hd :: [] -> hd
-    | hd :: tl -> last tl
-    | _ -> failwith "Empty list."
+let private last = function
+    | hd :: tl -> hd
+    | [] -> failwith "Empty list."
 
 let mutable suites = [new suite()]
 let mutable todo = fun () -> ()
@@ -26,30 +25,30 @@ let context c =
     else 
         let s = new suite()
         s.Context <- c
-        suites <- suites @ [s]
+        suites <- s::suites
 let private incrementLastTestSuite () =
     let lastSuite = last suites
     lastSuite.TotalTestsCount <- lastSuite.TotalTestsCount + 1
     lastSuite
 let ( &&& ) description f = 
     let lastSuite = incrementLastTestSuite()
-    lastSuite.Tests <- lastSuite.Tests @ [Test(description, f, lastSuite.TotalTestsCount)]
+    lastSuite.Tests <- Test(description, f, lastSuite.TotalTestsCount)::lastSuite.Tests
 let test f = null &&& f
 let ntest description f = description &&& f
 let ( &&&& ) description f = 
     let lastSuite = incrementLastTestSuite()
-    lastSuite.Wips <- lastSuite.Wips @ [Test(description, f, lastSuite.TotalTestsCount)]
+    lastSuite.Wips <- Test(description, f, lastSuite.TotalTestsCount)::lastSuite.Wips
 let wip f = null &&&& f
 let many count f = 
     let lastSuite = incrementLastTestSuite()
-    [1 .. count] |> List.iter (fun _ -> lastSuite.Manys <- lastSuite.Manys @ [Test(null, f, lastSuite.TotalTestsCount)])
+    [1 .. count] |> List.iter (fun _ -> lastSuite.Manys <- Test(null, f, lastSuite.TotalTestsCount)::lastSuite.Manys)
 let ( &&! ) description f = 
     let lastSuite = incrementLastTestSuite()
-    lastSuite.Tests <- lastSuite.Tests @ [Test(description, skipped, lastSuite.TotalTestsCount)]
+    lastSuite.Tests <- Test(description, skipped, lastSuite.TotalTestsCount)::lastSuite.Tests
 let xtest f = null &&! f
 let ( &&&&& ) description f = 
     let lastSuite = incrementLastTestSuite()
-    lastSuite.Always <- lastSuite.Always @ [Test(description, f, lastSuite.TotalTestsCount)]
+    lastSuite.Always <- Test(description, f, lastSuite.TotalTestsCount)::lastSuite.Always
 let mutable passedCount = 0
 let mutable skippedCount = 0
 let mutable failedCount = 0
@@ -88,8 +87,12 @@ let failSuite (ex: Exception) (suite : suite) =
     let reportFailedTest (ex: Exception) (test : Test) =
         reporter.testStart test.Id  
         fail ex test.Id <| safelyGetUrl()
-        reporter.testEnd test.Id 
-    suite.Tests |> List.iter (fun test -> reportFailedTest ex test)
+        reporter.testEnd test.Id
+
+    // tests are in reverse order and have to be reversed first
+    do suite.Tests
+    |> List.rev
+    |> List.iter (fun test -> reportFailedTest ex test)
 
 let run () =
     reporter.suiteBegin()
@@ -120,6 +123,9 @@ let run () =
             reporter.testEnd test.Id 
         
         failureMessage <- null            
+
+    // suites list is in reverse order and have to be reversed before running the tests
+    suites <- List.rev suites
         
     //run all the suites
     if runFailedContextsFirst = true then
@@ -149,13 +155,13 @@ let run () =
                     tests |> List.iter (fun w -> runtest s w)
                     wipTest <- false
                 else if s.Manys.IsEmpty = false then
-                    s.Manys |> List.iter (fun m -> runtest s m)
+                    s.Manys |> List.rev |> List.iter (fun m -> runtest s m)
                 else
                     let tests = s.Tests @ s.Always |> List.sortBy (fun t -> t.Number)
                     tests |> List.iter (fun t -> runtest s t)
             s.Lastly ()                  
 
-            if contextFailed = true then failedContexts <- failedContexts @ [s.Context]
+            if contextFailed = true then failedContexts <- s.Context::failedContexts
             if s.Context <> null then reporter.contextEnd s.Context
     )
     
@@ -166,7 +172,8 @@ let run () =
     reporter.suiteEnd()
 
 let runFor browsers =
-    let currentSuites = suites
+    // suites are in reverse order and have to be reversed before running the tests
+    let currentSuites = suites |> List.rev
     suites <- [new suite()]
     match box browsers with
         | :? (types.BrowserStartMode list) as browsers -> 
