@@ -643,7 +643,7 @@ context "Resize tests"
     start chrome
     url "http://resizemybrowser.com/"
     resize screenSizes.iPhone4
-    "#cWidth" == "357"
+    "#cWidth" == "320"
     "#cHeight" == "480"
     quit browser
     switchTo mainBrowser
@@ -663,7 +663,7 @@ context "Resize tests"
     url "http://resizemybrowser.com/"
     resize screenSizes.iPhone4
     rotate()
-    "#cHeight" == "357"
+    "#cHeight" == "320"
     "#cWidth" == "480"
     quit browser
     switchTo mainBrowser
@@ -717,7 +717,7 @@ let createTestSuite contextName n =
 
 start chrome
 
-createTestSuite "Add test performance" 100000
+createTestSuite "Add test performance" 1000
 
 run ()
         
