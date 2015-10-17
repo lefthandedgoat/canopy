@@ -699,21 +699,14 @@ context "todo tests"
 
 "write a test that tests the whole internet!" &&& todo
 
-let createTest n =
-    let testName = sprintf "Testing welcome %i" n
-
-    let testBody _ = 
-        url testpage
-        "#welcome" == "Welcome"
-
+let createTest k =
+    let testName = sprintf "Testing addition performance %i" k
     testName &&& todo
-
 
 let createTestSuite contextName n =
     context contextName
 
-    [1..n]
-    |> Seq.iter createTest
+    [1..n] |> Seq.iter createTest
 
 start chrome
 
