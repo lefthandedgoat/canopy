@@ -181,3 +181,6 @@ Updated to Selenium 2.48
 
 #### 0.9.36 - October 13 2015
 Improve reporting skip for console and TeamCity reporter [Issue #215](https://github.com/lefthandedgoat/canopy/issues/215)
+
+#### 0.9.37 - October 18 2015
+Great PR from @LimoWanKenobi that fixed a performance problem with add a lot of tests, thanks! [Issue #217](https://github.com/lefthandedgoat/canopy/issues/217)
