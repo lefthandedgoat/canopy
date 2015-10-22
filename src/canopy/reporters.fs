@@ -217,6 +217,7 @@ type LiveHtmlReporter(browser : BrowserStartMode, driverPath : string) =
     let mutable environment = System.String.Empty
     let testStopWatch = System.Diagnostics.Stopwatch()
     let contextStopWatch = System.Diagnostics.Stopwatch()
+    let jsEncode value = System.Web.HttpUtility.JavaScriptStringEncode(value)
 
     new() = LiveHtmlReporter(Firefox, String.Empty)
     new(browser : BrowserStartMode) = LiveHtmlReporter(browser, String.Empty)
@@ -234,7 +235,6 @@ type LiveHtmlReporter(browser : BrowserStartMode, driverPath : string) =
             then System.IO.Directory.CreateDirectory(directory) |> ignore
         IO.File.WriteAllText(System.IO.Path.Combine(directory,filename + ".html"), this.reportHtml())
     
-
     interface IReporter with               
         member this.pass () =
             this.swallowedJS (sprintf "updateTestInContext('%s', 'Pass', '%s');" context "")
@@ -243,12 +243,13 @@ type LiveHtmlReporter(browser : BrowserStartMode, driverPath : string) =
         member this.fail ex id ss url =
             this.swallowedJS (sprintf "updateTestInContext('%s', 'Fail', '%s');" context (Convert.ToBase64String(ss)))
             let stack = sprintf "%s%s%s" ex.Message System.Environment.NewLine ex.StackTrace
-            let stack = System.Web.HttpUtility.JavaScriptStringEncode(stack)
+            let stack = jsEncode stack
             this.swallowedJS (sprintf "addStackToTest ('%s', '%s');" context stack)
             this.swallowedJS (sprintf "addUrlToTest ('%s', '%s');" context url)
             consoleReporter.fail ex id ss url
 
         member this.describe d =
+            let d = jsEncode d
             this.swallowedJS (sprintf "addMessageToTest ('%s', '%s');" context d) 
             consoleReporter.describe d
           
@@ -256,7 +257,7 @@ type LiveHtmlReporter(browser : BrowserStartMode, driverPath : string) =
             contextStopWatch.Reset()
             contextStopWatch.Start()
             contexts <- c :: contexts
-            context <- System.Web.HttpUtility.JavaScriptStringEncode(c)
+            context <- jsEncode c
             this.swallowedJS (sprintf "addContext('%s');" context)
             this.swallowedJS (sprintf "collapseContextsExcept('%s');" context)
             consoleReporter.contextStart c
@@ -272,6 +273,7 @@ type LiveHtmlReporter(browser : BrowserStartMode, driverPath : string) =
             consoleReporter.summary minutes seconds passed failed skipped
         
         member this.write w = 
+            let w = jsEncode w
             this.swallowedJS (sprintf "addMessageToTest ('%s', '%s');" context w)
             consoleReporter.write w
         
@@ -281,7 +283,7 @@ type LiveHtmlReporter(browser : BrowserStartMode, driverPath : string) =
         member this.testStart id = 
             testStopWatch.Reset()
             testStopWatch.Start()
-            test <- System.Web.HttpUtility.JavaScriptStringEncode(id)
+            test <- jsEncode id
             this.swallowedJS (sprintf "addToContext ('%s', '%s');" context test)
             consoleReporter.testStart id
             

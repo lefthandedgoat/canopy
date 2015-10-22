@@ -4,9 +4,9 @@ open System.Reflection
 [<assembly: AssemblyTitleAttribute("canopy")>]
 [<assembly: AssemblyProductAttribute("canopy")>]
 [<assembly: AssemblyDescriptionAttribute("F# web testing framework")>]
-[<assembly: AssemblyVersionAttribute("0.9.37")>]
-[<assembly: AssemblyFileVersionAttribute("0.9.37")>]
+[<assembly: AssemblyVersionAttribute("0.9.38")>]
+[<assembly: AssemblyFileVersionAttribute("0.9.38")>]
 do ()
 
 module internal AssemblyVersionInformation =
-    let [<Literal>] Version = "0.9.37"
+    let [<Literal>] Version = "0.9.38"

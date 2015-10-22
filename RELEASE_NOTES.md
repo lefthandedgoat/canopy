@@ -184,3 +184,6 @@ Improve reporting skip for console and TeamCity reporter [Issue #215](https://gi
 
 #### 0.9.37 - October 18 2015
 Great PR from @LimoWanKenobi that fixed a performance problem with add a lot of tests, thanks! [Issue #217](https://github.com/lefthandedgoat/canopy/issues/217)
+
+#### 0.9.38 - October 22 2015
+Fix a bug in html reporter trying to describe json, it would fail to because the data was not encoded properly [Issue #218](https://github.com/lefthandedgoat/canopy/issues/218)
