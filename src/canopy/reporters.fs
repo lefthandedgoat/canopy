@@ -249,8 +249,8 @@ type LiveHtmlReporter(browser : BrowserStartMode, driverPath : string) =
             consoleReporter.fail ex id ss url
 
         member this.describe d =
-            let d = jsEncode d
-            this.swallowedJS (sprintf "addMessageToTest ('%s', '%s');" context d) 
+            let encoded = jsEncode d
+            this.swallowedJS (sprintf "addMessageToTest ('%s', '%s');" context encoded) 
             consoleReporter.describe d
           
         member this.contextStart c = 
@@ -273,8 +273,8 @@ type LiveHtmlReporter(browser : BrowserStartMode, driverPath : string) =
             consoleReporter.summary minutes seconds passed failed skipped
         
         member this.write w = 
-            let w = jsEncode w
-            this.swallowedJS (sprintf "addMessageToTest ('%s', '%s');" context w)
+            let encoded = jsEncode w
+            this.swallowedJS (sprintf "addMessageToTest ('%s', '%s');" context encoded)
             consoleReporter.write w
         
         member this.suggestSelectors selector suggestions = 

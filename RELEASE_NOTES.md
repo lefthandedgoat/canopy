@@ -187,3 +187,6 @@ Great PR from @LimoWanKenobi that fixed a performance problem with add a lot of 
 
 #### 0.9.38 - October 22 2015
 Fix a bug in html reporter trying to describe json, it would fail to because the data was not encoded properly [Issue #218](https://github.com/lefthandedgoat/canopy/issues/218)
+
+#### 0.9.39 - October 22 2015
+Fix a bug in the bug I fixed in 0.9.38 [Issue #218](https://github.com/lefthandedgoat/canopy/issues/218)
