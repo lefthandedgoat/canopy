@@ -190,3 +190,6 @@ Fix a bug in html reporter trying to describe json, it would fail to because the
 
 #### 0.9.39 - October 22 2015
 Fix a bug in the bug I fixed in 0.9.38 [Issue #218](https://github.com/lefthandedgoat/canopy/issues/218)
+
+#### 0.9.40 - November 4 2015
+Added nmany to let you run many tests with a name [Issue #219](https://github.com/lefthandedgoat/canopy/issues/219)

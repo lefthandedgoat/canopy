@@ -42,6 +42,9 @@ let wip f = null &&&& f
 let many count f = 
     let lastSuite = incrementLastTestSuite()
     [1 .. count] |> List.iter (fun _ -> lastSuite.Manys <- Test(null, f, lastSuite.TotalTestsCount)::lastSuite.Manys)
+let nmany count description f = 
+    let lastSuite = incrementLastTestSuite()
+    [1 .. count] |> List.iter (fun _ -> lastSuite.Manys <- Test(description, f, lastSuite.TotalTestsCount)::lastSuite.Manys)
 let ( &&! ) description f = 
     let lastSuite = incrementLastTestSuite()
     lastSuite.Tests <- Test(description, skipped, lastSuite.TotalTestsCount)::lastSuite.Tests
