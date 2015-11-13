@@ -195,9 +195,10 @@ type LiveHtmlReporter(browser : BrowserStartMode, driverPath : string) =
         | ChromeWithOptionsAndTimeSpan(options, timeSpan) -> new OpenQA.Selenium.Chrome.ChromeDriver(driverPath, options, timeSpan) :> IWebDriver
         | Firefox -> new OpenQA.Selenium.Firefox.FirefoxDriver() :> IWebDriver
         | FirefoxWithProfile profile -> new OpenQA.Selenium.Firefox.FirefoxDriver(profile) :> IWebDriver
-        | FirefoxWithPath path -> new OpenQA.Selenium.Firefox.FirefoxDriver(Firefox.FirefoxBinary(path), Firefox.FirefoxProfile()) :> IWebDriver
+        | FirefoxWithPath path -> new OpenQA.Selenium.Firefox.FirefoxDriver(new Firefox.FirefoxBinary(path), Firefox.FirefoxProfile()) :> IWebDriver
         | ChromeWithUserAgent userAgent -> raise(System.Exception("Sorry ChromeWithUserAgent can't be used for LiveHtmlReporter"))
         | FirefoxWithUserAgent userAgent -> raise(System.Exception("Sorry FirefoxWithUserAgent can't be used for LiveHtmlReporter"))
+        | FirefoxWithPathAndTimeSpan(path, timespan) -> new OpenQA.Selenium.Firefox.FirefoxDriver(new Firefox.FirefoxBinary(path), Firefox.FirefoxProfile(), timespan) :> IWebDriver
         | Safari -> new OpenQA.Selenium.Safari.SafariDriver() :> IWebDriver
         | PhantomJS | PhantomJSProxyNone -> raise(System.Exception("Sorry PhantomJS can't be used for LiveHtmlReporter"))
         | Remote(_,_) -> raise(System.Exception("Sorry Remote can't be used for LiveHtmlReporter"))

@@ -39,6 +39,7 @@ type BrowserStartMode =
     | FirefoxWithProfile of Firefox.FirefoxProfile
     | FirefoxWithPath of string
     | FirefoxWithUserAgent of string
+    | FirefoxWithPathAndTimeSpan of string * TimeSpan
     | IE
     | IEWithOptions of IE.InternetExplorerOptions
     | IEWithOptionsAndTimeSpan of IE.InternetExplorerOptions * TimeSpan

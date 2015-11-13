@@ -678,8 +678,9 @@ let start b =
         | ChromeWithOptionsAndTimeSpan(options, timeSpan) -> new Chrome.ChromeDriver(chromeDir, options, timeSpan) :> IWebDriver
         | Firefox -> new FirefoxDriver() :> IWebDriver
         | FirefoxWithProfile profile -> new FirefoxDriver(profile) :> IWebDriver
-        | FirefoxWithPath path -> new FirefoxDriver(Firefox.FirefoxBinary(path), Firefox.FirefoxProfile()) :> IWebDriver
+        | FirefoxWithPath path -> new FirefoxDriver(new Firefox.FirefoxBinary(path), Firefox.FirefoxProfile()) :> IWebDriver
         | FirefoxWithUserAgent userAgent -> firefoxWithUserAgent userAgent
+        | FirefoxWithPathAndTimeSpan(path, timespan) -> new FirefoxDriver(new Firefox.FirefoxBinary(path), Firefox.FirefoxProfile(), timespan) :> IWebDriver
         | Safari ->new Safari.SafariDriver() :> IWebDriver
         | PhantomJS -> 
             autoPinBrowserRightOnLaunch <- false
