@@ -193,3 +193,8 @@ Fix a bug in the bug I fixed in 0.9.38 [Issue #218](https://github.com/lefthande
 
 #### 0.9.40 - November 4 2015
 Added nmany to let you run many tests with a name [Issue #219](https://github.com/lefthandedgoat/canopy/issues/219)
+
+#### 0.9.41 - November 12 2015
+Updated to Selenium 2.48.1 [Issue #221](https://github.com/lefthandedgoat/canopy/issues/221)
+Added AutoOpen attribute so you dont have open types, runner, or configuration explicitly [Issue #222](https://github.com/lefthandedgoat/canopy/issues/222)
+New Startup mode for Firefox taking a path and a TimeSpan [Issue #223](https://github.com/lefthandedgoat/canopy/issues/223)
