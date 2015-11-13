@@ -1,4 +1,5 @@
-﻿module canopy.configuration
+﻿[<AutoOpen>]
+module canopy.configuration
 open reporters
 open System
 

@@ -1,4 +1,5 @@
-﻿module canopy.runner
+﻿[<AutoOpen>]
+module canopy.runner
 
 open System
 open configuration

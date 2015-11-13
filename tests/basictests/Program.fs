@@ -3,10 +3,7 @@ module main
 open System
 open OpenQA.Selenium
 open canopy
-open runner
-open configuration
 open reporters
-open types
 
 start chrome
 let mainBrowser = browser

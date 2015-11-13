@@ -1,3 +1,4 @@
+[<AutoOpen>]
 module canopy.types
 
 open System
