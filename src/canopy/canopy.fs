@@ -811,7 +811,7 @@ let coverage (url : 'a) =
     on nonMutableInnerUrl
     selectors |> List.iter(fun cssSelector -> swallowedJs (script cssSelector))
     let p = Path.Combine(Environment.GetFolderPath(Environment.SpecialFolder.ApplicationData), @"canopy\")
-    let f = DateTime.Now.ToString("MMM-d_HH-mm-ss-fff")
+    let f = sprintf "Coverage_%s" (DateTime.Now.ToString("MMM-d_HH-mm-ss-fff"))
     let ss = screenshot p f
     reporter.coverage nonMutableInnerUrl ss
 

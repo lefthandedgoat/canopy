@@ -14,6 +14,13 @@ runFailedContextsFirst <- true
 reporter <- new LiveHtmlReporter(Chrome, configuration.chromeDir) :> IReporter 
 reporter.setEnvironment "My Machine"
 
+configuration.failScreenshotFileName <- 
+  (fun test suite -> 
+      let suiteContext = if suite.Context = null then "" else suite.Context
+      let cleanName = test.Description.Replace(' ','_') //etc
+      let stamp = DateTime.Now.ToString("MMM-d_HH-mm-ss")
+      sprintf "%s_%s_%s" suiteContext cleanName stamp)
+
 failFast := true
 
 file1.all()

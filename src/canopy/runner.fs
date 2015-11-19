@@ -68,29 +68,29 @@ let skip id =
     skippedCount <- skippedCount + 1
     reporter.skip id
 
-let fail (ex : Exception) id =
+let fail (ex : Exception) (test : Test) (suite : suite) =
     if skipAllTestsOnFailure = true || skipRemainingTestsInContextOnFailure = true then skipNextTest <- true
     try
         if failFast = ref true then failed <- true        
         failedCount <- failedCount + 1
         contextFailed <- true
-        let f = DateTime.Now.ToString("MMM-d_HH-mm-ss-fff")
+        let f = configuration.failScreenshotFileName test suite
         if failureScreenshotsEnabled = true then
           let ss = screenshot configuration.failScreenshotPath f
-          reporter.fail ex id ss
-        else reporter.fail ex id Array.empty<byte>
+          reporter.fail ex test.Id ss
+        else reporter.fail ex test.Id Array.empty<byte>
     with 
         | :? WebDriverException as failExc -> 
             //Fail during error report (likely  OpenQA.Selenium.WebDriverException.WebDriverTimeoutException ). 
             // Don't fail the runner itself, but report it.
             reporter.write (sprintf "Error during fail reporting: %s" (failExc.ToString()))
-            reporter.fail ex id Array.empty
+            reporter.fail ex test.Id Array.empty
 let safelyGetUrl () = if browser = null then "no browser = no url" else browser.Url
 
 let failSuite (ex: Exception) (suite : suite) =    
     let reportFailedTest (ex: Exception) (test : Test) =
         reporter.testStart test.Id  
-        fail ex test.Id <| safelyGetUrl()
+        fail ex test suite <| safelyGetUrl()
         reporter.testEnd test.Id
 
     // tests are in reverse order and have to be reversed first
@@ -122,7 +122,7 @@ let run () =
                     pass()
                 with
                     | ex when failureMessage <> null && failureMessage = ex.Message -> pass()
-                    | ex -> fail ex test.Id <| safelyGetUrl()
+                    | ex -> fail ex test suite <| safelyGetUrl()
                 
             reporter.testEnd test.Id 
         

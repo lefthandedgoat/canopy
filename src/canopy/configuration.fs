@@ -13,6 +13,7 @@ let folderByOSType =
 //runner related
 let failFast = ref false
 let mutable failScreenshotPath = Environment.GetFolderPath(Environment.SpecialFolder.ApplicationData) + @"\canopy\"
+let mutable failScreenshotFileName = fun (test : types.Test) (suite: types.suite) -> DateTime.Now.ToString("MMM-d_HH-mm-ss-fff")
 
 let mutable chromeDir = folderByOSType
 let mutable ieDir = folderByOSType
