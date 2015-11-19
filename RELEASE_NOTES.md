@@ -198,3 +198,7 @@ Added nmany to let you run many tests with a name [Issue #219](https://github.co
 Updated to Selenium 2.48.1 [Issue #221](https://github.com/lefthandedgoat/canopy/issues/221)
 Added AutoOpen attribute so you dont have open types, runner, or configuration explicitly [Issue #222](https://github.com/lefthandedgoat/canopy/issues/222)
 New Startup mode for Firefox taking a path and a TimeSpan [Issue #223](https://github.com/lefthandedgoat/canopy/issues/223)
+
+#### 0.9.42 - November 18 2015
+Updated to Selenium 2.48.2
+Added support for configurable file names on failure screenshots [Issue #224](https://github.com/lefthandedgoat/canopy/issues/224)
