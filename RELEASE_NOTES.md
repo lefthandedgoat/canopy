@@ -202,3 +202,6 @@ New Startup mode for Firefox taking a path and a TimeSpan [Issue #223](https://g
 #### 0.9.42 - November 18 2015
 Updated to Selenium 2.48.2
 Added support for configurable file names on failure screenshots [Issue #224](https://github.com/lefthandedgoat/canopy/issues/224)
+
+#### 0.9.43 - December 2 2015
+Improved error handeling on screenshots [Issue #225](https://github.com/lefthandedgoat/canopy/issues/225)
