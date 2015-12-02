@@ -41,14 +41,18 @@ let private saveScreenshot directory filename pic =
     IO.File.WriteAllBytes(Path.Combine(directory,filename + ".png"), pic)
 
 let private takeScreenShotIfAlertUp () =
-    let bitmap = new Bitmap(width= System.Windows.Forms.Screen.PrimaryScreen.Bounds.Width, height= System.Windows.Forms.Screen.PrimaryScreen.Bounds.Height, format=PixelFormat.Format32bppArgb); 
-    use graphics = Graphics.FromImage(bitmap)
-    graphics.CopyFromScreen(System.Windows.Forms.Screen.PrimaryScreen.Bounds.X, System.Windows.Forms.Screen.PrimaryScreen.Bounds.Y, 0, 0, System.Windows.Forms.Screen.PrimaryScreen.Bounds.Size, CopyPixelOperation.SourceCopy);    
-    use stream = new MemoryStream()
-    bitmap.Save(stream, ImageFormat.Png)
-    stream.Close()
-    stream.ToArray()
-
+    try
+        let bitmap = new Bitmap(width= System.Windows.Forms.Screen.PrimaryScreen.Bounds.Width, height= System.Windows.Forms.Screen.PrimaryScreen.Bounds.Height, format=PixelFormat.Format32bppArgb); 
+        use graphics = Graphics.FromImage(bitmap)
+        graphics.CopyFromScreen(System.Windows.Forms.Screen.PrimaryScreen.Bounds.X, System.Windows.Forms.Screen.PrimaryScreen.Bounds.Y, 0, 0, System.Windows.Forms.Screen.PrimaryScreen.Bounds.Size, CopyPixelOperation.SourceCopy);    
+        use stream = new MemoryStream()
+        bitmap.Save(stream, ImageFormat.Png)
+        stream.Close()
+        stream.ToArray()
+    with ex -> 
+        printfn "Sorry, unable to take a screenshot. An alert was up, and the backup plan failed!
+        Exception: %s" ex.Message
+        Array.empty<byte>
 
 let private takeScreenshot directory filename =    
     try
