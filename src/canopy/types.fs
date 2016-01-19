@@ -27,6 +27,7 @@ type CanopyNotStringOrElementException(message) = inherit CanopyException(messag
 type CanopyOnException(message) = inherit CanopyException(message)
 type CanopyCheckFailedException(message) = inherit CanopyException(message)
 type CanopyUncheckFailedException(message) = inherit CanopyException(message)
+type CanopyReadException(message) = inherit CanopyException(message)
 
 //directions
 type direction =

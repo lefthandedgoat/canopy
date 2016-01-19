@@ -354,10 +354,23 @@ let private textOf (element : IWebElement) =
     | _ ->
         element.Text    
 
+let private safeRead item =
+    let readvalue = ref ""
+    try
+        wait elementTimeout (fun _ ->        
+          readvalue :=
+            match box item with
+            | :? IWebElement as elem -> textOf elem
+            | :? string as cssSelector -> element cssSelector |> textOf
+          true)
+        !readvalue
+    with
+        | :? WebDriverTimeoutException -> raise (CanopyReadException("was unable to read item for unkown reason"))
+        
 let read item = 
     match box item with
-    | :? IWebElement as elem -> textOf elem
-    | :? string as cssSelector -> element cssSelector |> textOf
+    | :? IWebElement as elem -> safeRead elem
+    | :? string as cssSelector -> safeRead cssSelector
     | _ -> raise (CanopyNotStringOrElementException(sprintf "Can't read %O because it is not a string or element" item))
         
 let clear item =
@@ -827,7 +840,7 @@ let addFinder finder =
     
 //hints    
 let private addHintFinder hints finder = hints |> Seq.append (seq { yield finder })
-let private addSelector finder hintType selector =
+let addSelector finder hintType selector =
     //gaurd against adding same hintType multipe times and increase size of finder seq
     if not <| (hints.ContainsKey(selector) && addedHints.[selector] |> List.exists (fun hint -> hint = hintType)) then
         if hints.ContainsKey(selector) then 
