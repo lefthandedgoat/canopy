@@ -98,6 +98,13 @@ let failSuite (ex: Exception) (suite : suite) =
     |> List.rev
     |> List.iter (fun test -> reportFailedTest ex test)
 
+let tryTest test suite func =
+    try
+        func ()                  
+    with
+        | ex when failureMessage <> null && failureMessage = ex.Message -> pass()
+        | ex -> fail ex test suite <| safelyGetUrl()
+
 let run () =
     reporter.suiteBegin()
     let stopWatch = new Diagnostics.Stopwatch()
@@ -113,17 +120,9 @@ let run () =
             else if skipNextTest = true then 
                 skip test.Id
             else
-                try
-                    try
-                        suite.Before ()
-                        test.Func ()
-                    finally
-                        suite.After ()
-                    pass()
-                with
-                    | ex when failureMessage <> null && failureMessage = ex.Message -> pass()
-                    | ex -> fail ex test suite <| safelyGetUrl()
-                
+                tryTest test suite (suite.Before >> test.Func)
+                tryTest test suite (suite.After >> pass)
+
             reporter.testEnd test.Id 
         
         failureMessage <- null            
