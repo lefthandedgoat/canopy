@@ -205,3 +205,7 @@ Added support for configurable file names on failure screenshots [Issue #224](ht
 
 #### 0.9.43 - December 2 2015
 Improved error handeling on screenshots [Issue #225](https://github.com/lefthandedgoat/canopy/issues/225)
+
+#### 0.9.44 - January 18 2016
+Accepted PR to fix error handeling regression, thanks @RubenOen  [Pull Request #230](https://github.com/lefthandedgoat/canopy/pull/230)
+Fixed issue where read could some times suffer form stale element exceptions and the likes [Issue #229](https://github.com/lefthandedgoat/canopy/issue/229)
