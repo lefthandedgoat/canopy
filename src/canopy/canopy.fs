@@ -505,6 +505,13 @@ let ( =~ ) cssSelector pattern =
         | :? CanopyElementNotFoundException as ex -> raise (CanopyEqualityFailedException(sprintf "%s%sregex equality check failed.  expected: %s, got:" ex.Message Environment.NewLine pattern))
         | :? WebDriverTimeoutException -> raise (CanopyEqualityFailedException(sprintf "regex equality check failed.  expected: %s, got: %s" pattern (read cssSelector)))
 
+let ( !=~ ) cssSelector pattern =
+    try
+        wait compareTimeout (fun _ -> regexMatch pattern (read cssSelector) |> not)
+    with
+        | :? CanopyElementNotFoundException as ex -> raise (CanopyEqualityFailedException(sprintf "%s%sregex not equality check failed.  expected NOT: %s, got:" ex.Message Environment.NewLine pattern))
+        | :? WebDriverTimeoutException -> raise (CanopyEqualityFailedException(sprintf "regex not equality check failed.  expected NOT: %s, got: %s" pattern (read cssSelector)))
+
 let ( *~ ) cssSelector pattern =
     try        
         wait compareTimeout (fun _ -> ( cssSelector |> elements |> Seq.exists(fun element -> regexMatch pattern (textOf element))))

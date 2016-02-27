@@ -407,6 +407,13 @@ context "other tests"
     "#lastName" << "Grey"
     "#lastName" =~ "Gr[ae]y"
 
+"regex not test" &&& fun _ ->
+    url testpage
+    "#lastName" << "Gray"
+    "#lastName" !=~ "Gr[o]y"
+    "#lastName" << "Grey"
+    "#lastName" !=~ "Gr[o]y"
+
 "regex one of many test" &&& fun _ ->
     url testpage
     "#colors li" *~ "gr[ea]y"
