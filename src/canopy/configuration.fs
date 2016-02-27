@@ -32,6 +32,7 @@ let mutable configuredFinders = finders.defaultFinders
 let mutable writeToSelectWithOptionValue = true
 let mutable optimizeBySkippingIFrameCheck = false
 let mutable optimizeByDisablingCoverageReport = false
+let mutable optimizeByDisablingClearBeforeWrite = false
 let mutable showInfoDiv = true
 let mutable failureScreenshotsEnabled = true
 let mutable skipAllTestsOnFailure = false

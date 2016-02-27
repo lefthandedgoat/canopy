@@ -317,7 +317,7 @@ let private writeToElement (e : IWebElement) (text:string) =
         let readonly = e.GetAttribute("readonly")
         if readonly = "true" then
             raise (CanopyReadOnlyException(sprintf "element %s is marked as read only, you can not write to read only elements" (e.ToString())))
-        try e.Clear() with ex -> ex |> ignore
+        if not optimizeByDisablingClearBeforeWrite then try e.Clear() with ex -> ex |> ignore
         e.SendKeys(text)
 
 let ( << ) item text = 
