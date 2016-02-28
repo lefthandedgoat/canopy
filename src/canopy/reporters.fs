@@ -212,7 +212,6 @@ type LiveHtmlReporter(browser : BrowserStartMode, driverPath : string) =
     do pin()
        
     let mutable context = System.String.Empty
-    let mutable test = System.String.Empty
     let mutable canQuit = false
     let mutable contexts : string list = []
     let mutable environment = System.String.Empty
@@ -236,19 +235,55 @@ type LiveHtmlReporter(browser : BrowserStartMode, driverPath : string) =
             then System.IO.Directory.CreateDirectory(directory) |> ignore
         IO.File.WriteAllText(System.IO.Path.Combine(directory,filename + ".html"), this.reportHtml())
     
+    member this.commonFail ctx (ex:Exception) id ss url =
+        this.swallowedJS (sprintf "updateTestInContext('%s', 'Fail', '%s');" ctx (Convert.ToBase64String(ss)))
+        let stack = sprintf "%s%s%s" ex.Message System.Environment.NewLine ex.StackTrace
+        let stack = jsEncode stack
+        this.swallowedJS (sprintf "addStackToTest ('%s', '%s');" ctx stack)
+        this.swallowedJS (sprintf "addUrlToTest ('%s', '%s');" ctx url)
+        consoleReporter.fail ex id ss url
+        
+    member this.passWithContext ctx =
+        let context = jsEncode ctx
+        this.swallowedJS (sprintf "updateTestInContext('%s', 'Pass', '%s');" context "")
+        consoleReporter.pass ()
+
+    member this.failWithContext ctx ex id ss url = 
+        let context = jsEncode ctx
+        this.commonFail context ex id ss url
+
+    member this.writeWithContext ctx w = 
+        let encoded = jsEncode w
+        let context = jsEncode ctx
+        this.swallowedJS (sprintf "addMessageToTest ('%s', '%s');" context encoded)
+        consoleReporter.write w
+
+    member this.testStartWithContext ctx id = 
+        let test = jsEncode id
+        let context = jsEncode ctx
+        this.swallowedJS (sprintf "addToContext ('%s', '%s');" context test)
+        consoleReporter.testStart id
+            
+    member this.testEndWithContext ctx id minutes seconds =
+        let context = jsEncode ctx
+        this.swallowedJS (sprintf "addTimeToTest ('%s', '%im %is');" context minutes seconds)
+
+    member this.todoWithContext ctx = 
+        let context = jsEncode ctx
+        this.swallowedJS (sprintf "updateTestInContext('%s', 'Todo', '%s');" context "")
+
+    member this.skipWithContext ctx id = 
+        let context = jsEncode ctx
+        this.swallowedJS (sprintf "updateTestInContext('%s', 'Skip', '%s');" context "")
+        consoleReporter.skip id
+
     interface IReporter with               
         member this.pass () =
             this.swallowedJS (sprintf "updateTestInContext('%s', 'Pass', '%s');" context "")
             consoleReporter.pass ()
 
-        member this.fail ex id ss url =
-            this.swallowedJS (sprintf "updateTestInContext('%s', 'Fail', '%s');" context (Convert.ToBase64String(ss)))
-            let stack = sprintf "%s%s%s" ex.Message System.Environment.NewLine ex.StackTrace
-            let stack = jsEncode stack
-            this.swallowedJS (sprintf "addStackToTest ('%s', '%s');" context stack)
-            this.swallowedJS (sprintf "addUrlToTest ('%s', '%s');" context url)
-            consoleReporter.fail ex id ss url
-
+        member this.fail ex id ss url = this.commonFail context ex id ss url
+                
         member this.describe d =
             let encoded = jsEncode d
             this.swallowedJS (sprintf "addMessageToTest ('%s', '%s');" context encoded) 
@@ -284,7 +319,7 @@ type LiveHtmlReporter(browser : BrowserStartMode, driverPath : string) =
         member this.testStart id = 
             testStopWatch.Reset()
             testStopWatch.Start()
-            test <- jsEncode id
+            let test = jsEncode id
             this.swallowedJS (sprintf "addToContext ('%s', '%s');" context test)
             consoleReporter.testStart id
             
