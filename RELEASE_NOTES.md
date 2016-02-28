@@ -209,3 +209,9 @@ Improved error handeling on screenshots [Issue #225](https://github.com/lefthand
 #### 0.9.44 - January 18 2016
 Accepted PR to fix error handeling regression, thanks @RubenOen  [Pull Request #230](https://github.com/lefthandedgoat/canopy/pull/230)
 Fixed issue where read could some times suffer form stale element exceptions and the likes [Issue #229](https://github.com/lefthandedgoat/canopy/issue/229)
+
+#### 0.9.45 - February 27 2016
+Added !=~ (regex not match) operator [Issue #237](https://github.com/lefthandedgoat/canopy/issue/237)
+Add a configurable optimization to disable clear before writing [Issue #236](https://github.com/lefthandedgoat/canopy/issue/236)
+Improve html reporter to make it friendlier to parallel runs [Issue #235](https://github.com/lefthandedgoat/canopy/issue/235)
+Update to selenium 2.52.0 [Issue #233](https://github.com/lefthandedgoat/canopy/issue/233)
