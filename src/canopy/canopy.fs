@@ -606,6 +606,16 @@ let doubleClick item =
                                         true))
     | _ -> raise (CanopyNotStringOrElementException(sprintf "Can't doubleClick %O because it is not a string or webelement" item))
 
+let ctrlClick item =     
+        let actions = Actions(browser)
+
+        match box item with
+        | :? IWebElement as elem -> actions.KeyDown(Keys.Control).Click(elem).KeyUp(Keys.Control).Perform() |> ignore
+        | :? string as cssSelector -> 
+        wait elementTimeout (fun _ -> ( let elem = element cssSelector
+                                        actions.KeyDown(Keys.Control).Click(elem).KeyUp(Keys.Control).Perform()
+                                        true))
+        | _ -> raise (CanopyNotStringOrElementException(sprintf "Can't ctrlClick %O because it is not a string or webelement" item))
 
 let check item = 
     try
