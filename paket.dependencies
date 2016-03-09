@@ -1,0 +1,9 @@
+source https://www.nuget.org/api/v2/
+
+nuget NuGet.CommandLine
+nuget FSharp.Core >= 3.0.2 lowest_matching:true
+nuget Newtonsoft.Json framework: >= net40
+nuget Selenium.Support
+nuget Selenium.WebDriver
+nuget SizSelCsZzz framework: >= net40
+nuget FAKE

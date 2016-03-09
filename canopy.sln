@@ -3,11 +3,9 @@ Microsoft Visual Studio Solution File, Format Version 12.00
 # Visual Studio 2013
 VisualStudioVersion = 12.0.31101.0
 MinimumVisualStudioVersion = 10.0.40219.1
-Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = ".nuget", ".nuget", "{51B54B14-A7C3-450B-A722-159E9CD3010F}"
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = ".paket", ".paket", "{C6C8BF1E-28EC-41CD-B2A5-8321CE7DEB23}"
 	ProjectSection(SolutionItems) = preProject
-		.NuGet\NuGet.Config = .NuGet\NuGet.Config
-		.NuGet\NuGet.exe = .NuGet\NuGet.exe
-		.NuGet\NuGet.targets = .NuGet\NuGet.targets
+		paket.dependencies = paket.dependencies
 	EndProjectSection
 EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "tests", "tests", "{0391DED2-DF91-4A61-959E-EEA250356DA0}"
