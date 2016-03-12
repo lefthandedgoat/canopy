@@ -93,4 +93,20 @@ quit()
 * [Testing](/canopy/testing.html): different ways to orchestrate tests and troubleshoot issues with a page
 * [Reporting](/canopy/reporting.html): different ways to output the results of your test suite
 
+####7\. Watch some intro videos 
+5 minutes with Amir Rajan
+<iframe src="https://channel9.msdn.com/Events/NET-Fringe/NET-Fringe-2015/Web-UI-Testing-with-F-and-Canopy/player" 
+    width="960" 
+    height="540" 
+    allowFullScreen 
+    frameBorder="0">
+</iframe>
+
+30 minutes with Chris Holt at fsharpConf
+<iframe src="https://channel9.msdn.com/Events/FSharp-Events/fsharpConf-2016/Web-UI-Automation-with-F-and-canopy/player" 
+    width="960" 
+    height="540" 
+    allowFullScreen 
+    frameBorder="0">
+</iframe>
 *)
