@@ -101,32 +101,45 @@ let failSuite (ex: Exception) (suite : suite) =
 let tryTest test suite func =
     try
         func ()                  
+        Pass
     with
-        | ex when failureMessage <> null && failureMessage = ex.Message -> pass()
-        | ex -> fail ex test suite <| safelyGetUrl()
+        | ex when failureMessage <> null && failureMessage = ex.Message -> Pass
+        | ex -> Fail ex
+
+let private runtest (suite : suite) (test : Test) =
+    if failed = false then             
+        reporter.testStart test.Id
+        let result = 
+          if System.Object.ReferenceEquals(test.Func, todo) then Todo
+          else if System.Object.ReferenceEquals(test.Func, skipped) then Skip
+          else if skipNextTest = true then Skip
+          else
+              let testResult = tryTest test suite (suite.Before >> test.Func)
+              let afterResult = tryTest test suite (suite.After)
+              match testResult with
+              | Fail(_) -> testResult
+              | _ -> afterResult
+
+        reporter.testEnd test.Id 
+        failureMessage <- null
+        result
+    else
+        failureMessage <- null
+        FailFast
+
+let processRunResult suite test result = 
+    match result with
+    | Pass -> pass ()
+    | Fail ex -> fail ex test suite <| safelyGetUrl()
+    | Skip -> skip test.Id
+    | Todo -> reporter.todo ()
+    | FailFast -> ()
 
 let run () =
     reporter.suiteBegin()
     let stopWatch = new Diagnostics.Stopwatch()
     stopWatch.Start()      
-    
-    let runtest (suite : suite) (test : Test) =
-        if failed = false then             
-            reporter.testStart test.Id  
-            if System.Object.ReferenceEquals(test.Func, todo) then 
-                reporter.todo ()
-            else if System.Object.ReferenceEquals(test.Func, skipped) then 
-                skip test.Id
-            else if skipNextTest = true then 
-                skip test.Id
-            else
-                tryTest test suite (suite.Before >> test.Func)
-                tryTest test suite (suite.After >> pass)
-
-            reporter.testEnd test.Id 
         
-        failureMessage <- null            
-
     // suites list is in reverse order and have to be reversed before running the tests
     suites <- List.rev suites
         
@@ -155,13 +168,13 @@ let run () =
                 if s.Wips.IsEmpty = false then
                     wipTest <- true
                     let tests = s.Wips @ s.Always |> List.sortBy (fun t -> t.Number)
-                    tests |> List.iter (fun w -> runtest s w)
+                    tests |> List.iter (fun w -> runtest s w |> processRunResult s w)
                     wipTest <- false
                 else if s.Manys.IsEmpty = false then
-                    s.Manys |> List.rev |> List.iter (fun m -> runtest s m)
+                    s.Manys |> List.rev |> List.iter (fun m -> runtest s m |> processRunResult s m)
                 else
                     let tests = s.Tests @ s.Always |> List.sortBy (fun t -> t.Number)
-                    tests |> List.iter (fun t -> runtest s t)
+                    tests |> List.iter (fun t -> runtest s t |> processRunResult s t)
             s.Lastly ()                  
 
             if contextFailed = true then failedContexts <- s.Context::failedContexts

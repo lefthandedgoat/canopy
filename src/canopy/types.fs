@@ -77,3 +77,10 @@ type suite () = class
     member val Always : Test list = [] with get, set
     member val IsParallel = false with get, set
 end
+
+type Result =
+    | Pass
+    | Fail of Exception
+    | Skip
+    | Todo
+    | FailFast
