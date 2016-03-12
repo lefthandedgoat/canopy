@@ -445,6 +445,11 @@ context "other tests"
     !^ testpage
     "#states" << "95"
     "#states" == "Palmyra Atoll"
+
+"writting (selecting) to drop down test, value list, opt group" &&& fun _ ->
+    !^ testpage
+    "#test-select" << "Audi"
+    "#test-select" == "Audi"
     
 "double clicking" &&& fun _ ->
     !^ "http://lefthandedgoat.github.io/canopy/testpages/doubleClick"
@@ -486,7 +491,7 @@ context "other tests"
 
 "count test via sizzle" &&& fun _ ->
     !^ testpage
-    count "option:selected" 2
+    count "option:selected" 3
 
 "#firstName should have John (using == infix operator), iframe1" &&& fun _ ->
     url "http://lefthandedgoat.github.io/canopy/testpages/iframe1"

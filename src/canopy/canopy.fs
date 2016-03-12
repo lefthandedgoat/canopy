@@ -302,9 +302,9 @@ let last cssSelector = (List.rev (elements cssSelector)).Head
 let private writeToSelect (elem:IWebElement) (text:string) =
     let options =        
         if writeToSelectWithOptionValue then 
-            unreliableElementsWithin (sprintf """option[text()="%s"] | option[@value="%s"]""" text text) elem            
+            unreliableElementsWithin (sprintf """//option[text()="%s"] | //option[@value="%s"]""" text text) elem            
         else //to preserve previous behaviour
-            unreliableElementsWithin (sprintf """option[text()="%s"]""" text) elem
+            unreliableElementsWithin (sprintf """//option[text()="%s"]""" text) elem
     
     match options with
     | [] -> raise (CanopyOptionNotFoundException(sprintf "element %s does not contain value %s" (elem.ToString()) text))
