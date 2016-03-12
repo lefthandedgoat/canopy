@@ -1,0 +1,14 @@
+NUGET
+  remote: https://www.nuget.org/api/v2
+  specs:
+    FAKE (4.21.4)
+    FSharp.Core (3.0.2)
+    Newtonsoft.Json (6.0.8) - framework: >= net40
+    NuGet.CommandLine (3.3.0)
+    Selenium.Support (2.52.0)
+      Selenium.WebDriver (>= 2.52.0)
+    Selenium.WebDriver (2.52.0)
+    SizSelCsZzz (0.3.36) - framework: >= net40
+      Newtonsoft.Json (>= 6.0)
+      Selenium.Support (>= 2.40)
+      Selenium.WebDriver (>= 2.40)
