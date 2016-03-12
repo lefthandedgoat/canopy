@@ -68,8 +68,8 @@
             ( &amp;&amp;! ) description f
           </code>
           <div class="tip" id="150">
-            <strong>Signature:</strong> description:string -&gt; f:&#39;?38584 -&gt; unit<br />
-                          <strong>Type parameters:</strong> '?38584          </div>
+            <strong>Signature:</strong> description:string -&gt; f:&#39;?38634 -&gt; unit<br />
+                          <strong>Type parameters:</strong> '?38634          </div>
         </td>
         <td class="xmldoc">
             <a href="https://github.com/lefthandedgoat/canopy/tree/scaffold/src/canopy/runner.fs#L49-49" class="github-link">
@@ -209,10 +209,10 @@
         <td class="member-name">
 
           <code onmouseout="hideTip(event, '158', 158)" onmouseover="showTip(event, '158', 158)">
-            fail ex test suite
+            fail ex test suite autoFail url
           </code>
           <div class="tip" id="158">
-            <strong>Signature:</strong> ex:Exception -&gt; test:Test -&gt; suite:suite -&gt; string -&gt; unit<br />
+            <strong>Signature:</strong> ex:Exception -&gt; test:Test -&gt; suite:suite -&gt; autoFail:bool -&gt; url:string -&gt; unit<br />
                       </div>
         </td>
         <td class="xmldoc">
@@ -288,7 +288,7 @@
                       </div>
         </td>
         <td class="xmldoc">
-            <a href="https://github.com/lefthandedgoat/canopy/tree/scaffold/src/canopy/runner.fs#L90-90" class="github-link">
+            <a href="https://github.com/lefthandedgoat/canopy/tree/scaffold/src/canopy/runner.fs#L94-94" class="github-link">
               <img src="../content/img/github.png" class="normal" />
               <img src="../content/img/github-blue.png" class="hover" />
             </a>
@@ -389,10 +389,10 @@
         <td class="member-name">
 
           <code onmouseout="hideTip(event, '168', 168)" onmouseover="showTip(event, '168', 168)">
-            pass ()
+            pass id
           </code>
           <div class="tip" id="168">
-            <strong>Signature:</strong> unit -&gt; unit<br />
+            <strong>Signature:</strong> id:string -&gt; unit<br />
                       </div>
         </td>
         <td class="xmldoc">
@@ -425,14 +425,14 @@
         <td class="member-name">
 
           <code onmouseout="hideTip(event, '170', 170)" onmouseover="showTip(event, '170', 170)">
-            run ()
+            processRunResult suite test result
           </code>
           <div class="tip" id="170">
-            <strong>Signature:</strong> unit -&gt; unit<br />
+            <strong>Signature:</strong> suite:suite -&gt; test:Test -&gt; result:Result -&gt; unit<br />
                       </div>
         </td>
         <td class="xmldoc">
-            <a href="https://github.com/lefthandedgoat/canopy/tree/scaffold/src/canopy/runner.fs#L108-108" class="github-link">
+            <a href="https://github.com/lefthandedgoat/canopy/tree/scaffold/src/canopy/runner.fs#L134-134" class="github-link">
               <img src="../content/img/github.png" class="normal" />
               <img src="../content/img/github-blue.png" class="hover" />
             </a>
@@ -443,14 +443,14 @@
         <td class="member-name">
 
           <code onmouseout="hideTip(event, '171', 171)" onmouseover="showTip(event, '171', 171)">
-            runFor browsers
+            run ()
           </code>
           <div class="tip" id="171">
-            <strong>Signature:</strong> browsers:&#39;?38602 -&gt; unit<br />
-                          <strong>Type parameters:</strong> '?38602          </div>
+            <strong>Signature:</strong> unit -&gt; unit<br />
+                      </div>
         </td>
         <td class="xmldoc">
-            <a href="https://github.com/lefthandedgoat/canopy/tree/scaffold/src/canopy/runner.fs#L177-177" class="github-link">
+            <a href="https://github.com/lefthandedgoat/canopy/tree/scaffold/src/canopy/runner.fs#L142-142" class="github-link">
               <img src="../content/img/github.png" class="normal" />
               <img src="../content/img/github-blue.png" class="hover" />
             </a>
@@ -461,14 +461,14 @@
         <td class="member-name">
 
           <code onmouseout="hideTip(event, '172', 172)" onmouseover="showTip(event, '172', 172)">
-            safelyGetUrl ()
+            runFor browsers
           </code>
           <div class="tip" id="172">
-            <strong>Signature:</strong> unit -&gt; string<br />
-                      </div>
+            <strong>Signature:</strong> browsers:&#39;?38656 -&gt; unit<br />
+                          <strong>Type parameters:</strong> '?38656          </div>
         </td>
         <td class="xmldoc">
-            <a href="https://github.com/lefthandedgoat/canopy/tree/scaffold/src/canopy/runner.fs#L88-88" class="github-link">
+            <a href="https://github.com/lefthandedgoat/canopy/tree/scaffold/src/canopy/runner.fs#L194-194" class="github-link">
               <img src="../content/img/github.png" class="normal" />
               <img src="../content/img/github-blue.png" class="hover" />
             </a>
@@ -479,9 +479,27 @@
         <td class="member-name">
 
           <code onmouseout="hideTip(event, '173', 173)" onmouseover="showTip(event, '173', 173)">
-            skip id
+            safelyGetUrl ()
           </code>
           <div class="tip" id="173">
+            <strong>Signature:</strong> unit -&gt; string<br />
+                      </div>
+        </td>
+        <td class="xmldoc">
+            <a href="https://github.com/lefthandedgoat/canopy/tree/scaffold/src/canopy/runner.fs#L92-92" class="github-link">
+              <img src="../content/img/github.png" class="normal" />
+              <img src="../content/img/github-blue.png" class="hover" />
+            </a>
+          
+        </td>
+      </tr>
+      <tr>
+        <td class="member-name">
+
+          <code onmouseout="hideTip(event, '174', 174)" onmouseover="showTip(event, '174', 174)">
+            skip id
+          </code>
+          <div class="tip" id="174">
             <strong>Signature:</strong> id:string -&gt; unit<br />
                       </div>
         </td>
@@ -496,10 +514,10 @@
       <tr>
         <td class="member-name">
 
-          <code onmouseout="hideTip(event, '174', 174)" onmouseover="showTip(event, '174', 174)">
+          <code onmouseout="hideTip(event, '175', 175)" onmouseover="showTip(event, '175', 175)">
             skipped 
           </code>
-          <div class="tip" id="174">
+          <div class="tip" id="175">
             <strong>Signature:</strong> unit -&gt; unit<br />
                       </div>
         </td>
@@ -514,10 +532,10 @@
       <tr>
         <td class="member-name">
 
-          <code onmouseout="hideTip(event, '175', 175)" onmouseover="showTip(event, '175', 175)">
+          <code onmouseout="hideTip(event, '176', 176)" onmouseover="showTip(event, '176', 176)">
             skippedCount 
           </code>
-          <div class="tip" id="175">
+          <div class="tip" id="176">
             <strong>Signature:</strong> int<br />
                       </div>
         </td>
@@ -532,10 +550,10 @@
       <tr>
         <td class="member-name">
 
-          <code onmouseout="hideTip(event, '176', 176)" onmouseover="showTip(event, '176', 176)">
+          <code onmouseout="hideTip(event, '177', 177)" onmouseover="showTip(event, '177', 177)">
             suites 
           </code>
-          <div class="tip" id="176">
+          <div class="tip" id="177">
             <strong>Signature:</strong> suite list<br />
                       </div>
         </td>
@@ -550,10 +568,10 @@
       <tr>
         <td class="member-name">
 
-          <code onmouseout="hideTip(event, '177', 177)" onmouseover="showTip(event, '177', 177)">
+          <code onmouseout="hideTip(event, '178', 178)" onmouseover="showTip(event, '178', 178)">
             test f
           </code>
-          <div class="tip" id="177">
+          <div class="tip" id="178">
             <strong>Signature:</strong> f:(unit -&gt; unit) -&gt; unit<br />
                       </div>
         </td>
@@ -568,10 +586,10 @@
       <tr>
         <td class="member-name">
 
-          <code onmouseout="hideTip(event, '178', 178)" onmouseover="showTip(event, '178', 178)">
+          <code onmouseout="hideTip(event, '179', 179)" onmouseover="showTip(event, '179', 179)">
             todo 
           </code>
-          <div class="tip" id="178">
+          <div class="tip" id="179">
             <strong>Signature:</strong> unit -&gt; unit<br />
                       </div>
         </td>
@@ -586,15 +604,15 @@
       <tr>
         <td class="member-name">
 
-          <code onmouseout="hideTip(event, '179', 179)" onmouseover="showTip(event, '179', 179)">
+          <code onmouseout="hideTip(event, '180', 180)" onmouseover="showTip(event, '180', 180)">
             tryTest test suite func
           </code>
-          <div class="tip" id="179">
-            <strong>Signature:</strong> test:Test -&gt; suite:suite -&gt; func:(unit -&gt; unit) -&gt; unit<br />
-                      </div>
+          <div class="tip" id="180">
+            <strong>Signature:</strong> test:&#39;?38650 -&gt; suite:&#39;?38651 -&gt; func:(unit -&gt; unit) -&gt; Result<br />
+                          <strong>Type parameters:</strong> '?38650, '?38651          </div>
         </td>
         <td class="xmldoc">
-            <a href="https://github.com/lefthandedgoat/canopy/tree/scaffold/src/canopy/runner.fs#L101-101" class="github-link">
+            <a href="https://github.com/lefthandedgoat/canopy/tree/scaffold/src/canopy/runner.fs#L105-105" class="github-link">
               <img src="../content/img/github.png" class="normal" />
               <img src="../content/img/github-blue.png" class="hover" />
             </a>
@@ -604,10 +622,10 @@
       <tr>
         <td class="member-name">
 
-          <code onmouseout="hideTip(event, '180', 180)" onmouseover="showTip(event, '180', 180)">
+          <code onmouseout="hideTip(event, '181', 181)" onmouseover="showTip(event, '181', 181)">
             wip f
           </code>
-          <div class="tip" id="180">
+          <div class="tip" id="181">
             <strong>Signature:</strong> f:(unit -&gt; unit) -&gt; unit<br />
                       </div>
         </td>
@@ -622,12 +640,12 @@
       <tr>
         <td class="member-name">
 
-          <code onmouseout="hideTip(event, '181', 181)" onmouseover="showTip(event, '181', 181)">
+          <code onmouseout="hideTip(event, '182', 182)" onmouseover="showTip(event, '182', 182)">
             xtest f
           </code>
-          <div class="tip" id="181">
-            <strong>Signature:</strong> f:&#39;?38586 -&gt; unit<br />
-                          <strong>Type parameters:</strong> '?38586          </div>
+          <div class="tip" id="182">
+            <strong>Signature:</strong> f:&#39;?38636 -&gt; unit<br />
+                          <strong>Type parameters:</strong> '?38636          </div>
         </td>
         <td class="xmldoc">
             <a href="https://github.com/lefthandedgoat/canopy/tree/scaffold/src/canopy/runner.fs#L52-52" class="github-link">
