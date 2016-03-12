@@ -68,29 +68,33 @@ let skip id =
     skippedCount <- skippedCount + 1
     reporter.skip id
 
-let fail (ex : Exception) (test : Test) (suite : suite) =
+let fail (ex : Exception) (test : Test) (suite : suite) autoFail url =
     if skipAllTestsOnFailure = true || skipRemainingTestsInContextOnFailure = true then skipNextTest <- true
-    try
-        if failFast = ref true then failed <- true        
-        failedCount <- failedCount + 1
-        contextFailed <- true
-        let f = configuration.failScreenshotFileName test suite
-        if failureScreenshotsEnabled = true then
-          let ss = screenshot configuration.failScreenshotPath f
-          reporter.fail ex test.Id ss
-        else reporter.fail ex test.Id Array.empty<byte>
-    with 
-        | :? WebDriverException as failExc -> 
-            //Fail during error report (likely  OpenQA.Selenium.WebDriverException.WebDriverTimeoutException ). 
-            // Don't fail the runner itself, but report it.
-            reporter.write (sprintf "Error during fail reporting: %s" (failExc.ToString()))
-            reporter.fail ex test.Id Array.empty
+    if autoFail then
+        skip test.Id //dont take the time to fail all the tests just skip them
+    else
+        try
+            if failFast = ref true then failed <- true        
+            failedCount <- failedCount + 1
+            contextFailed <- true
+            let f = configuration.failScreenshotFileName test suite
+            if failureScreenshotsEnabled = true then
+              let ss = screenshot configuration.failScreenshotPath f
+              reporter.fail ex test.Id ss url
+            else reporter.fail ex test.Id Array.empty<byte> url
+        with 
+            | failExc -> 
+                //Fail during error report (likely  OpenQA.Selenium.WebDriverException.WebDriverTimeoutException ). 
+                // Don't fail the runner itself, but report it.
+                reporter.write (sprintf "Error during fail reporting: %s" (failExc.ToString()))
+                reporter.fail ex test.Id Array.empty url
+
 let safelyGetUrl () = if browser = null then "no browser = no url" else browser.Url
 
 let failSuite (ex: Exception) (suite : suite) =    
     let reportFailedTest (ex: Exception) (test : Test) =
         reporter.testStart test.Id  
-        fail ex test suite <| safelyGetUrl()
+        fail ex test suite true <| safelyGetUrl()
         reporter.testEnd test.Id
 
     // tests are in reverse order and have to be reversed first
@@ -130,7 +134,7 @@ let private runtest (suite : suite) (test : Test) =
 let processRunResult suite test result = 
     match result with
     | Pass -> pass ()
-    | Fail ex -> fail ex test suite <| safelyGetUrl()
+    | Fail ex -> fail ex test suite false <| safelyGetUrl()
     | Skip -> skip test.Id
     | Todo -> reporter.todo ()
     | FailFast -> ()
