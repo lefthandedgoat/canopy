@@ -258,6 +258,15 @@ Simulates a double click via JavaScript.
 doubleClick "#login"
 
 (**
+ctrlClick 
+-----
+Click an element via selector or text while holding down the control key, can also click selenium `IWebElements`. 
+*)
+ctrlClick "#list > option"
+ctrlClick "Oklahoma"
+ctrlClick (element "#list > option")
+
+(**
 check 
 -----
 Checks a checkbox if it is not already checked. 
