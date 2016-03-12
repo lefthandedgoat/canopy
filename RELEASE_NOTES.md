@@ -215,3 +215,9 @@ Added !=~ (regex not match) operator [Issue #237](https://github.com/lefthandedg
 Add a configurable optimization to disable clear before writing [Issue #236](https://github.com/lefthandedgoat/canopy/issue/236)
 Improve html reporter to make it friendlier to parallel runs [Issue #235](https://github.com/lefthandedgoat/canopy/issue/235)
 Update to selenium 2.52.0 [Issue #233](https://github.com/lefthandedgoat/canopy/issue/233)
+
+#### 0.9.46 - March 12 2016
+Failures in Once or Before will now skip tests in context with skipRemainingTestsInContextOnFailure <- true [Issue #242](https://github.com/lefthandedgoat/canopy/issue/242)
+Fix #241 for using html reporter with parallel test runs [Issue #241](https://github.com/lefthandedgoat/canopy/issue/241)
+Fix #240 selection + optgroup erorr [Issue #240](https://github.com/lefthandedgoat/canopy/issue/240)
+Fix #238 add escape key [Issue #238](https://github.com/lefthandedgoat/canopy/issue/238)
