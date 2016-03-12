@@ -17,7 +17,7 @@ reporter.setEnvironment "My Machine"
 configuration.failScreenshotFileName <- 
   (fun test suite -> 
       let suiteContext = if suite.Context = null then "" else suite.Context
-      let cleanName = test.Description.Replace(' ','_') //etc
+      let cleanName = if test.Description = null then "" else test.Description.Replace(' ','_') //etc
       let stamp = DateTime.Now.ToString("MMM-d_HH-mm-ss")
       sprintf "%s_%s_%s" suiteContext cleanName stamp)
 
