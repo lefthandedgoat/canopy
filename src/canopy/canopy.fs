@@ -410,6 +410,7 @@ let down = Keys.Down
 let up = Keys.Up
 let left = Keys.Left
 let right = Keys.Right
+let esc = Keys.Escape
 
 let press key = 
     let elem = ((js "return document.activeElement;") :?> IWebElement)
