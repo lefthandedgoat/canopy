@@ -457,6 +457,17 @@ context "other tests"
     doubleClick "#double_click"
     "#clicked" == "Clicked"
 
+"ctrl clicking" &&& fun _ ->
+    !^ "http://lefthandedgoat.github.io/canopy/testpages/ctrlClick"
+    
+    ctrlClick "One"
+    ctrlClick "2"
+    ctrlClick "Three"
+
+    selected "1"
+    selected "Two"
+    selected "3"
+
 "displayed test" &&& fun _ ->
     !^ "http://lefthandedgoat.github.io/canopy/testpages/displayed"
     displayed "#displayed"
@@ -735,4 +746,4 @@ coverage testpage
 coverage()
 coverage "http://scrumy.com/silenter39delayed"
 
-quit()
+//quit()
