@@ -7,3 +7,6 @@ nuget Selenium.Support
 nuget Selenium.WebDriver
 nuget SizSelCsZzz framework: >= net40
 nuget FAKE
+nuget Microsoft.AspNet.Razor = 2.0.30506.0
+nuget RazorEngine = 3.3.0
+nuget FSharp.Formatting = 2.4.36
