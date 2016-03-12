@@ -60,9 +60,9 @@ let mutable contextFailed = false
 let mutable failedContexts : string list = []
 let mutable failed = false
 
-let pass () =    
+let pass id =    
     passedCount <- passedCount + 1
-    reporter.pass ()
+    reporter.pass id
 
 let skip id =    
     skippedCount <- skippedCount + 1
@@ -131,12 +131,12 @@ let private runtest (suite : suite) (test : Test) =
         failureMessage <- null
         FailFast
 
-let processRunResult suite test result = 
+let processRunResult suite (test : Test) result = 
     match result with
-    | Pass -> pass ()
+    | Pass -> pass test.Id
     | Fail ex -> fail ex test suite false <| safelyGetUrl()
     | Skip -> skip test.Id
-    | Todo -> reporter.todo ()
+    | Todo -> reporter.todo test.Id
     | FailFast -> ()
 
 let run () =

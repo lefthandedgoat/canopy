@@ -848,7 +848,7 @@ let coverage (url : 'a) =
     let p = Path.Combine(Environment.GetFolderPath(Environment.SpecialFolder.ApplicationData), @"canopy\")
     let f = sprintf "Coverage_%s" (DateTime.Now.ToString("MMM-d_HH-mm-ss-fff"))
     let ss = screenshot p f
-    reporter.coverage nonMutableInnerUrl ss
+    reporter.coverage nonMutableInnerUrl ss nonMutableInnerUrl
 
 let addFinder finder =
     let currentFinders = configuredFinders
