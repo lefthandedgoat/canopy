@@ -3,7 +3,6 @@ module canopy.core
 
 open OpenQA.Selenium.Firefox
 open OpenQA.Selenium
-open OpenQA.Selenium.Support.UI
 open OpenQA.Selenium.Interactions
 open SizSelCsZzz
 open Microsoft.FSharp.Core.Printf
@@ -96,17 +95,29 @@ let puts text =
             infoDiv.innerHTML = 'locating: " + escapedText + "';"
         swallowedJs info
 
-let private wait timeout f =
-    let wait = new WebDriverWait(browser, TimeSpan.FromSeconds(timeout))
-    wait.Until(fun _ -> (
-                            try
-                                (f ()) = true
-                            with
-                            | :? CanopyException as ce -> raise(ce)
-                            | _ -> false
-                        )
-                ) |> ignore        
-    ()
+let waitResults timeout (f : unit -> 'a) =
+    let sw = System.Diagnostics.Stopwatch.StartNew()
+    let rec innerwait timeout f =
+        let sleepAndWait () = sleep waitSleep; innerwait timeout f
+        if sw.Elapsed.TotalSeconds >= timeout then raise <| WebDriverTimeoutException("Timed out!")
+
+        try
+            let result = f()
+            match box result with
+              | :? bool as b ->
+                   if b then result
+                   else sleepAndWait ()
+              | _ as o ->
+                    if o <> null then result
+                    else sleepAndWait ()
+        with
+          | :? WebDriverTimeoutException as ex -> reraise()
+          | :? CanopyException as ce -> raise(ce)
+          | _ -> sleepAndWait ()
+
+    innerwait timeout f
+
+let wait timeout (f : unit -> bool) = waitResults timeout f |> ignore
 
 let private colorizeAndSleep cssSelector =
     puts cssSelector
@@ -187,7 +198,7 @@ let suggestOtherSelectors cssSelector =
 let describe text =
     puts text
 
-let waitFor2 message (f : unit -> bool) =
+let waitFor2 message f =
     try        
         wait compareTimeout f
     with
@@ -231,16 +242,16 @@ let rec private findElements cssSelector (searchContext : ISearchContext) : IWeb
 
 let private findByFunction cssSelector timeout waitFunc searchContext reliable =
     if wipTest then colorizeAndSleep cssSelector
-    let wait = new WebDriverWait(browser, TimeSpan.FromSeconds(elementTimeout))
+    
     try
         if reliable then
             let elements = ref []
-            wait.Until(fun _ -> 
+            wait elementTimeout (fun _ -> 
                 elements := waitFunc cssSelector searchContext
-                not <| List.isEmpty !elements) |> ignore
+                not <| List.isEmpty !elements)
             !elements
         else
-            wait.Until(fun _ -> waitFunc cssSelector searchContext)
+            waitResults elementTimeout (fun _ -> waitFunc cssSelector searchContext)
     with
         | :? WebDriverTimeoutException ->   
             suggestOtherSelectors cssSelector

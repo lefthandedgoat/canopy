@@ -11,7 +11,7 @@ NUGET
       FSharp.Compiler.Service (>= 2.0.0.3)
     Newtonsoft.Json (6.0.8) - framework: >= net40
     NuGet.CommandLine (3.3.0)
-    Selenium.Support (2.52.0)
+    Selenium.Support (2.52.0) - framework: >= net40
       Selenium.WebDriver (>= 2.52.0)
     Selenium.WebDriver (2.52.0)
     SizSelCsZzz (0.3.36) - framework: >= net40
