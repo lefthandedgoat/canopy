@@ -4,7 +4,6 @@ module canopy.core
 open OpenQA.Selenium.Firefox
 open OpenQA.Selenium
 open OpenQA.Selenium.Interactions
-open SizSelCsZzz
 open Microsoft.FSharp.Core.Printf
 open System.IO
 open System
@@ -16,7 +15,6 @@ open finders
 open System.Drawing
 open System.Drawing.Imaging
 
-let mutable (browser : IWebDriver) = null
 let mutable (failureMessage : string) = null
 let mutable wipTest = false
 let mutable searchedFor : (string * string) list = []
@@ -94,7 +92,7 @@ let puts text =
             document.getElementsByTagName('body')[0].appendChild(infoDiv); 
             infoDiv.innerHTML = 'locating: " + escapedText + "';"
         swallowedJs info
-
+        
 let private colorizeAndSleep cssSelector =
     puts cssSelector
     swallowedJs <| sprintf "document.querySelector('%s').style.border = 'thick solid #FFF467';" cssSelector
