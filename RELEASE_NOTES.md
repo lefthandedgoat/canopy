@@ -221,3 +221,8 @@ Failures in Once or Before will now skip tests in context with skipRemainingTest
 Fix #241 for using html reporter with parallel test runs [Issue #241](https://github.com/lefthandedgoat/canopy/issue/241)
 Fix #240 selection + optgroup erorr [Issue #240](https://github.com/lefthandedgoat/canopy/issue/240)
 Fix #238 add escape key [Issue #238](https://github.com/lefthandedgoat/canopy/issue/238)
+
+#### 0.9.47 - March 13 2016
+Drop SizSelCsZzz dependency [Issue #244](https://github.com/lefthandedgoat/canopy/issue/244)
+Drop Selenium.Support dependency [Issue #245](https://github.com/lefthandedgoat/canopy/issue/245)
+BREAKING moved browser from canopy.core.browser to canopy.types.browser
