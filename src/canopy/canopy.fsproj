@@ -51,6 +51,7 @@
   <ItemGroup>
     <Compile Include="AssemblyInfo.fs" />
     <Compile Include="types.fs" />
+    <Compile Include="wait.fs" />
     <Compile Include="reporters.fs" />
     <Compile Include="finders.fs" />
     <Compile Include="configuration.fs" />

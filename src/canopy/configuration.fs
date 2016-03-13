@@ -23,7 +23,6 @@ let mutable elementTimeout = 10.0
 let mutable compareTimeout = 10.0
 let mutable pageTimeout = 10.0
 let mutable wipSleep = 1.0
-let mutable waitSleep = 0.5
 let mutable runFailedContextsFirst = false
 let mutable reporter : IReporter = new ConsoleReporter() :> IReporter
 let mutable disableSuggestOtherSelectors = false
