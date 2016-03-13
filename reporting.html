@@ -48,57 +48,40 @@
         <div class="span9" id="main">
           
 <h1>Reporting</h1>
-
 <h2>Console Reporter</h2>
-
 <p>The default reporter. Prints results to console.
 <img src="img/console.png" alt="Console Reporter" style="display: inherit;"/></p>
-
 <h2>Live HTML Reporter</h2>
-
 <p>Prints results to an html page. Support images. Screenshots on error, supports coverage reports.</p>
-
-<table class="pre"><tr><td class="lines"><pre class="fssnip">
-<span class="l">1: </span>
+<table class="pre"><tr><td class="lines"><pre class="fssnip"><span class="l">1: </span>
 <span class="l">2: </span>
 <span class="l">3: </span>
-</pre>
-</td>
-<td class="snippet"><pre class="fssnip">
-<span class="k">open</span> <span onmouseout="hideTip(event, 'fs4', 4)" onmouseover="showTip(event, 'fs4', 4)" class="i">configuration</span>
+</pre></td>
+<td class="snippet"><pre class="fssnip highlighted"><code lang="fsharp"><span class="k">open</span> <span onmouseout="hideTip(event, 'fs4', 4)" onmouseover="showTip(event, 'fs4', 4)" class="i">configuration</span>
 <span class="k">open</span> <span onmouseout="hideTip(event, 'fs5', 5)" onmouseover="showTip(event, 'fs5', 5)" class="i">reporters</span>
-<span onmouseout="hideTip(event, 'fs6', 6)" onmouseover="showTip(event, 'fs6', 6)" class="i">reporter</span> <span class="o">&lt;-</span> <span class="k">new</span> <span onmouseout="hideTip(event, 'fs7', 7)" onmouseover="showTip(event, 'fs7', 7)" class="i">LiveHtmlReporter</span>() <span class="o">:&gt;</span> <span onmouseout="hideTip(event, 'fs8', 8)" onmouseover="showTip(event, 'fs8', 8)" class="i">IReporter</span></pre>
-</td>
+<span onmouseout="hideTip(event, 'fs6', 6)" onmouseover="showTip(event, 'fs6', 6)" class="v">reporter</span> <span class="o">&lt;-</span> <span class="k">new</span> <span onmouseout="hideTip(event, 'fs7', 7)" onmouseover="showTip(event, 'fs7', 7)" class="t">LiveHtmlReporter</span>() <span class="o">:&gt;</span> <span onmouseout="hideTip(event, 'fs8', 8)" onmouseover="showTip(event, 'fs8', 8)" class="t">IReporter</span>
+</code></pre></td>
 </tr>
 </table>
-
 <img src="img/livehtmlreport.png" alt="Live HTML Reporter" style="display: inherit;"/>
-
 <h2>Coverage</h2>
-
-<p>Builds up selectors used for a given url, goes to that page and highlights all elements you have interacted with there. 
+<p>Builds up selectors used for a given url, goes to that page and highlights all elements you have interacted with there.
 Good for visual reference to what has and has not been tested.
 <img src="img/coverage.png" alt="Live HTML Reporter" style="display: inherit;"/></p>
-
 <h2>TeamCity Reporter</h2>
-
 <p>Prints special outputs that are compatible with team city.</p>
-
-<table class="pre"><tr><td class="lines"><pre class="fssnip">
-<span class="l">1: </span>
+<table class="pre"><tr><td class="lines"><pre class="fssnip"><span class="l">1: </span>
 <span class="l">2: </span>
 <span class="l">3: </span>
 <span class="l">4: </span>
 <span class="l">5: </span>
-</pre>
-</td>
-<td class="snippet"><pre class="fssnip">
-<span class="k">open</span> <span onmouseout="hideTip(event, 'fs4', 9)" onmouseover="showTip(event, 'fs4', 9)" class="i">configuration</span>
+</pre></td>
+<td class="snippet"><pre class="fssnip highlighted"><code lang="fsharp"><span class="k">open</span> <span onmouseout="hideTip(event, 'fs4', 9)" onmouseover="showTip(event, 'fs4', 9)" class="i">configuration</span>
 <span class="k">open</span> <span onmouseout="hideTip(event, 'fs5', 10)" onmouseover="showTip(event, 'fs5', 10)" class="i">reporters</span>
-<span onmouseout="hideTip(event, 'fs6', 11)" onmouseover="showTip(event, 'fs6', 11)" class="i">reporter</span> <span class="o">&lt;-</span> <span class="k">new</span> <span onmouseout="hideTip(event, 'fs9', 12)" onmouseover="showTip(event, 'fs9', 12)" class="i">TeamCityReporter</span>() <span class="o">:&gt;</span> <span onmouseout="hideTip(event, 'fs8', 13)" onmouseover="showTip(event, 'fs8', 13)" class="i">IReporter</span>
+<span onmouseout="hideTip(event, 'fs6', 11)" onmouseover="showTip(event, 'fs6', 11)" class="v">reporter</span> <span class="o">&lt;-</span> <span class="k">new</span> <span onmouseout="hideTip(event, 'fs9', 12)" onmouseover="showTip(event, 'fs9', 12)" class="t">TeamCityReporter</span>() <span class="o">:&gt;</span> <span onmouseout="hideTip(event, 'fs8', 13)" onmouseover="showTip(event, 'fs8', 13)" class="t">IReporter</span>
 
-<span class="c">//screenshot is TODO</span></pre>
-</td>
+<span class="c">//screenshot is TODO</span>
+</code></pre></td>
 </tr>
 </table>
 

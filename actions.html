@@ -48,604 +48,396 @@
         <div class="span9" id="main">
           
 <h1>Actions</h1>
-
 <h2>start</h2>
-
 <p>Start an instance of a browser.</p>
-
-<table class="pre"><tr><td class="lines"><pre class="fssnip">
-<span class="l">1: </span>
+<table class="pre"><tr><td class="lines"><pre class="fssnip"><span class="l">1: </span>
 <span class="l">2: </span>
 <span class="l">3: </span>
-</pre>
-</td>
-<td class="snippet"><pre class="fssnip">
-<span onmouseout="hideTip(event, 'fs5', 6)" onmouseover="showTip(event, 'fs5', 6)" class="i">start</span> <span onmouseout="hideTip(event, 'fs6', 7)" onmouseover="showTip(event, 'fs6', 7)" class="i">firefox</span>
-<span onmouseout="hideTip(event, 'fs5', 8)" onmouseover="showTip(event, 'fs5', 8)" class="i">start</span> <span onmouseout="hideTip(event, 'fs7', 9)" onmouseover="showTip(event, 'fs7', 9)" class="i">chrome</span>
-<span onmouseout="hideTip(event, 'fs5', 10)" onmouseover="showTip(event, 'fs5', 10)" class="i">start</span> <span onmouseout="hideTip(event, 'fs8', 11)" onmouseover="showTip(event, 'fs8', 11)" class="i">ie</span></pre>
-</td>
+</pre></td>
+<td class="snippet"><pre class="fssnip highlighted"><code lang="fsharp"><span onmouseout="hideTip(event, 'fs5', 6)" onmouseover="showTip(event, 'fs5', 6)" class="f">start</span> <span onmouseout="hideTip(event, 'fs6', 7)" onmouseover="showTip(event, 'fs6', 7)" class="i">firefox</span>
+<span onmouseout="hideTip(event, 'fs5', 8)" onmouseover="showTip(event, 'fs5', 8)" class="f">start</span> <span onmouseout="hideTip(event, 'fs7', 9)" onmouseover="showTip(event, 'fs7', 9)" class="i">chrome</span>
+<span onmouseout="hideTip(event, 'fs5', 10)" onmouseover="showTip(event, 'fs5', 10)" class="f">start</span> <span onmouseout="hideTip(event, 'fs8', 11)" onmouseover="showTip(event, 'fs8', 11)" class="i">ie</span>
+</code></pre></td>
 </tr>
 </table>
-
 <h2>switchTo</h2>
-
 <p>Switch to an existing instance of a browser.</p>
-
-<table class="pre"><tr><td class="lines"><pre class="fssnip">
-<span class="l">1: </span>
+<table class="pre"><tr><td class="lines"><pre class="fssnip"><span class="l">1: </span>
 <span class="l">2: </span>
 <span class="l">3: </span>
 <span class="l">4: </span>
 <span class="l">5: </span>
 <span class="l">6: </span>
-</pre>
-</td>
-<td class="snippet"><pre class="fssnip">
-<span onmouseout="hideTip(event, 'fs5', 12)" onmouseover="showTip(event, 'fs5', 12)" class="i">start</span> <span onmouseout="hideTip(event, 'fs6', 13)" onmouseover="showTip(event, 'fs6', 13)" class="i">firefox</span>
-<span class="k">let</span> <span onmouseout="hideTip(event, 'fs9', 14)" onmouseover="showTip(event, 'fs9', 14)" class="i">mainBrowser</span> <span class="o">=</span> <span onmouseout="hideTip(event, 'fs10', 15)" onmouseover="showTip(event, 'fs10', 15)" class="i">browser</span>
-<span onmouseout="hideTip(event, 'fs5', 16)" onmouseover="showTip(event, 'fs5', 16)" class="i">start</span> <span onmouseout="hideTip(event, 'fs7', 17)" onmouseover="showTip(event, 'fs7', 17)" class="i">chrome</span>
-<span class="k">let</span> <span onmouseout="hideTip(event, 'fs11', 18)" onmouseover="showTip(event, 'fs11', 18)" class="i">secondBrowser</span> <span class="o">=</span> <span onmouseout="hideTip(event, 'fs10', 19)" onmouseover="showTip(event, 'fs10', 19)" class="i">browser</span>
+</pre></td>
+<td class="snippet"><pre class="fssnip highlighted"><code lang="fsharp"><span onmouseout="hideTip(event, 'fs5', 12)" onmouseover="showTip(event, 'fs5', 12)" class="f">start</span> <span onmouseout="hideTip(event, 'fs6', 13)" onmouseover="showTip(event, 'fs6', 13)" class="i">firefox</span>
+<span class="k">let</span> <span onmouseout="hideTip(event, 'fs9', 14)" onmouseover="showTip(event, 'fs9', 14)" class="i">mainBrowser</span> <span class="o">=</span> <span onmouseout="hideTip(event, 'fs10', 15)" onmouseover="showTip(event, 'fs10', 15)" class="v">browser</span>
+<span onmouseout="hideTip(event, 'fs5', 16)" onmouseover="showTip(event, 'fs5', 16)" class="f">start</span> <span onmouseout="hideTip(event, 'fs7', 17)" onmouseover="showTip(event, 'fs7', 17)" class="i">chrome</span>
+<span class="k">let</span> <span onmouseout="hideTip(event, 'fs11', 18)" onmouseover="showTip(event, 'fs11', 18)" class="i">secondBrowser</span> <span class="o">=</span> <span onmouseout="hideTip(event, 'fs10', 19)" onmouseover="showTip(event, 'fs10', 19)" class="v">browser</span>
 <span class="c">//switch back to mainBrowser after opening secondBrowser</span>
-<span onmouseout="hideTip(event, 'fs12', 20)" onmouseover="showTip(event, 'fs12', 20)" class="i">switchTo</span> <span onmouseout="hideTip(event, 'fs9', 21)" onmouseover="showTip(event, 'fs9', 21)" class="i">mainBrowser</span></pre>
-</td>
+<span onmouseout="hideTip(event, 'fs12', 20)" onmouseover="showTip(event, 'fs12', 20)" class="f">switchTo</span> <span onmouseout="hideTip(event, 'fs9', 21)" onmouseover="showTip(event, 'fs9', 21)" class="i">mainBrowser</span>
+</code></pre></td>
 </tr>
 </table>
-
 <h2>js</h2>
-
 <p>Run JavaScript in the current browser.</p>
-
-<table class="pre"><tr><td class="lines"><pre class="fssnip">
-<span class="l">1: </span>
+<table class="pre"><tr><td class="lines"><pre class="fssnip"><span class="l">1: </span>
 <span class="l">2: </span>
-</pre>
-</td>
-<td class="snippet"><pre class="fssnip">
-<span class="c">//give the title a border</span>
-<span onmouseout="hideTip(event, 'fs13', 22)" onmouseover="showTip(event, 'fs13', 22)" class="i">js</span> <span class="s">&quot;</span><span class="s">document</span><span class="s">.</span><span class="s">querySelector</span><span class="s">(</span><span class="s">&#39;</span><span class="s">#</span><span class="s">title&#39;</span><span class="s">)</span><span class="s">.</span><span class="s">style</span><span class="s">.</span><span class="s">border</span><span class="s"> </span><span class="s">=</span><span class="s"> </span><span class="s">&#39;</span><span class="s">thick</span><span class="s"> </span><span class="s">solid</span><span class="s"> </span><span class="s">#</span><span class="s">FFF467&#39;</span><span class="s">;</span><span class="s">&quot;</span></pre>
-</td>
+</pre></td>
+<td class="snippet"><pre class="fssnip highlighted"><code lang="fsharp"><span class="c">//give the title a border</span>
+<span onmouseout="hideTip(event, 'fs13', 22)" onmouseover="showTip(event, 'fs13', 22)" class="f">js</span> <span class="s">&quot;document.querySelector(&#39;#title&#39;).style.border = &#39;thick solid #FFF467&#39;;&quot;</span>
+</code></pre></td>
 </tr>
 </table>
-
 <h2>screenshot</h2>
-
 <p>Take a screenshot and save it to the specified path with specified filename. Returns image as byte array.</p>
-
-<table class="pre"><tr><td class="lines"><pre class="fssnip">
-<span class="l">1: </span>
+<table class="pre"><tr><td class="lines"><pre class="fssnip"><span class="l">1: </span>
 <span class="l">2: </span>
 <span class="l">3: </span>
-</pre>
-</td>
-<td class="snippet"><pre class="fssnip">
-<span class="k">let</span> <span onmouseout="hideTip(event, 'fs14', 23)" onmouseover="showTip(event, 'fs14', 23)" class="i">path</span> <span class="o">=</span> <span onmouseout="hideTip(event, 'fs15', 24)" onmouseover="showTip(event, 'fs15', 24)" class="i">Environment</span><span class="o">.</span><span onmouseout="hideTip(event, 'fs16', 25)" onmouseover="showTip(event, 'fs16', 25)" class="i">GetFolderPath</span>(<span onmouseout="hideTip(event, 'fs15', 26)" onmouseover="showTip(event, 'fs15', 26)" class="i">Environment</span><span class="o">.</span><span onmouseout="hideTip(event, 'fs17', 27)" onmouseover="showTip(event, 'fs17', 27)" class="i">SpecialFolder</span><span class="o">.</span><span onmouseout="hideTip(event, 'fs18', 28)" onmouseover="showTip(event, 'fs18', 28)" class="i">ApplicationData</span>) <span class="o">+</span> <span class="s">@&quot;</span><span class="s">\</span><span class="s">canopy</span><span class="s">\</span><span class="s">&quot;</span>
-<span class="k">let</span> <span onmouseout="hideTip(event, 'fs19', 29)" onmouseover="showTip(event, 'fs19', 29)" class="i">filename</span> <span class="o">=</span> <span onmouseout="hideTip(event, 'fs20', 30)" onmouseover="showTip(event, 'fs20', 30)" class="i">DateTime</span><span class="o">.</span><span onmouseout="hideTip(event, 'fs21', 31)" onmouseover="showTip(event, 'fs21', 31)" class="i">Now</span><span class="o">.</span><span onmouseout="hideTip(event, 'fs22', 32)" onmouseover="showTip(event, 'fs22', 32)" class="i">ToString</span>(<span class="s">&quot;</span><span class="s">MMM</span><span class="s">-</span><span class="s">d_HH</span><span class="s">-</span><span class="s">mm</span><span class="s">-</span><span class="s">ss</span><span class="s">-</span><span class="s">fff</span><span class="s">&quot;</span>)
-<span onmouseout="hideTip(event, 'fs23', 33)" onmouseover="showTip(event, 'fs23', 33)" class="i">screenshot</span> <span onmouseout="hideTip(event, 'fs14', 34)" onmouseover="showTip(event, 'fs14', 34)" class="i">path</span> <span onmouseout="hideTip(event, 'fs19', 35)" onmouseover="showTip(event, 'fs19', 35)" class="i">filename</span></pre>
-</td>
+</pre></td>
+<td class="snippet"><pre class="fssnip highlighted"><code lang="fsharp"><span class="k">let</span> <span onmouseout="hideTip(event, 'fs14', 23)" onmouseover="showTip(event, 'fs14', 23)" class="i">path</span> <span class="o">=</span> <span onmouseout="hideTip(event, 'fs15', 24)" onmouseover="showTip(event, 'fs15', 24)" class="t">Environment</span><span class="o">.</span><span onmouseout="hideTip(event, 'fs16', 25)" onmouseover="showTip(event, 'fs16', 25)" class="f">GetFolderPath</span>(<span onmouseout="hideTip(event, 'fs15', 26)" onmouseover="showTip(event, 'fs15', 26)" class="t">Environment</span><span class="o">.</span><span onmouseout="hideTip(event, 'fs17', 27)" onmouseover="showTip(event, 'fs17', 27)" class="t">SpecialFolder</span><span class="o">.</span><span onmouseout="hideTip(event, 'fs18', 28)" onmouseover="showTip(event, 'fs18', 28)" class="i">ApplicationData</span>) <span class="o">+</span> <span class="s">@&quot;\canopy\&quot;</span>
+<span class="k">let</span> <span onmouseout="hideTip(event, 'fs19', 29)" onmouseover="showTip(event, 'fs19', 29)" class="i">filename</span> <span class="o">=</span> <span onmouseout="hideTip(event, 'fs20', 30)" onmouseover="showTip(event, 'fs20', 30)" class="t">DateTime</span><span class="o">.</span><span onmouseout="hideTip(event, 'fs21', 31)" onmouseover="showTip(event, 'fs21', 31)" class="i">Now</span><span class="o">.</span><span onmouseout="hideTip(event, 'fs22', 32)" onmouseover="showTip(event, 'fs22', 32)" class="f">ToString</span>(<span class="s">&quot;MMM-d_HH-mm-ss-fff&quot;</span>)
+<span onmouseout="hideTip(event, 'fs23', 33)" onmouseover="showTip(event, 'fs23', 33)" class="f">screenshot</span> <span onmouseout="hideTip(event, 'fs14', 34)" onmouseover="showTip(event, 'fs14', 34)" class="i">path</span> <span onmouseout="hideTip(event, 'fs19', 35)" onmouseover="showTip(event, 'fs19', 35)" class="i">filename</span>
+</code></pre></td>
 </tr>
 </table>
-
 <h2>sleep</h2>
-
 <p>Sleep for <code>X</code> seconds.</p>
-
-<table class="pre"><tr><td class="lines"><pre class="fssnip">
-<span class="l">1: </span>
+<table class="pre"><tr><td class="lines"><pre class="fssnip"><span class="l">1: </span>
 <span class="l">2: </span>
 <span class="l">3: </span>
 <span class="l">4: </span>
 <span class="l">5: </span>
 <span class="l">6: </span>
-</pre>
-</td>
-<td class="snippet"><pre class="fssnip">
+</pre></td>
+<td class="snippet"><pre class="fssnip highlighted"><code lang="fsharp"><span class="c">//sleep for 1 second</span>
+<span onmouseout="hideTip(event, 'fs24', 36)" onmouseover="showTip(event, 'fs24', 36)" class="f">sleep</span> ()
 <span class="c">//sleep for 1 second</span>
-<span onmouseout="hideTip(event, 'fs24', 36)" onmouseover="showTip(event, 'fs24', 36)" class="i">sleep</span> ()
-<span class="c">//sleep for 1 second</span>
-<span onmouseout="hideTip(event, 'fs24', 37)" onmouseover="showTip(event, 'fs24', 37)" class="i">sleep</span> <span class="n">1</span>
+<span onmouseout="hideTip(event, 'fs24', 37)" onmouseover="showTip(event, 'fs24', 37)" class="f">sleep</span> <span class="n">1</span>
 <span class="c">//sleep for 3 seconds</span>
-<span onmouseout="hideTip(event, 'fs24', 38)" onmouseover="showTip(event, 'fs24', 38)" class="i">sleep</span> <span class="n">3</span></pre>
-</td>
+<span onmouseout="hideTip(event, 'fs24', 38)" onmouseover="showTip(event, 'fs24', 38)" class="f">sleep</span> <span class="n">3</span>
+</code></pre></td>
 </tr>
 </table>
-
 <h2>highlight</h2>
-
 <p>Place a border around an element to help you identify it visually, used in wip test mode.</p>
-
-<table class="pre"><tr><td class="lines"><pre class="fssnip">
-<span class="l">1: </span>
-</pre>
-</td>
-<td class="snippet"><pre class="fssnip">
-<span onmouseout="hideTip(event, 'fs25', 39)" onmouseover="showTip(event, 'fs25', 39)" class="i">highlight</span> <span class="s">&quot;</span><span class="s">.</span><span class="s">btn</span><span class="s">&quot;</span></pre>
-</td>
+<table class="pre"><tr><td class="lines"><pre class="fssnip"><span class="l">1: </span>
+</pre></td>
+<td class="snippet"><pre class="fssnip highlighted"><code lang="fsharp"><span onmouseout="hideTip(event, 'fs25', 39)" onmouseover="showTip(event, 'fs25', 39)" class="f">highlight</span> <span class="s">&quot;.btn&quot;</span>
+</code></pre></td>
 </tr>
 </table>
-
 <h2>describe</h2>
-
 <p>Describe something in your test, currently writes description to console.</p>
-
-<table class="pre"><tr><td class="lines"><pre class="fssnip">
-<span class="l">1: </span>
-</pre>
-</td>
-<td class="snippet"><pre class="fssnip">
-<span onmouseout="hideTip(event, 'fs26', 40)" onmouseover="showTip(event, 'fs26', 40)" class="i">describe</span> <span class="s">&quot;</span><span class="s">on</span><span class="s"> </span><span class="s">main</span><span class="s"> </span><span class="s">page</span><span class="s">,</span><span class="s"> </span><span class="s">testing</span><span class="s"> </span><span class="s">logout</span><span class="s">&quot;</span></pre>
-</td>
+<table class="pre"><tr><td class="lines"><pre class="fssnip"><span class="l">1: </span>
+</pre></td>
+<td class="snippet"><pre class="fssnip highlighted"><code lang="fsharp"><span onmouseout="hideTip(event, 'fs26', 40)" onmouseover="showTip(event, 'fs26', 40)" class="f">describe</span> <span class="s">&quot;on main page, testing logout&quot;</span>
+</code></pre></td>
 </tr>
 </table>
-
 <h2>waitFor</h2>
-
 <p>Wait until custom function is true (better alternative to sleeping <code>X</code> seconds).</p>
-
-<table class="pre"><tr><td class="lines"><pre class="fssnip">
-<span class="l">1: </span>
+<table class="pre"><tr><td class="lines"><pre class="fssnip"><span class="l">1: </span>
 <span class="l">2: </span>
 <span class="l">3: </span>
 <span class="l">4: </span>
 <span class="l">5: </span>
 <span class="l">6: </span>
-</pre>
-</td>
-<td class="snippet"><pre class="fssnip">
-<span class="k">let</span> <span onmouseout="hideTip(event, 'fs27', 41)" onmouseover="showTip(event, 'fs27', 41)" class="i">fiveNumbersShown</span> () <span class="o">=</span> 
-    (<span onmouseout="hideTip(event, 'fs28', 42)" onmouseover="showTip(event, 'fs28', 42)" class="i">elements</span> <span class="s">&quot;</span><span class="s">.</span><span class="s">number</span><span class="s">&quot;</span>)<span class="o">.</span><span class="i">Length</span> <span class="o">=</span> <span class="n">5</span>
+</pre></td>
+<td class="snippet"><pre class="fssnip highlighted"><code lang="fsharp"><span class="k">let</span> <span onmouseout="hideTip(event, 'fs27', 41)" onmouseover="showTip(event, 'fs27', 41)" class="f">fiveNumbersShown</span> () <span class="o">=</span> 
+    (<span onmouseout="hideTip(event, 'fs28', 42)" onmouseover="showTip(event, 'fs28', 42)" class="f">elements</span> <span class="s">&quot;.number&quot;</span>)<span class="o">.</span><span class="i">Length</span> <span class="o">=</span> <span class="n">5</span>
 
-<span onmouseout="hideTip(event, 'fs29', 43)" onmouseover="showTip(event, 'fs29', 43)" class="i">url</span> <span class="s">&quot;</span><span class="s">http</span><span class="s">:</span><span class="s">/</span><span class="s">/</span><span class="s">somepage</span><span class="s">.</span><span class="s">com</span><span class="s">/</span><span class="s">countdown</span><span class="s">&quot;</span>
-<span onmouseout="hideTip(event, 'fs30', 44)" onmouseover="showTip(event, 'fs30', 44)" class="i">waitFor</span> <span onmouseout="hideTip(event, 'fs27', 45)" onmouseover="showTip(event, 'fs27', 45)" class="i">fiveNumbersShown</span>
-<span class="c">//continue with your test</span></pre>
-</td>
+<span onmouseout="hideTip(event, 'fs29', 43)" onmouseover="showTip(event, 'fs29', 43)" class="f">url</span> <span class="s">&quot;http://somepage.com/countdown&quot;</span>
+<span onmouseout="hideTip(event, 'fs30', 44)" onmouseover="showTip(event, 'fs30', 44)" class="f">waitFor</span> <span onmouseout="hideTip(event, 'fs27', 45)" onmouseover="showTip(event, 'fs27', 45)" class="f">fiveNumbersShown</span>
+<span class="c">//continue with your test</span>
+</code></pre></td>
 </tr>
 </table>
-
 <h2>element</h2>
-
-<p>Get an element (Selenium <code>IWebElement</code>) with given css selector or text (built in waits, automatically searches through <code>iFrames</code>). 
+<p>Get an element (Selenium <code>IWebElement</code>) with given css selector or text (built in waits, automatically searches through <code>iFrames</code>).
 Most useful if you need to write some custom helpers to provide functionality that canopy does not currently have.</p>
-
-<table class="pre"><tr><td class="lines"><pre class="fssnip">
-<span class="l">1: </span>
+<table class="pre"><tr><td class="lines"><pre class="fssnip"><span class="l">1: </span>
 <span class="l">2: </span>
 <span class="l">3: </span>
-</pre>
-</td>
-<td class="snippet"><pre class="fssnip">
-<span class="k">let</span> <span onmouseout="hideTip(event, 'fs31', 46)" onmouseover="showTip(event, 'fs31', 46)" class="i">logoutHref</span> <span class="o">=</span> (<span onmouseout="hideTip(event, 'fs32', 47)" onmouseover="showTip(event, 'fs32', 47)" class="i">element</span> <span class="s">&quot;</span><span class="s">#</span><span class="s">logout</span><span class="s">&quot;</span>)<span class="o">.</span><span class="i">GetAttribute</span>(<span class="s">&quot;</span><span class="s">href</span><span class="s">&quot;</span>)
-<span onmouseout="hideTip(event, 'fs26', 48)" onmouseover="showTip(event, 'fs26', 48)" class="i">describe</span> (<span class="s">&quot;</span><span class="s">logout</span><span class="s"> </span><span class="s">href</span><span class="s"> </span><span class="s">is</span><span class="s">:</span><span class="s"> </span><span class="s">&quot;</span> <span class="o">+</span> <span onmouseout="hideTip(event, 'fs31', 49)" onmouseover="showTip(event, 'fs31', 49)" class="i">logoutHref</span>) 
-<span class="c">//continue with your test</span></pre>
-</td>
+</pre></td>
+<td class="snippet"><pre class="fssnip highlighted"><code lang="fsharp"><span class="k">let</span> <span onmouseout="hideTip(event, 'fs31', 46)" onmouseover="showTip(event, 'fs31', 46)" class="i">logoutHref</span> <span class="o">=</span> (<span onmouseout="hideTip(event, 'fs32', 47)" onmouseover="showTip(event, 'fs32', 47)" class="f">element</span> <span class="s">&quot;#logout&quot;</span>)<span class="o">.</span><span class="f">GetAttribute</span>(<span class="s">&quot;href&quot;</span>)
+<span onmouseout="hideTip(event, 'fs26', 48)" onmouseover="showTip(event, 'fs26', 48)" class="f">describe</span> (<span class="s">&quot;logout href is: &quot;</span> <span class="o">+</span> <span onmouseout="hideTip(event, 'fs31', 49)" onmouseover="showTip(event, 'fs31', 49)" class="i">logoutHref</span>) 
+<span class="c">//continue with your test</span>
+</code></pre></td>
 </tr>
 </table>
-
 <h2>elementWithin</h2>
-
 <p>Get an element by searching within another element (nested).</p>
-
-<table class="pre"><tr><td class="lines"><pre class="fssnip">
-<span class="l">1: </span>
-</pre>
-</td>
-<td class="snippet"><pre class="fssnip">
-<span class="k">let</span> <span onmouseout="hideTip(event, 'fs33', 50)" onmouseover="showTip(event, 'fs33', 50)" class="i">name</span> <span class="o">=</span> <span onmouseout="hideTip(event, 'fs32', 51)" onmouseover="showTip(event, 'fs32', 51)" class="i">element</span> <span class="s">&quot;</span><span class="s">#</span><span class="s">header</span><span class="s">&quot;</span> <span class="o">|&gt;</span> <span onmouseout="hideTip(event, 'fs34', 52)" onmouseover="showTip(event, 'fs34', 52)" class="i">elementWithin</span> <span class="s">&quot;</span><span class="s">.</span><span class="s">name</span><span class="s">&quot;</span></pre>
-</td>
+<table class="pre"><tr><td class="lines"><pre class="fssnip"><span class="l">1: </span>
+</pre></td>
+<td class="snippet"><pre class="fssnip highlighted"><code lang="fsharp"><span class="k">let</span> <span onmouseout="hideTip(event, 'fs33', 50)" onmouseover="showTip(event, 'fs33', 50)" class="i">name</span> <span class="o">=</span> <span onmouseout="hideTip(event, 'fs32', 51)" onmouseover="showTip(event, 'fs32', 51)" class="f">element</span> <span class="s">&quot;#header&quot;</span> <span class="o">|&gt;</span> <span onmouseout="hideTip(event, 'fs34', 52)" onmouseover="showTip(event, 'fs34', 52)" class="f">elementWithin</span> <span class="s">&quot;.name&quot;</span>
+</code></pre></td>
 </tr>
 </table>
-
 <h2>someElement</h2>
-
-<p>Like <code>element</code> function except it runs a <code>Some(IWebElement)</code> or <code>None</code>. 
+<p>Like <code>element</code> function except it runs a <code>Some(IWebElement)</code> or <code>None</code>.
 Read more about <code>Option</code> types <a href="http://en.wikibooks.org/wiki/F_Sharp_Programming/Option_Types">here</a>.</p>
-
-<table class="pre"><tr><td class="lines"><pre class="fssnip">
-<span class="l">1: </span>
+<table class="pre"><tr><td class="lines"><pre class="fssnip"><span class="l">1: </span>
 <span class="l">2: </span>
 <span class="l">3: </span>
 <span class="l">4: </span>
 <span class="l">5: </span>
 <span class="l">6: </span>
-</pre>
-</td>
-<td class="snippet"><pre class="fssnip">
-<span class="c">//create your own exists helper function</span>
-<span class="k">let</span> <span onmouseout="hideTip(event, 'fs35', 53)" onmouseover="showTip(event, 'fs35', 53)" class="i">exists</span> <span onmouseout="hideTip(event, 'fs36', 54)" onmouseover="showTip(event, 'fs36', 54)" class="i">selector</span> <span class="o">=</span> 
-    <span class="k">let</span> <span onmouseout="hideTip(event, 'fs37', 55)" onmouseover="showTip(event, 'fs37', 55)" class="i">someEle</span> <span class="o">=</span> <span onmouseout="hideTip(event, 'fs38', 56)" onmouseover="showTip(event, 'fs38', 56)" class="i">someElement</span> <span onmouseout="hideTip(event, 'fs36', 57)" onmouseover="showTip(event, 'fs36', 57)" class="i">selector</span>
+</pre></td>
+<td class="snippet"><pre class="fssnip highlighted"><code lang="fsharp"><span class="c">//create your own exists helper function</span>
+<span class="k">let</span> <span onmouseout="hideTip(event, 'fs35', 53)" onmouseover="showTip(event, 'fs35', 53)" class="f">exists</span> <span onmouseout="hideTip(event, 'fs36', 54)" onmouseover="showTip(event, 'fs36', 54)" class="i">selector</span> <span class="o">=</span> 
+    <span class="k">let</span> <span onmouseout="hideTip(event, 'fs37', 55)" onmouseover="showTip(event, 'fs37', 55)" class="i">someEle</span> <span class="o">=</span> <span onmouseout="hideTip(event, 'fs38', 56)" onmouseover="showTip(event, 'fs38', 56)" class="f">someElement</span> <span onmouseout="hideTip(event, 'fs36', 57)" onmouseover="showTip(event, 'fs36', 57)" class="i">selector</span>
     <span class="k">match</span> <span onmouseout="hideTip(event, 'fs37', 58)" onmouseover="showTip(event, 'fs37', 58)" class="i">someEle</span> <span class="k">with</span>
-    | <span onmouseout="hideTip(event, 'fs39', 59)" onmouseover="showTip(event, 'fs39', 59)" class="i">Some</span>(_) <span class="k">-&gt;</span> <span class="k">true</span>
-    | <span onmouseout="hideTip(event, 'fs40', 60)" onmouseover="showTip(event, 'fs40', 60)" class="i">None</span> <span class="k">-&gt;</span> <span class="k">false</span></pre>
-</td>
+    | <span onmouseout="hideTip(event, 'fs39', 59)" onmouseover="showTip(event, 'fs39', 59)" class="p">Some</span>(_) <span class="k">-&gt;</span> <span class="k">true</span>
+    | <span onmouseout="hideTip(event, 'fs40', 60)" onmouseover="showTip(event, 'fs40', 60)" class="p">None</span> <span class="k">-&gt;</span> <span class="k">false</span>
+</code></pre></td>
 </tr>
 </table>
-
 <h2>someElementWithin</h2>
-
-<p>Like <code>elementWithin</code> function except it runs a <code>Some(IWebElement)</code> or <code>None</code>. 
+<p>Like <code>elementWithin</code> function except it runs a <code>Some(IWebElement)</code> or <code>None</code>.
 Read more about Option types <a href="http://en.wikibooks.org/wiki/F_Sharp_Programming/Option_Types">here</a>.</p>
-
-<table class="pre"><tr><td class="lines"><pre class="fssnip">
-<span class="l">1: </span>
+<table class="pre"><tr><td class="lines"><pre class="fssnip"><span class="l">1: </span>
 <span class="l">2: </span>
-</pre>
-</td>
-<td class="snippet"><pre class="fssnip">
-<span class="c">//create your own exists helper function</span>
-<span class="k">let</span> <span onmouseout="hideTip(event, 'fs41', 61)" onmouseover="showTip(event, 'fs41', 61)" class="i">someName</span> <span class="o">=</span> <span onmouseout="hideTip(event, 'fs32', 62)" onmouseover="showTip(event, 'fs32', 62)" class="i">element</span> <span class="s">&quot;</span><span class="s">#</span><span class="s">header</span><span class="s">&quot;</span> <span class="o">|&gt;</span> <span onmouseout="hideTip(event, 'fs42', 63)" onmouseover="showTip(event, 'fs42', 63)" class="i">someElementWithin</span> <span class="s">&quot;</span><span class="s">.</span><span class="s">name</span><span class="s">&quot;</span></pre>
-</td>
+</pre></td>
+<td class="snippet"><pre class="fssnip highlighted"><code lang="fsharp"><span class="c">//create your own exists helper function</span>
+<span class="k">let</span> <span onmouseout="hideTip(event, 'fs41', 61)" onmouseover="showTip(event, 'fs41', 61)" class="i">someName</span> <span class="o">=</span> <span onmouseout="hideTip(event, 'fs32', 62)" onmouseover="showTip(event, 'fs32', 62)" class="f">element</span> <span class="s">&quot;#header&quot;</span> <span class="o">|&gt;</span> <span onmouseout="hideTip(event, 'fs42', 63)" onmouseover="showTip(event, 'fs42', 63)" class="f">someElementWithin</span> <span class="s">&quot;.name&quot;</span>
+</code></pre></td>
 </tr>
 </table>
-
 <h2>parent</h2>
-
 <p>Get the parent element of provided element.</p>
-
-<table class="pre"><tr><td class="lines"><pre class="fssnip">
-<span class="l">1: </span>
-</pre>
-</td>
-<td class="snippet"><pre class="fssnip">
-<span onmouseout="hideTip(event, 'fs32', 64)" onmouseover="showTip(event, 'fs32', 64)" class="i">element</span> <span class="s">&quot;</span><span class="s">#</span><span class="s">firstName</span><span class="s">&quot;</span> <span class="o">|&gt;</span> <span onmouseout="hideTip(event, 'fs43', 65)" onmouseover="showTip(event, 'fs43', 65)" class="i">parent</span></pre>
-</td>
+<table class="pre"><tr><td class="lines"><pre class="fssnip"><span class="l">1: </span>
+</pre></td>
+<td class="snippet"><pre class="fssnip highlighted"><code lang="fsharp"><span onmouseout="hideTip(event, 'fs32', 64)" onmouseover="showTip(event, 'fs32', 64)" class="f">element</span> <span class="s">&quot;#firstName&quot;</span> <span class="o">|&gt;</span> <span onmouseout="hideTip(event, 'fs43', 65)" onmouseover="showTip(event, 'fs43', 65)" class="f">parent</span>
+</code></pre></td>
 </tr>
 </table>
-
 <h2>someParent</h2>
-
 <p>Get the <code>Some</code>/<code>None</code> parent element of provided element.</p>
-
-<table class="pre"><tr><td class="lines"><pre class="fssnip">
-<span class="l">1: </span>
-</pre>
-</td>
-<td class="snippet"><pre class="fssnip">
-<span onmouseout="hideTip(event, 'fs32', 66)" onmouseover="showTip(event, 'fs32', 66)" class="i">element</span> <span class="s">&quot;</span><span class="s">#</span><span class="s">firstName</span><span class="s">&quot;</span> <span class="o">|&gt;</span> <span onmouseout="hideTip(event, 'fs44', 67)" onmouseover="showTip(event, 'fs44', 67)" class="i">someParent</span></pre>
-</td>
+<table class="pre"><tr><td class="lines"><pre class="fssnip"><span class="l">1: </span>
+</pre></td>
+<td class="snippet"><pre class="fssnip highlighted"><code lang="fsharp"><span onmouseout="hideTip(event, 'fs32', 66)" onmouseover="showTip(event, 'fs32', 66)" class="f">element</span> <span class="s">&quot;#firstName&quot;</span> <span class="o">|&gt;</span> <span onmouseout="hideTip(event, 'fs44', 67)" onmouseover="showTip(event, 'fs44', 67)" class="f">someParent</span>
+</code></pre></td>
 </tr>
 </table>
-
 <h2>elements</h2>
-
 <p>The same as element except you get all elements that match the css selector or text.</p>
-
-<table class="pre"><tr><td class="lines"><pre class="fssnip">
-<span class="l">1: </span>
+<table class="pre"><tr><td class="lines"><pre class="fssnip"><span class="l">1: </span>
 <span class="l">2: </span>
 <span class="l">3: </span>
 <span class="l">4: </span>
 <span class="l">5: </span>
-</pre>
-</td>
-<td class="snippet"><pre class="fssnip">
-<span class="k">let</span> <span onmouseout="hideTip(event, 'fs45', 68)" onmouseover="showTip(event, 'fs45', 68)" class="i">clickAll</span> <span onmouseout="hideTip(event, 'fs36', 69)" onmouseover="showTip(event, 'fs36', 69)" class="i">selector</span> <span class="o">=</span>
-  <span onmouseout="hideTip(event, 'fs28', 70)" onmouseover="showTip(event, 'fs28', 70)" class="i">elements</span> <span onmouseout="hideTip(event, 'fs36', 71)" onmouseover="showTip(event, 'fs36', 71)" class="i">selector</span>
-  <span class="o">|&gt;</span> <span onmouseout="hideTip(event, 'fs46', 72)" onmouseover="showTip(event, 'fs46', 72)" class="i">List</span><span class="o">.</span><span onmouseout="hideTip(event, 'fs47', 73)" onmouseover="showTip(event, 'fs47', 73)" class="i">iter</span> (<span class="k">fun</span> <span onmouseout="hideTip(event, 'fs48', 74)" onmouseover="showTip(event, 'fs48', 74)" class="i">element</span> <span class="k">-&gt;</span> <span onmouseout="hideTip(event, 'fs49', 75)" onmouseover="showTip(event, 'fs49', 75)" class="i">click</span> <span onmouseout="hideTip(event, 'fs48', 76)" onmouseover="showTip(event, 'fs48', 76)" class="i">element</span>)
+</pre></td>
+<td class="snippet"><pre class="fssnip highlighted"><code lang="fsharp"><span class="k">let</span> <span onmouseout="hideTip(event, 'fs45', 68)" onmouseover="showTip(event, 'fs45', 68)" class="f">clickAll</span> <span onmouseout="hideTip(event, 'fs36', 69)" onmouseover="showTip(event, 'fs36', 69)" class="i">selector</span> <span class="o">=</span>
+  <span onmouseout="hideTip(event, 'fs28', 70)" onmouseover="showTip(event, 'fs28', 70)" class="f">elements</span> <span onmouseout="hideTip(event, 'fs36', 71)" onmouseover="showTip(event, 'fs36', 71)" class="i">selector</span>
+  <span class="o">|&gt;</span> <span onmouseout="hideTip(event, 'fs46', 72)" onmouseover="showTip(event, 'fs46', 72)" class="t">List</span><span class="o">.</span><span onmouseout="hideTip(event, 'fs47', 73)" onmouseover="showTip(event, 'fs47', 73)" class="f">iter</span> (<span class="k">fun</span> <span onmouseout="hideTip(event, 'fs48', 74)" onmouseover="showTip(event, 'fs48', 74)" class="i">element</span> <span class="k">-&gt;</span> <span onmouseout="hideTip(event, 'fs49', 75)" onmouseover="showTip(event, 'fs49', 75)" class="f">click</span> <span onmouseout="hideTip(event, 'fs48', 76)" onmouseover="showTip(event, 'fs48', 76)" class="i">element</span>)
 
-<span onmouseout="hideTip(event, 'fs45', 77)" onmouseover="showTip(event, 'fs45', 77)" class="i">clickAll</span> <span class="s">&quot;</span><span class="s">.</span><span class="s">button</span><span class="s">&quot;</span></pre>
-</td>
+<span onmouseout="hideTip(event, 'fs45', 77)" onmouseover="showTip(event, 'fs45', 77)" class="f">clickAll</span> <span class="s">&quot;.button&quot;</span>
+</code></pre></td>
 </tr>
 </table>
-
 <h2>elementsWithin</h2>
-
 <p>Get elements by searching within another element (nested).</p>
-
-<table class="pre"><tr><td class="lines"><pre class="fssnip">
-<span class="l">1: </span>
-</pre>
-</td>
-<td class="snippet"><pre class="fssnip">
-<span class="k">let</span> <span onmouseout="hideTip(event, 'fs50', 78)" onmouseover="showTip(event, 'fs50', 78)" class="i">names</span> <span class="o">=</span> <span onmouseout="hideTip(event, 'fs32', 79)" onmouseover="showTip(event, 'fs32', 79)" class="i">element</span> <span class="s">&quot;</span><span class="s">#</span><span class="s">header</span><span class="s">&quot;</span> <span class="o">|&gt;</span> <span onmouseout="hideTip(event, 'fs51', 80)" onmouseover="showTip(event, 'fs51', 80)" class="i">elementsWithin</span> <span class="s">&quot;</span><span class="s">.</span><span class="s">name</span><span class="s">&quot;</span></pre>
-</td>
+<table class="pre"><tr><td class="lines"><pre class="fssnip"><span class="l">1: </span>
+</pre></td>
+<td class="snippet"><pre class="fssnip highlighted"><code lang="fsharp"><span class="k">let</span> <span onmouseout="hideTip(event, 'fs50', 78)" onmouseover="showTip(event, 'fs50', 78)" class="i">names</span> <span class="o">=</span> <span onmouseout="hideTip(event, 'fs32', 79)" onmouseover="showTip(event, 'fs32', 79)" class="f">element</span> <span class="s">&quot;#header&quot;</span> <span class="o">|&gt;</span> <span onmouseout="hideTip(event, 'fs51', 80)" onmouseover="showTip(event, 'fs51', 80)" class="f">elementsWithin</span> <span class="s">&quot;.name&quot;</span>
+</code></pre></td>
 </tr>
 </table>
-
 <h2>nth</h2>
-
 <p>Get the nth element.</p>
-
-<table class="pre"><tr><td class="lines"><pre class="fssnip">
-<span class="l">1: </span>
-</pre>
-</td>
-<td class="snippet"><pre class="fssnip">
-<span onmouseout="hideTip(event, 'fs49', 81)" onmouseover="showTip(event, 'fs49', 81)" class="i">click</span> (<span onmouseout="hideTip(event, 'fs52', 82)" onmouseover="showTip(event, 'fs52', 82)" class="i">nth</span> <span class="n">4</span> <span class="s">&quot;</span><span class="s">.</span><span class="s">button</span><span class="s">&quot;</span>)</pre>
-</td>
+<table class="pre"><tr><td class="lines"><pre class="fssnip"><span class="l">1: </span>
+</pre></td>
+<td class="snippet"><pre class="fssnip highlighted"><code lang="fsharp"><span onmouseout="hideTip(event, 'fs49', 81)" onmouseover="showTip(event, 'fs49', 81)" class="f">click</span> (<span onmouseout="hideTip(event, 'fs52', 82)" onmouseover="showTip(event, 'fs52', 82)" class="f">nth</span> <span class="n">4</span> <span class="s">&quot;.button&quot;</span>)
+</code></pre></td>
 </tr>
 </table>
-
 <h2>first</h2>
-
 <p>Get the first element.</p>
-
-<table class="pre"><tr><td class="lines"><pre class="fssnip">
-<span class="l">1: </span>
-</pre>
-</td>
-<td class="snippet"><pre class="fssnip">
-<span onmouseout="hideTip(event, 'fs49', 83)" onmouseover="showTip(event, 'fs49', 83)" class="i">click</span> (<span onmouseout="hideTip(event, 'fs53', 84)" onmouseover="showTip(event, 'fs53', 84)" class="i">first</span> <span class="s">&quot;</span><span class="s">.</span><span class="s">button</span><span class="s">&quot;</span>)</pre>
-</td>
+<table class="pre"><tr><td class="lines"><pre class="fssnip"><span class="l">1: </span>
+</pre></td>
+<td class="snippet"><pre class="fssnip highlighted"><code lang="fsharp"><span onmouseout="hideTip(event, 'fs49', 83)" onmouseover="showTip(event, 'fs49', 83)" class="f">click</span> (<span onmouseout="hideTip(event, 'fs53', 84)" onmouseover="showTip(event, 'fs53', 84)" class="f">first</span> <span class="s">&quot;.button&quot;</span>)
+</code></pre></td>
 </tr>
 </table>
-
 <h2>last</h2>
-
 <p>Get the last element.</p>
-
-<table class="pre"><tr><td class="lines"><pre class="fssnip">
-<span class="l">1: </span>
-</pre>
-</td>
-<td class="snippet"><pre class="fssnip">
-<span onmouseout="hideTip(event, 'fs49', 85)" onmouseover="showTip(event, 'fs49', 85)" class="i">click</span> (<span onmouseout="hideTip(event, 'fs54', 86)" onmouseover="showTip(event, 'fs54', 86)" class="i">last</span> <span class="s">&quot;</span><span class="s">.</span><span class="s">button</span><span class="s">&quot;</span>)</pre>
-</td>
+<table class="pre"><tr><td class="lines"><pre class="fssnip"><span class="l">1: </span>
+</pre></td>
+<td class="snippet"><pre class="fssnip highlighted"><code lang="fsharp"><span onmouseout="hideTip(event, 'fs49', 85)" onmouseover="showTip(event, 'fs49', 85)" class="f">click</span> (<span onmouseout="hideTip(event, 'fs54', 86)" onmouseover="showTip(event, 'fs54', 86)" class="f">last</span> <span class="s">&quot;.button&quot;</span>)
+</code></pre></td>
 </tr>
 </table>
-
 <h2>&lt;&lt; (write)</h2>
-
 <p>Write text to element.</p>
-
-<table class="pre"><tr><td class="lines"><pre class="fssnip">
-<span class="l">1: </span>
+<table class="pre"><tr><td class="lines"><pre class="fssnip"><span class="l">1: </span>
 <span class="l">2: </span>
 <span class="l">3: </span>
 <span class="l">4: </span>
-</pre>
-</td>
-<td class="snippet"><pre class="fssnip">
-<span class="s">&quot;</span><span class="s">#</span><span class="s">firstName</span><span class="s">&quot;</span> <span class="o">&lt;&lt;</span> <span class="s">&quot;</span><span class="s">Alex</span><span class="s">&quot;</span>
+</pre></td>
+<td class="snippet"><pre class="fssnip highlighted"><code lang="fsharp"><span class="s">&quot;#firstName&quot;</span> <span class="o">&lt;&lt;</span> <span class="s">&quot;Alex&quot;</span>
 <span class="c">//if you dont like the &lt;&lt; syntax you can alias anyway you like, eg: </span>
-<span class="k">let</span> <span onmouseout="hideTip(event, 'fs55', 87)" onmouseover="showTip(event, 'fs55', 87)" class="i">write</span> <span onmouseout="hideTip(event, 'fs56', 88)" onmouseover="showTip(event, 'fs56', 88)" class="i">text</span> <span onmouseout="hideTip(event, 'fs57', 89)" onmouseover="showTip(event, 'fs57', 89)" class="i">selector</span> <span class="o">=</span> 
-    <span onmouseout="hideTip(event, 'fs57', 90)" onmouseover="showTip(event, 'fs57', 90)" class="i">selector</span> <span class="o">&lt;&lt;</span> <span onmouseout="hideTip(event, 'fs56', 91)" onmouseover="showTip(event, 'fs56', 91)" class="i">text</span> </pre>
-</td>
+<span class="k">let</span> <span onmouseout="hideTip(event, 'fs55', 87)" onmouseover="showTip(event, 'fs55', 87)" class="f">write</span> <span onmouseout="hideTip(event, 'fs56', 88)" onmouseover="showTip(event, 'fs56', 88)" class="i">text</span> <span onmouseout="hideTip(event, 'fs57', 89)" onmouseover="showTip(event, 'fs57', 89)" class="i">selector</span> <span class="o">=</span> 
+    <span onmouseout="hideTip(event, 'fs57', 90)" onmouseover="showTip(event, 'fs57', 90)" class="i">selector</span> <span class="o">&lt;&lt;</span> <span onmouseout="hideTip(event, 'fs56', 91)" onmouseover="showTip(event, 'fs56', 91)" class="i">text</span> 
+</code></pre></td>
 </tr>
 </table>
-
 <h2>read</h2>
-
 <p>Read the text (or value or selected option) of an element.</p>
-
-<table class="pre"><tr><td class="lines"><pre class="fssnip">
-<span class="l">1: </span>
+<table class="pre"><tr><td class="lines"><pre class="fssnip"><span class="l">1: </span>
 <span class="l">2: </span>
 <span class="l">3: </span>
-</pre>
-</td>
-<td class="snippet"><pre class="fssnip">
-<span class="k">let</span> <span onmouseout="hideTip(event, 'fs58', 92)" onmouseover="showTip(event, 'fs58', 92)" class="i">selectedState</span> <span class="o">=</span> <span onmouseout="hideTip(event, 'fs59', 93)" onmouseover="showTip(event, 'fs59', 93)" class="i">read</span> <span class="s">&quot;</span><span class="s">#</span><span class="s">states</span><span class="s">&quot;</span>
-<span class="k">let</span> <span onmouseout="hideTip(event, 'fs60', 94)" onmouseover="showTip(event, 'fs60', 94)" class="i">firstName</span> <span class="o">=</span> <span onmouseout="hideTip(event, 'fs59', 95)" onmouseover="showTip(event, 'fs59', 95)" class="i">read</span> <span class="s">&quot;</span><span class="s">#</span><span class="s">firstName</span><span class="s">&quot;</span>
-<span class="k">let</span> <span onmouseout="hideTip(event, 'fs61', 96)" onmouseover="showTip(event, 'fs61', 96)" class="i">linkText</span> <span class="o">=</span> <span onmouseout="hideTip(event, 'fs59', 97)" onmouseover="showTip(event, 'fs59', 97)" class="i">read</span> <span class="s">&quot;</span><span class="s">#</span><span class="s">someLink</span><span class="s">&quot;</span></pre>
-</td>
+</pre></td>
+<td class="snippet"><pre class="fssnip highlighted"><code lang="fsharp"><span class="k">let</span> <span onmouseout="hideTip(event, 'fs58', 92)" onmouseover="showTip(event, 'fs58', 92)" class="i">selectedState</span> <span class="o">=</span> <span onmouseout="hideTip(event, 'fs59', 93)" onmouseover="showTip(event, 'fs59', 93)" class="f">read</span> <span class="s">&quot;#states&quot;</span>
+<span class="k">let</span> <span onmouseout="hideTip(event, 'fs60', 94)" onmouseover="showTip(event, 'fs60', 94)" class="i">firstName</span> <span class="o">=</span> <span onmouseout="hideTip(event, 'fs59', 95)" onmouseover="showTip(event, 'fs59', 95)" class="f">read</span> <span class="s">&quot;#firstName&quot;</span>
+<span class="k">let</span> <span onmouseout="hideTip(event, 'fs61', 96)" onmouseover="showTip(event, 'fs61', 96)" class="i">linkText</span> <span class="o">=</span> <span onmouseout="hideTip(event, 'fs59', 97)" onmouseover="showTip(event, 'fs59', 97)" class="f">read</span> <span class="s">&quot;#someLink&quot;</span>
+</code></pre></td>
 </tr>
 </table>
-
 <h2>clear</h2>
-
 <p>Clear the text of an element.</p>
-
-<table class="pre"><tr><td class="lines"><pre class="fssnip">
-<span class="l">1: </span>
-</pre>
-</td>
-<td class="snippet"><pre class="fssnip">
-<span onmouseout="hideTip(event, 'fs62', 98)" onmouseover="showTip(event, 'fs62', 98)" class="i">clear</span> <span class="s">&quot;</span><span class="s">#</span><span class="s">firstName</span><span class="s">&quot;</span></pre>
-</td>
+<table class="pre"><tr><td class="lines"><pre class="fssnip"><span class="l">1: </span>
+</pre></td>
+<td class="snippet"><pre class="fssnip highlighted"><code lang="fsharp"><span onmouseout="hideTip(event, 'fs62', 98)" onmouseover="showTip(event, 'fs62', 98)" class="f">clear</span> <span class="s">&quot;#firstName&quot;</span>
+</code></pre></td>
 </tr>
 </table>
-
 <h2>press</h2>
-
 <p>Simulate a key press.</p>
-
-<table class="pre"><tr><td class="lines"><pre class="fssnip">
-<span class="l">1: </span>
+<table class="pre"><tr><td class="lines"><pre class="fssnip"><span class="l">1: </span>
 <span class="l">2: </span>
 <span class="l">3: </span>
 <span class="l">4: </span>
 <span class="l">5: </span>
 <span class="l">6: </span>
-</pre>
-</td>
-<td class="snippet"><pre class="fssnip">
-<span onmouseout="hideTip(event, 'fs63', 99)" onmouseover="showTip(event, 'fs63', 99)" class="i">press</span> <span onmouseout="hideTip(event, 'fs64', 100)" onmouseover="showTip(event, 'fs64', 100)" class="i">tab</span>
-<span onmouseout="hideTip(event, 'fs63', 101)" onmouseover="showTip(event, 'fs63', 101)" class="i">press</span> <span onmouseout="hideTip(event, 'fs65', 102)" onmouseover="showTip(event, 'fs65', 102)" class="i">enter</span>
-<span onmouseout="hideTip(event, 'fs63', 103)" onmouseover="showTip(event, 'fs63', 103)" class="i">press</span> <span onmouseout="hideTip(event, 'fs66', 104)" onmouseover="showTip(event, 'fs66', 104)" class="i">down</span>
-<span onmouseout="hideTip(event, 'fs63', 105)" onmouseover="showTip(event, 'fs63', 105)" class="i">press</span> <span onmouseout="hideTip(event, 'fs67', 106)" onmouseover="showTip(event, 'fs67', 106)" class="i">up</span>
-<span onmouseout="hideTip(event, 'fs63', 107)" onmouseover="showTip(event, 'fs63', 107)" class="i">press</span> <span onmouseout="hideTip(event, 'fs68', 108)" onmouseover="showTip(event, 'fs68', 108)" class="i">left</span>
-<span onmouseout="hideTip(event, 'fs63', 109)" onmouseover="showTip(event, 'fs63', 109)" class="i">press</span> <span onmouseout="hideTip(event, 'fs69', 110)" onmouseover="showTip(event, 'fs69', 110)" class="i">right</span></pre>
-</td>
+</pre></td>
+<td class="snippet"><pre class="fssnip highlighted"><code lang="fsharp"><span onmouseout="hideTip(event, 'fs63', 99)" onmouseover="showTip(event, 'fs63', 99)" class="f">press</span> <span onmouseout="hideTip(event, 'fs64', 100)" onmouseover="showTip(event, 'fs64', 100)" class="i">tab</span>
+<span onmouseout="hideTip(event, 'fs63', 101)" onmouseover="showTip(event, 'fs63', 101)" class="f">press</span> <span onmouseout="hideTip(event, 'fs65', 102)" onmouseover="showTip(event, 'fs65', 102)" class="i">enter</span>
+<span onmouseout="hideTip(event, 'fs63', 103)" onmouseover="showTip(event, 'fs63', 103)" class="f">press</span> <span onmouseout="hideTip(event, 'fs66', 104)" onmouseover="showTip(event, 'fs66', 104)" class="i">down</span>
+<span onmouseout="hideTip(event, 'fs63', 105)" onmouseover="showTip(event, 'fs63', 105)" class="f">press</span> <span onmouseout="hideTip(event, 'fs67', 106)" onmouseover="showTip(event, 'fs67', 106)" class="i">up</span>
+<span onmouseout="hideTip(event, 'fs63', 107)" onmouseover="showTip(event, 'fs63', 107)" class="f">press</span> <span onmouseout="hideTip(event, 'fs68', 108)" onmouseover="showTip(event, 'fs68', 108)" class="i">left</span>
+<span onmouseout="hideTip(event, 'fs63', 109)" onmouseover="showTip(event, 'fs63', 109)" class="f">press</span> <span onmouseout="hideTip(event, 'fs69', 110)" onmouseover="showTip(event, 'fs69', 110)" class="i">right</span>
+</code></pre></td>
 </tr>
 </table>
-
 <h2>alert</h2>
-
 <p>Gets the current alert.</p>
-
-<table class="pre"><tr><td class="lines"><pre class="fssnip">
-<span class="l">1: </span>
-</pre>
-</td>
-<td class="snippet"><pre class="fssnip">
-<span onmouseout="hideTip(event, 'fs70', 111)" onmouseover="showTip(event, 'fs70', 111)" class="i">alert</span>() <span class="o">==</span> <span class="s">&quot;</span><span class="s">Welcome</span><span class="s"> </span><span class="s">to</span><span class="s"> </span><span class="s">Test</span><span class="s"> </span><span class="s">Page</span><span class="s">!</span><span class="s">&quot;</span></pre>
-</td>
+<table class="pre"><tr><td class="lines"><pre class="fssnip"><span class="l">1: </span>
+</pre></td>
+<td class="snippet"><pre class="fssnip highlighted"><code lang="fsharp"><span onmouseout="hideTip(event, 'fs70', 111)" onmouseover="showTip(event, 'fs70', 111)" class="f">alert</span>() <span class="o">==</span> <span class="s">&quot;Welcome to Test Page!&quot;</span>
+</code></pre></td>
 </tr>
 </table>
-
 <h2>acceptAlert</h2>
-
 <p>Accepts the current alert.</p>
-
-<table class="pre"><tr><td class="lines"><pre class="fssnip">
-<span class="l">1: </span>
-</pre>
-</td>
-<td class="snippet"><pre class="fssnip">
-<span onmouseout="hideTip(event, 'fs71', 112)" onmouseover="showTip(event, 'fs71', 112)" class="i">acceptAlert</span>()</pre>
-</td>
+<table class="pre"><tr><td class="lines"><pre class="fssnip"><span class="l">1: </span>
+</pre></td>
+<td class="snippet"><pre class="fssnip highlighted"><code lang="fsharp"><span onmouseout="hideTip(event, 'fs71', 112)" onmouseover="showTip(event, 'fs71', 112)" class="f">acceptAlert</span>()
+</code></pre></td>
 </tr>
 </table>
-
 <h2>dismissAlert</h2>
-
 <p>Dismiss the current alert.</p>
-
-<table class="pre"><tr><td class="lines"><pre class="fssnip">
-<span class="l">1: </span>
-</pre>
-</td>
-<td class="snippet"><pre class="fssnip">
-<span onmouseout="hideTip(event, 'fs72', 113)" onmouseover="showTip(event, 'fs72', 113)" class="i">dismissAlert</span>()</pre>
-</td>
+<table class="pre"><tr><td class="lines"><pre class="fssnip"><span class="l">1: </span>
+</pre></td>
+<td class="snippet"><pre class="fssnip highlighted"><code lang="fsharp"><span onmouseout="hideTip(event, 'fs72', 113)" onmouseover="showTip(event, 'fs72', 113)" class="f">dismissAlert</span>()
+</code></pre></td>
 </tr>
 </table>
-
 <h2>click</h2>
-
 <p>Click an element via selector or text, can also click selenium <code>IWebElements</code>.</p>
-
-<table class="pre"><tr><td class="lines"><pre class="fssnip">
-<span class="l">1: </span>
+<table class="pre"><tr><td class="lines"><pre class="fssnip"><span class="l">1: </span>
 <span class="l">2: </span>
 <span class="l">3: </span>
-</pre>
-</td>
-<td class="snippet"><pre class="fssnip">
-<span onmouseout="hideTip(event, 'fs49', 114)" onmouseover="showTip(event, 'fs49', 114)" class="i">click</span> <span class="s">&quot;</span><span class="s">#</span><span class="s">login</span><span class="s">&quot;</span>
-<span onmouseout="hideTip(event, 'fs49', 115)" onmouseover="showTip(event, 'fs49', 115)" class="i">click</span> <span class="s">&quot;</span><span class="s">Login</span><span class="s">&quot;</span>
-<span onmouseout="hideTip(event, 'fs49', 116)" onmouseover="showTip(event, 'fs49', 116)" class="i">click</span> (<span onmouseout="hideTip(event, 'fs32', 117)" onmouseover="showTip(event, 'fs32', 117)" class="i">element</span> <span class="s">&quot;</span><span class="s">#</span><span class="s">login</span><span class="s">&quot;</span>)</pre>
-</td>
+</pre></td>
+<td class="snippet"><pre class="fssnip highlighted"><code lang="fsharp"><span onmouseout="hideTip(event, 'fs49', 114)" onmouseover="showTip(event, 'fs49', 114)" class="f">click</span> <span class="s">&quot;#login&quot;</span>
+<span onmouseout="hideTip(event, 'fs49', 115)" onmouseover="showTip(event, 'fs49', 115)" class="f">click</span> <span class="s">&quot;Login&quot;</span>
+<span onmouseout="hideTip(event, 'fs49', 116)" onmouseover="showTip(event, 'fs49', 116)" class="f">click</span> (<span onmouseout="hideTip(event, 'fs32', 117)" onmouseover="showTip(event, 'fs32', 117)" class="f">element</span> <span class="s">&quot;#login&quot;</span>)
+</code></pre></td>
 </tr>
 </table>
-
 <h2>doubleClick</h2>
-
 <p>Simulates a double click via JavaScript.</p>
-
-<table class="pre"><tr><td class="lines"><pre class="fssnip">
-<span class="l">1: </span>
-</pre>
-</td>
-<td class="snippet"><pre class="fssnip">
-<span onmouseout="hideTip(event, 'fs73', 118)" onmouseover="showTip(event, 'fs73', 118)" class="i">doubleClick</span> <span class="s">&quot;</span><span class="s">#</span><span class="s">login</span><span class="s">&quot;</span></pre>
-</td>
+<table class="pre"><tr><td class="lines"><pre class="fssnip"><span class="l">1: </span>
+</pre></td>
+<td class="snippet"><pre class="fssnip highlighted"><code lang="fsharp"><span onmouseout="hideTip(event, 'fs73', 118)" onmouseover="showTip(event, 'fs73', 118)" class="f">doubleClick</span> <span class="s">&quot;#login&quot;</span>
+</code></pre></td>
 </tr>
 </table>
-
 <h2>ctrlClick</h2>
-
 <p>Click an element via selector or text while holding down the control key, can also click selenium <code>IWebElements</code>.</p>
-
-<table class="pre"><tr><td class="lines"><pre class="fssnip">
-<span class="l">1: </span>
+<table class="pre"><tr><td class="lines"><pre class="fssnip"><span class="l">1: </span>
 <span class="l">2: </span>
 <span class="l">3: </span>
-</pre>
-</td>
-<td class="snippet"><pre class="fssnip">
-<span onmouseout="hideTip(event, 'fs74', 119)" onmouseover="showTip(event, 'fs74', 119)" class="i">ctrlClick</span> <span class="s">&quot;</span><span class="s">#</span><span class="s">list</span><span class="s"> </span><span class="s">&gt;</span><span class="s"> </span><span class="s">option</span><span class="s">&quot;</span>
-<span onmouseout="hideTip(event, 'fs74', 120)" onmouseover="showTip(event, 'fs74', 120)" class="i">ctrlClick</span> <span class="s">&quot;</span><span class="s">Oklahoma</span><span class="s">&quot;</span>
-<span onmouseout="hideTip(event, 'fs74', 121)" onmouseover="showTip(event, 'fs74', 121)" class="i">ctrlClick</span> (<span onmouseout="hideTip(event, 'fs32', 122)" onmouseover="showTip(event, 'fs32', 122)" class="i">element</span> <span class="s">&quot;</span><span class="s">#</span><span class="s">list</span><span class="s"> </span><span class="s">&gt;</span><span class="s"> </span><span class="s">option</span><span class="s">&quot;</span>)</pre>
-</td>
+</pre></td>
+<td class="snippet"><pre class="fssnip highlighted"><code lang="fsharp"><span onmouseout="hideTip(event, 'fs74', 119)" onmouseover="showTip(event, 'fs74', 119)" class="f">ctrlClick</span> <span class="s">&quot;#list &gt; option&quot;</span>
+<span onmouseout="hideTip(event, 'fs74', 120)" onmouseover="showTip(event, 'fs74', 120)" class="f">ctrlClick</span> <span class="s">&quot;Oklahoma&quot;</span>
+<span onmouseout="hideTip(event, 'fs74', 121)" onmouseover="showTip(event, 'fs74', 121)" class="f">ctrlClick</span> (<span onmouseout="hideTip(event, 'fs32', 122)" onmouseover="showTip(event, 'fs32', 122)" class="f">element</span> <span class="s">&quot;#list &gt; option&quot;</span>)
+</code></pre></td>
 </tr>
 </table>
-
 <h2>check</h2>
-
 <p>Checks a checkbox if it is not already checked.</p>
-
-<table class="pre"><tr><td class="lines"><pre class="fssnip">
-<span class="l">1: </span>
+<table class="pre"><tr><td class="lines"><pre class="fssnip"><span class="l">1: </span>
 <span class="l">2: </span>
 <span class="l">3: </span>
-</pre>
-</td>
-<td class="snippet"><pre class="fssnip">
-<span onmouseout="hideTip(event, 'fs75', 123)" onmouseover="showTip(event, 'fs75', 123)" class="i">check</span> <span class="s">&quot;</span><span class="s">#</span><span class="s">yes</span><span class="s">&quot;</span>
+</pre></td>
+<td class="snippet"><pre class="fssnip highlighted"><code lang="fsharp"><span onmouseout="hideTip(event, 'fs75', 123)" onmouseover="showTip(event, 'fs75', 123)" class="f">check</span> <span class="s">&quot;#yes&quot;</span>
 <span class="c">//below code will not click the checkbox again, which would uncheck it</span>
-<span onmouseout="hideTip(event, 'fs75', 124)" onmouseover="showTip(event, 'fs75', 124)" class="i">check</span> <span class="s">&quot;</span><span class="s">#</span><span class="s">yes</span><span class="s">&quot;</span></pre>
-</td>
+<span onmouseout="hideTip(event, 'fs75', 124)" onmouseover="showTip(event, 'fs75', 124)" class="f">check</span> <span class="s">&quot;#yes&quot;</span>
+</code></pre></td>
 </tr>
 </table>
-
 <h2>uncheck</h2>
-
 <p>Unchecks a checkbox if it is not already unchecked.</p>
-
-<table class="pre"><tr><td class="lines"><pre class="fssnip">
-<span class="l">1: </span>
+<table class="pre"><tr><td class="lines"><pre class="fssnip"><span class="l">1: </span>
 <span class="l">2: </span>
 <span class="l">3: </span>
-</pre>
-</td>
-<td class="snippet"><pre class="fssnip">
-<span onmouseout="hideTip(event, 'fs76', 125)" onmouseover="showTip(event, 'fs76', 125)" class="i">uncheck</span> <span class="s">&quot;</span><span class="s">#</span><span class="s">yes</span><span class="s">&quot;</span>
+</pre></td>
+<td class="snippet"><pre class="fssnip highlighted"><code lang="fsharp"><span onmouseout="hideTip(event, 'fs76', 125)" onmouseover="showTip(event, 'fs76', 125)" class="f">uncheck</span> <span class="s">&quot;#yes&quot;</span>
 <span class="c">//below code will not click the checkbox again, which would check it</span>
-<span onmouseout="hideTip(event, 'fs76', 126)" onmouseover="showTip(event, 'fs76', 126)" class="i">uncheck</span> <span class="s">&quot;</span><span class="s">#</span><span class="s">yes</span><span class="s">&quot;</span></pre>
-</td>
+<span onmouseout="hideTip(event, 'fs76', 126)" onmouseover="showTip(event, 'fs76', 126)" class="f">uncheck</span> <span class="s">&quot;#yes&quot;</span>
+</code></pre></td>
 </tr>
 </table>
-
-<h2>--> (drag is an alias)</h2>
-
+<h2>--&gt; (drag is an alias)</h2>
 <p>Drag on item to another.</p>
-
-<table class="pre"><tr><td class="lines"><pre class="fssnip">
-<span class="l">1: </span>
+<table class="pre"><tr><td class="lines"><pre class="fssnip"><span class="l">1: </span>
 <span class="l">2: </span>
-</pre>
-</td>
-<td class="snippet"><pre class="fssnip">
-<span class="s">&quot;</span><span class="s">.</span><span class="s">todo</span><span class="s">&quot;</span> <span class="o">--&gt;</span> <span class="s">&quot;</span><span class="s">.</span><span class="s">inprogress</span><span class="s">&quot;</span>
-<span onmouseout="hideTip(event, 'fs77', 127)" onmouseover="showTip(event, 'fs77', 127)" class="i">drag</span> <span class="s">&quot;</span><span class="s">.</span><span class="s">todo</span><span class="s">&quot;</span> <span class="s">&quot;</span><span class="s">.</span><span class="s">inprogress</span><span class="s">&quot;</span></pre>
-</td>
+</pre></td>
+<td class="snippet"><pre class="fssnip highlighted"><code lang="fsharp"><span class="s">&quot;.todo&quot;</span> <span class="o">--&gt;</span> <span class="s">&quot;.inprogress&quot;</span>
+<span onmouseout="hideTip(event, 'fs77', 127)" onmouseover="showTip(event, 'fs77', 127)" class="f">drag</span> <span class="s">&quot;.todo&quot;</span> <span class="s">&quot;.inprogress&quot;</span>
+</code></pre></td>
 </tr>
 </table>
-
 <h2>hover</h2>
-
 <p>Hover over an element.</p>
-
-<table class="pre"><tr><td class="lines"><pre class="fssnip">
-<span class="l">1: </span>
+<table class="pre"><tr><td class="lines"><pre class="fssnip"><span class="l">1: </span>
 <span class="l">2: </span>
 <span class="l">3: </span>
 <span class="l">4: </span>
-</pre>
-</td>
-<td class="snippet"><pre class="fssnip">
-<span onmouseout="hideTip(event, 'fs29', 128)" onmouseover="showTip(event, 'fs29', 128)" class="i">url</span> <span class="s">&quot;</span><span class="s">http</span><span class="s">:</span><span class="s">/</span><span class="s">/</span><span class="s">lefthandedgoat</span><span class="s">.</span><span class="s">github</span><span class="s">.</span><span class="s">io</span><span class="s">/</span><span class="s">canopy</span><span class="s">/</span><span class="s">testpages</span><span class="s">/</span><span class="s">&quot;</span>
-<span class="s">&quot;</span><span class="s">#</span><span class="s">hover</span><span class="s">&quot;</span> <span class="o">==</span> <span class="s">&quot;</span><span class="s">not</span><span class="s"> </span><span class="s">hovered</span><span class="s">&quot;</span>
-<span onmouseout="hideTip(event, 'fs78', 129)" onmouseover="showTip(event, 'fs78', 129)" class="i">hover</span> <span class="s">&quot;</span><span class="s">Milk</span><span class="s">&quot;</span>
-<span class="s">&quot;</span><span class="s">#</span><span class="s">hover</span><span class="s">&quot;</span> <span class="o">==</span> <span class="s">&quot;</span><span class="s">hovered</span><span class="s">&quot;</span></pre>
-</td>
+</pre></td>
+<td class="snippet"><pre class="fssnip highlighted"><code lang="fsharp"><span onmouseout="hideTip(event, 'fs29', 128)" onmouseover="showTip(event, 'fs29', 128)" class="f">url</span> <span class="s">&quot;http://lefthandedgoat.github.io/canopy/testpages/&quot;</span>
+<span class="s">&quot;#hover&quot;</span> <span class="o">==</span> <span class="s">&quot;not hovered&quot;</span>
+<span onmouseout="hideTip(event, 'fs78', 129)" onmouseover="showTip(event, 'fs78', 129)" class="f">hover</span> <span class="s">&quot;Milk&quot;</span>
+<span class="s">&quot;#hover&quot;</span> <span class="o">==</span> <span class="s">&quot;hovered&quot;</span>
+</code></pre></td>
 </tr>
 </table>
-
 <h2>pin</h2>
-
 <p>Pin a browser to the left, right, or fullscreen (any browser you start is pinned right automatically).</p>
-
-<table class="pre"><tr><td class="lines"><pre class="fssnip">
-<span class="l">1: </span>
+<table class="pre"><tr><td class="lines"><pre class="fssnip"><span class="l">1: </span>
 <span class="l">2: </span>
 <span class="l">3: </span>
-</pre>
-</td>
-<td class="snippet"><pre class="fssnip">
-<span onmouseout="hideTip(event, 'fs79', 130)" onmouseover="showTip(event, 'fs79', 130)" class="i">pin</span> <span onmouseout="hideTip(event, 'fs80', 131)" onmouseover="showTip(event, 'fs80', 131)" class="i">Left</span>
-<span onmouseout="hideTip(event, 'fs79', 132)" onmouseover="showTip(event, 'fs79', 132)" class="i">pin</span> <span onmouseout="hideTip(event, 'fs81', 133)" onmouseover="showTip(event, 'fs81', 133)" class="i">Right</span>
-<span onmouseout="hideTip(event, 'fs79', 134)" onmouseover="showTip(event, 'fs79', 134)" class="i">pin</span> <span onmouseout="hideTip(event, 'fs82', 135)" onmouseover="showTip(event, 'fs82', 135)" class="i">FullScreen</span> </pre>
-</td>
+</pre></td>
+<td class="snippet"><pre class="fssnip highlighted"><code lang="fsharp"><span onmouseout="hideTip(event, 'fs79', 130)" onmouseover="showTip(event, 'fs79', 130)" class="f">pin</span> <span onmouseout="hideTip(event, 'fs80', 131)" onmouseover="showTip(event, 'fs80', 131)" class="p">Left</span>
+<span onmouseout="hideTip(event, 'fs79', 132)" onmouseover="showTip(event, 'fs79', 132)" class="f">pin</span> <span onmouseout="hideTip(event, 'fs81', 133)" onmouseover="showTip(event, 'fs81', 133)" class="p">Right</span>
+<span onmouseout="hideTip(event, 'fs79', 134)" onmouseover="showTip(event, 'fs79', 134)" class="f">pin</span> <span onmouseout="hideTip(event, 'fs82', 135)" onmouseover="showTip(event, 'fs82', 135)" class="p">FullScreen</span> 
+</code></pre></td>
 </tr>
 </table>
-
 <h2>tile</h2>
-
 <p>Tile listed browsers equally across your screen. 4 open browsers would each take 25% of the screen.</p>
-
-<table class="pre"><tr><td class="lines"><pre class="fssnip">
-<span class="l">1: </span>
+<table class="pre"><tr><td class="lines"><pre class="fssnip"><span class="l">1: </span>
 <span class="l">2: </span>
 <span class="l">3: </span>
 <span class="l">4: </span>
@@ -653,96 +445,64 @@ Read more about Option types <a href="http://en.wikibooks.org/wiki/F_Sharp_Progr
 <span class="l">6: </span>
 <span class="l">7: </span>
 <span class="l">8: </span>
-</pre>
-</td>
-<td class="snippet"><pre class="fssnip">
-<span onmouseout="hideTip(event, 'fs5', 136)" onmouseover="showTip(event, 'fs5', 136)" class="i">start</span> <span onmouseout="hideTip(event, 'fs7', 137)" onmouseover="showTip(event, 'fs7', 137)" class="i">chrome</span>
-<span class="k">let</span> <span onmouseout="hideTip(event, 'fs83', 138)" onmouseover="showTip(event, 'fs83', 138)" class="i">browser1</span> <span class="o">=</span> <span onmouseout="hideTip(event, 'fs10', 139)" onmouseover="showTip(event, 'fs10', 139)" class="i">browser</span>
-<span onmouseout="hideTip(event, 'fs5', 140)" onmouseover="showTip(event, 'fs5', 140)" class="i">start</span> <span onmouseout="hideTip(event, 'fs7', 141)" onmouseover="showTip(event, 'fs7', 141)" class="i">chrome</span>
-<span class="k">let</span> <span onmouseout="hideTip(event, 'fs84', 142)" onmouseover="showTip(event, 'fs84', 142)" class="i">browser2</span> <span class="o">=</span> <span onmouseout="hideTip(event, 'fs10', 143)" onmouseover="showTip(event, 'fs10', 143)" class="i">browser</span>
-<span onmouseout="hideTip(event, 'fs5', 144)" onmouseover="showTip(event, 'fs5', 144)" class="i">start</span> <span onmouseout="hideTip(event, 'fs7', 145)" onmouseover="showTip(event, 'fs7', 145)" class="i">chrome</span>
-<span class="k">let</span> <span onmouseout="hideTip(event, 'fs85', 146)" onmouseover="showTip(event, 'fs85', 146)" class="i">browser3</span> <span class="o">=</span> <span onmouseout="hideTip(event, 'fs10', 147)" onmouseover="showTip(event, 'fs10', 147)" class="i">browser</span>
+</pre></td>
+<td class="snippet"><pre class="fssnip highlighted"><code lang="fsharp"><span onmouseout="hideTip(event, 'fs5', 136)" onmouseover="showTip(event, 'fs5', 136)" class="f">start</span> <span onmouseout="hideTip(event, 'fs7', 137)" onmouseover="showTip(event, 'fs7', 137)" class="i">chrome</span>
+<span class="k">let</span> <span onmouseout="hideTip(event, 'fs83', 138)" onmouseover="showTip(event, 'fs83', 138)" class="i">browser1</span> <span class="o">=</span> <span onmouseout="hideTip(event, 'fs10', 139)" onmouseover="showTip(event, 'fs10', 139)" class="v">browser</span>
+<span onmouseout="hideTip(event, 'fs5', 140)" onmouseover="showTip(event, 'fs5', 140)" class="f">start</span> <span onmouseout="hideTip(event, 'fs7', 141)" onmouseover="showTip(event, 'fs7', 141)" class="i">chrome</span>
+<span class="k">let</span> <span onmouseout="hideTip(event, 'fs84', 142)" onmouseover="showTip(event, 'fs84', 142)" class="i">browser2</span> <span class="o">=</span> <span onmouseout="hideTip(event, 'fs10', 143)" onmouseover="showTip(event, 'fs10', 143)" class="v">browser</span>
+<span onmouseout="hideTip(event, 'fs5', 144)" onmouseover="showTip(event, 'fs5', 144)" class="f">start</span> <span onmouseout="hideTip(event, 'fs7', 145)" onmouseover="showTip(event, 'fs7', 145)" class="i">chrome</span>
+<span class="k">let</span> <span onmouseout="hideTip(event, 'fs85', 146)" onmouseover="showTip(event, 'fs85', 146)" class="i">browser3</span> <span class="o">=</span> <span onmouseout="hideTip(event, 'fs10', 147)" onmouseover="showTip(event, 'fs10', 147)" class="v">browser</span>
 
-<span onmouseout="hideTip(event, 'fs86', 148)" onmouseover="showTip(event, 'fs86', 148)" class="i">tile</span> [<span onmouseout="hideTip(event, 'fs83', 149)" onmouseover="showTip(event, 'fs83', 149)" class="i">browser1</span>; <span onmouseout="hideTip(event, 'fs84', 150)" onmouseover="showTip(event, 'fs84', 150)" class="i">browser2</span>; <span onmouseout="hideTip(event, 'fs85', 151)" onmouseover="showTip(event, 'fs85', 151)" class="i">browser3</span>]</pre>
-</td>
+<span onmouseout="hideTip(event, 'fs86', 148)" onmouseover="showTip(event, 'fs86', 148)" class="f">tile</span> [<span onmouseout="hideTip(event, 'fs83', 149)" onmouseover="showTip(event, 'fs83', 149)" class="i">browser1</span>; <span onmouseout="hideTip(event, 'fs84', 150)" onmouseover="showTip(event, 'fs84', 150)" class="i">browser2</span>; <span onmouseout="hideTip(event, 'fs85', 151)" onmouseover="showTip(event, 'fs85', 151)" class="i">browser3</span>]
+</code></pre></td>
 </tr>
 </table>
-
 <h2>quit</h2>
-
 <p>Quit the current browser or the specified browser.</p>
-
-<table class="pre"><tr><td class="lines"><pre class="fssnip">
-<span class="l">1: </span>
+<table class="pre"><tr><td class="lines"><pre class="fssnip"><span class="l">1: </span>
 <span class="l">2: </span>
 <span class="l">3: </span>
 <span class="l">4: </span>
-</pre>
-</td>
-<td class="snippet"><pre class="fssnip">
-<span class="c">//quit current</span>
-<span onmouseout="hideTip(event, 'fs87', 152)" onmouseover="showTip(event, 'fs87', 152)" class="i">quit</span> ()
+</pre></td>
+<td class="snippet"><pre class="fssnip highlighted"><code lang="fsharp"><span class="c">//quit current</span>
+<span onmouseout="hideTip(event, 'fs87', 152)" onmouseover="showTip(event, 'fs87', 152)" class="f">quit</span> ()
 <span class="c">//quit specific</span>
-<span onmouseout="hideTip(event, 'fs87', 153)" onmouseover="showTip(event, 'fs87', 153)" class="i">quit</span> <span onmouseout="hideTip(event, 'fs83', 154)" onmouseover="showTip(event, 'fs83', 154)" class="i">browser1</span></pre>
-</td>
+<span onmouseout="hideTip(event, 'fs87', 153)" onmouseover="showTip(event, 'fs87', 153)" class="f">quit</span> <span onmouseout="hideTip(event, 'fs83', 154)" onmouseover="showTip(event, 'fs83', 154)" class="i">browser1</span>
+</code></pre></td>
 </tr>
 </table>
-
 <h2>currentUrl</h2>
-
 <p>Gets the current url.</p>
-
-<table class="pre"><tr><td class="lines"><pre class="fssnip">
-<span class="l">1: </span>
-</pre>
-</td>
-<td class="snippet"><pre class="fssnip">
-<span class="k">let</span> <span onmouseout="hideTip(event, 'fs88', 155)" onmouseover="showTip(event, 'fs88', 155)" class="i">u</span> <span class="o">=</span> <span onmouseout="hideTip(event, 'fs89', 156)" onmouseover="showTip(event, 'fs89', 156)" class="i">currentUrl</span> ()</pre>
-</td>
+<table class="pre"><tr><td class="lines"><pre class="fssnip"><span class="l">1: </span>
+</pre></td>
+<td class="snippet"><pre class="fssnip highlighted"><code lang="fsharp"><span class="k">let</span> <span onmouseout="hideTip(event, 'fs88', 155)" onmouseover="showTip(event, 'fs88', 155)" class="i">u</span> <span class="o">=</span> <span onmouseout="hideTip(event, 'fs89', 156)" onmouseover="showTip(event, 'fs89', 156)" class="f">currentUrl</span> ()
+</code></pre></td>
 </tr>
 </table>
-
 <h2>!^ (aliased by url)</h2>
-
 <p>Go to a url.</p>
-
-<table class="pre"><tr><td class="lines"><pre class="fssnip">
-<span class="l">1: </span>
+<table class="pre"><tr><td class="lines"><pre class="fssnip"><span class="l">1: </span>
 <span class="l">2: </span>
-</pre>
-</td>
-<td class="snippet"><pre class="fssnip">
-<span class="o">!^</span> <span class="s">&quot;</span><span class="s">http</span><span class="s">:</span><span class="s">/</span><span class="s">/</span><span class="s">www</span><span class="s">.</span><span class="s">google</span><span class="s">.</span><span class="s">com</span><span class="s">&quot;</span>
-<span onmouseout="hideTip(event, 'fs29', 157)" onmouseover="showTip(event, 'fs29', 157)" class="i">url</span> <span class="s">&quot;</span><span class="s">http</span><span class="s">:</span><span class="s">/</span><span class="s">/</span><span class="s">www</span><span class="s">.</span><span class="s">google</span><span class="s">.</span><span class="s">com</span><span class="s">&quot;</span></pre>
-</td>
+</pre></td>
+<td class="snippet"><pre class="fssnip highlighted"><code lang="fsharp"><span class="o">!^</span> <span class="s">&quot;http://www.google.com&quot;</span>
+<span onmouseout="hideTip(event, 'fs29', 157)" onmouseover="showTip(event, 'fs29', 157)" class="f">url</span> <span class="s">&quot;http://www.google.com&quot;</span>
+</code></pre></td>
 </tr>
 </table>
-
 <h2>title</h2>
-
 <p>Gets the title of the current page.</p>
-
-<table class="pre"><tr><td class="lines"><pre class="fssnip">
-<span class="l">1: </span>
-</pre>
-</td>
-<td class="snippet"><pre class="fssnip">
-<span class="k">let</span> <span onmouseout="hideTip(event, 'fs90', 158)" onmouseover="showTip(event, 'fs90', 158)" class="i">theTitle</span> <span class="o">=</span> <span onmouseout="hideTip(event, 'fs91', 159)" onmouseover="showTip(event, 'fs91', 159)" class="i">title</span> ()</pre>
-</td>
+<table class="pre"><tr><td class="lines"><pre class="fssnip"><span class="l">1: </span>
+</pre></td>
+<td class="snippet"><pre class="fssnip highlighted"><code lang="fsharp"><span class="k">let</span> <span onmouseout="hideTip(event, 'fs90', 158)" onmouseover="showTip(event, 'fs90', 158)" class="i">theTitle</span> <span class="o">=</span> <span onmouseout="hideTip(event, 'fs91', 159)" onmouseover="showTip(event, 'fs91', 159)" class="f">title</span> ()
+</code></pre></td>
 </tr>
 </table>
-
 <h2>reload</h2>
-
 <p>Reload the current page.</p>
-
-<table class="pre"><tr><td class="lines"><pre class="fssnip">
-<span class="l">1: </span>
-</pre>
-</td>
-<td class="snippet"><pre class="fssnip">
-<span onmouseout="hideTip(event, 'fs92', 160)" onmouseover="showTip(event, 'fs92', 160)" class="i">reload</span> ()</pre>
-</td>
+<table class="pre"><tr><td class="lines"><pre class="fssnip"><span class="l">1: </span>
+</pre></td>
+<td class="snippet"><pre class="fssnip highlighted"><code lang="fsharp"><span onmouseout="hideTip(event, 'fs92', 160)" onmouseover="showTip(event, 'fs92', 160)" class="f">reload</span> ()
+</code></pre></td>
 </tr>
 </table>
 
@@ -755,7 +515,7 @@ Read more about Option types <a href="http://en.wikibooks.org/wiki/F_Sharp_Progr
 <div class="tip" id="fs7">val chrome : BrowserStartMode<br /><br />Full name: canopy.core.chrome</div>
 <div class="tip" id="fs8">val ie : BrowserStartMode<br /><br />Full name: canopy.core.ie</div>
 <div class="tip" id="fs9">val mainBrowser : OpenQA.Selenium.IWebDriver<br /><br />Full name: Actions.mainBrowser</div>
-<div class="tip" id="fs10">val mutable browser : OpenQA.Selenium.IWebDriver<br /><br />Full name: canopy.core.browser</div>
+<div class="tip" id="fs10">val mutable browser : OpenQA.Selenium.IWebDriver<br /><br />Full name: canopy.types.browser</div>
 <div class="tip" id="fs11">val secondBrowser : OpenQA.Selenium.IWebDriver<br /><br />Full name: Actions.secondBrowser</div>
 <div class="tip" id="fs12">val switchTo : b:OpenQA.Selenium.IWebDriver -&gt; unit<br /><br />Full name: canopy.core.switchTo</div>
 <div class="tip" id="fs13">val js : script:string -&gt; obj<br /><br />Full name: canopy.core.js</div>

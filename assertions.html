@@ -48,194 +48,116 @@
         <div class="span9" id="main">
           
 <h1>Assertions</h1>
-
 <h2>on</h2>
-
 <p>Assert that the browser is currently on a url (uses <code>String.Contains</code>).</p>
-
-<table class="pre"><tr><td class="lines"><pre class="fssnip">
-<span class="l">1: </span>
+<table class="pre"><tr><td class="lines"><pre class="fssnip"><span class="l">1: </span>
 <span class="l">2: </span>
-</pre>
-</td>
-<td class="snippet"><pre class="fssnip">
-<span onmouseout="hideTip(event, 'fs4', 4)" onmouseover="showTip(event, 'fs4', 4)" class="i">url</span> <span class="s">&quot;</span><span class="s">https</span><span class="s">:</span><span class="s">/</span><span class="s">/</span><span class="s">duckduckgo</span><span class="s">.</span><span class="s">com</span><span class="s">/</span><span class="s">?</span><span class="s">q</span><span class="s">=</span><span class="s">canopy</span><span class="s">+</span><span class="s">f</span><span class="s">%</span><span class="s">23</span><span class="s">&quot;</span>
-<span onmouseout="hideTip(event, 'fs5', 5)" onmouseover="showTip(event, 'fs5', 5)" class="i">on</span> <span class="s">&quot;</span><span class="s">https</span><span class="s">:</span><span class="s">/</span><span class="s">/</span><span class="s">duckduckgo</span><span class="s">.</span><span class="s">com</span><span class="s">/</span><span class="s">?</span><span class="s">q</span><span class="s">&quot;</span></pre>
-</td>
+</pre></td>
+<td class="snippet"><pre class="fssnip highlighted"><code lang="fsharp"><span onmouseout="hideTip(event, 'fs4', 4)" onmouseover="showTip(event, 'fs4', 4)" class="f">url</span> <span class="s">&quot;https://duckduckgo.com/?q=canopy+f%23&quot;</span>
+<span onmouseout="hideTip(event, 'fs5', 5)" onmouseover="showTip(event, 'fs5', 5)" class="f">on</span> <span class="s">&quot;https://duckduckgo.com/?q&quot;</span>
+</code></pre></td>
 </tr>
 </table>
-
 <h2>selected</h2>
-
 <p>Assert that a radio or checkbox is selected.</p>
-
-<table class="pre"><tr><td class="lines"><pre class="fssnip">
-<span class="l">1: </span>
-</pre>
-</td>
-<td class="snippet"><pre class="fssnip">
-<span onmouseout="hideTip(event, 'fs6', 6)" onmouseover="showTip(event, 'fs6', 6)" class="i">selected</span> <span class="s">&quot;</span><span class="s">#</span><span class="s">yes</span><span class="s">&quot;</span></pre>
-</td>
+<table class="pre"><tr><td class="lines"><pre class="fssnip"><span class="l">1: </span>
+</pre></td>
+<td class="snippet"><pre class="fssnip highlighted"><code lang="fsharp"><span onmouseout="hideTip(event, 'fs6', 6)" onmouseover="showTip(event, 'fs6', 6)" class="f">selected</span> <span class="s">&quot;#yes&quot;</span>
+</code></pre></td>
 </tr>
 </table>
-
 <h2>deselected</h2>
-
 <p>Assert that a radio or checkbox is not selected.</p>
-
-<table class="pre"><tr><td class="lines"><pre class="fssnip">
-<span class="l">1: </span>
-</pre>
-</td>
-<td class="snippet"><pre class="fssnip">
-<span onmouseout="hideTip(event, 'fs7', 7)" onmouseover="showTip(event, 'fs7', 7)" class="i">deselected</span> <span class="s">&quot;</span><span class="s">#</span><span class="s">yes</span><span class="s">&quot;</span></pre>
-</td>
+<table class="pre"><tr><td class="lines"><pre class="fssnip"><span class="l">1: </span>
+</pre></td>
+<td class="snippet"><pre class="fssnip highlighted"><code lang="fsharp"><span onmouseout="hideTip(event, 'fs7', 7)" onmouseover="showTip(event, 'fs7', 7)" class="f">deselected</span> <span class="s">&quot;#yes&quot;</span>
+</code></pre></td>
 </tr>
 </table>
-
 <h2>== (equals)</h2>
-
 <p>Assert that the element on the left is equal to the value on the right.</p>
-
-<table class="pre"><tr><td class="lines"><pre class="fssnip">
-<span class="l">1: </span>
-</pre>
-</td>
-<td class="snippet"><pre class="fssnip">
-<span class="s">&quot;</span><span class="s">#</span><span class="s">firstName</span><span class="s">&quot;</span> <span class="o">==</span> <span class="s">&quot;</span><span class="s">Alex</span><span class="s">&quot;</span></pre>
-</td>
+<table class="pre"><tr><td class="lines"><pre class="fssnip"><span class="l">1: </span>
+</pre></td>
+<td class="snippet"><pre class="fssnip highlighted"><code lang="fsharp"><span class="s">&quot;#firstName&quot;</span> <span class="o">==</span> <span class="s">&quot;Alex&quot;</span>
+</code></pre></td>
 </tr>
 </table>
-
 <h2>!= (does not equal)</h2>
-
 <p>Assert that the element on the left is not equal to the value on the right.</p>
-
-<table class="pre"><tr><td class="lines"><pre class="fssnip">
-<span class="l">1: </span>
-</pre>
-</td>
-<td class="snippet"><pre class="fssnip">
-<span class="s">&quot;</span><span class="s">#</span><span class="s">firstName</span><span class="s">&quot;</span> <span class="o">!=</span> <span class="s">&quot;</span><span class="s">Tom</span><span class="s">&quot;</span></pre>
-</td>
+<table class="pre"><tr><td class="lines"><pre class="fssnip"><span class="l">1: </span>
+</pre></td>
+<td class="snippet"><pre class="fssnip highlighted"><code lang="fsharp"><span class="s">&quot;#firstName&quot;</span> <span class="o">!=</span> <span class="s">&quot;Tom&quot;</span>
+</code></pre></td>
 </tr>
 </table>
-
 <h2>*= (one of many equals)</h2>
-
 <p>Assert that at least one element in a list equals a value.</p>
-
-<table class="pre"><tr><td class="lines"><pre class="fssnip">
-<span class="l">1: </span>
-</pre>
-</td>
-<td class="snippet"><pre class="fssnip">
-<span class="s">&quot;</span><span class="s">.</span><span class="s">todoItem</span><span class="s">&quot;</span> <span class="o">*=</span> <span class="s">&quot;</span><span class="s">Buy</span><span class="s"> </span><span class="s">milk</span><span class="s">&quot;</span></pre>
-</td>
+<table class="pre"><tr><td class="lines"><pre class="fssnip"><span class="l">1: </span>
+</pre></td>
+<td class="snippet"><pre class="fssnip highlighted"><code lang="fsharp"><span class="s">&quot;.todoItem&quot;</span> <span class="o">*=</span> <span class="s">&quot;Buy milk&quot;</span>
+</code></pre></td>
 </tr>
 </table>
-
 <h2>*!= (none equals)</h2>
-
 <p>Assert that none of the items in a list equals a value.</p>
-
-<table class="pre"><tr><td class="lines"><pre class="fssnip">
-<span class="l">1: </span>
-</pre>
-</td>
-<td class="snippet"><pre class="fssnip">
-<span class="s">&quot;</span><span class="s">.</span><span class="s">todoItem</span><span class="s">&quot;</span> <span class="o">*!=</span> <span class="s">&quot;</span><span class="s">Sell</span><span class="s"> </span><span class="s">everything</span><span class="s">&quot;</span></pre>
-</td>
+<table class="pre"><tr><td class="lines"><pre class="fssnip"><span class="l">1: </span>
+</pre></td>
+<td class="snippet"><pre class="fssnip highlighted"><code lang="fsharp"><span class="s">&quot;.todoItem&quot;</span> <span class="o">*!=</span> <span class="s">&quot;Sell everything&quot;</span>
+</code></pre></td>
 </tr>
 </table>
-
 <h2>contains</h2>
-
 <p>Assert that one string contains another.</p>
-
-<table class="pre"><tr><td class="lines"><pre class="fssnip">
-<span class="l">1: </span>
-</pre>
-</td>
-<td class="snippet"><pre class="fssnip">
-<span onmouseout="hideTip(event, 'fs8', 8)" onmouseover="showTip(event, 'fs8', 8)" class="i">contains</span> <span class="s">&quot;</span><span class="s">Log</span><span class="s">&quot;</span> (<span onmouseout="hideTip(event, 'fs9', 9)" onmouseover="showTip(event, 'fs9', 9)" class="i">read</span> <span class="s">&quot;</span><span class="s">#</span><span class="s">logout</span><span class="s">&quot;</span>)</pre>
-</td>
+<table class="pre"><tr><td class="lines"><pre class="fssnip"><span class="l">1: </span>
+</pre></td>
+<td class="snippet"><pre class="fssnip highlighted"><code lang="fsharp"><span onmouseout="hideTip(event, 'fs8', 8)" onmouseover="showTip(event, 'fs8', 8)" class="f">contains</span> <span class="s">&quot;Log&quot;</span> (<span onmouseout="hideTip(event, 'fs9', 9)" onmouseover="showTip(event, 'fs9', 9)" class="f">read</span> <span class="s">&quot;#logout&quot;</span>)
+</code></pre></td>
 </tr>
 </table>
-
 <h2>count</h2>
-
 <p>Assert there are <code>X</code> items of given css selector.</p>
-
-<table class="pre"><tr><td class="lines"><pre class="fssnip">
-<span class="l">1: </span>
-</pre>
-</td>
-<td class="snippet"><pre class="fssnip">
-<span onmouseout="hideTip(event, 'fs10', 10)" onmouseover="showTip(event, 'fs10', 10)" class="i">count</span> <span class="s">&quot;</span><span class="s">.</span><span class="s">todoItem</span><span class="s">&quot;</span> <span class="n">5</span></pre>
-</td>
+<table class="pre"><tr><td class="lines"><pre class="fssnip"><span class="l">1: </span>
+</pre></td>
+<td class="snippet"><pre class="fssnip highlighted"><code lang="fsharp"><span onmouseout="hideTip(event, 'fs10', 10)" onmouseover="showTip(event, 'fs10', 10)" class="f">count</span> <span class="s">&quot;.todoItem&quot;</span> <span class="n">5</span>
+</code></pre></td>
 </tr>
 </table>
-
 <h2>=~ (regex match)</h2>
-
 <p>Assert that an element <code>regex</code> matches a value.</p>
-
-<table class="pre"><tr><td class="lines"><pre class="fssnip">
-<span class="l">1: </span>
+<table class="pre"><tr><td class="lines"><pre class="fssnip"><span class="l">1: </span>
 <span class="l">2: </span>
 <span class="l">3: </span>
 <span class="l">4: </span>
-</pre>
-</td>
-<td class="snippet"><pre class="fssnip">
-<span class="s">&quot;</span><span class="s">#</span><span class="s">lastName</span><span class="s">&quot;</span> <span class="o">&lt;&lt;</span> <span class="s">&quot;</span><span class="s">Gray</span><span class="s">&quot;</span>
-<span class="s">&quot;</span><span class="s">#</span><span class="s">lastName</span><span class="s">&quot;</span> <span class="o">=~</span> <span class="s">&quot;</span><span class="s">Gr</span><span class="s">[</span><span class="s">ae</span><span class="s">]</span><span class="s">y</span><span class="s">&quot;</span>
-<span class="s">&quot;</span><span class="s">#</span><span class="s">lastName</span><span class="s">&quot;</span> <span class="o">&lt;&lt;</span> <span class="s">&quot;</span><span class="s">Grey</span><span class="s">&quot;</span>
-<span class="s">&quot;</span><span class="s">#</span><span class="s">lastName</span><span class="s">&quot;</span> <span class="o">=~</span> <span class="s">&quot;</span><span class="s">Gr</span><span class="s">[</span><span class="s">ae</span><span class="s">]</span><span class="s">y</span><span class="s">&quot;</span></pre>
-</td>
+</pre></td>
+<td class="snippet"><pre class="fssnip highlighted"><code lang="fsharp"><span class="s">&quot;#lastName&quot;</span> <span class="o">&lt;&lt;</span> <span class="s">&quot;Gray&quot;</span>
+<span class="s">&quot;#lastName&quot;</span> <span class="o">=~</span> <span class="s">&quot;Gr[ae]y&quot;</span>
+<span class="s">&quot;#lastName&quot;</span> <span class="o">&lt;&lt;</span> <span class="s">&quot;Grey&quot;</span>
+<span class="s">&quot;#lastName&quot;</span> <span class="o">=~</span> <span class="s">&quot;Gr[ae]y&quot;</span>
+</code></pre></td>
 </tr>
 </table>
-
 <h2>*~ (one of many regex match)</h2>
-
 <p>Assert that one of many element <code>regex</code> matches a value.</p>
-
-<table class="pre"><tr><td class="lines"><pre class="fssnip">
-<span class="l">1: </span>
-</pre>
-</td>
-<td class="snippet"><pre class="fssnip">
-<span class="s">&quot;</span><span class="s">#</span><span class="s">colors</span><span class="s"> </span><span class="s">li</span><span class="s">&quot;</span> <span class="o">*~</span> <span class="s">&quot;</span><span class="s">gr</span><span class="s">[</span><span class="s">ea</span><span class="s">]</span><span class="s">y</span><span class="s">&quot;</span> </pre>
-</td>
+<table class="pre"><tr><td class="lines"><pre class="fssnip"><span class="l">1: </span>
+</pre></td>
+<td class="snippet"><pre class="fssnip highlighted"><code lang="fsharp"><span class="s">&quot;#colors li&quot;</span> <span class="o">*~</span> <span class="s">&quot;gr[ea]y&quot;</span> 
+</code></pre></td>
 </tr>
 </table>
-
 <h2>displayed</h2>
-
 <p>Assert that an element is displayed on the screen.</p>
-
-<table class="pre"><tr><td class="lines"><pre class="fssnip">
-<span class="l">1: </span>
-</pre>
-</td>
-<td class="snippet"><pre class="fssnip">
-<span onmouseout="hideTip(event, 'fs11', 11)" onmouseover="showTip(event, 'fs11', 11)" class="i">displayed</span> <span class="s">&quot;</span><span class="s">#</span><span class="s">modal</span><span class="s">&quot;</span></pre>
-</td>
+<table class="pre"><tr><td class="lines"><pre class="fssnip"><span class="l">1: </span>
+</pre></td>
+<td class="snippet"><pre class="fssnip highlighted"><code lang="fsharp"><span onmouseout="hideTip(event, 'fs11', 11)" onmouseover="showTip(event, 'fs11', 11)" class="f">displayed</span> <span class="s">&quot;#modal&quot;</span>
+</code></pre></td>
 </tr>
 </table>
-
 <h2>notDisplayed</h2>
-
 <p>Assert that an element is not displayed on the screen.</p>
-
-<table class="pre"><tr><td class="lines"><pre class="fssnip">
-<span class="l">1: </span>
-</pre>
-</td>
-<td class="snippet"><pre class="fssnip">
-<span onmouseout="hideTip(event, 'fs12', 12)" onmouseover="showTip(event, 'fs12', 12)" class="i">notDisplayed</span> <span class="s">&quot;</span><span class="s">#</span><span class="s">modal</span><span class="s">&quot;</span></pre>
-</td>
+<table class="pre"><tr><td class="lines"><pre class="fssnip"><span class="l">1: </span>
+</pre></td>
+<td class="snippet"><pre class="fssnip highlighted"><code lang="fsharp"><span onmouseout="hideTip(event, 'fs12', 12)" onmouseover="showTip(event, 'fs12', 12)" class="f">notDisplayed</span> <span class="s">&quot;#modal&quot;</span>
+</code></pre></td>
 </tr>
 </table>
 

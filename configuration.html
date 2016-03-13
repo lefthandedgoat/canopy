@@ -48,239 +48,161 @@
         <div class="span9" id="main">
           
 <h1>Configuration</h1>
-
 <h2>chromeDir</h2>
-
 <ul>
 <li>Directory for the chromedriver</li>
-<li>Defaults to pre-set OS paths
-O* SX: /usr/bin/</li>
+<li>
+Defaults to pre-set OS paths
+O* SX: /usr/bin/
+</li>
 <li>Windows: C:\</li>
 </ul>
-
-<table class="pre"><tr><td class="lines"><pre class="fssnip">
-<span class="l">1: </span>
-</pre>
-</td>
-<td class="snippet"><pre class="fssnip">
-<span onmouseout="hideTip(event, 'fs3', 4)" onmouseover="showTip(event, 'fs3', 4)" class="i">chromeDir</span> <span class="o">&lt;-</span> <span class="s">&quot;</span><span class="s">C</span><span class="s">:</span><span class="s">\\</span><span class="s">&quot;</span></pre>
-</td>
+<table class="pre"><tr><td class="lines"><pre class="fssnip"><span class="l">1: </span>
+</pre></td>
+<td class="snippet"><pre class="fssnip highlighted"><code lang="fsharp"><span onmouseout="hideTip(event, 'fs3', 4)" onmouseover="showTip(event, 'fs3', 4)" class="v">chromeDir</span> <span class="o">&lt;-</span> <span class="s">&quot;C:</span><span class="e">\\</span><span class="s">&quot;</span>
+</code></pre></td>
 </tr>
 </table>
-
 <h2>ieDir</h2>
-
 <ul>
 <li>Directory for Internet Explorer</li>
 <li>Defaults to pre-set OS paths</li>
 <li>OSX: /usr/bin/</li>
 <li>Windows: C:\</li>
 </ul>
-
-<table class="pre"><tr><td class="lines"><pre class="fssnip">
-<span class="l">1: </span>
-</pre>
-</td>
-<td class="snippet"><pre class="fssnip">
-<span onmouseout="hideTip(event, 'fs4', 5)" onmouseover="showTip(event, 'fs4', 5)" class="i">ieDir</span> <span class="o">&lt;-</span> <span class="s">&quot;</span><span class="s">C</span><span class="s">:</span><span class="s">\\</span><span class="s">&quot;</span></pre>
-</td>
+<table class="pre"><tr><td class="lines"><pre class="fssnip"><span class="l">1: </span>
+</pre></td>
+<td class="snippet"><pre class="fssnip highlighted"><code lang="fsharp"><span onmouseout="hideTip(event, 'fs4', 5)" onmouseover="showTip(event, 'fs4', 5)" class="v">ieDir</span> <span class="o">&lt;-</span> <span class="s">&quot;C:</span><span class="e">\\</span><span class="s">&quot;</span>
+</code></pre></td>
 </tr>
 </table>
-
 <h2>phantomJSDir</h2>
-
 <ul>
 <li>Directory for phantomJS</li>
 <li>Defaults to pre-set OS paths</li>
 <li>OSX: /usr/bin/</li>
 <li>Windows: C:\</li>
 </ul>
-
-<table class="pre"><tr><td class="lines"><pre class="fssnip">
-<span class="l">1: </span>
-</pre>
-</td>
-<td class="snippet"><pre class="fssnip">
-<span onmouseout="hideTip(event, 'fs5', 6)" onmouseover="showTip(event, 'fs5', 6)" class="i">phantomJSDir</span> <span class="o">&lt;-</span> <span class="s">&quot;</span><span class="s">C</span><span class="s">:</span><span class="s">\\</span><span class="s">&quot;</span></pre>
-</td>
+<table class="pre"><tr><td class="lines"><pre class="fssnip"><span class="l">1: </span>
+</pre></td>
+<td class="snippet"><pre class="fssnip highlighted"><code lang="fsharp"><span onmouseout="hideTip(event, 'fs5', 6)" onmouseover="showTip(event, 'fs5', 6)" class="v">phantomJSDir</span> <span class="o">&lt;-</span> <span class="s">&quot;C:</span><span class="e">\\</span><span class="s">&quot;</span>
+</code></pre></td>
 </tr>
 </table>
-
 <h2>safariDir</h2>
-
 <ul>
 <li>Directory for Safari</li>
 <li>Defaults to pre-set OS paths</li>
 <li>OSX: /usr/bin/</li>
 <li>Windows: C:\</li>
 </ul>
-
-<table class="pre"><tr><td class="lines"><pre class="fssnip">
-<span class="l">1: </span>
-</pre>
-</td>
-<td class="snippet"><pre class="fssnip">
-<span onmouseout="hideTip(event, 'fs6', 7)" onmouseover="showTip(event, 'fs6', 7)" class="i">safariDir</span> <span class="o">&lt;-</span> <span class="s">&quot;</span><span class="s">C</span><span class="s">:</span><span class="s">\\</span><span class="s">&quot;</span></pre>
-</td>
+<table class="pre"><tr><td class="lines"><pre class="fssnip"><span class="l">1: </span>
+</pre></td>
+<td class="snippet"><pre class="fssnip highlighted"><code lang="fsharp"><span onmouseout="hideTip(event, 'fs6', 7)" onmouseover="showTip(event, 'fs6', 7)" class="v">safariDir</span> <span class="o">&lt;-</span> <span class="s">&quot;C:</span><span class="e">\\</span><span class="s">&quot;</span>
+</code></pre></td>
 </tr>
 </table>
-
 <h2>elementTimeout</h2>
-
 <ul>
 <li>Amount of time for the test runner to search for an element.</li>
 <li>Default is 10.0 seconds</li>
 </ul>
-
-<table class="pre"><tr><td class="lines"><pre class="fssnip">
-<span class="l">1: </span>
-</pre>
-</td>
-<td class="snippet"><pre class="fssnip">
-<span onmouseout="hideTip(event, 'fs7', 8)" onmouseover="showTip(event, 'fs7', 8)" class="i">elementTimeout</span> <span class="o">&lt;-</span> <span class="n">10.0</span></pre>
-</td>
+<table class="pre"><tr><td class="lines"><pre class="fssnip"><span class="l">1: </span>
+</pre></td>
+<td class="snippet"><pre class="fssnip highlighted"><code lang="fsharp"><span onmouseout="hideTip(event, 'fs7', 8)" onmouseover="showTip(event, 'fs7', 8)" class="v">elementTimeout</span> <span class="o">&lt;-</span> <span class="n">10.0</span>
+</code></pre></td>
 </tr>
 </table>
-
 <h2>compareTimeout</h2>
-
 <ul>
 <li>Amount of time for the test runner to spend comparing elements.</li>
 <li>Default is 10.0 seconds</li>
 </ul>
-
-<table class="pre"><tr><td class="lines"><pre class="fssnip">
-<span class="l">1: </span>
-</pre>
-</td>
-<td class="snippet"><pre class="fssnip">
-<span onmouseout="hideTip(event, 'fs8', 9)" onmouseover="showTip(event, 'fs8', 9)" class="i">compareTimeout</span> <span class="o">&lt;-</span> <span class="n">10.0</span></pre>
-</td>
+<table class="pre"><tr><td class="lines"><pre class="fssnip"><span class="l">1: </span>
+</pre></td>
+<td class="snippet"><pre class="fssnip highlighted"><code lang="fsharp"><span onmouseout="hideTip(event, 'fs8', 9)" onmouseover="showTip(event, 'fs8', 9)" class="v">compareTimeout</span> <span class="o">&lt;-</span> <span class="n">10.0</span>
+</code></pre></td>
 </tr>
 </table>
-
 <h2>pageTimeout</h2>
-
 <ul>
 <li>Amount of time for the test runner to wait for the page to load.</li>
 <li>Default is 10.0 seconds</li>
 </ul>
-
-<table class="pre"><tr><td class="lines"><pre class="fssnip">
-<span class="l">1: </span>
-</pre>
-</td>
-<td class="snippet"><pre class="fssnip">
-<span onmouseout="hideTip(event, 'fs9', 10)" onmouseover="showTip(event, 'fs9', 10)" class="i">pageTimeout</span> <span class="o">&lt;-</span> <span class="n">10.0</span></pre>
-</td>
+<table class="pre"><tr><td class="lines"><pre class="fssnip"><span class="l">1: </span>
+</pre></td>
+<td class="snippet"><pre class="fssnip highlighted"><code lang="fsharp"><span onmouseout="hideTip(event, 'fs9', 10)" onmouseover="showTip(event, 'fs9', 10)" class="v">pageTimeout</span> <span class="o">&lt;-</span> <span class="n">10.0</span>
+</code></pre></td>
 </tr>
 </table>
-
 <h2>wipSleep</h2>
-
 <ul>
 <li>Amount of time to spend between WIP tests (Tests marked with &amp;&amp;&amp;&amp;)</li>
 <li>Default is 1.0 seconds</li>
 </ul>
-
-<table class="pre"><tr><td class="lines"><pre class="fssnip">
-<span class="l">1: </span>
-</pre>
-</td>
-<td class="snippet"><pre class="fssnip">
-<span onmouseout="hideTip(event, 'fs10', 11)" onmouseover="showTip(event, 'fs10', 11)" class="i">wipSleep</span> <span class="o">&lt;-</span> <span class="n">1.0</span></pre>
-</td>
+<table class="pre"><tr><td class="lines"><pre class="fssnip"><span class="l">1: </span>
+</pre></td>
+<td class="snippet"><pre class="fssnip highlighted"><code lang="fsharp"><span onmouseout="hideTip(event, 'fs10', 11)" onmouseover="showTip(event, 'fs10', 11)" class="v">wipSleep</span> <span class="o">&lt;-</span> <span class="n">1.0</span>
+</code></pre></td>
 </tr>
 </table>
-
 <h2>runFailedContextsFirst</h2>
-
 <ul>
 <li>Runs failed contexts first if the test suite has already executed.</li>
 <li>Defaults is false</li>
 </ul>
-
-<table class="pre"><tr><td class="lines"><pre class="fssnip">
-<span class="l">1: </span>
-</pre>
-</td>
-<td class="snippet"><pre class="fssnip">
-<span onmouseout="hideTip(event, 'fs11', 12)" onmouseover="showTip(event, 'fs11', 12)" class="i">runFailedContextsFirst</span> <span class="o">&lt;-</span> <span class="k">false</span></pre>
-</td>
+<table class="pre"><tr><td class="lines"><pre class="fssnip"><span class="l">1: </span>
+</pre></td>
+<td class="snippet"><pre class="fssnip highlighted"><code lang="fsharp"><span onmouseout="hideTip(event, 'fs11', 12)" onmouseover="showTip(event, 'fs11', 12)" class="v">runFailedContextsFirst</span> <span class="o">&lt;-</span> <span class="k">false</span>
+</code></pre></td>
 </tr>
 </table>
-
 <h2>reporter</h2>
-
 <ul>
 <li>Reporter object that will handle how logs should be stored.</li>
 <li>Must inherit IReporter</li>
 <li>Default is ConsoleReporter</li>
 </ul>
-
-<table class="pre"><tr><td class="lines"><pre class="fssnip">
-<span class="l">1: </span>
-</pre>
-</td>
-<td class="snippet"><pre class="fssnip">
-<span onmouseout="hideTip(event, 'fs12', 13)" onmouseover="showTip(event, 'fs12', 13)" class="i">reporter</span> <span class="o">&lt;-</span> <span class="k">new</span> <span onmouseout="hideTip(event, 'fs13', 14)" onmouseover="showTip(event, 'fs13', 14)" class="i">reporters</span><span class="o">.</span><span onmouseout="hideTip(event, 'fs14', 15)" onmouseover="showTip(event, 'fs14', 15)" class="i">ConsoleReporter</span>() <span class="o">:&gt;</span> <span onmouseout="hideTip(event, 'fs13', 16)" onmouseover="showTip(event, 'fs13', 16)" class="i">reporters</span><span class="o">.</span><span onmouseout="hideTip(event, 'fs15', 17)" onmouseover="showTip(event, 'fs15', 17)" class="i">IReporter</span></pre>
-</td>
+<table class="pre"><tr><td class="lines"><pre class="fssnip"><span class="l">1: </span>
+</pre></td>
+<td class="snippet"><pre class="fssnip highlighted"><code lang="fsharp"><span onmouseout="hideTip(event, 'fs12', 13)" onmouseover="showTip(event, 'fs12', 13)" class="v">reporter</span> <span class="o">&lt;-</span> <span class="k">new</span> <span onmouseout="hideTip(event, 'fs13', 14)" onmouseover="showTip(event, 'fs13', 14)" class="t">reporters</span><span class="o">.</span><span onmouseout="hideTip(event, 'fs14', 15)" onmouseover="showTip(event, 'fs14', 15)" class="t">ConsoleReporter</span>() <span class="o">:&gt;</span> <span onmouseout="hideTip(event, 'fs13', 16)" onmouseover="showTip(event, 'fs13', 16)" class="t">reporters</span><span class="o">.</span><span onmouseout="hideTip(event, 'fs15', 17)" onmouseover="showTip(event, 'fs15', 17)" class="t">IReporter</span>
+</code></pre></td>
 </tr>
 </table>
-
 <h2>disableSuggestOtherSelectors</h2>
-
 <ul>
 <li>Option that will disable selector suggestion if a selector fails to execute</li>
 <li>Defaults is false</li>
 </ul>
-
-<table class="pre"><tr><td class="lines"><pre class="fssnip">
-<span class="l">1: </span>
-</pre>
-</td>
-<td class="snippet"><pre class="fssnip">
-<span onmouseout="hideTip(event, 'fs16', 18)" onmouseover="showTip(event, 'fs16', 18)" class="i">disableSuggestOtherSelectors</span> <span class="o">&lt;-</span> <span class="k">false</span></pre>
-</td>
+<table class="pre"><tr><td class="lines"><pre class="fssnip"><span class="l">1: </span>
+</pre></td>
+<td class="snippet"><pre class="fssnip highlighted"><code lang="fsharp"><span onmouseout="hideTip(event, 'fs16', 18)" onmouseover="showTip(event, 'fs16', 18)" class="v">disableSuggestOtherSelectors</span> <span class="o">&lt;-</span> <span class="k">false</span>
+</code></pre></td>
 </tr>
 </table>
-
 <h2>autoPinBrowserRightOnLaunch</h2>
-
 <ul>
 <li>Automatically pins the browser to the right of the screen on launch</li>
 <li>Default is true</li>
 </ul>
-
-<table class="pre"><tr><td class="lines"><pre class="fssnip">
-<span class="l">1: </span>
-</pre>
-</td>
-<td class="snippet"><pre class="fssnip">
-<span onmouseout="hideTip(event, 'fs17', 19)" onmouseover="showTip(event, 'fs17', 19)" class="i">autoPinBrowserRightOnLaunch</span> <span class="o">&lt;-</span> <span class="k">true</span></pre>
-</td>
+<table class="pre"><tr><td class="lines"><pre class="fssnip"><span class="l">1: </span>
+</pre></td>
+<td class="snippet"><pre class="fssnip highlighted"><code lang="fsharp"><span onmouseout="hideTip(event, 'fs17', 19)" onmouseover="showTip(event, 'fs17', 19)" class="v">autoPinBrowserRightOnLaunch</span> <span class="o">&lt;-</span> <span class="k">true</span>
+</code></pre></td>
 </tr>
 </table>
-
 <h2>throwIfMoreThanOneElement</h2>
-
 <ul>
 <li>Throws a CanopyMoreThanOneElementFoundException if more than one element is found using a selector</li>
 <li>Default is false</li>
 </ul>
-
-<table class="pre"><tr><td class="lines"><pre class="fssnip">
-<span class="l">1: </span>
-</pre>
-</td>
-<td class="snippet"><pre class="fssnip">
-<span onmouseout="hideTip(event, 'fs18', 20)" onmouseover="showTip(event, 'fs18', 20)" class="i">throwIfMoreThanOneElement</span> <span class="o">&lt;-</span> <span class="k">false</span></pre>
-</td>
+<table class="pre"><tr><td class="lines"><pre class="fssnip"><span class="l">1: </span>
+</pre></td>
+<td class="snippet"><pre class="fssnip highlighted"><code lang="fsharp"><span onmouseout="hideTip(event, 'fs18', 20)" onmouseover="showTip(event, 'fs18', 20)" class="v">throwIfMoreThanOneElement</span> <span class="o">&lt;-</span> <span class="k">false</span>
+</code></pre></td>
 </tr>
 </table>
-
 <h2>configuredFinders</h2>
-
 <ul>
 <li>Defines functions for finding elements based on selectors</li>
 <li>Default is the following sequence</li>
@@ -291,82 +213,54 @@ O* SX: /usr/bin/</li>
 <li>findByText</li>
 <li>findByJQuery</li>
 </ul>
-
-<table class="pre"><tr><td class="lines"><pre class="fssnip">
-<span class="l">1: </span>
-</pre>
-</td>
-<td class="snippet"><pre class="fssnip">
-<span onmouseout="hideTip(event, 'fs19', 21)" onmouseover="showTip(event, 'fs19', 21)" class="i">configuredFinders</span> <span class="o">&lt;-</span> <span onmouseout="hideTip(event, 'fs20', 22)" onmouseover="showTip(event, 'fs20', 22)" class="i">finders</span><span class="o">.</span><span onmouseout="hideTip(event, 'fs21', 23)" onmouseover="showTip(event, 'fs21', 23)" class="i">defaultFinders</span></pre>
-</td>
+<table class="pre"><tr><td class="lines"><pre class="fssnip"><span class="l">1: </span>
+</pre></td>
+<td class="snippet"><pre class="fssnip highlighted"><code lang="fsharp"><span onmouseout="hideTip(event, 'fs19', 21)" onmouseover="showTip(event, 'fs19', 21)" class="f">configuredFinders</span> <span class="o">&lt;-</span> <span onmouseout="hideTip(event, 'fs20', 22)" onmouseover="showTip(event, 'fs20', 22)" class="t">finders</span><span class="o">.</span><span onmouseout="hideTip(event, 'fs21', 23)" onmouseover="showTip(event, 'fs21', 23)" class="f">defaultFinders</span>
+</code></pre></td>
 </tr>
 </table>
-
 <h2>writeToSelectWithOptionValue</h2>
-
 <ul>
 <li>Provided to preserve previous behaviour of not using the options value to write to a select</li>
 <li>Default is true</li>
 </ul>
-
-<table class="pre"><tr><td class="lines"><pre class="fssnip">
-<span class="l">1: </span>
-</pre>
-</td>
-<td class="snippet"><pre class="fssnip">
-<span onmouseout="hideTip(event, 'fs22', 24)" onmouseover="showTip(event, 'fs22', 24)" class="i">writeToSelectWithOptionValue</span> <span class="o">&lt;-</span> <span class="k">true</span></pre>
-</td>
+<table class="pre"><tr><td class="lines"><pre class="fssnip"><span class="l">1: </span>
+</pre></td>
+<td class="snippet"><pre class="fssnip highlighted"><code lang="fsharp"><span onmouseout="hideTip(event, 'fs22', 24)" onmouseover="showTip(event, 'fs22', 24)" class="v">writeToSelectWithOptionValue</span> <span class="o">&lt;-</span> <span class="k">true</span>
+</code></pre></td>
 </tr>
 </table>
-
 <h2>optimizeBySkippingIFrameCheck</h2>
-
 <ul>
 <li>If you need your tests to be faster and don't have any iframes you can turn this to true</li>
 <li>Default is false</li>
 </ul>
-
-<table class="pre"><tr><td class="lines"><pre class="fssnip">
-<span class="l">1: </span>
-</pre>
-</td>
-<td class="snippet"><pre class="fssnip">
-<span onmouseout="hideTip(event, 'fs23', 25)" onmouseover="showTip(event, 'fs23', 25)" class="i">optimizeBySkippingIFrameCheck</span> <span class="o">&lt;-</span> <span class="k">false</span></pre>
-</td>
+<table class="pre"><tr><td class="lines"><pre class="fssnip"><span class="l">1: </span>
+</pre></td>
+<td class="snippet"><pre class="fssnip highlighted"><code lang="fsharp"><span onmouseout="hideTip(event, 'fs23', 25)" onmouseover="showTip(event, 'fs23', 25)" class="v">optimizeBySkippingIFrameCheck</span> <span class="o">&lt;-</span> <span class="k">false</span>
+</code></pre></td>
 </tr>
 </table>
-
 <h2>optimizeByDisablingCoverageReport</h2>
-
 <ul>
 <li>If you need your tests to be faster and don't use coverage report you can turn this to true</li>
 <li>Default is false</li>
 </ul>
-
-<table class="pre"><tr><td class="lines"><pre class="fssnip">
-<span class="l">1: </span>
-</pre>
-</td>
-<td class="snippet"><pre class="fssnip">
-<span onmouseout="hideTip(event, 'fs24', 26)" onmouseover="showTip(event, 'fs24', 26)" class="i">optimizeByDisablingCoverageReport</span> <span class="o">&lt;-</span> <span class="k">false</span></pre>
-</td>
+<table class="pre"><tr><td class="lines"><pre class="fssnip"><span class="l">1: </span>
+</pre></td>
+<td class="snippet"><pre class="fssnip highlighted"><code lang="fsharp"><span onmouseout="hideTip(event, 'fs24', 26)" onmouseover="showTip(event, 'fs24', 26)" class="v">optimizeByDisablingCoverageReport</span> <span class="o">&lt;-</span> <span class="k">false</span>
+</code></pre></td>
 </tr>
 </table>
-
 <h2>showInfoDiv</h2>
-
 <ul>
 <li>Allows information to be displayed on the browser when the puts function is called</li>
 <li>Default is true</li>
 </ul>
-
-<table class="pre"><tr><td class="lines"><pre class="fssnip">
-<span class="l">1: </span>
-</pre>
-</td>
-<td class="snippet"><pre class="fssnip">
-<span onmouseout="hideTip(event, 'fs25', 27)" onmouseover="showTip(event, 'fs25', 27)" class="i">showInfoDiv</span> <span class="o">&lt;-</span> <span class="k">true</span></pre>
-</td>
+<table class="pre"><tr><td class="lines"><pre class="fssnip"><span class="l">1: </span>
+</pre></td>
+<td class="snippet"><pre class="fssnip highlighted"><code lang="fsharp"><span onmouseout="hideTip(event, 'fs25', 27)" onmouseover="showTip(event, 'fs25', 27)" class="v">showInfoDiv</span> <span class="o">&lt;-</span> <span class="k">true</span>
+</code></pre></td>
 </tr>
 </table>
 

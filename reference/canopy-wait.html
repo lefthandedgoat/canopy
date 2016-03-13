@@ -5,7 +5,7 @@
 	   h4 + img { margin-top: 20px; margin-bottom: 20px;}
 	</STYLE>
     <meta charset="utf-8">
-    <title>CanopyReadException - canopy</title>
+    <title>wait - canopy</title>
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <meta name="description" content="">
     <meta name="author" content="Chris Holt">
@@ -49,36 +49,73 @@
 
 
 
-<h1>CanopyReadException</h1>
+<h1>wait</h1>
 <p>
   <span>Namespace: canopy</span><br />
-  <span>Parent Module: <a href="canopy-types.html">types</a></span>
 </p>
 <div class="xmldoc">
 </div>
-  <h3>Constructors</h3>
+
+<!-- Render nested types and modules, if there are any -->
+
+  <h3>Functions and values</h3>
   <table class="table table-bordered member-list">
     <thead>
-      <tr><td>Constructor</td><td>Description</td></tr>
+      <tr><td>Function or value</td><td>Description</td></tr>
     </thead>
     <tbody>
       <tr>
         <td class="member-name">
 
-          <code onmouseout="hideTip(event, '269', 269)" onmouseover="showTip(event, '269', 269)">
-            new(message)
+          <code onmouseout="hideTip(event, '184', 184)" onmouseover="showTip(event, '184', 184)">
+            wait timeout f
           </code>
-          <div class="tip" id="269">
-            <strong>Signature:</strong> message:string -&gt; CanopyReadException<br />
+          <div class="tip" id="184">
+            <strong>Signature:</strong> timeout:float -&gt; f:(unit -&gt; bool) -&gt; unit<br />
                       </div>
         </td>
         <td class="xmldoc">
-            <a href="https://github.com/lefthandedgoat/canopy/tree/scaffold/src/canopy/types.fs#L32-32" class="github-link">
+            <a href="https://github.com/lefthandedgoat/canopy/tree/scaffold/src/canopy/wait.fs#L30-30" class="github-link">
               <img src="../content/img/github.png" class="normal" />
               <img src="../content/img/github-blue.png" class="hover" />
             </a>
           
-              <p>CompiledName: <code>.ctor</code></p>
+        </td>
+      </tr>
+      <tr>
+        <td class="member-name">
+
+          <code onmouseout="hideTip(event, '185', 185)" onmouseover="showTip(event, '185', 185)">
+            waitResults timeout f
+          </code>
+          <div class="tip" id="185">
+            <strong>Signature:</strong> timeout:float -&gt; f:(unit -&gt; &#39;a) -&gt; &#39;a<br />
+                          <strong>Type parameters:</strong> 'a          </div>
+        </td>
+        <td class="xmldoc">
+            <a href="https://github.com/lefthandedgoat/canopy/tree/scaffold/src/canopy/wait.fs#L8-8" class="github-link">
+              <img src="../content/img/github.png" class="normal" />
+              <img src="../content/img/github-blue.png" class="hover" />
+            </a>
+          
+        </td>
+      </tr>
+      <tr>
+        <td class="member-name">
+
+          <code onmouseout="hideTip(event, '186', 186)" onmouseover="showTip(event, '186', 186)">
+            waitSleep 
+          </code>
+          <div class="tip" id="186">
+            <strong>Signature:</strong> float&lt;MeasureOne&gt;<br />
+                      </div>
+        </td>
+        <td class="xmldoc">
+            <a href="https://github.com/lefthandedgoat/canopy/tree/scaffold/src/canopy/wait.fs#L6-6" class="github-link">
+              <img src="../content/img/github.png" class="normal" />
+              <img src="../content/img/github-blue.png" class="hover" />
+            </a>
+          
         </td>
       </tr>
     </tbody>
