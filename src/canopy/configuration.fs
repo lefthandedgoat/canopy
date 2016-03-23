@@ -38,3 +38,4 @@ let mutable failureScreenshotsEnabled = true
 let mutable skipAllTestsOnFailure = false
 let mutable skipRemainingTestsInContextOnFailure = false
 let mutable skipNextTest = false
+let mutable failureMessagesThatShoulBeTreatedAsSkip : string list = []

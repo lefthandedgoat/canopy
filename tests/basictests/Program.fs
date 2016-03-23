@@ -13,6 +13,7 @@ pageTimeout <- 3.0
 runFailedContextsFirst <- true
 reporter <- new LiveHtmlReporter(Chrome, configuration.chromeDir) :> IReporter 
 reporter.setEnvironment "My Machine"
+configuration.failureMessagesThatShoulBeTreatedAsSkip <- ["Skip me when I fail"]
 
 configuration.failScreenshotFileName <- 
   (fun test suite -> 
@@ -35,6 +36,10 @@ lastly (fun _ -> Console.WriteLine "lastly")
 let testpage = "http://lefthandedgoat.github.io/canopy/testpages/" 
 
 "intentionally skipped shows blue in LiveHtmlReport" &&! skipped
+
+"Should skip even though it fails" &&& fun _ ->    
+    url testpage
+    failwith "Skip me when I fail"
 
 "Apostrophes don't break anything" &&& fun _ ->    
     url testpage
@@ -746,4 +751,4 @@ coverage testpage
 coverage()
 coverage "http://scrumy.com/silenter39delayed"
 
-quit()
+//quit()

@@ -69,25 +69,28 @@ let skip id =
     reporter.skip id
 
 let fail (ex : Exception) (test : Test) (suite : suite) autoFail url =
-    if skipAllTestsOnFailure = true || skipRemainingTestsInContextOnFailure = true then skipNextTest <- true
-    if autoFail then
-        skip test.Id //dont take the time to fail all the tests just skip them
+    if failureMessagesThatShoulBeTreatedAsSkip |> List.exists (fun message -> ex.Message = message) then
+        skip test.Id
     else
-        try
-            if failFast = ref true then failed <- true        
-            failedCount <- failedCount + 1
-            contextFailed <- true
-            let f = configuration.failScreenshotFileName test suite
-            if failureScreenshotsEnabled = true then
-              let ss = screenshot configuration.failScreenshotPath f
-              reporter.fail ex test.Id ss url
-            else reporter.fail ex test.Id Array.empty<byte> url
-        with 
-            | failExc -> 
-                //Fail during error report (likely  OpenQA.Selenium.WebDriverException.WebDriverTimeoutException ). 
-                // Don't fail the runner itself, but report it.
-                reporter.write (sprintf "Error during fail reporting: %s" (failExc.ToString()))
-                reporter.fail ex test.Id Array.empty url
+        if skipAllTestsOnFailure = true || skipRemainingTestsInContextOnFailure = true then skipNextTest <- true
+        if autoFail then
+            skip test.Id //dont take the time to fail all the tests just skip them
+        else
+            try
+                if failFast = ref true then failed <- true        
+                failedCount <- failedCount + 1
+                contextFailed <- true
+                let f = configuration.failScreenshotFileName test suite
+                if failureScreenshotsEnabled = true then
+                  let ss = screenshot configuration.failScreenshotPath f
+                  reporter.fail ex test.Id ss url
+                else reporter.fail ex test.Id Array.empty<byte> url
+            with 
+                | failExc -> 
+                    //Fail during error report (likely  OpenQA.Selenium.WebDriverException.WebDriverTimeoutException ). 
+                    // Don't fail the runner itself, but report it.
+                    reporter.write (sprintf "Error during fail reporting: %s" (failExc.ToString()))
+                    reporter.fail ex test.Id Array.empty url
 
 let safelyGetUrl () = if browser = null then "no browser = no url" else browser.Url
 
