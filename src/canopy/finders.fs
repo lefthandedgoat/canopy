@@ -68,7 +68,7 @@ let private loadJQuery () =
 let findByJQuery cssSelector _ =
     try
         loadJQuery()
-        let script = sprintf "return jQuery('%s').get();" cssSelector
+        let script = sprintf """return jQuery("%s").get();""" cssSelector
         (browser :?> IJavaScriptExecutor).ExecuteScript(script) :?> ReadOnlyCollection<IWebElement> |> List.ofSeq
     with | ex -> []
 

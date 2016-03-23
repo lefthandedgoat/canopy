@@ -751,4 +751,4 @@ coverage testpage
 coverage()
 coverage "http://scrumy.com/silenter39delayed"
 
-//quit()
+quit()
