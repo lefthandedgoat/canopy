@@ -1,7 +1,7 @@
 NUGET
   remote: https://www.nuget.org/api/v2
   specs:
-    FAKE (4.22.0)
+    FAKE (4.22.8)
     FSharp.Compiler.Service (2.0.0.6)
     FSharp.Core (3.0.2)
     FSharp.Formatting (2.14.0)
@@ -10,4 +10,4 @@ NUGET
     FSharpVSPowerTools.Core (2.3.0)
       FSharp.Compiler.Service (>= 2.0.0.3)
     NuGet.CommandLine (3.3.0)
-    Selenium.WebDriver (2.52.0)
+    Selenium.WebDriver (2.53.0)
