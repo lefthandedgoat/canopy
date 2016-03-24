@@ -232,3 +232,6 @@ Fix issue with jquery selectors that had single ticks in them [Issue #250](https
 Update to latest Selenium 2.53.0 [Issue #251](https://github.com/lefthandedgoat/canopy/issue/251)
 Added ability to skip a test that fails with a specific error message [Issue #248](https://github.com/lefthandedgoat/canopy/issue/248)
 Fix issue with failing and using the after method [Issue #247](https://github.com/lefthandedgoat/canopy/issue/247)
+
+#### 0.9.49 - March 24 2016
+Fix issue with encoding on the command line [Issue #252](https://github.com/lefthandedgoat/canopy/issue/252)
