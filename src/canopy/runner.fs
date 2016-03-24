@@ -113,6 +113,15 @@ let tryTest test suite func =
         | ex when failureMessage <> null && failureMessage = ex.Message -> Pass
         | ex -> Fail ex
 
+let private processRunResult suite (test : Test) result = 
+    match result with
+    | Pass -> pass test.Id
+    | Fail ex -> fail ex test suite false <| safelyGetUrl()
+    | Skip -> skip test.Id
+    | Todo -> reporter.todo test.Id
+    | FailFast -> ()
+    | Failed -> ()
+
 let private runtest (suite : suite) (test : Test) =
     if failed = false then             
         reporter.testStart test.Id
@@ -121,10 +130,15 @@ let private runtest (suite : suite) (test : Test) =
           else if System.Object.ReferenceEquals(test.Func, skipped) then Skip
           else if skipNextTest = true then Skip
           else
-              let testResult = tryTest test suite (suite.Before >> test.Func)
+              let testResult =
+                let testResult = tryTest test suite (suite.Before >> test.Func)
+                match testResult with
+                | Fail(_) -> processRunResult suite test testResult; Failed
+                | _ -> testResult
+              
               let afterResult = tryTest test suite (suite.After)
               match testResult with
-              | Fail(_) -> testResult
+              | Failed -> testResult
               | _ -> afterResult
 
         reporter.testEnd test.Id 
@@ -133,14 +147,6 @@ let private runtest (suite : suite) (test : Test) =
     else
         failureMessage <- null
         FailFast
-
-let processRunResult suite (test : Test) result = 
-    match result with
-    | Pass -> pass test.Id
-    | Fail ex -> fail ex test suite false <| safelyGetUrl()
-    | Skip -> skip test.Id
-    | Todo -> reporter.todo test.Id
-    | FailFast -> ()
 
 let run () =
     reporter.suiteBegin()

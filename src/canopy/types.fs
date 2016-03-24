@@ -86,3 +86,4 @@ type Result =
     | Skip
     | Todo
     | FailFast
+    | Failed
