@@ -236,57 +236,57 @@ type LiveHtmlReporter(browser : BrowserStartMode, driverPath : string) =
         IO.File.WriteAllText(System.IO.Path.Combine(directory,filename + ".html"), this.reportHtml())
     
     member this.commonFail ctx (ex:Exception) id ss url =
-        let id = jsEncode id
-        this.swallowedJS (sprintf "updateTestInContext('%s', '%s','Fail', '%s');" ctx id (Convert.ToBase64String(ss)))
+        let encodedId = jsEncode id
+        this.swallowedJS (sprintf "updateTestInContext('%s', '%s','Fail', '%s');" ctx encodedId (Convert.ToBase64String(ss)))
         let stack = sprintf "%s%s%s" ex.Message System.Environment.NewLine ex.StackTrace
         let stack = jsEncode stack
-        this.swallowedJS (sprintf "addStackToTest ('%s', '%s', '%s');" ctx id stack)
-        this.swallowedJS (sprintf "addUrlToTest ('%s', '%s', '%s');" ctx id url)
+        this.swallowedJS (sprintf "addStackToTest ('%s', '%s', '%s');" ctx encodedId stack)
+        this.swallowedJS (sprintf "addUrlToTest ('%s', '%s', '%s');" ctx encodedId url)
         consoleReporter.fail ex id ss url
         
     member this.passWithContext ctx id =
-        let id = jsEncode id
+        let encodedId = jsEncode id
         let context = jsEncode ctx
-        this.swallowedJS (sprintf "updateTestInContext('%s', '%s', 'Pass', '%s');" context id "")
+        this.swallowedJS (sprintf "updateTestInContext('%s', '%s', 'Pass', '%s');" context encodedId "")
         consoleReporter.pass id
 
     member this.failWithContext ctx ex id ss url = 
         let context = jsEncode ctx
         this.commonFail context ex id ss url
 
-    member this.writeWithContext ctx w id = 
-        let id = jsEncode id
+    member this.writeWithContext ctx w id =
+        let encodedId = jsEncode id
         let encoded = jsEncode w
         let context = jsEncode ctx
-        this.swallowedJS (sprintf "addMessageToTestByName ('%s', '%s', '%s');" context id encoded)
+        this.swallowedJS (sprintf "addMessageToTestByName ('%s', '%s', '%s');" context encodedId encoded)
         consoleReporter.write w
 
-    member this.testStartWithContext ctx id = 
-        let id = jsEncode id
+    member this.testStartWithContext ctx id =
+        let encodedId = jsEncode id
         let context = jsEncode ctx
-        this.swallowedJS (sprintf "addToContext ('%s', '%s');" context id)
+        this.swallowedJS (sprintf "addToContext ('%s', '%s');" context encodedId)
         consoleReporter.testStart id
             
     member this.testEndWithContext ctx id minutes seconds =
-        let id = jsEncode id
+        let encodedId = jsEncode id
         let context = jsEncode ctx
-        this.swallowedJS (sprintf "addTimeToTest ('%s', '%s', '%im %is');" context id minutes seconds)
+        this.swallowedJS (sprintf "addTimeToTest ('%s', '%s', '%im %is');" context encodedId minutes seconds)
 
-    member this.todoWithContext ctx id = 
-        let id = jsEncode id
+    member this.todoWithContext ctx id =
+        let encodedId = jsEncode id
         let context = jsEncode ctx
-        this.swallowedJS (sprintf "updateTestInContext('%s', '%s', 'Todo', '%s');" context id "")
+        this.swallowedJS (sprintf "updateTestInContext('%s', '%s', 'Todo', '%s');" context encodedId "")
 
-    member this.skipWithContext ctx id = 
-        let id = jsEncode id
+    member this.skipWithContext ctx id =
+        let encodedId = jsEncode id
         let context = jsEncode ctx
-        this.swallowedJS (sprintf "updateTestInContext('%s', '%s', 'Skip', '%s');" context id "")
+        this.swallowedJS (sprintf "updateTestInContext('%s', '%s', 'Skip', '%s');" context encodedId "")
         consoleReporter.skip id
 
     interface IReporter with               
         member this.pass id =
-            let id = jsEncode id
-            this.swallowedJS (sprintf "updateTestInContext('%s', '%s', 'Pass', '%s');" context id "")
+            let encodedId = jsEncode id
+            this.swallowedJS (sprintf "updateTestInContext('%s', '%s', 'Pass', '%s');" context encodedId "")
             consoleReporter.pass id
 
         member this.fail ex id ss url = this.commonFail context ex id ss url
@@ -326,15 +326,15 @@ type LiveHtmlReporter(browser : BrowserStartMode, driverPath : string) =
         member this.testStart id = 
             testStopWatch.Reset()
             testStopWatch.Start()
-            let id = jsEncode id
-            this.swallowedJS (sprintf "addToContext ('%s', '%s');" context id)
+            let encodedId = jsEncode id
+            this.swallowedJS (sprintf "addToContext ('%s', '%s');" context encodedId)
             consoleReporter.testStart id
             
         member this.testEnd id =
-            let id = jsEncode id
+            let encodedId = jsEncode id
             testStopWatch.Stop()
             let ellapsed = testStopWatch.Elapsed
-            this.swallowedJS (sprintf "addTimeToTest ('%s', '%s', '%im %is');" context id ellapsed.Minutes ellapsed.Seconds)
+            this.swallowedJS (sprintf "addTimeToTest ('%s', '%s', '%im %is');" context encodedId ellapsed.Minutes ellapsed.Seconds)
 
         member this.quit () = 
           match this.reportPath with
@@ -354,20 +354,21 @@ type LiveHtmlReporter(browser : BrowserStartMode, driverPath : string) =
             canQuit <- true
             this.swallowedJS (sprintf "collapseContextsExcept('%s');" "") //cheap hack to collapse all contexts at the end of a run
 
-        member this.coverage url ss id = 
-            let id = jsEncode id
+        member this.coverage url ss id =
+            let encodedId = jsEncode id
             if (contexts |> List.exists (fun c -> c = "Coverage Reports")) = false then
                 contexts <- "Coverage Reports" :: contexts
                 this.swallowedJS (sprintf "addContext('%s');" "Coverage Reports")
             this.swallowedJS (sprintf "addToContext ('%s', '%s');" "Coverage Reports" url)
-            this.swallowedJS (sprintf "updateTestInContext('%s', '%s', 'Pass', '%s');" "Coverage Reports" id (Convert.ToBase64String(ss)))
+            this.swallowedJS (sprintf "updateTestInContext('%s', '%s', 'Pass', '%s');" "Coverage Reports" encodedId (Convert.ToBase64String(ss)))
 
-        member this.todo id = 
-            let id = jsEncode id
-            this.swallowedJS (sprintf "updateTestInContext('%s', '%s', 'Todo', '%s');" context id "")
+        member this.todo id =
+            let encodedId = jsEncode id
+            this.swallowedJS (sprintf "updateTestInContext('%s', '%s', 'Todo', '%s');" context encodedId "")
 
-        member this.skip id = 
-            this.swallowedJS (sprintf "updateTestInContext('%s', '%s', 'Skip', '%s');" context id "")
+        member this.skip id =
+            let encodedId = jsEncode id
+            this.swallowedJS (sprintf "updateTestInContext('%s', '%s', 'Skip', '%s');" context encodedId "")
             consoleReporter.skip id
 
         member this.setEnvironment env =
