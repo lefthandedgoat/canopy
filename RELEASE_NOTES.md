@@ -226,3 +226,9 @@ Fix #238 add escape key [Issue #238](https://github.com/lefthandedgoat/canopy/is
 Drop SizSelCsZzz dependency [Issue #244](https://github.com/lefthandedgoat/canopy/issue/244)
 Drop Selenium.Support dependency [Issue #245](https://github.com/lefthandedgoat/canopy/issue/245)
 BREAKING moved browser from canopy.core.browser to canopy.types.browser
+
+#### 0.9.48 - March 24 2016
+Fix issue with jquery selectors that had single ticks in them [Issue #250](https://github.com/lefthandedgoat/canopy/issue/250)
+Update to latest Selenium 2.53.0 [Issue #251](https://github.com/lefthandedgoat/canopy/issue/251)
+Added ability to skip a test that fails with a specific error message [Issue #248](https://github.com/lefthandedgoat/canopy/issue/248)
+Fix issue with failing and using the after method [Issue #247](https://github.com/lefthandedgoat/canopy/issue/247)
