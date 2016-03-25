@@ -172,12 +172,12 @@
 
 		var addUrlToTest = function (context, testName, url) {
 			var ctx = getContext(context);
-			getTestRow(ctx, testName).after('<div class="url"><pre>' + url + '</pre></div>');
+			getTest(ctx, testName).after('<div class="url"><pre>' + url + '</pre></div>');
 		};
 		
 		var addStackToTest = function (context, testName, stack) {
 			var ctx = getContext(context);
-			getTestRow(ctx, testName).after('<div class="stack"><pre>' + stack + '</pre></div>');
+			getTest(ctx, testName).after('<div class="stack"><pre>' + stack + '</pre></div>');
 		};
 		
 		var addTimeToTest = function (context, testName, time) {
