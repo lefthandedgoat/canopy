@@ -134,3 +134,104 @@
 
 #### 0.9.22 - March 4 2015
 * Updated to Selenium 2.45, thanks @pottereric
+
+#### 0.9.23 - May 18 2015
+* Added &&&&& (always) tests which will run in both normal mode and wip mode [Issue #195](https://github.com/lefthandedgoat/canopy/issues/195)
+* Added runFor which lets you run the same set of tests for multiple browsers [Issue #190](https://github.com/lefthandedgoat/canopy/issues/190)
+
+#### 0.9.24 - May 19 2015
+* Fixed bug related to new &&&&& (always) operator [Issue #195](https://github.com/lefthandedgoat/canopy/issues/195)
+
+#### 0.9.26 - June 1 2015
+* Fixed bug where after wouldn't run following a failed test [Issue #197](https://github.com/lefthandedgoat/canopy/issues/197)
+
+#### 0.9.27 - June 15 2015
+* Improved Html reporter to have stack trace, error message and url of failing page [Issue #202](https://github.com/lefthandedgoat/canopy/issues/202)
+* Updated to Selenium 2.46
+
+#### 0.9.28 - June 16 2015
+* Fix broken link to html reporter introduced in 0.9.27
+
+#### 0.9.29 - June 17 2015
+* Fix issue 203, using canopy for unit tests [Issue #203](https://github.com/lefthandedgoat/canopy/issues/203)
+
+#### 0.9.30 - July 30 2015
+* Updated to Selenium 2.47
+* Fix issue 205, making switchToTab more reliable [Issue #205](https://github.com/lefthandedgoat/canopy/issues/205)
+* Improve LiveHtmlReporter so that puts and describe will add ordered messages to the output
+* Improved behaviour for failing all tests if on failed.  Changed it to only fail all tests if the 'once' function fails
+
+#### 0.9.31 - August 18 2015
+* Fix issue 209, screenshot being taken too late in some cases [Issue #209](https://github.com/lefthandedgoat/canopy/issues/209)
+* Fix issue 210, text based selector with apostrophes were not working [Issue #205](https://github.com/lefthandedgoat/canopy/issues/210)
+
+#### 0.9.32 - August 25 2015
+* Accept PR adding better support for OSX and Safari.  Thanks to Pedro Ramirez! [Issue #211](https://github.com/lefthandedgoat/canopy/pull/211)
+
+#### 0.9.33 - September 9 2015
+* Fix bug were failing tests were marked as passed [Issue #212](https://github.com/lefthandedgoat/canopy/issues/212)
+* Make print info displayed in bottom right of page optional, thanks Jeremy Bellows! [Issue #213](https://github.com/lefthandedgoat/canopy/issues/213)
+
+#### 0.9.34 - September 15 2015
+* Improved the HTML reporter to have environment, total time, start date, time per context, and time per test
+
+#### 0.9.35 - October 7 2015
+Added features to improve granularity for skipping tests after a failure and skipping individual tests [Issue #215](https://github.com/lefthandedgoat/canopy/issues/215)
+Updated to Selenium 2.48
+
+#### 0.9.36 - October 13 2015
+Improve reporting skip for console and TeamCity reporter [Issue #215](https://github.com/lefthandedgoat/canopy/issues/215)
+
+#### 0.9.37 - October 18 2015
+Great PR from @LimoWanKenobi that fixed a performance problem with add a lot of tests, thanks! [Issue #217](https://github.com/lefthandedgoat/canopy/issues/217)
+
+#### 0.9.38 - October 22 2015
+Fix a bug in html reporter trying to describe json, it would fail to because the data was not encoded properly [Issue #218](https://github.com/lefthandedgoat/canopy/issues/218)
+
+#### 0.9.39 - October 22 2015
+Fix a bug in the bug I fixed in 0.9.38 [Issue #218](https://github.com/lefthandedgoat/canopy/issues/218)
+
+#### 0.9.40 - November 4 2015
+Added nmany to let you run many tests with a name [Issue #219](https://github.com/lefthandedgoat/canopy/issues/219)
+
+#### 0.9.41 - November 12 2015
+Updated to Selenium 2.48.1 [Issue #221](https://github.com/lefthandedgoat/canopy/issues/221)
+Added AutoOpen attribute so you dont have open types, runner, or configuration explicitly [Issue #222](https://github.com/lefthandedgoat/canopy/issues/222)
+New Startup mode for Firefox taking a path and a TimeSpan [Issue #223](https://github.com/lefthandedgoat/canopy/issues/223)
+
+#### 0.9.42 - November 18 2015
+Updated to Selenium 2.48.2
+Added support for configurable file names on failure screenshots [Issue #224](https://github.com/lefthandedgoat/canopy/issues/224)
+
+#### 0.9.43 - December 2 2015
+Improved error handeling on screenshots [Issue #225](https://github.com/lefthandedgoat/canopy/issues/225)
+
+#### 0.9.44 - January 18 2016
+Accepted PR to fix error handeling regression, thanks @RubenOen  [Pull Request #230](https://github.com/lefthandedgoat/canopy/pull/230)
+Fixed issue where read could some times suffer form stale element exceptions and the likes [Issue #229](https://github.com/lefthandedgoat/canopy/issue/229)
+
+#### 0.9.45 - February 27 2016
+Added !=~ (regex not match) operator [Issue #237](https://github.com/lefthandedgoat/canopy/issue/237)
+Add a configurable optimization to disable clear before writing [Issue #236](https://github.com/lefthandedgoat/canopy/issue/236)
+Improve html reporter to make it friendlier to parallel runs [Issue #235](https://github.com/lefthandedgoat/canopy/issue/235)
+Update to selenium 2.52.0 [Issue #233](https://github.com/lefthandedgoat/canopy/issue/233)
+
+#### 0.9.46 - March 12 2016
+Failures in Once or Before will now skip tests in context with skipRemainingTestsInContextOnFailure <- true [Issue #242](https://github.com/lefthandedgoat/canopy/issue/242)
+Fix #241 for using html reporter with parallel test runs [Issue #241](https://github.com/lefthandedgoat/canopy/issue/241)
+Fix #240 selection + optgroup erorr [Issue #240](https://github.com/lefthandedgoat/canopy/issue/240)
+Fix #238 add escape key [Issue #238](https://github.com/lefthandedgoat/canopy/issue/238)
+
+#### 0.9.47 - March 13 2016
+Drop SizSelCsZzz dependency [Issue #244](https://github.com/lefthandedgoat/canopy/issue/244)
+Drop Selenium.Support dependency [Issue #245](https://github.com/lefthandedgoat/canopy/issue/245)
+BREAKING moved browser from canopy.core.browser to canopy.types.browser
+
+#### 0.9.48 - March 24 2016
+Fix issue with jquery selectors that had single ticks in them [Issue #250](https://github.com/lefthandedgoat/canopy/issue/250)
+Update to latest Selenium 2.53.0 [Issue #251](https://github.com/lefthandedgoat/canopy/issue/251)
+Added ability to skip a test that fails with a specific error message [Issue #248](https://github.com/lefthandedgoat/canopy/issue/248)
+Fix issue with failing and using the after method [Issue #247](https://github.com/lefthandedgoat/canopy/issue/247)
+
+#### 0.9.49 - March 24 2016
+Fix issue with encoding on the command line [Issue #252](https://github.com/lefthandedgoat/canopy/issue/252)

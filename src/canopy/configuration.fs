@@ -1,14 +1,24 @@
-﻿module canopy.configuration
+﻿[<AutoOpen>]
+module canopy.configuration
 open reporters
 open System
+
+//location of drivers depending on OS
+let folderByOSType = 
+    match System.Environment.OSVersion.Platform with
+    | PlatformID.MacOSX 
+    | PlatformID.Unix -> @"/usr/bin/"
+    | _ -> @"c:\"
 
 //runner related
 let failFast = ref false
 let mutable failScreenshotPath = Environment.GetFolderPath(Environment.SpecialFolder.ApplicationData) + @"\canopy\"
+let mutable failScreenshotFileName = fun (test : types.Test) (suite: types.suite) -> DateTime.Now.ToString("MMM-d_HH-mm-ss-fff")
 
-let mutable chromeDir = @"c:\"
-let mutable ieDir = @"c:\"
-let mutable phantomJSDir = @"c:\"
+let mutable chromeDir = folderByOSType
+let mutable ieDir = folderByOSType
+let mutable phantomJSDir = folderByOSType
+let mutable safariDir = folderByOSType
 let mutable elementTimeout = 10.0
 let mutable compareTimeout = 10.0
 let mutable pageTimeout = 10.0
@@ -22,3 +32,10 @@ let mutable configuredFinders = finders.defaultFinders
 let mutable writeToSelectWithOptionValue = true
 let mutable optimizeBySkippingIFrameCheck = false
 let mutable optimizeByDisablingCoverageReport = false
+let mutable optimizeByDisablingClearBeforeWrite = false
+let mutable showInfoDiv = true
+let mutable failureScreenshotsEnabled = true
+let mutable skipAllTestsOnFailure = false
+let mutable skipRemainingTestsInContextOnFailure = false
+let mutable skipNextTest = false
+let mutable failureMessagesThatShoulBeTreatedAsSkip : string list = []

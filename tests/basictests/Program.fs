@@ -3,10 +3,7 @@ module main
 open System
 open OpenQA.Selenium
 open canopy
-open runner
-open configuration
 open reporters
-open types
 
 start chrome
 let mainBrowser = browser
@@ -15,8 +12,20 @@ compareTimeout <- 3.0
 pageTimeout <- 3.0
 runFailedContextsFirst <- true
 reporter <- new LiveHtmlReporter(Chrome, configuration.chromeDir) :> IReporter 
+reporter.setEnvironment "My Machine"
+configuration.failureMessagesThatShoulBeTreatedAsSkip <- ["Skip me when I fail"]
+
+configuration.failScreenshotFileName <- 
+  (fun test suite -> 
+      let suiteContext = if suite.Context = null then "" else suite.Context
+      let cleanName = if test.Description = null then "" else test.Description.Replace(' ','_') //etc
+      let stamp = DateTime.Now.ToString("MMM-d_HH-mm-ss")
+      sprintf "%s_%s_%s" suiteContext cleanName stamp)
 
 failFast := true
+
+file1.all()
+file2.all()
 
 context "context1"
 once (fun _ -> Console.WriteLine "once")
@@ -27,6 +36,14 @@ lastly (fun _ -> Console.WriteLine "lastly")
 let testpage = "http://lefthandedgoat.github.io/canopy/testpages/" 
 
 "intentionally skipped shows blue in LiveHtmlReport" &&! skipped
+
+"Should skip even though it fails" &&& fun _ ->    
+    url testpage
+    failwith "Skip me when I fail"
+
+"Apostrophes don't break anything" &&& fun _ ->    
+    url testpage
+    count "I've got an apostrophe" 1
 
 "#welcome should have Welcome" &&& fun _ ->    
     url testpage
@@ -395,6 +412,13 @@ context "other tests"
     "#lastName" << "Grey"
     "#lastName" =~ "Gr[ae]y"
 
+"regex not test" &&& fun _ ->
+    url testpage
+    "#lastName" << "Gray"
+    "#lastName" !=~ "Gr[o]y"
+    "#lastName" << "Grey"
+    "#lastName" !=~ "Gr[o]y"
+
 "regex one of many test" &&& fun _ ->
     url testpage
     "#colors li" *~ "gr[ea]y"
@@ -426,12 +450,28 @@ context "other tests"
     !^ testpage
     "#states" << "95"
     "#states" == "Palmyra Atoll"
+
+"writting (selecting) to drop down test, value list, opt group" &&& fun _ ->
+    !^ testpage
+    "#test-select" << "Audi"
+    "#test-select" == "Audi"
     
 "double clicking" &&& fun _ ->
     !^ "http://lefthandedgoat.github.io/canopy/testpages/doubleClick"
     "#clicked" == "Not Clicked"
     doubleClick "#double_click"
     "#clicked" == "Clicked"
+
+"ctrl clicking" &&& fun _ ->
+    !^ "http://lefthandedgoat.github.io/canopy/testpages/ctrlClick"
+    
+    ctrlClick "One"
+    ctrlClick "2"
+    ctrlClick "Three"
+
+    selected "1"
+    selected "Two"
+    selected "3"
 
 "displayed test" &&& fun _ ->
     !^ "http://lefthandedgoat.github.io/canopy/testpages/displayed"
@@ -467,7 +507,7 @@ context "other tests"
 
 "count test via sizzle" &&& fun _ ->
     !^ testpage
-    count "option:selected" 2
+    count "option:selected" 3
 
 "#firstName should have John (using == infix operator), iframe1" &&& fun _ ->
     url "http://lefthandedgoat.github.io/canopy/testpages/iframe1"
@@ -690,6 +730,19 @@ context "Navigate tests"
 context "todo tests"
 
 "write a test that tests the whole internet!" &&& todo
+
+let createTest k =
+    let testName = sprintf "Testing addition performance %i" k
+    testName &&& todo
+
+let createTestSuite contextName n =
+    context contextName
+
+    [1..n] |> Seq.iter createTest
+
+start chrome
+
+createTestSuite "Add test performance" 1000
 
 run ()
         

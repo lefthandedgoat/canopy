@@ -1,20 +1,16 @@
 ﻿
 Microsoft Visual Studio Solution File, Format Version 12.00
 # Visual Studio 2013
-VisualStudioVersion = 12.0.30324.0
+VisualStudioVersion = 12.0.31101.0
 MinimumVisualStudioVersion = 10.0.40219.1
-Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = ".nuget", ".nuget", "{51B54B14-A7C3-450B-A722-159E9CD3010F}"
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = ".paket", ".paket", "{C6C8BF1E-28EC-41CD-B2A5-8321CE7DEB23}"
 	ProjectSection(SolutionItems) = preProject
-		.NuGet\NuGet.Config = .NuGet\NuGet.Config
-		.NuGet\NuGet.exe = .NuGet\NuGet.exe
-		.NuGet\NuGet.targets = .NuGet\NuGet.targets
+		paket.dependencies = paket.dependencies
 	EndProjectSection
 EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "tests", "tests", "{0391DED2-DF91-4A61-959E-EEA250356DA0}"
 EndProject
 Project("{F2A71F9B-5D33-465A-A702-920D77279786}") = "basictests", "tests\basictests\basictests.fsproj", "{D4610DE2-BFD2-491D-AD72-BBBB206E11C7}"
-EndProject
-Project("{F2A71F9B-5D33-465A-A702-920D77279786}") = "documentationtests", "tests\documentationtests\documentationtests.fsproj", "{A39AE288-5534-43ED-ADFD-2E401E2C25BA}"
 EndProject
 Project("{F2A71F9B-5D33-465A-A702-920D77279786}") = "canopy", "src\canopy\canopy.fsproj", "{63135CF6-70A9-4382-851D-4B679EE0CBF8}"
 EndProject
@@ -35,6 +31,7 @@ Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "content", "content", "{A94D
 	ProjectSection(SolutionItems) = preProject
 		docs\content\actions.fsx = docs\content\actions.fsx
 		docs\content\assertions.fsx = docs\content\assertions.fsx
+		docs\content\configuration.fsx = docs\content\configuration.fsx
 		docs\content\index.fsx = docs\content\index.fsx
 		docs\content\reporting.fsx = docs\content\reporting.fsx
 		docs\content\testing.fsx = docs\content\testing.fsx
@@ -67,16 +64,6 @@ Global
 		{D4610DE2-BFD2-491D-AD72-BBBB206E11C7}.Release|Mixed Platforms.Build.0 = Release|x86
 		{D4610DE2-BFD2-491D-AD72-BBBB206E11C7}.Release|x86.ActiveCfg = Release|x86
 		{D4610DE2-BFD2-491D-AD72-BBBB206E11C7}.Release|x86.Build.0 = Release|x86
-		{A39AE288-5534-43ED-ADFD-2E401E2C25BA}.Debug|Any CPU.ActiveCfg = Debug|x86
-		{A39AE288-5534-43ED-ADFD-2E401E2C25BA}.Debug|Mixed Platforms.ActiveCfg = Debug|x86
-		{A39AE288-5534-43ED-ADFD-2E401E2C25BA}.Debug|Mixed Platforms.Build.0 = Debug|x86
-		{A39AE288-5534-43ED-ADFD-2E401E2C25BA}.Debug|x86.ActiveCfg = Debug|x86
-		{A39AE288-5534-43ED-ADFD-2E401E2C25BA}.Debug|x86.Build.0 = Debug|x86
-		{A39AE288-5534-43ED-ADFD-2E401E2C25BA}.Release|Any CPU.ActiveCfg = Release|x86
-		{A39AE288-5534-43ED-ADFD-2E401E2C25BA}.Release|Mixed Platforms.ActiveCfg = Release|x86
-		{A39AE288-5534-43ED-ADFD-2E401E2C25BA}.Release|Mixed Platforms.Build.0 = Release|x86
-		{A39AE288-5534-43ED-ADFD-2E401E2C25BA}.Release|x86.ActiveCfg = Release|x86
-		{A39AE288-5534-43ED-ADFD-2E401E2C25BA}.Release|x86.Build.0 = Release|x86
 		{63135CF6-70A9-4382-851D-4B679EE0CBF8}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
 		{63135CF6-70A9-4382-851D-4B679EE0CBF8}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{63135CF6-70A9-4382-851D-4B679EE0CBF8}.Debug|Mixed Platforms.ActiveCfg = Debug|Any CPU
@@ -103,7 +90,6 @@ Global
 	EndGlobalSection
 	GlobalSection(NestedProjects) = preSolution
 		{D4610DE2-BFD2-491D-AD72-BBBB206E11C7} = {0391DED2-DF91-4A61-959E-EEA250356DA0}
-		{A39AE288-5534-43ED-ADFD-2E401E2C25BA} = {0391DED2-DF91-4A61-959E-EEA250356DA0}
 		{A94D736A-68EB-4D7B-A761-DF6B1EEAE24C} = {12E9007C-8265-43D8-86B0-C9182921A9E5}
 		{3C3590B5-4CC8-49D1-A2CE-4FDFA73ADB53} = {12E9007C-8265-43D8-86B0-C9182921A9E5}
 	EndGlobalSection

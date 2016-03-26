@@ -1,8 +1,11 @@
+[<AutoOpen>]
 module canopy.types
 
 open System
 open OpenQA.Selenium
 open Microsoft.FSharp.Reflection
+
+let mutable (browser : IWebDriver) = null
 
 type CanopyException(message) = inherit Exception(message)
 type CanopyReadOnlyException(message) = inherit CanopyException(message)
@@ -26,6 +29,7 @@ type CanopyNotStringOrElementException(message) = inherit CanopyException(messag
 type CanopyOnException(message) = inherit CanopyException(message)
 type CanopyCheckFailedException(message) = inherit CanopyException(message)
 type CanopyUncheckFailedException(message) = inherit CanopyException(message)
+type CanopyReadException(message) = inherit CanopyException(message)
 
 //directions
 type direction =
@@ -39,6 +43,7 @@ type BrowserStartMode =
     | FirefoxWithProfile of Firefox.FirefoxProfile
     | FirefoxWithPath of string
     | FirefoxWithUserAgent of string
+    | FirefoxWithPathAndTimeSpan of string * TimeSpan
     | IE
     | IEWithOptions of IE.InternetExplorerOptions
     | IEWithOptionsAndTimeSpan of IE.InternetExplorerOptions * TimeSpan
@@ -46,6 +51,7 @@ type BrowserStartMode =
     | ChromeWithOptions of Chrome.ChromeOptions
     | ChromeWithOptionsAndTimeSpan of Chrome.ChromeOptions * TimeSpan
     | ChromeWithUserAgent of string
+    | Safari    
     | PhantomJS
     | PhantomJSProxyNone
     | Remote of string * ICapabilities
@@ -62,6 +68,7 @@ type Test (description: string, func : (unit -> unit), number : int) =
 
 type suite () = class
     member val Context : string = null with get, set
+    member val TotalTestsCount : int = 0 with get, set
     member val Once = fun () -> () with get, set
     member val Before = fun () -> () with get, set
     member val After = fun () -> () with get, set
@@ -69,5 +76,14 @@ type suite () = class
     member val Tests : Test list = [] with get, set
     member val Wips : Test list = [] with get, set
     member val Manys : Test list = [] with get, set
+    member val Always : Test list = [] with get, set
     member val IsParallel = false with get, set
 end
+
+type Result =
+    | Pass
+    | Fail of Exception
+    | Skip
+    | Todo
+    | FailFast
+    | Failed

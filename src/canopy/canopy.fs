@@ -3,9 +3,7 @@ module canopy.core
 
 open OpenQA.Selenium.Firefox
 open OpenQA.Selenium
-open OpenQA.Selenium.Support.UI
 open OpenQA.Selenium.Interactions
-open SizSelCsZzz
 open Microsoft.FSharp.Core.Printf
 open System.IO
 open System
@@ -17,7 +15,6 @@ open finders
 open System.Drawing
 open System.Drawing.Imaging
 
-let mutable (browser : IWebDriver) = null
 let mutable (failureMessage : string) = null
 let mutable wipTest = false
 let mutable searchedFor : (string * string) list = []
@@ -27,6 +24,7 @@ let aurora = FirefoxWithPath(@"C:\Program Files (x86)\Aurora\firefox.exe")
 let ie = IE
 let chrome = Chrome
 let phantomJS = PhantomJS
+let safari = Safari
 let phantomJSProxyNone = PhantomJSProxyNone
   
 let mutable browsers = []
@@ -40,14 +38,18 @@ let private saveScreenshot directory filename pic =
     IO.File.WriteAllBytes(Path.Combine(directory,filename + ".png"), pic)
 
 let private takeScreenShotIfAlertUp () =
-    let bitmap = new Bitmap(width= System.Windows.Forms.Screen.PrimaryScreen.Bounds.Width, height= System.Windows.Forms.Screen.PrimaryScreen.Bounds.Height, format=PixelFormat.Format32bppArgb); 
-    use graphics = Graphics.FromImage(bitmap)
-    graphics.CopyFromScreen(System.Windows.Forms.Screen.PrimaryScreen.Bounds.X, System.Windows.Forms.Screen.PrimaryScreen.Bounds.Y, 0, 0, System.Windows.Forms.Screen.PrimaryScreen.Bounds.Size, CopyPixelOperation.SourceCopy);    
-    use stream = new MemoryStream()
-    bitmap.Save(stream, ImageFormat.Png)
-    stream.Close()
-    stream.ToArray()
-
+    try
+        let bitmap = new Bitmap(width= System.Windows.Forms.Screen.PrimaryScreen.Bounds.Width, height= System.Windows.Forms.Screen.PrimaryScreen.Bounds.Height, format=PixelFormat.Format32bppArgb); 
+        use graphics = Graphics.FromImage(bitmap)
+        graphics.CopyFromScreen(System.Windows.Forms.Screen.PrimaryScreen.Bounds.X, System.Windows.Forms.Screen.PrimaryScreen.Bounds.Y, 0, 0, System.Windows.Forms.Screen.PrimaryScreen.Bounds.Size, CopyPixelOperation.SourceCopy);    
+        use stream = new MemoryStream()
+        bitmap.Save(stream, ImageFormat.Png)
+        stream.Close()
+        stream.ToArray()
+    with ex -> 
+        printfn "Sorry, unable to take a screenshot. An alert was up, and the backup plan failed!
+        Exception: %s" ex.Message
+        Array.empty<byte>
 
 let private takeScreenshot directory filename =    
     try
@@ -80,28 +82,17 @@ let sleep seconds =
 
 let puts text = 
     reporter.write text
-    let escapedText = System.Web.HttpUtility.JavaScriptStringEncode(text)
-    let info = "
-        var infoDiv = document.getElementById('canopy_info_div'); 
-        if(!infoDiv) { infoDiv = document.createElement('div'); } 
-        infoDiv.id = 'canopy_info_div'; 
-        infoDiv.setAttribute('style','position: absolute; border: 1px solid black; bottom: 0px; right: 0px; margin: 3px; padding: 3px; background-color: white; z-index: 99999; font-size: 20px; font-family: monospace; font-weight: bold;'); 
-        document.getElementsByTagName('body')[0].appendChild(infoDiv); 
-        infoDiv.innerHTML = 'locating: " + escapedText + "';"
-    swallowedJs info
-
-let private wait timeout f =
-    let wait = new WebDriverWait(browser, TimeSpan.FromSeconds(timeout))
-    wait.Until(fun _ -> (
-                            try
-                                (f ()) = true
-                            with
-                            | :? CanopyException as ce -> raise(ce)
-                            | _ -> false
-                        )
-                ) |> ignore        
-    ()
-
+    if (showInfoDiv) then
+        let escapedText = System.Web.HttpUtility.JavaScriptStringEncode(text)
+        let info = "
+            var infoDiv = document.getElementById('canopy_info_div'); 
+            if(!infoDiv) { infoDiv = document.createElement('div'); } 
+            infoDiv.id = 'canopy_info_div'; 
+            infoDiv.setAttribute('style','position: absolute; border: 1px solid black; bottom: 0px; right: 0px; margin: 3px; padding: 3px; background-color: white; z-index: 99999; font-size: 20px; font-family: monospace; font-weight: bold;'); 
+            document.getElementsByTagName('body')[0].appendChild(infoDiv); 
+            infoDiv.innerHTML = 'locating: " + escapedText + "';"
+        swallowedJs info
+        
 let private colorizeAndSleep cssSelector =
     puts cssSelector
     swallowedJs <| sprintf "document.querySelector('%s').style.border = 'thick solid #FFF467';" cssSelector
@@ -181,7 +172,7 @@ let suggestOtherSelectors cssSelector =
 let describe text =
     puts text
 
-let waitFor2 message (f : unit -> bool) =
+let waitFor2 message f =
     try        
         wait compareTimeout f
     with
@@ -225,16 +216,16 @@ let rec private findElements cssSelector (searchContext : ISearchContext) : IWeb
 
 let private findByFunction cssSelector timeout waitFunc searchContext reliable =
     if wipTest then colorizeAndSleep cssSelector
-    let wait = new WebDriverWait(browser, TimeSpan.FromSeconds(elementTimeout))
+    
     try
         if reliable then
             let elements = ref []
-            wait.Until(fun _ -> 
+            wait elementTimeout (fun _ -> 
                 elements := waitFunc cssSelector searchContext
-                not <| List.isEmpty !elements) |> ignore
+                not <| List.isEmpty !elements)
             !elements
         else
-            wait.Until(fun _ -> waitFunc cssSelector searchContext)
+            waitResults elementTimeout (fun _ -> waitFunc cssSelector searchContext)
     with
         | :? WebDriverTimeoutException ->   
             suggestOtherSelectors cssSelector
@@ -296,9 +287,9 @@ let last cssSelector = (List.rev (elements cssSelector)).Head
 let private writeToSelect (elem:IWebElement) (text:string) =
     let options =        
         if writeToSelectWithOptionValue then 
-            unreliableElementsWithin (sprintf """option[text()="%s"] | option[@value="%s"]""" text text) elem            
+            unreliableElementsWithin (sprintf """//option[text()="%s"] | //option[@value="%s"]""" text text) elem            
         else //to preserve previous behaviour
-            unreliableElementsWithin (sprintf """option[text()="%s"]""" text) elem
+            unreliableElementsWithin (sprintf """//option[text()="%s"]""" text) elem
     
     match options with
     | [] -> raise (CanopyOptionNotFoundException(sprintf "element %s does not contain value %s" (elem.ToString()) text))
@@ -311,7 +302,7 @@ let private writeToElement (e : IWebElement) (text:string) =
         let readonly = e.GetAttribute("readonly")
         if readonly = "true" then
             raise (CanopyReadOnlyException(sprintf "element %s is marked as read only, you can not write to read only elements" (e.ToString())))
-        try e.Clear() with ex -> ex |> ignore
+        if not optimizeByDisablingClearBeforeWrite then try e.Clear() with ex -> ex |> ignore
         e.SendKeys(text)
 
 let ( << ) item text = 
@@ -348,10 +339,23 @@ let private textOf (element : IWebElement) =
     | _ ->
         element.Text    
 
+let private safeRead item =
+    let readvalue = ref ""
+    try
+        wait elementTimeout (fun _ ->        
+          readvalue :=
+            match box item with
+            | :? IWebElement as elem -> textOf elem
+            | :? string as cssSelector -> element cssSelector |> textOf
+          true)
+        !readvalue
+    with
+        | :? WebDriverTimeoutException -> raise (CanopyReadException("was unable to read item for unkown reason"))
+        
 let read item = 
     match box item with
-    | :? IWebElement as elem -> textOf elem
-    | :? string as cssSelector -> element cssSelector |> textOf
+    | :? IWebElement as elem -> safeRead elem
+    | :? string as cssSelector -> safeRead cssSelector
     | _ -> raise (CanopyNotStringOrElementException(sprintf "Can't read %O because it is not a string or element" item))
         
 let clear item =
@@ -391,6 +395,7 @@ let down = Keys.Down
 let up = Keys.Up
 let left = Keys.Left
 let right = Keys.Right
+let esc = Keys.Escape
 
 let press key = 
     let elem = ((js "return document.activeElement;") :?> IWebElement)
@@ -486,6 +491,13 @@ let ( =~ ) cssSelector pattern =
         | :? CanopyElementNotFoundException as ex -> raise (CanopyEqualityFailedException(sprintf "%s%sregex equality check failed.  expected: %s, got:" ex.Message Environment.NewLine pattern))
         | :? WebDriverTimeoutException -> raise (CanopyEqualityFailedException(sprintf "regex equality check failed.  expected: %s, got: %s" pattern (read cssSelector)))
 
+let ( !=~ ) cssSelector pattern =
+    try
+        wait compareTimeout (fun _ -> regexMatch pattern (read cssSelector) |> not)
+    with
+        | :? CanopyElementNotFoundException as ex -> raise (CanopyEqualityFailedException(sprintf "%s%sregex not equality check failed.  expected NOT: %s, got:" ex.Message Environment.NewLine pattern))
+        | :? WebDriverTimeoutException -> raise (CanopyEqualityFailedException(sprintf "regex not equality check failed.  expected NOT: %s, got: %s" pattern (read cssSelector)))
+
 let ( *~ ) cssSelector pattern =
     try        
         wait compareTimeout (fun _ -> ( cssSelector |> elements |> Seq.exists(fun element -> regexMatch pattern (textOf element))))
@@ -580,6 +592,16 @@ let doubleClick item =
                                         true))
     | _ -> raise (CanopyNotStringOrElementException(sprintf "Can't doubleClick %O because it is not a string or webelement" item))
 
+let ctrlClick item =     
+        let actions = Actions(browser)
+
+        match box item with
+        | :? IWebElement as elem -> actions.KeyDown(Keys.Control).Click(elem).KeyUp(Keys.Control).Perform() |> ignore
+        | :? string as cssSelector -> 
+        wait elementTimeout (fun _ -> ( let elem = element cssSelector
+                                        actions.KeyDown(Keys.Control).Click(elem).KeyUp(Keys.Control).Perform()
+                                        true))
+        | _ -> raise (CanopyNotStringOrElementException(sprintf "Can't ctrlClick %O because it is not a string or webelement" item))
 
 let check item = 
     try
@@ -660,6 +682,7 @@ let start b =
     //also download IEDriverServer and place in c:\ or configure with ieDir
     //firefox just works
     //for phantomjs download it and put in c:\ or configure with phantomJSDir
+    //for Safari download it and put in c:\ or configure with safariDir
        
     browser <-        
         match b with
@@ -676,8 +699,10 @@ let start b =
         | ChromeWithOptionsAndTimeSpan(options, timeSpan) -> new Chrome.ChromeDriver(chromeDir, options, timeSpan) :> IWebDriver
         | Firefox -> new FirefoxDriver() :> IWebDriver
         | FirefoxWithProfile profile -> new FirefoxDriver(profile) :> IWebDriver
-        | FirefoxWithPath path -> new FirefoxDriver(Firefox.FirefoxBinary(path), Firefox.FirefoxProfile()) :> IWebDriver
+        | FirefoxWithPath path -> new FirefoxDriver(new Firefox.FirefoxBinary(path), Firefox.FirefoxProfile()) :> IWebDriver
         | FirefoxWithUserAgent userAgent -> firefoxWithUserAgent userAgent
+        | FirefoxWithPathAndTimeSpan(path, timespan) -> new FirefoxDriver(new Firefox.FirefoxBinary(path), Firefox.FirefoxProfile(), timespan) :> IWebDriver
+        | Safari ->new Safari.SafariDriver() :> IWebDriver
         | PhantomJS -> 
             autoPinBrowserRightOnLaunch <- false
             new PhantomJS.PhantomJSDriver(phantomJSDir) :> IWebDriver
@@ -694,8 +719,14 @@ let start b =
 let switchTo b = browser <- b
 
 let switchToTab number =
-    let tabs = browser.WindowHandles;
-    browser.SwitchTo().Window(tabs.[(number - 1)]) |> ignore
+    wait pageTimeout (fun _ ->
+        let number = number - 1
+        let tabs = browser.WindowHandles;
+        if tabs |> Seq.length >= number then
+            browser.SwitchTo().Window(tabs.[number]) |> ignore
+            true
+        else
+            false)
 
 let closeTab number =
     switchToTab number
@@ -801,9 +832,9 @@ let coverage (url : 'a) =
     on nonMutableInnerUrl
     selectors |> List.iter(fun cssSelector -> swallowedJs (script cssSelector))
     let p = Path.Combine(Environment.GetFolderPath(Environment.SpecialFolder.ApplicationData), @"canopy\")
-    let f = DateTime.Now.ToString("MMM-d_HH-mm-ss-fff")
+    let f = sprintf "Coverage_%s" (DateTime.Now.ToString("MMM-d_HH-mm-ss-fff"))
     let ss = screenshot p f
-    reporter.coverage nonMutableInnerUrl ss
+    reporter.coverage nonMutableInnerUrl ss nonMutableInnerUrl
 
 let addFinder finder =
     let currentFinders = configuredFinders
@@ -813,7 +844,7 @@ let addFinder finder =
     
 //hints    
 let private addHintFinder hints finder = hints |> Seq.append (seq { yield finder })
-let private addSelector finder hintType selector =
+let addSelector finder hintType selector =
     //gaurd against adding same hintType multipe times and increase size of finder seq
     if not <| (hints.ContainsKey(selector) && addedHints.[selector] |> List.exists (fun hint -> hint = hintType)) then
         if hints.ContainsKey(selector) then 

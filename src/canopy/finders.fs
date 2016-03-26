@@ -1,18 +1,14 @@
 ﻿module canopy.finders
 
 open OpenQA.Selenium
-open SizSelCsZzz
+open System.Collections.ObjectModel
+open System.Collections.Generic
 
 //have to use the ReadonlyCollection<IWebElement> because thats what selenium uses and it wont cast to seq<IWebElement> or something, and type inference isnt playing nice
 //basically a hack because I dont know a better way
-let findByCss (cssSelector : string) (f : (By -> System.Collections.ObjectModel.ReadOnlyCollection<IWebElement>)) =
+let findByCss (cssSelector : string) (f : (By -> ReadOnlyCollection<IWebElement>)) =
     try
         f(By.CssSelector(cssSelector)) |> List.ofSeq
-    with | ex -> []
-    
-let findByJQuery cssSelector f =
-    try
-        f(ByJQuery.CssSelector(cssSelector)) |> List.ofSeq
     with | ex -> []
 
 let findByXpath xpath f =
@@ -33,7 +29,7 @@ let findByLabel locator f =
             | head :: tail when isField head-> [head]
             | _ -> []
     try
-        let labels = f(By.XPath(sprintf ".//label[text() = '%s']" locator))
+        let labels = f(By.XPath(sprintf """.//label[text() = "%s"]""" locator))
         if (Seq.isEmpty labels) then
             []
         else
@@ -45,13 +41,36 @@ let findByLabel locator f =
 
 let findByText text f =
     try
-        f(By.XPath(sprintf ".//*[text() = '%s']" text)) |> List.ofSeq
+        f(By.XPath(sprintf """.//*[text() = "%s"]""" text)) |> List.ofSeq
     with | _ -> []
 
 let findByValue value f =
     try
-        findByCss (sprintf "*[value='%s']" value) f |> List.ofSeq        
+        findByCss (sprintf """*[value="%s"]""" value) f |> List.ofSeq        
     with | _ -> []
+
+//Inspired by https://github.com/RaYell/selenium-webdriver-extensions
+let private loadJQuery () = 
+    let jsBrowser = browser :?> IJavaScriptExecutor
+    let jqueryExistsScript = """return (typeof window.jQuery) === 'function';"""
+    let exists = jsBrowser.ExecuteScript(jqueryExistsScript) :?> bool
+    if not exists then
+        let load = """
+            var jq = document.createElement('script');
+            jq.src = '//code.jquery.com/jquery-2.2.1.min.js';
+            document.getElementsByTagName('head')[0].appendChild(jq);
+         """
+        jsBrowser.ExecuteScript(load) |> ignore
+        wait 2.0 (fun _ -> jsBrowser.ExecuteScript(jqueryExistsScript) :?> bool)
+
+//total cheese but instead of making a By type, we will just do 'FindElements' style because
+//thats the only way its currently used. Cry
+let findByJQuery cssSelector _ =
+    try
+        loadJQuery()
+        let script = sprintf """return jQuery("%s").get();""" cssSelector
+        (browser :?> IJavaScriptExecutor).ExecuteScript(script) :?> ReadOnlyCollection<IWebElement> |> List.ofSeq
+    with | ex -> []
 
 //you can use this as an example to how to extend canopy by creating your own set of finders, tweaking the current collection, or adding/removing
 let mutable defaultFinders = 
@@ -66,5 +85,5 @@ let mutable defaultFinders =
         }
     )
 
-let addedHints = System.Collections.Generic.Dictionary<string, string list>()
-let hints = new System.Collections.Generic.Dictionary<string, seq<(string -> (By -> System.Collections.ObjectModel.ReadOnlyCollection<IWebElement>) -> IWebElement list)>>()
+let addedHints = Dictionary<string, string list>()
+let hints = new Dictionary<string, seq<(string -> (By -> ReadOnlyCollection<IWebElement>) -> IWebElement list)>>()

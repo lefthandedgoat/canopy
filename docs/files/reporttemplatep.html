@@ -125,60 +125,68 @@
 			$("#skipped").text($(".results .info").length);
 		};
 		
-        var addToContext = function (context, testName) {
-			var ctx = $('#contexts tr[data-context="' + context + '"]');
-			ctx.next('tr').find('table').append('<tr><td><div class="test"><span class="mini well clear">' + testName + '</span><span class="pull-right mini well hidden test-time"></span></div></td></tr>');	
-		};
+		var getContext = function (context) { return $('#contexts tr[data-context="' + context + '"]'); };
 		
-		var updateTestInContext = function (context, passFailSkip, image) {
-			var ctx = $('#contexts tr[data-context="' + context + '"]');
+		var getTest = function (ctx, testName) { return ctx.next('tr').find('table').find('[data-name="' + testName + '"]'); };
+		
+		var getTestRow = function (ctx, testName) { return getTest(ctx, testName).closest("tr"); };
+		
+        var addToContext = function (context, testName) {
+			var ctx = getContext(context);
+			ctx.next('tr').find('table').append('<tr><td><div class="test" data-name="' + testName + '"><span class="mini well clear">' + testName + '</span><span class="pull-right mini well hidden test-time"></span></div></td></tr>');	
+		};
+				
+		var updateTestInContext = function (context, testName, passFailSkip, image) {
+			var ctx = getContext(context);
+			var testRow = getTestRow(ctx, testName);
+			
 			if (passFailSkip === "Pass") {
-				ctx.next('tr').find('table').find('tr').last().addClass('success');
+				testRow.addClass('success');
 				if (ctx.hasClass("error") === false) {
 					ctx.removeClass("warning").removeClass("info").addClass("success");
 				}
 			}
 			if (passFailSkip === "Fail") {
-				ctx.next('tr').find('table').find('tr').last().addClass('error');
+				testRow.addClass('error');
 				ctx.removeClass("success").removeClass("warning").removeClass("info").addClass("error");
 			}
 			if (passFailSkip === "Todo") {
-				ctx.next('tr').find('table').find('tr').last().addClass('warning');
+				testRow.addClass('warning');
 				if (ctx.hasClass("error") === false && ctx.hasClass("info") === false && ctx.hasClass("success") === false){
 					ctx.addClass("warning");
 				}
 			}
 			if (passFailSkip === "Skip") {
-				ctx.next('tr').find('table').find('tr').last().addClass('info');
+				testRow.addClass('info');
 				if (ctx.hasClass("error") === false && ctx.hasClass("warning") === false && ctx.hasClass("success") === false){
 					ctx.addClass("info");
 				}
 			}
 
 			if(image !== "") {
-				ctx.next('tr').find('table').find('tr').last().find('td').last().append('<div><img alt="" src="data:image/jpeg;base64,' + image + '" /></div>')
+				testRow.find('td').last().append('<div><img alt="" src="data:image/jpeg;base64,' + image + '" /></div>')
 			}
 			
 			recalculateTotals();
 		};
 
-		var addUrlToTest = function (context, url) {
-			var ctx = $('#contexts tr[data-context="' + context + '"]');
-			ctx.next('tr').find('table').last('tr').find('.test').last().after('<div class="url"><pre>' + url + '</pre></div>');
+		var addUrlToTest = function (context, testName, url) {
+			var ctx = getContext(context);
+			getTest(ctx, testName).after('<div class="url"><pre>' + url + '</pre></div>');
 		};
 		
-		var addStackToTest = function (context, stack) {
-			var ctx = $('#contexts tr[data-context="' + context + '"]');
-			ctx.next('tr').find('table').last('tr').find('.test').last().after('<div class="stack"><pre>' + stack + '</pre></div>');
+		var addStackToTest = function (context, testName, stack) {
+			var ctx = getContext(context);
+			getTest(ctx, testName).after('<div class="stack"><pre>' + stack + '</pre></div>');
 		};
 		
-		var addTimeToTest = function (context, time) {
-		    var ctx = $('#contexts tr[data-context="' + context + '"]');
-		    ctx.next('tr').find('table').last('tr').find('.test').last().find('.test-time').removeClass('hidden').text(time);
+		var addTimeToTest = function (context, testName, time) {
+		    var ctx = getContext(context);
+		    getTest(ctx, testName).find('.test-time').removeClass('hidden').text(time);
 		};
 
 		var addTimeToContext = function (context, time) {
-		    var ctx = $('#contexts tr[data-context="' + context + '"]');
+		    var ctx = getContext(context);
 		    ctx.find('.context-time').removeClass('hidden').text(time);
 		};
 
@@ -195,11 +203,21 @@
 		};
 
 		var addMessageToTest = function (context, message) {
-			var ctx = $('#contexts tr[data-context="' + context + '"]');
+			var ctx = getContext(context);
 			if(ctx.next('tr').find('table').last('tr').find('.test').last().siblings('pre').length === 0) {
 				ctx.next('tr').find('table').last('tr').find('.test').last().after('<pre><ol class="message"><li>' + message + '</li></ol></pre>');
 			} else {
 				ctx.next('tr').find('table').last('tr').find('.test').last().siblings('pre').find('ol').append('<li>' + message + '</li>');
+			}
+		};
+		
+		var addMessageToTestByName = function (context, testName, message) {
+			var ctx = getContext(context);
+			var test = getTest(ctx, testName);
+			if(test.siblings('pre').length === 0) {
+				test.after('<pre><ol class="message"><li>' + message + '</li></ol></pre>');
+			} else {
+				test.siblings('pre').find('ol').append('<li>' + message + '</li>');
 			}
 		};
 		
