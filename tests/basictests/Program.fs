@@ -451,6 +451,13 @@ context "other tests"
     "#states" << "95"
     "#states" == "Palmyra Atoll"
 
+"writting (selecting) to drop down test, two selects same value" &&& fun _ ->
+    !^ "http://lefthandedgoat.github.io/canopy/testpages/selectOptions"
+    "#test-select" << "g"
+    "#test-select2" << "b"
+    "#test-select" == "Green"
+    "#test-select2" == "Blue"
+
 "writting (selecting) to drop down test, value list, opt group" &&& fun _ ->
     !^ testpage
     "#test-select" << "Audi"
