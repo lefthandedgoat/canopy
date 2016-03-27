@@ -235,3 +235,6 @@ Fix issue with failing and using the after method [Issue #247](https://github.co
 
 #### 0.9.49 - March 24 2016
 Fix issue with encoding on the command line [Issue #252](https://github.com/lefthandedgoat/canopy/issue/252)
+
+#### 0.9.50 - March 27 2016
+Fix issue with multiple dropdowns with same values [Issue #253](https://github.com/lefthandedgoat/canopy/issue/253)
