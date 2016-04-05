@@ -238,3 +238,7 @@ Fix issue with encoding on the command line [Issue #252](https://github.com/left
 
 #### 0.9.50 - March 27 2016
 Fix issue with multiple dropdowns with same values [Issue #253](https://github.com/lefthandedgoat/canopy/issue/253)
+
+
+#### 0.9.51 - April 5 2016
+Add onPass and OnFail hooks, thanks Tony! [Issue #254](https://github.com/lefthandedgoat/canopy/issue/254)
