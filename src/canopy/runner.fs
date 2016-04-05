@@ -20,6 +20,8 @@ let once f = (last suites).Once <- f
 let before f = (last suites).Before <- f
 let after f = (last suites).After <- f
 let lastly f = (last suites).Lastly <- f
+let onPass f = (last suites).OnPass <- f
+let onFail f = (last suites).OnFail <- f
 let context c = 
     if (last suites).Context = null then 
         (last suites).Context <- c
@@ -60,10 +62,11 @@ let mutable contextFailed = false
 let mutable failedContexts : string list = []
 let mutable failed = false
 
-let pass id =    
+let pass id (suite : suite) =    
     passedCount <- passedCount + 1
     reporter.pass id
-
+    suite.OnPass()
+    
 let skip id =    
     skippedCount <- skippedCount + 1
     reporter.skip id
@@ -85,12 +88,14 @@ let fail (ex : Exception) (test : Test) (suite : suite) autoFail url =
                   let ss = screenshot configuration.failScreenshotPath f
                   reporter.fail ex test.Id ss url
                 else reporter.fail ex test.Id Array.empty<byte> url
+                suite.OnFail()
             with 
                 | failExc -> 
                     //Fail during error report (likely  OpenQA.Selenium.WebDriverException.WebDriverTimeoutException ). 
                     // Don't fail the runner itself, but report it.
                     reporter.write (sprintf "Error during fail reporting: %s" (failExc.ToString()))
                     reporter.fail ex test.Id Array.empty url
+                    suite.OnFail()
 
 let safelyGetUrl () = if browser = null then "no browser = no url" else browser.Url
 
@@ -115,7 +120,7 @@ let tryTest test suite func =
 
 let private processRunResult suite (test : Test) result = 
     match result with
-    | Pass -> pass test.Id
+    | Pass -> pass test.Id suite
     | Fail ex -> fail ex test suite false <| safelyGetUrl()
     | Skip -> skip test.Id
     | Todo -> reporter.todo test.Id
