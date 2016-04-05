@@ -97,7 +97,9 @@ let fail (ex : Exception) (test : Test) (suite : suite) autoFail url =
                     reporter.fail ex test.Id Array.empty url
                     suite.OnFail()
 
-let safelyGetUrl () = if browser = null then "no browser = no url" else browser.Url
+let safelyGetUrl () =
+  if browser = null then "no browser = no url"
+  else try browser.Url with _ -> "failed to get url"
 
 let failSuite (ex: Exception) (suite : suite) =    
     let reportFailedTest (ex: Exception) (test : Test) =
