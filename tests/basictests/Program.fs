@@ -247,6 +247,14 @@ test (fun _ ->
     count ".item" 5
     true === (element "span" |> someElementWithin ".specialItem").IsSome
 
+"element within works with jquery selectors" &&& fun _ ->
+    url "http://lefthandedgoat.github.io/canopy/testpages/elementWithin"
+    "spanned item 6" === (element ".specialItem:visible" |> parent |> elementWithin ".specialItem:visible").Text
+
+"element within works with jquery selectors and respects scope" &&& fun _ ->
+    url "http://lefthandedgoat.github.io/canopy/testpages/elementWithin"
+    false === (element ".specialItem:visible" |> someElementWithin ".specialItem:visible").IsSome
+
 "parent of firstItem and secondItem is list" &&& fun _ ->
     url "http://lefthandedgoat.github.io/canopy/testpages/parent"
     "list" === (element "#firstItem" |> parent).GetAttribute("id")

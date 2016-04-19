@@ -63,14 +63,29 @@ let private loadJQuery () =
         jsBrowser.ExecuteScript(load) |> ignore
         wait 2.0 (fun _ -> jsBrowser.ExecuteScript(jqueryExistsScript) :?> bool)
 
-//total cheese but instead of making a By type, we will just do 'FindElements' style because
-//thats the only way its currently used. Cry
-let findByJQuery cssSelector _ =
+type ByJQuery (selector) =
+    inherit OpenQA.Selenium.By()
+   
+    do 
+        let findElements (context : ISearchContext) =
+            loadJQuery()
+            if context :? IWebDriver
+            then
+                let script = sprintf """return jQuery("%s").get();""" selector
+                (browser :?> IJavaScriptExecutor).ExecuteScript(script) :?> ReadOnlyCollection<IWebElement>
+            else
+                let script = sprintf """return jQuery("%s", arguments[0]).get();""" selector
+                let wrapper = context :?> OpenQA.Selenium.Internal.IWrapsDriver
+                (wrapper.WrappedDriver :?> IJavaScriptExecutor).ExecuteScript(script, wrapper) :?> ReadOnlyCollection<IWebElement>
+    
+        base.FindElementsMethod <- fun context -> findElements context
+
+        base.FindElementMethod <- fun context -> findElements context |> Seq.head
+        
+let findByJQuery jquerySelector f =
     try
-        loadJQuery()
-        let script = sprintf """return jQuery("%s").get();""" cssSelector
-        (browser :?> IJavaScriptExecutor).ExecuteScript(script) :?> ReadOnlyCollection<IWebElement> |> List.ofSeq
-    with | ex -> []
+        f(ByJQuery(jquerySelector) :> By) |> List.ofSeq
+    with | _ -> []
 
 //you can use this as an example to how to extend canopy by creating your own set of finders, tweaking the current collection, or adding/removing
 let mutable defaultFinders = 
