@@ -178,7 +178,8 @@ type TeamCityReporter() =
 
         member this.setEnvironment env = ()
 
-type LiveHtmlReporter(browser : BrowserStartMode, driverPath : string) =
+type LiveHtmlReporter(browser : BrowserStartMode, driverPath : string, ?pinBrowserRight0: bool) =
+    let pinBrowserRight = defaultArg pinBrowserRight0 true    
     let consoleReporter : IReporter = new ConsoleReporter() :> IReporter
     
     let _browser =    
@@ -203,13 +204,17 @@ type LiveHtmlReporter(browser : BrowserStartMode, driverPath : string) =
         | PhantomJS | PhantomJSProxyNone -> raise(System.Exception("Sorry PhantomJS can't be used for LiveHtmlReporter"))
         | Remote(_,_) -> raise(System.Exception("Sorry Remote can't be used for LiveHtmlReporter"))
                 
-    let pin () =   
+    let pin () =           
         let h = System.Windows.Forms.Screen.PrimaryScreen.WorkingArea.Height;
         let w = System.Windows.Forms.Screen.PrimaryScreen.WorkingArea.Width;
         let maxWidth = w / 2    
         _browser.Manage().Window.Size <- new System.Drawing.Size(maxWidth,h);        
         _browser.Manage().Window.Position <- new System.Drawing.Point((maxWidth * 0),0);
-    do pin()
+    
+    let tryPin() = 
+        if pinBrowserRight then do pin()
+
+    do tryPin()
        
     let mutable context = System.String.Empty
     let mutable canQuit = false
