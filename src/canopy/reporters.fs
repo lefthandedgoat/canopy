@@ -1,6 +1,7 @@
 module canopy.reporters
 
 open System
+open System.Collections.Generic
 open OpenQA.Selenium
 open types
 
@@ -378,3 +379,93 @@ type LiveHtmlReporter(browser : BrowserStartMode, driverPath : string, ?pinBrows
 
         member this.setEnvironment env =
             environment <- env
+
+type XMLTestResult() =
+    [<DefaultValue>] val mutable Name : string
+    [<DefaultValue>] val mutable Result : string
+    
+let xmlTestResult name result =
+    let testResult = XMLTestResult()
+    testResult.Name <- name
+    testResult.Result <- result
+    testResult
+
+type XMLContext() =
+    [<DefaultValue>] val mutable Results : List<XMLTestResult> 
+    [<DefaultValue>] val mutable Name : string
+    
+let xmlContext name = 
+    let context = XMLContext()
+    context.Name <- name
+    context.Results <- List<XMLTestResult>()
+    context 
+        
+type XMLReport () =
+    [<DefaultValue>] val mutable Contexts : List<XMLContext>
+    
+let xmlReport () =
+    let report = XMLReport()
+    report.Contexts <- List<XMLContext>()
+    report
+
+type XMLReporter(filename : string, directory : string) =
+    let consoleReporter : IReporter = new ConsoleReporter() :> IReporter
+    let report = xmlReport()
+
+    let mutable currentContext : XMLContext = xmlContext "default"
+        
+    interface IReporter with               
+        member this.pass id = 
+            currentContext.Results.Add(xmlTestResult id "Pass")
+            consoleReporter.pass id
+    
+        member this.fail ex id ss url =
+            currentContext.Results.Add(xmlTestResult id "Fail")
+            consoleReporter.fail ex id ss url
+    
+        member this.describe d = 
+            consoleReporter.describe d          
+    
+        member this.contextStart c = 
+            currentContext <- xmlContext c
+            report.Contexts.Add currentContext
+            consoleReporter.contextStart c
+    
+        member this.contextEnd c = 
+            consoleReporter.contextEnd c
+    
+        member this.summary minutes seconds passed failed skipped = 
+            consoleReporter.summary minutes seconds passed failed skipped        
+    
+        member this.write w = 
+            consoleReporter.write w        
+    
+        member this.suggestSelectors selector suggestions = 
+            consoleReporter.suggestSelectors selector suggestions
+    
+        member this.testStart id = ()
+            
+        member this.testEnd id = ()
+            
+        member this.quit () = ()
+        
+        member this.suiteBegin () = ()
+
+        member this.suiteEnd () = 
+            if not <| System.IO.Directory.Exists(directory) 
+            then System.IO.Directory.CreateDirectory(directory) |> ignore
+            
+            let serializer = new System.Xml.Serialization.XmlSerializer(report.GetType());
+            use textWriter = new System.IO.StringWriter()
+            serializer.Serialize(textWriter, report);
+            let results = textWriter.ToString()
+            IO.File.WriteAllText(System.IO.Path.Combine(directory,filename + ".xml"), results)
+            
+        member this.coverage url ss _ = ()
+
+        member this.todo id = currentContext.Results.Add(xmlTestResult id "Todo")
+
+        member this.skip id = 
+            currentContext.Results.Add(xmlTestResult id "Skip")
+            
+        member this.setEnvironment env = ()

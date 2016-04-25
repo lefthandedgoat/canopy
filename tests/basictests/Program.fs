@@ -11,7 +11,8 @@ elementTimeout <- 3.0
 compareTimeout <- 3.0
 pageTimeout <- 3.0
 runFailedContextsFirst <- true
-reporter <- new LiveHtmlReporter(Chrome, configuration.chromeDir) :> IReporter 
+reporter <- new XMLReporter("canopyresults", @"c:\")
+//reporter <- new LiveHtmlReporter(Chrome, configuration.chromeDir) :> IReporter 
 reporter.setEnvironment "My Machine"
 configuration.failureMessagesThatShoulBeTreatedAsSkip <- ["Skip me when I fail"]
 
