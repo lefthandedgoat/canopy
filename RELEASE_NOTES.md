@@ -244,3 +244,6 @@ Add onPass and OnFail hooks, thanks Tony! [Issue #254](https://github.com/leftha
 
 #### 0.9.52 - April 5 2016
 make safelyGetUrl safery, thanks Tony! [Issue #255](https://github.com/lefthandedgoat/canopy/issue/255)
+
+#### 0.9.53 - April 19 2016
+Fixed a bug for jquery selectors where they wouldnt respect their context, thanks goncaloc1! [Issue #257](https://github.com/lefthandedgoat/canopy/issue/257)
