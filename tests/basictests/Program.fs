@@ -5,7 +5,12 @@ open OpenQA.Selenium
 open canopy
 open reporters
 
-start chrome
+printfn "Starting browser"
+let a = new Edge.EdgeDriver(edgeDir)
+autoPinBrowserRightOnLaunch <- false
+
+printfn "Started browser"
+//start edge
 let mainBrowser = browser
 elementTimeout <- 3.0
 compareTimeout <- 3.0
