@@ -22,7 +22,7 @@ let mutable searchedFor : (string * string) list = []
 let firefox = Firefox
 let aurora = FirefoxWithPath(@"C:\Program Files (x86)\Aurora\firefox.exe")
 let ie = IE
-let edge = Edge
+let edgeBETA = EdgeBETA
 let chrome = Chrome
 let phantomJS = PhantomJS
 let safari = Safari
@@ -690,7 +690,7 @@ let start b =
         | IE -> new IE.InternetExplorerDriver(ieDir) :> IWebDriver
         | IEWithOptions options -> new IE.InternetExplorerDriver(ieDir, options) :> IWebDriver
         | IEWithOptionsAndTimeSpan(options, timeSpan) -> new IE.InternetExplorerDriver(ieDir, options, timeSpan) :> IWebDriver
-        | Edge -> new Edge.EdgeDriver(edgeDir) :> IWebDriver
+        | EdgeBETA -> new Edge.EdgeDriver(edgeDir) :> IWebDriver
         | Chrome -> 
                 let options = OpenQA.Selenium.Chrome.ChromeOptions()
                 options.AddArgument("test-type") //https://code.google.com/p/chromedriver/issues/detail?id=799

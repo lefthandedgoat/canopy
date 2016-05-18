@@ -5,12 +5,7 @@ open OpenQA.Selenium
 open canopy
 open reporters
 
-printfn "Starting browser"
-let a = new Edge.EdgeDriver(edgeDir)
-autoPinBrowserRightOnLaunch <- false
-
-printfn "Started browser"
-//start edge
+start chrome
 let mainBrowser = browser
 elementTimeout <- 3.0
 compareTimeout <- 3.0
@@ -759,8 +754,6 @@ let createTestSuite contextName n =
     context contextName
 
     [1..n] |> Seq.iter createTest
-
-start chrome
 
 createTestSuite "Add test performance" 1000
 
