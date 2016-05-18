@@ -470,6 +470,10 @@ let contains (value1 : string) (value2 : string) =
     if (value2.Contains(value1) <> true) then
         raise (CanopyContainsFailedException(sprintf "contains check failed.  %s does not contain %s" value2 value1))
 
+let notContains (value1 : string) (value2 : string) =
+    if (value2.Contains(value1) = true) then
+        raise (CanopyNotContainsFailedException(sprintf "notContains check failed.  %s does contain %s" value2 value1))
+
 let count cssSelector count =
     try        
         wait compareTimeout (fun _ -> (unreliableElements cssSelector).Length = count)
