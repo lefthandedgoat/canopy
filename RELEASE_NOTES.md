@@ -247,3 +247,7 @@ make safelyGetUrl safery, thanks Tony! [Issue #255](https://github.com/lefthande
 
 #### 0.9.53 - April 19 2016
 Fixed a bug for jquery selectors where they wouldnt respect their context, thanks goncaloc1! [Issue #257](https://github.com/lefthandedgoat/canopy/issue/257)
+
+#### 0.9.54 - May 18 2016
+Added notContains [Issue #263](https://github.com/lefthandedgoat/canopy/issue/263)
+Added BETA support for Edge browser [Issue #264](https://github.com/lefthandedgoat/canopy/issue/264)
