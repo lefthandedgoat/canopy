@@ -47,6 +47,7 @@ type BrowserStartMode =
     | IE
     | IEWithOptions of IE.InternetExplorerOptions
     | IEWithOptionsAndTimeSpan of IE.InternetExplorerOptions * TimeSpan
+    | EdgeBETA
     | Chrome
     | ChromeWithOptions of Chrome.ChromeOptions
     | ChromeWithOptionsAndTimeSpan of Chrome.ChromeOptions * TimeSpan

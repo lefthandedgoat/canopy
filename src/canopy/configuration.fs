@@ -19,6 +19,8 @@ let mutable chromeDir = folderByOSType
 let mutable ieDir = folderByOSType
 let mutable phantomJSDir = folderByOSType
 let mutable safariDir = folderByOSType
+let mutable edgeDir = @"C:\Program Files (x86)\Microsoft Web Driver\"
+
 let mutable elementTimeout = 10.0
 let mutable compareTimeout = 10.0
 let mutable pageTimeout = 10.0

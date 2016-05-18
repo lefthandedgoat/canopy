@@ -755,8 +755,6 @@ let createTestSuite contextName n =
 
     [1..n] |> Seq.iter createTest
 
-start chrome
-
 createTestSuite "Add test performance" 1000
 
 run ()

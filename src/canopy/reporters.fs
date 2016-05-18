@@ -188,6 +188,7 @@ type LiveHtmlReporter(browser : BrowserStartMode, driverPath : string, ?pinBrows
         | IE -> new OpenQA.Selenium.IE.InternetExplorerDriver(driverPath) :> IWebDriver
         | IEWithOptions options ->new OpenQA.Selenium.IE.InternetExplorerDriver(driverPath, options) :> IWebDriver
         | IEWithOptionsAndTimeSpan(options, timeSpan) -> new OpenQA.Selenium.IE.InternetExplorerDriver(driverPath, options, timeSpan) :> IWebDriver
+        | EdgeBETA -> new OpenQA.Selenium.Edge.EdgeDriver(driverPath) :> IWebDriver
         | Chrome -> 
                 let options = OpenQA.Selenium.Chrome.ChromeOptions()
                 options.AddArgument("test-type") //https://code.google.com/p/chromedriver/issues/detail?id=799
