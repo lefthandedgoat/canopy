@@ -95,11 +95,7 @@ quit()
 
 ####7\. Watch some intro videos
 4 minute canopy starter kit
-<div style="overflow:hidden;height:540px;width:960px;">
-   <div id="youtube_canvas" style="height:540px;width:960px;"><iframe style="height:540px;width:960px;border:0;" frameborder="0" src="https://www.youtube.com/embed/kLNPl3EcsCI&amp;feature=youtu.be?hl=en&amp;autoplay=0&amp;cc_load_policy=0&amp;loop=0&amp;iv_load_policy=1&amp;fs=1&amp;showinfo=1"></iframe></div>
-   <a class="youtube-embed-code" href="http://www.tubeembed.com" id="get-youtube-data">tubeembed</a>
-   <style>#youtube_canvas img{max-width:none!important;background:none!important}</style>
-</div>
+<iframe width="960" height="540" src="https://www.youtube.com/embed/kLNPl3EcsCI" frameborder="0" allowfullscreen></iframe>
 
 5 minutes with Amir Rajan
 <iframe src="https://channel9.msdn.com/Events/NET-Fringe/NET-Fringe-2015/Web-UI-Testing-with-F-and-Canopy/player"
