@@ -1,5 +1,5 @@
 (*** hide ***)
-// This block of code is omitted in the generated HTML documentation. Use 
+// This block of code is omitted in the generated HTML documentation. Use
 // it to define helpers that you do not want to show in the documentation.
 #I "../../bin"
 
@@ -20,14 +20,14 @@ canopy - f#rictionless web testing
 
 canopy is a web testing framework with one goal in mind, make UI testing simple:
 
-* Solid stabilization layer built on top of Selenium. Death to "brittle, quirky, UI tests". 
+* Solid stabilization layer built on top of Selenium. Death to "brittle, quirky, UI tests".
 
-* Quick to learn. Even if you've never done UI Automation, and don't know F#. 
+* Quick to learn. Even if you've never done UI Automation, and don't know F#.
 
-* Clean, concise API. 
+* Clean, concise API.
 
 * MIT License.
-   
+
 Getting Started
 ---------------
 ####1\. Create a new F# console application
@@ -85,7 +85,7 @@ quit()
 ####5\. Run
 <img src="img/run.png" alt="Run" style="display: inherit;"/>
 
-####6\. Explore the rest of canopy's API 
+####6\. Explore the rest of canopy's API
 
 * [Actions](/canopy/actions.html): documentation of everything you can do on a page
 * [Assertions](/canopy/assertions.html): all the ways you can verify what's on the page is correct
@@ -93,20 +93,27 @@ quit()
 * [Testing](/canopy/testing.html): different ways to orchestrate tests and troubleshoot issues with a page
 * [Reporting](/canopy/reporting.html): different ways to output the results of your test suite
 
-####7\. Watch some intro videos 
+####7\. Watch some intro videos
+4 minute canopy starter kit
+<div style="overflow:hidden;height:540px;width:960px;">
+   <div id="youtube_canvas" style="height:540px;width:960px;"><iframe style="height:540px;width:960px;border:0;" frameborder="0" src="https://www.youtube.com/embed/kLNPl3EcsCI&amp;feature=youtu.be?hl=en&amp;autoplay=0&amp;cc_load_policy=0&amp;loop=0&amp;iv_load_policy=1&amp;fs=1&amp;showinfo=1"></iframe></div>
+   <a class="youtube-embed-code" href="http://www.tubeembed.com" id="get-youtube-data">tubeembed</a>
+   <style>#youtube_canvas img{max-width:none!important;background:none!important}</style>
+</div>
+
 5 minutes with Amir Rajan
-<iframe src="https://channel9.msdn.com/Events/NET-Fringe/NET-Fringe-2015/Web-UI-Testing-with-F-and-Canopy/player" 
-    width="960" 
-    height="540" 
-    allowFullScreen 
+<iframe src="https://channel9.msdn.com/Events/NET-Fringe/NET-Fringe-2015/Web-UI-Testing-with-F-and-Canopy/player"
+    width="960"
+    height="540"
+    allowFullScreen
     frameBorder="0">
 </iframe>
 
 30 minutes with Chris Holt at fsharpConf
-<iframe src="https://channel9.msdn.com/Events/FSharp-Events/fsharpConf-2016/Web-UI-Automation-with-F-and-canopy/player" 
-    width="960" 
-    height="540" 
-    allowFullScreen 
+<iframe src="https://channel9.msdn.com/Events/FSharp-Events/fsharpConf-2016/Web-UI-Automation-with-F-and-canopy/player"
+    width="960"
+    height="540"
+    allowFullScreen
     frameBorder="0">
 </iframe>
 *)
