@@ -698,6 +698,7 @@ let start b =
         | Chrome -> 
                 let options = OpenQA.Selenium.Chrome.ChromeOptions()
                 options.AddArgument("test-type") //https://code.google.com/p/chromedriver/issues/detail?id=799
+                options.AddArgument("start-maximized") //adding this argument should start the chrome browser at max res
                 new Chrome.ChromeDriver(chromeDir, options) :> IWebDriver
         | ChromeWithOptions options -> new Chrome.ChromeDriver(chromeDir, options) :> IWebDriver
         | ChromeWithUserAgent userAgent -> chromeWithUserAgent userAgent
