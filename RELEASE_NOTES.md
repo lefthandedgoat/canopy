@@ -251,3 +251,6 @@ Fixed a bug for jquery selectors where they wouldnt respect their context, thank
 #### 0.9.54 - May 18 2016
 Added notContains [Issue #263](https://github.com/lefthandedgoat/canopy/issue/263)
 Added BETA support for Edge browser [Issue #264](https://github.com/lefthandedgoat/canopy/issue/264)
+
+#### 0.9.55 - July 7 2016
+Updated to Selenium 2.53.1 for Firefox 47.1 support [Issue #270](https://github.com/lefthandedgoat/canopy/issue/270)

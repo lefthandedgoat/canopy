@@ -419,6 +419,16 @@ let dismissAlert() =
         browser.SwitchTo().Alert().Dismiss()
         true)
     
+let fastTextFromCSS selector =
+  let script =
+    //there is no map on NodeList which is the type returned by querySelectorAll =(
+    sprintf """return [].map.call(document.querySelectorAll("%s"), function (item) { return item.text || item.innerText; });""" selector
+  try
+    js script :?> System.Collections.ObjectModel.ReadOnlyCollection<System.Object>
+    |> Seq.map (fun item -> item.ToString())
+    |> List.ofSeq
+  with | _ -> [ "default" ]
+
 //assertions    
 let ( == ) item value =
     match box item with
