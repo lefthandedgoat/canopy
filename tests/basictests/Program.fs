@@ -232,6 +232,15 @@ test (fun _ ->
     uncheck "#checkbox"
     element "#checkbox" |> deselected
 
+"rightClicking Works" &&& fun _ ->
+    !^ "https://api.jquery.com/contextmenu/"
+    let iframe = element "iframe"
+    browser.SwitchTo().Frame(iframe) |> ignore
+    notDisplayed ".contextmenu"
+
+    rightClick "div:first"
+    displayed ".contextmenu"
+    
 "element within only searching within the element" &&& fun _ ->
     url "http://lefthandedgoat.github.io/canopy/testpages/elementWithin"
     count ".item" 5

@@ -618,6 +618,17 @@ let ctrlClick item =
                                         true))
         | _ -> raise (CanopyNotStringOrElementException(sprintf "Can't ctrlClick %O because it is not a string or webelement" item))
 
+let rightClick item =     
+        let actions = Actions(browser)
+
+        match box item with
+        | :? IWebElement as elem -> actions.ContextClick(elem).Perform() |> ignore
+        | :? string as cssSelector -> 
+        wait elementTimeout (fun _ -> ( let elem = element cssSelector
+                                        actions.ContextClick(elem).Perform()
+                                        true))
+        | _ -> raise (CanopyNotStringOrElementException(sprintf "Can't rightClick %O because it is not a string or webelement" item))
+
 let check item = 
     try
         match box item with
