@@ -48,6 +48,22 @@
         <div class="span9" id="main">
           
 <h1>Testing</h1>
+<h2>run</h2>
+<p>Starts test suite after is defined.  Usually at the bottom of your Program.fs</p>
+<table class="pre"><tr><td class="lines"><pre class="fssnip"><span class="l">1: </span>
+</pre></td>
+<td class="snippet"><pre class="fssnip highlighted"><code lang="fsharp"><span onmouseout="hideTip(event, 'fs4', 4)" onmouseover="showTip(event, 'fs4', 4)" class="f">run</span>()
+</code></pre></td>
+</tr>
+</table>
+<h2>run</h2>
+<p>Starts test suite and runs the suite with each of the listed browsers.  Usually at the bottom of your Program.fs</p>
+<table class="pre"><tr><td class="lines"><pre class="fssnip"><span class="l">1: </span>
+</pre></td>
+<td class="snippet"><pre class="fssnip highlighted"><code lang="fsharp"><span onmouseout="hideTip(event, 'fs5', 5)" onmouseover="showTip(event, 'fs5', 5)" class="f">runFor</span> [<span onmouseout="hideTip(event, 'fs6', 6)" onmouseover="showTip(event, 'fs6', 6)" class="i">chrome</span>; <span onmouseout="hideTip(event, 'fs7', 7)" onmouseover="showTip(event, 'fs7', 7)" class="i">firefox</span>; <span onmouseout="hideTip(event, 'fs8', 8)" onmouseover="showTip(event, 'fs8', 8)" class="i">ie</span>]
+</code></pre></td>
+</tr>
+</table>
 <h2>context</h2>
 <p>Define the context of the tests. A default context is defined and used if one is not provided.
 You can have as many contexts as you like. Each context gets a new once/before/after/lastly function.</p>
@@ -60,61 +76,85 @@ You can have as many contexts as you like. Each context gets a new once/before/a
 <span class="l">7: </span>
 <span class="l">8: </span>
 </pre></td>
-<td class="snippet"><pre class="fssnip highlighted"><code lang="fsharp"><span onmouseout="hideTip(event, 'fs4', 4)" onmouseover="showTip(event, 'fs4', 4)" class="f">context</span> <span class="s">&quot;Login page tests&quot;</span>
+<td class="snippet"><pre class="fssnip highlighted"><code lang="fsharp"><span onmouseout="hideTip(event, 'fs9', 9)" onmouseover="showTip(event, 'fs9', 9)" class="f">context</span> <span class="s">&quot;Login page tests&quot;</span>
 <span class="c">//some tests</span>
 
-<span onmouseout="hideTip(event, 'fs4', 5)" onmouseover="showTip(event, 'fs4', 5)" class="f">context</span> <span class="s">&quot;Search page tests&quot;</span>
+<span onmouseout="hideTip(event, 'fs9', 10)" onmouseover="showTip(event, 'fs9', 10)" class="f">context</span> <span class="s">&quot;Search page tests&quot;</span>
 <span class="c">//different tests</span>
 
-<span onmouseout="hideTip(event, 'fs4', 6)" onmouseover="showTip(event, 'fs4', 6)" class="f">context</span> <span class="s">&quot;Reset password page tests&quot;</span>
+<span onmouseout="hideTip(event, 'fs9', 11)" onmouseover="showTip(event, 'fs9', 11)" class="f">context</span> <span class="s">&quot;Reset password page tests&quot;</span>
 <span class="c">//different tests</span>
 </code></pre></td>
 </tr>
 </table>
 <h2>once</h2>
-<p>Function that is run once time at the beginning of a test suite.</p>
+<p>Function that is run once time at the beginning of a test suite. (per context)</p>
 <table class="pre"><tr><td class="lines"><pre class="fssnip"><span class="l">1: </span>
 <span class="l">2: </span>
 <span class="l">3: </span>
 </pre></td>
-<td class="snippet"><pre class="fssnip highlighted"><code lang="fsharp"><span onmouseout="hideTip(event, 'fs5', 7)" onmouseover="showTip(event, 'fs5', 7)" class="f">once</span> (<span class="k">fun</span> _ <span class="k">-&gt;</span> 
+<td class="snippet"><pre class="fssnip highlighted"><code lang="fsharp"><span onmouseout="hideTip(event, 'fs10', 12)" onmouseover="showTip(event, 'fs10', 12)" class="f">once</span> (<span class="k">fun</span> _ <span class="k">-&gt;</span>
     ()<span class="c">//do this one time at the beginning of the most recently defined context</span>
 )
 </code></pre></td>
 </tr>
 </table>
 <h2>before</h2>
-<p>Function that is run before each test in a context.</p>
+<p>Function that is run before each test in a context. (per context)</p>
 <table class="pre"><tr><td class="lines"><pre class="fssnip"><span class="l">1: </span>
 <span class="l">2: </span>
 <span class="l">3: </span>
 </pre></td>
-<td class="snippet"><pre class="fssnip highlighted"><code lang="fsharp"><span onmouseout="hideTip(event, 'fs6', 8)" onmouseover="showTip(event, 'fs6', 8)" class="f">before</span> (<span class="k">fun</span> _ <span class="k">-&gt;</span> 
+<td class="snippet"><pre class="fssnip highlighted"><code lang="fsharp"><span onmouseout="hideTip(event, 'fs11', 13)" onmouseover="showTip(event, 'fs11', 13)" class="f">before</span> (<span class="k">fun</span> _ <span class="k">-&gt;</span>
     ()<span class="c">//do this before every test of the most recently defined context</span>
 )
 </code></pre></td>
 </tr>
 </table>
 <h2>after</h2>
-<p>Function that is run after each test in a context.</p>
+<p>Function that is run after each test in a context. (per context)</p>
 <table class="pre"><tr><td class="lines"><pre class="fssnip"><span class="l">1: </span>
 <span class="l">2: </span>
 <span class="l">3: </span>
 </pre></td>
-<td class="snippet"><pre class="fssnip highlighted"><code lang="fsharp"><span onmouseout="hideTip(event, 'fs7', 9)" onmouseover="showTip(event, 'fs7', 9)" class="f">after</span> (<span class="k">fun</span> _ <span class="k">-&gt;</span> 
+<td class="snippet"><pre class="fssnip highlighted"><code lang="fsharp"><span onmouseout="hideTip(event, 'fs12', 14)" onmouseover="showTip(event, 'fs12', 14)" class="f">after</span> (<span class="k">fun</span> _ <span class="k">-&gt;</span>
     ()<span class="c">//do this after every test of the most recently defined context</span>
 )
 </code></pre></td>
 </tr>
 </table>
 <h2>lastly</h2>
-<p>Function that is run once at the end of a context.</p>
+<p>Function that is run once at the end of a context. (per context)</p>
 <table class="pre"><tr><td class="lines"><pre class="fssnip"><span class="l">1: </span>
 <span class="l">2: </span>
 <span class="l">3: </span>
 </pre></td>
-<td class="snippet"><pre class="fssnip highlighted"><code lang="fsharp"><span onmouseout="hideTip(event, 'fs8', 10)" onmouseover="showTip(event, 'fs8', 10)" class="f">lastly</span> (<span class="k">fun</span> _ <span class="k">-&gt;</span> 
+<td class="snippet"><pre class="fssnip highlighted"><code lang="fsharp"><span onmouseout="hideTip(event, 'fs13', 15)" onmouseover="showTip(event, 'fs13', 15)" class="f">lastly</span> (<span class="k">fun</span> _ <span class="k">-&gt;</span>
     ()<span class="c">//do this after the very last test of the most recently defined context</span>
+)
+</code></pre></td>
+</tr>
+</table>
+<h2>onPass</h2>
+<p>Function that is run after a test passes. (per context)</p>
+<table class="pre"><tr><td class="lines"><pre class="fssnip"><span class="l">1: </span>
+<span class="l">2: </span>
+<span class="l">3: </span>
+</pre></td>
+<td class="snippet"><pre class="fssnip highlighted"><code lang="fsharp"><span onmouseout="hideTip(event, 'fs14', 16)" onmouseover="showTip(event, 'fs14', 16)" class="f">onPass</span> (<span class="k">fun</span> _ <span class="k">-&gt;</span>
+    ()<span class="c">//do this after a test passes</span>
+)
+</code></pre></td>
+</tr>
+</table>
+<h2>onFail</h2>
+<p>Function that is run after a test fails. (per context)</p>
+<table class="pre"><tr><td class="lines"><pre class="fssnip"><span class="l">1: </span>
+<span class="l">2: </span>
+<span class="l">3: </span>
+</pre></td>
+<td class="snippet"><pre class="fssnip highlighted"><code lang="fsharp"><span onmouseout="hideTip(event, 'fs15', 17)" onmouseover="showTip(event, 'fs15', 17)" class="f">onFail</span> (<span class="k">fun</span> _ <span class="k">-&gt;</span>
+    ()<span class="c">//do this after a test fails</span>
 )
 </code></pre></td>
 </tr>
@@ -128,7 +168,7 @@ You can have as many contexts as you like. Each context gets a new once/before/a
 <span class="l">5: </span>
 <span class="l">6: </span>
 </pre></td>
-<td class="snippet"><pre class="fssnip highlighted"><code lang="fsharp"><span onmouseout="hideTip(event, 'fs9', 11)" onmouseover="showTip(event, 'fs9', 11)" class="f">test</span> (<span class="k">fun</span> _ <span class="k">-&gt;</span>
+<td class="snippet"><pre class="fssnip highlighted"><code lang="fsharp"><span onmouseout="hideTip(event, 'fs16', 18)" onmouseover="showTip(event, 'fs16', 18)" class="f">test</span> (<span class="k">fun</span> _ <span class="k">-&gt;</span>
     <span class="c">//go somewhere</span>
     <span class="c">//interact with page</span>
     <span class="c">//assert</span>
@@ -158,7 +198,7 @@ You can have as many contexts as you like. Each context gets a new once/before/a
     <span class="c">//assert</span>
     ()
 <span class="c">//Or</span>
-<span onmouseout="hideTip(event, 'fs10', 12)" onmouseover="showTip(event, 'fs10', 12)" class="f">ntest</span> <span class="s">&quot;go somewhere, do some stuff, assert&quot;</span> (<span class="k">fun</span> _ <span class="k">-&gt;</span>
+<span onmouseout="hideTip(event, 'fs17', 19)" onmouseover="showTip(event, 'fs17', 19)" class="f">ntest</span> <span class="s">&quot;go somewhere, do some stuff, assert&quot;</span> (<span class="k">fun</span> _ <span class="k">-&gt;</span>
     <span class="c">//go somewhere</span>
     <span class="c">//interact with page</span>
     <span class="c">//assert</span>
@@ -191,7 +231,7 @@ If one test is marked wip, only wip tests are ran. Other tests are skipped.</p>
     <span class="c">//assert</span>
     ()
 <span class="c">//Or</span>
-<span onmouseout="hideTip(event, 'fs11', 13)" onmouseover="showTip(event, 'fs11', 13)" class="f">wip</span> (<span class="k">fun</span> _ <span class="k">-&gt;</span>
+<span onmouseout="hideTip(event, 'fs18', 20)" onmouseover="showTip(event, 'fs18', 20)" class="f">wip</span> (<span class="k">fun</span> _ <span class="k">-&gt;</span>
     <span class="c">//go somewhere</span>
     <span class="c">//interact with page</span>
     <span class="c">//assert</span>
@@ -223,7 +263,7 @@ If one test is marked wip, only wip tests are ran. Other tests are skipped.</p>
     <span class="c">//assert</span>
     ()
 <span class="c">//Or</span>
-<span onmouseout="hideTip(event, 'fs12', 14)" onmouseover="showTip(event, 'fs12', 14)" class="f">xtest</span> (<span class="k">fun</span> _ <span class="k">-&gt;</span>
+<span onmouseout="hideTip(event, 'fs19', 21)" onmouseover="showTip(event, 'fs19', 21)" class="f">xtest</span> (<span class="k">fun</span> _ <span class="k">-&gt;</span>
     <span class="c">//go somewhere</span>
     <span class="c">//interact with page</span>
     <span class="c">//assert</span>
@@ -233,7 +273,7 @@ If one test is marked wip, only wip tests are ran. Other tests are skipped.</p>
 </tr>
 </table>
 <h2>&amp;&amp;&amp;&amp;&amp; (always run, in both standard and wip modes)</h2>
-<p>Test will always be run.  If some tests are marked work in progress, tests marked as always will also run.<br />
+<p>Test will always be run.  If some tests are marked work in progress, tests marked as always will also run.
 The test will run slow with wip tests, but run at normal speed when there are no wip tests.</p>
 <table class="pre"><tr><td class="lines"><pre class="fssnip"><span class="l">1: </span>
 <span class="l">2: </span>
@@ -260,7 +300,25 @@ The test will run slow with wip tests, but run at normal speed when there are no
 <span class="l">5: </span>
 <span class="l">6: </span>
 </pre></td>
-<td class="snippet"><pre class="fssnip highlighted"><code lang="fsharp"><span onmouseout="hideTip(event, 'fs13', 15)" onmouseover="showTip(event, 'fs13', 15)" class="f">many</span> <span class="n">20</span> (<span class="k">fun</span> _ <span class="k">-&gt;</span>
+<td class="snippet"><pre class="fssnip highlighted"><code lang="fsharp"><span onmouseout="hideTip(event, 'fs20', 22)" onmouseover="showTip(event, 'fs20', 22)" class="f">many</span> <span class="n">20</span> (<span class="k">fun</span> _ <span class="k">-&gt;</span>
+    <span class="c">//go somewhere</span>
+    <span class="c">//interact with page</span>
+    <span class="c">//assert</span>
+    ()
+)
+</code></pre></td>
+</tr>
+</table>
+<h2>nmany</h2>
+<p>Run a single named test X times. Helps with troubleshooting tests that sometimes fail.</p>
+<table class="pre"><tr><td class="lines"><pre class="fssnip"><span class="l">1: </span>
+<span class="l">2: </span>
+<span class="l">3: </span>
+<span class="l">4: </span>
+<span class="l">5: </span>
+<span class="l">6: </span>
+</pre></td>
+<td class="snippet"><pre class="fssnip highlighted"><code lang="fsharp"><span onmouseout="hideTip(event, 'fs21', 23)" onmouseover="showTip(event, 'fs21', 23)" class="f">nmany</span> <span class="n">20</span> <span class="s">&quot;description&quot;</span> (<span class="k">fun</span> _ <span class="k">-&gt;</span>
     <span class="c">//go somewhere</span>
     <span class="c">//interact with page</span>
     <span class="c">//assert</span>
@@ -273,7 +331,7 @@ The test will run slow with wip tests, but run at normal speed when there are no
 <p>Mark a test as todo to fill in later. LiveHtmlReporter will mark todo tests in the output.</p>
 <table class="pre"><tr><td class="lines"><pre class="fssnip"><span class="l">1: </span>
 </pre></td>
-<td class="snippet"><pre class="fssnip highlighted"><code lang="fsharp"><span class="s">&quot;go somewhere, do some stuff, assert&quot;</span> <span class="o">&amp;&amp;&amp;</span> <span onmouseout="hideTip(event, 'fs14', 16)" onmouseover="showTip(event, 'fs14', 16)" class="f">todo</span>
+<td class="snippet"><pre class="fssnip highlighted"><code lang="fsharp"><span class="s">&quot;go somewhere, do some stuff, assert&quot;</span> <span class="o">&amp;&amp;&amp;</span> <span onmouseout="hideTip(event, 'fs22', 24)" onmouseover="showTip(event, 'fs22', 24)" class="f">todo</span>
 </code></pre></td>
 </tr>
 </table>
@@ -281,17 +339,25 @@ The test will run slow with wip tests, but run at normal speed when there are no
 <div class="tip" id="fs1">namespace canopy</div>
 <div class="tip" id="fs2">module runner<br /><br />from canopy</div>
 <div class="tip" id="fs3">namespace System</div>
-<div class="tip" id="fs4">val context : c:string -&gt; unit<br /><br />Full name: canopy.runner.context</div>
-<div class="tip" id="fs5">val once : f:(unit -&gt; unit) -&gt; unit<br /><br />Full name: canopy.runner.once</div>
-<div class="tip" id="fs6">val before : f:(unit -&gt; unit) -&gt; unit<br /><br />Full name: canopy.runner.before</div>
-<div class="tip" id="fs7">val after : f:(unit -&gt; unit) -&gt; unit<br /><br />Full name: canopy.runner.after</div>
-<div class="tip" id="fs8">val lastly : f:(unit -&gt; unit) -&gt; unit<br /><br />Full name: canopy.runner.lastly</div>
-<div class="tip" id="fs9">val test : f:(unit -&gt; unit) -&gt; unit<br /><br />Full name: canopy.runner.test</div>
-<div class="tip" id="fs10">val ntest : description:string -&gt; f:(unit -&gt; unit) -&gt; unit<br /><br />Full name: canopy.runner.ntest</div>
-<div class="tip" id="fs11">val wip : f:(unit -&gt; unit) -&gt; unit<br /><br />Full name: canopy.runner.wip</div>
-<div class="tip" id="fs12">val xtest : f:&#39;a -&gt; unit<br /><br />Full name: canopy.runner.xtest</div>
-<div class="tip" id="fs13">val many : count:int -&gt; f:(unit -&gt; unit) -&gt; unit<br /><br />Full name: canopy.runner.many</div>
-<div class="tip" id="fs14">val mutable todo : (unit -&gt; unit)<br /><br />Full name: canopy.runner.todo</div>
+<div class="tip" id="fs4">val run : unit -&gt; unit<br /><br />Full name: canopy.runner.run</div>
+<div class="tip" id="fs5">val runFor : browsers:&#39;a -&gt; unit<br /><br />Full name: canopy.runner.runFor</div>
+<div class="tip" id="fs6">val chrome : BrowserStartMode<br /><br />Full name: canopy.core.chrome</div>
+<div class="tip" id="fs7">val firefox : BrowserStartMode<br /><br />Full name: canopy.core.firefox</div>
+<div class="tip" id="fs8">val ie : BrowserStartMode<br /><br />Full name: canopy.core.ie</div>
+<div class="tip" id="fs9">val context : c:string -&gt; unit<br /><br />Full name: canopy.runner.context</div>
+<div class="tip" id="fs10">val once : f:(unit -&gt; unit) -&gt; unit<br /><br />Full name: canopy.runner.once</div>
+<div class="tip" id="fs11">val before : f:(unit -&gt; unit) -&gt; unit<br /><br />Full name: canopy.runner.before</div>
+<div class="tip" id="fs12">val after : f:(unit -&gt; unit) -&gt; unit<br /><br />Full name: canopy.runner.after</div>
+<div class="tip" id="fs13">val lastly : f:(unit -&gt; unit) -&gt; unit<br /><br />Full name: canopy.runner.lastly</div>
+<div class="tip" id="fs14">val onPass : f:(unit -&gt; unit) -&gt; unit<br /><br />Full name: canopy.runner.onPass</div>
+<div class="tip" id="fs15">val onFail : f:(unit -&gt; unit) -&gt; unit<br /><br />Full name: canopy.runner.onFail</div>
+<div class="tip" id="fs16">val test : f:(unit -&gt; unit) -&gt; unit<br /><br />Full name: canopy.runner.test</div>
+<div class="tip" id="fs17">val ntest : description:string -&gt; f:(unit -&gt; unit) -&gt; unit<br /><br />Full name: canopy.runner.ntest</div>
+<div class="tip" id="fs18">val wip : f:(unit -&gt; unit) -&gt; unit<br /><br />Full name: canopy.runner.wip</div>
+<div class="tip" id="fs19">val xtest : f:&#39;a -&gt; unit<br /><br />Full name: canopy.runner.xtest</div>
+<div class="tip" id="fs20">val many : count:int -&gt; f:(unit -&gt; unit) -&gt; unit<br /><br />Full name: canopy.runner.many</div>
+<div class="tip" id="fs21">val nmany : count:int -&gt; description:string -&gt; f:(unit -&gt; unit) -&gt; unit<br /><br />Full name: canopy.runner.nmany</div>
+<div class="tip" id="fs22">val mutable todo : (unit -&gt; unit)<br /><br />Full name: canopy.runner.todo</div>
 
         </div>
         <div class="span3">
