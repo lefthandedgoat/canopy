@@ -102,106 +102,73 @@ O* SX: /usr/bin/
 </code></pre></td>
 </tr>
 </table>
+<h2>edgeDir</h2>
+<ul>
+<li>Directory for edge driver</li>
+<li>Defaults to "C:\Program Files (x86)\Microsoft Web Driver\"</li>
+</ul>
 <h2>elementTimeout</h2>
 <ul>
 <li>Amount of time for the test runner to search for an element.</li>
 <li>Default is 10.0 seconds</li>
 </ul>
-<table class="pre"><tr><td class="lines"><pre class="fssnip"><span class="l">1: </span>
-</pre></td>
-<td class="snippet"><pre class="fssnip highlighted"><code lang="fsharp"><span onmouseout="hideTip(event, 'fs7', 8)" onmouseover="showTip(event, 'fs7', 8)" class="v">elementTimeout</span> <span class="o">&lt;-</span> <span class="n">10.0</span>
-</code></pre></td>
-</tr>
-</table>
 <h2>compareTimeout</h2>
 <ul>
 <li>Amount of time for the test runner to spend comparing elements.</li>
 <li>Default is 10.0 seconds</li>
 </ul>
-<table class="pre"><tr><td class="lines"><pre class="fssnip"><span class="l">1: </span>
-</pre></td>
-<td class="snippet"><pre class="fssnip highlighted"><code lang="fsharp"><span onmouseout="hideTip(event, 'fs8', 9)" onmouseover="showTip(event, 'fs8', 9)" class="v">compareTimeout</span> <span class="o">&lt;-</span> <span class="n">10.0</span>
-</code></pre></td>
-</tr>
-</table>
 <h2>pageTimeout</h2>
 <ul>
 <li>Amount of time for the test runner to wait for the page to load.</li>
 <li>Default is 10.0 seconds</li>
 </ul>
-<table class="pre"><tr><td class="lines"><pre class="fssnip"><span class="l">1: </span>
-</pre></td>
-<td class="snippet"><pre class="fssnip highlighted"><code lang="fsharp"><span onmouseout="hideTip(event, 'fs9', 10)" onmouseover="showTip(event, 'fs9', 10)" class="v">pageTimeout</span> <span class="o">&lt;-</span> <span class="n">10.0</span>
-</code></pre></td>
-</tr>
-</table>
 <h2>wipSleep</h2>
 <ul>
 <li>Amount of time to spend between WIP tests (Tests marked with &amp;&amp;&amp;&amp;)</li>
 <li>Default is 1.0 seconds</li>
 </ul>
-<table class="pre"><tr><td class="lines"><pre class="fssnip"><span class="l">1: </span>
-</pre></td>
-<td class="snippet"><pre class="fssnip highlighted"><code lang="fsharp"><span onmouseout="hideTip(event, 'fs10', 11)" onmouseover="showTip(event, 'fs10', 11)" class="v">wipSleep</span> <span class="o">&lt;-</span> <span class="n">1.0</span>
-</code></pre></td>
-</tr>
-</table>
 <h2>runFailedContextsFirst</h2>
 <ul>
 <li>Runs failed contexts first if the test suite has already executed.</li>
 <li>Defaults is false</li>
 </ul>
-<table class="pre"><tr><td class="lines"><pre class="fssnip"><span class="l">1: </span>
-</pre></td>
-<td class="snippet"><pre class="fssnip highlighted"><code lang="fsharp"><span onmouseout="hideTip(event, 'fs11', 12)" onmouseover="showTip(event, 'fs11', 12)" class="v">runFailedContextsFirst</span> <span class="o">&lt;-</span> <span class="k">false</span>
-</code></pre></td>
-</tr>
-</table>
+<h2>failFast</h2>
+<ul>
+<li>Stop running test suite after one test fails.</li>
+<li>Defaults is false</li>
+</ul>
+<h2>failScreenshotPath</h2>
+<ul>
+<li>The path to save screenshots that are taken on failure.</li>
+<li>Defaults is AppData\canopy</li>
+</ul>
+<h2>failScreenshotFileName</h2>
+<ul>
+<li>Function that is run to create the filename of screenshot.</li>
+<li>Takes a test and a suite to be optionally used in name creation.</li>
+<li>Defaults is Timestamp with format "MMM-d_HH-mm-ss-fff"</li>
+</ul>
 <h2>reporter</h2>
 <ul>
 <li>Reporter object that will handle how logs should be stored.</li>
 <li>Must inherit IReporter</li>
 <li>Default is ConsoleReporter</li>
 </ul>
-<table class="pre"><tr><td class="lines"><pre class="fssnip"><span class="l">1: </span>
-</pre></td>
-<td class="snippet"><pre class="fssnip highlighted"><code lang="fsharp"><span onmouseout="hideTip(event, 'fs12', 13)" onmouseover="showTip(event, 'fs12', 13)" class="v">reporter</span> <span class="o">&lt;-</span> <span class="k">new</span> <span onmouseout="hideTip(event, 'fs13', 14)" onmouseover="showTip(event, 'fs13', 14)" class="t">reporters</span><span class="o">.</span><span onmouseout="hideTip(event, 'fs14', 15)" onmouseover="showTip(event, 'fs14', 15)" class="t">ConsoleReporter</span>() <span class="o">:&gt;</span> <span onmouseout="hideTip(event, 'fs13', 16)" onmouseover="showTip(event, 'fs13', 16)" class="t">reporters</span><span class="o">.</span><span onmouseout="hideTip(event, 'fs15', 17)" onmouseover="showTip(event, 'fs15', 17)" class="t">IReporter</span>
-</code></pre></td>
-</tr>
-</table>
 <h2>disableSuggestOtherSelectors</h2>
 <ul>
 <li>Option that will disable selector suggestion if a selector fails to execute</li>
 <li>Defaults is false</li>
 </ul>
-<table class="pre"><tr><td class="lines"><pre class="fssnip"><span class="l">1: </span>
-</pre></td>
-<td class="snippet"><pre class="fssnip highlighted"><code lang="fsharp"><span onmouseout="hideTip(event, 'fs16', 18)" onmouseover="showTip(event, 'fs16', 18)" class="v">disableSuggestOtherSelectors</span> <span class="o">&lt;-</span> <span class="k">false</span>
-</code></pre></td>
-</tr>
-</table>
 <h2>autoPinBrowserRightOnLaunch</h2>
 <ul>
 <li>Automatically pins the browser to the right of the screen on launch</li>
 <li>Default is true</li>
 </ul>
-<table class="pre"><tr><td class="lines"><pre class="fssnip"><span class="l">1: </span>
-</pre></td>
-<td class="snippet"><pre class="fssnip highlighted"><code lang="fsharp"><span onmouseout="hideTip(event, 'fs17', 19)" onmouseover="showTip(event, 'fs17', 19)" class="v">autoPinBrowserRightOnLaunch</span> <span class="o">&lt;-</span> <span class="k">true</span>
-</code></pre></td>
-</tr>
-</table>
 <h2>throwIfMoreThanOneElement</h2>
 <ul>
 <li>Throws a CanopyMoreThanOneElementFoundException if more than one element is found using a selector</li>
 <li>Default is false</li>
 </ul>
-<table class="pre"><tr><td class="lines"><pre class="fssnip"><span class="l">1: </span>
-</pre></td>
-<td class="snippet"><pre class="fssnip highlighted"><code lang="fsharp"><span onmouseout="hideTip(event, 'fs18', 20)" onmouseover="showTip(event, 'fs18', 20)" class="v">throwIfMoreThanOneElement</span> <span class="o">&lt;-</span> <span class="k">false</span>
-</code></pre></td>
-</tr>
-</table>
 <h2>configuredFinders</h2>
 <ul>
 <li>Defines functions for finding elements based on selectors</li>
@@ -213,56 +180,51 @@ O* SX: /usr/bin/
 <li>findByText</li>
 <li>findByJQuery</li>
 </ul>
-<table class="pre"><tr><td class="lines"><pre class="fssnip"><span class="l">1: </span>
-</pre></td>
-<td class="snippet"><pre class="fssnip highlighted"><code lang="fsharp"><span onmouseout="hideTip(event, 'fs19', 21)" onmouseover="showTip(event, 'fs19', 21)" class="f">configuredFinders</span> <span class="o">&lt;-</span> <span onmouseout="hideTip(event, 'fs20', 22)" onmouseover="showTip(event, 'fs20', 22)" class="t">finders</span><span class="o">.</span><span onmouseout="hideTip(event, 'fs21', 23)" onmouseover="showTip(event, 'fs21', 23)" class="f">defaultFinders</span>
-</code></pre></td>
-</tr>
-</table>
 <h2>writeToSelectWithOptionValue</h2>
 <ul>
 <li>Provided to preserve previous behaviour of not using the options value to write to a select</li>
 <li>Default is true</li>
 </ul>
-<table class="pre"><tr><td class="lines"><pre class="fssnip"><span class="l">1: </span>
-</pre></td>
-<td class="snippet"><pre class="fssnip highlighted"><code lang="fsharp"><span onmouseout="hideTip(event, 'fs22', 24)" onmouseover="showTip(event, 'fs22', 24)" class="v">writeToSelectWithOptionValue</span> <span class="o">&lt;-</span> <span class="k">true</span>
-</code></pre></td>
-</tr>
-</table>
 <h2>optimizeBySkippingIFrameCheck</h2>
 <ul>
 <li>If you need your tests to be faster and don't have any iframes you can turn this to true</li>
 <li>Default is false</li>
 </ul>
-<table class="pre"><tr><td class="lines"><pre class="fssnip"><span class="l">1: </span>
-</pre></td>
-<td class="snippet"><pre class="fssnip highlighted"><code lang="fsharp"><span onmouseout="hideTip(event, 'fs23', 25)" onmouseover="showTip(event, 'fs23', 25)" class="v">optimizeBySkippingIFrameCheck</span> <span class="o">&lt;-</span> <span class="k">false</span>
-</code></pre></td>
-</tr>
-</table>
 <h2>optimizeByDisablingCoverageReport</h2>
 <ul>
 <li>If you need your tests to be faster and don't use coverage report you can turn this to true</li>
 <li>Default is false</li>
 </ul>
-<table class="pre"><tr><td class="lines"><pre class="fssnip"><span class="l">1: </span>
-</pre></td>
-<td class="snippet"><pre class="fssnip highlighted"><code lang="fsharp"><span onmouseout="hideTip(event, 'fs24', 26)" onmouseover="showTip(event, 'fs24', 26)" class="v">optimizeByDisablingCoverageReport</span> <span class="o">&lt;-</span> <span class="k">false</span>
-</code></pre></td>
-</tr>
-</table>
 <h2>showInfoDiv</h2>
 <ul>
 <li>Allows information to be displayed on the browser when the puts function is called</li>
 <li>Default is true</li>
 </ul>
-<table class="pre"><tr><td class="lines"><pre class="fssnip"><span class="l">1: </span>
-</pre></td>
-<td class="snippet"><pre class="fssnip highlighted"><code lang="fsharp"><span onmouseout="hideTip(event, 'fs25', 27)" onmouseover="showTip(event, 'fs25', 27)" class="v">showInfoDiv</span> <span class="o">&lt;-</span> <span class="k">true</span>
-</code></pre></td>
-</tr>
-</table>
+<h2>failureScreenshotsEnabled</h2>
+<ul>
+<li>Enables/Disables automatic taking of screenshot on failures.</li>
+<li>Default is true</li>
+</ul>
+<h2>skipAllTestsOnFailure</h2>
+<ul>
+<li>Like fail fast, but instead of not running tests, it skips them.</li>
+<li>Default is false</li>
+</ul>
+<h2>skipRemainingTestsInContextOnFailure</h2>
+<ul>
+<li>Like skipAllTestsOnFailure, but only skip those in the current context.</li>
+<li>Default is false</li>
+</ul>
+<h2>skipNextTest</h2>
+<ul>
+<li>Skip the next test</li>
+<li>Default is false</li>
+</ul>
+<h2>failureMessagesThatShoulBeTreatedAsSkip</h2>
+<ul>
+<li>Mark a failed test as skipped if it failed for any of the listed known reasons</li>
+<li>Default is empty list</li>
+</ul>
 
 <div class="tip" id="fs1">namespace canopy</div>
 <div class="tip" id="fs2">module configuration<br /><br />from canopy</div>
@@ -270,25 +232,6 @@ O* SX: /usr/bin/
 <div class="tip" id="fs4">val mutable ieDir : string<br /><br />Full name: canopy.configuration.ieDir</div>
 <div class="tip" id="fs5">val mutable phantomJSDir : string<br /><br />Full name: canopy.configuration.phantomJSDir</div>
 <div class="tip" id="fs6">val mutable safariDir : string<br /><br />Full name: canopy.configuration.safariDir</div>
-<div class="tip" id="fs7">val mutable elementTimeout : float<br /><br />Full name: canopy.configuration.elementTimeout</div>
-<div class="tip" id="fs8">val mutable compareTimeout : float<br /><br />Full name: canopy.configuration.compareTimeout</div>
-<div class="tip" id="fs9">val mutable pageTimeout : float<br /><br />Full name: canopy.configuration.pageTimeout</div>
-<div class="tip" id="fs10">val mutable wipSleep : float<br /><br />Full name: canopy.configuration.wipSleep</div>
-<div class="tip" id="fs11">val mutable runFailedContextsFirst : bool<br /><br />Full name: canopy.configuration.runFailedContextsFirst</div>
-<div class="tip" id="fs12">val mutable reporter : reporters.IReporter<br /><br />Full name: canopy.configuration.reporter</div>
-<div class="tip" id="fs13">module reporters<br /><br />from canopy</div>
-<div class="tip" id="fs14">Multiple items<br />type ConsoleReporter =<br />&#160;&#160;interface IReporter<br />&#160;&#160;new : unit -&gt; ConsoleReporter<br /><br />Full name: canopy.reporters.ConsoleReporter<br /><br />--------------------<br />new : unit -&gt; reporters.ConsoleReporter</div>
-<div class="tip" id="fs15">type IReporter =<br />&#160;&#160;interface<br />&#160;&#160;&#160;&#160;abstract member contextEnd : string -&gt; unit<br />&#160;&#160;&#160;&#160;abstract member contextStart : string -&gt; unit<br />&#160;&#160;&#160;&#160;abstract member coverage : string -&gt; byte [] -&gt; string -&gt; unit<br />&#160;&#160;&#160;&#160;abstract member describe : string -&gt; unit<br />&#160;&#160;&#160;&#160;abstract member fail : Exception -&gt; string -&gt; byte [] -&gt; string -&gt; unit<br />&#160;&#160;&#160;&#160;abstract member pass : string -&gt; unit<br />&#160;&#160;&#160;&#160;abstract member quit : unit -&gt; unit<br />&#160;&#160;&#160;&#160;abstract member setEnvironment : string -&gt; unit<br />&#160;&#160;&#160;&#160;abstract member skip : string -&gt; unit<br />&#160;&#160;&#160;&#160;abstract member suggestSelectors : string -&gt; string list -&gt; unit<br />&#160;&#160;&#160;&#160;...<br />&#160;&#160;end<br /><br />Full name: canopy.reporters.IReporter</div>
-<div class="tip" id="fs16">val mutable disableSuggestOtherSelectors : bool<br /><br />Full name: canopy.configuration.disableSuggestOtherSelectors</div>
-<div class="tip" id="fs17">val mutable autoPinBrowserRightOnLaunch : bool<br /><br />Full name: canopy.configuration.autoPinBrowserRightOnLaunch</div>
-<div class="tip" id="fs18">val mutable throwIfMoreThanOneElement : bool<br /><br />Full name: canopy.configuration.throwIfMoreThanOneElement</div>
-<div class="tip" id="fs19">val mutable configuredFinders : (string -&gt; (OpenQA.Selenium.By -&gt; System.Collections.ObjectModel.ReadOnlyCollection&lt;OpenQA.Selenium.IWebElement&gt;) -&gt; seq&lt;OpenQA.Selenium.IWebElement list&gt;)<br /><br />Full name: canopy.configuration.configuredFinders</div>
-<div class="tip" id="fs20">module finders<br /><br />from canopy</div>
-<div class="tip" id="fs21">val mutable defaultFinders : (string -&gt; (OpenQA.Selenium.By -&gt; System.Collections.ObjectModel.ReadOnlyCollection&lt;OpenQA.Selenium.IWebElement&gt;) -&gt; seq&lt;OpenQA.Selenium.IWebElement list&gt;)<br /><br />Full name: canopy.finders.defaultFinders</div>
-<div class="tip" id="fs22">val mutable writeToSelectWithOptionValue : bool<br /><br />Full name: canopy.configuration.writeToSelectWithOptionValue</div>
-<div class="tip" id="fs23">val mutable optimizeBySkippingIFrameCheck : bool<br /><br />Full name: canopy.configuration.optimizeBySkippingIFrameCheck</div>
-<div class="tip" id="fs24">val mutable optimizeByDisablingCoverageReport : bool<br /><br />Full name: canopy.configuration.optimizeByDisablingCoverageReport</div>
-<div class="tip" id="fs25">val mutable showInfoDiv : bool<br /><br />Full name: canopy.configuration.showInfoDiv</div>
 
         </div>
         <div class="span3">
