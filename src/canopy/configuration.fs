@@ -11,11 +11,11 @@ let folderByOSType =
     | _ -> @"c:\"
 
 //runner related
-(* TODO/documented/configuration *)
+(* documented/configuration *)
 let failFast = ref false
-(* TODO/documented/configuration *)
+(* documented/configuration *)
 let mutable failScreenshotPath = Environment.GetFolderPath(Environment.SpecialFolder.ApplicationData) + @"\canopy\"
-(* TODO/documented/configuration *)
+(* documented/configuration *)
 let mutable failScreenshotFileName = fun (test : types.Test) (suite: types.suite) -> DateTime.Now.ToString("MMM-d_HH-mm-ss-fff")
 
 (* documented/configuration *)
@@ -26,7 +26,7 @@ let mutable ieDir = folderByOSType
 let mutable phantomJSDir = folderByOSType
 (* documented/configuration *)
 let mutable safariDir = folderByOSType
-(* TODO/documented/configuration *)
+(* documented/configuration *)
 let mutable edgeDir = @"C:\Program Files (x86)\Microsoft Web Driver\"
 
 (* documented/configuration *)
@@ -59,13 +59,13 @@ let mutable optimizeByDisablingCoverageReport = false
 let mutable optimizeByDisablingClearBeforeWrite = false
 (* documented/configuration *)
 let mutable showInfoDiv = true
-(* TODO/documented/configuration *)
+(* documented/configuration *)
 let mutable failureScreenshotsEnabled = true
-(* TODO/documented/configuration *)
+(* documented/configuration *)
 let mutable skipAllTestsOnFailure = false
-(* TODO/documented/configuration *)
+(* documented/configuration *)
 let mutable skipRemainingTestsInContextOnFailure = false
-(* TODO/documented/configuration *)
+(* documented/configuration *)
 let mutable skipNextTest = false
-(* TODO/documented/configuration *)
+(* documented/configuration *)
 let mutable failureMessagesThatShoulBeTreatedAsSkip : string list = []
