@@ -22,10 +22,10 @@ let after f = (last suites).After <- f
 let lastly f = (last suites).Lastly <- f
 let onPass f = (last suites).OnPass <- f
 let onFail f = (last suites).OnFail <- f
-let context c = 
-    if (last suites).Context = null then 
+let context c =
+    if (last suites).Context = null then
         (last suites).Context <- c
-    else 
+    else
         let s = new suite()
         s.Context <- c
         suites <- s::suites
@@ -33,26 +33,26 @@ let private incrementLastTestSuite () =
     let lastSuite = last suites
     lastSuite.TotalTestsCount <- lastSuite.TotalTestsCount + 1
     lastSuite
-let ( &&& ) description f = 
+let ( &&& ) description f =
     let lastSuite = incrementLastTestSuite()
     lastSuite.Tests <- Test(description, f, lastSuite.TotalTestsCount)::lastSuite.Tests
 let test f = null &&& f
 let ntest description f = description &&& f
-let ( &&&& ) description f = 
+let ( &&&& ) description f =
     let lastSuite = incrementLastTestSuite()
     lastSuite.Wips <- Test(description, f, lastSuite.TotalTestsCount)::lastSuite.Wips
 let wip f = null &&&& f
-let many count f = 
+let many count f =
     let lastSuite = incrementLastTestSuite()
     [1 .. count] |> List.iter (fun _ -> lastSuite.Manys <- Test(null, f, lastSuite.TotalTestsCount)::lastSuite.Manys)
-let nmany count description f = 
+let nmany count description f =
     let lastSuite = incrementLastTestSuite()
     [1 .. count] |> List.iter (fun _ -> lastSuite.Manys <- Test(description, f, lastSuite.TotalTestsCount)::lastSuite.Manys)
-let ( &&! ) description f = 
+let ( &&! ) description f =
     let lastSuite = incrementLastTestSuite()
     lastSuite.Tests <- Test(description, skipped, lastSuite.TotalTestsCount)::lastSuite.Tests
 let xtest f = null &&! f
-let ( &&&&& ) description f = 
+let ( &&&&& ) description f =
     let lastSuite = incrementLastTestSuite()
     lastSuite.Always <- Test(description, f, lastSuite.TotalTestsCount)::lastSuite.Always
 let mutable passedCount = 0
@@ -62,12 +62,12 @@ let mutable contextFailed = false
 let mutable failedContexts : string list = []
 let mutable failed = false
 
-let pass id (suite : suite) =    
+let pass id (suite : suite) =
     passedCount <- passedCount + 1
     reporter.pass id
     suite.OnPass()
-    
-let skip id =    
+
+let skip id =
     skippedCount <- skippedCount + 1
     reporter.skip id
 
@@ -80,7 +80,7 @@ let fail (ex : Exception) (test : Test) (suite : suite) autoFail url =
             skip test.Id //dont take the time to fail all the tests just skip them
         else
             try
-                if failFast = ref true then failed <- true        
+                if failFast = ref true then failed <- true
                 failedCount <- failedCount + 1
                 contextFailed <- true
                 let f = configuration.failScreenshotFileName test suite
@@ -89,9 +89,9 @@ let fail (ex : Exception) (test : Test) (suite : suite) autoFail url =
                   reporter.fail ex test.Id ss url
                 else reporter.fail ex test.Id Array.empty<byte> url
                 suite.OnFail()
-            with 
-                | failExc -> 
-                    //Fail during error report (likely  OpenQA.Selenium.WebDriverException.WebDriverTimeoutException ). 
+            with
+                | failExc ->
+                    //Fail during error report (likely  OpenQA.Selenium.WebDriverException.WebDriverTimeoutException ).
                     // Don't fail the runner itself, but report it.
                     reporter.write (sprintf "Error during fail reporting: %s" (failExc.ToString()))
                     reporter.fail ex test.Id Array.empty url
@@ -101,9 +101,9 @@ let safelyGetUrl () =
   if browser = null then "no browser = no url"
   else try browser.Url with _ -> "failed to get url"
 
-let failSuite (ex: Exception) (suite : suite) =    
+let failSuite (ex: Exception) (suite : suite) =
     let reportFailedTest (ex: Exception) (test : Test) =
-        reporter.testStart test.Id  
+        reporter.testStart test.Id
         fail ex test suite true <| safelyGetUrl()
         reporter.testEnd test.Id
 
@@ -114,13 +114,13 @@ let failSuite (ex: Exception) (suite : suite) =
 
 let tryTest test suite func =
     try
-        func ()                  
+        func ()
         Pass
     with
         | ex when failureMessage <> null && failureMessage = ex.Message -> Pass
         | ex -> Fail ex
 
-let private processRunResult suite (test : Test) result = 
+let private processRunResult suite (test : Test) result =
     match result with
     | Pass -> pass test.Id suite
     | Fail ex -> fail ex test suite false <| safelyGetUrl()
@@ -130,9 +130,9 @@ let private processRunResult suite (test : Test) result =
     | Failed -> ()
 
 let private runtest (suite : suite) (test : Test) =
-    if failed = false then             
+    if failed = false then
         reporter.testStart test.Id
-        let result = 
+        let result =
           if System.Object.ReferenceEquals(test.Func, todo) then Todo
           else if System.Object.ReferenceEquals(test.Func, skipped) then Skip
           else if skipNextTest = true then Skip
@@ -142,13 +142,13 @@ let private runtest (suite : suite) (test : Test) =
                 match testResult with
                 | Fail(_) -> processRunResult suite test testResult; Failed
                 | _ -> testResult
-              
+
               let afterResult = tryTest test suite (suite.After)
               match testResult with
               | Failed -> testResult
               | _ -> afterResult
 
-        reporter.testEnd test.Id 
+        reporter.testEnd test.Id
         failureMessage <- null
         result
     else
@@ -158,11 +158,11 @@ let private runtest (suite : suite) (test : Test) =
 let run () =
     reporter.suiteBegin()
     let stopWatch = new Diagnostics.Stopwatch()
-    stopWatch.Start()      
-        
+    stopWatch.Start()
+
     // suites list is in reverse order and have to be reversed before running the tests
     suites <- List.rev suites
-        
+
     //run all the suites
     if runFailedContextsFirst = true then
         let failedContexts = history.get()
@@ -182,7 +182,7 @@ let run () =
             if s.Context <> null then reporter.contextStart s.Context
             try
                 s.Once ()
-            with 
+            with
                 | ex -> failSuite ex s
             if failed = false then
                 if s.Wips.IsEmpty = false then
@@ -195,16 +195,16 @@ let run () =
                 else
                     let tests = s.Tests @ s.Always |> List.sortBy (fun t -> t.Number)
                     tests |> List.iter (fun t -> runtest s t |> processRunResult s t)
-            s.Lastly ()                  
+            s.Lastly ()
 
             if contextFailed = true then failedContexts <- s.Context::failedContexts
             if s.Context <> null then reporter.contextEnd s.Context
     )
-    
+
     history.save failedContexts
 
-    stopWatch.Stop()    
-    reporter.summary stopWatch.Elapsed.Minutes stopWatch.Elapsed.Seconds passedCount failedCount skippedCount 
+    stopWatch.Stop()
+    reporter.summary stopWatch.Elapsed.Minutes stopWatch.Elapsed.Seconds passedCount failedCount skippedCount
     reporter.suiteEnd()
 
 let runFor browsers =
@@ -212,7 +212,7 @@ let runFor browsers =
     let currentSuites = suites |> List.rev
     suites <- [new suite()]
     match box browsers with
-        | :? (types.BrowserStartMode list) as browsers -> 
+        | :? (types.BrowserStartMode list) as browsers ->
             browsers
             |> List.iter (fun browser ->
                 toString browser
@@ -229,4 +229,3 @@ let runFor browsers =
                 once (fun _ -> switchTo browser)
                 suites <- suites @ currentSuites)
         | _ -> raise <| Exception "I dont know what you have given me"
-  

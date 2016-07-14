@@ -19,7 +19,7 @@ let findByXpath xpath f =
 let findByLabel locator f =
     let isInputField (element : IWebElement) =
         element.TagName = "input" && element.GetAttribute("type") <> "hidden"
-    
+
     let isField (element : IWebElement) =
         element.TagName = "select" || element.TagName = "textarea" || isInputField element
 
@@ -46,11 +46,11 @@ let findByText text f =
 
 let findByValue value f =
     try
-        findByCss (sprintf """*[value="%s"]""" value) f |> List.ofSeq        
+        findByCss (sprintf """*[value="%s"]""" value) f |> List.ofSeq
     with | _ -> []
 
 //Inspired by https://github.com/RaYell/selenium-webdriver-extensions
-let private loadJQuery () = 
+let private loadJQuery () =
     let jsBrowser = browser :?> IJavaScriptExecutor
     let jqueryExistsScript = """return (typeof window.jQuery) === 'function';"""
     let exists = jsBrowser.ExecuteScript(jqueryExistsScript) :?> bool
@@ -65,8 +65,8 @@ let private loadJQuery () =
 
 type ByJQuery (selector) =
     inherit OpenQA.Selenium.By()
-   
-    do 
+
+    do
         let findElements (context : ISearchContext) =
             loadJQuery()
             if context :? IWebDriver
@@ -77,18 +77,18 @@ type ByJQuery (selector) =
                 let script = sprintf """return jQuery("%s", arguments[0]).get();""" selector
                 let wrapper = context :?> OpenQA.Selenium.Internal.IWrapsDriver
                 (wrapper.WrappedDriver :?> IJavaScriptExecutor).ExecuteScript(script, wrapper) :?> ReadOnlyCollection<IWebElement>
-    
+
         base.FindElementsMethod <- fun context -> findElements context
 
         base.FindElementMethod <- fun context -> findElements context |> Seq.head
-        
+
 let findByJQuery jquerySelector f =
     try
         f(ByJQuery(jquerySelector) :> By) |> List.ofSeq
     with | _ -> []
 
 //you can use this as an example to how to extend canopy by creating your own set of finders, tweaking the current collection, or adding/removing
-let mutable defaultFinders = 
+let mutable defaultFinders =
     (fun cssSelector f ->
         seq {
             yield findByCss     cssSelector f

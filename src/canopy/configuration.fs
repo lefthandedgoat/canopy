@@ -4,9 +4,9 @@ open reporters
 open System
 
 //location of drivers depending on OS
-let folderByOSType = 
+let folderByOSType =
     match System.Environment.OSVersion.Platform with
-    | PlatformID.MacOSX 
+    | PlatformID.MacOSX
     | PlatformID.Unix -> @"/usr/bin/"
     | _ -> @"c:\"
 

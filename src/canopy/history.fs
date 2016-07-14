@@ -9,13 +9,13 @@ let path = Environment.GetFolderPath(Environment.SpecialFolder.ApplicationData) 
 let save (results : string list) =
     if Directory.Exists(p) = false then Directory.CreateDirectory(p) |> ignore
     if File.Exists(path) = false then File.Create(path).Close()
-    using(new StreamWriter(path)) (fun sw ->    
+    using(new StreamWriter(path)) (fun sw ->
         sw.Write (String.Join("|", (results |> Array.ofList)))
     )
 
 let get _ =
     let emptyList : string list = []
-    if File.Exists(path) = false then 
+    if File.Exists(path) = false then
         emptyList
     else
         using(new StreamReader(path)) (fun sr ->

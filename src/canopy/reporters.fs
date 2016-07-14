@@ -23,14 +23,14 @@ type IReporter =
    abstract member coverage : string -> byte [] -> string -> unit
    abstract member setEnvironment : string -> unit
 
-type ConsoleReporter() =   
-    interface IReporter with               
-        member this.pass _ = 
+type ConsoleReporter() =
+    interface IReporter with
+        member this.pass _ =
             Console.ForegroundColor <- ConsoleColor.Green
             Console.WriteLine("Passed");
             Console.ResetColor()
 
-        member this.fail ex id ss url = 
+        member this.fail ex id ss url =
             Console.ForegroundColor <- ConsoleColor.Red
             Console.WriteLine("Error: ");
             Console.ResetColor()
@@ -39,7 +39,7 @@ type ConsoleReporter() =
             Console.WriteLine(url);
             Console.WriteLine("Stack: ");
             ex.StackTrace.Split([| "\r\n"; "\n" |], StringSplitOptions.None)
-            |> Array.iter (fun trace -> 
+            |> Array.iter (fun trace ->
                 Console.ResetColor()
                 if trace.Contains(".FSharp.") || trace.Contains("canopy.core") || trace.Contains("OpenQA.Selenium") then
                     Console.WriteLine(trace)
@@ -55,12 +55,12 @@ type ConsoleReporter() =
                         Console.WriteLine(trace)
                 Console.ResetColor())
 
-        member this.describe d = Console.WriteLine d          
-        
-        member this.contextStart c = Console.WriteLine (String.Format("context: {0}", c))        
-        
+        member this.describe d = Console.WriteLine d
+
+        member this.contextStart c = Console.WriteLine (String.Format("context: {0}", c))
+
         member this.contextEnd c = ()
-        
+
         member this.summary minutes seconds passed failed skipped =
             Console.WriteLine()
             Console.WriteLine("{0} minutes {1} seconds to execute", minutes, seconds)
@@ -69,18 +69,18 @@ type ConsoleReporter() =
             Console.WriteLine("{0} passed", passed)
             Console.ResetColor()
             if skipped > 0 then
-                Console.ForegroundColor <- ConsoleColor.Yellow        
-            Console.WriteLine("{0} skipped", skipped)    
+                Console.ForegroundColor <- ConsoleColor.Yellow
+            Console.WriteLine("{0} skipped", skipped)
             Console.ResetColor()
             if failed > 0 then
-                Console.ForegroundColor <- ConsoleColor.Red        
-            Console.WriteLine("{0} failed", failed)    
-            Console.ResetColor()        
-        
-        member this.write w = Console.WriteLine w        
-        
-        member this.suggestSelectors selector suggestions = 
-            Console.ForegroundColor <- ConsoleColor.Yellow                    
+                Console.ForegroundColor <- ConsoleColor.Red
+            Console.WriteLine("{0} failed", failed)
+            Console.ResetColor()
+
+        member this.write w = Console.WriteLine w
+
+        member this.suggestSelectors selector suggestions =
+            Console.ForegroundColor <- ConsoleColor.Yellow
             Console.WriteLine("Couldn't find any elements with selector '{0}', did you mean:", selector)
             suggestions |> List.iter (fun suggestion -> Console.WriteLine("\t{0}", suggestion))
             Console.ResetColor()
@@ -90,15 +90,15 @@ type ConsoleReporter() =
             Console.ResetColor()
 
         member this.testEnd id = ()
-        
+
         member this.quit () = ()
-        
+
         member this.suiteBegin () = ()
 
         member this.suiteEnd () = ()
 
         member this.coverage url ss _ = ()
-        
+
         member this.todo _ = ()
 
         member this.skip id =
@@ -113,7 +113,7 @@ type TeamCityReporter() =
     let flowId = System.Guid.NewGuid().ToString()
 
     let consoleReporter : IReporter = new ConsoleReporter() :> IReporter
-    let tcFriendlyMessage (message : string) = 
+    let tcFriendlyMessage (message : string) =
         let message = message.Replace("|", "||")
         let message = message.Replace("'", "|'")
         let message = message.Replace("\n", "|n")
@@ -128,48 +128,48 @@ type TeamCityReporter() =
         let temcityReport = sprintf "##teamcity[%s flowId='%s']" text flowId
         consoleReporter.describe temcityReport
 
-    interface IReporter with               
+    interface IReporter with
         member this.pass id = consoleReporter.pass id
-    
+
         member this.fail ex id ss url =
             let mutable image = ""
             if not (Array.isEmpty ss) then
                 image <- String.Format("canopy-image({0})", Convert.ToBase64String(ss))
-                
+
             teamcityReport (sprintf "testFailed name='%s' message='%s' details='%s'"
-                                (tcFriendlyMessage id) 
-                                (tcFriendlyMessage ex.Message)    
+                                (tcFriendlyMessage id)
+                                (tcFriendlyMessage ex.Message)
                                 (tcFriendlyMessage image))
             consoleReporter.fail ex id ss url
-    
-        member this.describe d = 
+
+        member this.describe d =
             teamcityReport (sprintf "message text='%s' status='NORMAL'" (tcFriendlyMessage d))
-            consoleReporter.describe d          
-    
-        member this.contextStart c = 
+            consoleReporter.describe d
+
+        member this.contextStart c =
             teamcityReport (sprintf "testSuiteStarted name='%s'" (tcFriendlyMessage c))
             consoleReporter.contextStart c
-    
-        member this.contextEnd c = 
+
+        member this.contextEnd c =
             teamcityReport (sprintf "testSuiteFinished name='%s'" (tcFriendlyMessage c))
             consoleReporter.contextEnd c
-    
-        member this.summary minutes seconds passed failed skipped = consoleReporter.summary minutes seconds passed failed skipped        
-    
-        member this.write w = consoleReporter.write w        
-    
+
+        member this.summary minutes seconds passed failed skipped = consoleReporter.summary minutes seconds passed failed skipped
+
+        member this.write w = consoleReporter.write w
+
         member this.suggestSelectors selector suggestions = consoleReporter.suggestSelectors selector suggestions
-    
+
         member this.testStart id = teamcityReport (sprintf "testStarted name='%s'" (tcFriendlyMessage id))
-    
+
         member this.testEnd id = teamcityReport (sprintf "testFinished name='%s'" (tcFriendlyMessage id))
 
         member this.quit () = ()
-        
+
         member this.suiteBegin () = ()
 
         member this.suiteEnd () = ()
-        
+
         member this.coverage url ss _ = ()
 
         member this.todo _ = ()
@@ -179,21 +179,21 @@ type TeamCityReporter() =
         member this.setEnvironment env = ()
 
 type LiveHtmlReporter(browser : BrowserStartMode, driverPath : string, ?pinBrowserRight0: bool) =
-    let pinBrowserRight = defaultArg pinBrowserRight0 true    
+    let pinBrowserRight = defaultArg pinBrowserRight0 true
     let consoleReporter : IReporter = new ConsoleReporter() :> IReporter
-    
-    let _browser =    
+
+    let _browser =
         //copy pasta!
         match browser with
         | IE -> new OpenQA.Selenium.IE.InternetExplorerDriver(driverPath) :> IWebDriver
         | IEWithOptions options ->new OpenQA.Selenium.IE.InternetExplorerDriver(driverPath, options) :> IWebDriver
         | IEWithOptionsAndTimeSpan(options, timeSpan) -> new OpenQA.Selenium.IE.InternetExplorerDriver(driverPath, options, timeSpan) :> IWebDriver
         | EdgeBETA -> new OpenQA.Selenium.Edge.EdgeDriver(driverPath) :> IWebDriver
-        | Chrome -> 
+        | Chrome ->
                 let options = OpenQA.Selenium.Chrome.ChromeOptions()
                 options.AddArgument("test-type") //https://code.google.com/p/chromedriver/issues/detail?id=799
                 new OpenQA.Selenium.Chrome.ChromeDriver(driverPath, options) :> IWebDriver
-        | ChromeWithOptions options -> new OpenQA.Selenium.Chrome.ChromeDriver(driverPath, options) :> IWebDriver        
+        | ChromeWithOptions options -> new OpenQA.Selenium.Chrome.ChromeDriver(driverPath, options) :> IWebDriver
         | ChromeWithOptionsAndTimeSpan(options, timeSpan) -> new OpenQA.Selenium.Chrome.ChromeDriver(driverPath, options, timeSpan) :> IWebDriver
         | Firefox -> new OpenQA.Selenium.Firefox.FirefoxDriver() :> IWebDriver
         | FirefoxWithProfile profile -> new OpenQA.Selenium.Firefox.FirefoxDriver(profile) :> IWebDriver
@@ -204,19 +204,19 @@ type LiveHtmlReporter(browser : BrowserStartMode, driverPath : string, ?pinBrows
         | Safari -> new OpenQA.Selenium.Safari.SafariDriver() :> IWebDriver
         | PhantomJS | PhantomJSProxyNone -> raise(System.Exception("Sorry PhantomJS can't be used for LiveHtmlReporter"))
         | Remote(_,_) -> raise(System.Exception("Sorry Remote can't be used for LiveHtmlReporter"))
-                
-    let pin () =           
+
+    let pin () =
         let h = System.Windows.Forms.Screen.PrimaryScreen.WorkingArea.Height;
         let w = System.Windows.Forms.Screen.PrimaryScreen.WorkingArea.Width;
-        let maxWidth = w / 2    
-        _browser.Manage().Window.Size <- new System.Drawing.Size(maxWidth,h);        
+        let maxWidth = w / 2
+        _browser.Manage().Window.Size <- new System.Drawing.Size(maxWidth,h);
         _browser.Manage().Window.Position <- new System.Drawing.Point((maxWidth * 0),0);
-    
-    let tryPin() = 
+
+    let tryPin() =
         if pinBrowserRight then do pin()
 
     do tryPin()
-       
+
     let mutable context = System.String.Empty
     let mutable canQuit = false
     let mutable contexts : string list = []
@@ -236,11 +236,11 @@ type LiveHtmlReporter(browser : BrowserStartMode, driverPath : string, ?pinBrows
     member this.js script = (_browser :?> IJavaScriptExecutor).ExecuteScript(script)
     member this.reportHtml () = (this.js "return $('*').html();").ToString()
     member private this.swallowedJS script = try (_browser :?> IJavaScriptExecutor).ExecuteScript(script) |> ignore with | ex -> ()
-    member this.saveReportHtml directory filename =    
-        if not <| System.IO.Directory.Exists(directory) 
+    member this.saveReportHtml directory filename =
+        if not <| System.IO.Directory.Exists(directory)
             then System.IO.Directory.CreateDirectory(directory) |> ignore
         IO.File.WriteAllText(System.IO.Path.Combine(directory,filename + ".html"), this.reportHtml())
-    
+
     member this.commonFail ctx (ex:Exception) id ss url =
         let encodedId = jsEncode id
         this.swallowedJS (sprintf "updateTestInContext('%s', '%s','Fail', '%s');" ctx encodedId (Convert.ToBase64String(ss)))
@@ -249,14 +249,14 @@ type LiveHtmlReporter(browser : BrowserStartMode, driverPath : string, ?pinBrows
         this.swallowedJS (sprintf "addStackToTest ('%s', '%s', '%s');" ctx encodedId stack)
         this.swallowedJS (sprintf "addUrlToTest ('%s', '%s', '%s');" ctx encodedId url)
         consoleReporter.fail ex id ss url
-        
+
     member this.passWithContext ctx id =
         let encodedId = jsEncode id
         let context = jsEncode ctx
         this.swallowedJS (sprintf "updateTestInContext('%s', '%s', 'Pass', '%s');" context encodedId "")
         consoleReporter.pass id
 
-    member this.failWithContext ctx ex id ss url = 
+    member this.failWithContext ctx ex id ss url =
         let context = jsEncode ctx
         this.commonFail context ex id ss url
 
@@ -272,7 +272,7 @@ type LiveHtmlReporter(browser : BrowserStartMode, driverPath : string, ?pinBrows
         let context = jsEncode ctx
         this.swallowedJS (sprintf "addToContext ('%s', '%s');" context encodedId)
         consoleReporter.testStart id
-            
+
     member this.testEndWithContext ctx id minutes seconds =
         let encodedId = jsEncode id
         let context = jsEncode ctx
@@ -289,20 +289,20 @@ type LiveHtmlReporter(browser : BrowserStartMode, driverPath : string, ?pinBrows
         this.swallowedJS (sprintf "updateTestInContext('%s', '%s', 'Skip', '%s');" context encodedId "")
         consoleReporter.skip id
 
-    interface IReporter with               
+    interface IReporter with
         member this.pass id =
             let encodedId = jsEncode id
             this.swallowedJS (sprintf "updateTestInContext('%s', '%s', 'Pass', '%s');" context encodedId "")
             consoleReporter.pass id
 
         member this.fail ex id ss url = this.commonFail context ex id ss url
-                
+
         member this.describe d =
             let encoded = jsEncode d
-            this.swallowedJS (sprintf "addMessageToTest ('%s', '%s');" context encoded) 
+            this.swallowedJS (sprintf "addMessageToTest ('%s', '%s');" context encoded)
             consoleReporter.describe d
-          
-        member this.contextStart c = 
+
+        member this.contextStart c =
             contextStopWatch.Reset()
             contextStopWatch.Start()
             contexts <- c :: contexts
@@ -311,38 +311,38 @@ type LiveHtmlReporter(browser : BrowserStartMode, driverPath : string, ?pinBrows
             this.swallowedJS (sprintf "collapseContextsExcept('%s');" context)
             consoleReporter.contextStart c
 
-        member this.contextEnd c = 
+        member this.contextEnd c =
             contextStopWatch.Stop()
             let ellapsed = contextStopWatch.Elapsed
             this.swallowedJS (sprintf "addTimeToContext ('%s', '%im %is');" context ellapsed.Minutes ellapsed.Seconds)
             consoleReporter.contextEnd c
 
         member this.summary minutes seconds passed failed skipped =
-            this.swallowedJS (sprintf "setTotalTime ('%im %is');" minutes seconds)                        
+            this.swallowedJS (sprintf "setTotalTime ('%im %is');" minutes seconds)
             consoleReporter.summary minutes seconds passed failed skipped
-        
-        member this.write w = 
+
+        member this.write w =
             let encoded = jsEncode w
             this.swallowedJS (sprintf "addMessageToTest ('%s', '%s');" context encoded)
             consoleReporter.write w
-        
-        member this.suggestSelectors selector suggestions = 
+
+        member this.suggestSelectors selector suggestions =
             consoleReporter.suggestSelectors selector suggestions
 
-        member this.testStart id = 
+        member this.testStart id =
             testStopWatch.Reset()
             testStopWatch.Start()
             let encodedId = jsEncode id
             this.swallowedJS (sprintf "addToContext ('%s', '%s');" context encodedId)
             consoleReporter.testStart id
-            
+
         member this.testEnd id =
             let encodedId = jsEncode id
             testStopWatch.Stop()
             let ellapsed = testStopWatch.Elapsed
             this.swallowedJS (sprintf "addTimeToTest ('%s', '%s', '%im %is');" context encodedId ellapsed.Minutes ellapsed.Seconds)
 
-        member this.quit () = 
+        member this.quit () =
           match this.reportPath with
             | Some(path) ->
               let reportFileInfo = new IO.FileInfo(path)
@@ -350,13 +350,13 @@ type LiveHtmlReporter(browser : BrowserStartMode, driverPath : string, ?pinBrows
             | None -> consoleReporter.write "Not saving report"
 
           if canQuit then _browser.Quit()
-        
-        member this.suiteBegin () = 
-            _browser.Navigate().GoToUrl(this.reportTemplateUrl)
-            this.swallowedJS (sprintf "setStartTime ('%s');" (String.Format("{0:F}", System.DateTime.Now)))    
-            if environment <> String.Empty then this.swallowedJS (sprintf "setEnvironment ('%s');" environment)             
 
-        member this.suiteEnd () = 
+        member this.suiteBegin () =
+            _browser.Navigate().GoToUrl(this.reportTemplateUrl)
+            this.swallowedJS (sprintf "setStartTime ('%s');" (String.Format("{0:F}", System.DateTime.Now)))
+            if environment <> String.Empty then this.swallowedJS (sprintf "setEnvironment ('%s');" environment)
+
+        member this.suiteEnd () =
             canQuit <- true
             this.swallowedJS (sprintf "collapseContextsExcept('%s');" "") //cheap hack to collapse all contexts at the end of a run
 
