@@ -33,6 +33,22 @@ let mutable browsers = []
 //misc
 let failsWith message = failureMessage <- message
 
+let private textOf (element : IWebElement) =
+    match element.TagName  with
+    | "input" ->
+        element.GetAttribute("value")
+    | "textarea" ->
+        element.GetAttribute("value")
+    | "select" ->
+        let value = element.GetAttribute("value")
+        let options = Seq.toList (element.FindElements(By.TagName("option")))
+        let option = options |> List.filter (fun e -> e.GetAttribute("value") = value)
+        option.Head.Text
+    | _ ->
+        element.Text
+
+let private regexMatch pattern input = System.Text.RegularExpressions.Regex.Match(input, pattern).Success
+
 let private saveScreenshot directory filename pic =
     if not <| Directory.Exists(directory)
         then Directory.CreateDirectory(directory) |> ignore
@@ -266,6 +282,12 @@ let element cssSelector = cssSelector |> elements |> elementFromList cssSelector
 
 let elementWithin cssSelector (elem:IWebElement) =  find cssSelector elementTimeout elem true
 
+let elementsWithText cssSelector regex =
+    unreliableElements cssSelector
+    |> List.filter (fun elem -> regexMatch regex (textOf elem))
+
+let elementWithText cssSelector regex = (elementsWithText cssSelector regex).Head
+
 let parent elem = elem |> elementWithin ".."
 
 let elementsWithin cssSelector elem = findMany cssSelector elementTimeout elem true
@@ -324,22 +346,6 @@ let ( << ) item text =
         )
     | _ -> raise (CanopyNotStringOrElementException(sprintf "Can't read %O because it is not a string or element" item))
 
-
-
-let private textOf (element : IWebElement) =
-    match element.TagName  with
-    | "input" ->
-        element.GetAttribute("value")
-    | "textarea" ->
-        element.GetAttribute("value")
-    | "select" ->
-        let value = element.GetAttribute("value")
-        let options = Seq.toList (element.FindElements(By.TagName("option")))
-        let option = options |> List.filter (fun e -> e.GetAttribute("value") = value)
-        option.Head.Text
-    | _ ->
-        element.Text
-
 let private safeRead item =
     let readvalue = ref ""
     try
@@ -348,6 +354,7 @@ let private safeRead item =
             match box item with
             | :? IWebElement as elem -> textOf elem
             | :? string as cssSelector -> element cssSelector |> textOf
+            | _ -> raise (CanopyReadException("was unable to read item because it was not a string or IWebElement"))
           true)
         !readvalue
     with
@@ -371,6 +378,7 @@ let clear item =
     | _ -> raise (CanopyNotStringOrElementException(sprintf "Can't clear %O because it is not a string or element" item))
 
 //status
+(* documented/assertions *)
 let selected item =
     let selected cssSelector (elem : IWebElement) =
         if not <| elem.Selected then raise (CanopySelectionFailedExeception(sprintf "element selected failed, %s not selected." cssSelector))
@@ -380,6 +388,7 @@ let selected item =
     | :? string as cssSelector -> element cssSelector |> selected cssSelector
     | _ -> raise (CanopyNotStringOrElementException(sprintf "Can't check selected on %O because it is not a string or element" item))
 
+(* documented/assertions *)
 let deselected item =
     let deselected cssSelector (elem : IWebElement) =
         if elem.Selected then raise (CanopyDeselectionFailedException(sprintf "element deselected failed, %s selected." cssSelector))
@@ -430,6 +439,7 @@ let fastTextFromCSS selector =
   with | _ -> [ "default" ]
 
 //assertions
+(* documented/assertions *)
 let ( == ) item value =
     match box item with
     | :? IAlert as alert ->
@@ -452,6 +462,7 @@ let ( == ) item value =
 
     | _ -> raise (CanopyNotStringOrElementException(sprintf "Can't check equality on %O because it is not a string or alert" item))
 
+(* documented/assertions *)
 let ( != ) cssSelector value =
     try
         wait compareTimeout (fun _ -> (read cssSelector) <> value)
@@ -459,6 +470,7 @@ let ( != ) cssSelector value =
         | :? CanopyElementNotFoundException as ex -> raise (CanopyNotEqualsFailedException(sprintf "%s%snot equals check failed.  expected NOT: %s, got: " ex.Message Environment.NewLine value))
         | :? WebDriverTimeoutException -> raise (CanopyNotEqualsFailedException(sprintf "not equals check failed.  expected NOT: %s, got: %s" value (read cssSelector)))
 
+(* documented/assertions *)
 let ( *= ) cssSelector value =
     try
         wait compareTimeout (fun _ -> ( cssSelector |> elements |> Seq.exists(fun element -> (textOf element) = value)))
@@ -469,6 +481,7 @@ let ( *= ) cssSelector value =
             cssSelector |> elements |> List.iter (fun e -> bprintf sb "%s%s" (textOf e) Environment.NewLine)
             raise (CanopyValueNotInListException(sprintf "can't find %s in list %s%sgot: %s" value cssSelector Environment.NewLine (sb.ToString())))
 
+(* documented/assertions *)
 let ( *!= ) cssSelector value =
     try
         wait compareTimeout (fun _ -> ( cssSelector |> elements |> Seq.exists(fun element -> (textOf element) = value) |> not))
@@ -476,14 +489,17 @@ let ( *!= ) cssSelector value =
         | :? CanopyElementNotFoundException as ex -> raise (CanopyValueInListException(sprintf "%s%sfound check failed" ex.Message Environment.NewLine))
         | :? WebDriverTimeoutException -> raise (CanopyValueInListException(sprintf "found %s in list %s, expected not to" value cssSelector))
 
+(* documented/assertions *)
 let contains (value1 : string) (value2 : string) =
     if (value2.Contains(value1) <> true) then
         raise (CanopyContainsFailedException(sprintf "contains check failed.  %s does not contain %s" value2 value1))
 
+(* TODO/documented/assertions *)
 let notContains (value1 : string) (value2 : string) =
     if (value2.Contains(value1) = true) then
         raise (CanopyNotContainsFailedException(sprintf "notContains check failed.  %s does contain %s" value2 value1))
 
+(* documented/assertions *)
 let count cssSelector count =
     try
         wait compareTimeout (fun _ -> (unreliableElements cssSelector).Length = count)
@@ -491,14 +507,7 @@ let count cssSelector count =
         | :? CanopyElementNotFoundException as ex -> raise (CanopyCountException(sprintf "%s%scount failed. expected: %i got: %i" ex.Message Environment.NewLine count 0))
         | :? WebDriverTimeoutException -> raise (CanopyCountException(sprintf "count failed. expected: %i got: %i" count (unreliableElements cssSelector).Length))
 
-let private regexMatch pattern input = System.Text.RegularExpressions.Regex.Match(input, pattern).Success
-
-let elementsWithText cssSelector regex =
-    unreliableElements cssSelector
-    |> List.filter (fun elem -> regexMatch regex (textOf elem))
-
-let elementWithText cssSelector regex = (elementsWithText cssSelector regex).Head
-
+(* documented/assertions *)
 let ( =~ ) cssSelector pattern =
     try
         wait compareTimeout (fun _ -> regexMatch pattern (read cssSelector))
@@ -506,6 +515,7 @@ let ( =~ ) cssSelector pattern =
         | :? CanopyElementNotFoundException as ex -> raise (CanopyEqualityFailedException(sprintf "%s%sregex equality check failed.  expected: %s, got:" ex.Message Environment.NewLine pattern))
         | :? WebDriverTimeoutException -> raise (CanopyEqualityFailedException(sprintf "regex equality check failed.  expected: %s, got: %s" pattern (read cssSelector)))
 
+(* TODO/documented/assertions *)
 let ( !=~ ) cssSelector pattern =
     try
         wait compareTimeout (fun _ -> regexMatch pattern (read cssSelector) |> not)
@@ -513,6 +523,7 @@ let ( !=~ ) cssSelector pattern =
         | :? CanopyElementNotFoundException as ex -> raise (CanopyEqualityFailedException(sprintf "%s%sregex not equality check failed.  expected NOT: %s, got:" ex.Message Environment.NewLine pattern))
         | :? WebDriverTimeoutException -> raise (CanopyEqualityFailedException(sprintf "regex not equality check failed.  expected NOT: %s, got: %s" pattern (read cssSelector)))
 
+(* documented/assertions *)
 let ( *~ ) cssSelector pattern =
     try
         wait compareTimeout (fun _ -> ( cssSelector |> elements |> Seq.exists(fun element -> regexMatch pattern (textOf element))))
@@ -523,10 +534,12 @@ let ( *~ ) cssSelector pattern =
             cssSelector |> elements |> List.iter (fun e -> bprintf sb "%s%s" (textOf e) Environment.NewLine)
             raise (CanopyValueNotInListException(sprintf "can't regex find %s in list %s%sgot: %s" pattern cssSelector Environment.NewLine (sb.ToString())))
 
+(* TODO/documented/assertions *)
 let is expected actual =
     if expected <> actual then
         raise (CanopyEqualityFailedException(sprintf "equality check failed.  expected: %O, got: %O" expected actual))
 
+(* TODO/documented/assertions *)
 let (===) expected actual = is expected actual
 
 let private shown (elem : IWebElement) =
@@ -534,6 +547,7 @@ let private shown (elem : IWebElement) =
     let display = elem.GetCssValue("display")
     display <> "none" && opacity = "1"
 
+(* documented/assertions *)
 let displayed item =
     try
         wait compareTimeout (fun _ ->
@@ -545,6 +559,7 @@ let displayed item =
         | :? CanopyElementNotFoundException as ex -> raise (CanopyDisplayedFailedException(sprintf "%s%sdisplay check for %O failed." ex.Message Environment.NewLine item))
         | :? WebDriverTimeoutException -> raise (CanopyDisplayedFailedException(sprintf "display check for %O failed." item))
 
+(* documented/assertions *)
 let notDisplayed item =
     try
         wait compareTimeout (fun _ ->
@@ -556,6 +571,7 @@ let notDisplayed item =
         | :? CanopyElementNotFoundException as ex -> raise (CanopyNotDisplayedFailedException(sprintf "%s%snotDisplay check for %O failed." ex.Message Environment.NewLine item))
         | :? WebDriverTimeoutException -> raise (CanopyNotDisplayedFailedException(sprintf "notDisplay check for %O failed." item))
 
+(* TODO/documented/assertions *)
 let enabled item =
     try
         wait compareTimeout (fun _ ->
@@ -567,6 +583,7 @@ let enabled item =
         | :? CanopyElementNotFoundException as ex -> raise (CanopyEnabledFailedException(sprintf "%s%senabled check for %O failed." ex.Message Environment.NewLine item))
         | :? WebDriverTimeoutException -> raise (CanopyEnabledFailedException(sprintf "enabled check for %O failed." item))
 
+(* TODO/documented/assertions *)
 let disabled item =
     try
         wait compareTimeout (fun _ ->
@@ -578,6 +595,7 @@ let disabled item =
         | :? CanopyElementNotFoundException as ex -> raise (CanopyDisabledFailedException(sprintf "%s%sdisabled check for %O failed." ex.Message Environment.NewLine item))
         | :? WebDriverTimeoutException -> raise (CanopyDisabledFailedException(sprintf "disabled check for %O failed." item))
 
+(* TODO/documented/assertions *)
 let fadedIn cssSelector = fun _ -> element cssSelector |> shown
 
 //clicking/checking
@@ -799,6 +817,7 @@ let quit browser =
 
 let currentUrl() = browser.Url
 
+(* documented/assertions *)
 let on (u: string) =
     let urlPath (u : string) =
         let url = match u with

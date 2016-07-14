@@ -16,12 +16,19 @@ let mutable suites = [new suite()]
 let mutable todo = fun () -> ()
 let mutable skipped = fun () -> ()
 
+(* documented/testing *)
 let once f = (last suites).Once <- f
+(* documented/testing *)
 let before f = (last suites).Before <- f
+(* documented/testing *)
 let after f = (last suites).After <- f
+(* documented/testing *)
 let lastly f = (last suites).Lastly <- f
+(* TODO/documented/testing *)
 let onPass f = (last suites).OnPass <- f
+(* TODO/documented/testing *)
 let onFail f = (last suites).OnFail <- f
+(* documented/testing *)
 let context c =
     if (last suites).Context = null then
         (last suites).Context <- c
@@ -33,25 +40,35 @@ let private incrementLastTestSuite () =
     let lastSuite = last suites
     lastSuite.TotalTestsCount <- lastSuite.TotalTestsCount + 1
     lastSuite
+(* documented/testing *)
 let ( &&& ) description f =
     let lastSuite = incrementLastTestSuite()
     lastSuite.Tests <- Test(description, f, lastSuite.TotalTestsCount)::lastSuite.Tests
+(* documented/testing *)
 let test f = null &&& f
+(* documented/testing *)
 let ntest description f = description &&& f
+(* documented/testing *)
 let ( &&&& ) description f =
     let lastSuite = incrementLastTestSuite()
     lastSuite.Wips <- Test(description, f, lastSuite.TotalTestsCount)::lastSuite.Wips
+(* documented/testing *)
 let wip f = null &&&& f
+(* documented/testing *)
 let many count f =
     let lastSuite = incrementLastTestSuite()
     [1 .. count] |> List.iter (fun _ -> lastSuite.Manys <- Test(null, f, lastSuite.TotalTestsCount)::lastSuite.Manys)
+(* TODO/documented/testing *)
 let nmany count description f =
     let lastSuite = incrementLastTestSuite()
     [1 .. count] |> List.iter (fun _ -> lastSuite.Manys <- Test(description, f, lastSuite.TotalTestsCount)::lastSuite.Manys)
+(* documented/testing *)
 let ( &&! ) description f =
     let lastSuite = incrementLastTestSuite()
     lastSuite.Tests <- Test(description, skipped, lastSuite.TotalTestsCount)::lastSuite.Tests
+(* documented/testing *)
 let xtest f = null &&! f
+(* documented/testing *)
 let ( &&&&& ) description f =
     let lastSuite = incrementLastTestSuite()
     lastSuite.Always <- Test(description, f, lastSuite.TotalTestsCount)::lastSuite.Always
@@ -155,6 +172,7 @@ let private runtest (suite : suite) (test : Test) =
         failureMessage <- null
         FailFast
 
+(* TODO/documented/testing *)
 let run () =
     reporter.suiteBegin()
     let stopWatch = new Diagnostics.Stopwatch()
@@ -207,6 +225,7 @@ let run () =
     reporter.summary stopWatch.Elapsed.Minutes stopWatch.Elapsed.Seconds passedCount failedCount skippedCount
     reporter.suiteEnd()
 
+(* TODO/documented/testing *)
 let runFor browsers =
     // suites are in reverse order and have to be reversed before running the tests
     let currentSuites = suites |> List.rev
