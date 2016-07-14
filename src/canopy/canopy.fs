@@ -81,15 +81,18 @@ let private takeScreenshot directory filename =
             alert.Accept()
             pic
 
+(* documented/actions *)
 let screenshot directory filename =
     match box browser with
         | :? ITakesScreenshot -> takeScreenshot directory filename
         | _ -> Array.empty<byte>
 
+(* documented/actions *)
 let js script = (browser :?> IJavaScriptExecutor).ExecuteScript(script)
 
 let private swallowedJs script = try js script |> ignore with | ex -> ()
 
+(* documented/actions *)
 let sleep seconds =
     let ms = match box seconds with
               | :? int as i -> i * 1000
@@ -116,6 +119,7 @@ let private colorizeAndSleep cssSelector =
     sleep wipSleep
     swallowedJs <| sprintf "document.querySelector('%s').style.border = 'thick solid #ACD372';" cssSelector
 
+(* documented/actions *)
 let highlight cssSelector =
     swallowedJs <| sprintf "document.querySelector('%s').style.border = 'thick solid #ACD372';" cssSelector
 
@@ -186,6 +190,7 @@ let suggestOtherSelectors cssSelector =
             |> Seq.map (fun r -> r.selector) |> List.ofSeq
             |> (fun suggestions -> reporter.suggestSelectors cssSelector suggestions)
 
+(* documented/actions *)
 let describe text =
     puts text
 
@@ -196,6 +201,7 @@ let waitFor2 message f =
         | :? WebDriverTimeoutException ->
                 raise (CanopyWaitForException(sprintf "%s%swaitFor condition failed to become true in %.1f seconds" message System.Environment.NewLine compareTimeout))
 
+(* documented/actions *)
 let waitFor = waitFor2 "Condition not met in given amount of time. If you want to increase the time, put compareTimeout <- 10.0 anywhere before a test to increase the timeout"
 
 //find related
@@ -272,14 +278,17 @@ let private someElementFromList cssSelector elementsList =
         if throwIfMoreThanOneElement then raise (CanopyMoreThanOneElementFoundException(sprintf "More than one element was selected when only one was expected for selector: %s" cssSelector))
         else Some(x)
 
+(* documented/actions *)
 let elements cssSelector = findMany cssSelector elementTimeout browser true
 
 let unreliableElements cssSelector = findMany cssSelector elementTimeout browser false
 
 let unreliableElement cssSelector = cssSelector |> unreliableElements |> elementFromList cssSelector
 
+(* documented/actions *)
 let element cssSelector = cssSelector |> elements |> elementFromList cssSelector
 
+(* documented/actions *)
 let elementWithin cssSelector (elem:IWebElement) =  find cssSelector elementTimeout elem true
 
 let elementsWithText cssSelector regex =
@@ -288,22 +297,30 @@ let elementsWithText cssSelector regex =
 
 let elementWithText cssSelector regex = (elementsWithText cssSelector regex).Head
 
+(* documented/actions *)
 let parent elem = elem |> elementWithin ".."
 
+(* documented/actions *)
 let elementsWithin cssSelector elem = findMany cssSelector elementTimeout elem true
 
 let unreliableElementsWithin cssSelector elem = findMany cssSelector elementTimeout elem false
 
+(* documented/actions *)
 let someElement cssSelector = cssSelector |> unreliableElements |> someElementFromList cssSelector
 
+(* documented/actions *)
 let someElementWithin cssSelector elem = elem |> unreliableElementsWithin cssSelector |> someElementFromList cssSelector
 
+(* documented/actions *)
 let someParent elem = elem |> elementsWithin ".." |> someElementFromList "provided element"
 
+(* documented/actions *)
 let nth index cssSelector = List.nth (elements cssSelector) index
 
+(* documented/actions *)
 let first cssSelector = (elements cssSelector).Head
 
+(* documented/actions *)
 let last cssSelector = (List.rev (elements cssSelector)).Head
 
 //read/write
@@ -328,6 +345,7 @@ let private writeToElement (e : IWebElement) (text:string) =
         if not optimizeByDisablingClearBeforeWrite then try e.Clear() with ex -> ex |> ignore
         e.SendKeys(text)
 
+(* documented/actions *)
 let ( << ) item text =
     match box item with
     | :? IWebElement as elem ->  writeToElement elem text
@@ -360,12 +378,14 @@ let private safeRead item =
     with
         | :? WebDriverTimeoutException -> raise (CanopyReadException("was unable to read item for unkown reason"))
 
+(* documented/actions *)
 let read item =
     match box item with
     | :? IWebElement as elem -> safeRead elem
     | :? string as cssSelector -> safeRead cssSelector
     | _ -> raise (CanopyNotStringOrElementException(sprintf "Can't read %O because it is not a string or element" item))
 
+(* documented/actions *)
 let clear item =
     let clear cssSelector (elem : IWebElement) =
         let readonly = elem.GetAttribute("readonly")
@@ -399,30 +419,41 @@ let deselected item =
     | _ -> raise (CanopyNotStringOrElementException(sprintf "Can't check deselected on %O because it is not a string or element" item))
 
 //keyboard
+(* documented/actions *)
 let tab = Keys.Tab
+(* documented/actions *)
 let enter = Keys.Enter
+(* documented/actions *)
 let down = Keys.Down
+(* documented/actions *)
 let up = Keys.Up
+(* documented/actions *)
 let left = Keys.Left
+(* documented/actions *)
 let right = Keys.Right
+(* TODO/documented/actions *)
 let esc = Keys.Escape
 
+(* documented/actions *)
 let press key =
     let elem = ((js "return document.activeElement;") :?> IWebElement)
     elem.SendKeys(key)
 
 //alerts
+(* documented/actions *)
 let alert() =
     waitFor (fun _ ->
         browser.SwitchTo().Alert() |> ignore
         true)
     browser.SwitchTo().Alert()
 
+(* documented/actions *)
 let acceptAlert() =
     wait compareTimeout (fun _ ->
         browser.SwitchTo().Alert().Accept()
         true)
 
+(* documented/actions *)
 let dismissAlert() =
     wait compareTimeout (fun _ ->
         browser.SwitchTo().Alert().Dismiss()
@@ -599,6 +630,7 @@ let disabled item =
 let fadedIn cssSelector = fun _ -> element cssSelector |> shown
 
 //clicking/checking
+(* documented/actions *)
 let click item =
     match box item with
     | :? IWebElement as element -> element.Click()
@@ -614,6 +646,7 @@ let click item =
             !atleastOneItemClicked)
     | _ -> raise (CanopyNotStringOrElementException(sprintf "Can't click %O because it is not a string or webelement" item))
 
+(* documented/actions *)
 let doubleClick item =
     let js = "var evt = document.createEvent('MouseEvents'); evt.initMouseEvent('dblclick',true, true, window, 0, 0, 0, 0, 0, false, false, false, false, 0,null); arguments[0].dispatchEvent(evt);"
 
@@ -625,6 +658,7 @@ let doubleClick item =
                                         true))
     | _ -> raise (CanopyNotStringOrElementException(sprintf "Can't doubleClick %O because it is not a string or webelement" item))
 
+(* documented/actions *)
 let ctrlClick item =
         let actions = Actions(browser)
 
@@ -636,6 +670,7 @@ let ctrlClick item =
                                         true))
         | _ -> raise (CanopyNotStringOrElementException(sprintf "Can't ctrlClick %O because it is not a string or webelement" item))
 
+(* TODO/documented/actions *)
 let rightClick item =
         let actions = Actions(browser)
 
@@ -647,6 +682,7 @@ let rightClick item =
                                         true))
         | _ -> raise (CanopyNotStringOrElementException(sprintf "Can't rightClick %O because it is not a string or webelement" item))
 
+(* documented/actions *)
 let check item =
     try
         match box item with
@@ -660,6 +696,7 @@ let check item =
         | :? CanopyElementNotFoundException as ex -> raise (CanopyCheckFailedException(sprintf "%s%sfailed to check %O." ex.Message Environment.NewLine item))
         | :? WebDriverTimeoutException -> raise (CanopyCheckFailedException(sprintf "failed to check %O." item))
 
+(* documented/actions *)
 let uncheck item =
     try
         match box item with
@@ -674,12 +711,14 @@ let uncheck item =
         | :? WebDriverTimeoutException -> raise (CanopyUncheckFailedException(sprintf "failed to uncheck %O." item))
 
 //hoverin
+(* documented/actions *)
 let hover selector =
     let actions = Actions(browser)
     let e = element selector
     actions.MoveToElement(e).Perform()
 
 //draggin
+(* documented/actions *)
 let (-->) cssSelectorA cssSelectorB =
     wait elementTimeout (fun _ ->
         let a = element cssSelectorA
@@ -687,9 +726,11 @@ let (-->) cssSelectorA cssSelectorB =
         (new Actions(browser)).DragAndDrop(a, b).Perform()
         true)
 
+(* documented/actions *)
 let drag cssSelectorA cssSelectorB = cssSelectorA --> cssSelectorB
 
 //browser related
+(* documented/actions *)
 let pin direction =
     let h = System.Windows.Forms.Screen.PrimaryScreen.WorkingArea.Height
     let w = System.Windows.Forms.Screen.PrimaryScreen.WorkingArea.Width
@@ -719,6 +760,7 @@ let private firefoxWithUserAgent (userAgent : string) =
     profile.SetPreference("general.useragent.override", userAgent)
     new FirefoxDriver(profile) :> IWebDriver
 
+(* documented/actions *)
 let start b =
     //for chrome you need to download chromedriver.exe from http://code.google.com/p/chromedriver/wiki/GettingStarted
     //place chromedriver.exe in c:\ or you can place it in a customer location and change chromeDir value above
@@ -760,6 +802,7 @@ let start b =
     if autoPinBrowserRightOnLaunch = true then pin Right
     browsers <- browsers @ [browser]
 
+(* documented/actions *)
 let switchTo b = browser <- b
 
 let switchToTab number =
@@ -776,6 +819,7 @@ let closeTab number =
     switchToTab number
     browser.Close()
 
+(* documented/actions *)
 let tile (browsers : IWebDriver list) =
     let h = System.Windows.Forms.Screen.PrimaryScreen.WorkingArea.Height
     let w = System.Windows.Forms.Screen.PrimaryScreen.WorkingArea.Width
@@ -809,12 +853,14 @@ let rotate() =
     let innerWidth, innerHeight = innerSize()
     resize(innerHeight, innerWidth)
 
+(* documented/actions *)
 let quit browser =
     reporter.quit()
     match box browser with
     | :? IWebDriver as b -> b.Quit()
     | _ -> browsers |> List.iter (fun b -> b.Quit())
 
+(* documented/actions *)
 let currentUrl() = browser.Url
 
 (* documented/assertions *)
@@ -830,12 +876,16 @@ let on (u: string) =
     with
         | ex -> if browser.Url.Contains(u) = false then raise (CanopyOnException(sprintf "on check failed, expected expression '%s' got %s" u browser.Url))
 
+(* documented/actions *)
 let ( !^ ) (u : string) = browser.Navigate().GoToUrl(u)
 
+(* documented/actions *)
 let url u = !^ u
 
+(* documented/actions *)
 let title() = browser.Title
 
+(* documented/actions *)
 let reload = currentUrl >> url
 
 type Navigate =
