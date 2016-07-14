@@ -55,7 +55,7 @@ safariDir <- "C:\\"
 edgeDir
 -----------
 * Directory for edge driver
-* Defaults to "C:\Program Files (x86)\Microsoft Web Driver\"
+* Defaults to C:\Program Files (x86)\Microsoft Web Driver\
 *)
 edgeDir <- "C:\\"
 
@@ -120,7 +120,7 @@ failScreenshotFileName
 -----
 * Function that is run to create the filename of screenshot.
 * Takes a test and a suite to be optionally used in name creation.
-* Defaults is Timestamp with format "MMM-d_HH-mm-ss-fff"
+* Defaults is Timestamp with format MMM-d_HH-mm-ss-fff
 *)
 failScreenshotFileName <- fun test suite -> System.DateTime.Now.ToString("MMM-d_HH-mm")
 
