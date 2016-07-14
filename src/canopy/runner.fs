@@ -24,9 +24,9 @@ let before f = (last suites).Before <- f
 let after f = (last suites).After <- f
 (* documented/testing *)
 let lastly f = (last suites).Lastly <- f
-(* TODO/documented/testing *)
+(* documented/testing *)
 let onPass f = (last suites).OnPass <- f
-(* TODO/documented/testing *)
+(* documented/testing *)
 let onFail f = (last suites).OnFail <- f
 (* documented/testing *)
 let context c =
@@ -58,7 +58,7 @@ let wip f = null &&&& f
 let many count f =
     let lastSuite = incrementLastTestSuite()
     [1 .. count] |> List.iter (fun _ -> lastSuite.Manys <- Test(null, f, lastSuite.TotalTestsCount)::lastSuite.Manys)
-(* TODO/documented/testing *)
+(* documented/testing *)
 let nmany count description f =
     let lastSuite = incrementLastTestSuite()
     [1 .. count] |> List.iter (fun _ -> lastSuite.Manys <- Test(description, f, lastSuite.TotalTestsCount)::lastSuite.Manys)
@@ -172,7 +172,7 @@ let private runtest (suite : suite) (test : Test) =
         failureMessage <- null
         FailFast
 
-(* TODO/documented/testing *)
+(* documented/testing *)
 let run () =
     reporter.suiteBegin()
     let stopWatch = new Diagnostics.Stopwatch()
@@ -225,7 +225,7 @@ let run () =
     reporter.summary stopWatch.Elapsed.Minutes stopWatch.Elapsed.Seconds passedCount failedCount skippedCount
     reporter.suiteEnd()
 
-(* TODO/documented/testing *)
+(* documented/testing *)
 let runFor browsers =
     // suites are in reverse order and have to be reversed before running the tests
     let currentSuites = suites |> List.rev

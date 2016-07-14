@@ -1,5 +1,5 @@
 (*** hide ***)
-// This block of code is omitted in the generated HTML documentation. Use 
+// This block of code is omitted in the generated HTML documentation. Use
 // it to define helpers that you do not want to show in the documentation.
 #I "../../bin"
 #r "canopy.dll"
@@ -12,11 +12,28 @@ open System
 (**
 Testing
 ========================
+*)
 
-context 
+(**
+run
+----
+Starts test suite after is defined.  Usually at the bottom of your Program.fs
+*)
+run()
+
+(**
+runFor
+----
+Starts test suite and runs the suite with each of the listed browsers.  Usually at the bottom of your Program.fs
+*)
+runFor [chrome; firefox; ie]
+
+
+(**
+context
 -------
-Define the context of the tests. A default context is defined and used if one is not provided. 
-You can have as many contexts as you like. Each context gets a new once/before/after/lastly function. 
+Define the context of the tests. A default context is defined and used if one is not provided.
+You can have as many contexts as you like. Each context gets a new once/before/after/lastly function.
 *)
 context "Login page tests"
 //some tests
@@ -28,45 +45,63 @@ context "Reset password page tests"
 //different tests
 
 (**
-once 
+once
 ----
-Function that is run once time at the beginning of a test suite. 
+Function that is run once time at the beginning of a test suite. (per context)
 *)
-once (fun _ -> 
+once (fun _ ->
     ()//do this one time at the beginning of the most recently defined context
 )
 
 (**
-before 
+before
 ------
-Function that is run before each test in a context. 
+Function that is run before each test in a context. (per context)
 *)
-before (fun _ -> 
+before (fun _ ->
     ()//do this before every test of the most recently defined context
 )
 
 (**
-after 
+after
 -----
-Function that is run after each test in a context. 
+Function that is run after each test in a context. (per context)
 *)
-after (fun _ -> 
+after (fun _ ->
     ()//do this after every test of the most recently defined context
 )
 
 (**
-lastly 
+lastly
 ------
-Function that is run once at the end of a context. 
+Function that is run once at the end of a context. (per context)
 *)
-lastly (fun _ -> 
+lastly (fun _ ->
     ()//do this after the very last test of the most recently defined context
 )
 
 (**
-test 
+onPass
+------
+Function that is run after a test passes. (per context)
+*)
+onPass (fun _ ->
+    ()//do this after a test passes
+)
+
+(**
+onFail
+------
+Function that is run after a test fails. (per context)
+*)
+onFail (fun _ ->
+    ()//do this after a test fails
+)
+
+(**
+test
 ----
-Standard test definition (name defined automatically by the test number eg: Test #1). 
+Standard test definition (name defined automatically by the test number eg: Test #1).
 *)
 test (fun _ ->
     //go somewhere
@@ -76,9 +111,9 @@ test (fun _ ->
 )
 
 (**
-&&& (named test, aliased as ntest) 
+&&& (named test, aliased as ntest)
 ----------------------------------
-Standard test definition with a name. 
+Standard test definition with a name.
 *)
 "go somewhere, do some stuff, assert" &&& fun _ ->
     //go somewhere
@@ -94,10 +129,10 @@ ntest "go somewhere, do some stuff, assert" (fun _ ->
 )
 
 (**
-&&&& (work in progress, aliased as wip) 
+&&&& (work in progress, aliased as wip)
 ---------------------------------------
-Used for debugging. Test runs slower and highlights the elements that it is interacting with to help debug. 
-If one test is marked wip, only wip tests are ran. Other tests are skipped. 
+Used for debugging. Test runs slower and highlights the elements that it is interacting with to help debug.
+If one test is marked wip, only wip tests are ran. Other tests are skipped.
 *)
 //this test is run slow and only with other tests marked as wip
 "go somewhere, do some stuff, assert" &&&& fun _ ->
@@ -114,9 +149,9 @@ wip (fun _ ->
 )
 
 (**
-&&! (skip, aliased as xtest) 
+&&! (skip, aliased as xtest)
 ----------------------------
-Do not run a test. 
+Do not run a test.
 *)
 //skipped
 "go somewhere, do some stuff, assert" &&! fun _ ->
@@ -133,9 +168,9 @@ xtest (fun _ ->
 )
 
 (**
-&&&&& (always run, in both standard and wip modes) 
+&&&&& (always run, in both standard and wip modes)
 ---------------------------------------
-Test will always be run.  If some tests are marked work in progress, tests marked as always will also run.  
+Test will always be run.  If some tests are marked work in progress, tests marked as always will also run.
 The test will run slow with wip tests, but run at normal speed when there are no wip tests.
 *)
 //this test is run slow with wip test and regular speed with standard tests, test will always run.
@@ -146,9 +181,9 @@ The test will run slow with wip tests, but run at normal speed when there are no
     ()
 
 (**
-many 
+many
 ----
-Run a single test X times. Helps with troubleshooting tests that sometimes fail. 
+Run a single test X times. Helps with troubleshooting tests that sometimes fail.
 *)
 many 20 (fun _ ->
     //go somewhere
@@ -158,8 +193,20 @@ many 20 (fun _ ->
 )
 
 (**
-todo 
+nmany
 ----
-Mark a test as todo to fill in later. LiveHtmlReporter will mark todo tests in the output. 
+Run a single named test X times. Helps with troubleshooting tests that sometimes fail.
+*)
+nmany 20 "description" (fun _ ->
+    //go somewhere
+    //interact with page
+    //assert
+    ()
+)
+
+(**
+todo
+----
+Mark a test as todo to fill in later. LiveHtmlReporter will mark todo tests in the output.
 *)
 "go somewhere, do some stuff, assert" &&& todo
