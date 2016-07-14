@@ -19,18 +19,26 @@ let mutable (failureMessage : string) = null
 let mutable wipTest = false
 let mutable searchedFor : (string * string) list = []
 
+(* documented/actions *)
 let firefox = Firefox
+(* TODO/documented/actions *)
 let aurora = FirefoxWithPath(@"C:\Program Files (x86)\Aurora\firefox.exe")
+(* documented/actions *)
 let ie = IE
+(* TODO/documented/actions *)
 let edgeBETA = EdgeBETA
+(* documented/actions *)
 let chrome = Chrome
+(* TODO/documented/actions *)
 let phantomJS = PhantomJS
+(* TODO/documented/actions *)
 let safari = Safari
 let phantomJSProxyNone = PhantomJSProxyNone
 
 let mutable browsers = []
 
 //misc
+(* TODO/documented/actions *)
 let failsWith message = failureMessage <- message
 
 let private textOf (element : IWebElement) =
@@ -100,6 +108,7 @@ let sleep seconds =
               | _ -> 1000
     System.Threading.Thread.Sleep(ms)
 
+(* TODO/documented/actions *)
 let puts text =
     reporter.write text
     if (showInfoDiv) then
@@ -123,7 +132,7 @@ let private colorizeAndSleep cssSelector =
 let highlight cssSelector =
     swallowedJs <| sprintf "document.querySelector('%s').style.border = 'thick solid #ACD372';" cssSelector
 
-let suggestOtherSelectors cssSelector =
+let private suggestOtherSelectors cssSelector =
     if not disableSuggestOtherSelectors then
         let classesViaJs = """
             var classes = [];
@@ -194,6 +203,7 @@ let suggestOtherSelectors cssSelector =
 let describe text =
     puts text
 
+(* TODO/documented/actions *)
 let waitFor2 message f =
     try
         wait compareTimeout f
@@ -281,8 +291,10 @@ let private someElementFromList cssSelector elementsList =
 (* documented/actions *)
 let elements cssSelector = findMany cssSelector elementTimeout browser true
 
+(* TODO/documented/actions *)
 let unreliableElements cssSelector = findMany cssSelector elementTimeout browser false
 
+(* TODO/documented/actions *)
 let unreliableElement cssSelector = cssSelector |> unreliableElements |> elementFromList cssSelector
 
 (* documented/actions *)
@@ -291,10 +303,12 @@ let element cssSelector = cssSelector |> elements |> elementFromList cssSelector
 (* documented/actions *)
 let elementWithin cssSelector (elem:IWebElement) =  find cssSelector elementTimeout elem true
 
+(* TODO/documented/actions *)
 let elementsWithText cssSelector regex =
     unreliableElements cssSelector
     |> List.filter (fun elem -> regexMatch regex (textOf elem))
 
+(* TODO/documented/actions *)
 let elementWithText cssSelector regex = (elementsWithText cssSelector regex).Head
 
 (* documented/actions *)
@@ -303,6 +317,7 @@ let parent elem = elem |> elementWithin ".."
 (* documented/actions *)
 let elementsWithin cssSelector elem = findMany cssSelector elementTimeout elem true
 
+(* TODO/documented/actions *)
 let unreliableElementsWithin cssSelector elem = findMany cssSelector elementTimeout elem false
 
 (* documented/actions *)
@@ -459,6 +474,7 @@ let dismissAlert() =
         browser.SwitchTo().Alert().Dismiss()
         true)
 
+(* TODO/documented/actions *)
 let fastTextFromCSS selector =
   let script =
     //there is no map on NodeList which is the type returned by querySelectorAll =(
@@ -741,6 +757,7 @@ let pin direction =
     | Right -> browser.Manage().Window.Position <- new System.Drawing.Point((maxWidth * 1),0)
     | FullScreen -> browser.Manage().Window.Maximize()
 
+(* TODO/documented/actions *)
 let pinToMonitor n =
     let n' = if n < 1 then 1 else n
     if System.Windows.Forms.SystemInformation.MonitorCount >= n' then
@@ -805,6 +822,7 @@ let start b =
 (* documented/actions *)
 let switchTo b = browser <- b
 
+(* TODO/documented/actions *)
 let switchToTab number =
     wait pageTimeout (fun _ ->
         let number = number - 1
@@ -815,6 +833,7 @@ let switchToTab number =
         else
             false)
 
+(* TODO/documented/actions *)
 let closeTab number =
     switchToTab number
     browser.Close()
@@ -836,12 +855,13 @@ let tile (browsers : IWebDriver list) =
 
     setSize browsers 0
 
-let innerSize() =
+let private innerSize() =
     let jsBrowser = browser :?> IJavaScriptExecutor
     let innerWidth = System.Int32.Parse(jsBrowser.ExecuteScript("return window.innerWidth").ToString())
     let innerHeight = System.Int32.Parse(jsBrowser.ExecuteScript("return window.innerHeight").ToString())
     innerWidth, innerHeight
 
+(* TODO/documented/actions *)
 let resize size =
     let width,height = size
     let innerWidth, innerHeight = innerSize()
@@ -849,6 +869,7 @@ let resize size =
     let newHeight = browser.Manage().Window.Size.Height - innerHeight + height
     browser.Manage().Window.Size <- System.Drawing.Size(newWidth, newHeight)
 
+(* TODO/documented/actions *)
 let rotate() =
     let innerWidth, innerHeight = innerSize()
     resize(innerHeight, innerWidth)
@@ -892,13 +913,17 @@ type Navigate =
   | Back
   | Forward
 
+(* TODO/documented/actions *)
 let back = Back
+(* TODO/documented/actions *)
 let forward = Forward
 
+(* TODO/documented/actions *)
 let navigate = function
   | Back -> browser.Navigate().Back()
   | Forward -> browser.Navigate().Forward()
 
+(* TODO/documented/actions *)
 let coverage (url : 'a) =
     let mutable innerUrl = ""
     match box url with
@@ -931,6 +956,7 @@ let coverage (url : 'a) =
     let ss = screenshot p f
     reporter.coverage nonMutableInnerUrl ss nonMutableInnerUrl
 
+(* TODO/documented/actions *)
 let addFinder finder =
     let currentFinders = configuredFinders
     configuredFinders <- (fun cssSelector f ->
@@ -939,6 +965,7 @@ let addFinder finder =
 
 //hints
 let private addHintFinder hints finder = hints |> Seq.append (seq { yield finder })
+(* TODO/documented/actions *)
 let addSelector finder hintType selector =
     //gaurd against adding same hintType multipe times and increase size of finder seq
     if not <| (hints.ContainsKey(selector) && addedHints.[selector] |> List.exists (fun hint -> hint = hintType)) then
@@ -950,9 +977,15 @@ let addSelector finder hintType selector =
             addedHints.[selector] <- [hintType]
     selector
 
+(* TODO/documented/actions *)
 let css = addSelector findByCss "css"
+(* TODO/documented/actions *)
 let xpath = addSelector findByXpath "xpath"
+(* TODO/documented/actions *)
 let jquery = addSelector findByJQuery "jquery"
+(* TODO/documented/actions *)
 let label = addSelector findByLabel "label"
+(* TODO/documented/actions *)
 let text = addSelector findByText "text"
+(* TODO/documented/actions *)
 let value = addSelector findByValue "value"

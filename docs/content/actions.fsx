@@ -1,5 +1,5 @@
 (*** hide ***)
-// This block of code is omitted in the generated HTML documentation. Use 
+// This block of code is omitted in the generated HTML documentation. Use
 // it to define helpers that you do not want to show in the documentation.
 #I "../../bin"
 #r "canopy.dll"
@@ -12,10 +12,12 @@ open System
 (**
 Actions
 ========================
+*)
 
+(**
 start
 -----
-Start an instance of a browser. 
+Start an instance of a browser.
 *)
 start firefox
 start chrome
@@ -24,7 +26,7 @@ start ie
 (**
 switchTo
 --------
-Switch to an existing instance of a browser. 
+Switch to an existing instance of a browser.
 *)
 start firefox
 let mainBrowser = browser
@@ -44,7 +46,7 @@ js "document.querySelector('#title').style.border = 'thick solid #FFF467';"
 (**
 screenshot
 ----------
-Take a screenshot and save it to the specified path with specified filename. Returns image as byte array. 
+Take a screenshot and save it to the specified path with specified filename. Returns image as byte array.
 *)
 let path = Environment.GetFolderPath(Environment.SpecialFolder.ApplicationData) + @"\canopy\"
 let filename = DateTime.Now.ToString("MMM-d_HH-mm-ss-fff")
@@ -53,7 +55,7 @@ screenshot path filename
 (**
 sleep
 -----
-Sleep for `X` seconds. 
+Sleep for `X` seconds.
 *)
 //sleep for 1 second
 sleep ()
@@ -65,23 +67,23 @@ sleep 3
 (**
 highlight
 ---------
-Place a border around an element to help you identify it visually, used in wip test mode. 
+Place a border around an element to help you identify it visually, used in wip test mode.
 *)
 highlight ".btn"
 
 (**
-describe 
+describe
 --------
-Describe something in your test, currently writes description to console. 
+Describe something in your test, currently writes description to console.
 *)
 describe "on main page, testing logout"
 
 (**
-waitFor 
+waitFor
 -------
-Wait until custom function is true (better alternative to sleeping `X` seconds). 
+Wait until custom function is true (better alternative to sleeping `X` seconds).
 *)
-let fiveNumbersShown () = 
+let fiveNumbersShown () =
     (elements ".number").Length = 5
 
 url "http://somepage.com/countdown"
@@ -89,63 +91,63 @@ waitFor fiveNumbersShown
 //continue with your test
 
 (**
-element 
+element
 -------
-Get an element (Selenium `IWebElement`) with given css selector or text (built in waits, automatically searches through `iFrames`). 
-Most useful if you need to write some custom helpers to provide functionality that canopy does not currently have. 
+Get an element (Selenium `IWebElement`) with given css selector or text (built in waits, automatically searches through `iFrames`).
+Most useful if you need to write some custom helpers to provide functionality that canopy does not currently have.
 *)
 let logoutHref = (element "#logout").GetAttribute("href")
-describe ("logout href is: " + logoutHref) 
+describe ("logout href is: " + logoutHref)
 //continue with your test
 
 (**
-elementWithin 
+elementWithin
 -------------
-Get an element by searching within another element (nested). 
+Get an element by searching within another element (nested).
 *)
 let name = element "#header" |> elementWithin ".name"
 
 
 (**
-someElement 
+someElement
 -----------
-Like `element` function except it runs a `Some(IWebElement)` or `None`. 
-Read more about `Option` types [here](http://en.wikibooks.org/wiki/F_Sharp_Programming/Option_Types). 
+Like `element` function except it runs a `Some(IWebElement)` or `None`.
+Read more about `Option` types [here](http://en.wikibooks.org/wiki/F_Sharp_Programming/Option_Types).
 *)
 //create your own exists helper function
-let exists selector = 
+let exists selector =
     let someEle = someElement selector
     match someEle with
     | Some(_) -> true
     | None -> false
 
 (**
-someElementWithin 
+someElementWithin
 -----------------
-Like `elementWithin` function except it runs a `Some(IWebElement)` or `None`. 
-Read more about Option types [here](http://en.wikibooks.org/wiki/F_Sharp_Programming/Option_Types). 
+Like `elementWithin` function except it runs a `Some(IWebElement)` or `None`.
+Read more about Option types [here](http://en.wikibooks.org/wiki/F_Sharp_Programming/Option_Types).
 *)
 //create your own exists helper function
 let someName = element "#header" |> someElementWithin ".name"
 
 (**
-parent 
+parent
 ------
-Get the parent element of provided element. 
+Get the parent element of provided element.
 *)
 element "#firstName" |> parent
 
 (**
-someParent 
+someParent
 ----------
-Get the `Some`/`None` parent element of provided element. 
+Get the `Some`/`None` parent element of provided element.
 *)
 element "#firstName" |> someParent
 
 (**
-elements 
+elements
 --------
-The same as element except you get all elements that match the css selector or text. 
+The same as element except you get all elements that match the css selector or text.
 *)
 let clickAll selector =
   elements selector
@@ -154,63 +156,63 @@ let clickAll selector =
 clickAll ".button"
 
 (**
-elementsWithin 
+elementsWithin
 --------------
-Get elements by searching within another element (nested). 
+Get elements by searching within another element (nested).
 *)
 let names = element "#header" |> elementsWithin ".name"
 
 (**
 nth
---- 
-Get the nth element. 
+---
+Get the nth element.
 *)
 click (nth 4 ".button")
 
 (**
-first 
+first
 -----
-Get the first element. 
+Get the first element.
 *)
 click (first ".button")
 
 (**
 last
 ----
-Get the last element. 
+Get the last element.
 *)
 click (last ".button")
 
 (**
 << (write)
 ----------
-Write text to element. 
+Write text to element.
 *)
 "#firstName" << "Alex"
-//if you dont like the << syntax you can alias anyway you like, eg: 
-let write text selector = 
-    selector << text 
+//if you dont like the << syntax you can alias anyway you like, eg:
+let write text selector =
+    selector << text
 
 (**
 read
 ----
-Read the text (or value or selected option) of an element. 
+Read the text (or value or selected option) of an element.
 *)
 let selectedState = read "#states"
 let firstName = read "#firstName"
 let linkText = read "#someLink"
 
 (**
-clear 
+clear
 -----
-Clear the text of an element. 
+Clear the text of an element.
 *)
 clear "#firstName"
 
 (**
-press 
+press
 -----
-Simulate a key press. 
+Simulate a key press.
 *)
 press tab
 press enter
@@ -220,74 +222,74 @@ press left
 press right
 
 (**
-alert 
+alert
 -----
-Gets the current alert. 
+Gets the current alert.
 *)
 alert() == "Welcome to Test Page!"
 
 (**
-acceptAlert 
+acceptAlert
 -----------
-Accepts the current alert. 
+Accepts the current alert.
 *)
 acceptAlert()
 
 
 (**
-dismissAlert 
+dismissAlert
 ------------
-Dismiss the current alert. 
+Dismiss the current alert.
 *)
 dismissAlert()
 
 (**
-click 
+click
 -----
-Click an element via selector or text, can also click selenium `IWebElements`. 
+Click an element via selector or text, can also click selenium `IWebElements`.
 *)
 click "#login"
 click "Login"
 click (element "#login")
 
 (**
-doubleClick 
+doubleClick
 -----------
-Simulates a double click via JavaScript. 
+Simulates a double click via JavaScript.
 *)
 doubleClick "#login"
 
 (**
-ctrlClick 
+ctrlClick
 -----
-Click an element via selector or text while holding down the control key, can also click selenium `IWebElements`. 
+Click an element via selector or text while holding down the control key, can also click selenium `IWebElements`.
 *)
 ctrlClick "#list > option"
 ctrlClick "Oklahoma"
 ctrlClick (element "#list > option")
 
 (**
-check 
+check
 -----
-Checks a checkbox if it is not already checked. 
+Checks a checkbox if it is not already checked.
 *)
 check "#yes"
 //below code will not click the checkbox again, which would uncheck it
 check "#yes"
 
 (**
-uncheck 
+uncheck
 -------
-Unchecks a checkbox if it is not already unchecked. 
+Unchecks a checkbox if it is not already unchecked.
 *)
 uncheck "#yes"
 //below code will not click the checkbox again, which would check it
 uncheck "#yes"
 
 (**
---> (drag is an alias) 
+--> (drag is an alias)
 ----------------------
-Drag on item to another. 
+Drag on item to another.
 *)
 ".todo" --> ".inprogress"
 drag ".todo" ".inprogress"
@@ -303,18 +305,18 @@ hover "Milk"
 "#hover" == "hovered"
 
 (**
-pin 
+pin
 ---
-Pin a browser to the left, right, or fullscreen (any browser you start is pinned right automatically). 
+Pin a browser to the left, right, or fullscreen (any browser you start is pinned right automatically).
 *)
 pin Left
 pin Right
-pin FullScreen 
+pin FullScreen
 
 (**
-tile 
+tile
 ----
-Tile listed browsers equally across your screen. 4 open browsers would each take 25% of the screen. 
+Tile listed browsers equally across your screen. 4 open browsers would each take 25% of the screen.
 *)
 start chrome
 let browser1 = browser
@@ -326,9 +328,9 @@ let browser3 = browser
 tile [browser1; browser2; browser3]
 
 (**
-quit 
+quit
 ----
-Quit the current browser or the specified browser. 
+Quit the current browser or the specified browser.
 *)
 //quit current
 quit ()
@@ -338,14 +340,14 @@ quit browser1
 (**
 currentUrl
 ----------
-Gets the current url. 
+Gets the current url.
 *)
 let u = currentUrl ()
 
 (**
 !^ (aliased by url)
 ---------------------
-Go to a url. 
+Go to a url.
 *)
 !^ "http://www.google.com"
 url "http://www.google.com"
@@ -353,13 +355,13 @@ url "http://www.google.com"
 (**
 title
 -----
-Gets the title of the current page. 
+Gets the title of the current page.
 *)
 let theTitle = title ()
 
 (**
 reload
 ------
-Reload the current page. 
+Reload the current page.
 *)
 reload ()
