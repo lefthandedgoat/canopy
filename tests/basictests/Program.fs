@@ -11,12 +11,12 @@ elementTimeout <- 3.0
 compareTimeout <- 3.0
 pageTimeout <- 3.0
 runFailedContextsFirst <- true
-reporter <- new LiveHtmlReporter(Chrome, configuration.chromeDir) :> IReporter 
+reporter <- new LiveHtmlReporter(Chrome, configuration.chromeDir) :> IReporter
 reporter.setEnvironment "My Machine"
 configuration.failureMessagesThatShoulBeTreatedAsSkip <- ["Skip me when I fail"]
 
-configuration.failScreenshotFileName <- 
-  (fun test suite -> 
+configuration.failScreenshotFileName <-
+  (fun test suite ->
       let suiteContext = if suite.Context = null then "" else suite.Context
       let cleanName = if test.Description = null then "" else test.Description.Replace(' ','_') //etc
       let stamp = DateTime.Now.ToString("MMM-d_HH-mm-ss")
@@ -32,20 +32,20 @@ once (fun _ -> Console.WriteLine "once")
 before (fun _ -> Console.WriteLine "before")
 after (fun _ -> Console.WriteLine "after")
 lastly (fun _ -> Console.WriteLine "lastly")
- 
-let testpage = "http://lefthandedgoat.github.io/canopy/testpages/" 
+
+let testpage = "http://lefthandedgoat.github.io/canopy/testpages/"
 
 "intentionally skipped shows blue in LiveHtmlReport" &&! skipped
 
-"Should skip even though it fails" &&& fun _ ->    
+"Should skip even though it fails" &&& fun _ ->
     url testpage
     failwith "Skip me when I fail"
 
-"Apostrophes don't break anything" &&& fun _ ->    
+"Apostrophes don't break anything" &&& fun _ ->
     url testpage
     count "I've got an apostrophe" 1
 
-"#welcome should have Welcome" &&& fun _ ->    
+"#welcome should have Welcome" &&& fun _ ->
     url testpage
     "#welcome" == "Welcome"
 
@@ -105,7 +105,7 @@ test (fun _ ->
 "writing to #lastName (as element) sets text to John" &&& fun _ ->
     !^ testpage
     let lastname = element "#lastname"
-    clear lastname   
+    clear lastname
     lastname << "John"
     "#lastname" == "John"
 
@@ -240,7 +240,7 @@ test (fun _ ->
 
     rightClick "div:first"
     displayed ".contextmenu"
-    
+
 "element within only searching within the element" &&& fun _ ->
     url "http://lefthandedgoat.github.io/canopy/testpages/elementWithin"
     count ".item" 5
@@ -283,7 +283,7 @@ test (fun _ ->
     None === (someElement "#thisIdDoesNotExist")
 
 "someElement fails when more than one element found" &&& fun _ ->
-    url testpage    
+    url testpage
     failsWith "More than one element was selected when only one was expected for selector: .lastName"
     someElement ".lastName" |> ignore
 
@@ -361,7 +361,7 @@ before (fun _ -> Console.WriteLine "only before set now")
     press tab
     press down
 
-"click polling" &&& fun _ -> 
+"click polling" &&& fun _ ->
     url "http://lefthandedgoat.github.io/canopy/testpages/autocomplete"
     click "#search"
     click "table tr td"
@@ -376,34 +376,34 @@ before (fun _ -> Console.WriteLine "only before set now")
 
 "readonly should throw error on read only field with clear" &&& fun _ ->
     failsWith "element #read_only is marked as read only, you can not clear read only elements"
-    !^ "http://lefthandedgoat.github.io/canopy/testpages/readonly"    
+    !^ "http://lefthandedgoat.github.io/canopy/testpages/readonly"
     clear "#read_only"
-        
+
 "readonly should throw error on read only field with write" &&& fun _ ->
     failsWith "element #read_only is marked as read only, you can not write to read only elements"
-    !^ "http://lefthandedgoat.github.io/canopy/testpages/readonly"    
+    !^ "http://lefthandedgoat.github.io/canopy/testpages/readonly"
     "#read_only" << "new text"
 
 "when value is wrong and changes to empty string prior to time out, it should show wrong value, not empty string" &&& fun _ ->
     failsWith "equality check failed.  expected: John1, got: John"
-    url testpage    
+    url testpage
     "#firstName" == "John1"
 
 context "other tests"
 
-"define a custom wait for using any function that takes in unit and returns bool" &&& fun _ ->    
-    let pageLoaded () = 
+"define a custom wait for using any function that takes in unit and returns bool" &&& fun _ ->
+    let pageLoaded () =
         (element "#wait_for").Text = "Done!"
-    
+
     !^ "http://lefthandedgoat.github.io/canopy/testpages/waitFor"
     waitFor pageLoaded
     "#wait_for" == "Done!"
 
-"define a custom wait for using any function that takes in unit and returns bool" &&& fun _ ->    
+"define a custom wait for using any function that takes in unit and returns bool" &&& fun _ ->
     failsWith <| sprintf "waiting for page to load%swaitFor condition failed to become true in 3.0 seconds" System.Environment.NewLine
-    let pageLoaded () = 
+    let pageLoaded () =
         (element "#wait_for").Text = "Done!!!"
-    
+
     !^ "http://lefthandedgoat.github.io/canopy/testpages/waitFor"
     waitFor2 "waiting for page to load" pageLoaded
 
@@ -415,9 +415,9 @@ context "other tests"
     on "http://lefthandedgoat.github.io/canopy/testpages/home"
 
 "define a custom wait for using any function that takes in unit and returns bool, example using lists" &&& fun _ ->
-    let fiveNumbersShown () = 
+    let fiveNumbersShown () =
         (elements ".number").Length = 5
-    
+
     !^ "http://lefthandedgoat.github.io/canopy/testpages/waitFor"
     waitFor fiveNumbersShown
     (elements ".number").Length === 5
@@ -445,7 +445,7 @@ context "other tests"
     (first "#value_list td").Text === "Value 1"
 
 "test for last function" &&& fun _ ->
-    !^ testpage    
+    !^ testpage
     (last "#value_list td").Text === "Value 4"
 
 "test for nth function" &&& fun _ ->
@@ -479,7 +479,7 @@ context "other tests"
     !^ testpage
     "#test-select" << "Audi"
     "#test-select" == "Audi"
-    
+
 "double clicking" &&& fun _ ->
     !^ "http://lefthandedgoat.github.io/canopy/testpages/doubleClick"
     "#clicked" == "Not Clicked"
@@ -488,7 +488,7 @@ context "other tests"
 
 "ctrl clicking" &&& fun _ ->
     !^ "http://lefthandedgoat.github.io/canopy/testpages/ctrlClick"
-    
+
     ctrlClick "One"
     ctrlClick "2"
     ctrlClick "Three"
@@ -539,7 +539,7 @@ context "other tests"
 
 "elementWithin will find iFrame inside of outter element properly, iframe1" &&& fun _ ->
     url "http://lefthandedgoat.github.io/canopy/testpages/iframe1"
-    first "body" |> elementWithin "#states" |> elementWithin "1" |> read |> is "Alabama" 
+    first "body" |> elementWithin "#states" |> elementWithin "1" |> read |> is "Alabama"
 
 "#firstName should have John (using == infix operator), iframe2" &&& fun _ ->
     url "http://lefthandedgoat.github.io/canopy/testpages/iframe2"
@@ -547,14 +547,14 @@ context "other tests"
 
 "elementWithin will find iFrame inside of outter element properly, iframe2" &&& fun _ ->
     url "http://lefthandedgoat.github.io/canopy/testpages/iframe2"
-    first "body" |> elementWithin "#states" |> elementWithin "1" |> read |> is "Alabama" 
+    first "body" |> elementWithin "#states" |> elementWithin "1" |> read |> is "Alabama"
 
 "selecting option in iframe works by text and value" &&& fun _ ->
-    url "http://lefthandedgoat.github.io/canopy/testpages/iframe1"    
-    
+    url "http://lefthandedgoat.github.io/canopy/testpages/iframe1"
+
     "#item_list" << "Item 2"
     "#item_list" == "Item 2"
-    "#item_list" << "3"    
+    "#item_list" << "3"
     "#item_list" == "Item 3"
 
 context "hints tests"
@@ -590,7 +590,7 @@ context "hovering"
     "#hover" == "not hovered"
     hover "Milk"
     "#hover" == "hovered"
-    
+
 context "dragging"
 "draging works" &&& fun _ ->
     url "http://scrumy.com/silenter39delayed"
@@ -605,7 +605,7 @@ if not (browser :? OpenQA.Selenium.PhantomJS.PhantomJSDriver) then
 
     before (fun _ -> !^ "http://lefthandedgoat.github.io/canopy/testpages/alert")
 
-    "alert box should have 'Alert Test'" &&& fun _ ->    
+    "alert box should have 'Alert Test'" &&& fun _ ->
         click "#alert_test"
         alert() == "Alert Test"
         acceptAlert()
@@ -615,8 +615,8 @@ if not (browser :? OpenQA.Selenium.PhantomJS.PhantomJSDriver) then
         alert() == "Alert Test"
         dismissAlert()
 
-    "alert box should fail correctly when expecting wrong message" &&& fun _ -> 
-        failsWith "equality check failed.  expected: Not the message, got: Alert Test"    
+    "alert box should fail correctly when expecting wrong message" &&& fun _ ->
+        failsWith "equality check failed.  expected: Not the message, got: Alert Test"
         click "#alert_test"
         alert() == "Not the message"
 
@@ -646,7 +646,7 @@ before (fun _ -> !^ "http://lefthandedgoat.github.io/canopy/testpages/")
     throwIfMoreThanOneElement <- true
     failsWith "More than one element was selected when only one was expected for selector: input"
     read (element "input") === "test value 1"
-        
+
 
 context "tiling windows"
 "start multiple browsers and tile them" &&& fun _ ->
@@ -767,7 +767,7 @@ let createTestSuite contextName n =
 createTestSuite "Add test performance" 1000
 
 run ()
-        
+
 switchTo mainBrowser
 coverage testpage
 coverage()
