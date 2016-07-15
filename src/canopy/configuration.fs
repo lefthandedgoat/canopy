@@ -10,6 +10,12 @@ let folderByOSType =
     | PlatformID.Unix -> @"/usr/bin/"
     | _ -> @"c:\"
 
+let folderByOSTypeChromium =
+    match System.Environment.OSVersion.Platform with
+    | PlatformID.MacOSX
+    | PlatformID.Unix -> @"/usr/lib/chromium-browser"
+    | _ -> @"c:\"
+
 //runner related
 (* documented/configuration *)
 let failFast = ref false
@@ -20,6 +26,8 @@ let mutable failScreenshotFileName = fun (test : types.Test) (suite: types.suite
 
 (* documented/configuration *)
 let mutable chromeDir = folderByOSType
+(* TODO/documented/configuration *)
+let mutable chromiumDir = folderByOSTypeChromium
 (* documented/configuration *)
 let mutable ieDir = folderByOSType
 (* documented/configuration *)

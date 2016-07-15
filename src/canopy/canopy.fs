@@ -30,6 +30,8 @@ let edgeBETA = EdgeBETA
 (* documented/actions *)
 let chrome = Chrome
 (* TODO/documented/actions *)
+let chromium = Chromium
+(* TODO/documented/actions *)
 let phantomJS = PhantomJS
 (* TODO/documented/actions *)
 let safari = Safari
@@ -794,12 +796,16 @@ let start b =
         | IEWithOptionsAndTimeSpan(options, timeSpan) -> new IE.InternetExplorerDriver(ieDir, options, timeSpan) :> IWebDriver
         | EdgeBETA -> new Edge.EdgeDriver(edgeDir) :> IWebDriver
         | Chrome ->
-                let options = OpenQA.Selenium.Chrome.ChromeOptions()
-                options.AddArgument("test-type") //https://code.google.com/p/chromedriver/issues/detail?id=799
-                new Chrome.ChromeDriver(chromeDir, options) :> IWebDriver
+            let options = OpenQA.Selenium.Chrome.ChromeOptions()
+            options.AddArgument("test-type") //https://code.google.com/p/chromedriver/issues/detail?id=799
+            new Chrome.ChromeDriver(chromeDir, options) :> IWebDriver
         | ChromeWithOptions options -> new Chrome.ChromeDriver(chromeDir, options) :> IWebDriver
         | ChromeWithUserAgent userAgent -> chromeWithUserAgent userAgent
         | ChromeWithOptionsAndTimeSpan(options, timeSpan) -> new Chrome.ChromeDriver(chromeDir, options, timeSpan) :> IWebDriver
+        | Chromium ->
+            let options = OpenQA.Selenium.Chrome.ChromeOptions()
+            options.AddArgument("test-type") //https://code.google.com/p/chromedriver/issues/detail?id=799
+            new Chrome.ChromeDriver(chromiumDir, options) :> IWebDriver
         | Firefox -> new FirefoxDriver() :> IWebDriver
         | FirefoxWithProfile profile -> new FirefoxDriver(profile) :> IWebDriver
         | FirefoxWithPath path -> new FirefoxDriver(new Firefox.FirefoxBinary(path), Firefox.FirefoxProfile()) :> IWebDriver
