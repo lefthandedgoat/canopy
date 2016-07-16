@@ -254,3 +254,6 @@ Added BETA support for Edge browser [Issue #264](https://github.com/lefthandedgo
 
 #### 0.9.55 - July 7 2016
 Updated to Selenium 2.53.1 for Firefox 47.1 support [Issue #270](https://github.com/lefthandedgoat/canopy/issue/270)
+
+#### 0.9.56 - July 8 2016
+Add right click for [Issue #273](https://github.com/lefthandedgoat/canopy/issue/273)
