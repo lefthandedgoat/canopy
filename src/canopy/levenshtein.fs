@@ -24,8 +24,8 @@ let levenshtein word1 word2 =
                 let delete = table.[i-1, j] + 1
                 let insert = table.[i, j-1] + 1
                 //cost of substitution is 2
-                let substitute = 
-                    if chars1.[i - 1] = chars2.[j - 1] 
+                let substitute =
+                    if chars1.[i - 1] = chars2.[j - 1]
                         then table.[i-1, j-1] //same character
                         else table.[i-1, j-1] + 2
                 table.[i, j] <- List.min [delete; insert; substitute]

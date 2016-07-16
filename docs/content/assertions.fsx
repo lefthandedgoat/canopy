@@ -1,5 +1,5 @@
 (*** hide ***)
-// This block of code is omitted in the generated HTML documentation. Use 
+// This block of code is omitted in the generated HTML documentation. Use
 // it to define helpers that you do not want to show in the documentation.
 #I "../../bin"
 #r "canopy.dll"
@@ -12,74 +12,69 @@ open System
 (**
 Assertions
 ========================
-
-on 
---
-Assert that the browser is currently on a url (uses `String.Contains`).
 *)
-url "https://duckduckgo.com/?q=canopy+f%23"
-on "https://duckduckgo.com/?q"
 
 (**
-selected 
---------
-Assert that a radio or checkbox is selected. 
-*)
-selected "#yes"
-
-(**
-deselected 
-----------
-Assert that a radio or checkbox is not selected. 
-*)
-deselected "#yes"
-
-(**
-== (equals) 
+== (equals)
 -----------
-Assert that the element on the left is equal to the value on the right. 
+Assert that the element on the left is equal to the value on the right.
 *)
 "#firstName" == "Alex"
 
 (**
-!= (does not equal) 
+!= (does not equal)
 -------------------
-Assert that the element on the left is not equal to the value on the right. 
+Assert that the element on the left is not equal to the value on the right.
 *)
 "#firstName" != "Tom"
 
 (**
-*= (one of many equals) 
+=== (aliased as is)
+-----------
+Assert that the value on the left is equalt to the value on right.
+* Note: does not use retry-ability.  Equivalent to Assert.Equals.
+*)
+"Not a selector" === "Not a selector"
+
+(**
+*= (one of many equals)
 -----------------------
-Assert that at least one element in a list equals a value. 
+Assert that at least one element in a list equals a value.
 *)
 ".todoItem" *= "Buy milk"
 
 (**
-*!= (none equals) 
+*!= (none equals)
 -----------------
-Assert that none of the items in a list equals a value. 
+Assert that none of the items in a list equals a value.
 *)
 ".todoItem" *!= "Sell everything"
 
 (**
 contains
 --------
-Assert that one string contains another. 
+Assert that one string contains another.
 *)
 contains "Log" (read "#logout")
 
 (**
-count 
+notContains
+--------
+Assert that one string does not contains another.
+*)
+notContains "Hello Bob!" (read "#name")
+
+(**
+count
 -----
-Assert there are `X` items of given css selector. 
+Assert there are `X` items of given css selector.
 *)
 count ".todoItem" 5
 
 (**
-=~ (regex match) 
+=~ (regex match)
 ----------------
-Assert that an element `regex` matches a value. 
+Assert that an element `regex` matches a value.
 *)
 "#lastName" << "Gray"
 "#lastName" =~ "Gr[ae]y"
@@ -87,22 +82,76 @@ Assert that an element `regex` matches a value.
 "#lastName" =~ "Gr[ae]y"
 
 (**
-*~ (one of many regex match) 
-----------------------------
-Assert that one of many element `regex` matches a value. 
+!=~ (regex match)
+----------------
+Assert that an element does not `regex` match a value.
 *)
-"#colors li" *~ "gr[ea]y" 
+"#lastName" << "Gr0y"
+"#lastName" !=~ "Gr[ae]y"
+"#lastName" << "Gr1y"
+"#lastName" !=~ "Gr[ae]y"
 
 (**
-displayed 
+*~ (one of many regex match)
+----------------------------
+Assert that one of many element `regex` matches a value.
+*)
+"#colors li" *~ "gr[ea]y"
+
+(**
+on
+--
+Assert that the browser is currently on a url (uses `String.Contains`).
+*)
+url "https://duckduckgo.com/?q=canopy+f%23"
+on "https://duckduckgo.com/?q"
+
+(**
+selected
+--------
+Assert that a radio or checkbox is selected.
+*)
+selected "#yes"
+
+(**
+deselected
+----------
+Assert that a radio or checkbox is not selected.
+*)
+deselected "#yes"
+
+(**
+displayed
 ---------
-Assert that an element is displayed on the screen. 
+Assert that an element is displayed on the screen.
 *)
 displayed "#modal"
 
 (**
-notDisplayed 
+notDisplayed
 ------------
-Assert that an element is not displayed on the screen. 
+Assert that an element is not displayed on the screen.
 *)
 notDisplayed "#modal"
+
+(**
+enabled
+---------
+Assert that an element is enabled.
+*)
+enabled "#button"
+
+(**
+disabled
+---------
+Assert that an element is not enabled.
+*)
+disabled "#button"
+
+(**
+fadedIn
+---------
+Returns true/false if element has finished fading in and is shown.
+*)
+let isShown = (fadedIn "#message")()
+waitFor <| fadedIn "#message"

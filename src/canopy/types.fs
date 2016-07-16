@@ -53,12 +53,13 @@ type BrowserStartMode =
     | ChromeWithOptions of Chrome.ChromeOptions
     | ChromeWithOptionsAndTimeSpan of Chrome.ChromeOptions * TimeSpan
     | ChromeWithUserAgent of string
-    | Safari    
+    | Chromium
+    | Safari
     | PhantomJS
     | PhantomJSProxyNone
     | Remote of string * ICapabilities
-  
-let toString (x:'a) = 
+
+let toString (x:'a) =
     match FSharpValue.GetUnionFields(x, typeof<'a>) with
     | case, _ -> case.Name
 
