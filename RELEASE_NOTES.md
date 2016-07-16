@@ -257,3 +257,6 @@ Updated to Selenium 2.53.1 for Firefox 47.1 support [Issue #270](https://github.
 
 #### 0.9.56 - July 8 2016
 Add right click for [Issue #273](https://github.com/lefthandedgoat/canopy/issue/273)
+
+#### 0.9.57 - July 16 2016
+Added better support for chromium [Issue #276](https://github.com/lefthandedgoat/canopy/issue/276)
