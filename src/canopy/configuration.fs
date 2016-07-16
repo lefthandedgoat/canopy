@@ -26,7 +26,7 @@ let mutable failScreenshotFileName = fun (test : types.Test) (suite: types.suite
 
 (* documented/configuration *)
 let mutable chromeDir = folderByOSType
-(* TODO/documented/configuration *)
+(* documented/configuration *)
 let mutable chromiumDir = folderByOSTypeChromium
 (* documented/configuration *)
 let mutable ieDir = folderByOSType

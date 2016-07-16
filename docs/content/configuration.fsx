@@ -11,12 +11,24 @@ open canopy.configuration
 (**
 Configuration
 ========================
+*)
 
+(**
 chromeDir
 --
 * Directory for the chromedriver
 * Defaults to pre-set OS paths
 O* SX: /usr/bin/
+* Windows: C:\
+*)
+chromeDir <- "C:\\"
+
+(**
+chromiumDir
+--
+* Directory for the chromedriver for use with chromium
+* Defaults to pre-set OS paths
+*nix: /usr/lib/chromium-browser
 * Windows: C:\
 *)
 chromeDir <- "C:\\"
