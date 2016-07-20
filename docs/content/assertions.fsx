@@ -121,16 +121,16 @@ Assert that a radio or checkbox is not selected.
 deselected "#yes"
 
 (**
-displayed
+displayed 
 ---------
-Assert that an element is displayed on the screen.
+Assert that an element is displayed on the screen. (Note:  Will not walk up the dom.  If a parent container is hidden this may give the wrong results, try adding :visible to selector)
 *)
 displayed "#modal"
 
 (**
 notDisplayed
 ------------
-Assert that an element is not displayed on the screen.
+Assert that an element is not displayed on the screen. (Note:  Will not walk up the dom.  If a parent container is hidden this may give the wrong results, try adding :visible to selector)
 *)
 notDisplayed "#modal"
 
