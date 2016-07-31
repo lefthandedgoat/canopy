@@ -134,6 +134,7 @@ let tryTest test suite func =
         func ()
         Pass
     with
+        | :? CanopySkipTestException -> Skip
         | ex when failureMessage <> null && failureMessage = ex.Message -> Pass
         | ex -> Fail ex
 
@@ -160,10 +161,13 @@ let private runtest (suite : suite) (test : Test) =
                 | Fail(_) -> processRunResult suite test testResult; Failed
                 | _ -> testResult
 
-              let afterResult = tryTest test suite (suite.After)
               match testResult with
-              | Failed -> testResult
-              | _ -> afterResult
+              | Skip -> Skip
+              | _ -> 
+                let afterResult = tryTest test suite (suite.After)
+                match testResult with
+                | Failed -> testResult
+                | _ -> afterResult
 
         reporter.testEnd test.Id
         failureMessage <- null

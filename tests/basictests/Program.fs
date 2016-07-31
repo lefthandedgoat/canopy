@@ -47,6 +47,7 @@ let testpage = "http://lefthandedgoat.github.io/canopy/testpages/"
 
 "#welcome should have Welcome" &&& fun _ ->
     url testpage
+    skip "test"
     "#welcome" == "Welcome"
 
 //ntest "description" (fun _ -> url "http://www.google.com")
@@ -592,7 +593,7 @@ context "hovering"
     "#hover" == "hovered"
 
 context "dragging"
-"draging works" &&& fun _ ->
+"draging works" &&! fun _ ->
     url "http://scrumy.com/silenter39delayed"
     click ".plus-button a img"
     "#task_title" << "Demo"

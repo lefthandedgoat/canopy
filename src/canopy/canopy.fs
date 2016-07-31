@@ -996,3 +996,7 @@ let label = addSelector findByLabel "label"
 let text = addSelector findByText "text"
 (* documented/actions *)
 let value = addSelector findByValue "value"
+
+let skip message = 
+  describe <| sprintf "Skipped: %s" message
+  raise <| CanopySkipTestException()
