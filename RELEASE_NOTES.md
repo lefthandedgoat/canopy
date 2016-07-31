@@ -260,3 +260,6 @@ Add right click for [Issue #273](https://github.com/lefthandedgoat/canopy/issue/
 
 #### 0.9.57 - July 16 2016
 Added better support for chromium [Issue #276](https://github.com/lefthandedgoat/canopy/issue/276)
+
+#### 0.9.58 - July 31 2016
+Added ability to skip in the middle of a test [Issue #280](https://github.com/lefthandedgoat/canopy/issue/280)
