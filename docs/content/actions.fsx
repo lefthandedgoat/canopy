@@ -389,7 +389,7 @@ clear "#firstName"
 (**
 press
 -----
-Simulate a key press.
+Simulate a key press. Other keys can be sent by first importing OpenQA.Selenium and using the keys defined there.
 *)
 press tab
 press enter
@@ -398,6 +398,10 @@ press up
 press left
 press right
 press esc
+
+open OpenQA.Selenium
+press Keys.Backspace
+
 
 (**
 alert
