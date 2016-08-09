@@ -866,8 +866,6 @@ let tile (browsers : IWebDriver list) =
 let positionBrowser left top width height =
     let h = System.Windows.Forms.Screen.PrimaryScreen.WorkingArea.Height
     let w = System.Windows.Forms.Screen.PrimaryScreen.WorkingArea.Width
-    let count = browsers.Length
-    let maxWidth = w / count
 
     let x = left * w / 100
     let y = top * h / 100
