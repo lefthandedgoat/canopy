@@ -455,6 +455,14 @@ let browser3 = browser
 tile [browser1; browser2; browser3]
 
 (**
+positionBrowser
+----
+Position current browser on the screen - position is in percentages: positionBrowser left top width height 
+*)
+positionBrowser 66 0 33 50
+
+
+(**
 currentUrl
 ----------
 Gets the current url.

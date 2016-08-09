@@ -862,6 +862,22 @@ let tile (browsers : IWebDriver list) =
 
     setSize browsers 0
 
+(* documented/actions *)
+let positionBrowser left top width height =
+    let h = System.Windows.Forms.Screen.PrimaryScreen.WorkingArea.Height
+    let w = System.Windows.Forms.Screen.PrimaryScreen.WorkingArea.Width
+    let count = browsers.Length
+    let maxWidth = w / count
+
+    let x = left * w / 100
+    let y = top * h / 100
+    let bw = width * w /100
+    let bh = height * h / 100
+
+    browser.Manage().Window.Size <- new System.Drawing.Size(bw, bh)
+    browser.Manage().Window.Position <- new System.Drawing.Point(x, y)
+    
+
 let private innerSize() =
     let jsBrowser = browser :?> IJavaScriptExecutor
     let innerWidth = System.Int32.Parse(jsBrowser.ExecuteScript("return window.innerWidth").ToString())
