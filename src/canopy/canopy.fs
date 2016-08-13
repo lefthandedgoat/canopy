@@ -807,6 +807,7 @@ let start b =
             let options = OpenQA.Selenium.Chrome.ChromeOptions()
             options.AddArgument("test-type") //https://code.google.com/p/chromedriver/issues/detail?id=799
             new Chrome.ChromeDriver(chromiumDir, options) :> IWebDriver
+        | ChromiumWithOptions options -> new Chrome.ChromeDriver(chromiumDir, options) :> IWebDriver
         | Firefox -> new FirefoxDriver() :> IWebDriver
         | FirefoxWithProfile profile -> new FirefoxDriver(profile) :> IWebDriver
         | FirefoxWithPath path -> new FirefoxDriver(new Firefox.FirefoxBinary(path), Firefox.FirefoxProfile()) :> IWebDriver

@@ -263,3 +263,9 @@ Added better support for chromium [Issue #276](https://github.com/lefthandedgoat
 
 #### 0.9.58 - July 31 2016
 Added ability to skip in the middle of a test [Issue #280](https://github.com/lefthandedgoat/canopy/issue/280)
+
+#### 0.9.59 - Aug 12 2016
+Added ability to position a browser in a specific location, thanks @navmed! [Issue #285](https://github.com/lefthandedgoat/canopy/issue/285)
+
+#### 0.9.60 - Aug 13 2016
+Added chromium with options support [Issue #276](https://github.com/lefthandedgoat/canopy/issue/276)
