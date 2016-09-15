@@ -798,6 +798,7 @@ let start b =
         | EdgeBETA -> new Edge.EdgeDriver(edgeDir) :> IWebDriver
         | Chrome ->
             let options = OpenQA.Selenium.Chrome.ChromeOptions()
+            options.AddArguments("--disable-extensions")
             options.AddArgument("test-type") //https://code.google.com/p/chromedriver/issues/detail?id=799
             new Chrome.ChromeDriver(chromeDir, options) :> IWebDriver
         | ChromeWithOptions options -> new Chrome.ChromeDriver(chromeDir, options) :> IWebDriver
@@ -805,6 +806,7 @@ let start b =
         | ChromeWithOptionsAndTimeSpan(options, timeSpan) -> new Chrome.ChromeDriver(chromeDir, options, timeSpan) :> IWebDriver
         | Chromium ->
             let options = OpenQA.Selenium.Chrome.ChromeOptions()
+            options.AddArguments("--disable-extensions")
             options.AddArgument("test-type") //https://code.google.com/p/chromedriver/issues/detail?id=799
             new Chrome.ChromeDriver(chromiumDir, options) :> IWebDriver
         | ChromiumWithOptions options -> new Chrome.ChromeDriver(chromiumDir, options) :> IWebDriver
@@ -875,7 +877,7 @@ let positionBrowser left top width height =
 
     browser.Manage().Window.Size <- new System.Drawing.Size(bw, bh)
     browser.Manage().Window.Position <- new System.Drawing.Point(x, y)
-    
+
 
 let private innerSize() =
     let jsBrowser = browser :?> IJavaScriptExecutor
@@ -1012,6 +1014,6 @@ let text = addSelector findByText "text"
 (* documented/actions *)
 let value = addSelector findByValue "value"
 
-let skip message = 
+let skip message =
   describe <| sprintf "Skipped: %s" message
   raise <| CanopySkipTestException()
