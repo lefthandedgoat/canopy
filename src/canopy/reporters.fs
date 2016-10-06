@@ -192,6 +192,7 @@ type LiveHtmlReporter(browser : BrowserStartMode, driverPath : string, ?pinBrows
         | Chrome | Chromium ->
                 let options = OpenQA.Selenium.Chrome.ChromeOptions()
                 options.AddArgument("test-type") //https://code.google.com/p/chromedriver/issues/detail?id=799
+                options.AddArguments("--disable-extensions")
                 new OpenQA.Selenium.Chrome.ChromeDriver(driverPath, options) :> IWebDriver
         | ChromeWithOptions options -> new OpenQA.Selenium.Chrome.ChromeDriver(driverPath, options) :> IWebDriver
         | ChromeWithOptionsAndTimeSpan(options, timeSpan) -> new OpenQA.Selenium.Chrome.ChromeDriver(driverPath, options, timeSpan) :> IWebDriver
