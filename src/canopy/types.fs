@@ -85,6 +85,7 @@ type suite () = class
     member val Manys : Test list = [] with get, set
     member val Always : Test list = [] with get, set
     member val IsParallel = false with get, set
+    member this.Clone() = this.MemberwiseClone() :?> suite
 end
 
 type Result =

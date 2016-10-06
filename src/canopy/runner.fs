@@ -232,23 +232,33 @@ let run () =
 (* documented/testing *)
 let runFor browsers =
     // suites are in reverse order and have to be reversed before running the tests
-    let currentSuites = suites |> List.rev
-    suites <- [new suite()]
+    let currentSuites = suites
+    
     match box browsers with
         | :? (types.BrowserStartMode list) as browsers ->
-            browsers
-            |> List.iter (fun browser ->
-                toString browser
-                |> sprintf "Running tests with %s browser"
-                |> context
-                once (fun _ -> start browser)
-                suites <- suites @ currentSuites)
+            let newSuites =
+              browsers
+              |> List.rev
+              |> List.map (fun browser ->
+                  let suite = new suite()
+                  suite.Context <- sprintf "Running tests with %s browser" (toString browser)
+                  suite.Once <- fun _ -> start browser                                
+                  let currentSuites2 = currentSuites |> List.map(fun suite -> suite.Clone())
+                  currentSuites2 |> List.iter (fun suite -> suite.Context <- sprintf "(%s) %s" (toString browser) suite.Context)
+                  currentSuites2 @ [suite])
+              |> List.concat
+            suites <- newSuites
         | :? (IWebDriver list) as browsers ->
-            browsers
-            |> List.iter (fun browser ->
-                browser.ToString()
-                |> sprintf "Running tests with %s browser"
-                |> context
-                once (fun _ -> switchTo browser)
-                suites <- suites @ currentSuites)
+            let newSuites =
+              browsers
+              |> List.rev
+              |> List.map (fun browser ->
+                  let suite = new suite()
+                  suite.Context <- sprintf "Running tests with %s browser" (browser.ToString())                
+                  suite.Once <- fun _ -> switchTo browser
+                  let currentSuites2 = currentSuites |> List.map(fun suite -> suite.Clone())
+                  currentSuites2 |> List.iter (fun suite -> suite.Context <- sprintf "(%s) %s" (browser.ToString()) suite.Context)
+                  currentSuites2 @ [suite])
+              |> List.concat
+            suites <- newSuites
         | _ -> raise <| Exception "I dont know what you have given me"
