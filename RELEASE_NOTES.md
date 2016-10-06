@@ -271,4 +271,7 @@ Added ability to position a browser in a specific location, thanks @navmed! [Iss
 Added chromium with options support [Issue #276](https://github.com/lefthandedgoat/canopy/issue/276)
 
 #### 0.9.61 - September 16 2016
-Added chromium with options support [Issue #289](https://github.com/lefthandedgoat/canopy/issue/289)
+Fix chrome develop options popup [Issue #289](https://github.com/lefthandedgoat/canopy/issue/289)
+
+#### 0.9.62 - October 5 2016
+Fix runFor [Issue #292](https://github.com/lefthandedgoat/canopy/issue/292)
