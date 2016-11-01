@@ -1017,3 +1017,8 @@ let value = addSelector findByValue "value"
 let skip message =
   describe <| sprintf "Skipped: %s" message
   raise <| CanopySkipTestException()
+
+
+(* documented/actions *)
+let waitForElement cssSelector =
+    waitFor (fun _ -> someElement cssSelector |> Option.isSome)

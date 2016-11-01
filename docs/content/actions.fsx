@@ -380,6 +380,16 @@ waitFor2 "waiting for five numbers to be shown" fiveNumbersShown
 //continue with your test
 
 (**
+waitForElement
+--------------
+Wait until an element with a given CSS selector appears in the DOM.
+This is useful when you need to wait for data being loaded and displayed.
+*)
+url "http://somepage.com/countdown"
+waitForElement ".number"
+//continue with your test
+
+(**
 clear
 -----
 Clear the text of an element.
