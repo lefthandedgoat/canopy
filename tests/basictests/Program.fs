@@ -667,21 +667,21 @@ context "User Agents tests"
 "ChromeWithUserAgent userAgents.iPad should show as iPad" &&& fun _ ->
     start <| ChromeWithUserAgent userAgents.iPad
     url "http://whatsmyuseragent.com/"
-    ".info" *~ "iPad"
+    ".info-box.user-agent" *~ "iPad"
     quit browser
     switchTo mainBrowser
 
 "FirefoxDeviceWithUserAgent userAgents.iPhone should show as iPhone" &&& fun _ ->
     start <| FirefoxWithUserAgent userAgents.iPhone
     url "http://whatsmyuseragent.com/"
-    ".info" *~ "iPhone"
+    ".info-box.user-agent" *~ "iPhone"
     quit browser
     switchTo mainBrowser
 
 "FirefoxDeviceWithUserAgent myagent should show as myagent" &&& fun _ ->
     start <| FirefoxWithUserAgent "myagent"
     url "http://whatsmyuseragent.com/"
-    ".info" *~ "myagent"
+    ".info-box.user-agent" *~ "myagent"
     quit browser
     switchTo mainBrowser
 
@@ -692,7 +692,7 @@ context "Resize tests"
     url "http://resizemybrowser.com/"
     resize (400,400)
     "#cWidth" == "400"
-    "#cHeight" == "400"
+    "#cHeight" == "401"
     quit browser
     switchTo mainBrowser
 
@@ -710,8 +710,8 @@ context "Resize tests"
     url "http://resizemybrowser.com/"
     resize (400,500)
     rotate()
-    "#cHeight" == "400"
-    "#cWidth" == "500"
+    "#cHeight" == "399"
+    "#cWidth" == "501"
     quit browser
     switchTo mainBrowser
 
@@ -720,7 +720,7 @@ context "Resize tests"
     url "http://resizemybrowser.com/"
     resize screenSizes.iPhone4
     rotate()
-    "#cHeight" == "320"
+    "#cHeight" == "321"
     "#cWidth" == "480"
     quit browser
     switchTo mainBrowser
