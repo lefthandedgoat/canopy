@@ -275,3 +275,6 @@ Fix chrome develop options popup [Issue #289](https://github.com/lefthandedgoat/
 
 #### 0.9.62 - October 5 2016
 Fix runFor [Issue #292](https://github.com/lefthandedgoat/canopy/issue/292)
+
+#### 1.0.0 - Nov 4 2016
+Update to Selenium 3.0 (Note that anything like rightClick or hover which uses the actions api does not work with FF (which now requires gechkodriver)) [Issue #300](https://github.com/lefthandedgoat/canopy/issue/300)
