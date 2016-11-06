@@ -380,3 +380,66 @@ type LiveHtmlReporter(browser : BrowserStartMode, driverPath : string, ?pinBrows
 
         member this.setEnvironment env =
             environment <- env
+
+type JUnitReporter(resultFilePath:string) =
+
+    let consoleReporter : IReporter = new ConsoleReporter() :> IReporter
+    
+    let passedTests = ResizeArray<_>()
+    let failedTests = ResizeArray<_>() 
+
+    interface IReporter with
+
+        member this.pass id =
+            consoleReporter.pass id
+            passedTests.Add(id)
+
+        member this.fail ex id ss url =
+            consoleReporter.fail ex id ss url
+            failedTests.Add(ex, id)
+
+        member this.describe d =
+            consoleReporter.describe d
+
+        member this.contextStart c =
+            consoleReporter.contextStart c
+
+        member this.contextEnd c =
+            consoleReporter.contextEnd c
+
+        member this.summary minutes seconds passed failed skipped =
+            consoleReporter.summary minutes seconds passed failed skipped
+            let testCount = passed + failed
+            let passedTestsXml =
+                passedTests
+                |> Seq.map(sprintf "<testcase name=\"%s\" />")
+            let failedTestsXml =
+                failedTests
+                |> Seq.map(fun (ex, id) -> sprintf "<testcase name=\"%s\"><failure>%s</failure></testcase>" id ex.Message) 
+            let allTestsXml = String.Join(String.Empty, Seq.concat [passedTestsXml; failedTestsXml])
+            let xml = sprintf "<testsuite tests=\"%i\">%s</testsuite>" testCount allTestsXml
+            let resultFile = System.IO.FileInfo(resultFilePath)
+            resultFile.Directory.Create()
+            consoleReporter.write <| sprintf "Saving results to %s" resultFilePath
+            let enc = new System.Text.UTF8Encoding(false)
+            let bytes = enc.GetBytes xml
+            use fs = new System.IO.FileStream(resultFilePath, System.IO.FileMode.OpenOrCreate)
+            fs.Write(bytes, 0, bytes.Length)
+
+        member this.write w =
+            consoleReporter.write w
+
+        member this.suggestSelectors selector suggestions =
+            consoleReporter.suggestSelectors selector suggestions
+
+        member this.testStart id =
+            consoleReporter.testStart id
+
+        member this.testEnd id = ()
+        member this.quit () = ()
+        member this.suiteBegin () = ()
+        member this.suiteEnd () = ()
+        member this.coverage url ss _ = ()
+        member this.todo _ = ()
+        member this.skip id = ()
+        member this.setEnvironment env = ()
