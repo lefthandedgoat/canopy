@@ -278,3 +278,6 @@ Fix runFor [Issue #292](https://github.com/lefthandedgoat/canopy/issue/292)
 
 #### 1.0.0 - Nov 4 2016
 Update to Selenium 3.0 (Note that anything like rightClick or hover which uses the actions api does not work with FF (which now requires gechkodriver)) [Issue #300](https://github.com/lefthandedgoat/canopy/issue/300)
+
+#### 1.0.1 - Nov 6 2016
+Basic JUnitReporter implementation by blair55 [Issue #302](https://github.com/lefthandedgoat/canopy/issue/302)
