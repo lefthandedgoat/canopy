@@ -31,7 +31,7 @@ Assert that the element on the left is not equal to the value on the right.
 (**
 === (aliased as is)
 -----------
-Assert that the value on the left is equalt to the value on right.
+Assert that the value on the left is equal to the value on right.
 * Note: does not use retry-ability.  Equivalent to Assert.Equals.
 *)
 "Not a selector" === "Not a selector"
