@@ -292,6 +292,10 @@ test (fun _ ->
     url testpage
     on testpage
 
+"Navigating to a url should be on exact url" &&& fun _ ->
+    url testpage
+    onn testpage
+
 "Navigating to a url with query string should be on url with and without a query string" &&& fun _ ->
     let testpageWithQueryString = testpage + "?param1=weeeee"
     url testpageWithQueryString

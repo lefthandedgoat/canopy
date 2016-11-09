@@ -909,15 +909,19 @@ let quit browser =
 let currentUrl() = browser.Url
 
 (* documented/assertions *)
-let on (u: string) =
+let onn (u: string) =
     let urlPath (u : string) =
         let url = match u with
                   | x when x.StartsWith("http") -> u  //leave absolute urls alone
                   | _ -> "http://host/" + u.Trim('/') //ensure valid uri
         let uriBuilder = new System.UriBuilder(url)
         uriBuilder.Path.TrimEnd('/') //get the path part removing trailing slashes
+    wait pageTimeout (fun _ -> if browser.Url = u then true else urlPath(browser.Url) = urlPath(u))
+
+(* documented/assertions *)
+let on (u: string) =
     try
-        wait pageTimeout (fun _ -> if browser.Url = u then true else urlPath(browser.Url) = urlPath(u))
+        onn u
     with
         | ex -> if browser.Url.Contains(u) = false then raise (CanopyOnException(sprintf "on check failed, expected expression '%s' got %s" u browser.Url))
 
