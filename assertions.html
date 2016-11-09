@@ -150,7 +150,7 @@
 </tr>
 </table>
 <h2>on</h2>
-<p>Assert that the browser is currently on a url (uses <code>String.Contains</code>).</p>
+<p>Assert that the browser is currently on a url. Falls back to using <code>String.Contains</code> after page timeout.</p>
 <table class="pre"><tr><td class="lines"><pre class="fssnip"><span class="l">1: </span>
 <span class="l">2: </span>
 </pre></td>
@@ -159,11 +159,21 @@
 </code></pre></td>
 </tr>
 </table>
+<h2>onn</h2>
+<p>Same as <code>on</code> but does not fall back to using <code>String.Contains</code>.</p>
+<table class="pre"><tr><td class="lines"><pre class="fssnip"><span class="l">1: </span>
+<span class="l">2: </span>
+</pre></td>
+<td class="snippet"><pre class="fssnip highlighted"><code lang="fsharp"><span onmouseout="hideTip(event, 'fs8', 11)" onmouseover="showTip(event, 'fs8', 11)" class="f">url</span> <span class="s">&quot;https://duckduckgo.com/about&quot;</span>
+<span onmouseout="hideTip(event, 'fs10', 12)" onmouseover="showTip(event, 'fs10', 12)" class="f">onn</span> <span class="s">&quot;https://duckduckgo.com/about&quot;</span>
+</code></pre></td>
+</tr>
+</table>
 <h2>selected</h2>
 <p>Assert that a radio or checkbox is selected.</p>
 <table class="pre"><tr><td class="lines"><pre class="fssnip"><span class="l">1: </span>
 </pre></td>
-<td class="snippet"><pre class="fssnip highlighted"><code lang="fsharp"><span onmouseout="hideTip(event, 'fs10', 11)" onmouseover="showTip(event, 'fs10', 11)" class="f">selected</span> <span class="s">&quot;#yes&quot;</span>
+<td class="snippet"><pre class="fssnip highlighted"><code lang="fsharp"><span onmouseout="hideTip(event, 'fs11', 13)" onmouseover="showTip(event, 'fs11', 13)" class="f">selected</span> <span class="s">&quot;#yes&quot;</span>
 </code></pre></td>
 </tr>
 </table>
@@ -171,7 +181,7 @@
 <p>Assert that a radio or checkbox is not selected.</p>
 <table class="pre"><tr><td class="lines"><pre class="fssnip"><span class="l">1: </span>
 </pre></td>
-<td class="snippet"><pre class="fssnip highlighted"><code lang="fsharp"><span onmouseout="hideTip(event, 'fs11', 12)" onmouseover="showTip(event, 'fs11', 12)" class="f">deselected</span> <span class="s">&quot;#yes&quot;</span>
+<td class="snippet"><pre class="fssnip highlighted"><code lang="fsharp"><span onmouseout="hideTip(event, 'fs12', 14)" onmouseover="showTip(event, 'fs12', 14)" class="f">deselected</span> <span class="s">&quot;#yes&quot;</span>
 </code></pre></td>
 </tr>
 </table>
@@ -179,7 +189,7 @@
 <p>Assert that an element is displayed on the screen. (Note:  Will not walk up the dom.  If a parent container is hidden this may give the wrong results, try adding :visible to selector)</p>
 <table class="pre"><tr><td class="lines"><pre class="fssnip"><span class="l">1: </span>
 </pre></td>
-<td class="snippet"><pre class="fssnip highlighted"><code lang="fsharp"><span onmouseout="hideTip(event, 'fs12', 13)" onmouseover="showTip(event, 'fs12', 13)" class="f">displayed</span> <span class="s">&quot;#modal&quot;</span>
+<td class="snippet"><pre class="fssnip highlighted"><code lang="fsharp"><span onmouseout="hideTip(event, 'fs13', 15)" onmouseover="showTip(event, 'fs13', 15)" class="f">displayed</span> <span class="s">&quot;#modal&quot;</span>
 </code></pre></td>
 </tr>
 </table>
@@ -187,7 +197,7 @@
 <p>Assert that an element is not displayed on the screen. (Note:  Will not walk up the dom.  If a parent container is hidden this may give the wrong results, try adding :visible to selector)</p>
 <table class="pre"><tr><td class="lines"><pre class="fssnip"><span class="l">1: </span>
 </pre></td>
-<td class="snippet"><pre class="fssnip highlighted"><code lang="fsharp"><span onmouseout="hideTip(event, 'fs13', 14)" onmouseover="showTip(event, 'fs13', 14)" class="f">notDisplayed</span> <span class="s">&quot;#modal&quot;</span>
+<td class="snippet"><pre class="fssnip highlighted"><code lang="fsharp"><span onmouseout="hideTip(event, 'fs14', 16)" onmouseover="showTip(event, 'fs14', 16)" class="f">notDisplayed</span> <span class="s">&quot;#modal&quot;</span>
 </code></pre></td>
 </tr>
 </table>
@@ -195,7 +205,7 @@
 <p>Assert that an element is enabled.</p>
 <table class="pre"><tr><td class="lines"><pre class="fssnip"><span class="l">1: </span>
 </pre></td>
-<td class="snippet"><pre class="fssnip highlighted"><code lang="fsharp"><span onmouseout="hideTip(event, 'fs14', 15)" onmouseover="showTip(event, 'fs14', 15)" class="f">enabled</span> <span class="s">&quot;#button&quot;</span>
+<td class="snippet"><pre class="fssnip highlighted"><code lang="fsharp"><span onmouseout="hideTip(event, 'fs15', 17)" onmouseover="showTip(event, 'fs15', 17)" class="f">enabled</span> <span class="s">&quot;#button&quot;</span>
 </code></pre></td>
 </tr>
 </table>
@@ -203,7 +213,7 @@
 <p>Assert that an element is not enabled.</p>
 <table class="pre"><tr><td class="lines"><pre class="fssnip"><span class="l">1: </span>
 </pre></td>
-<td class="snippet"><pre class="fssnip highlighted"><code lang="fsharp"><span onmouseout="hideTip(event, 'fs15', 16)" onmouseover="showTip(event, 'fs15', 16)" class="f">disabled</span> <span class="s">&quot;#button&quot;</span>
+<td class="snippet"><pre class="fssnip highlighted"><code lang="fsharp"><span onmouseout="hideTip(event, 'fs16', 18)" onmouseover="showTip(event, 'fs16', 18)" class="f">disabled</span> <span class="s">&quot;#button&quot;</span>
 </code></pre></td>
 </tr>
 </table>
@@ -212,8 +222,8 @@
 <table class="pre"><tr><td class="lines"><pre class="fssnip"><span class="l">1: </span>
 <span class="l">2: </span>
 </pre></td>
-<td class="snippet"><pre class="fssnip highlighted"><code lang="fsharp"><span class="k">let</span> <span onmouseout="hideTip(event, 'fs16', 17)" onmouseover="showTip(event, 'fs16', 17)" class="i">isShown</span> <span class="o">=</span> (<span onmouseout="hideTip(event, 'fs17', 18)" onmouseover="showTip(event, 'fs17', 18)" class="f">fadedIn</span> <span class="s">&quot;#message&quot;</span>)()
-<span onmouseout="hideTip(event, 'fs18', 19)" onmouseover="showTip(event, 'fs18', 19)" class="f">waitFor</span> <span class="o">&lt;|</span> <span onmouseout="hideTip(event, 'fs17', 20)" onmouseover="showTip(event, 'fs17', 20)" class="f">fadedIn</span> <span class="s">&quot;#message&quot;</span>
+<td class="snippet"><pre class="fssnip highlighted"><code lang="fsharp"><span class="k">let</span> <span onmouseout="hideTip(event, 'fs17', 19)" onmouseover="showTip(event, 'fs17', 19)" class="i">isShown</span> <span class="o">=</span> (<span onmouseout="hideTip(event, 'fs18', 20)" onmouseover="showTip(event, 'fs18', 20)" class="f">fadedIn</span> <span class="s">&quot;#message&quot;</span>)()
+<span onmouseout="hideTip(event, 'fs19', 21)" onmouseover="showTip(event, 'fs19', 21)" class="f">waitFor</span> <span class="o">&lt;|</span> <span onmouseout="hideTip(event, 'fs18', 22)" onmouseover="showTip(event, 'fs18', 22)" class="f">fadedIn</span> <span class="s">&quot;#message&quot;</span>
 </code></pre></td>
 </tr>
 </table>
@@ -227,15 +237,16 @@
 <div class="tip" id="fs7">val count : cssSelector:string -&gt; count:int -&gt; unit<br /><br />Full name: canopy.core.count</div>
 <div class="tip" id="fs8">val url : u:string -&gt; unit<br /><br />Full name: canopy.core.url</div>
 <div class="tip" id="fs9">val on : u:string -&gt; unit<br /><br />Full name: canopy.core.on</div>
-<div class="tip" id="fs10">val selected : item:&#39;a -&gt; unit<br /><br />Full name: canopy.core.selected</div>
-<div class="tip" id="fs11">val deselected : item:&#39;a -&gt; unit<br /><br />Full name: canopy.core.deselected</div>
-<div class="tip" id="fs12">val displayed : item:&#39;a -&gt; unit<br /><br />Full name: canopy.core.displayed</div>
-<div class="tip" id="fs13">val notDisplayed : item:&#39;a -&gt; unit<br /><br />Full name: canopy.core.notDisplayed</div>
-<div class="tip" id="fs14">val enabled : item:&#39;a -&gt; unit<br /><br />Full name: canopy.core.enabled</div>
-<div class="tip" id="fs15">val disabled : item:&#39;a -&gt; unit<br /><br />Full name: canopy.core.disabled</div>
-<div class="tip" id="fs16">val isShown : bool<br /><br />Full name: Assertions.isShown</div>
-<div class="tip" id="fs17">val fadedIn : cssSelector:string -&gt; &#39;a -&gt; bool<br /><br />Full name: canopy.core.fadedIn</div>
-<div class="tip" id="fs18">val waitFor : ((unit -&gt; bool) -&gt; unit)<br /><br />Full name: canopy.core.waitFor</div>
+<div class="tip" id="fs10">val onn : u:string -&gt; unit<br /><br />Full name: canopy.core.onn</div>
+<div class="tip" id="fs11">val selected : item:&#39;a -&gt; unit<br /><br />Full name: canopy.core.selected</div>
+<div class="tip" id="fs12">val deselected : item:&#39;a -&gt; unit<br /><br />Full name: canopy.core.deselected</div>
+<div class="tip" id="fs13">val displayed : item:&#39;a -&gt; unit<br /><br />Full name: canopy.core.displayed</div>
+<div class="tip" id="fs14">val notDisplayed : item:&#39;a -&gt; unit<br /><br />Full name: canopy.core.notDisplayed</div>
+<div class="tip" id="fs15">val enabled : item:&#39;a -&gt; unit<br /><br />Full name: canopy.core.enabled</div>
+<div class="tip" id="fs16">val disabled : item:&#39;a -&gt; unit<br /><br />Full name: canopy.core.disabled</div>
+<div class="tip" id="fs17">val isShown : bool<br /><br />Full name: Assertions.isShown</div>
+<div class="tip" id="fs18">val fadedIn : cssSelector:string -&gt; &#39;a -&gt; bool<br /><br />Full name: canopy.core.fadedIn</div>
+<div class="tip" id="fs19">val waitFor : ((unit -&gt; bool) -&gt; unit)<br /><br />Full name: canopy.core.waitFor</div>
 
         </div>
         <div class="span3">
