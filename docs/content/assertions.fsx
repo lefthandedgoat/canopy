@@ -101,10 +101,18 @@ Assert that one of many element `regex` matches a value.
 (**
 on
 --
-Assert that the browser is currently on a url (uses `String.Contains`).
+Assert that the browser is currently on a url. Falls back to using `String.Contains` after page timeout.
 *)
 url "https://duckduckgo.com/?q=canopy+f%23"
 on "https://duckduckgo.com/?q"
+
+(**
+onn
+--
+Same as `on` but does not fall back to using `String.Contains`.
+*)
+url "https://duckduckgo.com/about"
+onn "https://duckduckgo.com/about"
 
 (**
 selected
