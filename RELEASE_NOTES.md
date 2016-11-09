@@ -281,3 +281,6 @@ Update to Selenium 3.0 (Note that anything like rightClick or hover which uses t
 
 #### 1.0.1 - Nov 6 2016
 Basic JUnitReporter implementation by blair55 [Issue #302](https://github.com/lefthandedgoat/canopy/issue/302)
+
+#### 1.0.2 - Nov 9 2016
+Added strict 'onn' to check that you are on a url (not fuzzy) by blair55 [Issue #304](https://github.com/lefthandedgoat/canopy/pull/304)
