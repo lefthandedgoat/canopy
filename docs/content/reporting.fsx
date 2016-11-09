@@ -44,3 +44,13 @@ open reporters
 reporter <- new TeamCityReporter() :> IReporter
 
 //screenshot is TODO
+
+(**
+JUnit Reporter
+-----------------
+Produces test results in basic JUnit format. Compatible with CircleCI. 
+*)
+
+open configuration
+open reporters
+reporter <- new JUnitReporter("./TestResults.xml") :> IReporter
