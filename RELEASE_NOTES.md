@@ -284,3 +284,6 @@ Basic JUnitReporter implementation by blair55 [Issue #302](https://github.com/le
 
 #### 1.0.2 - Nov 9 2016
 Added strict 'onn' to check that you are on a url (not fuzzy) by blair55 [Issue #304](https://github.com/lefthandedgoat/canopy/pull/304)
+
+#### 1.0.3 - Nov 9 2016
+Improve JUnitReporter by add time meta data by blair55 [Issue #305](https://github.com/lefthandedgoat/canopy/pull/305)
