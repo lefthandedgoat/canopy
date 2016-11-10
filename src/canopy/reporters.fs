@@ -385,8 +385,10 @@ type JUnitReporter(resultFilePath:string) =
 
     let consoleReporter : IReporter = new ConsoleReporter() :> IReporter
     
-    let passedTests = ResizeArray<_>()
-    let failedTests = ResizeArray<_>() 
+    let testStopWatch = System.Diagnostics.Stopwatch()
+    let testTimes = ResizeArray<string * float>()
+    let passedTests = ResizeArray<string>()
+    let failedTests = ResizeArray<Exception * string>() 
 
     interface IReporter with
 
@@ -409,15 +411,19 @@ type JUnitReporter(resultFilePath:string) =
 
         member this.summary minutes seconds passed failed skipped =
             consoleReporter.summary minutes seconds passed failed skipped
-            let testCount = passed + failed
+            let getTestTime test =
+                testTimes.Find(fun (t, _) -> test = t) |> snd
             let passedTestsXml =
                 passedTests
-                |> Seq.map(sprintf "<testcase name=\"%s\" />")
+                |> Seq.map(fun id -> sprintf "<testcase name=\"%s\" time=\"%.3f\"/>" id (getTestTime id))
             let failedTestsXml =
                 failedTests
-                |> Seq.map(fun (ex, id) -> sprintf "<testcase name=\"%s\"><failure>%s</failure></testcase>" id ex.Message) 
+                |> Seq.map(fun (ex, id) -> sprintf "<testcase name=\"%s\" time=\"%.3f\"><failure>%s</failure></testcase>" id (getTestTime id) ex.Message)
+            let testCount = passed + failed
+            let testTimeSum = testTimes |> Seq.sumBy snd
             let allTestsXml = String.Join(String.Empty, Seq.concat [passedTestsXml; failedTestsXml])
-            let xml = sprintf "<testsuite tests=\"%i\">%s</testsuite>" testCount allTestsXml
+            let xml =
+                sprintf "<testsuite tests=\"%i\" time=\"%.3f\">%s</testsuite>" testCount testTimeSum allTestsXml 
             let resultFile = System.IO.FileInfo(resultFilePath)
             resultFile.Directory.Create()
             consoleReporter.write <| sprintf "Saving results to %s" resultFilePath
@@ -434,8 +440,14 @@ type JUnitReporter(resultFilePath:string) =
 
         member this.testStart id =
             consoleReporter.testStart id
+            testStopWatch.Reset()
+            testStopWatch.Start()
 
-        member this.testEnd id = ()
+        member this.testEnd id =
+            testStopWatch.Stop()
+            let elapsedSeconds = float testStopWatch.ElapsedMilliseconds / 1000.
+            testTimes.Add(id, elapsedSeconds)
+
         member this.quit () = ()
         member this.suiteBegin () = ()
         member this.suiteEnd () = ()
