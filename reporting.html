@@ -84,6 +84,18 @@ Good for visual reference to what has and has not been tested.
 </code></pre></td>
 </tr>
 </table>
+<h2>JUnit Reporter</h2>
+<p>Produces test results in basic JUnit format. Compatible with CircleCI.</p>
+<table class="pre"><tr><td class="lines"><pre class="fssnip"><span class="l">1: </span>
+<span class="l">2: </span>
+<span class="l">3: </span>
+</pre></td>
+<td class="snippet"><pre class="fssnip highlighted"><code lang="fsharp"><span class="k">open</span> <span onmouseout="hideTip(event, 'fs4', 14)" onmouseover="showTip(event, 'fs4', 14)" class="i">configuration</span>
+<span class="k">open</span> <span onmouseout="hideTip(event, 'fs5', 15)" onmouseover="showTip(event, 'fs5', 15)" class="i">reporters</span>
+<span onmouseout="hideTip(event, 'fs6', 16)" onmouseover="showTip(event, 'fs6', 16)" class="v">reporter</span> <span class="o">&lt;-</span> <span class="k">new</span> <span onmouseout="hideTip(event, 'fs10', 17)" onmouseover="showTip(event, 'fs10', 17)" class="t">JUnitReporter</span>(<span class="s">&quot;./TestResults.xml&quot;</span>) <span class="o">:&gt;</span> <span onmouseout="hideTip(event, 'fs8', 18)" onmouseover="showTip(event, 'fs8', 18)" class="t">IReporter</span>
+</code></pre></td>
+</tr>
+</table>
 
 <div class="tip" id="fs1">namespace canopy</div>
 <div class="tip" id="fs2">module runner<br /><br />from canopy</div>
@@ -94,6 +106,7 @@ Good for visual reference to what has and has not been tested.
 <div class="tip" id="fs7">Multiple items<br />type LiveHtmlReporter =<br />&#160;&#160;interface IReporter<br />&#160;&#160;new : unit -&gt; LiveHtmlReporter<br />&#160;&#160;new : browser:BrowserStartMode -&gt; LiveHtmlReporter<br />&#160;&#160;new : browser:BrowserStartMode * driverPath:string * ?pinBrowserRight0:bool -&gt; LiveHtmlReporter<br />&#160;&#160;member commonFail : ctx:string -&gt; ex:Exception -&gt; id:string -&gt; ss:byte [] -&gt; url:string -&gt; unit<br />&#160;&#160;member failWithContext : ctx:string -&gt; ex:Exception -&gt; id:string -&gt; ss:byte [] -&gt; url:string -&gt; unit<br />&#160;&#160;member browser : IWebDriver<br />&#160;&#160;member reportPath : string option<br />&#160;&#160;member reportTemplateUrl : string<br />&#160;&#160;member js : script:string -&gt; obj<br />&#160;&#160;...<br /><br />Full name: canopy.reporters.LiveHtmlReporter<br /><br />--------------------<br />new : unit -&gt; LiveHtmlReporter<br />new : browser:BrowserStartMode -&gt; LiveHtmlReporter<br />new : browser:BrowserStartMode * driverPath:string * ?pinBrowserRight0:bool -&gt; LiveHtmlReporter</div>
 <div class="tip" id="fs8">type IReporter =<br />&#160;&#160;interface<br />&#160;&#160;&#160;&#160;abstract member contextEnd : string -&gt; unit<br />&#160;&#160;&#160;&#160;abstract member contextStart : string -&gt; unit<br />&#160;&#160;&#160;&#160;abstract member coverage : string -&gt; byte [] -&gt; string -&gt; unit<br />&#160;&#160;&#160;&#160;abstract member describe : string -&gt; unit<br />&#160;&#160;&#160;&#160;abstract member fail : Exception -&gt; string -&gt; byte [] -&gt; string -&gt; unit<br />&#160;&#160;&#160;&#160;abstract member pass : string -&gt; unit<br />&#160;&#160;&#160;&#160;abstract member quit : unit -&gt; unit<br />&#160;&#160;&#160;&#160;abstract member setEnvironment : string -&gt; unit<br />&#160;&#160;&#160;&#160;abstract member skip : string -&gt; unit<br />&#160;&#160;&#160;&#160;abstract member suggestSelectors : string -&gt; string list -&gt; unit<br />&#160;&#160;&#160;&#160;...<br />&#160;&#160;end<br /><br />Full name: canopy.reporters.IReporter</div>
 <div class="tip" id="fs9">Multiple items<br />type TeamCityReporter =<br />&#160;&#160;interface IReporter<br />&#160;&#160;new : unit -&gt; TeamCityReporter<br /><br />Full name: canopy.reporters.TeamCityReporter<br /><br />--------------------<br />new : unit -&gt; TeamCityReporter</div>
+<div class="tip" id="fs10">Multiple items<br />type JUnitReporter =<br />&#160;&#160;interface IReporter<br />&#160;&#160;new : resultFilePath:string -&gt; JUnitReporter<br /><br />Full name: canopy.reporters.JUnitReporter<br /><br />--------------------<br />new : resultFilePath:string -&gt; JUnitReporter</div>
 
         </div>
         <div class="span3">
