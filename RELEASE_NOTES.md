@@ -208,79 +208,79 @@ Improved error handeling on screenshots [Issue #225](https://github.com/lefthand
 
 #### 0.9.44 - January 18 2016
 Accepted PR to fix error handeling regression, thanks @RubenOen  [Pull Request #230](https://github.com/lefthandedgoat/canopy/pull/230)
-Fixed issue where read could some times suffer form stale element exceptions and the likes [Issue #229](https://github.com/lefthandedgoat/canopy/issue/229)
+Fixed issue where read could some times suffer form stale element exceptions and the likes [Issue #229](https://github.com/lefthandedgoat/canopy/issues/229)
 
 #### 0.9.45 - February 27 2016
-Added !=~ (regex not match) operator [Issue #237](https://github.com/lefthandedgoat/canopy/issue/237)
-Add a configurable optimization to disable clear before writing [Issue #236](https://github.com/lefthandedgoat/canopy/issue/236)
-Improve html reporter to make it friendlier to parallel runs [Issue #235](https://github.com/lefthandedgoat/canopy/issue/235)
-Update to selenium 2.52.0 [Issue #233](https://github.com/lefthandedgoat/canopy/issue/233)
+Added !=~ (regex not match) operator [Issue #237](https://github.com/lefthandedgoat/canopy/issues/237)
+Add a configurable optimization to disable clear before writing [Issue #236](https://github.com/lefthandedgoat/canopy/issues/236)
+Improve html reporter to make it friendlier to parallel runs [Issue #235](https://github.com/lefthandedgoat/canopy/issues/235)
+Update to selenium 2.52.0 [Issue #233](https://github.com/lefthandedgoat/canopy/issues/233)
 
 #### 0.9.46 - March 12 2016
-Failures in Once or Before will now skip tests in context with skipRemainingTestsInContextOnFailure <- true [Issue #242](https://github.com/lefthandedgoat/canopy/issue/242)
-Fix #241 for using html reporter with parallel test runs [Issue #241](https://github.com/lefthandedgoat/canopy/issue/241)
-Fix #240 selection + optgroup erorr [Issue #240](https://github.com/lefthandedgoat/canopy/issue/240)
-Fix #238 add escape key [Issue #238](https://github.com/lefthandedgoat/canopy/issue/238)
+Failures in Once or Before will now skip tests in context with skipRemainingTestsInContextOnFailure <- true [Issue #242](https://github.com/lefthandedgoat/canopy/issues/242)
+Fix #241 for using html reporter with parallel test runs [Issue #241](https://github.com/lefthandedgoat/canopy/issues/241)
+Fix #240 selection + optgroup erorr [Issue #240](https://github.com/lefthandedgoat/canopy/issues/240)
+Fix #238 add escape key [Issue #238](https://github.com/lefthandedgoat/canopy/issues/238)
 
 #### 0.9.47 - March 13 2016
-Drop SizSelCsZzz dependency [Issue #244](https://github.com/lefthandedgoat/canopy/issue/244)
-Drop Selenium.Support dependency [Issue #245](https://github.com/lefthandedgoat/canopy/issue/245)
+Drop SizSelCsZzz dependency [Issue #244](https://github.com/lefthandedgoat/canopy/issues/244)
+Drop Selenium.Support dependency [Issue #245](https://github.com/lefthandedgoat/canopy/issues/245)
 BREAKING moved browser from canopy.core.browser to canopy.types.browser
 
 #### 0.9.48 - March 24 2016
-Fix issue with jquery selectors that had single ticks in them [Issue #250](https://github.com/lefthandedgoat/canopy/issue/250)
-Update to latest Selenium 2.53.0 [Issue #251](https://github.com/lefthandedgoat/canopy/issue/251)
-Added ability to skip a test that fails with a specific error message [Issue #248](https://github.com/lefthandedgoat/canopy/issue/248)
-Fix issue with failing and using the after method [Issue #247](https://github.com/lefthandedgoat/canopy/issue/247)
+Fix issue with jquery selectors that had single ticks in them [Issue #250](https://github.com/lefthandedgoat/canopy/issues/250)
+Update to latest Selenium 2.53.0 [Issue #251](https://github.com/lefthandedgoat/canopy/issues/251)
+Added ability to skip a test that fails with a specific error message [Issue #248](https://github.com/lefthandedgoat/canopy/issues/248)
+Fix issue with failing and using the after method [Issue #247](https://github.com/lefthandedgoat/canopy/issues/247)
 
 #### 0.9.49 - March 24 2016
-Fix issue with encoding on the command line [Issue #252](https://github.com/lefthandedgoat/canopy/issue/252)
+Fix issue with encoding on the command line [Issue #252](https://github.com/lefthandedgoat/canopy/issues/252)
 
 #### 0.9.50 - March 27 2016
-Fix issue with multiple dropdowns with same values [Issue #253](https://github.com/lefthandedgoat/canopy/issue/253)
+Fix issue with multiple dropdowns with same values [Issue #253](https://github.com/lefthandedgoat/canopy/issues/253)
 
 #### 0.9.51 - April 5 2016
-Add onPass and OnFail hooks, thanks Tony! [Issue #254](https://github.com/lefthandedgoat/canopy/issue/254)
+Add onPass and OnFail hooks, thanks Tony! [Issue #254](https://github.com/lefthandedgoat/canopy/issues/254)
 
 #### 0.9.52 - April 5 2016
-make safelyGetUrl safery, thanks Tony! [Issue #255](https://github.com/lefthandedgoat/canopy/issue/255)
+make safelyGetUrl safery, thanks Tony! [Issue #255](https://github.com/lefthandedgoat/canopy/issues/255)
 
 #### 0.9.53 - April 19 2016
-Fixed a bug for jquery selectors where they wouldnt respect their context, thanks goncaloc1! [Issue #257](https://github.com/lefthandedgoat/canopy/issue/257)
+Fixed a bug for jquery selectors where they wouldnt respect their context, thanks goncaloc1! [Issue #257](https://github.com/lefthandedgoat/canopy/issues/257)
 
 #### 0.9.54 - May 18 2016
-Added notContains [Issue #263](https://github.com/lefthandedgoat/canopy/issue/263)
-Added BETA support for Edge browser [Issue #264](https://github.com/lefthandedgoat/canopy/issue/264)
+Added notContains [Issue #263](https://github.com/lefthandedgoat/canopy/issues/263)
+Added BETA support for Edge browser [Issue #264](https://github.com/lefthandedgoat/canopy/issues/264)
 
 #### 0.9.55 - July 7 2016
-Updated to Selenium 2.53.1 for Firefox 47.1 support [Issue #270](https://github.com/lefthandedgoat/canopy/issue/270)
+Updated to Selenium 2.53.1 for Firefox 47.1 support [Issue #270](https://github.com/lefthandedgoat/canopy/issues/270)
 
 #### 0.9.56 - July 8 2016
-Add right click for [Issue #273](https://github.com/lefthandedgoat/canopy/issue/273)
+Add right click for [Issue #273](https://github.com/lefthandedgoat/canopy/issues/273)
 
 #### 0.9.57 - July 16 2016
-Added better support for chromium [Issue #276](https://github.com/lefthandedgoat/canopy/issue/276)
+Added better support for chromium [Issue #276](https://github.com/lefthandedgoat/canopy/issues/276)
 
 #### 0.9.58 - July 31 2016
-Added ability to skip in the middle of a test [Issue #280](https://github.com/lefthandedgoat/canopy/issue/280)
+Added ability to skip in the middle of a test [Issue #280](https://github.com/lefthandedgoat/canopy/issues/280)
 
 #### 0.9.59 - August 12 2016
-Added ability to position a browser in a specific location, thanks @navmed! [Issue #285](https://github.com/lefthandedgoat/canopy/issue/285)
+Added ability to position a browser in a specific location, thanks @navmed! [Issue #285](https://github.com/lefthandedgoat/canopy/issues/285)
 
 #### 0.9.60 - August 13 2016
-Added chromium with options support [Issue #276](https://github.com/lefthandedgoat/canopy/issue/276)
+Added chromium with options support [Issue #276](https://github.com/lefthandedgoat/canopy/issues/276)
 
 #### 0.9.61 - September 16 2016
-Fix chrome develop options popup [Issue #289](https://github.com/lefthandedgoat/canopy/issue/289)
+Fix chrome develop options popup [Issue #289](https://github.com/lefthandedgoat/canopy/issues/289)
 
 #### 0.9.62 - October 5 2016
-Fix runFor [Issue #292](https://github.com/lefthandedgoat/canopy/issue/292)
+Fix runFor [Issue #292](https://github.com/lefthandedgoat/canopy/issues/292)
 
 #### 1.0.0 - Nov 4 2016
-Update to Selenium 3.0 (Note that anything like rightClick or hover which uses the actions api does not work with FF (which now requires gechkodriver)) [Issue #300](https://github.com/lefthandedgoat/canopy/issue/300)
+Update to Selenium 3.0 (Note that anything like rightClick or hover which uses the actions api does not work with FF (which now requires gechkodriver)) [Issue #300](https://github.com/lefthandedgoat/canopy/issues/300)
 
 #### 1.0.1 - Nov 6 2016
-Basic JUnitReporter implementation by blair55 [Issue #302](https://github.com/lefthandedgoat/canopy/issue/302)
+Basic JUnitReporter implementation by blair55 [Issue #302](https://github.com/lefthandedgoat/canopy/issues/302)
 
 #### 1.0.2 - Nov 9 2016
 Added strict 'onn' to check that you are on a url (not fuzzy) by blair55 [Issue #304](https://github.com/lefthandedgoat/canopy/pull/304)
