@@ -58,6 +58,10 @@
     <Compile Include="Program.fs" />
     <None Include="app.config" />
     <None Include="paket.references" />
+    <None Include="geckodriver.exe">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </None>
+
   </ItemGroup>
   <ItemGroup>
     <Reference Include="mscorlib" />

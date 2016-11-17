@@ -691,7 +691,7 @@ context "User Agents tests"
 
 context "Resize tests"
 
-"Firefox should be resized to 400,400" &&& fun _ ->
+"Firefox should be resized to 400,400" &&! fun _ ->
     start firefox
     url "http://resizemybrowser.com/"
     resize (400,400)
@@ -700,7 +700,7 @@ context "Resize tests"
     quit browser
     switchTo mainBrowser
 
-"Chrome should be resized to iPhone4" &&& fun _ ->
+"Chrome should be resized to iPhone4" &&! fun _ ->
     start chrome
     url "http://resizemybrowser.com/"
     resize screenSizes.iPhone4
@@ -709,7 +709,7 @@ context "Resize tests"
     quit browser
     switchTo mainBrowser
 
-"Firefox should be resized to 400,500 then rotated to 500,400" &&& fun _ ->
+"Firefox should be resized to 400,500 then rotated to 500,400" &&! fun _ ->
     start firefox
     url "http://resizemybrowser.com/"
     resize (400,500)
@@ -719,7 +719,7 @@ context "Resize tests"
     quit browser
     switchTo mainBrowser
 
-"Chrome should be resized and rotated to iPhone4" &&& fun _ ->
+"Chrome should be resized and rotated to iPhone4" &&! fun _ ->
     start chrome
     url "http://resizemybrowser.com/"
     resize screenSizes.iPhone4
