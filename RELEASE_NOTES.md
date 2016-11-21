@@ -287,3 +287,6 @@ Added strict 'onn' to check that you are on a url (not fuzzy) by blair55 [Issue 
 
 #### 1.0.3 - Nov 9 2016
 Improve JUnitReporter by add time meta data by blair55 [Issue #305](https://github.com/lefthandedgoat/canopy/pull/305)
+
+#### 1.0.4 - Nov 21 2016
+Large images in caused html reporter to act funny, converted from png to jpg for better compression [Issue #310](https://github.com/lefthandedgoat/canopy/issues/310)
