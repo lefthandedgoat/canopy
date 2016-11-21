@@ -63,7 +63,7 @@ let private regexMatch pattern input = System.Text.RegularExpressions.Regex.Matc
 let private saveScreenshot directory filename pic =
     if not <| Directory.Exists(directory)
         then Directory.CreateDirectory(directory) |> ignore
-    IO.File.WriteAllBytes(Path.Combine(directory,filename + ".png"), pic)
+    IO.File.WriteAllBytes(Path.Combine(directory,filename + ".jpg"), pic)
 
 let private takeScreenShotIfAlertUp () =
     try
@@ -92,10 +92,20 @@ let private takeScreenshot directory filename =
             alert.Accept()
             pic
 
+let private pngToJpg pngArray =
+  let pngStream = new MemoryStream()
+  let jpgStream = new MemoryStream()
+
+  pngStream.Write(pngArray, 0, pngArray.Length)
+  let img = Image.FromStream(pngStream)
+  
+  img.Save(jpgStream, ImageFormat.Jpeg)
+  jpgStream.ToArray()
+
 (* documented/actions *)
 let screenshot directory filename =
     match box browser with
-        | :? ITakesScreenshot -> takeScreenshot directory filename
+        | :? ITakesScreenshot -> takeScreenshot directory filename |> pngToJpg
         | _ -> Array.empty<byte>
 
 (* documented/actions *)
