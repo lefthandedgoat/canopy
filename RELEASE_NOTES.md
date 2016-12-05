@@ -290,3 +290,6 @@ Improve JUnitReporter by add time meta data by blair55 [Issue #305](https://gith
 
 #### 1.0.4 - Nov 21 2016
 Large images in caused html reporter to act funny, converted from png to jpg for better compression [Issue #310](https://github.com/lefthandedgoat/canopy/issues/310)
+
+#### 1.0.5 - Dec 5 2016
+Adding a new FireFox browser cosntructor [Issue #315](https://github.com/lefthandedgoat/canopy/issues/315)
