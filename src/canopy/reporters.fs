@@ -185,24 +185,31 @@ type LiveHtmlReporter(browser : BrowserStartMode, driverPath : string, ?pinBrows
     let _browser =
         //copy pasta!
         match browser with
-        | IE -> new OpenQA.Selenium.IE.InternetExplorerDriver(driverPath) :> IWebDriver
-        | IEWithOptions options ->new OpenQA.Selenium.IE.InternetExplorerDriver(driverPath, options) :> IWebDriver
-        | IEWithOptionsAndTimeSpan(options, timeSpan) -> new OpenQA.Selenium.IE.InternetExplorerDriver(driverPath, options, timeSpan) :> IWebDriver
-        | EdgeBETA -> new OpenQA.Selenium.Edge.EdgeDriver(driverPath) :> IWebDriver
+        | IE -> new IE.InternetExplorerDriver(driverPath) :> IWebDriver
+        | IEWithOptions options -> new IE.InternetExplorerDriver(driverPath, options) :> IWebDriver
+        | IEWithOptionsAndTimeSpan(options, timeSpan) -> new IE.InternetExplorerDriver(driverPath, options, timeSpan) :> IWebDriver
+        | EdgeBETA -> new Edge.EdgeDriver(driverPath) :> IWebDriver
         | Chrome | Chromium ->
-                let options = OpenQA.Selenium.Chrome.ChromeOptions()
+                let options = Chrome.ChromeOptions()
                 options.AddArgument("test-type") //https://code.google.com/p/chromedriver/issues/detail?id=799
                 options.AddArguments("--disable-extensions")
-                new OpenQA.Selenium.Chrome.ChromeDriver(driverPath, options) :> IWebDriver
-        | ChromeWithOptions options -> new OpenQA.Selenium.Chrome.ChromeDriver(driverPath, options) :> IWebDriver
-        | ChromeWithOptionsAndTimeSpan(options, timeSpan) -> new OpenQA.Selenium.Chrome.ChromeDriver(driverPath, options, timeSpan) :> IWebDriver
-        | Firefox -> new OpenQA.Selenium.Firefox.FirefoxDriver() :> IWebDriver
-        | FirefoxWithProfile profile -> new OpenQA.Selenium.Firefox.FirefoxDriver(profile) :> IWebDriver
-        | FirefoxWithPath path -> new OpenQA.Selenium.Firefox.FirefoxDriver(new Firefox.FirefoxBinary(path), Firefox.FirefoxProfile()) :> IWebDriver
+                new Chrome.ChromeDriver(driverPath, options) :> IWebDriver
+        | ChromeWithOptions options -> new Chrome.ChromeDriver(driverPath, options) :> IWebDriver
+        | ChromeWithOptionsAndTimeSpan(options, timeSpan) -> new Chrome.ChromeDriver(driverPath, options, timeSpan) :> IWebDriver
         | ChromeWithUserAgent userAgent -> raise(System.Exception("Sorry ChromeWithUserAgent can't be used for LiveHtmlReporter"))
+        | ChromiumWithOptions options -> new Chrome.ChromeDriver(driverPath, options) :> IWebDriver
+        | Firefox -> new Firefox.FirefoxDriver() :> IWebDriver
+        | FirefoxWithProfile profile -> new Firefox.FirefoxDriver(profile) :> IWebDriver
+        | FirefoxWithPath path -> 
+          let options = new Firefox.FirefoxOptions()
+          options.BrowserExecutableLocation <- path
+          new Firefox.FirefoxDriver(options) :> IWebDriver
         | FirefoxWithUserAgent userAgent -> raise(System.Exception("Sorry FirefoxWithUserAgent can't be used for LiveHtmlReporter"))
-        | FirefoxWithPathAndTimeSpan(path, timespan) -> new OpenQA.Selenium.Firefox.FirefoxDriver(new Firefox.FirefoxBinary(path), Firefox.FirefoxProfile(), timespan) :> IWebDriver
-        | Safari -> new OpenQA.Selenium.Safari.SafariDriver() :> IWebDriver
+        | FirefoxWithPathAndTimeSpan(path, timespan) -> 
+          let options = new Firefox.FirefoxOptions()
+          options.BrowserExecutableLocation <- path
+          new Firefox.FirefoxDriver(Firefox.FirefoxDriverService.CreateDefaultService(), options, timespan) :> IWebDriver
+        | Safari -> new Safari.SafariDriver() :> IWebDriver
         | PhantomJS | PhantomJSProxyNone -> raise(System.Exception("Sorry PhantomJS can't be used for LiveHtmlReporter"))
         | Remote(_,_) -> raise(System.Exception("Sorry Remote can't be used for LiveHtmlReporter"))
 

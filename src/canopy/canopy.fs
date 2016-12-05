@@ -807,7 +807,7 @@ let start b =
         | IEWithOptionsAndTimeSpan(options, timeSpan) -> new IE.InternetExplorerDriver(ieDir, options, timeSpan) :> IWebDriver
         | EdgeBETA -> new Edge.EdgeDriver(edgeDir) :> IWebDriver
         | Chrome ->
-            let options = OpenQA.Selenium.Chrome.ChromeOptions()
+            let options = Chrome.ChromeOptions()
             options.AddArguments("--disable-extensions")
             options.AddArgument("test-type") //https://code.google.com/p/chromedriver/issues/detail?id=799
             new Chrome.ChromeDriver(chromeDir, options) :> IWebDriver
@@ -815,16 +815,22 @@ let start b =
         | ChromeWithUserAgent userAgent -> chromeWithUserAgent userAgent
         | ChromeWithOptionsAndTimeSpan(options, timeSpan) -> new Chrome.ChromeDriver(chromeDir, options, timeSpan) :> IWebDriver
         | Chromium ->
-            let options = OpenQA.Selenium.Chrome.ChromeOptions()
+            let options = Chrome.ChromeOptions()
             options.AddArguments("--disable-extensions")
             options.AddArgument("test-type") //https://code.google.com/p/chromedriver/issues/detail?id=799
             new Chrome.ChromeDriver(chromiumDir, options) :> IWebDriver
         | ChromiumWithOptions options -> new Chrome.ChromeDriver(chromiumDir, options) :> IWebDriver
         | Firefox -> new FirefoxDriver() :> IWebDriver
         | FirefoxWithProfile profile -> new FirefoxDriver(profile) :> IWebDriver
-        | FirefoxWithPath path -> new FirefoxDriver(new Firefox.FirefoxBinary(path), Firefox.FirefoxProfile()) :> IWebDriver
+        | FirefoxWithPath path -> 
+          let options = new Firefox.FirefoxOptions()
+          options.BrowserExecutableLocation <- path
+          new FirefoxDriver(options) :> IWebDriver
         | FirefoxWithUserAgent userAgent -> firefoxWithUserAgent userAgent
-        | FirefoxWithPathAndTimeSpan(path, timespan) -> new FirefoxDriver(new Firefox.FirefoxBinary(path), Firefox.FirefoxProfile(), timespan) :> IWebDriver
+        | FirefoxWithPathAndTimeSpan(path, timespan) -> 
+          let options = new Firefox.FirefoxOptions()
+          options.BrowserExecutableLocation <- path
+          new FirefoxDriver(FirefoxDriverService.CreateDefaultService(), options, timespan) :> IWebDriver
         | Safari ->new Safari.SafariDriver() :> IWebDriver
         | PhantomJS ->
             autoPinBrowserRightOnLaunch <- false
@@ -834,7 +840,7 @@ let start b =
             let service = PhantomJS.PhantomJSDriverService.CreateDefaultService(canopy.configuration.phantomJSDir)
             service.ProxyType <- "none"
             new PhantomJS.PhantomJSDriver(service) :> IWebDriver
-        | Remote(url, capabilities) -> new OpenQA.Selenium.Remote.RemoteWebDriver(new Uri(url), capabilities) :> IWebDriver
+        | Remote(url, capabilities) -> new Remote.RemoteWebDriver(new Uri(url), capabilities) :> IWebDriver
 
     if autoPinBrowserRightOnLaunch = true then pin Right
     browsers <- browsers @ [browser]
