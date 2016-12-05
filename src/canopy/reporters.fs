@@ -209,6 +209,10 @@ type LiveHtmlReporter(browser : BrowserStartMode, driverPath : string, ?pinBrows
           let options = new Firefox.FirefoxOptions()
           options.BrowserExecutableLocation <- path
           new Firefox.FirefoxDriver(Firefox.FirefoxDriverService.CreateDefaultService(), options, timespan) :> IWebDriver
+        | FirefoxWithProfileAndTimeSpan(profile, timespan) -> 
+          let options = new Firefox.FirefoxOptions()
+          options.Profile <- profile
+          new Firefox.FirefoxDriver(Firefox.FirefoxDriverService.CreateDefaultService(), options, timespan) :> IWebDriver
         | Safari -> new Safari.SafariDriver() :> IWebDriver
         | PhantomJS | PhantomJSProxyNone -> raise(System.Exception("Sorry PhantomJS can't be used for LiveHtmlReporter"))
         | Remote(_,_) -> raise(System.Exception("Sorry Remote can't be used for LiveHtmlReporter"))

@@ -831,6 +831,10 @@ let start b =
           let options = new Firefox.FirefoxOptions()
           options.BrowserExecutableLocation <- path
           new FirefoxDriver(FirefoxDriverService.CreateDefaultService(), options, timespan) :> IWebDriver
+        | FirefoxWithProfileAndTimeSpan(profile, timespan) -> 
+          let options = new Firefox.FirefoxOptions()
+          options.Profile <- profile
+          new FirefoxDriver(FirefoxDriverService.CreateDefaultService(), options, timespan) :> IWebDriver
         | Safari ->new Safari.SafariDriver() :> IWebDriver
         | PhantomJS ->
             autoPinBrowserRightOnLaunch <- false
