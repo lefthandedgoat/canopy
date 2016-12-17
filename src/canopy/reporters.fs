@@ -55,7 +55,9 @@ type ConsoleReporter() =
                         Console.WriteLine(trace)
                 Console.ResetColor())
 
-        member this.describe d = Console.WriteLine d
+        member this.describe text =
+            let now = DateTime.Now.ToString()
+            Console.WriteLine (sprintf "%s: %s" now text)
 
         member this.contextStart c = Console.WriteLine (String.Format("context: {0}", c))
 
