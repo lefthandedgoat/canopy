@@ -37,8 +37,8 @@ type ConsoleReporter() =
             Console.WriteLine(ex.Message);
             Console.Write("Url: ");
             Console.WriteLine(url);
-            Console.WriteLine("Stack: ");
-            ex.StackTrace.Split([| "\r\n"; "\n" |], StringSplitOptions.None)
+            Console.WriteLine("Exception details: ");
+            ex.ToString().Split([| "\r\n"; "\n" |], StringSplitOptions.None)
             |> Array.iter (fun trace ->
                 Console.ResetColor()
                 if trace.Contains(".FSharp.") || trace.Contains("canopy.core") || trace.Contains("OpenQA.Selenium") then
