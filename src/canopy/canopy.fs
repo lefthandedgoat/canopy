@@ -202,15 +202,10 @@ let private suggestOtherSelectors cssSelector =
             |> Array.Parallel.map (fun u -> editdistance cssSelector u)
             |> Array.sortBy (fun r -> - r.similarity)
 
-        if results.Length >= 5 then
-            results
-            |> Seq.take 5
-            |> Seq.map (fun r -> r.selector) |> List.ofSeq
-            |> (fun suggestions -> reporter.suggestSelectors cssSelector suggestions)
-        else
-            results
-            |> Seq.map (fun r -> r.selector) |> List.ofSeq
-            |> (fun suggestions -> reporter.suggestSelectors cssSelector suggestions)
+        results
+        |> fun xs -> if xs.Length >= 5 then Seq.take 5 xs else Array.toSeq xs
+        |> Seq.map (fun r -> r.selector) |> List.ofSeq
+        |> (fun suggestions -> reporter.suggestSelectors cssSelector suggestions)
 
 (* documented/actions *)
 let describe text =
