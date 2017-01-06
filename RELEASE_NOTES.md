@@ -293,3 +293,6 @@ Large images in caused html reporter to act funny, converted from png to jpg for
 
 #### 1.0.5 - Dec 5 2016
 Adding a new FireFox browser cosntructor [Issue #315](https://github.com/lefthandedgoat/canopy/issues/315)
+
+#### 1.0.6 - Dec 5 2016
+Add timestamp to log in describe() func thanks @knocte! [Issue #318](https://github.com/lefthandedgoat/canopy/pull/318)
