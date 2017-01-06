@@ -55,7 +55,7 @@
     <Compile Include="reporters.fs" />
     <Compile Include="finders.fs" />
     <Compile Include="configuration.fs" />
-    <Compile Include="levenshtein.fs" />
+    <Compile Include="jarowinkler.fs" />
     <Compile Include="canopy.fs" />
     <Compile Include="history.fs" />
     <Compile Include="runner.fs" />
