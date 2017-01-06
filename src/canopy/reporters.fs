@@ -110,7 +110,8 @@ type ConsoleReporter() =
 
         member this.setEnvironment env = ()
 
-type TeamCityReporter() =
+type TeamCityReporter(?logImagesToConsole: bool) =
+    let logImagesToConsole = defaultArg logImagesToConsole true
 
     let flowId = System.Guid.NewGuid().ToString()
 
@@ -135,7 +136,7 @@ type TeamCityReporter() =
 
         member this.fail ex id ss url =
             let mutable image = ""
-            if not (Array.isEmpty ss) then
+            if not (Array.isEmpty ss) && logImagesToConsole then
                 image <- String.Format("canopy-image({0})", Convert.ToBase64String(ss))
 
             teamcityReport (sprintf "testFailed name='%s' message='%s' details='%s'"
