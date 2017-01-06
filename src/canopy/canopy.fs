@@ -8,12 +8,12 @@ open Microsoft.FSharp.Core.Printf
 open System.IO
 open System
 open configuration
-open levenshtein
 open reporters
 open types
 open finders
 open System.Drawing
 open System.Drawing.Imaging
+open EditDistance
 
 let mutable (failureMessage : string) = null
 let mutable wipTest = false
@@ -199,8 +199,8 @@ let private suggestOtherSelectors cssSelector =
             |> Array.append texts
             |> Seq.distinct |> List.ofSeq
             |> remove "." |> remove "#" |> Array.ofList
-            |> Array.Parallel.map (fun u -> levenshtein cssSelector u)
-            |> Array.sortBy (fun r -> r.distance)
+            |> Array.Parallel.map (fun u -> editdistance cssSelector u)
+            |> Array.sortBy (fun r -> - r.similarity)
 
         if results.Length >= 5 then
             results
