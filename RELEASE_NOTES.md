@@ -296,3 +296,8 @@ Adding a new FireFox browser cosntructor [Issue #315](https://github.com/lefthan
 
 #### 1.0.6 - Dec 5 2016
 Add timestamp to log in describe() func thanks @knocte! [Issue #318](https://github.com/lefthandedgoat/canopy/pull/318)
+
+#### 1.0.7 - Jan 6 2017
+Make embedded images optional in TeamCity reporter [Issue #324](https://github.com/lefthandedgoat/canopy/issues/324)
+Improve suggestions on failed selector finds by switching from Levenshtein to Jaro-Winkler, thanks forki! [PR #323](https://github.com/lefthandedgoat/canopy/pull/323)
+Improve exception messages in errors, thanks @knocte! [PR #321](https://github.com/lefthandedgoat/canopy/issues/321)
