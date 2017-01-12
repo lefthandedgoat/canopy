@@ -37,9 +37,49 @@ namespace csharptests
             _.test("#firstName should have John (using == infix operator)", () =>
             {
                 _.url(testpage);
-                _.equals("#firstName", "John");
+                _.eq("#firstName", "John");
             });
 
+
+            _.test("#lastName should have Doe via read IWebElements", () =>
+            {
+                _.url(testpage);
+                var e = _.element("#lastname");
+                var value = _.read(e);
+                _.equality(value, "Doe");
+            });
+
+            _.test("clearing #firstName sets text to new empty string", () =>
+            {
+                _.url(testpage);
+                _.clear("#firstName");
+                _.eq("#firstName", "");
+            });
+
+            _.test("clearing #firstName sets text to new empty string via IWebElement", () =>
+            {
+                _.url(testpage);
+                _.clear(_.element("#firstName"));
+                _.eq("#firstName", "");
+            });
+
+            _.test("writing to #lastName sets text to Smith", () =>
+            {
+                _.url(testpage);
+                _.clear("#lastName");
+                _.write("#lastName", "Smith");
+                _.eq("#lastName", "Smith");
+            });
+            
+            _.test("writing to #lastName (as element) sets text to John", () =>
+            {
+                _.url(testpage);
+                var lastname = _.element("#lastname");
+                _.clear(lastname);
+                _.write(lastname, "John");
+                _.eq("#lastname", "John");
+            });
+           
             _.run();
 
             System.Console.ReadKey();

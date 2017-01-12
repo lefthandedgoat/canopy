@@ -36,7 +36,18 @@ type canopy () =
 
     static member quit () = canopy.core.quit ()
 
+    //element stuff
+    static member element selector = canopy.core.element selector
+
+    static member read selector = canopy.core.read selector
+
+    static member clear selector = canopy.core.clear selector
+
+    static member write selector value = selector << value
+
     //assertions
-    static member equals selector value = selector == value
+    static member eq selector value = selector == value
+
+    static member equality value1 value2 = value1 === value2
 
     static member count selector value = count selector value
