@@ -62,6 +62,7 @@
     <None Include="paket.references" />
     <Compile Include="screenSizes.fs" />
     <Compile Include="userAgents.fs" />
+    <Compile Include="csharp.fs" />
   </ItemGroup>
   <ItemGroup>
     <Reference Include="mscorlib" />

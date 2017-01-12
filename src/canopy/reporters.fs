@@ -181,7 +181,7 @@ type TeamCityReporter(?logImagesToConsole: bool) =
 
         member this.setEnvironment env = ()
 
-type LiveHtmlReporter(browser : BrowserStartMode, driverPath : string, ?pinBrowserRight0: bool) =
+type LiveHtmlReporter(browser : BrowserStartMode, driverPath : string, ?pinBrowserRight0: bool) =    
     let pinBrowserRight = defaultArg pinBrowserRight0 true
     let consoleReporter : IReporter = new ConsoleReporter() :> IReporter
 
@@ -242,6 +242,7 @@ type LiveHtmlReporter(browser : BrowserStartMode, driverPath : string, ?pinBrows
 
     new() = LiveHtmlReporter(Firefox, String.Empty)
     new(browser : BrowserStartMode) = LiveHtmlReporter(browser, String.Empty)
+    new (browser : BrowserStartMode, driverPath : string) = LiveHtmlReporter(browser, driverPath, true)
 
     member this.browser
         with get () = _browser
