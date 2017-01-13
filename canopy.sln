@@ -44,6 +44,8 @@ Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "tools", "tools", "{3C3590B5
 		docs\tools\templates\template.cshtml = docs\tools\templates\template.cshtml
 	EndProjectSection
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "csharptests", "csharptests\csharptests.csproj", "{8FD011AE-ACEC-4B55-810B-736DAE312D32}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -84,6 +86,18 @@ Global
 		{9DE5614C-8D7F-4BBD-A6A0-24AABD76796C}.Release|Mixed Platforms.ActiveCfg = Release|Any CPU
 		{9DE5614C-8D7F-4BBD-A6A0-24AABD76796C}.Release|Mixed Platforms.Build.0 = Release|Any CPU
 		{9DE5614C-8D7F-4BBD-A6A0-24AABD76796C}.Release|x86.ActiveCfg = Release|Any CPU
+		{8FD011AE-ACEC-4B55-810B-736DAE312D32}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{8FD011AE-ACEC-4B55-810B-736DAE312D32}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{8FD011AE-ACEC-4B55-810B-736DAE312D32}.Debug|Mixed Platforms.ActiveCfg = Debug|Any CPU
+		{8FD011AE-ACEC-4B55-810B-736DAE312D32}.Debug|Mixed Platforms.Build.0 = Debug|Any CPU
+		{8FD011AE-ACEC-4B55-810B-736DAE312D32}.Debug|x86.ActiveCfg = Debug|Any CPU
+		{8FD011AE-ACEC-4B55-810B-736DAE312D32}.Debug|x86.Build.0 = Debug|Any CPU
+		{8FD011AE-ACEC-4B55-810B-736DAE312D32}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{8FD011AE-ACEC-4B55-810B-736DAE312D32}.Release|Any CPU.Build.0 = Release|Any CPU
+		{8FD011AE-ACEC-4B55-810B-736DAE312D32}.Release|Mixed Platforms.ActiveCfg = Release|Any CPU
+		{8FD011AE-ACEC-4B55-810B-736DAE312D32}.Release|Mixed Platforms.Build.0 = Release|Any CPU
+		{8FD011AE-ACEC-4B55-810B-736DAE312D32}.Release|x86.ActiveCfg = Release|Any CPU
+		{8FD011AE-ACEC-4B55-810B-736DAE312D32}.Release|x86.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
@@ -92,5 +106,6 @@ Global
 		{D4610DE2-BFD2-491D-AD72-BBBB206E11C7} = {0391DED2-DF91-4A61-959E-EEA250356DA0}
 		{A94D736A-68EB-4D7B-A761-DF6B1EEAE24C} = {12E9007C-8265-43D8-86B0-C9182921A9E5}
 		{3C3590B5-4CC8-49D1-A2CE-4FDFA73ADB53} = {12E9007C-8265-43D8-86B0-C9182921A9E5}
+		{8FD011AE-ACEC-4B55-810B-736DAE312D32} = {0391DED2-DF91-4A61-959E-EEA250356DA0}
 	EndGlobalSection
 EndGlobal
