@@ -301,3 +301,6 @@ Add timestamp to log in describe() func thanks @knocte! [Issue #318](https://git
 Make embedded images optional in TeamCity reporter [Issue #324](https://github.com/lefthandedgoat/canopy/issues/324)
 Improve suggestions on failed selector finds by switching from Levenshtein to Jaro-Winkler, thanks forki! [PR #323](https://github.com/lefthandedgoat/canopy/pull/323)
 Improve exception messages in errors, thanks @knocte! [PR #321](https://github.com/lefthandedgoat/canopy/issues/321)
+
+#### 1.1.0 - Jan 12 2017
+Added a C# friendly wrapper (See program.cs in the C# project for examples) [Issue #327](https://github.com/lefthandedgoat/canopy/issues/327)

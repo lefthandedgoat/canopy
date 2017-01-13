@@ -222,10 +222,6 @@ let waitFor2 message f =
 (* documented/actions *)
 let waitFor = waitFor2 "Condition not met in given amount of time. If you want to increase the time, put compareTimeout <- 10.0 anywhere before a test to increase the timeout"
 
-(* documented/actions *)
-let waitForElement cssSelector =
-    waitFor (fun _ -> someElement cssSelector |> Option.isSome)
-
 //find related
 let rec private findElements cssSelector (searchContext : ISearchContext) : IWebElement list =
     if optimizeByDisablingCoverageReport = false then searchedFor <- (cssSelector, browser.Url) :: searchedFor
@@ -1040,3 +1036,7 @@ let value = addSelector findByValue "value"
 let skip message =
   describe <| sprintf "Skipped: %s" message
   raise <| CanopySkipTestException()
+
+(* documented/actions *)
+let waitForElement cssSelector =
+    waitFor (fun _ -> someElement cssSelector |> Option.isSome)
