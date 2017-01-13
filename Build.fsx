@@ -129,23 +129,6 @@ Target "NuGet" (fun _ ->
         ("nuget/" + project + ".nuspec")
 )
 
-Target "NuGet-edge" (fun _ ->
-    NuGet (fun p -> 
-        { p with   
-            Authors = authors
-            Project = project
-            Summary = summary
-            Description = description
-            Version = release.NugetVersion
-            ReleaseNotes = String.Join(Environment.NewLine, release.Notes)
-            Tags = tags
-            OutputPath = "bin"
-            AccessKey = getBuildParamOrDefault "nugetkey" ""
-            Publish = hasBuildParam "nugetkey"
-            Dependencies = [] })
-        ("nuget/" + project + "-edge.nuspec")
-)
-
 // --------------------------------------------------------------------------------------
 // Generate the documentation
 
@@ -186,7 +169,6 @@ Target "All" DoNothing
   ==> "GenerateDocs"
   ==> "ReleaseDocs"
   ==> "NuGet"
-  ==> "NuGet-edge"
   ==> "Release"
 
 RunTargetOrDefault "All"

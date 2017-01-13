@@ -22,7 +22,6 @@
   <files>
 	<file src="..\src\canopy\reporters.fs" target="content\canopy\reporters.fs" />
 	<file src="..\src\canopy\configuration.fs" target="content\canopy\configuration.fs" />
-	<file src="..\src\canopy\levenshtein.fs" target="content\canopy\levenshtein.fs" />
 	<file src="..\src\canopy\canopy.fs" target="content\canopy\canopy.fs" />
 	<file src="..\src\canopy\history.fs" target="content\canopy\history.fs" />
 	<file src="..\src\canopy\runner.fs" target="content\canopy\runner.fs" />
