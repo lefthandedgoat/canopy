@@ -79,10 +79,49 @@ namespace csharptests
                 _.write(lastname, "John");
                 _.eq("#lastname", "John");
             });
-           
+
+            _.test("Value 1 listed in #value_list", () =>
+            {
+                _.url(testpage);
+                _.starEq("#value_list td", "Value 1");
+            });
+
+            _.test("clicking #button sets #button_clicked to button clicked", () =>
+            {
+                _.url(testpage);
+                _.eq("#button_clicked", "button not clicked");
+                _.click("#button");
+                _.eq("#button_clicked", "button clicked");
+            });
+
+            _.test("clicking #radio1 selects it", () =>
+            {
+                _.url(testpage);
+                _.click("#button");
+                _.selected("#radio1");
+            });
+
+            _.test("clicking #radio1 selects it", () =>
+            {
+                _.url(testpage);
+                _.check("#checkbox");
+                _.uncheck("#checkbox");
+                _.deselected("#checkbox");
+            });
+
+            _.test("clicking #radio1 selects it", () =>
+            {
+                _.url("https://api.jquery.com/contextmenu/");
+                var iframe = _.element("iframe");
+                _.browser.SwitchTo().Frame(iframe);
+                _.notDisplayed(".contextmenu");
+                _.rightClick("div:first");
+                _.displayed(".contextmenu");
+            });
+            
             _.run();
 
-            System.Console.ReadKey();
+            Console.ReadKey();
             _.quit();
         }
     }
