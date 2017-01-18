@@ -304,3 +304,6 @@ Improve exception messages in errors, thanks @knocte! [PR #321](https://github.c
 
 #### 1.1.0 - Jan 12 2017
 Added a C# friendly wrapper (See program.cs in the C# project for examples) [Issue #327](https://github.com/lefthandedgoat/canopy/issues/327)
+
+#### 1.1.1 - Jan 18 2017
+Improve compatability with Mono 64 bit, thanks MorganPersson [PR #333](https://github.com/lefthandedgoat/canopy/pull/333)
