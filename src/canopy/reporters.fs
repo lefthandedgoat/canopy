@@ -221,11 +221,10 @@ type LiveHtmlReporter(browser : BrowserStartMode, driverPath : string, ?pinBrows
         | Remote(_,_) -> raise(System.Exception("Sorry Remote can't be used for LiveHtmlReporter"))
 
     let pin () =
-        let h = System.Windows.Forms.Screen.PrimaryScreen.WorkingArea.Height;
-        let w = System.Windows.Forms.Screen.PrimaryScreen.WorkingArea.Width;
+        let (w, h) = canopy.screen.getPrimaryScreenResolution ()
         let maxWidth = w / 2
-        _browser.Manage().Window.Size <- new System.Drawing.Size(maxWidth,h);
-        _browser.Manage().Window.Position <- new System.Drawing.Point((maxWidth * 0),0);
+        _browser.Manage().Window.Size <- new System.Drawing.Size(maxWidth,h)
+        _browser.Manage().Window.Position <- new System.Drawing.Point((maxWidth * 0),0)
 
     let tryPin() =
         if pinBrowserRight then do pin()
@@ -399,11 +398,11 @@ type LiveHtmlReporter(browser : BrowserStartMode, driverPath : string, ?pinBrows
 type JUnitReporter(resultFilePath:string) =
 
     let consoleReporter : IReporter = new ConsoleReporter() :> IReporter
-    
+
     let testStopWatch = System.Diagnostics.Stopwatch()
     let testTimes = ResizeArray<string * float>()
     let passedTests = ResizeArray<string>()
-    let failedTests = ResizeArray<Exception * string>() 
+    let failedTests = ResizeArray<Exception * string>()
 
     interface IReporter with
 
@@ -438,7 +437,7 @@ type JUnitReporter(resultFilePath:string) =
             let testTimeSum = testTimes |> Seq.sumBy snd
             let allTestsXml = String.Join(String.Empty, Seq.concat [passedTestsXml; failedTestsXml])
             let xml =
-                sprintf "<testsuite tests=\"%i\" time=\"%.3f\">%s</testsuite>" testCount testTimeSum allTestsXml 
+                sprintf "<testsuite tests=\"%i\" time=\"%.3f\">%s</testsuite>" testCount testTimeSum allTestsXml
             let resultFile = System.IO.FileInfo(resultFilePath)
             resultFile.Directory.Create()
             consoleReporter.write <| sprintf "Saving results to %s" resultFilePath
