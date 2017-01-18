@@ -63,6 +63,7 @@
     <Compile Include="screenSizes.fs" />
     <Compile Include="userAgents.fs" />
     <Compile Include="csharp.fs" />
+    <None Include="companion\companion.fsx" />
   </ItemGroup>
   <ItemGroup>
     <Reference Include="mscorlib" />
