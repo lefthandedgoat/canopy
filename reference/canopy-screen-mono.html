@@ -5,7 +5,7 @@
 	   h4 + img { margin-top: 20px; margin-bottom: 20px;}
 	</STYLE>
     <meta charset="utf-8">
-    <title>EditDistance - canopy</title>
+    <title>mono - canopy</title>
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <meta name="description" content="">
     <meta name="author" content="Chris Holt">
@@ -49,34 +49,15 @@
 
 
 
-<h1>EditDistance</h1>
+<h1>mono</h1>
 <p>
   <span>Namespace: canopy</span><br />
+  <span>Parent Module: <a href="canopy-screen.html">screen</a></span>
 </p>
 <div class="xmldoc">
-<p>Functions to compute the edit distance between two strings
-Taken from the Visual F# compiler</p>
-
 </div>
 
 <!-- Render nested types and modules, if there are any -->
-  <h2>Nested types and modules</h2>
-  <div>
-      <table class="table table-bordered type-list">
-    <thead>
-      <tr><td>Type</td><td>Description</td></tr>
-    </thead>
-    <tbody>
-        <tr>
-          <td class="type-name">
-            <a href="canopy-editdistance-result.html">result</a>
-          </td>
-          <td class="xmldoc"></td>
-        </tr>
-    </tbody>
-  </table>
-
-  </div>
 
   <h3>Functions and values</h3>
   <table class="table table-bordered member-list">
@@ -87,15 +68,15 @@ Taken from the Visual F# compiler</p>
       <tr>
         <td class="member-name">
 
-          <code onmouseout="hideTip(event, '1', 1)" onmouseover="showTip(event, '1', 1)">
-            editdistance s1 s2
+          <code onmouseout="hideTip(event, '205', 205)" onmouseover="showTip(event, '205', 205)">
+            allScreensWorkingArea ()
           </code>
-          <div class="tip" id="1">
-            <strong>Signature:</strong> s1:string -&gt; s2:string -&gt; result<br />
+          <div class="tip" id="205">
+            <strong>Signature:</strong> unit -&gt; Rectangle []<br />
                       </div>
         </td>
         <td class="xmldoc">
-            <a href="https://github.com/lefthandedgoat/canopy/tree/scaffold/src/canopy/jarowinkler.fs#L96-96" class="github-link">
+            <a href="https://github.com/lefthandedgoat/canopy/tree/scaffold/src/canopy/screen.fs#L54-54" class="github-link">
               <img src="../content/img/github.png" class="normal" />
               <img src="../content/img/github-blue.png" class="hover" />
             </a>
@@ -105,77 +86,87 @@ Taken from the Visual F# compiler</p>
       <tr>
         <td class="member-name">
 
-          <code onmouseout="hideTip(event, '2', 2)" onmouseover="showTip(event, '2', 2)">
-            existsInWin mChar str offset rad
+          <code onmouseout="hideTip(event, '206', 206)" onmouseover="showTip(event, '206', 206)">
+            getPrimaryScreenBounds ()
           </code>
-          <div class="tip" id="2">
-            <strong>Signature:</strong> mChar:char -&gt; str:string -&gt; offset:^?96976 -&gt; rad:^?96977 -&gt; bool<br />
-                          <strong>Type parameters:</strong> ^?96976, ^?96977          </div>
-        </td>
-        <td class="xmldoc">
-            <a href="https://github.com/lefthandedgoat/canopy/tree/scaffold/src/canopy/jarowinkler.fs#L7-7" class="github-link">
-              <img src="../content/img/github.png" class="normal" />
-              <img src="../content/img/github-blue.png" class="hover" />
-            </a>
-          <p>Given an offset and a radius from that offset,
-does mChar exist in that part of str?</p>
-
-
-        </td>
-      </tr>
-      <tr>
-        <td class="member-name">
-
-          <code onmouseout="hideTip(event, '3', 3)" onmouseover="showTip(event, '3', 3)">
-            jaro s1 s2
-          </code>
-          <div class="tip" id="3">
-            <strong>Signature:</strong> s1:string -&gt; s2:string -&gt; float&lt;MeasureOne&gt;<br />
+          <div class="tip" id="206">
+            <strong>Signature:</strong> unit -&gt; ScreenBoundary<br />
                       </div>
         </td>
         <td class="xmldoc">
-            <a href="https://github.com/lefthandedgoat/canopy/tree/scaffold/src/canopy/jarowinkler.fs#L19-19" class="github-link">
+            <a href="https://github.com/lefthandedgoat/canopy/tree/scaffold/src/canopy/screen.fs#L43-43" class="github-link">
               <img src="../content/img/github.png" class="normal" />
               <img src="../content/img/github-blue.png" class="hover" />
             </a>
-          <p>The jaro distance between s1 and s2</p>
-
-
+          
         </td>
       </tr>
       <tr>
         <td class="member-name">
 
-          <code onmouseout="hideTip(event, '4', 4)" onmouseover="showTip(event, '4', 4)">
-            JaroWinklerDistance s1 s2
+          <code onmouseout="hideTip(event, '207', 207)" onmouseover="showTip(event, '207', 207)">
+            getPrimaryScreenResolution ()
           </code>
-          <div class="tip" id="4">
-            <strong>Signature:</strong> s1:string -&gt; s2:string -&gt; float&lt;MeasureOne&gt;<br />
+          <div class="tip" id="207">
+            <strong>Signature:</strong> unit -&gt; int * int<br />
                       </div>
         </td>
         <td class="xmldoc">
-            <a href="https://github.com/lefthandedgoat/canopy/tree/scaffold/src/canopy/jarowinkler.fs#L77-77" class="github-link">
+            <a href="https://github.com/lefthandedgoat/canopy/tree/scaffold/src/canopy/screen.fs#L40-40" class="github-link">
               <img src="../content/img/github.png" class="normal" />
               <img src="../content/img/github-blue.png" class="hover" />
             </a>
-          <p>Calculates the Jaro-Winkler edit distance between two strings.
-The edit distance is a metric that allows to measure the amount of similarity between two strings.</p>
-
-
+          
         </td>
       </tr>
       <tr>
         <td class="member-name">
 
-          <code onmouseout="hideTip(event, '5', 5)" onmouseover="showTip(event, '5', 5)">
-            remove char lst
+          <code onmouseout="hideTip(event, '208', 208)" onmouseover="showTip(event, '208', 208)">
+            monitorCount ()
           </code>
-          <div class="tip" id="5">
-            <strong>Signature:</strong> char:&#39;?96991 -&gt; lst:&#39;?96991 list -&gt; &#39;?96991 list<br />
-                          <strong>Type parameters:</strong> '?96991          </div>
+          <div class="tip" id="208">
+            <strong>Signature:</strong> unit -&gt; int<br />
+                      </div>
         </td>
         <td class="xmldoc">
-            <a href="https://github.com/lefthandedgoat/canopy/tree/scaffold/src/canopy/jarowinkler.fs#L90-90" class="github-link">
+            <a href="https://github.com/lefthandedgoat/canopy/tree/scaffold/src/canopy/screen.fs#L51-51" class="github-link">
+              <img src="../content/img/github.png" class="normal" />
+              <img src="../content/img/github-blue.png" class="hover" />
+            </a>
+          
+        </td>
+      </tr>
+      <tr>
+        <td class="member-name">
+
+          <code onmouseout="hideTip(event, '209', 209)" onmouseover="showTip(event, '209', 209)">
+            screenHeight 
+          </code>
+          <div class="tip" id="209">
+            <strong>Signature:</strong> int<br />
+                      </div>
+        </td>
+        <td class="xmldoc">
+            <a href="https://github.com/lefthandedgoat/canopy/tree/scaffold/src/canopy/screen.fs#L38-38" class="github-link">
+              <img src="../content/img/github.png" class="normal" />
+              <img src="../content/img/github-blue.png" class="hover" />
+            </a>
+          
+        </td>
+      </tr>
+      <tr>
+        <td class="member-name">
+
+          <code onmouseout="hideTip(event, '210', 210)" onmouseover="showTip(event, '210', 210)">
+            screenWidth 
+          </code>
+          <div class="tip" id="210">
+            <strong>Signature:</strong> int<br />
+                      </div>
+        </td>
+        <td class="xmldoc">
+            <a href="https://github.com/lefthandedgoat/canopy/tree/scaffold/src/canopy/screen.fs#L37-37" class="github-link">
               <img src="../content/img/github.png" class="normal" />
               <img src="../content/img/github-blue.png" class="hover" />
             </a>
