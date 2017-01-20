@@ -17,7 +17,7 @@ var jq = exports.jq = _jquery2.default;
 var go = exports.go = jq("#go");
 var detail = exports.detail = jq(".detail");
 detail.click(function (_arg1) {
-  (0, _String.fsFormat)("I have been clicked")(function (x) {
+  (0, _String.fsFormat)("I have been clicked!!")(function (x) {
     console.log(x);
   });
 });

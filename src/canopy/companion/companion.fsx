@@ -11,7 +11,7 @@ let go = jq $ ("#go")
 let detail = jq $ (".detail")
 
 detail ? click(fun _ ->   
-  printfn "I have been clicked"
+  printfn "I have been clicked!!"
   ()) |> ignore
 
 go ? click(fun _ ->   
