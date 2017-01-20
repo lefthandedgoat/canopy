@@ -1,12 +1,24 @@
 ﻿
 #r "node_modules/fable-core/Fable.Core.dll"
 
-open Fable.Core  
-open Fable.Import
+open Fable.Core
+open Fable.Core.JsInterop
+open Fable.Import.Browser
 
-let numbers = [ 1 .. 13 ]
-numbers |> List.iter (fun number -> printfn "%i" number)
+let jq = importDefault<obj> "jquery"
+let go = jq $ ("#go")
 
+let detail = jq $ (".detail")
+
+detail ? click(fun _ ->   
+  printfn "I have been clicked"
+  ()) |> ignore
+
+go ? click(fun _ ->   
+  let selector = (jq $ ("#selector"))?``val``()  
+  let elements = jq $ selector
+  elements?css("background-color", "red") |> ignore
+  ()) |> ignore
 
 //let mutable tests : (string * (unit -> unit)) list = []
 //let ( &&& ) desc f = tests <- List.append tests [desc, f]

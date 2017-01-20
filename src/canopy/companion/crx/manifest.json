@@ -6,10 +6,13 @@
   "version": "0.1",
 
   "browser_action": {
-    "default_icon": "icon.png",
-    "default_popup": "companion.html"
+    "default_icon": "icon.png"
   },
   "permissions": [
-    "activeTab"
-  ]
+    "tabs", "http://*/*", "https://*/*"
+  ],
+  "background": {
+    "scripts": ["injector.js"],
+    "persistent": false
+  }
 }

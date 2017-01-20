@@ -1,15 +1,35 @@
-define(["exports", "fable-core/umd/Seq", "fable-core/umd/String"], function (exports, _Seq, _String) {
-  "use strict";
+"use strict";
 
-  Object.defineProperty(exports, "__esModule", {
-    value: true
-  });
-  exports.numbers = undefined;
-  var numbers = exports.numbers = (0, _Seq.toList)((0, _Seq.range)(1, 13));
-  (0, _Seq.iterate)(function (number) {
-    (0, _String.fsFormat)("%i")(function (x) {
-      console.log(x);
-    })(number);
-  }, numbers);
+Object.defineProperty(exports, "__esModule", {
+  value: true
 });
-//# sourceMappingURL=companion.js.map
+exports.detail = exports.go = exports.jq = undefined;
+
+var _jquery = require("jquery");
+
+var _jquery2 = _interopRequireDefault(_jquery);
+
+var _String = require("fable-core/umd/String");
+
+var _Seq = require("fable-core/umd/Seq");
+
+function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
+
+var jq = exports.jq = _jquery2.default;
+var go = exports.go = jq("#go");
+var detail = exports.detail = jq(".detail");
+detail.click(function (_arg1) {
+  (0, _String.fsFormat)("I have been clicked")(function (x) {
+    console.log(x);
+  });
+});
+go.click(function (_arg2) {
+  var selector = jq("#selector").val();
+  var elements = jq(selector);
+  elements.css("background-color", "red");
+});
+(0, _Seq.iterate)(function (i) {
+  (0, _String.fsFormat)("%i")(function (x) {
+    console.log(x);
+  })(i);
+}, (0, _Seq.toList)((0, _Seq.range)(1, 10)));
