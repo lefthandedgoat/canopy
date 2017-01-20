@@ -11,8 +11,6 @@ var _jquery2 = _interopRequireDefault(_jquery);
 
 var _String = require("fable-core/umd/String");
 
-var _Seq = require("fable-core/umd/Seq");
-
 function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
 
 var jq = exports.jq = _jquery2.default;
@@ -28,8 +26,3 @@ go.click(function (_arg2) {
   var elements = jq(selector);
   elements.css("background-color", "red");
 });
-(0, _Seq.iterate)(function (i) {
-  (0, _String.fsFormat)("%i")(function (x) {
-    console.log(x);
-  })(i);
-}, (0, _Seq.toList)((0, _Seq.range)(1, 10)));

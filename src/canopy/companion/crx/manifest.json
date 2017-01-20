@@ -12,7 +12,7 @@
     "tabs", "http://*/*", "https://*/*"
   ],
   "background": {
-    "scripts": ["injector.js"],
+    "scripts": ["background.js"],
     "persistent": false
   }
 }
