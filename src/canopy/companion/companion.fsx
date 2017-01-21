@@ -6,21 +6,29 @@ open Fable.Core.JsInterop
 open Fable.Import.Browser
 
 let jq = importDefault<obj> "jquery"
-  
-let helper = """
+let find selector = jq $ selector
+let append selector element = (find selector)?append(element) |> ignore
+let css selector property value =  (find selector)?css(property, value) |> ignore
+let click selector f =  (find selector)?click(f) |> ignore
+let value selector = (find selector)?``val``() 
+let remove selector = (find selector)?remove() |> ignore
+
+let inputs = """
 <div id="canopy_companion" style="position: absolute; border: 1px solid black; bottom: 0px; right: 0px; margin: 3px; padding: 3px; background-color: white; z-index: 99999; font-size: 20px; font-family: monospace; font-weight: bold;">
   <input type="text" id="selector" value="">
   <input type="button" id="go" value="Go">
 </div>"""
-(jq $ ("body"))?append(helper) |> ignore
+append "body" inputs
 
-let go = jq $ ("#go")
+click "#go" (fun _ ->   
+  let selector = value "#selector"  
+  css selector "background-color" "red")
 
-go ? click(fun _ ->   
-  let selector = (jq $ ("#selector"))?``val``()  
-  let elements = jq $ selector
-  elements?css("background-color", "red") |> ignore
-  ()) |> ignore
+let killBorders () =
+  remove "#canopy_companion_border_top"
+  remove "#canopy_companion_border_bottom"
+  remove "#canopy_companion_border_left"
+  remove "#canopy_companion_border_right"
 
 //let mutable tests : (string * (unit -> unit)) list = []
 //let ( &&& ) desc f = tests <- List.append tests [desc, f]
