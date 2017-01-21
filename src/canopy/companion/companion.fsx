@@ -13,22 +13,68 @@ let click selector f =  (find selector)?click(f) |> ignore
 let value selector = (find selector)?``val``() 
 let remove selector = (find selector)?remove() |> ignore
 
+let border_width = 5
+let border_padding = 2
+
 let inputs = """
 <div id="canopy_companion" style="position: absolute; border: 1px solid black; bottom: 0px; right: 0px; margin: 3px; padding: 3px; background-color: white; z-index: 99999; font-size: 20px; font-family: monospace; font-weight: bold;">
   <input type="text" id="selector" value="">
   <input type="button" id="go" value="Go">
 </div>"""
+
 append "body" inputs
+
+type Self = { self : obj }
+
+let mouseDown element = ()
+
+let removeBorders () =
+  remove ".canopy_companion_border_top"
+  remove ".canopy_companion_border_bottom"
+  remove ".canopy_companion_border_left"
+  remove ".canopy_companion_border_right"
+
+let px value = sprintf "%ipx" value
+
+let toInt value = value |> sprintf "%O" |> int
+
+let border position heightValue widthvalue topValue leftValue =
+  let element = jq $ "<div>"
+  let class' = sprintf "canopy_companion_border_%s" position
+  element?addClass(class')
+    ?css("height", px heightValue)
+    ?css("width", px widthvalue)
+    ?css("top", px topValue)
+    ?css("left", px leftValue)
+    ?css("background-color", "#F00 !important") |> ignore
+  
+  append "body" element
+
+let createBorders elements = 
+  jq?each(elements, fun index element ->
+    let clone = jq $ element
+    let position = clone?offset()
+    let top = position?("top") |> toInt
+    let left = position?("left")  |> toInt
+    let width = clone?outerWidth() |> toInt
+    let height = clone?outerHeight() |> toInt
+    
+    border "top"    border_width (width + border_padding * 2 + border_width * 2) (top - border_width - border_padding) (left - border_padding - border_width)
+    border "bottom" (border_width + 6) (width + border_padding * 2 + border_width * 2 - 5) (top + height + border_padding) (left - border_padding - border_width)
+    border "left"   (height + border_padding * 2) border_width (top - border_padding) (left - border_padding - border_width)
+    border "right"   (height + border_padding * 2) border_width (top - border_padding) (left + width + border_padding)
+        
+//    (find ".canopy_companion_border_top")   ?get(0)?target_elem <- element
+//    (find ".canopy_companion_border_bottom")?get(0)?target_elem <- element
+//    (find ".canopy_companion_border_left")  ?get(0)?target_elem <- element
+//    (find ".canopy_companion_border_right") ?get(0)?target_elem <- element
+  ) |> ignore
+  
 
 click "#go" (fun _ ->   
   let selector = value "#selector"  
-  css selector "background-color" "red")
-
-let killBorders () =
-  remove "#canopy_companion_border_top"
-  remove "#canopy_companion_border_bottom"
-  remove "#canopy_companion_border_left"
-  remove "#canopy_companion_border_right"
+  removeBorders ()
+  createBorders (find selector))
 
 //let mutable tests : (string * (unit -> unit)) list = []
 //let ( &&& ) desc f = tests <- List.append tests [desc, f]

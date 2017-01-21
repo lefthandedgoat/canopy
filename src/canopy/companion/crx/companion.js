@@ -3,20 +3,38 @@
 Object.defineProperty(exports, "__esModule", {
   value: true
 });
-exports.inputs = exports.jq = undefined;
+exports.Self = exports.inputs = exports.border_padding = exports.border_width = exports.jq = undefined;
+
+var _createClass = function () { function defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } } return function (Constructor, protoProps, staticProps) { if (protoProps) defineProperties(Constructor.prototype, protoProps); if (staticProps) defineProperties(Constructor, staticProps); return Constructor; }; }();
+
 exports.find = find;
 exports.append = append;
 exports.css = css;
 exports.click = click;
 exports.value = value;
 exports.remove = remove;
-exports.killBorders = killBorders;
+exports.mouseDown = mouseDown;
+exports.removeBorders = removeBorders;
+exports.px = px;
+exports.toInt = toInt;
+exports.border = border;
+exports.createBorders = createBorders;
 
 var _jquery = require("jquery");
 
 var _jquery2 = _interopRequireDefault(_jquery);
 
+var _Symbol2 = require("fable-core/umd/Symbol");
+
+var _Symbol3 = _interopRequireDefault(_Symbol2);
+
+var _Util = require("fable-core/umd/Util");
+
+var _String = require("fable-core/umd/String");
+
 function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
+
+function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
 
 var jq = exports.jq = _jquery2.default;
 
@@ -44,16 +62,88 @@ function remove(selector) {
   find(selector).remove();
 }
 
+var border_width = exports.border_width = 5;
+var border_padding = exports.border_padding = 2;
 var inputs = exports.inputs = "\r\n<div id=\"canopy_companion\" style=\"position: absolute; border: 1px solid black; bottom: 0px; right: 0px; margin: 3px; padding: 3px; background-color: white; z-index: 99999; font-size: 20px; font-family: monospace; font-weight: bold;\">\r\n  <input type=\"text\" id=\"selector\" value=\"\">\r\n  <input type=\"button\" id=\"go\" value=\"Go\">\r\n</div>";
 append("body", inputs);
+
+var Self = exports.Self = function () {
+  function Self(_self) {
+    _classCallCheck(this, Self);
+
+    this.self = _self;
+  }
+
+  _createClass(Self, [{
+    key: _Symbol3.default.reflection,
+    value: function () {
+      return {
+        type: "Companion.Self",
+        interfaces: ["FSharpRecord", "System.IEquatable"],
+        properties: {
+          self: _Util.Any
+        }
+      };
+    }
+  }, {
+    key: "Equals",
+    value: function (other) {
+      return (0, _Util.equalsRecords)(this, other);
+    }
+  }]);
+
+  return Self;
+}();
+
+(0, _Symbol2.setType)("Companion.Self", Self);
+
+function mouseDown(element) {}
+
+function removeBorders() {
+  remove(".canopy_companion_border_top");
+  remove(".canopy_companion_border_bottom");
+  remove(".canopy_companion_border_left");
+  remove(".canopy_companion_border_right");
+}
+
+function px(value_1) {
+  return (0, _String.fsFormat)("%ipx")(function (x) {
+    return x;
+  })(value_1);
+}
+
+function toInt(value_1) {
+  return Number.parseInt((0, _String.fsFormat)("%O")(function (x) {
+    return x;
+  })(value_1));
+}
+
+function border(position, heightValue, widthvalue, topValue, leftValue) {
+  var element = jq("<div>");
+  var class_ = (0, _String.fsFormat)("canopy_companion_border_%s")(function (x) {
+    return x;
+  })(position);
+  element.addClass(class_).css("height", px(heightValue)).css("width", px(widthvalue)).css("top", px(topValue)).css("left", px(leftValue)).css("background-color", "#F00 !important");
+  append("body", element);
+}
+
+function createBorders(elements) {
+  jq.each(elements, function (index, element) {
+    var clone = jq(element);
+    var position = clone.offset();
+    var top = toInt(position.top);
+    var left = toInt(position.left);
+    var width = toInt(clone.outerWidth());
+    var height = toInt(clone.outerHeight());
+    border("top", border_width, width + border_padding * 2 + border_width * 2, top - border_width - border_padding, left - border_padding - border_width);
+    border("bottom", border_width + 6, width + border_padding * 2 + border_width * 2 - 5, top + height + border_padding, left - border_padding - border_width);
+    border("left", height + border_padding * 2, border_width, top - border_padding, left - border_padding - border_width);
+    border("right", height + border_padding * 2, border_width, top - border_padding, left + width + border_padding);
+  });
+}
+
 click("#go", function (_arg1) {
   var selector = value("#selector");
-  css(selector, "background-color", "red");
+  removeBorders();
+  createBorders(find(selector));
 });
-
-function killBorders() {
-  remove("#canopy_companion_border_top");
-  remove("#canopy_companion_border_bottom");
-  remove("#canopy_companion_border_left");
-  remove("#canopy_companion_border_right");
-}
