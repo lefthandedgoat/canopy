@@ -6,13 +6,15 @@ open Fable.Core.JsInterop
 open Fable.Import.Browser
 
 let jq = importDefault<obj> "jquery"
+  
+let helper = """
+<div id="canopy_companion" style="position: absolute; border: 1px solid black; bottom: 0px; right: 0px; margin: 3px; padding: 3px; background-color: white; z-index: 99999; font-size: 20px; font-family: monospace; font-weight: bold;">
+  <input type="text" id="selector" value="">
+  <input type="button" id="go" value="Go">
+</div>"""
+(jq $ ("body"))?append(helper) |> ignore
+
 let go = jq $ ("#go")
-
-let detail = jq $ (".detail")
-
-detail ? click(fun _ ->   
-  printfn "I have been clicked!!"
-  ()) |> ignore
 
 go ? click(fun _ ->   
   let selector = (jq $ ("#selector"))?``val``()  
