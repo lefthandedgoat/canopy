@@ -11,6 +11,7 @@ let append selector element = (find selector)?append(element) |> ignore
 let css selector property value =  (find selector)?css(property, value) |> ignore
 let click selector f =  (find selector)?click(f) |> ignore
 let value selector = (find selector)?``val``() 
+let set selector value = (find selector)?``val``(value) |> ignore
 let remove selector = (find selector)?remove() |> ignore
 let exists selector = 
   let value = (find selector)?("length") |> sprintf "%O" |> int
@@ -23,6 +24,7 @@ let inputs = """
 <div id="canopy_companion">
   <input type="text" id="selector" value="">
   <input type="button" id="go" value="Go">
+  <input type="button" id="clear" value="Clear">
   <input type="button" id="close" value="X">
 </div>"""
 
@@ -58,11 +60,6 @@ let createBorders elements =
     border (border_width + 6) (width + border_padding * 2 + border_width * 2 - 5) (top + height + border_padding) (left - border_padding - border_width)
     border (height + border_padding * 2) border_width (top - border_padding) (left - border_padding - border_width)
     border (height + border_padding * 2) border_width (top - border_padding) (left + width + border_padding)
-        
-//    (find ".canopy_companion_border_top")   ?get(0)?target_elem <- element
-//    (find ".canopy_companion_border_bottom")?get(0)?target_elem <- element
-//    (find ".canopy_companion_border_left")  ?get(0)?target_elem <- element
-//    (find ".canopy_companion_border_right") ?get(0)?target_elem <- element
   ) |> ignore
   
 if not (exists "#canopy_companion") then
@@ -72,6 +69,10 @@ if not (exists "#canopy_companion") then
     let selector = value "#selector"  
     remove ".canopy_companion_border"
     createBorders (find selector))
+
+  click "#canopy_companion #clear" (fun _ ->
+    set "#selector" ""
+    remove ".canopy_companion_border")
 
   click "#canopy_companion #close" (fun _ -> 
     remove ".canopy_companion_border"

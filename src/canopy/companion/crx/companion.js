@@ -12,6 +12,7 @@ exports.append = append;
 exports.css = css;
 exports.click = click;
 exports.value = value;
+exports.set = set;
 exports.remove = remove;
 exports.exists = exists;
 exports.mouseDown = mouseDown;
@@ -58,6 +59,10 @@ function value(selector) {
   return find(selector).val();
 }
 
+function set(selector, value_1) {
+  find(selector).val(value_1);
+}
+
 function remove(selector) {
   find(selector).remove();
 }
@@ -71,7 +76,7 @@ function exists(selector) {
 
 var border_width = exports.border_width = 5;
 var border_padding = exports.border_padding = 2;
-var inputs = exports.inputs = "\r\n<div id=\"canopy_companion\">\r\n  <input type=\"text\" id=\"selector\" value=\"\">\r\n  <input type=\"button\" id=\"go\" value=\"Go\">\r\n  <input type=\"button\" id=\"close\" value=\"X\">\r\n</div>";
+var inputs = exports.inputs = "\r\n<div id=\"canopy_companion\">\r\n  <input type=\"text\" id=\"selector\" value=\"\">\r\n  <input type=\"button\" id=\"go\" value=\"Go\">\r\n  <input type=\"button\" id=\"clear\" value=\"Clear\">\r\n  <input type=\"button\" id=\"close\" value=\"X\">\r\n</div>";
 
 var Self = exports.Self = function () {
   function Self(_self) {
@@ -145,7 +150,11 @@ if (!exists("#canopy_companion")) {
     remove(".canopy_companion_border");
     createBorders(find(selector));
   });
-  click("#canopy_companion #close", function (_arg2) {
+  click("#canopy_companion #clear", function (_arg2) {
+    set("#selector", "");
+    remove(".canopy_companion_border");
+  });
+  click("#canopy_companion #close", function (_arg3) {
     remove(".canopy_companion_border");
     remove("#canopy_companion");
   });
