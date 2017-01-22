@@ -15,7 +15,6 @@ exports.value = value;
 exports.remove = remove;
 exports.exists = exists;
 exports.mouseDown = mouseDown;
-exports.removeBorders = removeBorders;
 exports.px = px;
 exports.toInt = toInt;
 exports.border = border;
@@ -72,7 +71,7 @@ function exists(selector) {
 
 var border_width = exports.border_width = 5;
 var border_padding = exports.border_padding = 2;
-var inputs = exports.inputs = "\r\n<div id=\"canopy_companion\" style=\"position: absolute; border: 1px solid black; bottom: 0px; right: 0px; margin: 3px; padding: 3px; background-color: white; z-index: 99999; font-size: 20px; font-family: monospace; font-weight: bold;\">\r\n  <input type=\"text\" id=\"selector\" value=\"\">\r\n  <input type=\"button\" id=\"go\" value=\"Go\">\r\n</div>";
+var inputs = exports.inputs = "\r\n<div id=\"canopy_companion\" style=\"position: absolute; border: 1px solid black; bottom: 0px; right: 0px; margin: 3px; padding: 3px; background-color: white; z-index: 99999; font-size: 20px; font-family: monospace; font-weight: bold;\">\r\n  <input type=\"text\" id=\"selector\" value=\"\">\r\n  <input type=\"button\" id=\"go\" value=\"Go\">\r\n  <input type=\"button\" id=\"close\" value=\"X\">\r\n</div>";
 
 var Self = exports.Self = function () {
   function Self(_self) {
@@ -105,10 +104,6 @@ var Self = exports.Self = function () {
 (0, _Symbol2.setType)("Companion.Self", Self);
 
 function mouseDown(element) {}
-
-function removeBorders() {
-  remove(".canopy_companion_border");
-}
 
 function px(value_1) {
   return (0, _String.fsFormat)("%ipx")(function (x) {
@@ -145,9 +140,13 @@ function createBorders(elements) {
 
 if (!exists("#canopy_companion")) {
   append("body", inputs);
-  click("#go", function (_arg1) {
+  click("#canopy_companion #go", function (_arg1) {
     var selector = value("#selector");
-    removeBorders();
+    remove(".canopy_companion_border");
     createBorders(find(selector));
+  });
+  click("#canopy_companion #close", function (_arg2) {
+    remove(".canopy_companion_border");
+    remove("#canopy_companion");
   });
 }

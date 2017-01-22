@@ -23,14 +23,12 @@ let inputs = """
 <div id="canopy_companion" style="position: absolute; border: 1px solid black; bottom: 0px; right: 0px; margin: 3px; padding: 3px; background-color: white; z-index: 99999; font-size: 20px; font-family: monospace; font-weight: bold;">
   <input type="text" id="selector" value="">
   <input type="button" id="go" value="Go">
+  <input type="button" id="close" value="X">
 </div>"""
 
 type Self = { self : obj }
 
 let mouseDown element = ()
-
-let removeBorders () =
-  remove ".canopy_companion_border"
 
 let px value = sprintf "%ipx" value
 
@@ -70,10 +68,14 @@ let createBorders elements =
 if not (exists "#canopy_companion") then
   append "body" inputs
 
-  click "#go" (fun _ ->   
+  click "#canopy_companion #go" (fun _ ->   
     let selector = value "#selector"  
-    removeBorders ()
+    remove ".canopy_companion_border"
     createBorders (find selector))
+
+  click "#canopy_companion #close" (fun _ -> 
+    remove ".canopy_companion_border"
+    remove "#canopy_companion")
 
 //let mutable tests : (string * (unit -> unit)) list = []
 //let ( &&& ) desc f = tests <- List.append tests [desc, f]
