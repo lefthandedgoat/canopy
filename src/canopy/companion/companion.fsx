@@ -29,19 +29,15 @@ type Self = { self : obj }
 let mouseDown element = ()
 
 let removeBorders () =
-  remove ".canopy_companion_border_top"
-  remove ".canopy_companion_border_bottom"
-  remove ".canopy_companion_border_left"
-  remove ".canopy_companion_border_right"
+  remove ".canopy_companion_border"
 
 let px value = sprintf "%ipx" value
 
 let toInt value = value |> sprintf "%O" |> int
 
-let border position heightValue widthvalue topValue leftValue =
+let border heightValue widthvalue topValue leftValue =
   let element = jq $ "<div>"
-  let class' = sprintf "canopy_companion_border_%s" position
-  element?addClass(class')
+  element?addClass("canopy_companion_border")
     ?css("height", px heightValue)
     ?css("width", px widthvalue)
     ?css("top", px topValue)
@@ -58,11 +54,11 @@ let createBorders elements =
     let left = position?("left")  |> toInt
     let width = clone?outerWidth() |> toInt
     let height = clone?outerHeight() |> toInt
-    
-    border "top"    border_width (width + border_padding * 2 + border_width * 2) (top - border_width - border_padding) (left - border_padding - border_width)
-    border "bottom" (border_width + 6) (width + border_padding * 2 + border_width * 2 - 5) (top + height + border_padding) (left - border_padding - border_width)
-    border "left"   (height + border_padding * 2) border_width (top - border_padding) (left - border_padding - border_width)
-    border "right"   (height + border_padding * 2) border_width (top - border_padding) (left + width + border_padding)
+        
+    border border_width (width + border_padding * 2 + border_width * 2) (top - border_width - border_padding) (left - border_padding - border_width)
+    border (border_width + 6) (width + border_padding * 2 + border_width * 2 - 5) (top + height + border_padding) (left - border_padding - border_width)
+    border (height + border_padding * 2) border_width (top - border_padding) (left - border_padding - border_width)
+    border (height + border_padding * 2) border_width (top - border_padding) (left + width + border_padding)
         
 //    (find ".canopy_companion_border_top")   ?get(0)?target_elem <- element
 //    (find ".canopy_companion_border_bottom")?get(0)?target_elem <- element

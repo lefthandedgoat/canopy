@@ -100,10 +100,7 @@ var Self = exports.Self = function () {
 function mouseDown(element) {}
 
 function removeBorders() {
-  remove(".canopy_companion_border_top");
-  remove(".canopy_companion_border_bottom");
-  remove(".canopy_companion_border_left");
-  remove(".canopy_companion_border_right");
+  remove(".canopy_companion_border");
 }
 
 function px(value_1) {
@@ -118,12 +115,9 @@ function toInt(value_1) {
   })(value_1));
 }
 
-function border(position, heightValue, widthvalue, topValue, leftValue) {
+function border(heightValue, widthvalue, topValue, leftValue) {
   var element = jq("<div>");
-  var class_ = (0, _String.fsFormat)("canopy_companion_border_%s")(function (x) {
-    return x;
-  })(position);
-  element.addClass(class_).css("height", px(heightValue)).css("width", px(widthvalue)).css("top", px(topValue)).css("left", px(leftValue)).css("background-color", "#F00 !important");
+  element.addClass("canopy_companion_border").css("height", px(heightValue)).css("width", px(widthvalue)).css("top", px(topValue)).css("left", px(leftValue)).css("background-color", "#F00 !important");
   append("body", element);
 }
 
@@ -135,10 +129,10 @@ function createBorders(elements) {
     var left = toInt(position.left);
     var width = toInt(clone.outerWidth());
     var height = toInt(clone.outerHeight());
-    border("top", border_width, width + border_padding * 2 + border_width * 2, top - border_width - border_padding, left - border_padding - border_width);
-    border("bottom", border_width + 6, width + border_padding * 2 + border_width * 2 - 5, top + height + border_padding, left - border_padding - border_width);
-    border("left", height + border_padding * 2, border_width, top - border_padding, left - border_padding - border_width);
-    border("right", height + border_padding * 2, border_width, top - border_padding, left + width + border_padding);
+    border(border_width, width + border_padding * 2 + border_width * 2, top - border_width - border_padding, left - border_padding - border_width);
+    border(border_width + 6, width + border_padding * 2 + border_width * 2 - 5, top + height + border_padding, left - border_padding - border_width);
+    border(height + border_padding * 2, border_width, top - border_padding, left - border_padding - border_width);
+    border(height + border_padding * 2, border_width, top - border_padding, left + width + border_padding);
   });
 }
 
