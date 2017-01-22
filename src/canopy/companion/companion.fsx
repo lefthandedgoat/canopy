@@ -5,6 +5,8 @@ open Fable.Core
 open Fable.Core.JsInterop
 open Fable.Import.Browser
 
+type Self = { self : obj }
+
 let jq = importDefault<obj> "jquery"
 let find selector = jq $ selector
 let append selector element = (find selector)?append(element) |> ignore
@@ -16,6 +18,16 @@ let remove selector = (find selector)?remove() |> ignore
 let exists selector = 
   let value = (find selector)?("length") |> sprintf "%O" |> int
   value > 0
+let bind element event (f : (obj -> unit)) = 
+  let element = jq $ element  
+  element?bind(event, { self = element }, f) |> ignore
+let bindEach selector event (f : (obj -> unit)) = 
+  let elements = find selector
+  jq?each(elements, fun index element -> bind element event f) |> ignore
+let bool whatever = 
+  match sprintf "%O" whatever with
+  | "true" -> true
+  | _      -> false
 
 let border_width = 5
 let border_padding = 2
@@ -27,10 +39,6 @@ let inputs = """
   <input type="button" id="clear" value="Clear">
   <input type="button" id="close" value="X">
 </div>"""
-
-type Self = { self : obj }
-
-let mouseDown element = ()
 
 let px value = sprintf "%ipx" value
 
@@ -62,7 +70,27 @@ let createBorders elements =
     border (height + border_padding * 2) border_width (top - border_padding) (left + width + border_padding)
   ) |> ignore
   
+let mouseOver event = 
+  let element = jq $ event?data?self
+  let body = jq $ "body"
+  let bodyParent = (jq $ "body")?parent()
+  if element <> body && element <> bodyParent then
+    createBorders element
+
+let mouseOut event = 
+  let element = jq $ event?data?self
+  let body = jq $ "body"
+  let bodyParent = (jq $ "body")?parent()
+  if element <> body && element <> bodyParent then
+    remove ".canopy_companion_border"
+
+let mouseDown element = ()
+
 if not (exists "#canopy_companion") then
+  bindEach "*" "mouseover" mouseOver
+  bindEach "*" "mouseout" mouseOut
+  bindEach "*" "mousedown" mouseDown
+  
   append "body" inputs
 
   click "#canopy_companion #go" (fun _ ->   
