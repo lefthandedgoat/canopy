@@ -71,7 +71,7 @@ function exists(selector) {
 
 var border_width = exports.border_width = 5;
 var border_padding = exports.border_padding = 2;
-var inputs = exports.inputs = "\r\n<div id=\"canopy_companion\" style=\"position: absolute; border: 1px solid black; bottom: 0px; right: 0px; margin: 3px; padding: 3px; background-color: white; z-index: 99999; font-size: 20px; font-family: monospace; font-weight: bold;\">\r\n  <input type=\"text\" id=\"selector\" value=\"\">\r\n  <input type=\"button\" id=\"go\" value=\"Go\">\r\n  <input type=\"button\" id=\"close\" value=\"X\">\r\n</div>";
+var inputs = exports.inputs = "\r\n<div id=\"canopy_companion\">\r\n  <input type=\"text\" id=\"selector\" value=\"\">\r\n  <input type=\"button\" id=\"go\" value=\"Go\">\r\n  <input type=\"button\" id=\"close\" value=\"X\">\r\n</div>";
 
 var Self = exports.Self = function () {
   function Self(_self) {

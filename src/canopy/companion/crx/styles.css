@@ -2,6 +2,7 @@
 /* starting point comes from selector gadget found at https://github.com/cantino/selectorgadget */
 
 div#canopy_companion {
+  bottom: 5px !important;
   azimuth: center !important;
   background-attachment: scroll !important;
   background-image: none !important;
@@ -9,7 +10,6 @@ div#canopy_companion {
   background-repeat: repeat !important;
   border-collapse: separate !important;
   border-spacing: 0 !important;
-  bottom: auto !important;
   caption-side: top !important;
   clear: none !important;
   clip: auto !important;
@@ -214,9 +214,6 @@ img.canopy_companion_selected {
 
 #canopy_companion.canopy_companion_border_top {
   top: 5px !important; }
-
-#canopy_companion.canopy_companion_border_bottom {
-  bottom: 5px !important; }
 
 #canopy_companion input {
   margin-right: 10px !important;
