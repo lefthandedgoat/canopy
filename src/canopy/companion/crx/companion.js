@@ -13,6 +13,7 @@ exports.css = css;
 exports.click = click;
 exports.value = value;
 exports.remove = remove;
+exports.exists = exists;
 exports.mouseDown = mouseDown;
 exports.removeBorders = removeBorders;
 exports.px = px;
@@ -24,13 +25,13 @@ var _jquery = require("jquery");
 
 var _jquery2 = _interopRequireDefault(_jquery);
 
+var _String = require("fable-core/umd/String");
+
 var _Symbol2 = require("fable-core/umd/Symbol");
 
 var _Symbol3 = _interopRequireDefault(_Symbol2);
 
 var _Util = require("fable-core/umd/Util");
-
-var _String = require("fable-core/umd/String");
 
 function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
 
@@ -62,10 +63,16 @@ function remove(selector) {
   find(selector).remove();
 }
 
+function exists(selector) {
+  var value_1 = Number.parseInt((0, _String.fsFormat)("%O")(function (x) {
+    return x;
+  })(find(selector).length));
+  return value_1 > 0;
+}
+
 var border_width = exports.border_width = 5;
 var border_padding = exports.border_padding = 2;
 var inputs = exports.inputs = "\r\n<div id=\"canopy_companion\" style=\"position: absolute; border: 1px solid black; bottom: 0px; right: 0px; margin: 3px; padding: 3px; background-color: white; z-index: 99999; font-size: 20px; font-family: monospace; font-weight: bold;\">\r\n  <input type=\"text\" id=\"selector\" value=\"\">\r\n  <input type=\"button\" id=\"go\" value=\"Go\">\r\n</div>";
-append("body", inputs);
 
 var Self = exports.Self = function () {
   function Self(_self) {
@@ -136,8 +143,11 @@ function createBorders(elements) {
   });
 }
 
-click("#go", function (_arg1) {
-  var selector = value("#selector");
-  removeBorders();
-  createBorders(find(selector));
-});
+if (!exists("#canopy_companion")) {
+  append("body", inputs);
+  click("#go", function (_arg1) {
+    var selector = value("#selector");
+    removeBorders();
+    createBorders(find(selector));
+  });
+}

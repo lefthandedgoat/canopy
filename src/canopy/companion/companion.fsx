@@ -12,6 +12,9 @@ let css selector property value =  (find selector)?css(property, value) |> ignor
 let click selector f =  (find selector)?click(f) |> ignore
 let value selector = (find selector)?``val``() 
 let remove selector = (find selector)?remove() |> ignore
+let exists selector = 
+  let value = (find selector)?("length") |> sprintf "%O" |> int
+  value > 0
 
 let border_width = 5
 let border_padding = 2
@@ -21,8 +24,6 @@ let inputs = """
   <input type="text" id="selector" value="">
   <input type="button" id="go" value="Go">
 </div>"""
-
-append "body" inputs
 
 type Self = { self : obj }
 
@@ -66,11 +67,13 @@ let createBorders elements =
 //    (find ".canopy_companion_border_right") ?get(0)?target_elem <- element
   ) |> ignore
   
+if not (exists "#canopy_companion") then
+  append "body" inputs
 
-click "#go" (fun _ ->   
-  let selector = value "#selector"  
-  removeBorders ()
-  createBorders (find selector))
+  click "#go" (fun _ ->   
+    let selector = value "#selector"  
+    removeBorders ()
+    createBorders (find selector))
 
 //let mutable tests : (string * (unit -> unit)) list = []
 //let ( &&& ) desc f = tests <- List.append tests [desc, f]
