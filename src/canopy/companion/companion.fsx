@@ -13,6 +13,7 @@ open Fable.Import.Browser
 //Types
 type Self = { Self : obj }
 type Element = { Tag : string; Class : string; Id : string; Text : string; Value : string; Name : string; Placeholder : string }
+type Result = { Selector : string; Readability : float; Count : int }
 
 //Varios JS helpers
 let jq = importDefault<obj> "jquery"
@@ -46,10 +47,93 @@ let cleanString value =
   let value = if value = "undefined" then "" else value
   let value = if value.Contains("\n") then "" else value
   value
+let lower (value : string) = value.ToLower()
 
 //Constants
 let border_width = 5
 let border_padding = 2
+
+//Suggestion stuff
+let howManyXPath selector = 
+  let result = document.evaluate(selector, document, null, 0.0, null)
+  [ while result.iterateNext() <> null do yield 1 ] |> List.length
+
+let howManyJQuery selector = !!(find selector)?length |> int
+
+let suggestByXPathText element = 
+  if element.Text <> "" then
+    let selector = sprintf "//%s[text()='%s']" element.Tag element.Text
+    Some {
+      Selector = selector
+      Count = howManyXPath selector
+      Readability = 1.3
+    }
+  else None
+
+let suggestByCanopyText element = 
+  if element.Text <> "" then
+    let selector = sprintf "//*[text()='%s']" element.Text
+    Some {
+      Selector = element.Text
+      Count = howManyXPath selector
+      Readability = 1.1
+    }
+  else None
+
+let suggestByName element =
+  if element.Name <> "" then
+    let selector = sprintf "*[name='%s']" element.Name
+    Some {
+      Selector = selector
+      Count = howManyJQuery selector
+      Readability = 1.2
+    }
+  else None
+
+let suggestByPlaceholder element =
+  if element.Name <> "" then
+    let selector = sprintf "*[placeholder='%s']" element.Placeholder
+    Some {
+      Selector = selector
+      Count = howManyJQuery selector
+      Readability = 1.2
+    }
+  else None
+
+let suggestById element = 
+  if element.Id <> "" then
+    let selector = sprintf "#%s" element.Id
+    Some {
+      Selector = selector
+      Count = howManyJQuery selector
+      Readability = 1.0
+    }
+  else None
+
+let suggestByValue element = 
+  if element.Value <> "" then
+    let selector = sprintf "*[value='%s']" element.Value
+    Some {
+      Selector = selector
+      Count = howManyJQuery selector
+      Readability = 1.0
+    }
+  else None
+
+let suggest element =
+  [
+    suggestById element
+    suggestByName element
+    suggestByPlaceholder element
+    suggestByCanopyText element
+    suggestByXPathText element
+    suggestByValue element
+    //Add class based suggestions
+  ]
+  |> List.choose id
+  |> List.map (fun result -> result.Readability * (float result.Selector.Length), result)
+  |> List.sortBy ( fun (score, result) -> result.Count, score)
+  |> fun results -> if results.Length >= 5 then List.take 5 results else results
 
 //Main Controls
 let inputs = """
@@ -135,15 +219,17 @@ let mouseDown event =
     blockClick element
     let element = 
       {
-        Tag =         cleanString <| !!self?tagName
+        Tag =         lower <| (cleanString <| !!self?tagName)
         Class =       cleanString <| !!self?className
         Id =          cleanString <| !!self?id
         Text =        cleanString <| if !!self?textContext = null then !!self?innerText else !!self?textContext
         Value =       cleanString <| !!self?value
-        Name =        cleanString <| !!self?value
+        Name =        cleanString <| !!self?name
         Placeholder = cleanString <| !!self?placeholder
       }
-    printfn "%A" element
+
+    let suggestions = suggest element
+    suggestions |> List.iter (fun (score, result) -> printfn "score: %A / result %A" score result)    
 
 //Startup code
 //Add the main search box if not there, and wire it up
@@ -173,13 +259,11 @@ if not (exists "#canopy_companion") then
     remove ".canopy_companion_border"
     remove "#canopy_companion")
 
-//on click generate selectors and create a list, sort by shortest and most specific (determined by how many dom elements are recieved by it)
+//(*
 
-(*
+//let mutable tests : (string * (unit -> unit)) list = []
+//let ( &&& ) desc f = tests <- List.append tests [desc, f]
+//let run () = tests |> List.map (fun (desc, f) -> (printfn "%s" desc; f ()))
+//let (==) value1 value2 = System.Console.WriteLine("{0} expected: {1} got: {2}", (value1 = value2), value2, value1)
 
-let mutable tests : (string * (unit -> unit)) list = []
-let ( &&& ) desc f = tests <- List.append tests [desc, f]
-let run () = tests |> List.map (fun (desc, f) -> (printfn "%s" desc; f ()))
-let (==) value1 value2 = System.Console.WriteLine("{0} expected: {1} got: {2}", (value1 = value2), value2, value1)
-
-*)
+//*)

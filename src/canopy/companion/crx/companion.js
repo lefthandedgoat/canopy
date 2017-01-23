@@ -3,7 +3,9 @@
 Object.defineProperty(exports, "__esModule", {
   value: true
 });
-exports.Element = exports.right = exports.left = exports.bottom = exports.top = exports.inputs = exports.border_padding = exports.border_width = exports.jq = exports.Self = undefined;
+exports.right = exports.left = exports.bottom = exports.top = exports.inputs = exports.border_padding = exports.border_width = exports.jq = exports.Result = exports.Element = exports.Self = undefined;
+
+var _typeof = typeof Symbol === "function" && typeof Symbol.iterator === "symbol" ? function (obj) { return typeof obj; } : function (obj) { return obj && typeof Symbol === "function" && obj.constructor === Symbol && obj !== Symbol.prototype ? "symbol" : typeof obj; };
 
 var _createClass = function () { function defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } } return function (Constructor, protoProps, staticProps) { if (protoProps) defineProperties(Constructor.prototype, protoProps); if (staticProps) defineProperties(Constructor, staticProps); return Constructor; }; }();
 
@@ -24,6 +26,16 @@ exports.bool = bool;
 exports.px = px;
 exports.toInt = toInt;
 exports.cleanString = cleanString;
+exports.lower = lower;
+exports.howManyXPath = howManyXPath;
+exports.howManyJQuery = howManyJQuery;
+exports.suggestByXPathText = suggestByXPathText;
+exports.suggestByCanopyText = suggestByCanopyText;
+exports.suggestByName = suggestByName;
+exports.suggestByPlaceholder = suggestByPlaceholder;
+exports.suggestById = suggestById;
+exports.suggestByValue = suggestByValue;
+exports.suggest = suggest;
 exports.border = border;
 exports.createBorders = createBorders;
 exports.mouseEnter = mouseEnter;
@@ -41,6 +53,10 @@ var _jquery = require("jquery");
 var _jquery2 = _interopRequireDefault(_jquery);
 
 var _String = require("fable-core/umd/String");
+
+var _Seq = require("fable-core/umd/Seq");
+
+var _List = require("fable-core/umd/List");
 
 function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
 
@@ -75,6 +91,93 @@ var Self = exports.Self = function () {
 }();
 
 (0, _Symbol2.setType)("Companion.Self", Self);
+
+var _Element = function () {
+  function _Element(tag, _class, id, text, value, name, placeholder) {
+    _classCallCheck(this, _Element);
+
+    this.Tag = tag;
+    this.Class = _class;
+    this.Id = id;
+    this.Text = text;
+    this.Value = value;
+    this.Name = name;
+    this.Placeholder = placeholder;
+  }
+
+  _createClass(_Element, [{
+    key: _Symbol3.default.reflection,
+    value: function () {
+      return {
+        type: "Companion.Element",
+        interfaces: ["FSharpRecord", "System.IEquatable", "System.IComparable"],
+        properties: {
+          Tag: "string",
+          Class: "string",
+          Id: "string",
+          Text: "string",
+          Value: "string",
+          Name: "string",
+          Placeholder: "string"
+        }
+      };
+    }
+  }, {
+    key: "Equals",
+    value: function (other) {
+      return (0, _Util.equalsRecords)(this, other);
+    }
+  }, {
+    key: "CompareTo",
+    value: function (other) {
+      return (0, _Util.compareRecords)(this, other);
+    }
+  }]);
+
+  return _Element;
+}();
+
+exports.Element = _Element;
+(0, _Symbol2.setType)("Companion.Element", _Element);
+
+var Result = exports.Result = function () {
+  function Result(selector, readability, count) {
+    _classCallCheck(this, Result);
+
+    this.Selector = selector;
+    this.Readability = readability;
+    this.Count = count;
+  }
+
+  _createClass(Result, [{
+    key: _Symbol3.default.reflection,
+    value: function () {
+      return {
+        type: "Companion.Result",
+        interfaces: ["FSharpRecord", "System.IEquatable", "System.IComparable"],
+        properties: {
+          Selector: "string",
+          Readability: "number",
+          Count: "number"
+        }
+      };
+    }
+  }, {
+    key: "Equals",
+    value: function (other) {
+      return (0, _Util.equalsRecords)(this, other);
+    }
+  }, {
+    key: "CompareTo",
+    value: function (other) {
+      return (0, _Util.compareRecords)(this, other);
+    }
+  }]);
+
+  return Result;
+}();
+
+(0, _Symbol2.setType)("Companion.Result", Result);
 var jq = exports.jq = _jquery2.default;
 
 function find(selector) {
@@ -167,8 +270,156 @@ function cleanString(value_1) {
   return value_4;
 }
 
+function lower(value_1) {
+  return value_1.toLocaleLowerCase();
+}
+
 var border_width = exports.border_width = 5;
 var border_padding = exports.border_padding = 2;
+
+function howManyXPath(selector) {
+  var result = document.evaluate(selector, document, null, 0, null);
+  return (0, _Seq.toList)((0, _Seq.delay)(function () {
+    return (0, _Seq.enumerateWhile)(function () {
+      return result.iterateNext() != null;
+    }, (0, _Seq.delay)(function () {
+      return (0, _Seq.singleton)(1);
+    }));
+  })).length;
+}
+
+function howManyJQuery(selector) {
+  return find(selector).length;
+}
+
+function suggestByXPathText(element) {
+  if (element.Text !== "") {
+    var _ret = function () {
+      var selector = (0, _String.fsFormat)("//%s[text()='%s']")(function (x) {
+        return x;
+      })(element.Tag)(element.Text);
+      return {
+        v: function () {
+          var Count = howManyXPath(selector);
+          return new Result(selector, 1.3, Count);
+        }()
+      };
+    }();
+
+    if ((typeof _ret === "undefined" ? "undefined" : _typeof(_ret)) === "object") return _ret.v;
+  }
+}
+
+function suggestByCanopyText(element) {
+  if (element.Text !== "") {
+    var _ret2 = function () {
+      var selector = (0, _String.fsFormat)("//*[text()='%s']")(function (x) {
+        return x;
+      })(element.Text);
+      return {
+        v: function () {
+          var Count = howManyXPath(selector);
+          return new Result(element.Text, 1.1, Count);
+        }()
+      };
+    }();
+
+    if ((typeof _ret2 === "undefined" ? "undefined" : _typeof(_ret2)) === "object") return _ret2.v;
+  }
+}
+
+function suggestByName(element) {
+  if (element.Name !== "") {
+    var _ret3 = function () {
+      var selector = (0, _String.fsFormat)("*[name='%s']")(function (x) {
+        return x;
+      })(element.Name);
+      return {
+        v: function () {
+          var Count = howManyJQuery(selector);
+          return new Result(selector, 1.2, Count);
+        }()
+      };
+    }();
+
+    if ((typeof _ret3 === "undefined" ? "undefined" : _typeof(_ret3)) === "object") return _ret3.v;
+  }
+}
+
+function suggestByPlaceholder(element) {
+  if (element.Name !== "") {
+    var _ret4 = function () {
+      var selector = (0, _String.fsFormat)("*[placeholder='%s']")(function (x) {
+        return x;
+      })(element.Placeholder);
+      return {
+        v: function () {
+          var Count = howManyJQuery(selector);
+          return new Result(selector, 1.2, Count);
+        }()
+      };
+    }();
+
+    if ((typeof _ret4 === "undefined" ? "undefined" : _typeof(_ret4)) === "object") return _ret4.v;
+  }
+}
+
+function suggestById(element) {
+  if (element.Id !== "") {
+    var _ret5 = function () {
+      var selector = (0, _String.fsFormat)("#%s")(function (x) {
+        return x;
+      })(element.Id);
+      return {
+        v: function () {
+          var Count = howManyJQuery(selector);
+          return new Result(selector, 1, Count);
+        }()
+      };
+    }();
+
+    if ((typeof _ret5 === "undefined" ? "undefined" : _typeof(_ret5)) === "object") return _ret5.v;
+  }
+}
+
+function suggestByValue(element) {
+  if (element.Value !== "") {
+    var _ret6 = function () {
+      var selector = (0, _String.fsFormat)("*[value='%s']")(function (x) {
+        return x;
+      })(element.Value);
+      return {
+        v: function () {
+          var Count = howManyJQuery(selector);
+          return new Result(selector, 1, Count);
+        }()
+      };
+    }();
+
+    if ((typeof _ret6 === "undefined" ? "undefined" : _typeof(_ret6)) === "object") return _ret6.v;
+  }
+}
+
+function suggest(element) {
+  return function (results) {
+    if (results.length >= 5) {
+      return (0, _Seq.toList)((0, _Seq.take)(5, results));
+    } else {
+      return results;
+    }
+  }((0, _Seq.toList)((0, _Seq.sortWith)(function (x, y) {
+    return (0, _Util.compare)(function (tupledArg) {
+      return [tupledArg[1].Count, tupledArg[0]];
+    }(x), function (tupledArg) {
+      return [tupledArg[1].Count, tupledArg[0]];
+    }(y));
+  }, (0, _List.map)(function (result) {
+    return [result.Readability * result.Selector.length, result];
+  }, (0, _List.choose)(function (x) {
+    return x;
+  }, (0, _List.ofArray)([suggestById(element), suggestByName(element), suggestByPlaceholder(element), suggestByCanopyText(element), suggestByXPathText(element), suggestByValue(element)]))))));
+}
+
 var inputs = exports.inputs = "\r\n<div id=\"canopy_companion\" class=\"canopy_companion_module\">\r\n  <input type=\"text\" id=\"selector\" class=\"canopy_companion_module\" value=\"\">\r\n  <input type=\"button\" id=\"go\" class=\"canopy_companion_module\" value=\"Go\">\r\n  <input type=\"button\" id=\"clear\" class=\"canopy_companion_module\" value=\"Clear\">\r\n  <input type=\"button\" id=\"close\" class=\"canopy_companion_module\" value=\"X\">\r\n</div>";
 var top = exports.top = jq("<div>").addClass("canopy_companion_border").addClass("canopy_companion_border_top");
 var bottom = exports.bottom = jq("<div>").addClass("canopy_companion_border").addClass("canopy_companion_border_bottom");
@@ -222,54 +473,6 @@ function blockClick(element) {
   }, 400);
 }
 
-var _Element = function () {
-  function _Element(tag, _class, id, text, value, name, placeholder) {
-    _classCallCheck(this, _Element);
-
-    this.Tag = tag;
-    this.Class = _class;
-    this.Id = id;
-    this.Text = text;
-    this.Value = value;
-    this.Name = name;
-    this.Placeholder = placeholder;
-  }
-
-  _createClass(_Element, [{
-    key: _Symbol3.default.reflection,
-    value: function () {
-      return {
-        type: "Companion.Element",
-        interfaces: ["FSharpRecord", "System.IEquatable", "System.IComparable"],
-        properties: {
-          Tag: "string",
-          Class: "string",
-          Id: "string",
-          Text: "string",
-          Value: "string",
-          Name: "string",
-          Placeholder: "string"
-        }
-      };
-    }
-  }, {
-    key: "Equals",
-    value: function (other) {
-      return (0, _Util.equalsRecords)(this, other);
-    }
-  }, {
-    key: "CompareTo",
-    value: function (other) {
-      return (0, _Util.compareRecords)(this, other);
-    }
-  }]);
-
-  return _Element;
-}();
-
-exports.Element = _Element;
-(0, _Symbol2.setType)("Companion.Element", _Element);
-
 function mouseDown(event) {
   var _self = event.data.Self.get(0);
 
@@ -279,10 +482,13 @@ function mouseDown(event) {
   if (tag_1 !== "BODY" ? tag_1 !== "HTML" : false) {
     event.stopImmediatePropagation();
     blockClick(element);
-    var element_1 = new _Element(cleanString(_self.tagName), cleanString(_self.className), cleanString(_self.id), cleanString(_self.textContext == null ? _self.innerText : _self.textContext), cleanString(_self.value), cleanString(_self.value), cleanString(_self.placeholder));
-    (0, _String.fsFormat)("%A")(function (x) {
-      console.log(x);
-    })(element_1);
+    var element_1 = new _Element(lower(cleanString(_self.tagName)), cleanString(_self.className), cleanString(_self.id), cleanString(_self.textContext == null ? _self.innerText : _self.textContext), cleanString(_self.value), cleanString(_self.name), cleanString(_self.placeholder));
+    var suggestions = suggest(element_1);
+    (0, _Seq.iterate)(function (tupledArg) {
+      (0, _String.fsFormat)("score: %A / result %A")(function (x) {
+        console.log(x);
+      })(tupledArg[0])(tupledArg[1]);
+    }, suggestions);
   }
 }
 
