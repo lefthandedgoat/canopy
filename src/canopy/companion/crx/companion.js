@@ -3,7 +3,7 @@
 Object.defineProperty(exports, "__esModule", {
   value: true
 });
-exports.right = exports.left = exports.bottom = exports.top = exports.inputs = exports.border_padding = exports.border_width = exports.jq = exports.Self = undefined;
+exports.Element = exports.right = exports.left = exports.bottom = exports.top = exports.inputs = exports.border_padding = exports.border_width = exports.jq = exports.Self = undefined;
 
 var _createClass = function () { function defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } } return function (Constructor, protoProps, staticProps) { if (protoProps) defineProperties(Constructor.prototype, protoProps); if (staticProps) defineProperties(Constructor, staticProps); return Constructor; }; }();
 
@@ -23,6 +23,7 @@ exports.onEach = onEach;
 exports.bool = bool;
 exports.px = px;
 exports.toInt = toInt;
+exports.cleanString = cleanString;
 exports.border = border;
 exports.createBorders = createBorders;
 exports.mouseEnter = mouseEnter;
@@ -49,7 +50,7 @@ var Self = exports.Self = function () {
   function Self(_self) {
     _classCallCheck(this, Self);
 
-    this.self = _self;
+    this.Self = _self;
   }
 
   _createClass(Self, [{
@@ -59,7 +60,7 @@ var Self = exports.Self = function () {
         type: "Companion.Self",
         interfaces: ["FSharpRecord", "System.IEquatable"],
         properties: {
-          self: _Util.Any
+          Self: _Util.Any
         }
       };
     }
@@ -159,6 +160,13 @@ function toInt(value_1) {
   })(value_1));
 }
 
+function cleanString(value_1) {
+  var value_2 = (0, _Util.toString)(value_1);
+  var value_3 = value_2 === "undefined" ? "" : value_2;
+  var value_4 = value_3.indexOf("\n") >= 0 ? "" : value_3;
+  return value_4;
+}
+
 var border_width = exports.border_width = 5;
 var border_padding = exports.border_padding = 2;
 var inputs = exports.inputs = "\r\n<div id=\"canopy_companion\" class=\"canopy_companion_module\">\r\n  <input type=\"text\" id=\"selector\" class=\"canopy_companion_module\" value=\"\">\r\n  <input type=\"button\" id=\"go\" class=\"canopy_companion_module\" value=\"Go\">\r\n  <input type=\"button\" id=\"clear\" class=\"canopy_companion_module\" value=\"Clear\">\r\n  <input type=\"button\" id=\"close\" class=\"canopy_companion_module\" value=\"X\">\r\n</div>";
@@ -190,7 +198,7 @@ function createBorders(elements) {
 }
 
 function mouseEnter(event) {
-  var element = jq(event.data.self);
+  var element = jq(event.data.Self);
   var tag_1 = tag(element);
 
   if (tag_1 !== "BODY" ? tag_1 !== "HTML" : false) {
@@ -214,13 +222,67 @@ function blockClick(element) {
   }, 400);
 }
 
+var _Element = function () {
+  function _Element(tag, _class, id, text, value, name, placeholder) {
+    _classCallCheck(this, _Element);
+
+    this.Tag = tag;
+    this.Class = _class;
+    this.Id = id;
+    this.Text = text;
+    this.Value = value;
+    this.Name = name;
+    this.Placeholder = placeholder;
+  }
+
+  _createClass(_Element, [{
+    key: _Symbol3.default.reflection,
+    value: function () {
+      return {
+        type: "Companion.Element",
+        interfaces: ["FSharpRecord", "System.IEquatable", "System.IComparable"],
+        properties: {
+          Tag: "string",
+          Class: "string",
+          Id: "string",
+          Text: "string",
+          Value: "string",
+          Name: "string",
+          Placeholder: "string"
+        }
+      };
+    }
+  }, {
+    key: "Equals",
+    value: function (other) {
+      return (0, _Util.equalsRecords)(this, other);
+    }
+  }, {
+    key: "CompareTo",
+    value: function (other) {
+      return (0, _Util.compareRecords)(this, other);
+    }
+  }]);
+
+  return _Element;
+}();
+
+exports.Element = _Element;
+(0, _Symbol2.setType)("Companion.Element", _Element);
+
 function mouseDown(event) {
-  var element = jq(event.data.self);
+  var _self = event.data.Self.get(0);
+
+  var element = jq(_self);
   var tag_1 = tag(element);
 
   if (tag_1 !== "BODY" ? tag_1 !== "HTML" : false) {
     event.stopImmediatePropagation();
     blockClick(element);
+    var element_1 = new _Element(cleanString(_self.tagName), cleanString(_self.className), cleanString(_self.id), cleanString(_self.textContext == null ? _self.innerText : _self.textContext), cleanString(_self.value), cleanString(_self.value), cleanString(_self.placeholder));
+    (0, _String.fsFormat)("%A")(function (x) {
+      console.log(x);
+    })(element_1);
   }
 }
 

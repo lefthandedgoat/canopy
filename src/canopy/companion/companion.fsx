@@ -5,7 +5,8 @@ open Fable.Core
 open Fable.Core.JsInterop
 open Fable.Import.Browser
 
-type Self = { self : obj }
+type Self = { Self : obj }
+type Element = { Tag : string; Class : string; Id : string; Text : string; Value : string; Name : string; Placeholder : string }
 
 let jq = importDefault<obj> "jquery"
 let find selector = jq $ selector
@@ -23,7 +24,7 @@ let exists selector =
 let off selector event = (find selector)?off(event) |> ignore
 let on element event f = 
   let element = jq $ element  
-  element?on(event, { self = element }, f) |> ignore
+  element?on(event, { Self = element }, f) |> ignore
 let onEach selector event f = 
   let elements = find selector
   jq?each(elements, fun index element -> on element event f) |> ignore
@@ -33,6 +34,11 @@ let bool whatever =
   | _      -> false
 let px value = sprintf "%ipx" value
 let toInt value = value |> sprintf "%O" |> int
+let cleanString value = 
+  let value = string value
+  let value = if value = "undefined" then "" else value
+  let value = if value.Contains("\n") then "" else value
+  value
 
 let border_width = 5
 let border_padding = 2
@@ -76,7 +82,7 @@ let createBorders elements =
   ) |> ignore
   
 let mouseEnter event = 
-  let element = jq $ event?data?self
+  let element = jq $ event?data?Self
   let tag = tag element
   if tag <> "BODY" && tag <> "HTML" then
     event?stopImmediatePropagation() |> ignore
@@ -105,11 +111,23 @@ let blockClick element =
   window.setTimeout((fun _ -> block?remove()), 400.) |> ignore
 
 let mouseDown event = 
-  let element = jq $ event?data?self
+  let self = !!event?data?Self?get(0)
+  let element = jq $ self
   let tag = tag element
   if tag <> "BODY" && tag <> "HTML" then
     event?stopImmediatePropagation() |> ignore
     blockClick element
+    let element = 
+      {
+        Tag =         cleanString <| !!self?tagName
+        Class =       cleanString <| !!self?className
+        Id =          cleanString <| !!self?id
+        Text =        cleanString <| if !!self?textContext = null then !!self?innerText else !!self?textContext
+        Value =       cleanString <| !!self?value
+        Name =        cleanString <| !!self?value
+        Placeholder = cleanString <| !!self?placeholder
+      }
+    printfn "%A" element
 
 if not (exists "#canopy_companion") then
   append "body" top
@@ -142,19 +160,4 @@ if not (exists "#canopy_companion") then
 //let run () = tests |> List.map (fun (desc, f) -> (printfn "%s" desc; f ()))
 //let (==) value1 value2 = System.Console.WriteLine("{0} expected: {1} got: {2}", (value1 = value2), value2, value1)
 
-//optionally inject jquery if not already there
-//on mouse over highlight element
 //on click generate selectors and create a list, sort by shortest and most specific (determined by how many dom elements are recieved by it
-//figure out how to click but not page transition (blockClickON https://github.com/cantino/selectorgadget/blob/2c9f31102f5f2ecb0f621fa7215d6ebc10d78171/lib/js/core/core.js.coffee)
-//Init a npm thing, requis js and all that stuff
-
-//make fake task
-
-
-(* mouseover code
-window.onclick = function(element) {
-  var target = element.target
-  var element = {className:target.className, id:target.id, text:target.innerText || target.textContent };
-  console.log(element);
-};
-*)
