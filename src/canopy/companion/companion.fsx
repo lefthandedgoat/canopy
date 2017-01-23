@@ -1,13 +1,20 @@
 ﻿
+(*
+Much of the below code was heavily inspired by selectorgadget
+You can find the source of it here:  https://github.com/cantino/selectorgadget
+*)
+
 #r "node_modules/fable-core/Fable.Core.dll"
 
 open Fable.Core
 open Fable.Core.JsInterop
 open Fable.Import.Browser
 
+//Types
 type Self = { Self : obj }
 type Element = { Tag : string; Class : string; Id : string; Text : string; Value : string; Name : string; Placeholder : string }
 
+//Varios JS helpers
 let jq = importDefault<obj> "jquery"
 let find selector = jq $ selector
 let append selector element = (find selector)?append(element) |> ignore
@@ -40,9 +47,11 @@ let cleanString value =
   let value = if value.Contains("\n") then "" else value
   value
 
+//Constants
 let border_width = 5
 let border_padding = 2
 
+//Main Controls
 let inputs = """
 <div id="canopy_companion" class="canopy_companion_module">
   <input type="text" id="selector" class="canopy_companion_module" value="">
@@ -51,11 +60,13 @@ let inputs = """
   <input type="button" id="close" class="canopy_companion_module" value="X">
 </div>"""
 
+//The borders used around elements
 let top =    (jq $ "<div>")?addClass("canopy_companion_border")?addClass("canopy_companion_border_top")
 let bottom = (jq $ "<div>")?addClass("canopy_companion_border")?addClass("canopy_companion_border_bottom")
 let left =   (jq $ "<div>")?addClass("canopy_companion_border")?addClass("canopy_companion_border_left")
 let right =  (jq $ "<div>")?addClass("canopy_companion_border")?addClass("canopy_companion_border_right")
 
+//Set the position values for the right provided border
 let border position heightValue widthvalue topValue leftValue =
   let element = find (sprintf ".canopy_companion_border_%s" position)
   element
@@ -66,6 +77,7 @@ let border position heightValue widthvalue topValue leftValue =
     ?show()
     |> ignore
 
+//Given an element, draw borders around it
 let createBorders elements = 
   jq?each(elements, fun index element ->
     let clone = jq $ element
@@ -81,6 +93,7 @@ let createBorders elements =
     border "right"  (height + border_padding * 2) border_width (top - border_padding) (left + width + border_padding)
   ) |> ignore
   
+//Highlight an element on mouseEnter
 let mouseEnter event = 
   let element = jq $ event?data?Self
   let tag = tag element
@@ -89,6 +102,8 @@ let mouseEnter event =
     hide ".canopy_companion_border"
     createBorders element
     
+//Put a hidden div over an area on click to block the real target being click (to prevent links working etc)
+//Fade it out after 400ms
 let blockClick element =
   let clone = jq $ element
   let position = clone?offset()
@@ -110,6 +125,7 @@ let blockClick element =
   append "body" block
   window.setTimeout((fun _ -> block?remove()), 400.) |> ignore
 
+//On mouse down, block the real click, grab the element being clicked, and calculate some selectors for it
 let mouseDown event = 
   let self = !!event?data?Self?get(0)
   let element = jq $ self
@@ -129,6 +145,8 @@ let mouseDown event =
       }
     printfn "%A" element
 
+//Startup code
+//Add the main search box if not there, and wire it up
 if not (exists "#canopy_companion") then
   append "body" top
   append "body" bottom
@@ -155,9 +173,13 @@ if not (exists "#canopy_companion") then
     remove ".canopy_companion_border"
     remove "#canopy_companion")
 
-//let mutable tests : (string * (unit -> unit)) list = []
-//let ( &&& ) desc f = tests <- List.append tests [desc, f]
-//let run () = tests |> List.map (fun (desc, f) -> (printfn "%s" desc; f ()))
-//let (==) value1 value2 = System.Console.WriteLine("{0} expected: {1} got: {2}", (value1 = value2), value2, value1)
+//on click generate selectors and create a list, sort by shortest and most specific (determined by how many dom elements are recieved by it)
 
-//on click generate selectors and create a list, sort by shortest and most specific (determined by how many dom elements are recieved by it
+(*
+
+let mutable tests : (string * (unit -> unit)) list = []
+let ( &&& ) desc f = tests <- List.append tests [desc, f]
+let run () = tests |> List.map (fun (desc, f) -> (printfn "%s" desc; f ()))
+let (==) value1 value2 = System.Console.WriteLine("{0} expected: {1} got: {2}", (value1 = value2), value2, value1)
+
+*)
