@@ -3,7 +3,7 @@
 Object.defineProperty(exports, "__esModule", {
   value: true
 });
-exports._currentBordered = exports.right = exports.left = exports.bottom = exports.top = exports.inputs = exports.border_padding = exports.border_width = exports.jq = exports.Self = undefined;
+exports.right = exports.left = exports.bottom = exports.top = exports.inputs = exports.border_padding = exports.border_width = exports.jq = exports.Self = undefined;
 
 var _createClass = function () { function defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } } return function (Constructor, protoProps, staticProps) { if (protoProps) defineProperties(Constructor.prototype, protoProps); if (staticProps) defineProperties(Constructor, staticProps); return Constructor; }; }();
 
@@ -167,8 +167,6 @@ var bottom = exports.bottom = jq("<div>").addClass("canopy_companion_border").ad
 var left = exports.left = jq("<div>").addClass("canopy_companion_border").addClass("canopy_companion_border_left");
 var right = exports.right = jq("<div>").addClass("canopy_companion_border").addClass("canopy_companion_border_right");
 
-var _currentBordered = exports._currentBordered = null;
-
 function border(position, heightValue, widthvalue, topValue, leftValue) {
   var element = find((0, _String.fsFormat)(".canopy_companion_border_%s")(function (x) {
     return x;
@@ -199,7 +197,6 @@ function mouseEnter(event) {
     event.stopImmediatePropagation();
     hide(".canopy_companion_border");
     createBorders(element);
-    exports._currentBordered = _currentBordered = event.data.self;
   }
 }
 

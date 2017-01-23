@@ -21,10 +21,10 @@ let exists selector =
   let value = (find selector)?("length") |> sprintf "%O" |> int
   value > 0
 let off selector event = (find selector)?off(event) |> ignore
-let on element event (f : (obj -> unit)) = 
+let on element event f = 
   let element = jq $ element  
   element?on(event, { self = element }, f) |> ignore
-let onEach selector event (f : (obj -> unit)) = 
+let onEach selector event f = 
   let elements = find selector
   jq?each(elements, fun index element -> on element event f) |> ignore
 let bool whatever = 
@@ -49,7 +49,6 @@ let top =    (jq $ "<div>")?addClass("canopy_companion_border")?addClass("canopy
 let bottom = (jq $ "<div>")?addClass("canopy_companion_border")?addClass("canopy_companion_border_bottom")
 let left =   (jq $ "<div>")?addClass("canopy_companion_border")?addClass("canopy_companion_border_left")
 let right =  (jq $ "<div>")?addClass("canopy_companion_border")?addClass("canopy_companion_border_right")
-let mutable _currentBordered : obj = null
 
 let border position heightValue widthvalue topValue leftValue =
   let element = find (sprintf ".canopy_companion_border_%s" position)
@@ -65,8 +64,8 @@ let createBorders elements =
   jq?each(elements, fun index element ->
     let clone = jq $ element
     let position = clone?offset()
-    let top = position?("top") |> toInt
-    let left = position?("left")  |> toInt
+    let top = position?top |> toInt
+    let left = position?left  |> toInt
     let width = clone?outerWidth() |> toInt
     let height = clone?outerHeight() |> toInt
         
@@ -83,13 +82,12 @@ let mouseEnter event =
     event?stopImmediatePropagation() |> ignore
     hide ".canopy_companion_border"
     createBorders element
-    _currentBordered <- event?data?self
-
+    
 let blockClick element =
   let clone = jq $ element
   let position = clone?offset()
-  let top = position?("top") |> toInt
-  let left = position?("left")  |> toInt
+  let top = position?top |> toInt
+  let left = position?left  |> toInt
   let width = clone?outerWidth() |> toInt
   let height = clone?outerHeight() |> toInt
 
