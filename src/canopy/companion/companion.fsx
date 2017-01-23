@@ -15,6 +15,7 @@ let click selector f =  (find selector)?click(f) |> ignore
 let value selector = (find selector)?``val``() 
 let set selector value = (find selector)?``val``(value) |> ignore
 let remove selector = (find selector)?remove() |> ignore
+let hide selector = (find selector)?hide() |> ignore
 let exists selector = 
   let value = (find selector)?("length") |> sprintf "%O" |> int
   value > 0
@@ -28,6 +29,8 @@ let bool whatever =
   match sprintf "%O" whatever with
   | "true" -> true
   | _      -> false
+let px value = sprintf "%ipx" value
+let toInt value = value |> sprintf "%O" |> int
 
 let border_width = 5
 let border_padding = 2
@@ -40,20 +43,20 @@ let inputs = """
   <input type="button" id="close" value="X">
 </div>"""
 
-let px value = sprintf "%ipx" value
+let top =    (jq $ "<div>")?addClass("canopy_companion_border")?addClass("canopy_companion_border_top")
+let bottom = (jq $ "<div>")?addClass("canopy_companion_border")?addClass("canopy_companion_border_bottom")
+let left =   (jq $ "<div>")?addClass("canopy_companion_border")?addClass("canopy_companion_border_left")
+let right =  (jq $ "<div>")?addClass("canopy_companion_border")?addClass("canopy_companion_border_right")
 
-let toInt value = value |> sprintf "%O" |> int
-
-let border heightValue widthvalue topValue leftValue =
-  let element = jq $ "<div>"
-  element?addClass("canopy_companion_border")
+let border position heightValue widthvalue topValue leftValue =
+  let element = find (sprintf ".canopy_companion_border_%s" position)
+  element
     ?css("height", px heightValue)
     ?css("width", px widthvalue)
     ?css("top", px topValue)
     ?css("left", px leftValue)
-    ?css("background-color", "#F00 !important") |> ignore
-  
-  append "body" element
+    ?show()
+    |> ignore
 
 let createBorders elements = 
   jq?each(elements, fun index element ->
@@ -64,43 +67,49 @@ let createBorders elements =
     let width = clone?outerWidth() |> toInt
     let height = clone?outerHeight() |> toInt
         
-    border border_width (width + border_padding * 2 + border_width * 2) (top - border_width - border_padding) (left - border_padding - border_width)
-    border (border_width + 6) (width + border_padding * 2 + border_width * 2 - 5) (top + height + border_padding) (left - border_padding - border_width)
-    border (height + border_padding * 2) border_width (top - border_padding) (left - border_padding - border_width)
-    border (height + border_padding * 2) border_width (top - border_padding) (left + width + border_padding)
+    border "top"    border_width (width + border_padding * 2 + border_width * 2) (top - border_width - border_padding) (left - border_padding - border_width)
+    border "bottom" border_width (width + border_padding * 2 + border_width * 2) (top + height + border_padding) (left - border_padding - border_width)
+    border "left"   (height + border_padding * 2) border_width (top - border_padding) (left - border_padding - border_width)
+    border "right"  (height + border_padding * 2) border_width (top - border_padding) (left + width + border_padding)
   ) |> ignore
   
-let mouseOver event = 
+let mouseEnter event = 
   let element = jq $ event?data?self
   let body = jq $ "body"
   let bodyParent = (jq $ "body")?parent()
   if element <> body && element <> bodyParent then
+    //hide ".canopy_companion_border"
     createBorders element
 
-let mouseOut event = 
+let mouseLeave event = 
   let element = jq $ event?data?self
   let body = jq $ "body"
   let bodyParent = (jq $ "body")?parent()
   if element <> body && element <> bodyParent then
-    remove ".canopy_companion_border"
+    hide ".canopy_companion_border"
 
 let mouseDown element = ()
 
 if not (exists "#canopy_companion") then
-  bindEach "*" "mouseover" mouseOver
-  bindEach "*" "mouseout" mouseOut
+  append "body" top
+  append "body" bottom
+  append "body" left
+  append "body" right
+
+  bindEach "*" "mouseenter" mouseEnter
+  bindEach "*" "mouseleave" mouseLeave
   bindEach "*" "mousedown" mouseDown
   
   append "body" inputs
 
   click "#canopy_companion #go" (fun _ ->   
     let selector = value "#selector"  
-    remove ".canopy_companion_border"
+    hide ".canopy_companion_border"
     createBorders (find selector))
 
   click "#canopy_companion #clear" (fun _ ->
     set "#selector" ""
-    remove ".canopy_companion_border")
+    hide ".canopy_companion_border")
 
   click "#canopy_companion #close" (fun _ -> 
     remove ".canopy_companion_border"

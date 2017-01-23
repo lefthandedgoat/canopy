@@ -3,7 +3,7 @@
 Object.defineProperty(exports, "__esModule", {
   value: true
 });
-exports.inputs = exports.border_padding = exports.border_width = exports.jq = exports.Self = undefined;
+exports.right = exports.left = exports.bottom = exports.top = exports.inputs = exports.border_padding = exports.border_width = exports.jq = exports.Self = undefined;
 
 var _createClass = function () { function defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } } return function (Constructor, protoProps, staticProps) { if (protoProps) defineProperties(Constructor.prototype, protoProps); if (staticProps) defineProperties(Constructor, staticProps); return Constructor; }; }();
 
@@ -14,6 +14,7 @@ exports.click = click;
 exports.value = value;
 exports.set = set;
 exports.remove = remove;
+exports.hide = hide;
 exports.exists = exists;
 exports.bind = bind;
 exports.bindEach = bindEach;
@@ -22,8 +23,8 @@ exports.px = px;
 exports.toInt = toInt;
 exports.border = border;
 exports.createBorders = createBorders;
-exports.mouseOver = mouseOver;
-exports.mouseOut = mouseOut;
+exports.mouseEnter = mouseEnter;
+exports.mouseLeave = mouseLeave;
 exports.mouseDown = mouseDown;
 
 var _Symbol2 = require("fable-core/umd/Symbol");
@@ -101,6 +102,10 @@ function remove(selector) {
   find(selector).remove();
 }
 
+function hide(selector) {
+  find(selector).hide();
+}
+
 function exists(selector) {
   var value_1 = Number.parseInt((0, _String.fsFormat)("%O")(function (x) {
     return x;
@@ -132,10 +137,6 @@ function bool(whatever) {
   }
 }
 
-var border_width = exports.border_width = 5;
-var border_padding = exports.border_padding = 2;
-var inputs = exports.inputs = "\r\n<div id=\"canopy_companion\">\r\n  <input type=\"text\" id=\"selector\" value=\"\">\r\n  <input type=\"button\" id=\"go\" value=\"Go\">\r\n  <input type=\"button\" id=\"clear\" value=\"Clear\">\r\n  <input type=\"button\" id=\"close\" value=\"X\">\r\n</div>";
-
 function px(value_1) {
   return (0, _String.fsFormat)("%ipx")(function (x) {
     return x;
@@ -148,28 +149,37 @@ function toInt(value_1) {
   })(value_1));
 }
 
-function border(heightValue, widthvalue, topValue, leftValue) {
-  var element = jq("<div>");
-  element.addClass("canopy_companion_border").css("height", px(heightValue)).css("width", px(widthvalue)).css("top", px(topValue)).css("left", px(leftValue)).css("background-color", "#F00 !important");
-  append("body", element);
+var border_width = exports.border_width = 5;
+var border_padding = exports.border_padding = 2;
+var inputs = exports.inputs = "\r\n<div id=\"canopy_companion\">\r\n  <input type=\"text\" id=\"selector\" value=\"\">\r\n  <input type=\"button\" id=\"go\" value=\"Go\">\r\n  <input type=\"button\" id=\"clear\" value=\"Clear\">\r\n  <input type=\"button\" id=\"close\" value=\"X\">\r\n</div>";
+var top = exports.top = jq("<div>").addClass("canopy_companion_border").addClass("canopy_companion_border_top");
+var bottom = exports.bottom = jq("<div>").addClass("canopy_companion_border").addClass("canopy_companion_border_bottom");
+var left = exports.left = jq("<div>").addClass("canopy_companion_border").addClass("canopy_companion_border_left");
+var right = exports.right = jq("<div>").addClass("canopy_companion_border").addClass("canopy_companion_border_right");
+
+function border(position, heightValue, widthvalue, topValue, leftValue) {
+  var element = find((0, _String.fsFormat)(".canopy_companion_border_%s")(function (x) {
+    return x;
+  })(position));
+  element.css("height", px(heightValue)).css("width", px(widthvalue)).css("top", px(topValue)).css("left", px(leftValue)).show();
 }
 
 function createBorders(elements) {
   jq.each(elements, function (index, element) {
     var clone = jq(element);
     var position = clone.offset();
-    var top = toInt(position.top);
-    var left = toInt(position.left);
+    var top_1 = toInt(position.top);
+    var left_1 = toInt(position.left);
     var width = toInt(clone.outerWidth());
     var height = toInt(clone.outerHeight());
-    border(border_width, width + border_padding * 2 + border_width * 2, top - border_width - border_padding, left - border_padding - border_width);
-    border(border_width + 6, width + border_padding * 2 + border_width * 2 - 5, top + height + border_padding, left - border_padding - border_width);
-    border(height + border_padding * 2, border_width, top - border_padding, left - border_padding - border_width);
-    border(height + border_padding * 2, border_width, top - border_padding, left + width + border_padding);
+    border("top", border_width, width + border_padding * 2 + border_width * 2, top_1 - border_width - border_padding, left_1 - border_padding - border_width);
+    border("bottom", border_width, width + border_padding * 2 + border_width * 2, top_1 + height + border_padding, left_1 - border_padding - border_width);
+    border("left", height + border_padding * 2, border_width, top_1 - border_padding, left_1 - border_padding - border_width);
+    border("right", height + border_padding * 2, border_width, top_1 - border_padding, left_1 + width + border_padding);
   });
 }
 
-function mouseOver(event) {
+function mouseEnter(event) {
   var element = jq(event.data.self);
   var body = jq("body");
   var bodyParent = jq("body").parent();
@@ -179,24 +189,28 @@ function mouseOver(event) {
   }
 }
 
-function mouseOut(event) {
+function mouseLeave(event) {
   var element = jq(event.data.self);
   var body = jq("body");
   var bodyParent = jq("body").parent();
 
   if (element !== body ? element !== bodyParent : false) {
-    remove(".canopy_companion_border");
+    hide(".canopy_companion_border");
   }
 }
 
 function mouseDown(element) {}
 
 if (!exists("#canopy_companion")) {
-  bindEach("*", "mouseover", function (event) {
-    mouseOver(event);
+  append("body", top);
+  append("body", bottom);
+  append("body", left);
+  append("body", right);
+  bindEach("*", "mouseenter", function (event) {
+    mouseEnter(event);
   });
-  bindEach("*", "mouseout", function (event) {
-    mouseOut(event);
+  bindEach("*", "mouseleave", function (event) {
+    mouseLeave(event);
   });
   bindEach("*", "mousedown", function (element) {
     mouseDown(element);
@@ -204,12 +218,12 @@ if (!exists("#canopy_companion")) {
   append("body", inputs);
   click("#canopy_companion #go", function (_arg1) {
     var selector = value("#selector");
-    remove(".canopy_companion_border");
+    hide(".canopy_companion_border");
     createBorders(find(selector));
   });
   click("#canopy_companion #clear", function (_arg2) {
     set("#selector", "");
-    remove(".canopy_companion_border");
+    hide(".canopy_companion_border");
   });
   click("#canopy_companion #close", function (_arg3) {
     remove(".canopy_companion_border");
