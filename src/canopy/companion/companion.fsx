@@ -48,6 +48,7 @@ let top =    (jq $ "<div>")?addClass("canopy_companion_border")?addClass("canopy
 let bottom = (jq $ "<div>")?addClass("canopy_companion_border")?addClass("canopy_companion_border_bottom")
 let left =   (jq $ "<div>")?addClass("canopy_companion_border")?addClass("canopy_companion_border_left")
 let right =  (jq $ "<div>")?addClass("canopy_companion_border")?addClass("canopy_companion_border_right")
+let mutable _currentBordered : obj = null
 
 let border position heightValue widthvalue topValue leftValue =
   let element = find (sprintf ".canopy_companion_border_%s" position)
@@ -69,7 +70,7 @@ let createBorders elements =
     let height = clone?outerHeight() |> toInt
         
     border "top"    border_width (width + border_padding * 2 + border_width * 2) (top - border_width - border_padding) (left - border_padding - border_width)
-    border "bottom" border_width (width + border_padding * 2 + border_width * 2) (top + height + border_padding) (left - border_padding - border_width)
+    border "bottom" border_width (width + border_padding * 2 + border_width * 2 - border_width) (top + height + border_padding) (left - border_padding - border_width)
     border "left"   (height + border_padding * 2) border_width (top - border_padding) (left - border_padding - border_width)
     border "right"  (height + border_padding * 2) border_width (top - border_padding) (left + width + border_padding)
   ) |> ignore
@@ -78,14 +79,10 @@ let mouseEnter event =
   let element = jq $ event?data?self
   let tag = tag element
   if tag <> "BODY" && tag <> "HTML" then
+    event?stopImmediatePropagation() |> ignore
     hide ".canopy_companion_border"
     createBorders element
-
-let mouseLeave event = 
-  let element = jq $ event?data?self
-  let tag = tag element
-  if tag <> "BODY" && tag <> "HTML" then
-    hide ".canopy_companion_border"
+    _currentBordered <- event?data?self
 
 let blockClick element =
   let clone = jq $ element
@@ -121,7 +118,6 @@ if not (exists "#canopy_companion") then
   append "body" right
 
   bindEach "*:not(.canopy_companion_module)" "mouseenter" mouseEnter
-  bindEach "*:not(.canopy_companion_module)" "mouseleave" mouseLeave
   bindEach "*:not(.canopy_companion_module)" "mousedown" mouseDown
   
   append "body" inputs

@@ -3,7 +3,7 @@
 Object.defineProperty(exports, "__esModule", {
   value: true
 });
-exports.right = exports.left = exports.bottom = exports.top = exports.inputs = exports.border_padding = exports.border_width = exports.jq = exports.Self = undefined;
+exports._currentBordered = exports.right = exports.left = exports.bottom = exports.top = exports.inputs = exports.border_padding = exports.border_width = exports.jq = exports.Self = undefined;
 
 var _createClass = function () { function defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } } return function (Constructor, protoProps, staticProps) { if (protoProps) defineProperties(Constructor.prototype, protoProps); if (staticProps) defineProperties(Constructor, staticProps); return Constructor; }; }();
 
@@ -25,8 +25,7 @@ exports.toInt = toInt;
 exports.border = border;
 exports.createBorders = createBorders;
 exports.mouseEnter = mouseEnter;
-exports.mouseLeave = mouseLeave;
-exports.blockClicksOn = blockClicksOn;
+exports.blockClick = blockClick;
 exports.mouseDown = mouseDown;
 
 var _Symbol2 = require("fable-core/umd/Symbol");
@@ -163,6 +162,8 @@ var bottom = exports.bottom = jq("<div>").addClass("canopy_companion_border").ad
 var left = exports.left = jq("<div>").addClass("canopy_companion_border").addClass("canopy_companion_border_left");
 var right = exports.right = jq("<div>").addClass("canopy_companion_border").addClass("canopy_companion_border_right");
 
+var _currentBordered = exports._currentBordered = null;
+
 function border(position, heightValue, widthvalue, topValue, leftValue) {
   var element = find((0, _String.fsFormat)(".canopy_companion_border_%s")(function (x) {
     return x;
@@ -179,7 +180,7 @@ function createBorders(elements) {
     var width = toInt(clone.outerWidth());
     var height = toInt(clone.outerHeight());
     border("top", border_width, width + border_padding * 2 + border_width * 2, top_1 - border_width - border_padding, left_1 - border_padding - border_width);
-    border("bottom", border_width, width + border_padding * 2 + border_width * 2, top_1 + height + border_padding, left_1 - border_padding - border_width);
+    border("bottom", border_width, width + border_padding * 2 + border_width * 2 - border_width, top_1 + height + border_padding, left_1 - border_padding - border_width);
     border("left", height + border_padding * 2, border_width, top_1 - border_padding, left_1 - border_padding - border_width);
     border("right", height + border_padding * 2, border_width, top_1 - border_padding, left_1 + width + border_padding);
   });
@@ -190,21 +191,14 @@ function mouseEnter(event) {
   var tag_1 = tag(element);
 
   if (tag_1 !== "BODY" ? tag_1 !== "HTML" : false) {
+    event.stopImmediatePropagation();
     hide(".canopy_companion_border");
     createBorders(element);
+    exports._currentBordered = _currentBordered = event.data.self;
   }
 }
 
-function mouseLeave(event) {
-  var element = jq(event.data.self);
-  var tag_1 = tag(element);
-
-  if (tag_1 !== "BODY" ? tag_1 !== "HTML" : false) {
-    hide(".canopy_companion_border");
-  }
-}
-
-function blockClicksOn(element) {
+function blockClick(element) {
   var clone = jq(element);
   var position = clone.offset();
   var top_1 = toInt(position.top);
@@ -223,7 +217,7 @@ function mouseDown(event) {
   var tag_1 = tag(element);
 
   if (tag_1 !== "BODY" ? tag_1 !== "HTML" : false) {
-    blockClicksOn(element);
+    blockClick(element);
   }
 }
 
@@ -234,9 +228,6 @@ if (!exists("#canopy_companion")) {
   append("body", right);
   bindEach("*:not(.canopy_companion_module)", "mouseenter", function (event) {
     mouseEnter(event);
-  });
-  bindEach("*:not(.canopy_companion_module)", "mouseleave", function (event) {
-    mouseLeave(event);
   });
   bindEach("*:not(.canopy_companion_module)", "mousedown", function (event) {
     mouseDown(event);
