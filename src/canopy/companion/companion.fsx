@@ -78,7 +78,7 @@ let mouseEnter event =
   let body = jq $ "body"
   let bodyParent = (jq $ "body")?parent()
   if element <> body && element <> bodyParent then
-    //hide ".canopy_companion_border"
+    hide ".canopy_companion_border"
     createBorders element
 
 let mouseLeave event = 

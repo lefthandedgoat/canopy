@@ -185,6 +185,7 @@ function mouseEnter(event) {
   var bodyParent = jq("body").parent();
 
   if (element !== body ? element !== bodyParent : false) {
+    hide(".canopy_companion_border");
     createBorders(element);
   }
 }
