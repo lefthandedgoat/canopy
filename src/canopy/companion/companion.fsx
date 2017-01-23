@@ -20,12 +20,13 @@ let hide selector = (find selector)?hide() |> ignore
 let exists selector = 
   let value = (find selector)?("length") |> sprintf "%O" |> int
   value > 0
-let bind element event (f : (obj -> unit)) = 
+let off selector event = (find selector)?off(event) |> ignore
+let on element event (f : (obj -> unit)) = 
   let element = jq $ element  
-  element?bind(event, { self = element }, f) |> ignore
-let bindEach selector event (f : (obj -> unit)) = 
+  element?on(event, { self = element }, f) |> ignore
+let onEach selector event (f : (obj -> unit)) = 
   let elements = find selector
-  jq?each(elements, fun index element -> bind element event f) |> ignore
+  jq?each(elements, fun index element -> on element event f) |> ignore
 let bool whatever = 
   match sprintf "%O" whatever with
   | "true" -> true
@@ -109,6 +110,7 @@ let mouseDown event =
   let element = jq $ event?data?self
   let tag = tag element
   if tag <> "BODY" && tag <> "HTML" then
+    event?stopImmediatePropagation() |> ignore
     blockClick element
 
 if not (exists "#canopy_companion") then
@@ -117,8 +119,8 @@ if not (exists "#canopy_companion") then
   append "body" left
   append "body" right
 
-  bindEach "*:not(.canopy_companion_module)" "mouseenter" mouseEnter
-  bindEach "*:not(.canopy_companion_module)" "mousedown" mouseDown
+  onEach "*:not(.canopy_companion_module)" "mouseenter.canopy" mouseEnter
+  onEach "*:not(.canopy_companion_module)" "mousedown.canopy" mouseDown
   
   append "body" inputs
 
@@ -132,6 +134,8 @@ if not (exists "#canopy_companion") then
     hide ".canopy_companion_border")
 
   click "#canopy_companion #close" (fun _ -> 
+    off "*:not(.canopy_companion_module)" "mouseenter.canopy"
+    off "*:not(.canopy_companion_module)" "mousedown.canopy"
     remove ".canopy_companion_border"
     remove "#canopy_companion")
 

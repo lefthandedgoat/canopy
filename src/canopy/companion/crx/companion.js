@@ -17,8 +17,9 @@ exports.tag = tag;
 exports.remove = remove;
 exports.hide = hide;
 exports.exists = exists;
-exports.bind = bind;
-exports.bindEach = bindEach;
+exports.off = off;
+exports.on = on;
+exports.onEach = onEach;
 exports.bool = bool;
 exports.px = px;
 exports.toInt = toInt;
@@ -118,15 +119,19 @@ function exists(selector) {
   return value_1 > 0;
 }
 
-function bind(element, event, f) {
-  var element_1 = jq(element);
-  element_1.bind(event, new Self(element_1), f);
+function off(selector, event) {
+  find(selector).off(event);
 }
 
-function bindEach(selector, event, f) {
+function on(element, event, f) {
+  var element_1 = jq(element);
+  element_1.on(event, new Self(element_1), f);
+}
+
+function onEach(selector, event, f) {
   var elements = find(selector);
   jq.each(elements, function (index, element) {
-    bind(element, event, f);
+    on(element, event, f);
   });
 }
 
@@ -217,6 +222,7 @@ function mouseDown(event) {
   var tag_1 = tag(element);
 
   if (tag_1 !== "BODY" ? tag_1 !== "HTML" : false) {
+    event.stopImmediatePropagation();
     blockClick(element);
   }
 }
@@ -226,10 +232,10 @@ if (!exists("#canopy_companion")) {
   append("body", bottom);
   append("body", left);
   append("body", right);
-  bindEach("*:not(.canopy_companion_module)", "mouseenter", function (event) {
+  onEach("*:not(.canopy_companion_module)", "mouseenter.canopy", function (event) {
     mouseEnter(event);
   });
-  bindEach("*:not(.canopy_companion_module)", "mousedown", function (event) {
+  onEach("*:not(.canopy_companion_module)", "mousedown.canopy", function (event) {
     mouseDown(event);
   });
   append("body", inputs);
@@ -243,6 +249,8 @@ if (!exists("#canopy_companion")) {
     hide(".canopy_companion_border");
   });
   click("#canopy_companion #close", function (_arg3) {
+    off("*:not(.canopy_companion_module)", "mouseenter.canopy");
+    off("*:not(.canopy_companion_module)", "mousedown.canopy");
     remove(".canopy_companion_border");
     remove("#canopy_companion");
   });
