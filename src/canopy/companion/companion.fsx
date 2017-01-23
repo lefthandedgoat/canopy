@@ -14,6 +14,7 @@ let css selector property value =  (find selector)?css(property, value) |> ignor
 let click selector f =  (find selector)?click(f) |> ignore
 let value selector = (find selector)?``val``() 
 let set selector value = (find selector)?``val``(value) |> ignore
+let tag element = (element?prop("tagName") |> string).ToUpper()
 let remove selector = (find selector)?remove() |> ignore
 let hide selector = (find selector)?hide() |> ignore
 let exists selector = 
@@ -36,11 +37,11 @@ let border_width = 5
 let border_padding = 2
 
 let inputs = """
-<div id="canopy_companion">
-  <input type="text" id="selector" value="">
-  <input type="button" id="go" value="Go">
-  <input type="button" id="clear" value="Clear">
-  <input type="button" id="close" value="X">
+<div id="canopy_companion" class="canopy_companion_module">
+  <input type="text" id="selector" class="canopy_companion_module" value="">
+  <input type="button" id="go" class="canopy_companion_module" value="Go">
+  <input type="button" id="clear" class="canopy_companion_module" value="Clear">
+  <input type="button" id="close" class="canopy_companion_module" value="X">
 </div>"""
 
 let top =    (jq $ "<div>")?addClass("canopy_companion_border")?addClass("canopy_companion_border_top")
@@ -75,20 +76,43 @@ let createBorders elements =
   
 let mouseEnter event = 
   let element = jq $ event?data?self
-  let body = jq $ "body"
-  let bodyParent = (jq $ "body")?parent()
-  if element <> body && element <> bodyParent then
+  let tag = tag element
+  if tag <> "BODY" && tag <> "HTML" then
     hide ".canopy_companion_border"
     createBorders element
 
 let mouseLeave event = 
   let element = jq $ event?data?self
-  let body = jq $ "body"
-  let bodyParent = (jq $ "body")?parent()
-  if element <> body && element <> bodyParent then
+  let tag = tag element
+  if tag <> "BODY" && tag <> "HTML" then
     hide ".canopy_companion_border"
 
-let mouseDown element = ()
+let blockClick element =
+  let clone = jq $ element
+  let position = clone?offset()
+  let top = position?("top") |> toInt
+  let left = position?("left")  |> toInt
+  let width = clone?outerWidth() |> toInt
+  let height = clone?outerHeight() |> toInt
+
+  let block = 
+    (jq $ "<div>")
+      ?css("position", "absolute")
+      ?css("z-index",  "9999999")
+      ?css("width",  px width)
+      ?css("height", px height)
+      ?css("top",    px top)
+      ?css("left",   px left)
+      ?css("background-color", "")
+
+  append "body" block
+  window.setTimeout((fun _ -> block?remove()), 400.) |> ignore
+
+let mouseDown event = 
+  let element = jq $ event?data?self
+  let tag = tag element
+  if tag <> "BODY" && tag <> "HTML" then
+    blockClick element
 
 if not (exists "#canopy_companion") then
   append "body" top
@@ -96,9 +120,9 @@ if not (exists "#canopy_companion") then
   append "body" left
   append "body" right
 
-  bindEach "*" "mouseenter" mouseEnter
-  bindEach "*" "mouseleave" mouseLeave
-  bindEach "*" "mousedown" mouseDown
+  bindEach "*:not(.canopy_companion_module)" "mouseenter" mouseEnter
+  bindEach "*:not(.canopy_companion_module)" "mouseleave" mouseLeave
+  bindEach "*:not(.canopy_companion_module)" "mousedown" mouseDown
   
   append "body" inputs
 

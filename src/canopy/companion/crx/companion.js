@@ -13,6 +13,7 @@ exports.css = css;
 exports.click = click;
 exports.value = value;
 exports.set = set;
+exports.tag = tag;
 exports.remove = remove;
 exports.hide = hide;
 exports.exists = exists;
@@ -25,6 +26,7 @@ exports.border = border;
 exports.createBorders = createBorders;
 exports.mouseEnter = mouseEnter;
 exports.mouseLeave = mouseLeave;
+exports.blockClicksOn = blockClicksOn;
 exports.mouseDown = mouseDown;
 
 var _Symbol2 = require("fable-core/umd/Symbol");
@@ -98,6 +100,10 @@ function set(selector, value_1) {
   find(selector).val(value_1);
 }
 
+function tag(element) {
+  return (0, _Util.toString)(element.prop("tagName")).toLocaleUpperCase();
+}
+
 function remove(selector) {
   find(selector).remove();
 }
@@ -151,7 +157,7 @@ function toInt(value_1) {
 
 var border_width = exports.border_width = 5;
 var border_padding = exports.border_padding = 2;
-var inputs = exports.inputs = "\r\n<div id=\"canopy_companion\">\r\n  <input type=\"text\" id=\"selector\" value=\"\">\r\n  <input type=\"button\" id=\"go\" value=\"Go\">\r\n  <input type=\"button\" id=\"clear\" value=\"Clear\">\r\n  <input type=\"button\" id=\"close\" value=\"X\">\r\n</div>";
+var inputs = exports.inputs = "\r\n<div id=\"canopy_companion\" class=\"canopy_companion_module\">\r\n  <input type=\"text\" id=\"selector\" class=\"canopy_companion_module\" value=\"\">\r\n  <input type=\"button\" id=\"go\" class=\"canopy_companion_module\" value=\"Go\">\r\n  <input type=\"button\" id=\"clear\" class=\"canopy_companion_module\" value=\"Clear\">\r\n  <input type=\"button\" id=\"close\" class=\"canopy_companion_module\" value=\"X\">\r\n</div>";
 var top = exports.top = jq("<div>").addClass("canopy_companion_border").addClass("canopy_companion_border_top");
 var bottom = exports.bottom = jq("<div>").addClass("canopy_companion_border").addClass("canopy_companion_border_bottom");
 var left = exports.left = jq("<div>").addClass("canopy_companion_border").addClass("canopy_companion_border_left");
@@ -181,10 +187,9 @@ function createBorders(elements) {
 
 function mouseEnter(event) {
   var element = jq(event.data.self);
-  var body = jq("body");
-  var bodyParent = jq("body").parent();
+  var tag_1 = tag(element);
 
-  if (element !== body ? element !== bodyParent : false) {
+  if (tag_1 !== "BODY" ? tag_1 !== "HTML" : false) {
     hide(".canopy_companion_border");
     createBorders(element);
   }
@@ -192,29 +197,49 @@ function mouseEnter(event) {
 
 function mouseLeave(event) {
   var element = jq(event.data.self);
-  var body = jq("body");
-  var bodyParent = jq("body").parent();
+  var tag_1 = tag(element);
 
-  if (element !== body ? element !== bodyParent : false) {
+  if (tag_1 !== "BODY" ? tag_1 !== "HTML" : false) {
     hide(".canopy_companion_border");
   }
 }
 
-function mouseDown(element) {}
+function blockClicksOn(element) {
+  var clone = jq(element);
+  var position = clone.offset();
+  var top_1 = toInt(position.top);
+  var left_1 = toInt(position.left);
+  var width = toInt(clone.outerWidth());
+  var height = toInt(clone.outerHeight());
+  var block = jq("<div>").css("position", "absolute").css("z-index", "9999999").css("width", px(width)).css("height", px(height)).css("top", px(top_1)).css("left", px(left_1)).css("background-color", "");
+  append("body", block);
+  window.setTimeout(function (_arg1) {
+    return block.remove();
+  }, 400);
+}
+
+function mouseDown(event) {
+  var element = jq(event.data.self);
+  var tag_1 = tag(element);
+
+  if (tag_1 !== "BODY" ? tag_1 !== "HTML" : false) {
+    blockClicksOn(element);
+  }
+}
 
 if (!exists("#canopy_companion")) {
   append("body", top);
   append("body", bottom);
   append("body", left);
   append("body", right);
-  bindEach("*", "mouseenter", function (event) {
+  bindEach("*:not(.canopy_companion_module)", "mouseenter", function (event) {
     mouseEnter(event);
   });
-  bindEach("*", "mouseleave", function (event) {
+  bindEach("*:not(.canopy_companion_module)", "mouseleave", function (event) {
     mouseLeave(event);
   });
-  bindEach("*", "mousedown", function (element) {
-    mouseDown(element);
+  bindEach("*:not(.canopy_companion_module)", "mousedown", function (event) {
+    mouseDown(event);
   });
   append("body", inputs);
   click("#canopy_companion #go", function (_arg1) {
