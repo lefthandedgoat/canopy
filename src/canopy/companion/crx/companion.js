@@ -39,6 +39,7 @@ exports.suggestByCanopyValue = suggestByCanopyValue;
 exports.suggestByClass = suggestByClass;
 exports.suggestBySingleClass = suggestBySingleClass;
 exports.suggestByHref = suggestByHref;
+exports.suggestByTag = suggestByTag;
 exports.suggest = suggest;
 exports.border = border;
 exports.createBorders = createBorders;
@@ -275,9 +276,10 @@ function toInt(value_1) {
 
 function cleanString(value_1) {
   var value_2 = (0, _Util.toString)(value_1);
-  var value_3 = value_2 === "undefined" ? "" : value_2;
-  var value_4 = value_3.indexOf("\n") >= 0 ? "" : value_3;
-  return value_4;
+  var value_3 = (0, _String.replace)(value_2, "'", "\\'");
+  var value_4 = value_3 === "undefined" ? "" : value_3;
+  var value_5 = value_4.indexOf("\n") >= 0 ? "" : value_4;
+  return value_5;
 }
 
 function lower(value_1) {
@@ -357,7 +359,7 @@ function suggestByName(element) {
 }
 
 function suggestByPlaceholder(element) {
-  if (element.Name !== "") {
+  if (element.Placeholder !== "") {
     var _ret4 = function () {
       var selector = (0, _String.fsFormat)("[placeholder='%s']")(function (x) {
         return x;
@@ -383,7 +385,7 @@ function suggestById(element) {
       return {
         v: function () {
           var Count = howManyJQuery(selector);
-          return new Result(selector, 1, Count);
+          return new Result(selector, 0.3, Count);
         }()
       };
     }();
@@ -481,6 +483,24 @@ function suggestByHref(element) {
   }
 }
 
+function suggestByTag(element) {
+  if (element.Tag !== "") {
+    var _ret10 = function () {
+      var selector = (0, _String.fsFormat)("%s")(function (x) {
+        return x;
+      })(element.Tag);
+      return {
+        v: function () {
+          var Count = howManyJQuery(selector);
+          return new Result(selector, 1.2, Count);
+        }()
+      };
+    }();
+
+    if ((typeof _ret10 === "undefined" ? "undefined" : _typeof(_ret10)) === "object") return _ret10.v;
+  }
+}
+
 function suggest(element) {
   return function (results) {
     if (results.length >= 5) {
@@ -502,7 +522,7 @@ function suggest(element) {
     return result.Count > 0;
   }, (0, _List.choose)(function (x) {
     return x;
-  }, (0, _List.append)(suggestBySingleClass(element), (0, _List.ofArray)([suggestById(element), suggestByName(element), suggestByPlaceholder(element), suggestByCanopyText(element), suggestByXPathText(element), suggestByValue(element), suggestByCanopyValue(element), suggestByClass(element), suggestByHref(element)]))))))))));
+  }, (0, _List.append)(suggestBySingleClass(element), (0, _List.ofArray)([suggestById(element), suggestByName(element), suggestByPlaceholder(element), suggestByCanopyText(element), suggestByXPathText(element), suggestByValue(element), suggestByCanopyValue(element), suggestByClass(element), suggestByHref(element), suggestByTag(element)]))))))))));
 }
 
 var inputs = exports.inputs = "\r\n<div id=\"canopy_companion\" class=\"canopy_companion_module\">\r\n  <input type=\"text\" id=\"selector\" class=\"canopy_companion_module\" value=\"\">\r\n  <input type=\"button\" id=\"go\" class=\"canopy_companion_module\" value=\"Go\">\r\n  <input type=\"button\" id=\"clear\" class=\"canopy_companion_module\" value=\"Clear\">\r\n  <input type=\"button\" id=\"close\" class=\"canopy_companion_module\" value=\"X\">\r\n</div>";

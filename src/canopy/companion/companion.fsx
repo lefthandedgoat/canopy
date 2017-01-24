@@ -91,7 +91,7 @@ let suggestByName element =
   else None
 
 let suggestByPlaceholder element =
-  if element.Name <> "" then
+  if element.Placeholder <> "" then
     let selector = sprintf "[placeholder='%s']" element.Placeholder
     Some {
       Selector = selector
@@ -106,7 +106,7 @@ let suggestById element =
     Some {
       Selector = selector
       Count = howManyJQuery selector
-      Readability = 1.0
+      Readability = 0.3
     }
   else None
 
@@ -164,6 +164,16 @@ let suggestByHref element =
     }
   else None
 
+let suggestByTag element = 
+  if element.Tag <> "" then    
+    let selector = sprintf "%s" element.Tag
+    Some {
+      Selector = selector
+      Count = howManyJQuery selector
+      Readability = 1.2
+    }
+  else None
+
 let suggest element =
   [
     suggestById element
@@ -175,6 +185,7 @@ let suggest element =
     suggestByCanopyValue element
     suggestByClass element
     suggestByHref element
+    suggestByTag element
     //Add smart hrefs with partials and shit
     //Add parent based stuff    
   ]
