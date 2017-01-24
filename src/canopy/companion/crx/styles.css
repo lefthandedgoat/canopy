@@ -1,8 +1,7 @@
 
 /* starting point comes from selector gadget found at https://github.com/cantino/selectorgadget */
 
-div#canopy_companion {
-  bottom: 5px !important;
+div#canopy_companion, .canopy_companion_result {
   azimuth: center !important;
   background-attachment: scroll !important;
   background-image: none !important;
@@ -60,7 +59,7 @@ div#canopy_companion {
   z-index: 9999999 !important;
   display: block !important;
   right: 5px !important;
-  margin: 5px !important;
+  /*margin: 5px !important;*/
   padding: 5px !important;
   font-size: 14px !important;
   float: none !important;
@@ -68,6 +67,10 @@ div#canopy_companion {
   font-style: none !important;
   background: white !important;
   text-align: left !important; }
+
+div#canopy_companion {
+    bottom: 5px !important;
+}
 
 /*div#canopy_companion *, .canopy_companion_clean, .canopy_companion_clean * {
   azimuth: center;

@@ -13,7 +13,8 @@ open Fable.Import.Browser
 //Types
 type Self = { Self : obj }
 type Element = { Tag : string; Class : string; Id : string; Text : string; Value : string; Name : string; Placeholder : string; Href : string }
-type Result = { Selector : string; Readability : float; Count : int }
+type SelectorType = XPath | Css | JQuery | Canopy
+type Result = { Selector : string; Readability : float; Count : int; Type : SelectorType }
 
 //Varios JS helpers
 let jq = importDefault<obj> "jquery"
@@ -48,6 +49,12 @@ let cleanString value =
   let value = if value.Contains("\n") then "" else value
   value
 let lower (value : string) = value.ToLower()
+let typeToString type' =
+  match type' with
+  | XPath -> "xpath"
+  | Css -> "css"
+  | JQuery-> "jQuery"
+  | Canopy -> "canopy"
 
 //Constants
 let border_width = 5
@@ -67,6 +74,7 @@ let suggestByXPathText element =
       Selector = selector
       Count = howManyXPath selector
       Readability = 1.3
+      Type = XPath
     }
   else None
 
@@ -77,6 +85,7 @@ let suggestByCanopyText element =
       Selector = element.Text
       Count = howManyXPath selector
       Readability = 0.5
+      Type = Canopy
     }
   else None
 
@@ -87,6 +96,7 @@ let suggestByName element =
       Selector = selector
       Count = howManyJQuery selector
       Readability = 1.2
+      Type = Css
     }
   else None
 
@@ -97,6 +107,7 @@ let suggestByPlaceholder element =
       Selector = selector
       Count = howManyJQuery selector
       Readability = 1.2
+      Type = Css
     }
   else None
 
@@ -107,6 +118,7 @@ let suggestById element =
       Selector = selector
       Count = howManyJQuery selector
       Readability = 0.3
+      Type = Css
     }
   else None
 
@@ -117,6 +129,7 @@ let suggestByValue element =
       Selector = selector
       Count = howManyJQuery selector
       Readability = 1.0
+      Type = Css
     }
   else None
 
@@ -127,6 +140,7 @@ let suggestByCanopyValue element =
       Selector = element.Value
       Count = howManyJQuery selector
       Readability = 0.5
+      Type = Canopy
     }
   else None
 
@@ -138,6 +152,7 @@ let suggestByClass element =
       Selector = selector
       Count = howManyJQuery selector
       Readability = 1.5
+      Type = Css
     }
   else None
 
@@ -150,6 +165,7 @@ let suggestBySingleClass element =
           Selector = class'
           Count = howManyJQuery class'
           Readability = 1.2
+          Type = Css
         })
       |> List.ofArray
   else [None]
@@ -161,6 +177,7 @@ let suggestByHref element =
       Selector = selector
       Count = howManyJQuery selector
       Readability = 1.2
+      Type = Css
     }
   else None
 
@@ -171,6 +188,7 @@ let suggestByTag element =
       Selector = selector
       Count = howManyJQuery selector
       Readability = 1.2
+      Type = Css
     }
   else None
 
@@ -200,11 +218,22 @@ let suggest element =
 //Main Controls
 let inputs = """
 <div id="canopy_companion" class="canopy_companion_module">
-  <input type="text" id="selector" class="canopy_companion_module" value="">
-  <input type="button" id="go" class="canopy_companion_module" value="Go">
   <input type="button" id="clear" class="canopy_companion_module" value="Clear">
   <input type="button" id="close" class="canopy_companion_module" value="X">
 </div>"""
+
+//Result template
+let result result' index =   
+  (jq $ sprintf """<div>selector: <input id="selector_%i" value="%s"> count: %i type: %A <input type="button" id="selector_copy_%i" value="Copy"></div>""" index result'.Selector result'.Count (typeToString result'.Type) index)
+    ?addClass("canopy_companion_module")
+    ?addClass("canopy_companion_result")
+    ?css("bottom", px (40 + 33 * index))
+  |> append "body"
+
+  (find (sprintf "#selector_copy_%i" index))
+    ?on("click", (fun _ ->
+      (find (sprintf "#selector_%i" index))?select() |> ignore
+      document.execCommand("copy"))) |> ignore
 
 //The borders used around elements
 let top =    (jq $ "<div>")?addClass("canopy_companion_border")?addClass("canopy_companion_border_top")
@@ -291,8 +320,12 @@ let mouseDown event =
         Href =        cleanString <| !!element?attr("href")
       }
 
-    let suggestions = suggest element
-    suggestions |> List.iter (fun (score, result) -> printfn "score: %A / result %A" score result)    
+    remove ".canopy_companion_result"
+    off "*" "click.selector_copy"
+
+    suggest element    
+    |> List.rev 
+    |> List.iteri (fun index (_, result') -> result result' index)
 
 //Startup code
 //Add the main search box if not there, and wire it up
@@ -307,19 +340,14 @@ if not (exists "#canopy_companion") then
   
   append "body" inputs
 
-  click "#canopy_companion #go" (fun _ ->   
-    let selector = value "#selector"  
-    hide ".canopy_companion_border"
-    createBorders (find selector))
-
   click "#canopy_companion #clear" (fun _ ->
-    set "#selector" ""
     hide ".canopy_companion_border")
 
   click "#canopy_companion #close" (fun _ -> 
     off "*:not(.canopy_companion_module)" "mouseenter.canopy"
     off "*:not(.canopy_companion_module)" "mousedown.canopy"
     remove ".canopy_companion_border"
+    remove ".canopy_companion_result"
     remove "#canopy_companion")
 
 //(*

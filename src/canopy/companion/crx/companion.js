@@ -3,7 +3,7 @@
 Object.defineProperty(exports, "__esModule", {
   value: true
 });
-exports.right = exports.left = exports.bottom = exports.top = exports.inputs = exports.border_padding = exports.border_width = exports.jq = exports.Result = exports.Element = exports.Self = undefined;
+exports.right = exports.left = exports.bottom = exports.top = exports.inputs = exports.border_padding = exports.border_width = exports.jq = exports.Result = exports.SelectorType = exports.Element = exports.Self = undefined;
 
 var _typeof = typeof Symbol === "function" && typeof Symbol.iterator === "symbol" ? function (obj) { return typeof obj; } : function (obj) { return obj && typeof Symbol === "function" && obj.constructor === Symbol && obj !== Symbol.prototype ? "symbol" : typeof obj; };
 
@@ -27,6 +27,7 @@ exports.px = px;
 exports.toInt = toInt;
 exports.cleanString = cleanString;
 exports.lower = lower;
+exports.typeToString = typeToString;
 exports.howManyXPath = howManyXPath;
 exports.howManyJQuery = howManyJQuery;
 exports.suggestByXPathText = suggestByXPathText;
@@ -41,6 +42,7 @@ exports.suggestBySingleClass = suggestBySingleClass;
 exports.suggestByHref = suggestByHref;
 exports.suggestByTag = suggestByTag;
 exports.suggest = suggest;
+exports.result = result;
 exports.border = border;
 exports.createBorders = createBorders;
 exports.mouseEnter = mouseEnter;
@@ -151,13 +153,53 @@ var _Element = function () {
 exports.Element = _Element;
 (0, _Symbol2.setType)("Companion.Element", _Element);
 
+var SelectorType = exports.SelectorType = function () {
+  function SelectorType(caseName, fields) {
+    _classCallCheck(this, SelectorType);
+
+    this.Case = caseName;
+    this.Fields = fields;
+  }
+
+  _createClass(SelectorType, [{
+    key: _Symbol3.default.reflection,
+    value: function () {
+      return {
+        type: "Companion.SelectorType",
+        interfaces: ["FSharpUnion", "System.IEquatable", "System.IComparable"],
+        cases: {
+          Canopy: [],
+          Css: [],
+          JQuery: [],
+          XPath: []
+        }
+      };
+    }
+  }, {
+    key: "Equals",
+    value: function (other) {
+      return (0, _Util.equalsUnions)(this, other);
+    }
+  }, {
+    key: "CompareTo",
+    value: function (other) {
+      return (0, _Util.compareUnions)(this, other);
+    }
+  }]);
+
+  return SelectorType;
+}();
+
+(0, _Symbol2.setType)("Companion.SelectorType", SelectorType);
+
 var Result = exports.Result = function () {
-  function Result(selector, readability, count) {
+  function Result(selector, readability, count, type) {
     _classCallCheck(this, Result);
 
     this.Selector = selector;
     this.Readability = readability;
     this.Count = count;
+    this.Type = type;
   }
 
   _createClass(Result, [{
@@ -169,7 +211,8 @@ var Result = exports.Result = function () {
         properties: {
           Selector: "string",
           Readability: "number",
-          Count: "number"
+          Count: "number",
+          Type: SelectorType
         }
       };
     }
@@ -276,14 +319,25 @@ function toInt(value_1) {
 
 function cleanString(value_1) {
   var value_2 = (0, _Util.toString)(value_1);
-  var value_3 = (0, _String.replace)(value_2, "'", "\\'");
-  var value_4 = value_3 === "undefined" ? "" : value_3;
-  var value_5 = value_4.indexOf("\n") >= 0 ? "" : value_4;
-  return value_5;
+  var value_3 = value_2 === "undefined" ? "" : value_2;
+  var value_4 = value_3.indexOf("\n") >= 0 ? "" : value_3;
+  return value_4;
 }
 
 function lower(value_1) {
   return value_1.toLocaleLowerCase();
+}
+
+function typeToString(type_) {
+  if (type_.Case === "Css") {
+    return "css";
+  } else if (type_.Case === "JQuery") {
+    return "jQuery";
+  } else if (type_.Case === "Canopy") {
+    return "canopy";
+  } else {
+    return "xpath";
+  }
 }
 
 var border_width = exports.border_width = 5;
@@ -313,7 +367,7 @@ function suggestByXPathText(element) {
       return {
         v: function () {
           var Count = howManyXPath(selector);
-          return new Result(selector, 1.3, Count);
+          return new Result(selector, 1.3, Count, new SelectorType("XPath", []));
         }()
       };
     }();
@@ -331,7 +385,7 @@ function suggestByCanopyText(element) {
       return {
         v: function () {
           var Count = howManyXPath(selector);
-          return new Result(element.Text, 0.5, Count);
+          return new Result(element.Text, 0.5, Count, new SelectorType("Canopy", []));
         }()
       };
     }();
@@ -349,7 +403,7 @@ function suggestByName(element) {
       return {
         v: function () {
           var Count = howManyJQuery(selector);
-          return new Result(selector, 1.2, Count);
+          return new Result(selector, 1.2, Count, new SelectorType("Css", []));
         }()
       };
     }();
@@ -367,7 +421,7 @@ function suggestByPlaceholder(element) {
       return {
         v: function () {
           var Count = howManyJQuery(selector);
-          return new Result(selector, 1.2, Count);
+          return new Result(selector, 1.2, Count, new SelectorType("Css", []));
         }()
       };
     }();
@@ -385,7 +439,7 @@ function suggestById(element) {
       return {
         v: function () {
           var Count = howManyJQuery(selector);
-          return new Result(selector, 0.3, Count);
+          return new Result(selector, 0.3, Count, new SelectorType("Css", []));
         }()
       };
     }();
@@ -403,7 +457,7 @@ function suggestByValue(element) {
       return {
         v: function () {
           var Count = howManyJQuery(selector);
-          return new Result(selector, 1, Count);
+          return new Result(selector, 1, Count, new SelectorType("Css", []));
         }()
       };
     }();
@@ -421,7 +475,7 @@ function suggestByCanopyValue(element) {
       return {
         v: function () {
           var Count = howManyJQuery(selector);
-          return new Result(element.Value, 0.5, Count);
+          return new Result(element.Value, 0.5, Count, new SelectorType("Canopy", []));
         }()
       };
     }();
@@ -439,7 +493,7 @@ function suggestByClass(element) {
       return {
         v: function () {
           var Count = howManyJQuery(classes);
-          return new Result(classes, 1.5, Count);
+          return new Result(classes, 1.5, Count, new SelectorType("Css", []));
         }()
       };
     }();
@@ -457,7 +511,7 @@ function suggestBySingleClass(element) {
     }).map(function (class_) {
       return function () {
         var Count = howManyJQuery(class_);
-        return new Result(class_, 1.2, Count);
+        return new Result(class_, 1.2, Count, new SelectorType("Css", []));
       }();
     }));
   } else {
@@ -474,7 +528,7 @@ function suggestByHref(element) {
       return {
         v: function () {
           var Count = howManyJQuery(selector);
-          return new Result(selector, 1.2, Count);
+          return new Result(selector, 1.2, Count, new SelectorType("Css", []));
         }()
       };
     }();
@@ -492,7 +546,7 @@ function suggestByTag(element) {
       return {
         v: function () {
           var Count = howManyJQuery(selector);
-          return new Result(selector, 1.2, Count);
+          return new Result(selector, 1.2, Count, new SelectorType("Css", []));
         }()
       };
     }();
@@ -525,7 +579,22 @@ function suggest(element) {
   }, (0, _List.append)(suggestBySingleClass(element), (0, _List.ofArray)([suggestById(element), suggestByName(element), suggestByPlaceholder(element), suggestByCanopyText(element), suggestByXPathText(element), suggestByValue(element), suggestByCanopyValue(element), suggestByClass(element), suggestByHref(element), suggestByTag(element)]))))))))));
 }
 
-var inputs = exports.inputs = "\r\n<div id=\"canopy_companion\" class=\"canopy_companion_module\">\r\n  <input type=\"text\" id=\"selector\" class=\"canopy_companion_module\" value=\"\">\r\n  <input type=\"button\" id=\"go\" class=\"canopy_companion_module\" value=\"Go\">\r\n  <input type=\"button\" id=\"clear\" class=\"canopy_companion_module\" value=\"Clear\">\r\n  <input type=\"button\" id=\"close\" class=\"canopy_companion_module\" value=\"X\">\r\n</div>";
+var inputs = exports.inputs = "\r\n<div id=\"canopy_companion\" class=\"canopy_companion_module\">\r\n  <input type=\"button\" id=\"clear\" class=\"canopy_companion_module\" value=\"Clear\">\r\n  <input type=\"button\" id=\"close\" class=\"canopy_companion_module\" value=\"X\">\r\n</div>";
+
+function result(result_, index) {
+  append("body", jq((0, _String.fsFormat)("<div>selector: <input id=\"selector_%i\" value=\"%s\"> count: %i type: %A <input type=\"button\" id=\"selector_copy_%i\" value=\"Copy\"></div>")(function (x) {
+    return x;
+  })(index)(result_.Selector)(result_.Count)(typeToString(result_.Type))(index)).addClass("canopy_companion_module").addClass("canopy_companion_result").css("bottom", px(40 + 33 * index)));
+  find((0, _String.fsFormat)("#selector_copy_%i")(function (x) {
+    return x;
+  })(index)).on("click", function (_arg1) {
+    find((0, _String.fsFormat)("#selector_%i")(function (x) {
+      return x;
+    })(index)).select();
+    return document.execCommand("copy");
+  });
+}
+
 var top = exports.top = jq("<div>").addClass("canopy_companion_border").addClass("canopy_companion_border_top");
 var bottom = exports.bottom = jq("<div>").addClass("canopy_companion_border").addClass("canopy_companion_border_bottom");
 var left = exports.left = jq("<div>").addClass("canopy_companion_border").addClass("canopy_companion_border_left");
@@ -588,12 +657,11 @@ function mouseDown(event) {
     event.stopImmediatePropagation();
     blockClick(element);
     var element_1 = new _Element(lower(cleanString(_self.tagName)), cleanString(_self.className), cleanString(_self.id), cleanString(_self.textContext == null ? _self.innerText : _self.textContext), cleanString(_self.value), cleanString(_self.name), cleanString(_self.placeholder), cleanString(element.attr("href")));
-    var suggestions = suggest(element_1);
-    (0, _Seq.iterate)(function (tupledArg) {
-      (0, _String.fsFormat)("score: %A / result %A")(function (x) {
-        console.log(x);
-      })(tupledArg[0])(tupledArg[1]);
-    }, suggestions);
+    remove(".canopy_companion_result");
+    off("*", "click.selector_copy");
+    (0, _Seq.iterateIndexed)(function (index, tupledArg) {
+      result(tupledArg[1], index);
+    }, (0, _List.reverse)(suggest(element_1)));
   }
 }
 
@@ -609,19 +677,14 @@ if (!exists("#canopy_companion")) {
     mouseDown(event);
   });
   append("body", inputs);
-  click("#canopy_companion #go", function (_arg1) {
-    var selector = value("#selector");
-    hide(".canopy_companion_border");
-    createBorders(find(selector));
-  });
-  click("#canopy_companion #clear", function (_arg2) {
-    set("#selector", "");
+  click("#canopy_companion #clear", function (_arg1) {
     hide(".canopy_companion_border");
   });
-  click("#canopy_companion #close", function (_arg3) {
+  click("#canopy_companion #close", function (_arg2) {
     off("*:not(.canopy_companion_module)", "mouseenter.canopy");
     off("*:not(.canopy_companion_module)", "mousedown.canopy");
     remove(".canopy_companion_border");
+    remove(".canopy_companion_result");
     remove("#canopy_companion");
   });
 }
