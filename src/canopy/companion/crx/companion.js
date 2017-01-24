@@ -35,6 +35,10 @@ exports.suggestByName = suggestByName;
 exports.suggestByPlaceholder = suggestByPlaceholder;
 exports.suggestById = suggestById;
 exports.suggestByValue = suggestByValue;
+exports.suggestByCanopyValue = suggestByCanopyValue;
+exports.suggestByClass = suggestByClass;
+exports.suggestBySingleClass = suggestBySingleClass;
+exports.suggestByHref = suggestByHref;
 exports.suggest = suggest;
 exports.border = border;
 exports.createBorders = createBorders;
@@ -58,7 +62,11 @@ var _Seq = require("fable-core/umd/Seq");
 
 var _List = require("fable-core/umd/List");
 
+var _Set = require("fable-core/umd/Set");
+
 function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
+
+function _toConsumableArray(arr) { if (Array.isArray(arr)) { for (var i = 0, arr2 = Array(arr.length); i < arr.length; i++) { arr2[i] = arr[i]; } return arr2; } else { return Array.from(arr); } }
 
 function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
 
@@ -93,7 +101,7 @@ var Self = exports.Self = function () {
 (0, _Symbol2.setType)("Companion.Self", Self);
 
 var _Element = function () {
-  function _Element(tag, _class, id, text, value, name, placeholder) {
+  function _Element(tag, _class, id, text, value, name, placeholder, href) {
     _classCallCheck(this, _Element);
 
     this.Tag = tag;
@@ -103,6 +111,7 @@ var _Element = function () {
     this.Value = value;
     this.Name = name;
     this.Placeholder = placeholder;
+    this.Href = href;
   }
 
   _createClass(_Element, [{
@@ -118,7 +127,8 @@ var _Element = function () {
           Text: "string",
           Value: "string",
           Name: "string",
-          Placeholder: "string"
+          Placeholder: "string",
+          Href: "string"
         }
       };
     }
@@ -319,7 +329,7 @@ function suggestByCanopyText(element) {
       return {
         v: function () {
           var Count = howManyXPath(selector);
-          return new Result(element.Text, 1.1, Count);
+          return new Result(element.Text, 0.5, Count);
         }()
       };
     }();
@@ -331,7 +341,7 @@ function suggestByCanopyText(element) {
 function suggestByName(element) {
   if (element.Name !== "") {
     var _ret3 = function () {
-      var selector = (0, _String.fsFormat)("*[name='%s']")(function (x) {
+      var selector = (0, _String.fsFormat)("[name='%s']")(function (x) {
         return x;
       })(element.Name);
       return {
@@ -349,7 +359,7 @@ function suggestByName(element) {
 function suggestByPlaceholder(element) {
   if (element.Name !== "") {
     var _ret4 = function () {
-      var selector = (0, _String.fsFormat)("*[placeholder='%s']")(function (x) {
+      var selector = (0, _String.fsFormat)("[placeholder='%s']")(function (x) {
         return x;
       })(element.Placeholder);
       return {
@@ -385,7 +395,7 @@ function suggestById(element) {
 function suggestByValue(element) {
   if (element.Value !== "") {
     var _ret6 = function () {
-      var selector = (0, _String.fsFormat)("*[value='%s']")(function (x) {
+      var selector = (0, _String.fsFormat)("[value='%s']")(function (x) {
         return x;
       })(element.Value);
       return {
@@ -397,6 +407,77 @@ function suggestByValue(element) {
     }();
 
     if ((typeof _ret6 === "undefined" ? "undefined" : _typeof(_ret6)) === "object") return _ret6.v;
+  }
+}
+
+function suggestByCanopyValue(element) {
+  if (element.Value !== "") {
+    var _ret7 = function () {
+      var selector = (0, _String.fsFormat)("[value='%s']")(function (x) {
+        return x;
+      })(element.Value);
+      return {
+        v: function () {
+          var Count = howManyJQuery(selector);
+          return new Result(element.Value, 0.5, Count);
+        }()
+      };
+    }();
+
+    if ((typeof _ret7 === "undefined" ? "undefined" : _typeof(_ret7)) === "object") return _ret7.v;
+  }
+}
+
+function suggestByClass(element) {
+  if (element.Class !== "") {
+    var _ret8 = function () {
+      var classes = (0, _String.fsFormat)(".%s")(function (x) {
+        return x;
+      })(_String.join.apply(undefined, ["."].concat(_toConsumableArray((0, _String.split)(element.Class, " ")))));
+      return {
+        v: function () {
+          var Count = howManyJQuery(classes);
+          return new Result(classes, 1.5, Count);
+        }()
+      };
+    }();
+
+    if ((typeof _ret8 === "undefined" ? "undefined" : _typeof(_ret8)) === "object") return _ret8.v;
+  }
+}
+
+function suggestBySingleClass(element) {
+  if (element.Class !== "") {
+    return (0, _List.ofArray)((0, _String.split)(element.Class, " ").map(function (class_) {
+      return (0, _String.fsFormat)(".%s")(function (x) {
+        return x;
+      })(class_);
+    }).map(function (class_) {
+      return function () {
+        var Count = howManyJQuery(class_);
+        return new Result(class_, 1.2, Count);
+      }();
+    }));
+  } else {
+    return (0, _List.ofArray)([null]);
+  }
+}
+
+function suggestByHref(element) {
+  if (element.Href !== "") {
+    var _ret9 = function () {
+      var selector = (0, _String.fsFormat)("[href='%s']")(function (x) {
+        return x;
+      })(element.Href);
+      return {
+        v: function () {
+          var Count = howManyJQuery(selector);
+          return new Result(selector, 1.2, Count);
+        }()
+      };
+    }();
+
+    if ((typeof _ret9 === "undefined" ? "undefined" : _typeof(_ret9)) === "object") return _ret9.v;
   }
 }
 
@@ -415,9 +496,13 @@ function suggest(element) {
     }(y));
   }, (0, _List.map)(function (result) {
     return [result.Readability * result.Selector.length, result];
+  }, (0, _Seq.toList)((0, _Set.distinctBy)(function (result) {
+    return result.Selector;
+  }, (0, _List.filter)(function (result) {
+    return result.Count > 0;
   }, (0, _List.choose)(function (x) {
     return x;
-  }, (0, _List.ofArray)([suggestById(element), suggestByName(element), suggestByPlaceholder(element), suggestByCanopyText(element), suggestByXPathText(element), suggestByValue(element)]))))));
+  }, (0, _List.append)(suggestBySingleClass(element), (0, _List.ofArray)([suggestById(element), suggestByName(element), suggestByPlaceholder(element), suggestByCanopyText(element), suggestByXPathText(element), suggestByValue(element), suggestByCanopyValue(element), suggestByClass(element), suggestByHref(element)]))))))))));
 }
 
 var inputs = exports.inputs = "\r\n<div id=\"canopy_companion\" class=\"canopy_companion_module\">\r\n  <input type=\"text\" id=\"selector\" class=\"canopy_companion_module\" value=\"\">\r\n  <input type=\"button\" id=\"go\" class=\"canopy_companion_module\" value=\"Go\">\r\n  <input type=\"button\" id=\"clear\" class=\"canopy_companion_module\" value=\"Clear\">\r\n  <input type=\"button\" id=\"close\" class=\"canopy_companion_module\" value=\"X\">\r\n</div>";
@@ -482,7 +567,7 @@ function mouseDown(event) {
   if (tag_1 !== "BODY" ? tag_1 !== "HTML" : false) {
     event.stopImmediatePropagation();
     blockClick(element);
-    var element_1 = new _Element(lower(cleanString(_self.tagName)), cleanString(_self.className), cleanString(_self.id), cleanString(_self.textContext == null ? _self.innerText : _self.textContext), cleanString(_self.value), cleanString(_self.name), cleanString(_self.placeholder));
+    var element_1 = new _Element(lower(cleanString(_self.tagName)), cleanString(_self.className), cleanString(_self.id), cleanString(_self.textContext == null ? _self.innerText : _self.textContext), cleanString(_self.value), cleanString(_self.name), cleanString(_self.placeholder), cleanString(element.attr("href")));
     var suggestions = suggest(element_1);
     (0, _Seq.iterate)(function (tupledArg) {
       (0, _String.fsFormat)("score: %A / result %A")(function (x) {

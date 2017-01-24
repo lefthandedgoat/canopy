@@ -12,7 +12,7 @@ open Fable.Import.Browser
 
 //Types
 type Self = { Self : obj }
-type Element = { Tag : string; Class : string; Id : string; Text : string; Value : string; Name : string; Placeholder : string }
+type Element = { Tag : string; Class : string; Id : string; Text : string; Value : string; Name : string; Placeholder : string; Href : string }
 type Result = { Selector : string; Readability : float; Count : int }
 
 //Varios JS helpers
@@ -76,13 +76,13 @@ let suggestByCanopyText element =
     Some {
       Selector = element.Text
       Count = howManyXPath selector
-      Readability = 1.1
+      Readability = 0.5
     }
   else None
 
 let suggestByName element =
   if element.Name <> "" then
-    let selector = sprintf "*[name='%s']" element.Name
+    let selector = sprintf "[name='%s']" element.Name
     Some {
       Selector = selector
       Count = howManyJQuery selector
@@ -92,7 +92,7 @@ let suggestByName element =
 
 let suggestByPlaceholder element =
   if element.Name <> "" then
-    let selector = sprintf "*[placeholder='%s']" element.Placeholder
+    let selector = sprintf "[placeholder='%s']" element.Placeholder
     Some {
       Selector = selector
       Count = howManyJQuery selector
@@ -112,11 +112,55 @@ let suggestById element =
 
 let suggestByValue element = 
   if element.Value <> "" then
-    let selector = sprintf "*[value='%s']" element.Value
+    let selector = sprintf "[value='%s']" element.Value
     Some {
       Selector = selector
       Count = howManyJQuery selector
       Readability = 1.0
+    }
+  else None
+
+let suggestByCanopyValue element = 
+  if element.Value <> "" then
+    let selector = sprintf "[value='%s']" element.Value
+    Some {
+      Selector = element.Value
+      Count = howManyJQuery selector
+      Readability = 0.5
+    }
+  else None
+
+let suggestByClass element = 
+  if element.Class <> "" then
+    let classes = sprintf ".%s" (System.String.Join(".", element.Class.Split(' ')))
+    let selector = classes
+    Some {
+      Selector = selector
+      Count = howManyJQuery selector
+      Readability = 1.5
+    }
+  else None
+
+let suggestBySingleClass element = 
+  if element.Class <> "" then
+      element.Class.Split(' ') 
+      |> Array.map (fun class' -> sprintf ".%s" class')
+      |> Array.map (fun class' ->
+        Some {
+          Selector = class'
+          Count = howManyJQuery class'
+          Readability = 1.2
+        })
+      |> List.ofArray
+  else [None]
+
+let suggestByHref element = 
+  if element.Href <> "" then    
+    let selector = sprintf "[href='%s']" element.Href
+    Some {
+      Selector = selector
+      Count = howManyJQuery selector
+      Readability = 1.2
     }
   else None
 
@@ -128,9 +172,16 @@ let suggest element =
     suggestByCanopyText element
     suggestByXPathText element
     suggestByValue element
-    //Add class based suggestions
+    suggestByCanopyValue element
+    suggestByClass element
+    suggestByHref element
+    //Add smart hrefs with partials and shit
+    //Add parent based stuff    
   ]
+  |> List.append (suggestBySingleClass element)
   |> List.choose id
+  |> List.filter (fun result -> result.Count > 0)
+  |> List.distinctBy (fun result -> result.Selector)
   |> List.map (fun result -> result.Readability * (float result.Selector.Length), result)
   |> List.sortBy ( fun (score, result) -> result.Count, score)
   |> fun results -> if results.Length >= 5 then List.take 5 results else results
@@ -226,6 +277,7 @@ let mouseDown event =
         Value =       cleanString <| !!self?value
         Name =        cleanString <| !!self?name
         Placeholder = cleanString <| !!self?placeholder
+        Href =        cleanString <| !!element?attr("href")
       }
 
     let suggestions = suggest element
