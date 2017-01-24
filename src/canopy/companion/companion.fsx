@@ -224,7 +224,7 @@ let inputs = """
 
 //Result template
 let result result' index =   
-  (jq $ sprintf """<div>selector: <input id="selector_%i" value="%s"> count: %i type: %A <input type="button" id="selector_copy_%i" value="Copy"></div>""" index result'.Selector result'.Count (typeToString result'.Type) index)
+  (jq $ sprintf """<div>selector: <span id="selector_%i">"%s"</span> count: %i type: %A <input type="button" id="selector_copy_%i" value="Copy"></div>""" index result'.Selector result'.Count (typeToString result'.Type) index)
     ?addClass("canopy_companion_module")
     ?addClass("canopy_companion_result")
     ?css("bottom", px (40 + 33 * index))
@@ -232,8 +232,12 @@ let result result' index =
 
   (find (sprintf "#selector_copy_%i" index))
     ?on("click", (fun _ ->
-      (find (sprintf "#selector_%i" index))?select() |> ignore
-      document.execCommand("copy"))) |> ignore
+      let selector = (find (sprintf "#selector_%i" index))?text() |> string
+      jq $ "<textarea id='magic_textarea'>" |> append "body"
+      (find "#magic_textarea")?``val``(selector) |> ignore
+      (find "#magic_textarea")?select() |> ignore
+      document.execCommand("copy") |> ignore
+      remove "#magic_textarea")) |> ignore
 
 //The borders used around elements
 let top =    (jq $ "<div>")?addClass("canopy_companion_border")?addClass("canopy_companion_border_top")
@@ -341,7 +345,8 @@ if not (exists "#canopy_companion") then
   append "body" inputs
 
   click "#canopy_companion #clear" (fun _ ->
-    hide ".canopy_companion_border")
+    remove ".canopy_companion_result"
+    hide   ".canopy_companion_border")
 
   click "#canopy_companion #close" (fun _ -> 
     off "*:not(.canopy_companion_module)" "mouseenter.canopy"

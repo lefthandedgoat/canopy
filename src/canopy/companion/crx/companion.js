@@ -582,16 +582,20 @@ function suggest(element) {
 var inputs = exports.inputs = "\r\n<div id=\"canopy_companion\" class=\"canopy_companion_module\">\r\n  <input type=\"button\" id=\"clear\" class=\"canopy_companion_module\" value=\"Clear\">\r\n  <input type=\"button\" id=\"close\" class=\"canopy_companion_module\" value=\"X\">\r\n</div>";
 
 function result(result_, index) {
-  append("body", jq((0, _String.fsFormat)("<div>selector: <input id=\"selector_%i\" value=\"%s\"> count: %i type: %A <input type=\"button\" id=\"selector_copy_%i\" value=\"Copy\"></div>")(function (x) {
+  append("body", jq((0, _String.fsFormat)("<div>selector: <span id=\"selector_%i\">\"%s\"</span> count: %i type: %A <input type=\"button\" id=\"selector_copy_%i\" value=\"Copy\"></div>")(function (x) {
     return x;
   })(index)(result_.Selector)(result_.Count)(typeToString(result_.Type))(index)).addClass("canopy_companion_module").addClass("canopy_companion_result").css("bottom", px(40 + 33 * index)));
   find((0, _String.fsFormat)("#selector_copy_%i")(function (x) {
     return x;
   })(index)).on("click", function (_arg1) {
-    find((0, _String.fsFormat)("#selector_%i")(function (x) {
+    var selector = (0, _Util.toString)(find((0, _String.fsFormat)("#selector_%i")(function (x) {
       return x;
-    })(index)).select();
-    return document.execCommand("copy");
+    })(index)).text());
+    append("body", jq("<textarea id='magic_textarea'>"));
+    find("#magic_textarea").val(selector);
+    find("#magic_textarea").select();
+    document.execCommand("copy");
+    remove("#magic_textarea");
   });
 }
 
@@ -678,6 +682,7 @@ if (!exists("#canopy_companion")) {
   });
   append("body", inputs);
   click("#canopy_companion #clear", function (_arg1) {
+    remove(".canopy_companion_result");
     hide(".canopy_companion_border");
   });
   click("#canopy_companion #close", function (_arg2) {
