@@ -28,6 +28,7 @@ exports.toInt = toInt;
 exports.cleanString = cleanString;
 exports.lower = lower;
 exports.typeToString = typeToString;
+exports.applyXPath = applyXPath;
 exports.howManyXPath = howManyXPath;
 exports.howManyJQuery = howManyJQuery;
 exports.suggestByXPathText = suggestByXPathText;
@@ -42,9 +43,11 @@ exports.suggestBySingleClass = suggestBySingleClass;
 exports.suggestByHref = suggestByHref;
 exports.suggestByTag = suggestByTag;
 exports.suggest = suggest;
-exports.result = result;
+exports.green_border = green_border;
+exports.createGreenBorders = createGreenBorders;
 exports.border = border;
 exports.createBorders = createBorders;
+exports.result = result;
 exports.mouseEnter = mouseEnter;
 exports.blockClick = blockClick;
 exports.mouseDown = mouseDown;
@@ -193,13 +196,14 @@ var SelectorType = exports.SelectorType = function () {
 (0, _Symbol2.setType)("Companion.SelectorType", SelectorType);
 
 var Result = exports.Result = function () {
-  function Result(selector, readability, count, type) {
+  function Result(selector, readability, count, type, applySelector) {
     _classCallCheck(this, Result);
 
     this.Selector = selector;
     this.Readability = readability;
     this.Count = count;
     this.Type = type;
+    this.ApplySelector = applySelector;
   }
 
   _createClass(Result, [{
@@ -212,7 +216,8 @@ var Result = exports.Result = function () {
           Selector: "string",
           Readability: "number",
           Count: "number",
-          Type: SelectorType
+          Type: SelectorType,
+          ApplySelector: "string"
         }
       };
     }
@@ -343,6 +348,21 @@ function typeToString(type_) {
 var border_width = exports.border_width = 5;
 var border_padding = exports.border_padding = 2;
 
+function applyXPath(selector) {
+  var result = document.evaluate(selector, document, null, 0, null);
+  var element = result.iterateNext();
+  return Array.from((0, _Seq.delay)(function () {
+    return (0, _Seq.enumerateWhile)(function () {
+      return element != null;
+    }, (0, _Seq.delay)(function () {
+      return (0, _Seq.append)((0, _Seq.singleton)(element), (0, _Seq.delay)(function () {
+        element = result.iterateNext();
+        return (0, _Seq.empty)();
+      }));
+    }));
+  }));
+}
+
 function howManyXPath(selector) {
   var result = document.evaluate(selector, document, null, 0, null);
   return (0, _Seq.toList)((0, _Seq.delay)(function () {
@@ -367,7 +387,7 @@ function suggestByXPathText(element) {
       return {
         v: function () {
           var Count = howManyXPath(selector);
-          return new Result(selector, 1.3, Count, new SelectorType("XPath", []));
+          return new Result(selector, 1.3, Count, new SelectorType("XPath", []), selector);
         }()
       };
     }();
@@ -385,7 +405,7 @@ function suggestByCanopyText(element) {
       return {
         v: function () {
           var Count = howManyXPath(selector);
-          return new Result(element.Text, 0.5, Count, new SelectorType("Canopy", []));
+          return new Result(element.Text, 0.5, Count, new SelectorType("Canopy", []), selector);
         }()
       };
     }();
@@ -403,7 +423,7 @@ function suggestByName(element) {
       return {
         v: function () {
           var Count = howManyJQuery(selector);
-          return new Result(selector, 1.2, Count, new SelectorType("Css", []));
+          return new Result(selector, 1.2, Count, new SelectorType("Css", []), selector);
         }()
       };
     }();
@@ -421,7 +441,7 @@ function suggestByPlaceholder(element) {
       return {
         v: function () {
           var Count = howManyJQuery(selector);
-          return new Result(selector, 1.2, Count, new SelectorType("Css", []));
+          return new Result(selector, 1.2, Count, new SelectorType("Css", []), selector);
         }()
       };
     }();
@@ -439,7 +459,7 @@ function suggestById(element) {
       return {
         v: function () {
           var Count = howManyJQuery(selector);
-          return new Result(selector, 0.3, Count, new SelectorType("Css", []));
+          return new Result(selector, 0.3, Count, new SelectorType("Css", []), selector);
         }()
       };
     }();
@@ -457,7 +477,7 @@ function suggestByValue(element) {
       return {
         v: function () {
           var Count = howManyJQuery(selector);
-          return new Result(selector, 1, Count, new SelectorType("Css", []));
+          return new Result(selector, 1, Count, new SelectorType("Css", []), selector);
         }()
       };
     }();
@@ -469,13 +489,13 @@ function suggestByValue(element) {
 function suggestByCanopyValue(element) {
   if (element.Value !== "") {
     var _ret7 = function () {
-      var selector = (0, _String.fsFormat)("[value='%s']")(function (x) {
+      var selector = (0, _String.fsFormat)("//*[@value='%s']")(function (x) {
         return x;
       })(element.Value);
       return {
         v: function () {
-          var Count = howManyJQuery(selector);
-          return new Result(element.Value, 0.5, Count, new SelectorType("Canopy", []));
+          var Count = howManyXPath(selector);
+          return new Result(element.Value, 0.5, Count, new SelectorType("Canopy", []), selector);
         }()
       };
     }();
@@ -493,7 +513,7 @@ function suggestByClass(element) {
       return {
         v: function () {
           var Count = howManyJQuery(classes);
-          return new Result(classes, 1.5, Count, new SelectorType("Css", []));
+          return new Result(classes, 1.5, Count, new SelectorType("Css", []), classes);
         }()
       };
     }();
@@ -511,7 +531,7 @@ function suggestBySingleClass(element) {
     }).map(function (class_) {
       return function () {
         var Count = howManyJQuery(class_);
-        return new Result(class_, 1.2, Count, new SelectorType("Css", []));
+        return new Result(class_, 1.2, Count, new SelectorType("Css", []), class_);
       }();
     }));
   } else {
@@ -528,7 +548,7 @@ function suggestByHref(element) {
       return {
         v: function () {
           var Count = howManyJQuery(selector);
-          return new Result(selector, 1.2, Count, new SelectorType("Css", []));
+          return new Result(selector, 1.2, Count, new SelectorType("Css", []), selector);
         }()
       };
     }();
@@ -546,7 +566,7 @@ function suggestByTag(element) {
       return {
         v: function () {
           var Count = howManyJQuery(selector);
-          return new Result(selector, 1.2, Count, new SelectorType("Css", []));
+          return new Result(selector, 1.2, Count, new SelectorType("Css", []), selector);
         }()
       };
     }();
@@ -580,29 +600,30 @@ function suggest(element) {
 }
 
 var inputs = exports.inputs = "\r\n<div id=\"canopy_companion\" class=\"canopy_companion_module\">\r\n  <input type=\"button\" id=\"clear\" class=\"canopy_companion_module\" value=\"Clear\">\r\n  <input type=\"button\" id=\"close\" class=\"canopy_companion_module\" value=\"X\">\r\n</div>";
-
-function result(result_, index) {
-  append("body", jq((0, _String.fsFormat)("<div>selector: <span id=\"selector_%i\">\"%s\"</span> count: %i type: %A <input type=\"button\" id=\"selector_copy_%i\" value=\"Copy\"></div>")(function (x) {
-    return x;
-  })(index)(result_.Selector)(result_.Count)(typeToString(result_.Type))(index)).addClass("canopy_companion_module").addClass("canopy_companion_result").css("bottom", px(40 + 33 * index)));
-  find((0, _String.fsFormat)("#selector_copy_%i")(function (x) {
-    return x;
-  })(index)).on("click", function (_arg1) {
-    var selector = (0, _Util.toString)(find((0, _String.fsFormat)("#selector_%i")(function (x) {
-      return x;
-    })(index)).text());
-    append("body", jq("<textarea id='magic_textarea'>"));
-    find("#magic_textarea").val(selector);
-    find("#magic_textarea").select();
-    document.execCommand("copy");
-    remove("#magic_textarea");
-  });
-}
-
 var top = exports.top = jq("<div>").addClass("canopy_companion_border").addClass("canopy_companion_border_top");
 var bottom = exports.bottom = jq("<div>").addClass("canopy_companion_border").addClass("canopy_companion_border_bottom");
 var left = exports.left = jq("<div>").addClass("canopy_companion_border").addClass("canopy_companion_border_left");
 var right = exports.right = jq("<div>").addClass("canopy_companion_border").addClass("canopy_companion_border_right");
+
+function green_border(heightValue, widthvalue, topValue, leftValue) {
+  append("body", jq("<div>").addClass("canopy_companion_border").addClass("canopy_companion_border_green").css("height", px(heightValue)).css("width", px(widthvalue)).css("top", px(topValue)).css("left", px(leftValue)));
+}
+
+function createGreenBorders(elements) {
+  remove(".canopy_companion_border_green");
+  jq.each(elements, function (index, element) {
+    var clone = jq(element);
+    var position = clone.offset();
+    var top_1 = toInt(position.top);
+    var left_1 = toInt(position.left);
+    var width = toInt(clone.outerWidth());
+    var height = toInt(clone.outerHeight());
+    green_border(border_width, width + border_padding * 2 + border_width * 2, top_1 - border_width - border_padding, left_1 - border_padding - border_width);
+    green_border(border_width, width + border_padding * 2 + border_width * 2 - border_width, top_1 + height + border_padding, left_1 - border_padding - border_width);
+    green_border(height + border_padding * 2, border_width, top_1 - border_padding, left_1 - border_padding - border_width);
+    green_border(height + border_padding * 2, border_width, top_1 - border_padding, left_1 + width + border_padding);
+  });
+}
 
 function border(position, heightValue, widthvalue, topValue, leftValue) {
   var element = find((0, _String.fsFormat)(".canopy_companion_border_%s")(function (x) {
@@ -623,6 +644,63 @@ function createBorders(elements) {
     border("bottom", border_width, width + border_padding * 2 + border_width * 2 - border_width, top_1 + height + border_padding, left_1 - border_padding - border_width);
     border("left", height + border_padding * 2, border_width, top_1 - border_padding, left_1 - border_padding - border_width);
     border("right", height + border_padding * 2, border_width, top_1 - border_padding, left_1 + width + border_padding);
+  });
+}
+
+function result(result_, index) {
+  append("body", jq((0, _String.fsFormat)("<div>\r\n          selector: <span id=\"selector_%i\">\"%s\"</span> \r\n          count: %i \r\n          type: %A \r\n          <input type=\"button\" id=\"selector_copy_%i\" value=\"Copy\"> \r\n          <input type=\"button\" id=\"selector_apply_%i\" value=\"Apply\" data-selector=\"%s\" data-type=\"%s\">\r\n        </div>")(function (x) {
+    return x;
+  })(index)(result_.Selector)(result_.Count)(typeToString(result_.Type))(index)(index)(result_.ApplySelector)(typeToString(result_.Type))).addClass("canopy_companion_module").addClass("canopy_companion_result").css("bottom", px(40 + 33 * index)));
+  find((0, _String.fsFormat)("#selector_copy_%i")(function (x) {
+    return x;
+  })(index)).on("click.selector_copy", function (_arg1) {
+    var selector = (0, _Util.toString)(find((0, _String.fsFormat)("#selector_%i")(function (x) {
+      return x;
+    })(index)).text());
+    append("body", jq("<textarea id='magic_textarea'>"));
+    find("#magic_textarea").val(selector);
+    find("#magic_textarea").select();
+    document.execCommand("copy");
+    remove("#magic_textarea");
+  });
+  find((0, _String.fsFormat)("#selector_apply_%i")(function (x) {
+    return x;
+  })(index)).on("click.selector_apply", function (_arg2) {
+    var selector = (0, _Util.toString)(find((0, _String.fsFormat)("#selector_apply_%i")(function (x) {
+      return x;
+    })(index)).data("selector"));
+    var type_ = (0, _Util.toString)(find((0, _String.fsFormat)("#selector_apply_%i")(function (x) {
+      return x;
+    })(index)).data("type"));
+
+    var elements = function () {
+      var $var1 = null;
+
+      switch (type_) {
+        case "css":
+        case "jQuery":
+          {
+            $var1 = find(selector);
+            break;
+          }
+
+        case "canopy":
+        case "xpath":
+          {
+            $var1 = applyXPath(selector);
+            break;
+          }
+
+        default:
+          {
+            $var1 = null;
+          }
+      }
+
+      return $var1;
+    }();
+
+    createGreenBorders(elements);
   });
 }
 
@@ -663,6 +741,7 @@ function mouseDown(event) {
     var element_1 = new _Element(lower(cleanString(_self.tagName)), cleanString(_self.className), cleanString(_self.id), cleanString(_self.textContext == null ? _self.innerText : _self.textContext), cleanString(_self.value), cleanString(_self.name), cleanString(_self.placeholder), cleanString(element.attr("href")));
     remove(".canopy_companion_result");
     off("*", "click.selector_copy");
+    off("*", "click.selector_apply");
     (0, _Seq.iterateIndexed)(function (index, tupledArg) {
       result(tupledArg[1], index);
     }, (0, _List.reverse)(suggest(element_1)));

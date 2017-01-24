@@ -14,7 +14,7 @@ open Fable.Import.Browser
 type Self = { Self : obj }
 type Element = { Tag : string; Class : string; Id : string; Text : string; Value : string; Name : string; Placeholder : string; Href : string }
 type SelectorType = XPath | Css | JQuery | Canopy
-type Result = { Selector : string; Readability : float; Count : int; Type : SelectorType }
+type Result = { Selector : string; Readability : float; Count : int; Type : SelectorType; ApplySelector : string}
 
 //Varios JS helpers
 let jq = importDefault<obj> "jquery"
@@ -60,6 +60,11 @@ let typeToString type' =
 let border_width = 5
 let border_padding = 2
 
+let applyXPath selector = 
+  let result = document.evaluate(selector, document, null, 0.0, null)
+  let mutable element : obj = !!result.iterateNext()
+  !! [| while element <> null do yield element; element <- result.iterateNext() |]
+  
 //Suggestion stuff
 let howManyXPath selector = 
   let result = document.evaluate(selector, document, null, 0.0, null)
@@ -75,6 +80,7 @@ let suggestByXPathText element =
       Count = howManyXPath selector
       Readability = 1.3
       Type = XPath
+      ApplySelector = selector
     }
   else None
 
@@ -86,6 +92,7 @@ let suggestByCanopyText element =
       Count = howManyXPath selector
       Readability = 0.5
       Type = Canopy
+      ApplySelector = selector
     }
   else None
 
@@ -97,6 +104,7 @@ let suggestByName element =
       Count = howManyJQuery selector
       Readability = 1.2
       Type = Css
+      ApplySelector = selector
     }
   else None
 
@@ -108,6 +116,7 @@ let suggestByPlaceholder element =
       Count = howManyJQuery selector
       Readability = 1.2
       Type = Css
+      ApplySelector = selector
     }
   else None
 
@@ -119,6 +128,7 @@ let suggestById element =
       Count = howManyJQuery selector
       Readability = 0.3
       Type = Css
+      ApplySelector = selector
     }
   else None
 
@@ -130,17 +140,19 @@ let suggestByValue element =
       Count = howManyJQuery selector
       Readability = 1.0
       Type = Css
+      ApplySelector = selector
     }
   else None
 
 let suggestByCanopyValue element = 
   if element.Value <> "" then
-    let selector = sprintf "[value='%s']" element.Value
+    let selector = sprintf "//*[@value='%s']" element.Value
     Some {
       Selector = element.Value
-      Count = howManyJQuery selector
+      Count = howManyXPath selector
       Readability = 0.5
       Type = Canopy
+      ApplySelector = selector
     }
   else None
 
@@ -153,6 +165,7 @@ let suggestByClass element =
       Count = howManyJQuery selector
       Readability = 1.5
       Type = Css
+      ApplySelector = selector
     }
   else None
 
@@ -166,6 +179,7 @@ let suggestBySingleClass element =
           Count = howManyJQuery class'
           Readability = 1.2
           Type = Css
+          ApplySelector = class'
         })
       |> List.ofArray
   else [None]
@@ -178,6 +192,7 @@ let suggestByHref element =
       Count = howManyJQuery selector
       Readability = 1.2
       Type = Css
+      ApplySelector = selector
     }
   else None
 
@@ -189,6 +204,7 @@ let suggestByTag element =
       Count = howManyJQuery selector
       Readability = 1.2
       Type = Css
+      ApplySelector = selector
     }
   else None
 
@@ -222,28 +238,39 @@ let inputs = """
   <input type="button" id="close" class="canopy_companion_module" value="X">
 </div>"""
 
-//Result template
-let result result' index =   
-  (jq $ sprintf """<div>selector: <span id="selector_%i">"%s"</span> count: %i type: %A <input type="button" id="selector_copy_%i" value="Copy"></div>""" index result'.Selector result'.Count (typeToString result'.Type) index)
-    ?addClass("canopy_companion_module")
-    ?addClass("canopy_companion_result")
-    ?css("bottom", px (40 + 33 * index))
-  |> append "body"
-
-  (find (sprintf "#selector_copy_%i" index))
-    ?on("click", (fun _ ->
-      let selector = (find (sprintf "#selector_%i" index))?text() |> string
-      jq $ "<textarea id='magic_textarea'>" |> append "body"
-      (find "#magic_textarea")?``val``(selector) |> ignore
-      (find "#magic_textarea")?select() |> ignore
-      document.execCommand("copy") |> ignore
-      remove "#magic_textarea")) |> ignore
-
 //The borders used around elements
 let top =    (jq $ "<div>")?addClass("canopy_companion_border")?addClass("canopy_companion_border_top")
 let bottom = (jq $ "<div>")?addClass("canopy_companion_border")?addClass("canopy_companion_border_bottom")
 let left =   (jq $ "<div>")?addClass("canopy_companion_border")?addClass("canopy_companion_border_left")
 let right =  (jq $ "<div>")?addClass("canopy_companion_border")?addClass("canopy_companion_border_right")
+
+//Make new green borders for apply
+let green_border heightValue widthvalue topValue leftValue =
+  (jq $ "<div>")
+    ?addClass("canopy_companion_border")
+    ?addClass("canopy_companion_border_green")  
+    ?css("height", px heightValue)
+    ?css("width", px widthvalue)
+    ?css("top", px topValue)
+    ?css("left", px leftValue)
+    |> append "body"
+
+//Given elements, draw green borders around it
+let createGreenBorders elements = 
+  remove ".canopy_companion_border_green"
+  jq?each(elements, fun index element ->
+    let clone = jq $ element
+    let position = clone?offset()
+    let top = position?top |> toInt
+    let left = position?left  |> toInt
+    let width = clone?outerWidth() |> toInt
+    let height = clone?outerHeight() |> toInt
+        
+    green_border border_width (width + border_padding * 2 + border_width * 2) (top - border_width - border_padding) (left - border_padding - border_width)
+    green_border border_width (width + border_padding * 2 + border_width * 2 - border_width) (top + height + border_padding) (left - border_padding - border_width)
+    green_border (height + border_padding * 2) border_width (top - border_padding) (left - border_padding - border_width)
+    green_border (height + border_padding * 2) border_width (top - border_padding) (left + width + border_padding)
+  ) |> ignore
 
 //Set the position values for the right provided border
 let border position heightValue widthvalue topValue leftValue =
@@ -271,6 +298,43 @@ let createBorders elements =
     border "left"   (height + border_padding * 2) border_width (top - border_padding) (left - border_padding - border_width)
     border "right"  (height + border_padding * 2) border_width (top - border_padding) (left + width + border_padding)
   ) |> ignore
+
+//Result template
+let result result' index =   
+  (jq $ sprintf 
+      """<div>
+          selector: <span id="selector_%i">"%s"</span> 
+          count: %i 
+          type: %A 
+          <input type="button" id="selector_copy_%i" value="Copy"> 
+          <input type="button" id="selector_apply_%i" value="Apply" data-selector="%s" data-type="%s">
+        </div>""" index result'.Selector result'.Count (typeToString result'.Type) index index result'.ApplySelector (typeToString result'.Type))
+    ?addClass("canopy_companion_module")
+    ?addClass("canopy_companion_result")
+    ?css("bottom", px (40 + 33 * index))
+  |> append "body"
+
+  //Wire up the copy button
+  (find (sprintf "#selector_copy_%i" index))
+    ?on("click.selector_copy", (fun _ ->
+      let selector = (find (sprintf "#selector_%i" index))?text() |> string
+      jq $ "<textarea id='magic_textarea'>" |> append "body"
+      (find "#magic_textarea")?``val``(selector) |> ignore
+      (find "#magic_textarea")?select() |> ignore
+      document.execCommand("copy") |> ignore
+      remove "#magic_textarea")) |> ignore
+
+  //Wire up the Apply button
+  (find (sprintf "#selector_apply_%i" index))
+    ?on("click.selector_apply", (fun _ ->
+      let selector = (find (sprintf "#selector_apply_%i" index))?data("selector") |> string
+      let type' = (find (sprintf "#selector_apply_%i" index))?data("type") |> string
+      let elements = 
+        match type' with
+        | "css"    | "jQuery" -> find selector
+        | "canopy" | "xpath"  -> applyXPath selector
+        | _ -> null
+      createGreenBorders elements)) |> ignore
   
 //Highlight an element on mouseEnter
 let mouseEnter event = 
@@ -326,6 +390,7 @@ let mouseDown event =
 
     remove ".canopy_companion_result"
     off "*" "click.selector_copy"
+    off "*" "click.selector_apply"
 
     suggest element    
     |> List.rev 

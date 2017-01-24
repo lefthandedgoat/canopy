@@ -72,114 +72,6 @@ div#canopy_companion {
     bottom: 5px !important;
 }
 
-/*div#canopy_companion *, .canopy_companion_clean, .canopy_companion_clean * {
-  azimuth: center;
-  background-attachment: scroll;
-  background-image: none;
-  background-position: 0% 0%;
-  background-repeat: repeat;
-  border-collapse: separate;
-  border-spacing: 0;
-  bottom: auto;
-  caption-side: top;
-  clear: none;
-  clip: auto;
-  color: black;
-  content: normal;
-  counter-increment: none;
-  counter-reset: none;
-  cursor: auto;
-  direction: ltr;
-  elevation: level;
-  empty-cells: show;
-  font-family: sans-serif;
-  font-variant: normal;
-  font-weight: normal;
-  height: auto;
-  left: auto;
-  letter-spacing: normal;
-  line-height: normal;
-  list-style-image: none;
-  list-style-position: outside;
-  list-style-type: disc;
-  max-height: none;
-  max-width: none;
-  min-height: 0;
-  min-width: 0;
-  orphans: 2;
-  outline-color: invert;
-  outline-style: none;
-  outline-width: medium;
-  overflow: visible;
-  page-break-after: auto;
-  page-break-before: auto;
-  page-break-inside: auto;
-  table-layout: auto;
-  text-align: left;
-  text-decoration: none;
-  text-indent: 0;
-  text-transform: none;
-  top: auto;
-  unicode-bidi: normal;
-  vertical-align: baseline;
-  visibility: visible;
-  white-space: normal;
-  widows: 2;
-  width: auto;
-  word-spacing: normal;
-  right: 0px;
-  margin: 0;
-  padding: 0;
-  font-size: 14px;
-  float: none;
-  font-style: none;
-  background: white;
-  text-align: left; }*/
-
-.canopy_companion_clean a {
-  color: blue;
-  text-decoration: underline;
-  cursor: pointer; }
-
-div#canopy_companion .canopy_companion_input_field {
-  display: block;
-  float: left;
-  margin: 0 7px 0 0;
-  background-color: #f5f5f5;
-  border: 1px solid #dedede;
-  border-top: 1px solid #eee;
-  border-left: 1px solid #eee;
-  font-family: "Lucida Grande", Tahoma, Arial, Verdana, sans-serif;
-  text-decoration: none;
-  color: #565656;
-  cursor: pointer;
-  padding: 5px 8px 6px 7px; }
-
-div#canopy_companion .canopy_companion_wizard .canopy_companion_input_field {
-  margin: 7px 3px 7px 3px;
-  float: none;
-  display: inline; }
-
-div#canopy_companion .canopy_companion_prompt {
-  margin: 3px 0px 3px 0px;
-  font-family: "Lucida Grande", Tahoma, Arial, Verdana, sans-serif;
-  font-weight: bold;
-  float: none; }
-
-div#canopy_companion .canopy_companion_wizard #canopy_companion_path_field {
-  margin: 5px 0px;
-  clear: both;
-  float: none;
-  display: block; }
-
-.canopy_companion_selected {
-  background-color: #0F0 !important;
-  background-image: none !important; }
-
-.canopy_companion_suggested {
-  background-color: #FF5 !important;
-  background-image: none !important; }
-
 .canopy_companion_border {
   position: absolute !important;
   z-index: 999999 !important;
@@ -193,43 +85,9 @@ div#canopy_companion .canopy_companion_wizard #canopy_companion_path_field {
   font-style: none !important;
   outline: 0 !important;
   vertical-align: baseline !important;
-  text-align: left !important; }
+  text-align: left !important; 
+}
 
-.canopy_companion_border_bottom {
-  font-size: 10px !important;
-  padding: 2px 0px 2px 5px !important; }
-
-.canopy_companion_border_red {
-  background-color: #F00 !important; }
-
-.canopy_companion_rejected {
-  background-color: #F00 !important;
-  background-image: none !important; }
-
-img.canopy_companion_rejected {
-  border: 5px solid #F00 !important; }
-
-img.canopy_companion_suggested {
-  border: 5px solid #FF5 !important; }
-
-img.canopy_companion_selected {
-  border: 5px solid #0F0 !important; }
-
-#canopy_companion.canopy_companion_border_top {
-  top: 5px !important; }
-
-#canopy_companion input {
-  margin-right: 10px !important;
-  font-size: 15px !important; }
-
-#canopy_companion_path_field {
-  width: 400px !important; }
-
-#canopy_companion .canopy_companion_new_line {
-  clear: both; }
-
-#canopy_companion .canopy_companion_option {
-  float: left; }
-
-#canopy_companion .canopy_companion_selected_option {
-  text-decoration: underline; }
+.canopy_companion_border_green {
+  background-color: #0F0 !important; 
+}
