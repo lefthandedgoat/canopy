@@ -400,7 +400,7 @@ let private safeRead item =
           true)
         !readvalue
     with
-        | :? WebDriverTimeoutException -> raise (CanopyReadException("was unable to read item for unkown reason"))
+        | :? WebDriverTimeoutException -> raise (CanopyReadException("was unable to read item for unknown reason"))
 
 (* documented/actions *)
 let read item =
