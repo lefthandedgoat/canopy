@@ -182,17 +182,17 @@ type canopy () =
 
     static member notContains value1 value2 = notContains value1 value2
 
-    static member selected selector = selected value
+    static member selected selector = selected selector
 
-    static member deselected selector = deselected value
+    static member deselected selector = deselected selector
 
-    static member displayed selector = displayed value
+    static member displayed selector = displayed selector
 
-    static member notDisplayed selector = notDisplayed value
+    static member notDisplayed selector = notDisplayed selector
 
-    static member enabled selector = enabled value
+    static member enabled selector = enabled selector
 
-    static member disabled selector = disabled value
+    static member disabled selector = disabled selector
 
     static member fadedIn selector = fadedIn selector
 

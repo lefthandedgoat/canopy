@@ -307,3 +307,6 @@ Added a C# friendly wrapper (See program.cs in the C# project for examples) [Iss
 
 #### 1.1.1 - Jan 18 2017
 Improve compatability with Mono 64 bit, thanks MorganPersson [PR #333](https://github.com/lefthandedgoat/canopy/pull/333)
+
+#### 1.1.2 - Jan 24 2017
+Fix bugs in C# friendly wrapper, thanks @spindev! [Issue #327](https://github.com/lefthandedgoat/canopy/pull/327)
