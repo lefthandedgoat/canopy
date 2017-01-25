@@ -323,10 +323,12 @@ function toInt(value_1) {
 }
 
 function cleanString(value_1) {
-  var value_2 = (0, _Util.toString)(value_1);
-  var value_3 = value_2 === "undefined" ? "" : value_2;
-  var value_4 = value_3.indexOf("\n") >= 0 ? "" : value_3;
-  return value_4;
+  var value_2 = value_1;
+  var value_3 = value_2 == null ? "" : value_2;
+  var value_4 = value_3 === "undefined" ? "" : value_3;
+  var value_5 = value_4.indexOf("\n") >= 0 ? "" : value_4;
+  var value_6 = value_5.indexOf("\r\n") >= 0 ? "" : value_5;
+  return value_6;
 }
 
 function lower(value_1) {
@@ -600,13 +602,13 @@ function suggest(element) {
 }
 
 var inputs = exports.inputs = "\r\n<div id=\"canopy_companion\" class=\"canopy_companion_module\">\r\n  <input type=\"button\" id=\"clear\" class=\"canopy_companion_module\" value=\"Clear\">\r\n  <input type=\"button\" id=\"close\" class=\"canopy_companion_module\" value=\"X\">\r\n</div>";
-var top = exports.top = jq("<div>").addClass("canopy_companion_border").addClass("canopy_companion_border_top");
-var bottom = exports.bottom = jq("<div>").addClass("canopy_companion_border").addClass("canopy_companion_border_bottom");
-var left = exports.left = jq("<div>").addClass("canopy_companion_border").addClass("canopy_companion_border_left");
-var right = exports.right = jq("<div>").addClass("canopy_companion_border").addClass("canopy_companion_border_right");
+var top = exports.top = jq("<div>").addClass("canopy_companion_border canopy_companion_module").addClass("canopy_companion_border_top");
+var bottom = exports.bottom = jq("<div>").addClass("canopy_companion_border canopy_companion_module").addClass("canopy_companion_border_bottom");
+var left = exports.left = jq("<div>").addClass("canopy_companion_border canopy_companion_module").addClass("canopy_companion_border_left");
+var right = exports.right = jq("<div>").addClass("canopy_companion_border canopy_companion_module").addClass("canopy_companion_border_right");
 
 function green_border(heightValue, widthvalue, topValue, leftValue) {
-  append("body", jq("<div>").addClass("canopy_companion_border").addClass("canopy_companion_border_green").css("height", px(heightValue)).css("width", px(widthvalue)).css("top", px(topValue)).css("left", px(leftValue)));
+  append("body", jq("<div>").addClass("canopy_companion_border").addClass("canopy_companion_border_green").addClass("canopy_companion_module").css("height", px(heightValue)).css("width", px(widthvalue)).css("top", px(topValue)).css("left", px(leftValue)));
 }
 
 function createGreenBorders(elements) {
@@ -648,7 +650,7 @@ function createBorders(elements) {
 }
 
 function result(result_, index) {
-  append("body", jq((0, _String.fsFormat)("<div>\r\n          selector: <span id=\"selector_%i\">\"%s\"</span> \r\n          count: %i \r\n          type: %A \r\n          <input type=\"button\" id=\"selector_copy_%i\" value=\"Copy\"> \r\n          <input type=\"button\" id=\"selector_apply_%i\" value=\"Apply\" data-selector=\"%s\" data-type=\"%s\">\r\n        </div>")(function (x) {
+  append("body", jq((0, _String.fsFormat)("<div>\r\n          selector: <span id=\"selector_%i\" class=\"canopy_companion_module\">\"%s\"</span> \r\n          count: %i \r\n          type: %A \r\n          <input class=\"canopy_companion_module\" type=\"button\" id=\"selector_copy_%i\" value=\"Copy\"> \r\n          <input class=\"canopy_companion_module\" type=\"button\" id=\"selector_apply_%i\" value=\"Apply\" data-selector=\"%s\" data-type=\"%s\">\r\n        </div>")(function (x) {
     return x;
   })(index)(result_.Selector)(result_.Count)(typeToString(result_.Type))(index)(index)(result_.ApplySelector)(typeToString(result_.Type))).addClass("canopy_companion_module").addClass("canopy_companion_result").css("bottom", px(40 + 33 * index)));
   find((0, _String.fsFormat)("#selector_copy_%i")(function (x) {
@@ -680,7 +682,9 @@ function result(result_, index) {
         case "css":
         case "jQuery":
           {
-            $var1 = find(selector);
+            $var1 = find((0, _String.fsFormat)("%s:not(.canopy_companion_module)")(function (x) {
+              return x;
+            })(selector));
             break;
           }
 
@@ -738,7 +742,7 @@ function mouseDown(event) {
   if (tag_1 !== "BODY" ? tag_1 !== "HTML" : false) {
     event.stopImmediatePropagation();
     blockClick(element);
-    var element_1 = new _Element(lower(cleanString(_self.tagName)), cleanString(_self.className), cleanString(_self.id), cleanString(_self.textContext == null ? _self.innerText : _self.textContext), cleanString(_self.value), cleanString(_self.name), cleanString(_self.placeholder), cleanString(element.attr("href")));
+    var element_1 = new _Element(cleanString(lower(_self.tagName)), cleanString(_self.className), cleanString(_self.id), cleanString(_self.textContext == null ? _self.innerText : _self.textContext), cleanString(_self.value), cleanString(_self.name), cleanString(_self.placeholder), cleanString(element.attr("href")));
     remove(".canopy_companion_result");
     off("*", "click.selector_copy");
     off("*", "click.selector_apply");
@@ -761,6 +765,7 @@ if (!exists("#canopy_companion")) {
   });
   append("body", inputs);
   click("#canopy_companion #clear", function (_arg1) {
+    remove(".canopy_companion_border_green");
     remove(".canopy_companion_result");
     hide(".canopy_companion_border");
   });

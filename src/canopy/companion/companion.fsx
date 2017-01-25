@@ -43,10 +43,12 @@ let bool whatever =
   | _      -> false
 let px value = sprintf "%ipx" value
 let toInt value = value |> sprintf "%O" |> int
-let cleanString value = 
+let cleanString value =   
   let value = string value
+  let value = if value = null then "" else value
   let value = if value = "undefined" then "" else value
   let value = if value.Contains("\n") then "" else value
+  let value = if value.Contains("\r\n") then "" else value
   value
 let lower (value : string) = value.ToLower()
 let typeToString type' =
@@ -239,16 +241,17 @@ let inputs = """
 </div>"""
 
 //The borders used around elements
-let top =    (jq $ "<div>")?addClass("canopy_companion_border")?addClass("canopy_companion_border_top")
-let bottom = (jq $ "<div>")?addClass("canopy_companion_border")?addClass("canopy_companion_border_bottom")
-let left =   (jq $ "<div>")?addClass("canopy_companion_border")?addClass("canopy_companion_border_left")
-let right =  (jq $ "<div>")?addClass("canopy_companion_border")?addClass("canopy_companion_border_right")
+let top =    (jq $ "<div>")?addClass("canopy_companion_border canopy_companion_module")?addClass("canopy_companion_border_top")
+let bottom = (jq $ "<div>")?addClass("canopy_companion_border canopy_companion_module")?addClass("canopy_companion_border_bottom")
+let left =   (jq $ "<div>")?addClass("canopy_companion_border canopy_companion_module")?addClass("canopy_companion_border_left")
+let right =  (jq $ "<div>")?addClass("canopy_companion_border canopy_companion_module")?addClass("canopy_companion_border_right")
 
 //Make new green borders for apply
 let green_border heightValue widthvalue topValue leftValue =
   (jq $ "<div>")
     ?addClass("canopy_companion_border")
-    ?addClass("canopy_companion_border_green")  
+    ?addClass("canopy_companion_border_green")
+    ?addClass("canopy_companion_module")
     ?css("height", px heightValue)
     ?css("width", px widthvalue)
     ?css("top", px topValue)
@@ -303,11 +306,11 @@ let createBorders elements =
 let result result' index =   
   (jq $ sprintf 
       """<div>
-          selector: <span id="selector_%i">"%s"</span> 
+          selector: <span id="selector_%i" class="canopy_companion_module">"%s"</span> 
           count: %i 
           type: %A 
-          <input type="button" id="selector_copy_%i" value="Copy"> 
-          <input type="button" id="selector_apply_%i" value="Apply" data-selector="%s" data-type="%s">
+          <input class="canopy_companion_module" type="button" id="selector_copy_%i" value="Copy"> 
+          <input class="canopy_companion_module" type="button" id="selector_apply_%i" value="Apply" data-selector="%s" data-type="%s">
         </div>""" index result'.Selector result'.Count (typeToString result'.Type) index index result'.ApplySelector (typeToString result'.Type))
     ?addClass("canopy_companion_module")
     ?addClass("canopy_companion_result")
@@ -331,7 +334,7 @@ let result result' index =
       let type' = (find (sprintf "#selector_apply_%i" index))?data("type") |> string
       let elements = 
         match type' with
-        | "css"    | "jQuery" -> find selector
+        | "css"    | "jQuery" -> find (sprintf "%s:not(.canopy_companion_module)" selector)
         | "canopy" | "xpath"  -> applyXPath selector
         | _ -> null
       createGreenBorders elements)) |> ignore
@@ -376,9 +379,9 @@ let mouseDown event =
   if tag <> "BODY" && tag <> "HTML" then
     event?stopImmediatePropagation() |> ignore
     blockClick element
-    let element = 
+    let element =
       {
-        Tag =         lower <| (cleanString <| !!self?tagName)
+        Tag =         cleanString <| (lower <| !!self?tagName)
         Class =       cleanString <| !!self?className
         Id =          cleanString <| !!self?id
         Text =        cleanString <| if !!self?textContext = null then !!self?innerText else !!self?textContext
@@ -392,8 +395,8 @@ let mouseDown event =
     off "*" "click.selector_copy"
     off "*" "click.selector_apply"
 
-    suggest element    
-    |> List.rev 
+    suggest element
+    |> List.rev
     |> List.iteri (fun index (_, result') -> result result' index)
 
 //Startup code
@@ -410,6 +413,7 @@ if not (exists "#canopy_companion") then
   append "body" inputs
 
   click "#canopy_companion #clear" (fun _ ->
+    remove ".canopy_companion_border_green"
     remove ".canopy_companion_result"
     hide   ".canopy_companion_border")
 
