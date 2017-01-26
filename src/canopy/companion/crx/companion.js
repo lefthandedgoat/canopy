@@ -27,6 +27,10 @@ exports.px = px;
 exports.toInt = toInt;
 exports.cleanString = cleanString;
 exports.lower = lower;
+exports.hasDigit = hasDigit;
+exports.hrefStopAtDigits = hrefStopAtDigits;
+exports.hrefStopAtQueryString = hrefStopAtQueryString;
+exports.hrefStopAtHash = hrefStopAtHash;
 exports.typeToString = typeToString;
 exports.applyXPath = applyXPath;
 exports.howManyXPath = howManyXPath;
@@ -41,6 +45,9 @@ exports.suggestByCanopyValue = suggestByCanopyValue;
 exports.suggestByClass = suggestByClass;
 exports.suggestBySingleClass = suggestBySingleClass;
 exports.suggestByHref = suggestByHref;
+exports.suggestByHrefStopAtDigit = suggestByHrefStopAtDigit;
+exports.suggestByHrefStopAtQueryString = suggestByHrefStopAtQueryString;
+exports.suggestByHrefStopAtHash = suggestByHrefStopAtHash;
 exports.suggestByTag = suggestByTag;
 exports.suggest = suggest;
 exports.green_border = green_border;
@@ -63,6 +70,8 @@ var _jquery = require("jquery");
 var _jquery2 = _interopRequireDefault(_jquery);
 
 var _String = require("fable-core/umd/String");
+
+var _RegExp = require("fable-core/umd/RegExp");
 
 var _Seq = require("fable-core/umd/Seq");
 
@@ -335,6 +344,46 @@ function lower(value_1) {
   return value_1.toLocaleLowerCase();
 }
 
+function hasDigit(value_1) {
+  return (0, _RegExp.isMatch)(value_1, "\\d");
+}
+
+function hrefStopAtDigits(href) {
+  var parts = (0, _String.split)(href, "/");
+
+  var index = function (array) {
+    return (0, _Seq.tryFindIndex)(function (value_1) {
+      return hasDigit(value_1);
+    }, array);
+  }(parts);
+
+  if (index == null) {
+    return href;
+  } else {
+    return function (parts_1) {
+      return _String.join.apply(undefined, ["/"].concat(_toConsumableArray(parts_1)));
+    }(function (array) {
+      return array.slice(0, index);
+    }(parts));
+  }
+}
+
+function hrefStopAtQueryString(href) {
+  if (href.indexOf("?") >= 0) {
+    return (0, _String.split)(href, "?")[0];
+  } else {
+    return href;
+  }
+}
+
+function hrefStopAtHash(href) {
+  if (href.indexOf("#") >= 0) {
+    return (0, _String.split)(href, "#")[0];
+  } else {
+    return href;
+  }
+}
+
 function typeToString(type_) {
   if (type_.Case === "Css") {
     return "css";
@@ -559,9 +608,69 @@ function suggestByHref(element) {
   }
 }
 
+function suggestByHrefStopAtDigit(element) {
+  var href = hrefStopAtDigits(element.Href);
+
+  if (element.Href !== "" ? href !== element.Href : false) {
+    var _ret10 = function () {
+      var selector = (0, _String.fsFormat)("[href^='%s']")(function (x) {
+        return x;
+      })(href);
+      return {
+        v: function () {
+          var Count = howManyJQuery(selector);
+          return new Result(selector, 1.3, Count, new SelectorType("Css", []), selector);
+        }()
+      };
+    }();
+
+    if ((typeof _ret10 === "undefined" ? "undefined" : _typeof(_ret10)) === "object") return _ret10.v;
+  }
+}
+
+function suggestByHrefStopAtQueryString(element) {
+  var href = hrefStopAtQueryString(element.Href);
+
+  if (element.Href !== "" ? href !== element.Href : false) {
+    var _ret11 = function () {
+      var selector = (0, _String.fsFormat)("[href^='%s']")(function (x) {
+        return x;
+      })(href);
+      return {
+        v: function () {
+          var Count = howManyJQuery(selector);
+          return new Result(selector, 1.3, Count, new SelectorType("Css", []), selector);
+        }()
+      };
+    }();
+
+    if ((typeof _ret11 === "undefined" ? "undefined" : _typeof(_ret11)) === "object") return _ret11.v;
+  }
+}
+
+function suggestByHrefStopAtHash(element) {
+  var href = hrefStopAtHash(element.Href);
+
+  if (element.Href !== "" ? href !== element.Href : false) {
+    var _ret12 = function () {
+      var selector = (0, _String.fsFormat)("[href^='%s']")(function (x) {
+        return x;
+      })(href);
+      return {
+        v: function () {
+          var Count = howManyJQuery(selector);
+          return new Result(selector, 1.3, Count, new SelectorType("Css", []), selector);
+        }()
+      };
+    }();
+
+    if ((typeof _ret12 === "undefined" ? "undefined" : _typeof(_ret12)) === "object") return _ret12.v;
+  }
+}
+
 function suggestByTag(element) {
   if (element.Tag !== "") {
-    var _ret10 = function () {
+    var _ret13 = function () {
       var selector = (0, _String.fsFormat)("%s")(function (x) {
         return x;
       })(element.Tag);
@@ -573,7 +682,7 @@ function suggestByTag(element) {
       };
     }();
 
-    if ((typeof _ret10 === "undefined" ? "undefined" : _typeof(_ret10)) === "object") return _ret10.v;
+    if ((typeof _ret13 === "undefined" ? "undefined" : _typeof(_ret13)) === "object") return _ret13.v;
   }
 }
 
@@ -598,7 +707,7 @@ function suggest(element) {
     return result.Count > 0;
   }, (0, _List.choose)(function (x) {
     return x;
-  }, (0, _List.append)(suggestBySingleClass(element), (0, _List.ofArray)([suggestById(element), suggestByName(element), suggestByPlaceholder(element), suggestByCanopyText(element), suggestByXPathText(element), suggestByValue(element), suggestByCanopyValue(element), suggestByClass(element), suggestByHref(element), suggestByTag(element)]))))))))));
+  }, (0, _List.append)(suggestBySingleClass(element), (0, _List.ofArray)([suggestById(element), suggestByName(element), suggestByPlaceholder(element), suggestByCanopyText(element), suggestByXPathText(element), suggestByValue(element), suggestByCanopyValue(element), suggestByClass(element), suggestByHref(element), suggestByHrefStopAtDigit(element), suggestByHrefStopAtQueryString(element), suggestByHrefStopAtHash(element), suggestByTag(element)]))))))))));
 }
 
 var inputs = exports.inputs = "\r\n<div id=\"canopy_companion\" class=\"canopy_companion_module\">\r\n  <input type=\"button\" id=\"clear\" class=\"canopy_companion_module\" value=\"Clear\">\r\n  <input type=\"button\" id=\"close\" class=\"canopy_companion_module\" value=\"X\">\r\n</div>";

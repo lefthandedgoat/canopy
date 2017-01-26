@@ -51,6 +51,20 @@ let cleanString value =
   let value = if value.Contains("\r\n") then "" else value
   value
 let lower (value : string) = value.ToLower()
+let hasDigit (value : string) = System.Text.RegularExpressions.Regex.IsMatch(value, @"\d")
+let hrefStopAtDigits (href : string) =
+  let parts = href.Split('/')
+  let index = parts |> Array.tryFindIndex hasDigit
+  match index with 
+  | Some(index) -> parts |> Array.take index |> fun parts -> System.String.Join ("/", parts)
+  | None        -> href
+let hrefStopAtQueryString (href : string) =
+  if href.Contains("?") then href.Split('?') |> Array.head
+  else href
+let hrefStopAtHash (href : string) =
+  if href.Contains("#") then href.Split('#') |> Array.head
+  else href
+  
 let typeToString type' =
   match type' with
   | XPath -> "xpath"
@@ -198,6 +212,45 @@ let suggestByHref element =
     }
   else None
 
+let suggestByHrefStopAtDigit element = 
+  let href = hrefStopAtDigits element.Href
+  if element.Href <> "" && href <> element.Href then
+    let selector = sprintf "[href^='%s']" href
+    Some {
+      Selector = selector
+      Count = howManyJQuery selector
+      Readability = 1.3
+      Type = Css
+      ApplySelector = selector
+    }
+  else None
+
+let suggestByHrefStopAtQueryString element = 
+  let href = hrefStopAtQueryString element.Href
+  if element.Href <> "" && href <> element.Href then    
+    let selector = sprintf "[href^='%s']" href
+    Some {
+      Selector = selector
+      Count = howManyJQuery selector
+      Readability = 1.3
+      Type = Css
+      ApplySelector = selector
+    }
+  else None
+
+let suggestByHrefStopAtHash element = 
+  let href = hrefStopAtHash element.Href
+  if element.Href <> "" && href <> element.Href then    
+    let selector = sprintf "[href^='%s']" href
+    Some {
+      Selector = selector
+      Count = howManyJQuery selector
+      Readability = 1.3
+      Type = Css
+      ApplySelector = selector
+    }
+  else None
+
 let suggestByTag element = 
   if element.Tag <> "" then    
     let selector = sprintf "%s" element.Tag
@@ -220,9 +273,11 @@ let suggest element =
     suggestByValue element
     suggestByCanopyValue element
     suggestByClass element
-    suggestByHref element
+    suggestByHref element    
+    suggestByHrefStopAtDigit element
+    suggestByHrefStopAtQueryString element
+    suggestByHrefStopAtHash element
     suggestByTag element
-    //Add smart hrefs with partials and shit
     //Add parent based stuff    
   ]
   |> List.append (suggestBySingleClass element)
