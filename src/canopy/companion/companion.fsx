@@ -374,7 +374,7 @@ let result result' index =
 
   //Wire up the copy button
   (find (sprintf "#selector_copy_%i" index))
-    ?on("click.selector_copy", (fun _ ->
+    ?on("click.canopy_selector_copy", (fun _ ->
       let selector = (find (sprintf "#selector_%i" index))?text() |> string
       jq $ "<textarea id='magic_textarea'>" |> append "body"
       (find "#magic_textarea")?``val``(selector) |> ignore
@@ -384,7 +384,7 @@ let result result' index =
 
   //Wire up the Apply button
   (find (sprintf "#selector_apply_%i" index))
-    ?on("click.selector_apply", (fun _ ->
+    ?on("click.canopy_selector_apply", (fun _ ->
       let selector = (find (sprintf "#selector_apply_%i" index))?data("selector") |> string
       let type' = (find (sprintf "#selector_apply_%i" index))?data("type") |> string
       let elements = 
@@ -468,13 +468,17 @@ if not (exists "#canopy_companion") then
   append "body" inputs
 
   click "#canopy_companion #clear" (fun _ ->
+    off "*" "click.canopy_selector_apply"
+    off "*" "click.canopy_selector_copy"
     remove ".canopy_companion_border_green"
     remove ".canopy_companion_result"
     hide   ".canopy_companion_border")
 
   click "#canopy_companion #close" (fun _ -> 
-    off "*:not(.canopy_companion_module)" "mouseenter.canopy"
-    off "*:not(.canopy_companion_module)" "mousedown.canopy"
+    off "*" "mouseenter.canopy"
+    off "*" "mousedown.canopy"
+    off "*" "click.canopy_selector_apply"
+    off "*" "click.canopy_selector_copy"
     remove ".canopy_companion_border"
     remove ".canopy_companion_result"
     remove "#canopy_companion")

@@ -764,7 +764,7 @@ function result(result_, index) {
   })(index)(result_.Selector)(result_.Count)(typeToString(result_.Type))(index)(index)(result_.ApplySelector)(typeToString(result_.Type))).addClass("canopy_companion_module").addClass("canopy_companion_result").css("bottom", px(40 + 33 * index)));
   find((0, _String.fsFormat)("#selector_copy_%i")(function (x) {
     return x;
-  })(index)).on("click.selector_copy", function (_arg1) {
+  })(index)).on("click.canopy_selector_copy", function (_arg1) {
     var selector = (0, _Util.toString)(find((0, _String.fsFormat)("#selector_%i")(function (x) {
       return x;
     })(index)).text());
@@ -776,7 +776,7 @@ function result(result_, index) {
   });
   find((0, _String.fsFormat)("#selector_apply_%i")(function (x) {
     return x;
-  })(index)).on("click.selector_apply", function (_arg2) {
+  })(index)).on("click.canopy_selector_apply", function (_arg2) {
     var selector = (0, _Util.toString)(find((0, _String.fsFormat)("#selector_apply_%i")(function (x) {
       return x;
     })(index)).data("selector"));
@@ -874,13 +874,17 @@ if (!exists("#canopy_companion")) {
   });
   append("body", inputs);
   click("#canopy_companion #clear", function (_arg1) {
+    off("*", "click.canopy_selector_apply");
+    off("*", "click.canopy_selector_copy");
     remove(".canopy_companion_border_green");
     remove(".canopy_companion_result");
     hide(".canopy_companion_border");
   });
   click("#canopy_companion #close", function (_arg2) {
-    off("*:not(.canopy_companion_module)", "mouseenter.canopy");
-    off("*:not(.canopy_companion_module)", "mousedown.canopy");
+    off("*", "mouseenter.canopy");
+    off("*", "mousedown.canopy");
+    off("*", "click.canopy_selector_apply");
+    off("*", "click.canopy_selector_copy");
     remove(".canopy_companion_border");
     remove(".canopy_companion_result");
     remove("#canopy_companion");
