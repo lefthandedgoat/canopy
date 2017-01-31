@@ -3,7 +3,7 @@
 Object.defineProperty(exports, "__esModule", {
   value: true
 });
-exports.right = exports.left = exports.bottom = exports.top = exports.inputs = exports.border_padding = exports.border_width = exports.jq = exports.Result = exports.SelectorType = exports.Element = exports.Self = undefined;
+exports.right = exports.left = exports.bottom = exports.top = exports.inputs = exports.border_padding = exports.border_width = exports.checked$27$ = exports.jq = exports.Result = exports.SelectorType = exports.Element = exports.Self = undefined;
 
 var _typeof = typeof Symbol === "function" && typeof Symbol.iterator === "symbol" ? function (obj) { return typeof obj; } : function (obj) { return obj && typeof Symbol === "function" && obj.constructor === Symbol && obj !== Symbol.prototype ? "symbol" : typeof obj; };
 
@@ -344,6 +344,12 @@ function lower(value_1) {
   return value_1.toLocaleLowerCase();
 }
 
+function checked_(selector) {
+  return bool(find(selector).is(":checked"));
+}
+
+exports.checked$27$ = checked_;
+
 function hasDigit(value_1) {
   return (0, _RegExp.isMatch)(value_1, "\\d");
 }
@@ -429,8 +435,8 @@ function howManyJQuery(selector) {
   return find(selector).length;
 }
 
-function suggestByXPathText(element) {
-  if (element.Text !== "") {
+function suggestByXPathText(element, apply) {
+  if (apply ? element.Text !== "" : false) {
     var _ret = function () {
       var selector = (0, _String.fsFormat)("//%s[text()='%s']")(function (x) {
         return x;
@@ -447,8 +453,8 @@ function suggestByXPathText(element) {
   }
 }
 
-function suggestByCanopyText(element) {
-  if (element.Text !== "") {
+function suggestByCanopyText(element, apply) {
+  if (apply ? element.Text !== "" : false) {
     var _ret2 = function () {
       var selector = (0, _String.fsFormat)("//*[text()='%s']")(function (x) {
         return x;
@@ -465,8 +471,8 @@ function suggestByCanopyText(element) {
   }
 }
 
-function suggestByName(element) {
-  if (element.Name !== "") {
+function suggestByName(element, apply) {
+  if (apply ? element.Name !== "" : false) {
     var _ret3 = function () {
       var selector = (0, _String.fsFormat)("[name='%s']")(function (x) {
         return x;
@@ -483,8 +489,8 @@ function suggestByName(element) {
   }
 }
 
-function suggestByPlaceholder(element) {
-  if (element.Placeholder !== "") {
+function suggestByPlaceholder(element, apply) {
+  if (apply ? element.Placeholder !== "" : false) {
     var _ret4 = function () {
       var selector = (0, _String.fsFormat)("[placeholder='%s']")(function (x) {
         return x;
@@ -501,8 +507,8 @@ function suggestByPlaceholder(element) {
   }
 }
 
-function suggestById(element) {
-  if (element.Id !== "") {
+function suggestById(element, apply) {
+  if (apply ? element.Id !== "" : false) {
     var _ret5 = function () {
       var selector = (0, _String.fsFormat)("#%s")(function (x) {
         return x;
@@ -519,8 +525,8 @@ function suggestById(element) {
   }
 }
 
-function suggestByValue(element) {
-  if (element.Value !== "") {
+function suggestByValue(element, apply) {
+  if (apply ? element.Value !== "" : false) {
     var _ret6 = function () {
       var selector = (0, _String.fsFormat)("[value='%s']")(function (x) {
         return x;
@@ -537,8 +543,8 @@ function suggestByValue(element) {
   }
 }
 
-function suggestByCanopyValue(element) {
-  if (element.Value !== "") {
+function suggestByCanopyValue(element, apply) {
+  if (apply ? element.Value !== "" : false) {
     var _ret7 = function () {
       var selector = (0, _String.fsFormat)("//*[@value='%s']")(function (x) {
         return x;
@@ -555,8 +561,8 @@ function suggestByCanopyValue(element) {
   }
 }
 
-function suggestByClass(element) {
-  if (element.Class !== "") {
+function suggestByClass(element, apply) {
+  if (apply ? element.Class !== "" : false) {
     var _ret8 = function () {
       var classes = (0, _String.fsFormat)(".%s")(function (x) {
         return x;
@@ -573,8 +579,8 @@ function suggestByClass(element) {
   }
 }
 
-function suggestBySingleClass(element) {
-  if (element.Class !== "") {
+function suggestBySingleClass(element, apply) {
+  if (apply ? element.Class !== "" : false) {
     return (0, _List.ofArray)((0, _String.split)(element.Class, " ").map(function (class_) {
       return (0, _String.fsFormat)(".%s")(function (x) {
         return x;
@@ -590,8 +596,8 @@ function suggestBySingleClass(element) {
   }
 }
 
-function suggestByHref(element) {
-  if (element.Href !== "") {
+function suggestByHref(element, apply) {
+  if (apply ? element.Href !== "" : false) {
     var _ret9 = function () {
       var selector = (0, _String.fsFormat)("[href='%s']")(function (x) {
         return x;
@@ -608,10 +614,10 @@ function suggestByHref(element) {
   }
 }
 
-function suggestByHrefStopAtDigit(element) {
+function suggestByHrefStopAtDigit(element, apply) {
   var href = hrefStopAtDigits(element.Href);
 
-  if (element.Href !== "" ? href !== element.Href : false) {
+  if ((apply ? element.Href !== "" : false) ? href !== element.Href : false) {
     var _ret10 = function () {
       var selector = (0, _String.fsFormat)("[href^='%s']")(function (x) {
         return x;
@@ -628,10 +634,10 @@ function suggestByHrefStopAtDigit(element) {
   }
 }
 
-function suggestByHrefStopAtQueryString(element) {
+function suggestByHrefStopAtQueryString(element, apply) {
   var href = hrefStopAtQueryString(element.Href);
 
-  if (element.Href !== "" ? href !== element.Href : false) {
+  if ((apply ? element.Href !== "" : false) ? href !== element.Href : false) {
     var _ret11 = function () {
       var selector = (0, _String.fsFormat)("[href^='%s']")(function (x) {
         return x;
@@ -648,10 +654,10 @@ function suggestByHrefStopAtQueryString(element) {
   }
 }
 
-function suggestByHrefStopAtHash(element) {
+function suggestByHrefStopAtHash(element, apply) {
   var href = hrefStopAtHash(element.Href);
 
-  if (element.Href !== "" ? href !== element.Href : false) {
+  if ((apply ? element.Href !== "" : false) ? href !== element.Href : false) {
     var _ret12 = function () {
       var selector = (0, _String.fsFormat)("[href^='%s']")(function (x) {
         return x;
@@ -668,8 +674,8 @@ function suggestByHrefStopAtHash(element) {
   }
 }
 
-function suggestByTag(element) {
-  if (element.Tag !== "") {
+function suggestByTag(element, apply) {
+  if (apply ? element.Tag !== "" : false) {
     var _ret13 = function () {
       var selector = (0, _String.fsFormat)("%s")(function (x) {
         return x;
@@ -687,6 +693,10 @@ function suggestByTag(element) {
 }
 
 function suggest(element) {
+  var css_1 = checked_("#css");
+  var canopy = checked_("#canopy");
+  var xpath = checked_("#xpath");
+  var href = checked_("#href");
   return function (results) {
     if (results.length >= 5) {
       return (0, _Seq.toList)((0, _Seq.take)(5, results));
@@ -707,10 +717,10 @@ function suggest(element) {
     return result.Count > 0;
   }, (0, _List.choose)(function (x) {
     return x;
-  }, (0, _List.append)(suggestBySingleClass(element), (0, _List.ofArray)([suggestById(element), suggestByName(element), suggestByPlaceholder(element), suggestByCanopyText(element), suggestByXPathText(element), suggestByValue(element), suggestByCanopyValue(element), suggestByClass(element), suggestByHref(element), suggestByHrefStopAtDigit(element), suggestByHrefStopAtQueryString(element), suggestByHrefStopAtHash(element), suggestByTag(element)]))))))))));
+  }, (0, _List.append)(suggestBySingleClass(element, css_1), (0, _List.ofArray)([suggestById(element, css_1), suggestByName(element, css_1), suggestByPlaceholder(element, css_1), suggestByCanopyText(element, canopy), suggestByXPathText(element, xpath), suggestByValue(element, css_1), suggestByCanopyValue(element, canopy), suggestByClass(element, css_1), suggestByHref(element, href), suggestByHrefStopAtDigit(element, href), suggestByHrefStopAtQueryString(element, href), suggestByHrefStopAtHash(element, href), suggestByTag(element, css_1)]))))))))));
 }
 
-var inputs = exports.inputs = "\r\n<div id=\"canopy_companion\" class=\"canopy_companion_module\">\r\n  <input type=\"button\" id=\"clear\" class=\"canopy_companion_module\" value=\"Clear\">\r\n  <input type=\"button\" id=\"close\" class=\"canopy_companion_module\" value=\"X\">\r\n</div>";
+var inputs = exports.inputs = "\r\n<div id=\"canopy_companion\" class=\"canopy_companion_module\">\r\n  <label><input type=\"checkbox\" id=\"css\" class=\"canopy_companion_module\" checked>css</label>\r\n  <label><input type=\"checkbox\" id=\"canopy\" class=\"canopy_companion_module\" checked>canopy</label>\r\n  <label><input type=\"checkbox\" id=\"xpath\" class=\"canopy_companion_module\" checked>xpath</label>\r\n  <label><input type=\"checkbox\" id=\"href\" class=\"canopy_companion_module\" checked>href</label>\r\n  <input type=\"button\" id=\"clear\" class=\"canopy_companion_module\" value=\"Clear\">\r\n  <input type=\"button\" id=\"close\" class=\"canopy_companion_module\" value=\"X\">\r\n</div>";
 var top = exports.top = jq("<div>").addClass("canopy_companion_border canopy_companion_module").addClass("canopy_companion_border_top");
 var bottom = exports.bottom = jq("<div>").addClass("canopy_companion_border canopy_companion_module").addClass("canopy_companion_border_bottom");
 var left = exports.left = jq("<div>").addClass("canopy_companion_border canopy_companion_module").addClass("canopy_companion_border_left");

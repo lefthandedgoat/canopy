@@ -4,6 +4,14 @@ Much of the below code was heavily inspired by selectorgadget
 You can find the source of it here:  https://github.com/cantino/selectorgadget
 *)
 
+(* 
+TODO
+Add parent based selection strategy
+Improve UI probably using a table
+Can you remove some _module stuff by doing _module * on not selectors
+Publish to chrome store
+*)
+
 #r "node_modules/fable-core/Fable.Core.dll"
 
 open Fable.Core
@@ -51,6 +59,7 @@ let cleanString value =
   let value = if value.Contains("\r\n") then "" else value
   value
 let lower (value : string) = value.ToLower()
+let checked' selector = (find selector)?is(":checked") |> bool
 let hasDigit (value : string) = System.Text.RegularExpressions.Regex.IsMatch(value, @"\d")
 let hrefStopAtDigits (href : string) =
   let parts = href.Split('/')
@@ -88,8 +97,8 @@ let howManyXPath selector =
 
 let howManyJQuery selector = !!(find selector)?length |> int
 
-let suggestByXPathText element = 
-  if element.Text <> "" then
+let suggestByXPathText element apply = 
+  if apply && element.Text <> "" then
     let selector = sprintf "//%s[text()='%s']" element.Tag element.Text
     Some {
       Selector = selector
@@ -100,8 +109,8 @@ let suggestByXPathText element =
     }
   else None
 
-let suggestByCanopyText element = 
-  if element.Text <> "" then
+let suggestByCanopyText element apply = 
+  if apply && element.Text <> "" then
     let selector = sprintf "//*[text()='%s']" element.Text
     Some {
       Selector = element.Text
@@ -112,8 +121,8 @@ let suggestByCanopyText element =
     }
   else None
 
-let suggestByName element =
-  if element.Name <> "" then
+let suggestByName element apply =
+  if apply && element.Name <> "" then
     let selector = sprintf "[name='%s']" element.Name
     Some {
       Selector = selector
@@ -124,8 +133,8 @@ let suggestByName element =
     }
   else None
 
-let suggestByPlaceholder element =
-  if element.Placeholder <> "" then
+let suggestByPlaceholder element apply =
+  if apply && element.Placeholder <> "" then
     let selector = sprintf "[placeholder='%s']" element.Placeholder
     Some {
       Selector = selector
@@ -136,8 +145,8 @@ let suggestByPlaceholder element =
     }
   else None
 
-let suggestById element = 
-  if element.Id <> "" then
+let suggestById element apply = 
+  if apply && element.Id <> "" then
     let selector = sprintf "#%s" element.Id
     Some {
       Selector = selector
@@ -148,8 +157,8 @@ let suggestById element =
     }
   else None
 
-let suggestByValue element = 
-  if element.Value <> "" then
+let suggestByValue element apply = 
+  if apply && element.Value <> "" then
     let selector = sprintf "[value='%s']" element.Value
     Some {
       Selector = selector
@@ -160,8 +169,8 @@ let suggestByValue element =
     }
   else None
 
-let suggestByCanopyValue element = 
-  if element.Value <> "" then
+let suggestByCanopyValue element apply = 
+  if apply && element.Value <> "" then
     let selector = sprintf "//*[@value='%s']" element.Value
     Some {
       Selector = element.Value
@@ -172,8 +181,8 @@ let suggestByCanopyValue element =
     }
   else None
 
-let suggestByClass element = 
-  if element.Class <> "" then
+let suggestByClass element apply = 
+  if apply && element.Class <> "" then
     let classes = sprintf ".%s" (System.String.Join(".", element.Class.Split(' ')))
     let selector = classes
     Some {
@@ -185,8 +194,8 @@ let suggestByClass element =
     }
   else None
 
-let suggestBySingleClass element = 
-  if element.Class <> "" then
+let suggestBySingleClass element apply = 
+  if apply && element.Class <> "" then
       element.Class.Split(' ') 
       |> Array.map (fun class' -> sprintf ".%s" class')
       |> Array.map (fun class' ->
@@ -200,8 +209,8 @@ let suggestBySingleClass element =
       |> List.ofArray
   else [None]
 
-let suggestByHref element = 
-  if element.Href <> "" then    
+let suggestByHref element apply = 
+  if apply && element.Href <> "" then    
     let selector = sprintf "[href='%s']" element.Href
     Some {
       Selector = selector
@@ -212,9 +221,9 @@ let suggestByHref element =
     }
   else None
 
-let suggestByHrefStopAtDigit element = 
+let suggestByHrefStopAtDigit element apply = 
   let href = hrefStopAtDigits element.Href
-  if element.Href <> "" && href <> element.Href then
+  if apply && element.Href <> "" && href <> element.Href then
     let selector = sprintf "[href^='%s']" href
     Some {
       Selector = selector
@@ -225,9 +234,9 @@ let suggestByHrefStopAtDigit element =
     }
   else None
 
-let suggestByHrefStopAtQueryString element = 
+let suggestByHrefStopAtQueryString element apply = 
   let href = hrefStopAtQueryString element.Href
-  if element.Href <> "" && href <> element.Href then    
+  if apply && element.Href <> "" && href <> element.Href then    
     let selector = sprintf "[href^='%s']" href
     Some {
       Selector = selector
@@ -238,9 +247,9 @@ let suggestByHrefStopAtQueryString element =
     }
   else None
 
-let suggestByHrefStopAtHash element = 
+let suggestByHrefStopAtHash element apply = 
   let href = hrefStopAtHash element.Href
-  if element.Href <> "" && href <> element.Href then    
+  if apply && element.Href <> "" && href <> element.Href then    
     let selector = sprintf "[href^='%s']" href
     Some {
       Selector = selector
@@ -251,8 +260,8 @@ let suggestByHrefStopAtHash element =
     }
   else None
 
-let suggestByTag element = 
-  if element.Tag <> "" then    
+let suggestByTag element apply = 
+  if apply && element.Tag <> "" then    
     let selector = sprintf "%s" element.Tag
     Some {
       Selector = selector
@@ -264,23 +273,27 @@ let suggestByTag element =
   else None
 
 let suggest element =
+  let css = checked' "#css"
+  let canopy = checked' "#canopy"
+  let xpath = checked' "#xpath"
+  let href = checked' "#href"
   [
-    suggestById element
-    suggestByName element
-    suggestByPlaceholder element
-    suggestByCanopyText element
-    suggestByXPathText element
-    suggestByValue element
-    suggestByCanopyValue element
-    suggestByClass element
-    suggestByHref element    
-    suggestByHrefStopAtDigit element
-    suggestByHrefStopAtQueryString element
-    suggestByHrefStopAtHash element
-    suggestByTag element
+    suggestById element css
+    suggestByName element css
+    suggestByPlaceholder element css
+    suggestByCanopyText element canopy
+    suggestByXPathText element xpath
+    suggestByValue element css
+    suggestByCanopyValue element canopy
+    suggestByClass element css
+    suggestByHref element href
+    suggestByHrefStopAtDigit element href
+    suggestByHrefStopAtQueryString element href
+    suggestByHrefStopAtHash element href
+    suggestByTag element css
     //Add parent based stuff    
   ]
-  |> List.append (suggestBySingleClass element)
+  |> List.append (suggestBySingleClass element css)
   |> List.choose id
   |> List.filter (fun result -> result.Count > 0)
   |> List.distinctBy (fun result -> result.Selector)
@@ -291,6 +304,10 @@ let suggest element =
 //Main Controls
 let inputs = """
 <div id="canopy_companion" class="canopy_companion_module">
+  <label><input type="checkbox" id="css" class="canopy_companion_module" checked>css</label>
+  <label><input type="checkbox" id="canopy" class="canopy_companion_module" checked>canopy</label>
+  <label><input type="checkbox" id="xpath" class="canopy_companion_module" checked>xpath</label>
+  <label><input type="checkbox" id="href" class="canopy_companion_module" checked>href</label>
   <input type="button" id="clear" class="canopy_companion_module" value="Clear">
   <input type="button" id="close" class="canopy_companion_module" value="X">
 </div>"""
