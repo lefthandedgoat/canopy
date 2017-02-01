@@ -7,9 +7,8 @@ You can find the source of it here:  https://github.com/cantino/selectorgadget
 (* 
 TODO
 Add parent based selection strategy
-Improve UI probably using a table
-Can you remove some _module stuff by doing _module * on not selectors
 Publish to chrome store
+Fix problem with apostrophe in link text
 *)
 
 #r "node_modules/fable-core/Fable.Core.dll"
@@ -35,6 +34,7 @@ let set selector value = (find selector)?``val``(value) |> ignore
 let tag element = (element?prop("tagName") |> string).ToUpper()
 let remove selector = (find selector)?remove() |> ignore
 let hide selector = (find selector)?hide() |> ignore
+let show selector = (find selector)?show() |> ignore
 let exists selector = 
   let value = (find selector)?("length") |> sprintf "%O" |> int
   value > 0
@@ -304,12 +304,33 @@ let suggest element =
 //Main Controls
 let inputs = """
 <div id="canopy_companion" class="canopy_companion_module">
-  <label><input type="checkbox" id="css" class="canopy_companion_module" checked>css</label>
-  <label><input type="checkbox" id="canopy" class="canopy_companion_module" checked>canopy</label>
-  <label><input type="checkbox" id="xpath" class="canopy_companion_module" checked>xpath</label>
-  <label><input type="checkbox" id="href" class="canopy_companion_module" checked>href</label>
-  <input type="button" id="clear" class="canopy_companion_module" value="Clear">
-  <input type="button" id="close" class="canopy_companion_module" value="X">
+  <table id="results" class="canopy_companion_module" style="display:none">
+    <thead class="canopy_companion_module">
+      <tr class="canopy_companion_module">
+        <th class="row_selector canopy_companion_module">select</th>
+        <th class="row_count canopy_companion_module">count</th>
+        <th class="row_type canopy_companion_module">type</th>
+        <th class="row_copy canopy_companion_module"></th>
+        <th class="row_apply canopy_companion_module"></th>
+      </tr>
+    </thead>
+	  <tbody class="canopy_companion_module">
+	  </tbody>
+  </table>
+  <table class="canopy_companion_module">    
+	  <tbody class="canopy_companion_module">		  
+    <tr>      
+      <td class="canopy_companion_module"><label class="canopy_companion_module"><input type="checkbox" id="css" class="canopy_companion_module" checked>css</label></td>
+      <td class="canopy_companion_module"><label class="canopy_companion_module"><input type="checkbox" id="canopy" class="canopy_companion_module" checked>canopy</label></td>
+      <td class="canopy_companion_module"><label class="canopy_companion_module"><input type="checkbox" id="xpath" class="canopy_companion_module" checked>xpath</label></td>
+      <td class="canopy_companion_module"><label class="canopy_companion_module"><input type="checkbox" id="href" class="canopy_companion_module" checked>href</label></td>
+      <td class="canopy_companion_module right">
+        <input type="button" id="clear" class="canopy_companion_module" value="Clear">
+        <input type="button" id="close"class="canopy_companion_module" value="X">
+      </td>
+    </tr>
+	  </tbody>
+  </table>  
 </div>"""
 
 //The borders used around elements
@@ -377,18 +398,16 @@ let createBorders elements =
 //Result template
 let result result' index =   
   (jq $ sprintf 
-      """<div>
-          selector: <span id="selector_%i" class="canopy_companion_module">"%s"</span> 
-          count: %i 
-          type: %A 
-          <input class="canopy_companion_module" type="button" id="selector_copy_%i" value="Copy"> 
-          <input class="canopy_companion_module" type="button" id="selector_apply_%i" value="Apply" data-selector="%s" data-type="%s">
-        </div>""" index result'.Selector result'.Count (typeToString result'.Type) index index result'.ApplySelector (typeToString result'.Type))
+      """<tr>
+          <td class="canopy_companion_module" id="selector_%i" class="canopy_companion_module">"%s"</td> 
+          <td class="canopy_companion_module">%i</td>
+          <td class="canopy_companion_module">%s</td>
+          <td class="canopy_companion_module"><input class="canopy_companion_module" type="button" id="selector_copy_%i" value="Copy"></td>
+          <td class="canopy_companion_module"><input class="canopy_companion_module" type="button" id="selector_apply_%i" value="Apply" data-selector="%s" data-type="%s"></td>
+        </tr>""" index result'.Selector result'.Count (typeToString result'.Type) index index result'.ApplySelector (typeToString result'.Type))
     ?addClass("canopy_companion_module")
-    ?addClass("canopy_companion_result")
-    ?css("bottom", px (40 + 33 * index))
-  |> append "body"
-
+  |> append "#canopy_companion #results tbody"
+  
   //Wire up the copy button
   (find (sprintf "#selector_copy_%i" index))
     ?on("click.canopy_selector_copy", (fun _ ->
@@ -463,13 +482,14 @@ let mouseDown event =
         Href =        cleanString <| !!element?attr("href")
       }
 
-    remove ".canopy_companion_result"
+    remove "#canopy_companion #results tbody tr"
     off "*" "click.selector_copy"
     off "*" "click.selector_apply"
 
     suggest element
-    |> List.rev
     |> List.iteri (fun index (_, result') -> result result' index)
+
+    show "#canopy_companion #results"
 
 //Startup code
 //Add the main search box if not there, and wire it up
@@ -488,7 +508,7 @@ if not (exists "#canopy_companion") then
     off "*" "click.canopy_selector_apply"
     off "*" "click.canopy_selector_copy"
     remove ".canopy_companion_border_green"
-    remove ".canopy_companion_result"
+    hide   "#canopy_companion #results"
     hide   ".canopy_companion_border")
 
   click "#canopy_companion #close" (fun _ -> 
@@ -497,7 +517,6 @@ if not (exists "#canopy_companion") then
     off "*" "click.canopy_selector_apply"
     off "*" "click.canopy_selector_copy"
     remove ".canopy_companion_border"
-    remove ".canopy_companion_result"
     remove "#canopy_companion")
 
 //(*

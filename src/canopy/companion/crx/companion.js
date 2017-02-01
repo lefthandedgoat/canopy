@@ -18,6 +18,7 @@ exports.set = set;
 exports.tag = tag;
 exports.remove = remove;
 exports.hide = hide;
+exports.show = show;
 exports.exists = exists;
 exports.off = off;
 exports.on = on;
@@ -282,6 +283,10 @@ function remove(selector) {
 
 function hide(selector) {
   find(selector).hide();
+}
+
+function show(selector) {
+  find(selector).show();
 }
 
 function exists(selector) {
@@ -720,7 +725,7 @@ function suggest(element) {
   }, (0, _List.append)(suggestBySingleClass(element, css_1), (0, _List.ofArray)([suggestById(element, css_1), suggestByName(element, css_1), suggestByPlaceholder(element, css_1), suggestByCanopyText(element, canopy), suggestByXPathText(element, xpath), suggestByValue(element, css_1), suggestByCanopyValue(element, canopy), suggestByClass(element, css_1), suggestByHref(element, href), suggestByHrefStopAtDigit(element, href), suggestByHrefStopAtQueryString(element, href), suggestByHrefStopAtHash(element, href), suggestByTag(element, css_1)]))))))))));
 }
 
-var inputs = exports.inputs = "\r\n<div id=\"canopy_companion\" class=\"canopy_companion_module\">\r\n  <label><input type=\"checkbox\" id=\"css\" class=\"canopy_companion_module\" checked>css</label>\r\n  <label><input type=\"checkbox\" id=\"canopy\" class=\"canopy_companion_module\" checked>canopy</label>\r\n  <label><input type=\"checkbox\" id=\"xpath\" class=\"canopy_companion_module\" checked>xpath</label>\r\n  <label><input type=\"checkbox\" id=\"href\" class=\"canopy_companion_module\" checked>href</label>\r\n  <input type=\"button\" id=\"clear\" class=\"canopy_companion_module\" value=\"Clear\">\r\n  <input type=\"button\" id=\"close\" class=\"canopy_companion_module\" value=\"X\">\r\n</div>";
+var inputs = exports.inputs = "\r\n<div id=\"canopy_companion\" class=\"canopy_companion_module\">\r\n  <table id=\"results\" class=\"canopy_companion_module\" style=\"display:none\">\r\n    <thead class=\"canopy_companion_module\">\r\n      <tr class=\"canopy_companion_module\">\r\n        <th class=\"row_selector canopy_companion_module\">select</th>\r\n        <th class=\"row_count canopy_companion_module\">count</th>\r\n        <th class=\"row_type canopy_companion_module\">type</th>\r\n        <th class=\"row_copy canopy_companion_module\"></th>\r\n        <th class=\"row_apply canopy_companion_module\"></th>\r\n      </tr>\r\n    </thead>\r\n\t  <tbody class=\"canopy_companion_module\">\r\n\t  </tbody>\r\n  </table>\r\n  <table class=\"canopy_companion_module\">    \r\n\t  <tbody class=\"canopy_companion_module\">\t\t  \r\n    <tr>      \r\n      <td class=\"canopy_companion_module\"><label class=\"canopy_companion_module\"><input type=\"checkbox\" id=\"css\" class=\"canopy_companion_module\" checked>css</label></td>\r\n      <td class=\"canopy_companion_module\"><label class=\"canopy_companion_module\"><input type=\"checkbox\" id=\"canopy\" class=\"canopy_companion_module\" checked>canopy</label></td>\r\n      <td class=\"canopy_companion_module\"><label class=\"canopy_companion_module\"><input type=\"checkbox\" id=\"xpath\" class=\"canopy_companion_module\" checked>xpath</label></td>\r\n      <td class=\"canopy_companion_module\"><label class=\"canopy_companion_module\"><input type=\"checkbox\" id=\"href\" class=\"canopy_companion_module\" checked>href</label></td>\r\n      <td class=\"canopy_companion_module right\">\r\n        <input type=\"button\" id=\"clear\" class=\"canopy_companion_module\" value=\"Clear\">\r\n        <input type=\"button\" id=\"close\"class=\"canopy_companion_module\" value=\"X\">\r\n      </td>\r\n    </tr>\r\n\t  </tbody>\r\n  </table>  \r\n</div>";
 var top = exports.top = jq("<div>").addClass("canopy_companion_border canopy_companion_module").addClass("canopy_companion_border_top");
 var bottom = exports.bottom = jq("<div>").addClass("canopy_companion_border canopy_companion_module").addClass("canopy_companion_border_bottom");
 var left = exports.left = jq("<div>").addClass("canopy_companion_border canopy_companion_module").addClass("canopy_companion_border_left");
@@ -769,9 +774,9 @@ function createBorders(elements) {
 }
 
 function result(result_, index) {
-  append("body", jq((0, _String.fsFormat)("<div>\r\n          selector: <span id=\"selector_%i\" class=\"canopy_companion_module\">\"%s\"</span> \r\n          count: %i \r\n          type: %A \r\n          <input class=\"canopy_companion_module\" type=\"button\" id=\"selector_copy_%i\" value=\"Copy\"> \r\n          <input class=\"canopy_companion_module\" type=\"button\" id=\"selector_apply_%i\" value=\"Apply\" data-selector=\"%s\" data-type=\"%s\">\r\n        </div>")(function (x) {
+  append("#canopy_companion #results tbody", jq((0, _String.fsFormat)("<tr>\r\n          <td class=\"canopy_companion_module\" id=\"selector_%i\" class=\"canopy_companion_module\">\"%s\"</td> \r\n          <td class=\"canopy_companion_module\">%i</td>\r\n          <td class=\"canopy_companion_module\">%s</td>\r\n          <td class=\"canopy_companion_module\"><input class=\"canopy_companion_module\" type=\"button\" id=\"selector_copy_%i\" value=\"Copy\"></td>\r\n          <td class=\"canopy_companion_module\"><input class=\"canopy_companion_module\" type=\"button\" id=\"selector_apply_%i\" value=\"Apply\" data-selector=\"%s\" data-type=\"%s\"></td>\r\n        </tr>")(function (x) {
     return x;
-  })(index)(result_.Selector)(result_.Count)(typeToString(result_.Type))(index)(index)(result_.ApplySelector)(typeToString(result_.Type))).addClass("canopy_companion_module").addClass("canopy_companion_result").css("bottom", px(40 + 33 * index)));
+  })(index)(result_.Selector)(result_.Count)(typeToString(result_.Type))(index)(index)(result_.ApplySelector)(typeToString(result_.Type))).addClass("canopy_companion_module"));
   find((0, _String.fsFormat)("#selector_copy_%i")(function (x) {
     return x;
   })(index)).on("click.canopy_selector_copy", function (_arg1) {
@@ -862,12 +867,13 @@ function mouseDown(event) {
     event.stopImmediatePropagation();
     blockClick(element);
     var element_1 = new _Element(cleanString(lower(_self.tagName)), cleanString(_self.className), cleanString(_self.id), cleanString(_self.textContext == null ? _self.innerText : _self.textContext), cleanString(_self.value), cleanString(_self.name), cleanString(_self.placeholder), cleanString(element.attr("href")));
-    remove(".canopy_companion_result");
+    remove("#canopy_companion #results tbody tr");
     off("*", "click.selector_copy");
     off("*", "click.selector_apply");
     (0, _Seq.iterateIndexed)(function (index, tupledArg) {
       result(tupledArg[1], index);
-    }, (0, _List.reverse)(suggest(element_1)));
+    }, suggest(element_1));
+    show("#canopy_companion #results");
   }
 }
 
@@ -887,7 +893,7 @@ if (!exists("#canopy_companion")) {
     off("*", "click.canopy_selector_apply");
     off("*", "click.canopy_selector_copy");
     remove(".canopy_companion_border_green");
-    remove(".canopy_companion_result");
+    hide("#canopy_companion #results");
     hide(".canopy_companion_border");
   });
   click("#canopy_companion #close", function (_arg2) {
@@ -896,7 +902,6 @@ if (!exists("#canopy_companion")) {
     off("*", "click.canopy_selector_apply");
     off("*", "click.canopy_selector_copy");
     remove(".canopy_companion_border");
-    remove(".canopy_companion_result");
     remove("#canopy_companion");
   });
 }

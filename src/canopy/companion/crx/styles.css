@@ -1,7 +1,7 @@
 
 /* starting point comes from selector gadget found at https://github.com/cantino/selectorgadget */
 
-div#canopy_companion, .canopy_companion_result {
+div#canopy_companion {
   azimuth: center !important;
   background-attachment: scroll !important;
   background-image: none !important;
@@ -91,3 +91,61 @@ div#canopy_companion {
 .canopy_companion_border_green {
   background-color: #0F0 !important; 
 }
+
+#canopy_companion th {
+    text-align: left;
+}
+#canopy_companion .row_selector {
+    width: 59%;
+}
+
+#canopy_companion .row_count {
+    width: 10%;
+}
+
+#canopy_companion .row_type {
+    width: 15%;
+}
+
+#canopy_companion .row_copy {
+    width: 8%;
+}
+
+#canopy_companion .row_apply {
+    width: 8%;
+}
+
+#canopy_companion table {
+    color: #333;
+    font-family: Helvetica, Arial, sans-serif;
+    width: 640px;
+    border-collapse:
+    collapse; border-spacing: 0;
+}
+
+#canopy_companion td, th {
+    font-family: Verdana, Geneva, sans-serif;
+    font-size: 10pt;
+    border: 1px solid transparent;
+    height: 30px;
+    transition: all 0.3s;
+}
+
+#canopy_companion th {
+    background: #DFDFDF;
+    font-weight: bold;
+}
+
+#canopy_companion td {
+    color: #828282;
+    background: #FAFAFA;
+    text-align: left;
+}
+
+#canopy_companion .right {
+    text-align: right;
+}
+
+#canopy_companion tr:nth-child(even) td { background: #F1F1F1; }
+
+#canopy_companion tr:nth-child(odd) td { background: #FEFEFE; }
