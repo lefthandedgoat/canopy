@@ -92,8 +92,10 @@ let applyXPath selector =
   
 //Suggestion stuff
 let howManyXPath selector = 
-  let result = document.evaluate(selector, document, null, 0.0, null)
-  [ while result.iterateNext() <> null do yield 1 ] |> List.length
+  try
+    let result = document.evaluate(selector, document, null, 0.0, null)
+    [ while result.iterateNext() <> null do yield 1 ] |> List.length
+  with _ -> 0
 
 let howManyJQuery selector = !!(find selector)?length |> int
 
@@ -183,7 +185,8 @@ let suggestByCanopyValue element apply =
 
 let suggestByClass element apply = 
   if apply && element.Class <> "" then
-    let classes = sprintf ".%s" (System.String.Join(".", element.Class.Split(' ')))
+    let classes = element.Class.Split(' ') |> Array.filter (fun class' -> class' <> "")
+    let classes = sprintf ".%s" (System.String.Join(".", classes))
     let selector = classes
     Some {
       Selector = selector
@@ -197,6 +200,7 @@ let suggestByClass element apply =
 let suggestBySingleClass element apply = 
   if apply && element.Class <> "" then
       element.Class.Split(' ') 
+      |> Array.filter (fun class' -> class' <> "")
       |> Array.map (fun class' -> sprintf ".%s" class')
       |> Array.map (fun class' ->
         Some {

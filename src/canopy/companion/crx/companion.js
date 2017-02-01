@@ -426,14 +426,24 @@ function applyXPath(selector) {
 }
 
 function howManyXPath(selector) {
-  var result = document.evaluate(selector, document, null, 0, null);
-  return (0, _Seq.toList)((0, _Seq.delay)(function () {
-    return (0, _Seq.enumerateWhile)(function () {
-      return result.iterateNext() != null;
-    }, (0, _Seq.delay)(function () {
-      return (0, _Seq.singleton)(1);
-    }));
-  })).length;
+  try {
+    var _ret = function () {
+      var result = document.evaluate(selector, document, null, 0, null);
+      return {
+        v: (0, _Seq.toList)((0, _Seq.delay)(function () {
+          return (0, _Seq.enumerateWhile)(function () {
+            return result.iterateNext() != null;
+          }, (0, _Seq.delay)(function () {
+            return (0, _Seq.singleton)(1);
+          }));
+        })).length
+      };
+    }();
+
+    if ((typeof _ret === "undefined" ? "undefined" : _typeof(_ret)) === "object") return _ret.v;
+  } catch (matchValue) {
+    return 0;
+  }
 }
 
 function howManyJQuery(selector) {
@@ -442,7 +452,7 @@ function howManyJQuery(selector) {
 
 function suggestByXPathText(element, apply) {
   if (apply ? element.Text !== "" : false) {
-    var _ret = function () {
+    var _ret2 = function () {
       var selector = (0, _String.fsFormat)("//%s[text()='%s']")(function (x) {
         return x;
       })(element.Tag)(element.Text);
@@ -454,13 +464,13 @@ function suggestByXPathText(element, apply) {
       };
     }();
 
-    if ((typeof _ret === "undefined" ? "undefined" : _typeof(_ret)) === "object") return _ret.v;
+    if ((typeof _ret2 === "undefined" ? "undefined" : _typeof(_ret2)) === "object") return _ret2.v;
   }
 }
 
 function suggestByCanopyText(element, apply) {
   if (apply ? element.Text !== "" : false) {
-    var _ret2 = function () {
+    var _ret3 = function () {
       var selector = (0, _String.fsFormat)("//*[text()='%s']")(function (x) {
         return x;
       })(element.Text);
@@ -472,34 +482,16 @@ function suggestByCanopyText(element, apply) {
       };
     }();
 
-    if ((typeof _ret2 === "undefined" ? "undefined" : _typeof(_ret2)) === "object") return _ret2.v;
+    if ((typeof _ret3 === "undefined" ? "undefined" : _typeof(_ret3)) === "object") return _ret3.v;
   }
 }
 
 function suggestByName(element, apply) {
   if (apply ? element.Name !== "" : false) {
-    var _ret3 = function () {
+    var _ret4 = function () {
       var selector = (0, _String.fsFormat)("[name='%s']")(function (x) {
         return x;
       })(element.Name);
-      return {
-        v: function () {
-          var Count = howManyJQuery(selector);
-          return new Result(selector, 1.2, Count, new SelectorType("Css", []), selector);
-        }()
-      };
-    }();
-
-    if ((typeof _ret3 === "undefined" ? "undefined" : _typeof(_ret3)) === "object") return _ret3.v;
-  }
-}
-
-function suggestByPlaceholder(element, apply) {
-  if (apply ? element.Placeholder !== "" : false) {
-    var _ret4 = function () {
-      var selector = (0, _String.fsFormat)("[placeholder='%s']")(function (x) {
-        return x;
-      })(element.Placeholder);
       return {
         v: function () {
           var Count = howManyJQuery(selector);
@@ -512,9 +504,27 @@ function suggestByPlaceholder(element, apply) {
   }
 }
 
+function suggestByPlaceholder(element, apply) {
+  if (apply ? element.Placeholder !== "" : false) {
+    var _ret5 = function () {
+      var selector = (0, _String.fsFormat)("[placeholder='%s']")(function (x) {
+        return x;
+      })(element.Placeholder);
+      return {
+        v: function () {
+          var Count = howManyJQuery(selector);
+          return new Result(selector, 1.2, Count, new SelectorType("Css", []), selector);
+        }()
+      };
+    }();
+
+    if ((typeof _ret5 === "undefined" ? "undefined" : _typeof(_ret5)) === "object") return _ret5.v;
+  }
+}
+
 function suggestById(element, apply) {
   if (apply ? element.Id !== "" : false) {
-    var _ret5 = function () {
+    var _ret6 = function () {
       var selector = (0, _String.fsFormat)("#%s")(function (x) {
         return x;
       })(element.Id);
@@ -526,13 +536,13 @@ function suggestById(element, apply) {
       };
     }();
 
-    if ((typeof _ret5 === "undefined" ? "undefined" : _typeof(_ret5)) === "object") return _ret5.v;
+    if ((typeof _ret6 === "undefined" ? "undefined" : _typeof(_ret6)) === "object") return _ret6.v;
   }
 }
 
 function suggestByValue(element, apply) {
   if (apply ? element.Value !== "" : false) {
-    var _ret6 = function () {
+    var _ret7 = function () {
       var selector = (0, _String.fsFormat)("[value='%s']")(function (x) {
         return x;
       })(element.Value);
@@ -544,13 +554,13 @@ function suggestByValue(element, apply) {
       };
     }();
 
-    if ((typeof _ret6 === "undefined" ? "undefined" : _typeof(_ret6)) === "object") return _ret6.v;
+    if ((typeof _ret7 === "undefined" ? "undefined" : _typeof(_ret7)) === "object") return _ret7.v;
   }
 }
 
 function suggestByCanopyValue(element, apply) {
   if (apply ? element.Value !== "" : false) {
-    var _ret7 = function () {
+    var _ret8 = function () {
       var selector = (0, _String.fsFormat)("//*[@value='%s']")(function (x) {
         return x;
       })(element.Value);
@@ -562,31 +572,36 @@ function suggestByCanopyValue(element, apply) {
       };
     }();
 
-    if ((typeof _ret7 === "undefined" ? "undefined" : _typeof(_ret7)) === "object") return _ret7.v;
+    if ((typeof _ret8 === "undefined" ? "undefined" : _typeof(_ret8)) === "object") return _ret8.v;
   }
 }
 
 function suggestByClass(element, apply) {
   if (apply ? element.Class !== "" : false) {
-    var _ret8 = function () {
-      var classes = (0, _String.fsFormat)(".%s")(function (x) {
+    var _ret9 = function () {
+      var classes = (0, _String.split)(element.Class, " ").filter(function (class_) {
+        return class_ !== "";
+      });
+      var classes_1 = (0, _String.fsFormat)(".%s")(function (x) {
         return x;
-      })(_String.join.apply(undefined, ["."].concat(_toConsumableArray((0, _String.split)(element.Class, " ")))));
+      })(_String.join.apply(undefined, ["."].concat(_toConsumableArray(classes))));
       return {
         v: function () {
-          var Count = howManyJQuery(classes);
-          return new Result(classes, 1.5, Count, new SelectorType("Css", []), classes);
+          var Count = howManyJQuery(classes_1);
+          return new Result(classes_1, 1.5, Count, new SelectorType("Css", []), classes_1);
         }()
       };
     }();
 
-    if ((typeof _ret8 === "undefined" ? "undefined" : _typeof(_ret8)) === "object") return _ret8.v;
+    if ((typeof _ret9 === "undefined" ? "undefined" : _typeof(_ret9)) === "object") return _ret9.v;
   }
 }
 
 function suggestBySingleClass(element, apply) {
   if (apply ? element.Class !== "" : false) {
-    return (0, _List.ofArray)((0, _String.split)(element.Class, " ").map(function (class_) {
+    return (0, _List.ofArray)((0, _String.split)(element.Class, " ").filter(function (class_) {
+      return class_ !== "";
+    }).map(function (class_) {
       return (0, _String.fsFormat)(".%s")(function (x) {
         return x;
       })(class_);
@@ -603,7 +618,7 @@ function suggestBySingleClass(element, apply) {
 
 function suggestByHref(element, apply) {
   if (apply ? element.Href !== "" : false) {
-    var _ret9 = function () {
+    var _ret10 = function () {
       var selector = (0, _String.fsFormat)("[href='%s']")(function (x) {
         return x;
       })(element.Href);
@@ -615,32 +630,12 @@ function suggestByHref(element, apply) {
       };
     }();
 
-    if ((typeof _ret9 === "undefined" ? "undefined" : _typeof(_ret9)) === "object") return _ret9.v;
+    if ((typeof _ret10 === "undefined" ? "undefined" : _typeof(_ret10)) === "object") return _ret10.v;
   }
 }
 
 function suggestByHrefStopAtDigit(element, apply) {
   var href = hrefStopAtDigits(element.Href);
-
-  if ((apply ? element.Href !== "" : false) ? href !== element.Href : false) {
-    var _ret10 = function () {
-      var selector = (0, _String.fsFormat)("[href^='%s']")(function (x) {
-        return x;
-      })(href);
-      return {
-        v: function () {
-          var Count = howManyJQuery(selector);
-          return new Result(selector, 1.3, Count, new SelectorType("Css", []), selector);
-        }()
-      };
-    }();
-
-    if ((typeof _ret10 === "undefined" ? "undefined" : _typeof(_ret10)) === "object") return _ret10.v;
-  }
-}
-
-function suggestByHrefStopAtQueryString(element, apply) {
-  var href = hrefStopAtQueryString(element.Href);
 
   if ((apply ? element.Href !== "" : false) ? href !== element.Href : false) {
     var _ret11 = function () {
@@ -659,8 +654,8 @@ function suggestByHrefStopAtQueryString(element, apply) {
   }
 }
 
-function suggestByHrefStopAtHash(element, apply) {
-  var href = hrefStopAtHash(element.Href);
+function suggestByHrefStopAtQueryString(element, apply) {
+  var href = hrefStopAtQueryString(element.Href);
 
   if ((apply ? element.Href !== "" : false) ? href !== element.Href : false) {
     var _ret12 = function () {
@@ -679,9 +674,29 @@ function suggestByHrefStopAtHash(element, apply) {
   }
 }
 
+function suggestByHrefStopAtHash(element, apply) {
+  var href = hrefStopAtHash(element.Href);
+
+  if ((apply ? element.Href !== "" : false) ? href !== element.Href : false) {
+    var _ret13 = function () {
+      var selector = (0, _String.fsFormat)("[href^='%s']")(function (x) {
+        return x;
+      })(href);
+      return {
+        v: function () {
+          var Count = howManyJQuery(selector);
+          return new Result(selector, 1.3, Count, new SelectorType("Css", []), selector);
+        }()
+      };
+    }();
+
+    if ((typeof _ret13 === "undefined" ? "undefined" : _typeof(_ret13)) === "object") return _ret13.v;
+  }
+}
+
 function suggestByTag(element, apply) {
   if (apply ? element.Tag !== "" : false) {
-    var _ret13 = function () {
+    var _ret14 = function () {
       var selector = (0, _String.fsFormat)("%s")(function (x) {
         return x;
       })(element.Tag);
@@ -693,7 +708,7 @@ function suggestByTag(element, apply) {
       };
     }();
 
-    if ((typeof _ret13 === "undefined" ? "undefined" : _typeof(_ret13)) === "object") return _ret13.v;
+    if ((typeof _ret14 === "undefined" ? "undefined" : _typeof(_ret14)) === "object") return _ret14.v;
   }
 }
 
