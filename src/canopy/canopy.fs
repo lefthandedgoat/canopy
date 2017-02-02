@@ -67,9 +67,10 @@ let private saveScreenshot directory filename pic =
 
 let private takeScreenShotIfAlertUp () =
     try
-        let bitmap = new Bitmap(width= System.Windows.Forms.Screen.PrimaryScreen.Bounds.Width, height= System.Windows.Forms.Screen.PrimaryScreen.Bounds.Height, format=PixelFormat.Format32bppArgb);
+        let screenBounds = canopy.screen.getPrimaryScreenBounds ()
+        let bitmap = new Bitmap(width= screenBounds.width, height= screenBounds.height, format=PixelFormat.Format32bppArgb);
         use graphics = Graphics.FromImage(bitmap)
-        graphics.CopyFromScreen(System.Windows.Forms.Screen.PrimaryScreen.Bounds.X, System.Windows.Forms.Screen.PrimaryScreen.Bounds.Y, 0, 0, System.Windows.Forms.Screen.PrimaryScreen.Bounds.Size, CopyPixelOperation.SourceCopy);
+        graphics.CopyFromScreen(screenBounds.x, screenBounds.y, 0, 0, screenBounds.size, CopyPixelOperation.SourceCopy);
         use stream = new MemoryStream()
         bitmap.Save(stream, ImageFormat.Png)
         stream.Close()
@@ -98,7 +99,7 @@ let private pngToJpg pngArray =
 
   pngStream.Write(pngArray, 0, pngArray.Length)
   let img = Image.FromStream(pngStream)
-  
+
   img.Save(jpgStream, ImageFormat.Jpeg)
   jpgStream.ToArray()
 
@@ -399,7 +400,7 @@ let private safeRead item =
           true)
         !readvalue
     with
-        | :? WebDriverTimeoutException -> raise (CanopyReadException("was unable to read item for unkown reason"))
+        | :? WebDriverTimeoutException -> raise (CanopyReadException("was unable to read item for unknown reason"))
 
 (* documented/actions *)
 let read item =
@@ -756,20 +757,19 @@ let drag cssSelectorA cssSelectorB = cssSelectorA --> cssSelectorB
 //browser related
 (* documented/actions *)
 let pin direction =
-    let h = System.Windows.Forms.Screen.PrimaryScreen.WorkingArea.Height
-    let w = System.Windows.Forms.Screen.PrimaryScreen.WorkingArea.Width
+    let (w, h) = canopy.screen.getPrimaryScreenResolution ()
     let maxWidth = w / 2
-    browser.Manage().Window.Size <- new System.Drawing.Size(maxWidth,h)
+    browser.Manage().Window.Size <- new System.Drawing.Size(maxWidth, h)
     match direction with
-    | Left -> browser.Manage().Window.Position <- new System.Drawing.Point((maxWidth * 0),0)
-    | Right -> browser.Manage().Window.Position <- new System.Drawing.Point((maxWidth * 1),0)
+    | Left -> browser.Manage().Window.Position <- new System.Drawing.Point((maxWidth * 0), 0)
+    | Right -> browser.Manage().Window.Position <- new System.Drawing.Point((maxWidth * 1), 0)
     | FullScreen -> browser.Manage().Window.Maximize()
 
 (* documented/actions *)
 let pinToMonitor n =
     let n' = if n < 1 then 1 else n
-    if System.Windows.Forms.SystemInformation.MonitorCount >= n' then
-        let workingArea = System.Windows.Forms.Screen.AllScreens.[n'-1].WorkingArea
+    if canopy.screen.monitorCount >= n' then
+        let workingArea =  canopy.screen.allScreensWorkingArea.[n'-1]
         browser.Manage().Window.Position <- new System.Drawing.Point(workingArea.X, 0)
         browser.Manage().Window.Maximize()
     else
