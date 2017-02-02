@@ -1,0 +1,9 @@
+{
+    "module": "commonjs",
+    "sourceMaps": false,
+    "projFile": "./companion.fsx",
+    "outDir": "crx",
+    "scripts": {
+        "prebuild": "npm install"
+    }
+}

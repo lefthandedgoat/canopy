@@ -1,0 +1,151 @@
+
+/* starting point comes from selector gadget found at https://github.com/cantino/selectorgadget */
+
+div#canopy_companion {
+  azimuth: center !important;
+  background-attachment: scroll !important;
+  background-image: none !important;
+  background-position: 0% 0% !important;
+  background-repeat: repeat !important;
+  border-collapse: separate !important;
+  border-spacing: 0 !important;
+  caption-side: top !important;
+  clear: none !important;
+  clip: auto !important;
+  color: black !important;
+  content: normal !important;
+  counter-increment: none !important;
+  counter-reset: none !important;
+  cursor: auto !important;
+  direction: ltr !important;
+  elevation: level !important;
+  empty-cells: show !important;
+  font-family: sans-serif !important;
+  font-variant: normal !important;
+  font-weight: normal !important;
+  height: auto !important;
+  left: auto !important;
+  letter-spacing: normal !important;
+  line-height: normal !important;
+  list-style-image: none !important;
+  list-style-position: outside !important;
+  list-style-type: disc !important;
+  max-height: none !important;
+  max-width: none !important;
+  min-height: 0 !important;
+  min-width: 0 !important;
+  orphans: 2 !important;
+  outline-color: invert !important;
+  outline-style: none !important;
+  outline-width: medium !important;
+  overflow: visible !important;
+  page-break-after: auto !important;
+  page-break-before: auto !important;
+  page-break-inside: auto !important;
+  table-layout: auto !important;
+  text-align: left !important;
+  text-decoration: none !important;
+  text-indent: 0 !important;
+  text-transform: none !important;
+  top: auto !important;
+  unicode-bidi: normal !important;
+  vertical-align: baseline !important;
+  visibility: visible !important;
+  white-space: normal !important;
+  widows: 2 !important;
+  width: auto !important;
+  word-spacing: normal !important;
+  position: fixed !important;
+  z-index: 9999999 !important;
+  display: block !important;
+  right: 5px !important;
+  /*margin: 5px !important;*/
+  padding: 5px !important;
+  font-size: 14px !important;
+  float: none !important;
+  border: 1px solid black !important;
+  font-style: none !important;
+  background: white !important;
+  text-align: left !important; }
+
+div#canopy_companion {
+    bottom: 5px !important;
+}
+
+.canopy_companion_border {
+  position: absolute !important;
+  z-index: 999999 !important;
+  background: white !important;
+  background-color: orange !important;
+  margin: 0px !important;
+  padding: 0px !important;
+  display: block !important;
+  float: none !important;
+  border: 0 !important;
+  font-style: none !important;
+  outline: 0 !important;
+  vertical-align: baseline !important;
+  text-align: left !important; 
+}
+
+.canopy_companion_border_green {
+  background-color: #0F0 !important; 
+}
+
+#canopy_companion th {
+    text-align: left;
+}
+#canopy_companion .row_selector {
+    width: 59%;
+}
+
+#canopy_companion .row_count {
+    width: 10%;
+}
+
+#canopy_companion .row_type {
+    width: 15%;
+}
+
+#canopy_companion .row_copy {
+    width: 8%;
+}
+
+#canopy_companion .row_apply {
+    width: 8%;
+}
+
+#canopy_companion table {
+    color: #333;
+    font-family: Helvetica, Arial, sans-serif;
+    width: 640px;
+    border-collapse:
+    collapse; border-spacing: 0;
+}
+
+#canopy_companion td, th {
+    font-family: Verdana, Geneva, sans-serif;
+    font-size: 10pt;
+    border: 1px solid transparent;
+    height: 30px;
+    transition: all 0.3s;
+}
+
+#canopy_companion th {
+    background: #DFDFDF;
+    font-weight: bold;
+}
+
+#canopy_companion td {
+    color: #828282;
+    background: #FAFAFA;
+    text-align: left;
+}
+
+#canopy_companion .right {
+    text-align: right;
+}
+
+#canopy_companion tr:nth-child(even) td { background: #F1F1F1; }
+
+#canopy_companion tr:nth-child(odd) td { background: #FEFEFE; }

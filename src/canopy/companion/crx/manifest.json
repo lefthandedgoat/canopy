@@ -1,0 +1,18 @@
+﻿{
+  "manifest_version": 2,
+
+  "name": "canopy companion css selector tool",
+  "description": "This extensions helps you create quality css, jquery, and xpath selectors",
+  "version": "0.2",
+
+  "browser_action": {
+    "default_icon": "icon.png"
+  },
+  "permissions": [
+    "tabs", "http://*/*", "https://*/*"
+  ],
+  "background": {
+    "scripts": ["background.js"],
+    "persistent": false
+  }
+}
