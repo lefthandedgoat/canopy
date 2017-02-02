@@ -3,7 +3,7 @@
 
   "name": "canopy companion css selector tool",
   "description": "This extensions helps you create quality css, jquery, and xpath selectors",
-  "version": "0.1",
+  "version": "0.2",
 
   "browser_action": {
     "default_icon": "icon.png"

@@ -8,7 +8,9 @@ You can find the source of it here:  https://github.com/cantino/selectorgadget
 TODO
 Add parent based selection strategy
 Publish to chrome store
-Fix problem with apostrophe in link text
+fix results on click
+log errors to console
+rename apply to preview
 *)
 
 #r "node_modules/fable-core/Fable.Core.dll"
