@@ -310,3 +310,6 @@ Improve compatability with Mono 64 bit, thanks MorganPersson [PR #333](https://g
 
 #### 1.1.2 - Jan 24 2017
 Fix bugs in C# friendly wrapper, thanks @spindev! [Issue #327](https://github.com/lefthandedgoat/canopy/pull/327)
+
+#### 1.1.3 - Feb 15 2017
+Fix bugs jUnit reporter, thanks @vermeeca! [PR #345](https://github.com/lefthandedgoat/canopy/pull/345)
