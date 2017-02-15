@@ -437,7 +437,7 @@ type JUnitReporter(resultFilePath:string) =
             let testTimeSum = testTimes |> Seq.sumBy snd
             let allTestsXml = String.Join(String.Empty, Seq.concat [passedTestsXml; failedTestsXml])
             let xml =
-                sprintf "<testsuite tests=\"%i\" time=\"%.3f\">%s</testsuite>" testCount testTimeSum allTestsXml
+                sprintf "<testsuite name=\"canopy\" tests=\"%i\" time=\"%.3f\">%s</testsuite>" testCount testTimeSum allTestsXml
             let resultFile = System.IO.FileInfo(resultFilePath)
             resultFile.Directory.Create()
             consoleReporter.write <| sprintf "Saving results to %s" resultFilePath
