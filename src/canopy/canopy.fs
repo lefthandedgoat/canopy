@@ -941,7 +941,10 @@ let on (u: string) =
         | ex -> if browser.Url.Contains(u) = false then raise (CanopyOnException(sprintf "on check failed, expected expression '%s' got %s" u browser.Url))
 
 (* documented/actions *)
-let ( !^ ) (u : string) = browser.Navigate().GoToUrl(u)
+let ( !^ ) (u : string) =
+    if browser == null then
+        raise (CanopyOnException "Can't navigate to the given url since the browser is not initialized.")
+    browser.Navigate().GoToUrl(u)
 
 (* documented/actions *)
 let url u = !^ u
