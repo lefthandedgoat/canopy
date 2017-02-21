@@ -942,7 +942,7 @@ let on (u: string) =
 
 (* documented/actions *)
 let ( !^ ) (u : string) =
-    if browser == null then
+    if browser = null then
         raise (CanopyOnException "Can't navigate to the given url since the browser is not initialized.")
     browser.Navigate().GoToUrl(u)
 
