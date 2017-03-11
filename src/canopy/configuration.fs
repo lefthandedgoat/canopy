@@ -36,6 +36,8 @@ let mutable phantomJSDir = folderByOSType
 let mutable safariDir = folderByOSType
 (* documented/configuration *)
 let mutable edgeDir = @"C:\Program Files (x86)\Microsoft Web Driver\"
+(* documented/configuration *)
+let mutable hideCommandPromptWindow = false
 
 (* documented/configuration *)
 let mutable elementTimeout = 10.0

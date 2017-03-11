@@ -72,6 +72,14 @@ edgeDir
 edgeDir <- "C:\\"
 
 (**
+hideCommandPromptWindow
+-----------
+* Hide drivers command prompt window
+* Defaults to false
+*)
+hideCommandPromptWindow <- true
+
+(**
 elementTimeout
 -------------------
 * Amount of time for the test runner to search for an element.
