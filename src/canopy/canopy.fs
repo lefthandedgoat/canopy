@@ -775,7 +775,7 @@ let pinToMonitor n =
     else
         raise(CanopyException(sprintf "Monitor %d is not detected" n))
 
-let private firefoxDriverService =
+let private firefoxDriverService _ =
     let service = Firefox.FirefoxDriverService.CreateDefaultService()
     service.HideCommandPromptWindow <- hideCommandPromptWindow
     service
@@ -785,36 +785,35 @@ let private firefoxWithUserAgent (userAgent : string) =
     profile.SetPreference("general.useragent.override", userAgent)
     let options = Firefox.FirefoxOptions();
     options.Profile <- profile
-    new FirefoxDriver(firefoxDriverService, options, TimeSpan.FromSeconds(elementTimeout)) :> IWebDriver
+    new FirefoxDriver(firefoxDriverService (), options, TimeSpan.FromSeconds(elementTimeout)) :> IWebDriver
 
-let private chromeDriverService = 
-    let service = Chrome.ChromeDriverService.CreateDefaultService();
+let private chromeDriverService _ = 
+    let service = Chrome.ChromeDriverService.CreateDefaultService(chromeDir);
     service.HideCommandPromptWindow <- hideCommandPromptWindow;
     service
 
 let private chromeWithUserAgent userAgent =
     let options = Chrome.ChromeOptions()
-    options.BinaryLocation <- chromeDir
     options.AddArgument("--user-agent=" + userAgent)
-    new Chrome.ChromeDriver(chromeDriverService, options) :> IWebDriver
+    new Chrome.ChromeDriver(chromeDriverService (), options) :> IWebDriver
 
-let private phantomJsDriverService = 
+let private phantomJsDriverService _ = 
     let service = PhantomJS.PhantomJSDriverService.CreateDefaultService(phantomJSDir)
     service.HideCommandPromptWindow <- hideCommandPromptWindow
     service
 
-let private ieDriverService = 
+let private ieDriverService _ = 
     let service = IE.InternetExplorerDriverService.CreateDefaultService(ieDir)
     service.HideCommandPromptWindow <- hideCommandPromptWindow
     service
 
-let private edgeDriverService = 
+let private edgeDriverService _ = 
     let service = Edge.EdgeDriverService.CreateDefaultService(edgeDir)
     service.HideCommandPromptWindow <- hideCommandPromptWindow
     service
 
-let private safariDriverService = 
-    let service = Safari.SafariDriverService.CreateDefaultService()
+let private safariDriverService _ = 
+    let service = Safari.SafariDriverService.CreateDefaultService(safariDir)
     service.HideCommandPromptWindow <- hideCommandPromptWindow
     service
 
@@ -830,59 +829,54 @@ let start b =
 
     browser <-
         match b with
-        | IE -> new IE.InternetExplorerDriver(ieDriverService) :> IWebDriver
-        | IEWithOptions options -> new IE.InternetExplorerDriver(ieDriverService, options) :> IWebDriver
-        | IEWithOptionsAndTimeSpan(options, timeSpan) -> new IE.InternetExplorerDriver(ieDriverService, options, timeSpan) :> IWebDriver
-        | EdgeBETA -> new Edge.EdgeDriver(edgeDriverService) :> IWebDriver
+        | IE -> new IE.InternetExplorerDriver(ieDriverService ()) :> IWebDriver
+        | IEWithOptions options -> new IE.InternetExplorerDriver(ieDriverService (), options) :> IWebDriver
+        | IEWithOptionsAndTimeSpan(options, timeSpan) -> new IE.InternetExplorerDriver(ieDriverService (), options, timeSpan) :> IWebDriver
+        | EdgeBETA -> new Edge.EdgeDriver(edgeDriverService ()) :> IWebDriver
         | Chrome ->
             let options = Chrome.ChromeOptions()
-            options.BinaryLocation <- chromeDir
             options.AddArguments("--disable-extensions")
             options.AddArgument("test-type") //https://code.google.com/p/chromedriver/issues/detail?id=799
-            new Chrome.ChromeDriver(chromeDriverService, options) :> IWebDriver
-        | ChromeWithOptions options -> 
-            options.BinaryLocation <- chromeDir
-            new Chrome.ChromeDriver(chromeDriverService, options) :> IWebDriver
+            new Chrome.ChromeDriver(chromeDriverService (), options) :> IWebDriver
+        | ChromeWithOptions options ->
+            new Chrome.ChromeDriver(chromeDriverService (), options) :> IWebDriver
         | ChromeWithUserAgent userAgent -> 
             chromeWithUserAgent userAgent
         | ChromeWithOptionsAndTimeSpan(options, timeSpan) -> 
-            options.BinaryLocation <- chromeDir
-            new Chrome.ChromeDriver(chromeDriverService, options, timeSpan) :> IWebDriver
+            new Chrome.ChromeDriver(chromeDriverService (), options, timeSpan) :> IWebDriver
         | Chromium ->
             let options = Chrome.ChromeOptions()
             options.AddArguments("--disable-extensions")
-            options.AddArgument("test-type") //https://code.google.com/p/chromedriver/issues/detail?id=799
-            options.BinaryLocation <- chromiumDir
-            new Chrome.ChromeDriver(chromeDriverService, options) :> IWebDriver
-        | ChromiumWithOptions options -> 
-            options.BinaryLocation <- chromiumDir
-            new Chrome.ChromeDriver(chromeDriverService, options) :> IWebDriver
-        | Firefox ->new FirefoxDriver(firefoxDriverService) :> IWebDriver
+            options.AddArgument("test-type") //https://code.google.com/p/chromedriver/issues/detail?id=799            
+            new Chrome.ChromeDriver(chromeDriverService (), options) :> IWebDriver
+        | ChromiumWithOptions options ->
+            new Chrome.ChromeDriver(chromeDriverService (), options) :> IWebDriver
+        | Firefox ->new FirefoxDriver(firefoxDriverService ()) :> IWebDriver
         | FirefoxWithProfile profile -> 
             let options = new Firefox.FirefoxOptions();
             options.Profile <- profile
-            new FirefoxDriver(firefoxDriverService, options, TimeSpan.FromSeconds(elementTimeout)) :> IWebDriver
+            new FirefoxDriver(firefoxDriverService (), options, TimeSpan.FromSeconds(elementTimeout)) :> IWebDriver
         | FirefoxWithPath path -> 
           let options = new Firefox.FirefoxOptions()
           options.BrowserExecutableLocation <- path
-          new FirefoxDriver(firefoxDriverService, options, TimeSpan.FromSeconds(elementTimeout)) :> IWebDriver
+          new FirefoxDriver(firefoxDriverService (), options, TimeSpan.FromSeconds(elementTimeout)) :> IWebDriver
         | FirefoxWithUserAgent userAgent -> firefoxWithUserAgent userAgent
         | FirefoxWithPathAndTimeSpan(path, timespan) -> 
           let options = new Firefox.FirefoxOptions()
           options.BrowserExecutableLocation <- path
-          new FirefoxDriver(firefoxDriverService, options, timespan) :> IWebDriver
+          new FirefoxDriver(firefoxDriverService (), options, timespan) :> IWebDriver
         | FirefoxWithProfileAndTimeSpan(profile, timespan) -> 
           let options = new Firefox.FirefoxOptions()
           options.Profile <- profile
-          new FirefoxDriver(firefoxDriverService, options, timespan) :> IWebDriver
+          new FirefoxDriver(firefoxDriverService (), options, timespan) :> IWebDriver
         | Safari ->
-            new Safari.SafariDriver(safariDriverService) :> IWebDriver
+            new Safari.SafariDriver(safariDriverService ()) :> IWebDriver
         | PhantomJS ->
             autoPinBrowserRightOnLaunch <- false
-            new PhantomJS.PhantomJSDriver(phantomJsDriverService) :> IWebDriver
+            new PhantomJS.PhantomJSDriver(phantomJsDriverService ()) :> IWebDriver
         | PhantomJSProxyNone ->
             autoPinBrowserRightOnLaunch <- false
-            let service = phantomJsDriverService
+            let service = phantomJsDriverService ()
             service.ProxyType <- "none"
             new PhantomJS.PhantomJSDriver(service) :> IWebDriver
         | Remote(url, capabilities) -> new Remote.RemoteWebDriver(new Uri(url), capabilities) :> IWebDriver
