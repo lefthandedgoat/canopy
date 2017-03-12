@@ -25,7 +25,7 @@ configuration.failScreenshotFileName <-
       let stamp = DateTime.Now.ToString("MMM-d_HH-mm-ss")
       sprintf "%s_%s_%s" suiteContext cleanName stamp)
 
-failFast := true
+failFast := false
 
 file1.all()
 file2.all()
