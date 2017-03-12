@@ -147,6 +147,8 @@ let private processRunResult suite (test : Test) result =
     | FailFast -> ()
     | Failed -> ()
 
+    reporter.testEnd test.Id
+
 let private runtest (suite : suite) (test : Test) =
     if failed = false then
         reporter.testStart test.Id
@@ -168,8 +170,7 @@ let private runtest (suite : suite) (test : Test) =
                 match testResult with
                 | Failed -> testResult
                 | _ -> afterResult
-
-        reporter.testEnd test.Id
+                        
         failureMessage <- null
         result
     else
