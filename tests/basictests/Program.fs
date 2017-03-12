@@ -11,6 +11,8 @@ elementTimeout <- 3.0
 compareTimeout <- 3.0
 pageTimeout <- 3.0
 runFailedContextsFirst <- false
+configuration.skipAllTestsOnFailure <- true
+
 reporter <- new TeamCityReporter() :> IReporter
 //reporter <- new LiveHtmlReporter(Chrome, configuration.chromeDir) :> IReporter
 reporter.setEnvironment "My Machine"
@@ -82,7 +84,7 @@ test (fun _ ->
 
 "#lastName should have Doe via read cssSelector" &&& fun _ ->
     !^ testpage
-    read "#lastName" |> is "Doe"
+    read "#lastName" |> is "Doe1"
 
 "#lastName should have Doe via read IWebElements" &&& fun _ ->
     !^ testpage
