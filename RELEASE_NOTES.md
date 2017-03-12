@@ -316,3 +316,8 @@ Fix bugs jUnit reporter, thanks @vermeeca! [PR #345](https://github.com/lefthand
 
 #### 1.1.4 - Feb 20 2017
 Improve error on url with browser is null, thanks @forki [PR #348](https://github.com/lefthandedgoat/canopy/pull/348)
+
+#### 1.2.0 - Mar 11 2017
+Update to Selenium 3.3 [Issue #351](https://github.com/lefthandedgoat/canopy/issues/351)
+Fix problem with auto skipping and Team city [Issue #350](https://github.com/lefthandedgoat/canopy/issues/350)
+Allow for the HideConsoleWindow setting to be set, thanks Ma3yTa! [PR #353](https://github.com/lefthandedgoat/canopy/pull/353)
