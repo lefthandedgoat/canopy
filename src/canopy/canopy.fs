@@ -835,7 +835,8 @@ let start b =
         | EdgeBETA -> new Edge.EdgeDriver(edgeDriverService ()) :> IWebDriver
         | Chrome ->
             let options = Chrome.ChromeOptions()
-            options.AddArguments("--disable-extensions")
+            options.AddArgument("--disable-extensions")
+            options.AddArgument("disable-infobars")
             options.AddArgument("test-type") //https://code.google.com/p/chromedriver/issues/detail?id=799
             new Chrome.ChromeDriver(chromeDriverService (), options) :> IWebDriver
         | ChromeWithOptions options ->
@@ -846,7 +847,8 @@ let start b =
             new Chrome.ChromeDriver(chromeDriverService (), options, timeSpan) :> IWebDriver
         | Chromium ->
             let options = Chrome.ChromeOptions()
-            options.AddArguments("--disable-extensions")
+            options.AddArgument("--disable-extensions")
+            options.AddArgument("disable-infobars")
             options.AddArgument("test-type") //https://code.google.com/p/chromedriver/issues/detail?id=799            
             new Chrome.ChromeDriver(chromeDriverService (), options) :> IWebDriver
         | ChromiumWithOptions options ->

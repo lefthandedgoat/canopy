@@ -194,8 +194,9 @@ type LiveHtmlReporter(browser : BrowserStartMode, driverPath : string, ?pinBrows
         | EdgeBETA -> new Edge.EdgeDriver(driverPath) :> IWebDriver
         | Chrome | Chromium ->
                 let options = Chrome.ChromeOptions()
-                options.AddArgument("test-type") //https://code.google.com/p/chromedriver/issues/detail?id=799
                 options.AddArguments("--disable-extensions")
+                options.AddArgument("disable-infobars")
+                options.AddArgument("test-type") //https://code.google.com/p/chromedriver/issues/detail?id=799                
                 new Chrome.ChromeDriver(driverPath, options) :> IWebDriver
         | ChromeWithOptions options -> new Chrome.ChromeDriver(driverPath, options) :> IWebDriver
         | ChromeWithOptionsAndTimeSpan(options, timeSpan) -> new Chrome.ChromeDriver(driverPath, options, timeSpan) :> IWebDriver
