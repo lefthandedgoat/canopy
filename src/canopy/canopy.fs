@@ -152,7 +152,7 @@ let private suggestOtherSelectors cssSelector =
             var classes = [];
             var all = document.getElementsByTagName('*');
             for (var i=0, max=all.length; i < max; i++) {
-	            var ary = all[i].className.split(' ');
+	            var ary = all[i].className.toString().split(' ');
 	            for(var j in ary){
 		            if(ary[j] === ''){
 			            ary.splice(j,1);
