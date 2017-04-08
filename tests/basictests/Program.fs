@@ -773,9 +773,4 @@ createTestSuite "Add test performance" 1000
 
 run ()
 
-switchTo mainBrowser
-coverage testpage
-coverage()
-coverage "http://scrumy.com/silenter39delayed"
-
 quit()

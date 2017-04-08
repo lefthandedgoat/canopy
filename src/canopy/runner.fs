@@ -209,10 +209,10 @@ let run () =
                 | ex -> failSuite ex s
             if failed = false then
                 if s.Wips.IsEmpty = false then
-                    wipTest <- true
+                    wipMode <- true
                     let tests = s.Wips @ s.Always |> List.sortBy (fun t -> t.Number)
                     tests |> List.iter (fun w -> runtest s w |> processRunResult s w)
-                    wipTest <- false
+                    wipMode <- false
                 else if s.Manys.IsEmpty = false then
                     s.Manys |> List.rev |> List.iter (fun m -> runtest s m |> processRunResult s m)
                 else
