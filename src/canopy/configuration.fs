@@ -5,16 +5,16 @@ open System
 
 //location of drivers depending on OS
 let folderByOSType =
-    match System.Environment.OSVersion.Platform with
-    | PlatformID.MacOSX
-    | PlatformID.Unix -> @"/usr/bin/"
-    | _ -> @"c:\"
+  match System.Environment.OSVersion.Platform with
+  | PlatformID.MacOSX
+  | PlatformID.Unix -> @"/usr/bin/"
+  | _ -> @"c:\"
 
 let folderByOSTypeChromium =
-    match System.Environment.OSVersion.Platform with
-    | PlatformID.MacOSX
-    | PlatformID.Unix -> @"/usr/lib/chromium-browser"
-    | _ -> @"c:\"
+  match System.Environment.OSVersion.Platform with
+  | PlatformID.MacOSX
+  | PlatformID.Unix -> @"/usr/lib/chromium-browser"
+  | _ -> @"c:\"
 
 //runner related
 (* documented/configuration *)

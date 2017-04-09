@@ -382,8 +382,8 @@ waitFor2 "waiting for five numbers to be shown" fiveNumbersShown
 (**
 waitForElement
 --------------
-Wait until an element with a given CSS selector appears in the DOM.
-This is useful when you need to wait for data being loaded and displayed.
+Wait until an element with a given selector appears in the DOM.
+Note that most things in canopy are reliable, like displayed, click, ==, and will wait for an element to exist before performing the action on it, so use this sparingly
 *)
 url "http://somepage.com/countdown"
 waitForElement ".number"
