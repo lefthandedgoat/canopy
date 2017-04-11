@@ -551,6 +551,13 @@ let contains (value1 : string) (value2 : string) =
         raise (CanopyContainsFailedException(sprintf "contains check failed.  %s does not contain %s" value2 value1))
 
 (* documented/assertions *)
+let containsInsensitive (value1 : string) (value2 : string) =
+    let rules = StringComparison.InvariantCultureIgnoreCase
+    let contains = value2.IndexOf(value1, rules)
+    if contains < 0 then
+        raise (CanopyContainsFailedException(sprintf "contains insensitive check failed.  %s does not contain %s" value2 value1))
+
+(* documented/assertions *)
 let notContains (value1 : string) (value2 : string) =
     if (value2.Contains(value1) = true) then
         raise (CanopyNotContainsFailedException(sprintf "notContains check failed.  %s does contain %s" value2 value1))

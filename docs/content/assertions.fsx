@@ -58,6 +58,13 @@ Assert that one string contains another.
 contains "Log" (read "#logout")
 
 (**
+containsInsensitive
+--------
+Assert that one string contains (case insensitive) another.
+*)
+containsInsensitive "Log" (read "#logout")
+
+(**
 notContains
 --------
 Assert that one string does not contains another.
