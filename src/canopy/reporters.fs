@@ -79,7 +79,9 @@ type ConsoleReporter() =
             Console.WriteLine("{0} failed", failed)
             Console.ResetColor()
 
-        member this.write w = Console.WriteLine w
+        member this.write text =
+            let now = DateTime.Now.ToString()
+            Console.WriteLine (sprintf "%s: %s" now text)
 
         member this.suggestSelectors selector suggestions =
             Console.ForegroundColor <- ConsoleColor.Yellow
