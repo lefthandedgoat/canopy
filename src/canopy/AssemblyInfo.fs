@@ -5,13 +5,13 @@ open System.Reflection
 [<assembly: AssemblyTitleAttribute("canopy")>]
 [<assembly: AssemblyProductAttribute("canopy")>]
 [<assembly: AssemblyDescriptionAttribute("F# web testing framework")>]
-[<assembly: AssemblyVersionAttribute("1.2.1")>]
-[<assembly: AssemblyFileVersionAttribute("1.2.1")>]
+[<assembly: AssemblyVersionAttribute("1.2.2")>]
+[<assembly: AssemblyFileVersionAttribute("1.2.2")>]
 do ()
 
 module internal AssemblyVersionInformation =
     let [<Literal>] AssemblyTitle = "canopy"
     let [<Literal>] AssemblyProduct = "canopy"
     let [<Literal>] AssemblyDescription = "F# web testing framework"
-    let [<Literal>] AssemblyVersion = "1.2.1"
-    let [<Literal>] AssemblyFileVersion = "1.2.1"
+    let [<Literal>] AssemblyVersion = "1.2.2"
+    let [<Literal>] AssemblyFileVersion = "1.2.2"

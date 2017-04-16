@@ -325,3 +325,7 @@ Allow for the HideConsoleWindow setting to be set, thanks Ma3yTa! [PR #353](http
 #### 1.2.1 - Apr 2 2017
 Attempt to fix js error in class name suggestions [Issue #358](https://github.com/lefthandedgoat/canopy/issues/358)
 Disable the 'Chrome is being run by automated process' banner [Issue #355](https://github.com/lefthandedgoat/canopy/issues/355)
+
+#### 1.2.2 - Apr 11 2017
+Add timestamps to write messages, thanks milkeg! [PR #360](https://github.com/lefthandedgoat/canopy/pull/360)
+Add a case insensitive contains assertion, thanks milkeg! [PR #361](https://github.com/lefthandedgoat/canopy/pull/361)
