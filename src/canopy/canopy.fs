@@ -794,15 +794,15 @@ let private firefoxWithUserAgent (userAgent : string) =
     options.Profile <- profile
     new FirefoxDriver(firefoxDriverService (), options, TimeSpan.FromSeconds(elementTimeout)) :> IWebDriver
 
-let private chromeDriverService _ = 
-    let service = Chrome.ChromeDriverService.CreateDefaultService(chromeDir);
+let private chromeDriverService dir = 
+    let service = Chrome.ChromeDriverService.CreateDefaultService(dir);
     service.HideCommandPromptWindow <- hideCommandPromptWindow;
     service
 
-let private chromeWithUserAgent userAgent =
+let private chromeWithUserAgent dir userAgent =
     let options = Chrome.ChromeOptions()
     options.AddArgument("--user-agent=" + userAgent)
-    new Chrome.ChromeDriver(chromeDriverService (), options) :> IWebDriver
+    new Chrome.ChromeDriver(chromeDriverService dir, options) :> IWebDriver
 
 let private phantomJsDriverService _ = 
     let service = PhantomJS.PhantomJSDriverService.CreateDefaultService(phantomJSDir)
@@ -845,21 +845,21 @@ let start b =
             options.AddArgument("--disable-extensions")
             options.AddArgument("disable-infobars")
             options.AddArgument("test-type") //https://code.google.com/p/chromedriver/issues/detail?id=799
-            new Chrome.ChromeDriver(chromeDriverService (), options) :> IWebDriver
+            new Chrome.ChromeDriver(chromeDriverService chromeDir, options) :> IWebDriver
         | ChromeWithOptions options ->
-            new Chrome.ChromeDriver(chromeDriverService (), options) :> IWebDriver
+            new Chrome.ChromeDriver(chromeDriverService chromeDir, options) :> IWebDriver
         | ChromeWithUserAgent userAgent -> 
-            chromeWithUserAgent userAgent
+            chromeWithUserAgent chromeDir userAgent
         | ChromeWithOptionsAndTimeSpan(options, timeSpan) -> 
-            new Chrome.ChromeDriver(chromeDriverService (), options, timeSpan) :> IWebDriver
+            new Chrome.ChromeDriver(chromeDriverService chromeDir, options, timeSpan) :> IWebDriver
         | Chromium ->
             let options = Chrome.ChromeOptions()
             options.AddArgument("--disable-extensions")
             options.AddArgument("disable-infobars")
             options.AddArgument("test-type") //https://code.google.com/p/chromedriver/issues/detail?id=799            
-            new Chrome.ChromeDriver(chromeDriverService (), options) :> IWebDriver
+            new Chrome.ChromeDriver(chromeDriverService chromiumDir, options) :> IWebDriver
         | ChromiumWithOptions options ->
-            new Chrome.ChromeDriver(chromeDriverService (), options) :> IWebDriver
+            new Chrome.ChromeDriver(chromeDriverService chromiumDir, options) :> IWebDriver
         | Firefox ->new FirefoxDriver(firefoxDriverService ()) :> IWebDriver
         | FirefoxWithProfile profile -> 
             let options = new Firefox.FirefoxOptions();
