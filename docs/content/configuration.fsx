@@ -18,7 +18,7 @@ chromeDir
 --
 * Directory for the chromedriver
 * Defaults to pre-set OS paths
-O* SX: /usr/bin/
+O* SX: /usr/local/bin/
 * Windows: C:\
 *)
 chromeDir <- "C:\\"

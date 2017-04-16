@@ -7,7 +7,7 @@ open System
 let folderByOSType =
     match System.Environment.OSVersion.Platform with
     | PlatformID.MacOSX
-    | PlatformID.Unix -> @"/usr/bin/"
+    | PlatformID.Unix -> @"/usr/local/bin/"
     | _ -> @"c:\"
 
 let folderByOSTypeChromium =
