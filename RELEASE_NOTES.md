@@ -329,3 +329,7 @@ Disable the 'Chrome is being run by automated process' banner [Issue #355](https
 #### 1.2.2 - Apr 11 2017
 Add timestamps to write messages, thanks milkeg! [PR #360](https://github.com/lefthandedgoat/canopy/pull/360)
 Add a case insensitive contains assertion, thanks milkeg! [PR #361](https://github.com/lefthandedgoat/canopy/pull/361)
+
+#### 1.2.3 - Apr 16 2017
+Fix wrong chromium path [Issue #360](https://github.com/lefthandedgoat/canopy/issues/362)
+BREAKING Update *nix driver path from usr/bin to usr/local/bin [Issue #363](https://github.com/lefthandedgoat/canopy/issues/363)
