@@ -22,7 +22,7 @@ let failFast = ref false
 (* documented/configuration *)
 let mutable failScreenshotPath = Environment.GetFolderPath(Environment.SpecialFolder.ApplicationData) + @"\canopy\"
 (* documented/configuration *)
-let mutable failScreenshotFileName = fun (test : types.Test) (suite: types.suite) -> DateTime.Now.ToString("MMM-d_HH-mm-ss-fff")
+let mutable failScreenshotFileName = fun (test : types.Test) (suite: types.Suite) -> DateTime.Now.ToString("MMM-d_HH-mm-ss-fff")
 
 (* documented/configuration *)
 let mutable chromeDir = folderByOSType

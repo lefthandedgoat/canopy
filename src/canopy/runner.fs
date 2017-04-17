@@ -12,7 +12,7 @@ let private last = function
   | hd :: tl -> hd
   | [] -> failwith "Empty list."
 
-let mutable suites = [new suite()]
+let mutable suites = [Suite()]
 let mutable todo = fun () -> ()
 let mutable skipped = fun () -> ()
 
@@ -33,7 +33,7 @@ let context c =
   if (last suites).Context = null then
     (last suites).Context <- c
   else
-    let s = new suite()
+    let s = Suite()
     s.Context <- c
     suites <- s::suites
 let private incrementLastTestSuite () =
@@ -79,7 +79,7 @@ let mutable contextFailed = false
 let mutable failedContexts : string list = []
 let mutable failed = false
 
-let pass id (suite : suite) =
+let pass id (suite : Suite) =
   passedCount <- passedCount + 1
   reporter.Pass id
   suite.OnPass()
@@ -88,7 +88,7 @@ let skip id =
   skippedCount <- skippedCount + 1
   reporter.Skip id
 
-let fail (ex : Exception) (test : Test) (suite : suite) autoFail url =
+let fail (ex : Exception) (test : Test) (suite : Suite) autoFail url =
   if failureMessagesThatShoulBeTreatedAsSkip |> List.exists (fun message -> ex.Message = message) then
     skip test.Id
   else
@@ -118,7 +118,7 @@ let safelyGetUrl () =
   if browser = null then "no browser = no url"
   else try browser.Url with _ -> "failed to get url"
 
-let failSuite (ex: Exception) (suite : suite) =
+let failSuite (ex: Exception) (suite : Suite) =
   let reportFailedTest (ex: Exception) (test : Test) =
     reporter.TestStart test.Id
     fail ex test suite true <| safelyGetUrl()
@@ -149,7 +149,7 @@ let private processRunResult suite (test : Test) result =
 
   reporter.TestEnd test.Id
 
-let private runtest (suite : suite) (test : Test) =
+let private runtest (suite : Suite) (test : Test) =
   if failed = false then
     reporter.TestStart test.Id
     let result =
@@ -241,7 +241,7 @@ let runFor browsers =
           browsers
           |> List.rev
           |> List.map (fun browser ->
-            let suite = new suite()
+            let suite = Suite()
             suite.Context <- sprintf "Running tests with %s browser" (toString browser)
             suite.Once <- fun _ -> start browser                                
             let currentSuites2 = currentSuites |> List.map(fun suite -> suite.Clone())
@@ -254,7 +254,7 @@ let runFor browsers =
           browsers
           |> List.rev
           |> List.map (fun browser ->
-            let suite = new suite()
+            let suite = Suite()
             suite.Context <- sprintf "Running tests with %s browser" (browser.ToString())                
             suite.Once <- fun _ -> switchTo browser
             let currentSuites2 = currentSuites |> List.map(fun suite -> suite.Clone())
