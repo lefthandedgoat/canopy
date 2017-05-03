@@ -603,7 +603,7 @@ let is expected actual =
         raise (CanopyEqualityFailedException(sprintf "equality check failed.  expected: %O, got: %O" expected actual))
 
 (* documented/assertions *)
-let (===) expected actual = is expected actual
+let (===) actual expected = is expected actual
 
 let private shown (elem : IWebElement) =
     let opacity = elem.GetCssValue("opacity")
