@@ -44,6 +44,11 @@ let findByText text f =
         f(By.XPath(sprintf """.//*[text() = "%s"]""" text)) |> List.ofSeq
     with | _ -> []
 
+let findByNormalizeSpaceText text f =
+    try
+        f(By.XPath(sprintf """.//*[normalize-space(text()) = "%s"]""" text)) |> List.ofSeq
+    with | _ -> []
+
 let findByValue value f =
     try
         findByCss (sprintf """*[value="%s"]""" value) f |> List.ofSeq
@@ -91,12 +96,13 @@ let findByJQuery jquerySelector f =
 let mutable defaultFinders =
     (fun cssSelector f ->
         seq {
-            yield findByCss     cssSelector f
-            yield findByValue   cssSelector f
-            yield findByXpath   cssSelector f
-            yield findByLabel   cssSelector f
-            yield findByText    cssSelector f
-            yield findByJQuery  cssSelector f
+            yield findByCss                cssSelector f
+            yield findByValue              cssSelector f
+            yield findByXpath              cssSelector f
+            yield findByLabel              cssSelector f
+            yield findByText               cssSelector f
+            yield findByJQuery             cssSelector f
+            yield findByNormalizeSpaceText cssSelector f
         }
     )
 
