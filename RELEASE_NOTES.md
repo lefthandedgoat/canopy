@@ -333,3 +333,7 @@ Add a case insensitive contains assertion, thanks milkeg! [PR #361](https://gith
 #### 1.2.3 - Apr 16 2017
 Fix wrong chromium path [Issue #360](https://github.com/lefthandedgoat/canopy/issues/362)
 BREAKING Update *nix driver path from usr/bin to usr/local/bin [Issue #363](https://github.com/lefthandedgoat/canopy/issues/363)
+
+#### 1.3.0 - May 3 2017
+Update to Selenium 3.4
+BREAKING?? Added find by text selector that works by first trimming whitespace.  Now a default finder.
