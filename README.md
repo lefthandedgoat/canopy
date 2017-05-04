@@ -8,7 +8,3 @@ Getting started kit available at https://github.com/lefthandedgoat/canopyStarter
 Real world examples available at https://github.com/lefthandedgoat/turtletestAutomation
 
 Some C# examples available at https://github.com/lefthandedgoat/canopy/blob/master/csharptests/Program.cs
-
-* Demo
-* for
-* Dan
