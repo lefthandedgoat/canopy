@@ -32,21 +32,27 @@ let diff example actual =
   //printfn "%A" example
   let actual = JsonValue.Parse(actual) |> AST |> Set.ofArray
   //printfn "%A" actual
-  let missing = example - actual |> Seq.map (fun missing -> Difference.Missing missing) |> List.ofSeq
-  missing
+  let missing = example - actual |> Seq.map Missing |> List.ofSeq
+  let extra = actual - example |> Seq.map Extra |> List.ofSeq
+  missing @ extra
 
 let validate example actual =
   let results = diff example actual
   if results <> [] then failwith (sprintf "%A" diff)
 
 let person1 = """{ "first":"jane", "middle":"something", "last":"doe" } """
-let person3 = """{ "first":"jane", "last":"doe" } """
+let person2 = """{ "first":"jane", "last":"doe" } """
+let person3 = """{ "first":"jane", "middle":"something", "last":"doe", "phone":"800-555-5555" } """
 
 "two identical people have no differences" &&& fun _ ->
   diff person1 person1 == []
 
 "missing property is identified" &&& fun _ ->
-  diff person1 person3 == [ Missing "{root}.middle" ]
+  diff person1 person2 == [ Missing "{root}.middle" ]
+
+"extra property is identified" &&& fun _ ->
+  diff person1 person3 == [ Extra "{root}.phone" ]
+
 
 run()
 
