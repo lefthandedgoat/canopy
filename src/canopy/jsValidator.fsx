@@ -6,7 +6,7 @@ open FSharp.Data
 
 let mutable tests : (string * (unit -> unit)) list = []
 let ( &&& ) desc f = tests <- (desc, f) :: tests
-let run () = tests |> List.rev |> List.iter (fun (desc, f) -> printfn "%s" desc; try f(); printfn "pass" with _ -> ())
+let run () = tests |> List.rev |> List.iter (fun (desc, f) -> printfn "%s" desc; try f(); printfn "pass" with ex -> printfn "failed: %s" ex.Message)
 let ( == ) left right = if left <> right then failwith (sprintf "expected %A got %A" left right)
 let clear () = tests <- []
 
@@ -14,21 +14,26 @@ type Difference =
   | Missing of string
   | Extra   of string
 
-let rec print jsonValue =
-  match jsonValue with
-  | JsonValue.String value -> printfn "%A is a string!" value
-  | JsonValue.Record properties -> printfn "its a record with properties!"; properties |> Array.iter (fun (property, value) -> printfn "property %s" property; print value)
-  | JsonValue.Number value -> printfn "%A is a number!" value
-  | JsonValue.Float value -> printfn "%A is a float!" value
-  | JsonValue.Boolean value -> printfn "%A is a bool!" value
-  | JsonValue.Null -> printfn "Its Null!"
-  | JsonValue.Array values -> printfn "Its an array!"; values |> Array.iter print
+let AST jsonValue =
+  let rec AST parent jsonValue =
+    match jsonValue with
+    | JsonValue.String  _    -> [| parent |]
+    | JsonValue.Number  _    -> [| parent |]
+    | JsonValue.Float   _    -> [| parent |]
+    | JsonValue.Boolean _    -> [| parent |]
+    | JsonValue.Null         -> [| parent |]
+    | JsonValue.Array values -> values |> Array.map (AST parent) |> Array.concat
+    | JsonValue.Record props -> props  |> Array.map (fun (prop, value) -> AST (sprintf "%s.%s" parent prop) value) |> Array.concat
+
+  AST "{root}" jsonValue
 
 let diff example actual =
-  let example = JsonValue.Parse(example)
-  print example
-  let actual = JsonValue.Parse(actual)
-  ["Missing {}.middle"]
+  let example = JsonValue.Parse(example) |> AST |> Set.ofArray
+  //printfn "%A" example
+  let actual = JsonValue.Parse(actual) |> AST |> Set.ofArray
+  //printfn "%A" actual
+  let missing = example - actual |> Seq.map (fun missing -> Difference.Missing missing) |> List.ofSeq
+  missing
 
 let validate example actual =
   let results = diff example actual
@@ -41,7 +46,7 @@ let person3 = """{ "first":"jane", "last":"doe" } """
   diff person1 person1 == []
 
 "missing property is identified" &&& fun _ ->
-  diff person1 person3 == ["Missing {}.middle"]
+  diff person1 person3 == [ Missing "{root}.middle" ]
 
 run()
 
