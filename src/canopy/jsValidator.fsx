@@ -1,5 +1,7 @@
 module jsonValidator
 
+#r "../../packages/FSharp.Data/lib/net40/FSharp.Data.dll"
+
 open FSharp.Data
 
 let mutable tests : (string * (unit -> unit)) list = []
@@ -12,8 +14,19 @@ type Difference =
   | Missing of string
   | Extra   of string
 
+let rec print jsonValue =
+  match jsonValue with
+  | JsonValue.String value -> printfn "%A is a string!" value
+  | JsonValue.Record properties -> printfn "its a record with properties!"; properties |> Array.iter (fun (property, value) -> printfn "property %s" property; print value)
+  | JsonValue.Number value -> printfn "%A is a number!" value
+  | JsonValue.Float value -> printfn "%A is a float!" value
+  | JsonValue.Boolean value -> printfn "%A is a bool!" value
+  | JsonValue.Null -> printfn "Its Null!"
+  | JsonValue.Array values -> printfn "Its an array!"; values |> Array.iter print
+
 let diff example actual =
   let example = JsonValue.Parse(example)
+  print example
   let actual = JsonValue.Parse(actual)
   ["Missing {}.middle"]
 
