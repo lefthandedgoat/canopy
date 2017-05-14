@@ -20,6 +20,7 @@ type Type =
   | AnonymousRecord
   | Property
   | Root
+  | None
 
 type Meta =
   {
@@ -34,9 +35,9 @@ type Meta =
 let root =
   {
     Path = "{root}"
-    ParentPath = "{root}"
-    Type = Type.Record
-    ParentType = Type.Root
+    ParentPath = ""
+    Type = Type.Root
+    ParentType = Type.None
     ImmediateOptional = false
     HistoricalOptional = false
   }
@@ -44,7 +45,7 @@ let root =
 let jsonValueToType jsonValue =
   match jsonValue with
   | JsonValue.Array  _ -> Array
-  | JsonValue.Record _ -> AnonymousRecord
+  | JsonValue.Record _ -> Record
   | _                  -> Property
 
 let AST jsonValue =
@@ -59,41 +60,36 @@ let AST jsonValue =
     //real work done here
     | JsonValue.Array values ->
         values
-        |> Array.map (AST { meta with ParentType = Array; ImmediateOptional = true; HistoricalOptional = true })
+        |> Array.map (fun value -> AST { meta with ParentPath = meta.Path; ParentType = Array; Type = jsonValueToType value; ImmediateOptional = true; HistoricalOptional = true } value)
         |> Array.concat
+        |> Array.append [| meta |]
 
     //real work done here
     | JsonValue.Record props ->
+        let selfType = if meta.ParentType = Array then AnonymousRecord else Record
+        let selfImmediateOptional = if meta.ParentType = Array then true else false
+        let selfPath = if meta.ParentType = Array then sprintf "%s.{}" meta.Path else meta.Path
+        let self = if meta.Type = Root then meta else { meta with Type = selfType; ParentType = meta.ParentType; Path = selfPath; ParentPath = meta.ParentPath; ImmediateOptional = selfImmediateOptional }
         props
         |> Array.map (fun (prop, value) ->
              let type' = jsonValueToType value
              let path =
-               match meta.ParentType with
-               | Root
-               | AnonymousRecord ->
-                 match type' with
-                 | Array           -> sprintf "%s.[%s]" meta.Path prop
-                 | Record          -> sprintf "%s.{%s}" meta.Path prop
-                 | Property        -> sprintf "%s.%s"   meta.Path prop
-                 | _        -> failwith (sprintf "should not happen %A" type')
-               | Array
-               | Record
-               | Property ->
-                 match type' with
-                 | Array           -> sprintf "%s.[%s]" meta.Path prop
-                 | Record          -> sprintf "%s.{%s}" meta.Path prop
-                 | Property        -> sprintf "%s.%s"   meta.Path prop
-                 | _        -> failwith (sprintf "should not happen 2 %A" type')
+               match type' with
+               | Array           -> sprintf "%s.[%s]" self.Path prop
+               | Record          -> sprintf "%s.{%s}" self.Path prop
+               | Property        -> sprintf "%s.%s"   self.Path prop
+               | _        -> failwith (sprintf "should not happen %A" type')
 
-             AST { meta with Path = path; ParentPath = meta.Path; Type = type'; ParentType = meta.Type; } value
+             AST { self with Path = path; ParentPath = self.Path; Type = type'; ParentType = self.Type; ImmediateOptional = false } value
            )
         |> Array.concat
+        |> Array.append [| self |]
 
   AST root jsonValue
 
 let diff example actual =
   let example = JsonValue.Parse(example) |> AST |> Set.ofArray
-  printfn "example: %A" example
+  //printfn "example: %A" example
   let actual = JsonValue.Parse(actual) |> AST |> Set.ofArray
   //printfn "actual: %A" actual
 
@@ -162,21 +158,22 @@ let location8 = """{ "lat":4.0212, "long":12.102012, "people":[ { "first":"jane"
   diff location3 location4 == [ ]
 
 "missing fields on records in arrays recognized correctly" &&& fun _ ->
-  diff location3 location5 == [ Missing "{root}.[people].middle" ]
+  diff location3 location5 == [ Missing "{root}.[people].{}.middle" ]
 
 "extra fields on records in arrays recognized correctly" &&& fun _ ->
-  diff location3 location6 == [ Extra "{root}.[people].phone" ]
+  diff location3 location6 == [ Extra "{root}.[people].{}.phone" ]
 
 "renamed field with extra property shows" &&& fun _ ->
   diff location7 location8 ==
     [
-      Missing "{root}.[workers].first"
-      Missing "{root}.[workers].last"
+      Missing "{root}.[workers]"
 
-      Extra "{root}.[people].first"
-      Extra "{root}.[people].middle"
-      Extra "{root}.[people].last"
-      Extra "{root}.[people].phone"
+      Extra "{root}.[people]"
+      Extra "{root}.[people].{}"
+      Extra "{root}.[people].{}.first"
+      Extra "{root}.[people].{}.last"
+      Extra "{root}.[people].{}.middle"
+      Extra "{root}.[people].{}.phone"
     ]
 
 run()
