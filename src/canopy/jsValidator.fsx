@@ -142,6 +142,9 @@ let location6 = """{ "lat":4.0212, "long":12.102012, "people":[ { "first":"jane"
 let location7 = """{ "lat":4.0212, "long":12.102012, "workers":[ { "first":"jane", "last":"doe" } ] } """
 let location8 = """{ "lat":4.0212, "long":12.102012, "people":[ { "first":"jane", "middle":"something", "last":"doe", "phone":"800-555-5555" } ] } """
 
+let class1 = """{ "name":"bio 101",  "building":"science", "location": { "lat":4.0212, "long":12.102012, "people": [ { "first":"jane", "middle":"something", "last":"doe" } ] } }"""
+let class2 = """{ "name":"chem 101", "building":"science", "location": { "lat":4.0212, "lng":12.102012,  "people": [ { "first":"jane", "last":"doe" } ] } }"""
+
 "two identical people have no differences" &&& fun _ ->
   diff person1 person1 == []
 
@@ -176,10 +179,15 @@ let location8 = """{ "lat":4.0212, "long":12.102012, "people":[ { "first":"jane"
       Extra "{root}.[people].{}.phone"
     ]
 
+"nested objects with arrays reocgnized correctly" &&& fun _ ->
+  diff class1 class2 ==
+    [
+      Missing "{root}.{location}.long"
+      Missing "{root}.{location}.[people].{}.middle"
+
+      Extra "{root}.{location}.lng"
+    ]
+
 run()
 
 clear()
-
-(*
-
-*)
