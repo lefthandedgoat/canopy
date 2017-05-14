@@ -6,7 +6,7 @@ open FSharp.Data
 
 let mutable tests : (string * (unit -> unit)) list = []
 let ( &&& ) desc f = tests <- (desc, f) :: tests
-let ( == ) left right = if left <> right then failwith (sprintf "expected %A got %A" right left)
+let ( == ) left right = if left <> right then failwith (sprintf "expected %A%sgot %A" right System.Environment.NewLine left)
 let clear () = tests <- []
 let run () = tests |> List.rev |> List.iter (fun (desc, f) -> printfn "%s" desc; try f(); printfn "pass" with ex -> printfn "failed: %s" ex.Message)
 
@@ -14,16 +14,19 @@ type Difference =
   | Missing of string
   | Extra   of string
 
-type NodeType =
+type Type =
   | Array
   | Record
-  | Other
+  | AnonymousRecord
+  | Property
+  | Root
 
 type Meta =
   {
     Path : string
     ParentPath : string
-    ParentType : NodeType
+    Type : Type
+    ParentType : Type
     ImmediateOptional : bool
     HistoricalOptional : bool
   }
@@ -31,17 +34,18 @@ type Meta =
 let root =
   {
     Path = "{root}"
-    ParentPath = ""
-    ParentType = NodeType.Record
+    ParentPath = "{root}"
+    Type = Type.Record
+    ParentType = Type.Root
     ImmediateOptional = false
     HistoricalOptional = false
   }
 
-let jsonValueToNodeType jsonValue =
+let jsonValueToType jsonValue =
   match jsonValue with
-  | JsonValue.Array  _ -> NodeType.Array
-  | JsonValue.Record _ -> NodeType.Record
-  | _                  -> NodeType.Other
+  | JsonValue.Array  _ -> Array
+  | JsonValue.Record _ -> AnonymousRecord
+  | _                  -> Property
 
 let AST jsonValue =
   let rec AST meta jsonValue =
@@ -50,7 +54,7 @@ let AST jsonValue =
     | JsonValue.Number  _
     | JsonValue.Float   _
     | JsonValue.Boolean _
-    | JsonValue.Null      -> [| meta |]
+    | JsonValue.Null    -> [| { meta with ImmediateOptional = false } |]
 
     //real work done here
     | JsonValue.Array values ->
@@ -62,16 +66,26 @@ let AST jsonValue =
     | JsonValue.Record props ->
         props
         |> Array.map (fun (prop, value) ->
-             let nodeType = jsonValueToNodeType value
-             let immediateOptional =  match nodeType with | Array -> true | _ -> false
-             let historicalOptional = match nodeType with | Array -> true | _ -> meta.HistoricalOptional
+             let type' = jsonValueToType value
              let path =
-               match nodeType with
-               | Array  -> sprintf "%s.[%s]" meta.Path prop
-               | Record -> sprintf "%s.{%s}" meta.Path prop
-               | Other  -> sprintf "%s.%s" meta.Path prop
+               match meta.ParentType with
+               | Root
+               | AnonymousRecord ->
+                 match type' with
+                 | Array           -> sprintf "%s.[%s]" meta.Path prop
+                 | Record          -> sprintf "%s.{%s}" meta.Path prop
+                 | Property        -> sprintf "%s.%s"   meta.Path prop
+                 | _        -> failwith (sprintf "should not happen %A" type')
+               | Array
+               | Record
+               | Property ->
+                 match type' with
+                 | Array           -> sprintf "%s.[%s]" meta.Path prop
+                 | Record          -> sprintf "%s.{%s}" meta.Path prop
+                 | Property        -> sprintf "%s.%s"   meta.Path prop
+                 | _        -> failwith (sprintf "should not happen 2 %A" type')
 
-             AST { Path = path; ParentPath = meta.Path; ParentType = Record; ImmediateOptional = immediateOptional; HistoricalOptional = historicalOptional } value
+             AST { meta with Path = path; ParentPath = meta.Path; Type = type'; ParentType = meta.Type; } value
            )
         |> Array.concat
 
@@ -79,16 +93,16 @@ let AST jsonValue =
 
 let diff example actual =
   let example = JsonValue.Parse(example) |> AST |> Set.ofArray
-  //printfn "%A" example
+  printfn "example: %A" example
   let actual = JsonValue.Parse(actual) |> AST |> Set.ofArray
-  //printfn "%A" actual
+  //printfn "actual: %A" actual
 
   let missing =
     let allMissing =
       example - actual
       |> Seq.filter (fun meta -> meta.ImmediateOptional = false && meta.HistoricalOptional = false)
       |> Set.ofSeq
-    printfn "allMissing %A" allMissing
+    //printfn "allMissing %A" allMissing
 
     let falsePositives =
       allMissing
@@ -97,7 +111,7 @@ let diff example actual =
                        && actual |> Seq.exists (fun meta2 -> meta.ParentPath = meta2.ParentPath))
       |> Set.ofSeq
 
-    printfn "falsePositives %A" falsePositives
+    //printfn "falsePositives %A" falsePositives
 
     allMissing - falsePositives
     |> Seq.map    (fun meta -> Missing meta.Path)
@@ -129,6 +143,9 @@ let location4 = """{ "lat":4.0212, "long":12.102012, "people":[ ] } """
 let location5 = """{ "lat":4.0212, "long":12.102012, "people":[ { "first":"jane", "last":"doe" } ] } """
 let location6 = """{ "lat":4.0212, "long":12.102012, "people":[ { "first":"jane", "middle":"something", "last":"doe", "phone":"800-555-5555" } ] } """
 
+let location7 = """{ "lat":4.0212, "long":12.102012, "workers":[ { "first":"jane", "last":"doe" } ] } """
+let location8 = """{ "lat":4.0212, "long":12.102012, "people":[ { "first":"jane", "middle":"something", "last":"doe", "phone":"800-555-5555" } ] } """
+
 "two identical people have no differences" &&& fun _ ->
   diff person1 person1 == []
 
@@ -149,6 +166,18 @@ let location6 = """{ "lat":4.0212, "long":12.102012, "people":[ { "first":"jane"
 
 "extra fields on records in arrays recognized correctly" &&& fun _ ->
   diff location3 location6 == [ Extra "{root}.[people].phone" ]
+
+"renamed field with extra property shows" &&& fun _ ->
+  diff location7 location8 ==
+    [
+      Missing "{root}.[workers].first"
+      Missing "{root}.[workers].last"
+
+      Extra "{root}.[people].first"
+      Extra "{root}.[people].middle"
+      Extra "{root}.[people].last"
+      Extra "{root}.[people].phone"
+    ]
 
 run()
 
