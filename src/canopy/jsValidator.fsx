@@ -24,8 +24,8 @@ type Meta =
     Path : string
     ParentPath : string
     ParentType : NodeType
-    ImmediateMissing : bool
-    HistoricalMissing : bool
+    ImmediateOptional : bool
+    HistoricalOptional : bool
   }
 
 let root =
@@ -33,8 +33,8 @@ let root =
     Path = "{root}"
     ParentPath = ""
     ParentType = NodeType.Record
-    ImmediateMissing = false
-    HistoricalMissing = false
+    ImmediateOptional = false
+    HistoricalOptional = false
   }
 
 let jsonValueToNodeType jsonValue =
@@ -55,7 +55,7 @@ let AST jsonValue =
     //real work done here
     | JsonValue.Array values ->
         values
-        |> Array.map (AST { meta with ParentType = Array; ImmediateMissing = true; HistoricalMissing = true })
+        |> Array.map (AST { meta with ParentType = Array; ImmediateOptional = true; HistoricalOptional = true })
         |> Array.concat
 
     //real work done here
@@ -63,15 +63,15 @@ let AST jsonValue =
         props
         |> Array.map (fun (prop, value) ->
              let nodeType = jsonValueToNodeType value
-             let immediateMissing =  match nodeType with | Array -> true | _ -> false
-             let historicalMissing = match nodeType with | Array -> true | _ -> meta.HistoricalMissing
+             let immediateOptional =  match nodeType with | Array -> true | _ -> false
+             let historicalOptional = match nodeType with | Array -> true | _ -> meta.HistoricalOptional
              let path =
                match nodeType with
                | Array  -> sprintf "%s.[%s]" meta.Path prop
                | Record -> sprintf "%s.{%s}" meta.Path prop
                | Other  -> sprintf "%s.%s" meta.Path prop
 
-             AST { Path = path; ParentPath = meta.Path; ParentType = Record; ImmediateMissing = immediateMissing; HistoricalMissing = historicalMissing } value
+             AST { Path = path; ParentPath = meta.Path; ParentType = Record; ImmediateOptional = immediateOptional; HistoricalOptional = historicalOptional } value
            )
         |> Array.concat
 
@@ -86,14 +86,14 @@ let diff example actual =
   let missing =
     let allMissing =
       example - actual
-      |> Seq.filter (fun meta -> meta.ImmediateMissing = false && meta.HistoricalMissing = false)
+      |> Seq.filter (fun meta -> meta.ImmediateOptional = false && meta.HistoricalOptional = false)
       |> Set.ofSeq
     printfn "allMissing %A" allMissing
 
     let falsePositives =
       allMissing
       |> Seq.filter (fun meta ->
-                       (meta.ImmediateMissing = true || meta.HistoricalMissing = true)
+                       (meta.ImmediateOptional = true || meta.HistoricalOptional = true)
                        && actual |> Seq.exists (fun meta2 -> meta.ParentPath = meta2.ParentPath))
       |> Set.ofSeq
 
@@ -103,21 +103,19 @@ let diff example actual =
     |> Seq.map    (fun meta -> Missing meta.Path)
     |> List.ofSeq
 
-  let missingsThatExistInActual = actual |> Seq.filter (fun meta -> (meta.ImmediateMissing = true || meta.HistoricalMissing = true))
-  let allThatCanBeMissing = example |> Seq.filter (fun meta -> (meta.ImmediateMissing = true || meta.HistoricalMissing = true))
-  //todo
-  //let siblingsPropertiesToMissing =
-  //    missingsThatExistInActual
-  //    |> Seq.map (fun meta ->
-
-
+  let missingButWithSiblingsThatArent =
+    let optionalThatExistInActual = actual |> Seq.filter (fun meta -> (meta.ImmediateOptional = true || meta.HistoricalOptional = true))
+    example - actual
+    |> Seq.filter (fun meta -> optionalThatExistInActual |> Seq.exists (fun meta2 -> meta.ParentPath = meta2.ParentPath))
+    |> Seq.map    (fun meta -> Missing meta.Path)
+    |> List.ofSeq
 
   let extra =
     actual - example
     |> Seq.map    (fun meta -> Extra meta.Path)
     |> List.ofSeq
 
-  missing @ extra
+  missing @ missingButWithSiblingsThatArent @ extra
 
 let person1 = """{ "first":"jane", "middle":"something", "last":"doe" } """
 let person2 = """{ "first":"jane", "last":"doe" } """
@@ -131,15 +129,6 @@ let location4 = """{ "lat":4.0212, "long":12.102012, "people":[ ] } """
 let location5 = """{ "lat":4.0212, "long":12.102012, "people":[ { "first":"jane", "last":"doe" } ] } """
 let location6 = """{ "lat":4.0212, "long":12.102012, "people":[ { "first":"jane", "middle":"something", "last":"doe", "phone":"800-555-5555" } ] } """
 
-
-
-
-run()
-
-
-clear()
-
-(*
 "two identical people have no differences" &&& fun _ ->
   diff person1 person1 == []
 
@@ -161,5 +150,10 @@ clear()
 "extra fields on records in arrays recognized correctly" &&& fun _ ->
   diff location3 location6 == [ Extra "{root}.[people].phone" ]
 
+run()
+
+clear()
+
+(*
 
 *)
