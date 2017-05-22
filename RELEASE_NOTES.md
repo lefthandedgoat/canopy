@@ -337,3 +337,6 @@ Update to Selenium 3.3 [Issue #351](https://github.com/lefthandedgoat/canopy/iss
 #### 1.3.0 - May 3 2017
 * Update to Selenium 3.4
 * BREAKING?? Added find by text selector that works by first trimming whitespace.  Now a default finder.
+
+#### 1.3.1 - May 20 2017
+* XmlEncode failure message in JUnitReporter [PR #367](https://github.com/lefthandedgoat/canopy/pull/367)

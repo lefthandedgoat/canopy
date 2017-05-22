@@ -435,7 +435,9 @@ type JUnitReporter(resultFilePath:string) =
                 |> Seq.map(fun id -> sprintf "<testcase name=\"%s\" time=\"%.3f\"/>" id (getTestTime id))
             let failedTestsXml =
                 failedTests
-                |> Seq.map(fun (ex, id) -> sprintf "<testcase name=\"%s\" time=\"%.3f\"><failure>%s</failure></testcase>" id (getTestTime id) ex.Message)
+                |> Seq.map(fun (ex, id) ->
+                    Security.SecurityElement.Escape ex.Message
+                    |> sprintf "<testcase name=\"%s\" time=\"%.3f\"><failure>%s</failure></testcase>" id (getTestTime id))
             let testCount = passed + failed
             let testTimeSum = testTimes |> Seq.sumBy snd
             let allTestsXml = String.Join(String.Empty, Seq.concat [passedTestsXml; failedTestsXml])
