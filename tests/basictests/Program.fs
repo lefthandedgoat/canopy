@@ -24,6 +24,8 @@ configuration.failScreenshotFileName <-
 
 failFast := true
 
+jsonValidatorTests.all()
+
 file1.all()
 file2.all()
 

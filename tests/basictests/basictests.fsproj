@@ -53,6 +53,7 @@
   </Choose>
   <Import Project="$(FSharpTargetsPath)" Condition="Exists('$(FSharpTargetsPath)')" />
   <ItemGroup>
+    <Compile Include="jsonValidatorTests.fs" />
     <Compile Include="file1.fs" />
     <Compile Include="file2.fs" />
     <Compile Include="Program.fs" />

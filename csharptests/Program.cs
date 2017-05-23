@@ -14,6 +14,8 @@ namespace csharptests
             configuration.reporter = new reporters.LiveHtmlReporter(types.BrowserStartMode.Chrome, configuration.chromeDir);
 
             var testpage = "http://lefthandedgoat.github.io/canopy/testpages/";
+
+            jsonValidatorTests.All();
             
             _.start(types.BrowserStartMode.Chrome);
 
@@ -27,7 +29,7 @@ namespace csharptests
             {
                 _.url("http://www.skipped.com");
             });
-            
+
             _.test("Apostrophes don't break anything", () =>
             {
                 _.url(testpage);
@@ -70,7 +72,7 @@ namespace csharptests
                 _.write("#lastName", "Smith");
                 _.eq("#lastName", "Smith");
             });
-            
+
             _.test("writing to #lastName (as element) sets text to John", () =>
             {
                 _.url(testpage);
@@ -118,7 +120,7 @@ namespace csharptests
                 _.rightClick("div:first");
                 _.displayed(".contextmenu");
             });
-            
+
             _.run();
 
             Console.ReadKey();
