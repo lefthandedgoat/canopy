@@ -5,3 +5,4 @@ nuget FSharp.Core >= 3.0.2 lowest_matching:true
 nuget Selenium.WebDriver
 nuget FAKE
 nuget FSharp.Formatting
+nuget FSharp.Data
