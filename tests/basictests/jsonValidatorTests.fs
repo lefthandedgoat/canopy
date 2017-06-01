@@ -27,6 +27,9 @@ let class2 = """{ "name":"chem 101", "building":"science", "location": { "lat":4
 let withArray = """{ "name":"bio 101", "people": [ { "first":"jane" } ] }"""
 let nullArray = """{ "name":"chem 101", "people": null }"""
 
+let withProperty = """{ "name":"bio 101", "age": 1 }"""
+let nullProperty = """{ "name":"chem 101", "age": null }"""
+
 let all () =
   context "json validator tests"
 
@@ -75,3 +78,9 @@ let all () =
 
   "null array is acceptable" &&& fun _ ->
     diff withArray nullArray == [ ]
+
+  "null property is acceptable" &&& fun _ ->
+    diff withProperty nullProperty == [ ]
+    
+  "null record is acceptable" &&& fun _ ->
+    failwith "adfadfsfasffd"

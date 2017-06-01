@@ -100,6 +100,17 @@ let diff example actual =
         else meta)
     |> Set.ofSeq
 
+  //if there is a null in actual and it has a matching property value in example, replace with the property definition because null properties are legit
+  let actual =
+    actual
+    |> Seq.map (fun meta -> 
+        if meta.Type = Type.Null then
+          let asProperty = { meta with Type = Property; Path = meta.Path.Replace(meta.Name, sprintf "%s" meta.Name) }
+          let exists = example.Contains(asProperty)
+          if exists then asProperty else meta
+        else meta)
+    |> Set.ofSeq
+  
   let missing =
     let allMissing =
       example - actual
