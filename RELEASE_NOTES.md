@@ -344,5 +344,5 @@ Update to Selenium 3.3 [Issue #351](https://github.com/lefthandedgoat/canopy/iss
 #### 1.4.0 - May 23 2017
 * Added a json validator [PR #368](https://github.com/lefthandedgoat/canopy/pull/368)
 
-#### 1.4.1 - June 1 2017
+#### 1.4.2 - June 1 2017
 * json validator - null arrays is now acceptable
