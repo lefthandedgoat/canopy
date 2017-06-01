@@ -11,12 +11,14 @@ type Type =
   | Record
   | AnonymousRecord
   | Property
+  | Null
   | Root
   | None
 
 type Meta =
   {
     Path : string
+    Name : string
     ParentPath : string
     Type : Type
     ParentType : Type
@@ -27,6 +29,7 @@ type Meta =
 let root =
   {
     Path = "{root}"
+    Name = "root"
     ParentPath = ""
     Type = Type.Root
     ParentType = Type.None
@@ -46,8 +49,9 @@ let AST jsonValue =
     | JsonValue.String  _
     | JsonValue.Number  _
     | JsonValue.Float   _
-    | JsonValue.Boolean _
-    | JsonValue.Null    -> [| { meta with ImmediateOptional = false } |]
+    | JsonValue.Boolean _ -> [| { meta with ImmediateOptional = false } |]
+    
+    | JsonValue.Null -> [| { meta with Type = Null; ImmediateOptional = false } |]
 
     //real work done here
     | JsonValue.Array values ->
@@ -72,7 +76,7 @@ let AST jsonValue =
                | Property        -> sprintf "%s.%s"   self.Path prop
                | _        -> failwith (sprintf "should not happen %A" type')
 
-             AST { self with Path = path; ParentPath = self.Path; Type = type'; ParentType = self.Type; ImmediateOptional = false } value
+             AST { self with Path = path; Name = prop; ParentPath = self.Path; Type = type'; ParentType = self.Type; ImmediateOptional = false } value
            )
         |> Array.concat
         |> Array.append [| self |]
@@ -84,6 +88,17 @@ let diff example actual =
   //printfn "example: %A" example
   let actual = JsonValue.Parse(actual) |> AST |> Set.ofArray
   //printfn "actual: %A" actual
+
+  //if there is a null in actual and it has a matching array value in example, replace with the array definition because null arrays are legit
+  let actual =
+    actual
+    |> Seq.map (fun meta -> 
+        if meta.Type = Type.Null then
+          let asArray = { meta with Type = Array; Path = meta.Path.Replace(meta.Name, sprintf "[%s]" meta.Name) }
+          let exists = example.Contains(asArray)
+          if exists then asArray else meta
+        else meta)
+    |> Set.ofSeq
 
   let missing =
     let allMissing =
