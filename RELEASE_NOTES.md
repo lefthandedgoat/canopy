@@ -346,3 +346,6 @@ Update to Selenium 3.3 [Issue #351](https://github.com/lefthandedgoat/canopy/iss
 
 #### 1.4.3 - June 1 2017
 * json validator - null arrays and properties are now acceptable
+
+#### 1.4.5 - June 9 2017
+* Added ability to shiftClick

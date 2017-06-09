@@ -143,6 +143,8 @@ type canopy () =
 
     static member ctrlClick selector = ctrlClick selector
 
+    static member shiftClick selector = shiftClick selector
+
     static member rightClick selector = rightClick selector
 
     static member check selector = check selector

@@ -703,6 +703,18 @@ let ctrlClick item =
         | _ -> raise (CanopyNotStringOrElementException(sprintf "Can't ctrlClick %O because it is not a string or webelement" item))
 
 (* documented/actions *)
+let shiftClick item =
+        let actions = Actions(browser)
+
+        match box item with
+        | :? IWebElement as elem -> actions.KeyDown(Keys.Shift).Click(elem).KeyUp(Keys.Shift).Perform() |> ignore
+        | :? string as cssSelector ->
+        wait elementTimeout (fun _ -> ( let elem = element cssSelector
+                                        actions.KeyDown(Keys.Shift).Click(elem).KeyUp(Keys.Shift).Perform()
+                                        true))
+        | _ -> raise (CanopyNotStringOrElementException(sprintf "Can't shiftClick %O because it is not a string or webelement" item))
+
+(* documented/actions *)
 let rightClick item =
         let actions = Actions(browser)
 

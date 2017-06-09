@@ -92,6 +92,15 @@ ctrlClick "Oklahoma"
 ctrlClick (element "#list > option")
 
 (**
+shiftClick
+-----
+Click an element via selector or text while holding down the shift key, can also click selenium `IWebElements`.
+*)
+shiftClick "#list > option"
+shiftClick "Oklahoma"
+shiftClick (element "#list > option")
+
+(**
 rightClick
 -----
 Right click an element.
