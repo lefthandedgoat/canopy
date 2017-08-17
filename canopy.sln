@@ -14,8 +14,6 @@ Project("{F2A71F9B-5D33-465A-A702-920D77279786}") = "basictests", "tests\basicte
 EndProject
 Project("{F2A71F9B-5D33-465A-A702-920D77279786}") = "canopy", "src\canopy\canopy.fsproj", "{63135CF6-70A9-4382-851D-4B679EE0CBF8}"
 EndProject
-Project("{F2A71F9B-5D33-465A-A702-920D77279786}") = "sampleprojectstructure", "src\sampleprojectstructure\sampleprojectstructure.fsproj", "{9DE5614C-8D7F-4BBD-A6A0-24AABD76796C}"
-EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "docs", "docs", "{12E9007C-8265-43D8-86B0-C9182921A9E5}"
 EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "project", "project", "{C8531F58-5EAB-413F-BB2F-FE96AE0A55F2}"
@@ -45,6 +43,8 @@ Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "tools", "tools", "{3C3590B5
 	EndProjectSection
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "csharptests", "csharptests\csharptests.csproj", "{8FD011AE-ACEC-4B55-810B-736DAE312D32}"
+EndProject
+Project("{F2A71F9B-5D33-465A-A702-920D77279786}") = "canopy.integration", "src\canopy.integration\canopy.integration.fsproj", "{4303FFAC-759E-4764-89AD-ED6A73E2E16D}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -76,16 +76,6 @@ Global
 		{63135CF6-70A9-4382-851D-4B679EE0CBF8}.Release|Mixed Platforms.ActiveCfg = Release|Any CPU
 		{63135CF6-70A9-4382-851D-4B679EE0CBF8}.Release|Mixed Platforms.Build.0 = Release|Any CPU
 		{63135CF6-70A9-4382-851D-4B679EE0CBF8}.Release|x86.ActiveCfg = Release|Any CPU
-		{9DE5614C-8D7F-4BBD-A6A0-24AABD76796C}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
-		{9DE5614C-8D7F-4BBD-A6A0-24AABD76796C}.Debug|Any CPU.Build.0 = Debug|Any CPU
-		{9DE5614C-8D7F-4BBD-A6A0-24AABD76796C}.Debug|Mixed Platforms.ActiveCfg = Debug|Any CPU
-		{9DE5614C-8D7F-4BBD-A6A0-24AABD76796C}.Debug|Mixed Platforms.Build.0 = Debug|Any CPU
-		{9DE5614C-8D7F-4BBD-A6A0-24AABD76796C}.Debug|x86.ActiveCfg = Debug|Any CPU
-		{9DE5614C-8D7F-4BBD-A6A0-24AABD76796C}.Release|Any CPU.ActiveCfg = Release|Any CPU
-		{9DE5614C-8D7F-4BBD-A6A0-24AABD76796C}.Release|Any CPU.Build.0 = Release|Any CPU
-		{9DE5614C-8D7F-4BBD-A6A0-24AABD76796C}.Release|Mixed Platforms.ActiveCfg = Release|Any CPU
-		{9DE5614C-8D7F-4BBD-A6A0-24AABD76796C}.Release|Mixed Platforms.Build.0 = Release|Any CPU
-		{9DE5614C-8D7F-4BBD-A6A0-24AABD76796C}.Release|x86.ActiveCfg = Release|Any CPU
 		{8FD011AE-ACEC-4B55-810B-736DAE312D32}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
 		{8FD011AE-ACEC-4B55-810B-736DAE312D32}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{8FD011AE-ACEC-4B55-810B-736DAE312D32}.Debug|Mixed Platforms.ActiveCfg = Debug|Any CPU
@@ -98,6 +88,18 @@ Global
 		{8FD011AE-ACEC-4B55-810B-736DAE312D32}.Release|Mixed Platforms.Build.0 = Release|Any CPU
 		{8FD011AE-ACEC-4B55-810B-736DAE312D32}.Release|x86.ActiveCfg = Release|Any CPU
 		{8FD011AE-ACEC-4B55-810B-736DAE312D32}.Release|x86.Build.0 = Release|Any CPU
+		{4303FFAC-759E-4764-89AD-ED6A73E2E16D}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{4303FFAC-759E-4764-89AD-ED6A73E2E16D}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{4303FFAC-759E-4764-89AD-ED6A73E2E16D}.Debug|Mixed Platforms.ActiveCfg = Debug|Any CPU
+		{4303FFAC-759E-4764-89AD-ED6A73E2E16D}.Debug|Mixed Platforms.Build.0 = Debug|Any CPU
+		{4303FFAC-759E-4764-89AD-ED6A73E2E16D}.Debug|x86.ActiveCfg = Debug|Any CPU
+		{4303FFAC-759E-4764-89AD-ED6A73E2E16D}.Debug|x86.Build.0 = Debug|Any CPU
+		{4303FFAC-759E-4764-89AD-ED6A73E2E16D}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{4303FFAC-759E-4764-89AD-ED6A73E2E16D}.Release|Any CPU.Build.0 = Release|Any CPU
+		{4303FFAC-759E-4764-89AD-ED6A73E2E16D}.Release|Mixed Platforms.ActiveCfg = Release|Any CPU
+		{4303FFAC-759E-4764-89AD-ED6A73E2E16D}.Release|Mixed Platforms.Build.0 = Release|Any CPU
+		{4303FFAC-759E-4764-89AD-ED6A73E2E16D}.Release|x86.ActiveCfg = Release|Any CPU
+		{4303FFAC-759E-4764-89AD-ED6A73E2E16D}.Release|x86.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE

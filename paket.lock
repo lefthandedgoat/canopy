@@ -1,15 +1,14 @@
+FRAMEWORK: NET40
 NUGET
   remote: https://www.nuget.org/api/v2
-    FAKE (4.52)
+    FAKE (4.61.3)
     FSharp.Compiler.Service (2.0.0.6)
     FSharp.Core (3.0.2)
     FSharp.Data (2.3.3)
-      Zlib.Portable (>= 1.11) - framework: >= netstandard11, portable-net45+sl5+win8, portable-net45+win8, portable-net45+win8+wp8+wpa81
     FSharp.Formatting (2.14.4)
       FSharp.Compiler.Service (2.0.0.6)
       FSharpVSPowerTools.Core (>= 2.3 < 2.4)
     FSharpVSPowerTools.Core (2.3)
       FSharp.Compiler.Service (>= 2.0.0.3)
-    NuGet.CommandLine (3.5)
+    NuGet.CommandLine (4.1)
     Selenium.WebDriver (3.4)
-    Zlib.Portable (1.11) - framework: >= netstandard11, portable-net45+sl5+win8, portable-net45+win8, portable-net45+win8+wp8+wpa81

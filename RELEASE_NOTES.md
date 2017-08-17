@@ -349,3 +349,6 @@ Update to Selenium 3.3 [Issue #351](https://github.com/lefthandedgoat/canopy/iss
 
 #### 1.4.5 - June 9 2017
 * Added ability to shiftClick
+
+#### 1.5.0 - Apr 16 2017
+* Breaking: move json validator to its own project to remove dependency on FSharp.Data [Issue #371](https://github.com/lefthandedgoat/canopy/issues/371)

@@ -1,5 +1,6 @@
 ﻿using System.Collections.Generic;
 using _ = canopy.csharp.canopy;
+using __ = canopy.csharp.integration;
 
 namespace csharptests
 {
@@ -31,56 +32,56 @@ namespace csharptests
 
             _.test("two identical people have no differences", () =>
             {
-                var diff = _.diffJson(person1, person1);
+                var diff = __.diffJson(person1, person1);
                 _.equality(diff.Count, empty.Count);
-                _.validateJson(person1, person1);
+                __.validateJson(person1, person1);
             });
 
             _.test("missing property is identified", () =>
             {
-                var diff = _.diffJson(person1, person2);
+                var diff = __.diffJson(person1, person2);
                 _.equality(1, diff.Count);
                 _.equality(true, diff.Contains("Missing {root}.middle"));
             });
 
             _.test("extra property is identified", () =>
             {
-                var diff = _.diffJson(person1, person3);
+                var diff = __.diffJson(person1, person3);
                 _.equality(1, diff.Count);
                 _.equality(true, diff.Contains("Extra {root}.phone"));
             });
 
             _.test("empty array is acceptable array of ints", () =>
             {
-                var diff = _.diffJson(location1, location2);
+                var diff = __.diffJson(location1, location2);
                 _.equality(diff.Count, empty.Count);
-                _.validateJson(location1, location2);
+                __.validateJson(location1, location2);
             });
 
             _.test("empty array is acceptable array of records", () =>
             {
-                var diff = _.diffJson(location3, location4);
+                var diff = __.diffJson(location3, location4);
                 _.equality(diff.Count, empty.Count);
-                _.validateJson(location3, location4);
+                __.validateJson(location3, location4);
             });
 
             _.test("missing fields on records in arrays recognized correctly", () =>
             {
-                var diff = _.diffJson(location3, location5);
+                var diff = __.diffJson(location3, location5);
                 _.equality(1, diff.Count);
                 _.equality(true, diff.Contains("Missing {root}.[people].{}.middle"));
             });
 
             _.test("extra fields on records in arrays recognized correctly", () =>
             {
-                var diff = _.diffJson(location3, location6);
+                var diff = __.diffJson(location3, location6);
                 _.equality(1, diff.Count);
                 _.equality(true, diff.Contains("Extra {root}.[people].{}.phone"));
             });
 
             _.test("renamed field with extra property shows", () =>
             {
-                var diff = _.diffJson(location7, location8);
+                var diff = __.diffJson(location7, location8);
                 _.equality(7, diff.Count);
                 _.equality(true, diff.Contains("Missing {root}.[workers]"));
 
@@ -94,7 +95,7 @@ namespace csharptests
 
             _.test("nested objects with arrays reocgnized correctly", () =>
             {
-                var diff = _.diffJson(class1, class2);
+                var diff = __.diffJson(class1, class2);
                 _.equality(3, diff.Count);
                 _.equality(true, diff.Contains("Missing {root}.{location}.long"));
                 _.equality(true, diff.Contains("Missing {root}.{location}.[people].{}.middle"));
