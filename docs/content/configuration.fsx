@@ -112,6 +112,16 @@ wipSleep
 wipSleep <- 1.0
 
 (**
+failIfAnyWipTests
+--------
+* Prevents accidentally allowing wip tests into the build pipeline.
+* Set to false locally so tests under development are not affected.
+* Set to true in your CI environment to catch wip tests that have been mistakenly commited to trunk/master.
+* Default is false
+*)
+failIfAnyWipTests <- true
+
+(**
 runFailedContextsFirst
 -----
 * Runs failed contexts first if the test suite has already executed.
