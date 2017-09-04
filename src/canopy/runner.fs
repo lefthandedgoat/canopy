@@ -179,6 +179,12 @@ let private runtest (suite : suite) (test : Test) =
 
 (* documented/testing *)
 let run () =
+
+    let wipsExist = suites |> List.exists (fun s -> s.Wips.IsEmpty = false)
+
+    if wipsExist && configuration.failIfAnyWipTests then
+       raise <| Exception "Wip tests found and failIfAnyWipTests is true"
+
     reporter.suiteBegin()
     let stopWatch = new Diagnostics.Stopwatch()
     stopWatch.Start()
@@ -194,7 +200,7 @@ let run () =
         suites <- fc @ pc
 
     //run only wips if there are any
-    if suites |> List.exists (fun s -> s.Wips.IsEmpty = false) then
+    if wipsExist then
         suites <- suites |> List.filter (fun s -> s.Wips.IsEmpty = false || s.Always.IsEmpty = false)
 
     suites

@@ -48,6 +48,8 @@ let mutable pageTimeout = 10.0
 (* documented/configuration *)
 let mutable wipSleep = 1.0
 (* documented/configuration *)
+let mutable failIfAnyWipTests = false
+(* documented/configuration *)
 let mutable runFailedContextsFirst = false
 (* documented/configuration *)
 let mutable reporter : IReporter = new ConsoleReporter() :> IReporter
