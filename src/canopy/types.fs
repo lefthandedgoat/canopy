@@ -47,6 +47,7 @@ type BrowserStartMode =
     | FirefoxWithUserAgent of string
     | FirefoxWithPathAndTimeSpan of string * TimeSpan
     | FirefoxWithProfileAndTimeSpan of Firefox.FirefoxProfile * TimeSpan
+    | FirefoxHeadless
     | IE
     | IEWithOptions of IE.InternetExplorerOptions
     | IEWithOptionsAndTimeSpan of IE.InternetExplorerOptions * TimeSpan
@@ -55,6 +56,7 @@ type BrowserStartMode =
     | ChromeWithOptions of Chrome.ChromeOptions
     | ChromeWithOptionsAndTimeSpan of Chrome.ChromeOptions * TimeSpan
     | ChromeWithUserAgent of string
+    | ChromeHeadless
     | Chromium
     | ChromiumWithOptions of Chrome.ChromeOptions
     | Safari

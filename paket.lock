@@ -11,4 +11,4 @@ NUGET
     FSharpVSPowerTools.Core (2.3)
       FSharp.Compiler.Service (>= 2.0.0.3)
     NuGet.CommandLine (4.1)
-    Selenium.WebDriver (3.4)
+    Selenium.WebDriver (3.5.2)

@@ -352,3 +352,8 @@ Update to Selenium 3.3 [Issue #351](https://github.com/lefthandedgoat/canopy/iss
 
 #### 1.5.0 - Apr 16 2017
 * Breaking: move json validator to its own project to remove dependency on FSharp.Data [Issue #371](https://github.com/lefthandedgoat/canopy/issues/371)
+
+#### 1.5.1 - Sept 5 2017
+* Added configuration for failing if any tests are WIP (useful for CI) thanks @blair55! [PR #381](https://github.com/lefthandedgoat/canopy/pull/381)
+* Added start mode for chrome headless and firefox headless
+* Updated to Selenium 3.5.2

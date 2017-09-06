@@ -864,6 +864,13 @@ let start b =
             chromeWithUserAgent chromeDir userAgent
         | ChromeWithOptionsAndTimeSpan(options, timeSpan) -> 
             new Chrome.ChromeDriver(chromeDriverService chromeDir, options, timeSpan) :> IWebDriver
+        | ChromeHeadless ->
+            let options = Chrome.ChromeOptions()
+            options.AddArgument("--disable-extensions")
+            options.AddArgument("disable-infobars")
+            options.AddArgument("test-type") //https://code.google.com/p/chromedriver/issues/detail?id=799
+            options.AddArgument("--headless")
+            new Chrome.ChromeDriver(chromeDriverService chromeDir, options) :> IWebDriver
         | Chromium ->
             let options = Chrome.ChromeOptions()
             options.AddArgument("--disable-extensions")
@@ -890,6 +897,10 @@ let start b =
           let options = new Firefox.FirefoxOptions()
           options.Profile <- profile
           new FirefoxDriver(firefoxDriverService (), options, timespan) :> IWebDriver
+        | FirefoxHeadless -> 
+            let options = new Firefox.FirefoxOptions();
+            options.AddArgument("--headless")
+            new FirefoxDriver(firefoxDriverService (), options, TimeSpan.FromSeconds(elementTimeout)) :> IWebDriver
         | Safari ->
             new Safari.SafariDriver(safariDriverService ()) :> IWebDriver
         | PhantomJS ->

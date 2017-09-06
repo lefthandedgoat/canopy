@@ -81,6 +81,3 @@ let all () =
 
   "null property is acceptable" &&& fun _ ->
     diff withProperty nullProperty == [ ]
-    
-  "null record is acceptable" &&& fun _ ->
-    failwith "adfadfsfasffd"
