@@ -180,3 +180,4 @@ nuget/*.nupkg
 .paket/paket.exe
 *.orig
 .fake
+/paket-files/

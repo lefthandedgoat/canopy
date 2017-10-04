@@ -8,3 +8,10 @@ nuget Selenium.WebDriver
 nuget FAKE
 nuget FSharp.Formatting
 nuget FSharp.Data
+
+group Netcore
+  storage: none
+  source https://www.nuget.org/api/v2/
+
+  nuget Selenium.WebDriver
+  nuget FSharp.Core
