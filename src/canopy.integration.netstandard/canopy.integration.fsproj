@@ -11,4 +11,5 @@
     <Compile Include="..\canopy.integration\csharp.fs" />
   </ItemGroup>
 
+  <Import Project="..\..\.paket\Paket.Restore.targets" />
 </Project>
