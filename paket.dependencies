@@ -15,3 +15,4 @@ group Netcore
 
   nuget Selenium.WebDriver
   nuget FSharp.Core
+  nuget CoreCompat.System.Drawing

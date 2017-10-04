@@ -2,3 +2,4 @@ group Netcore
 
 FSharp.Core
 Selenium.WebDriver
+CoreCompat.System.Drawing
