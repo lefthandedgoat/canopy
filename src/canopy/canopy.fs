@@ -937,8 +937,7 @@ let closeTab number =
 
 (* documented/actions *)
 let tile (browsers : IWebDriver list) =
-    let h = System.Windows.Forms.Screen.PrimaryScreen.WorkingArea.Height
-    let w = System.Windows.Forms.Screen.PrimaryScreen.WorkingArea.Width
+    let w, h = screen.getPrimaryScreenResolution ()
     let count = browsers.Length
     let maxWidth = w / count
 
