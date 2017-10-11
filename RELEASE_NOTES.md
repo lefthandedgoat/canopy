@@ -357,3 +357,6 @@ Update to Selenium 3.3 [Issue #351](https://github.com/lefthandedgoat/canopy/iss
 * Added configuration for failing if any tests are WIP (useful for CI) thanks @blair55! [PR #381](https://github.com/lefthandedgoat/canopy/pull/381)
 * Added start mode for chrome headless and firefox headless
 * Updated to Selenium 3.5.2
+
+#### 1.5.2 - Oct 11 2017
+* Fix a problem with failedContexts being written in parallel when not using it [Issue #387](https://github.com/lefthandedgoat/canopy/issues/387)
