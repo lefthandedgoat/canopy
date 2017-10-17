@@ -360,3 +360,6 @@ Update to Selenium 3.3 [Issue #351](https://github.com/lefthandedgoat/canopy/iss
 
 #### 1.5.2 - Oct 11 2017
 * Fix a problem with failedContexts being written in parallel when not using it [Issue #387](https://github.com/lefthandedgoat/canopy/issues/387)
+
+#### 1.5.3 - Oct 17 2017
+* Improve how wait works to clean up stack trace and not stack overflow [Issue #388](https://github.com/lefthandedgoat/canopy/issues/388)
