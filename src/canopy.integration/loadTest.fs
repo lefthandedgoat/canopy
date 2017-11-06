@@ -4,12 +4,25 @@ open System
 
 let guid guid = System.Guid.Parse(guid)
 
-type SendFormData =
+type Timescale =
+  | Seconds
+  | Minutes
+
+type Task =
   {
-    JobId : string
-    NumberOfRequests : string
-    MaxWorkers : string
-    Uri : string
+    Description : string
+    Action : (unit -> unit)
+    Frequency : int
+  }
+
+type Job =
+  {
+    Timescale : Timescale
+    Warmup : bool
+    Baseline : bool
+    AcceptableRatioPercent : int
+    Iterations : int
+    Tasks : Task list
   }
 
 type SendData =
@@ -18,14 +31,6 @@ type SendData =
     NumberOfRequests : int
     MaxWorkers : int
     Uri : string
-  }
-
-let convertSendData (sendFormData : SendFormData) =
-  {
-    JobId = guid sendFormData.JobId
-    NumberOfRequests = int sendFormData.NumberOfRequests
-    MaxWorkers = int sendFormData.MaxWorkers
-    Uri = sendFormData.Uri
   }
 
 //actor stuff
@@ -107,3 +112,25 @@ let newManager () : actor<Manager> =
             return! loop numberOfRequests pendingRequests results
       }
     loop 0 0 [])
+
+let runLoadTest job =
+  //validate that all the descriptions are unique
+
+  //create warmup workers if need be and run them 1 after the other
+
+  //create baseline workers and run them 1 after the other and record values
+
+  //create all the workers and create the time they should execute
+  //loop and look at head and see if its time has passed and if it has then
+    //run it and pass tail
+    //recurse
+    //finish when manager says that there are no more workers
+
+  //workers report to reporter that they are done and maybe the manager
+
+
+  //if baselined validate times against baseline and fail if off
+    //map diffs and print them
+  //else
+    //print averages
+  ()
