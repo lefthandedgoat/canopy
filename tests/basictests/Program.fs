@@ -5,14 +5,14 @@ open OpenQA.Selenium
 open canopy
 open reporters
 
-start chrome
+//start chrome
 let mainBrowser = browser
 elementTimeout <- 3.0
 compareTimeout <- 3.0
 pageTimeout <- 3.0
 runFailedContextsFirst <- false
-reporter <- new LiveHtmlReporter(Chrome, configuration.chromeDir) :> IReporter
-reporter.setEnvironment "My Machine"
+//reporter <- new LiveHtmlReporter(Chrome, configuration.chromeDir) :> IReporter
+//reporter.setEnvironment "My Machine"
 configuration.failureMessagesThatShoulBeTreatedAsSkip <- ["Skip me when I fail"]
 
 configuration.failScreenshotFileName <-
@@ -22,12 +22,14 @@ configuration.failScreenshotFileName <-
       let stamp = DateTime.Now.ToString("MMM-d_HH-mm-ss")
       sprintf "%s_%s_%s" suiteContext cleanName stamp)
 
-failFast := true
+failFast := false
+
+loadTestTests.all()
 
 jsonValidatorTests.all()
 
-file1.all()
-file2.all()
+//file1.all()
+//file2.all()
 
 context "context1"
 once (fun _ -> Console.WriteLine "once")
