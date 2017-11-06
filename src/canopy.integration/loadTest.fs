@@ -4,10 +4,6 @@ open System
 
 let guid guid = System.Guid.Parse(guid)
 
-type Timescale =
-  | Seconds
-  | Minutes
-
 type Task =
   {
     Description : string
@@ -17,7 +13,6 @@ type Task =
 
 type Job =
   {
-    Timescale : Timescale
     Warmup : bool
     Baseline : bool
     AcceptableRatioPercent : int
@@ -154,7 +149,36 @@ let private baseline job =
 //warmup and baseline are the same but you ignore the results of warmup
 let private warmup job = runTasksOnce job |> ignore
 
+let createTimeline job =
+  let random = System.Random(1) //always seed to 1 so we get the same pattern
+
+  [0 .. job.Iterations - 1]
+  |> List.map (fun i ->
+       job.Tasks
+         |> List.map (fun task ->
+         //find a random time to wait before running the first iteration
+         //for a Frequency of 1 its random between 0 and 60
+         //for a Frequencey of 12 its random between 0 and 5
+         let maxRandom = 60000 / task.Frequency //ms
+         let startPoint = random.Next(0, maxRandom)
+         [0 .. task.Frequency - 1] |> List.map (fun j -> startPoint + (maxRandom * j) + (60000 * i), task))
+       |> List.concat)
+     |> List.concat
+     |> List.sortBy (fun (timing, _) -> timing)
+
+let rec private iterateWorkers timingsAndWorkers (sw : System.Diagnostics.Stopwatch) =
+  match timingsAndWorkers with
+  | [] -> ()
+  | (timing, worker : actor<Worker>) :: tail ->
+    if int sw.Elapsed.TotalMilliseconds > timing then
+      worker.Post(Worker.Do)
+      iterateWorkers tail sw
+    else
+      System.Threading.Thread.Sleep(1)
+      iterateWorkers timingsAndWorkers sw
+
 let runLoadTest job =
+  let manager = newManager ()
   let reporter = newReporter ()
   let mutable baselineResults : Result list = []
 
@@ -164,18 +188,20 @@ let runLoadTest job =
   //create warmup workers if need be and run them 1 after the other
   if job.Warmup = true then warmup job
 
-  if job.Baseline = true then baselineResults <- baseline job
   //create baseline workers and run them 1 after the other and record values
+  if job.Baseline = true then baselineResults <- baseline job
 
   //create all the workers and create the time they should execute
+  let timingsAndWorkers = createTimeline job |> List.map (fun (timing, task) -> timing, newWorker manager reporter task.Description task.Action)
+  manager.Post(Initialize(timingsAndWorkers.Length))
+
   //loop and look at head and see if its time has passed and if it has then
-    //run it and pass tail
-    //recurse
-    //finish when manager says that there are no more workers
+  iterateWorkers timingsAndWorkers (System.Diagnostics.Stopwatch.StartNew())
 
-  //workers report to reporter that they are done and maybe the manager
+  manager.PostAndReply(fun replyChannel -> Manager.Retire replyChannel) |> ignore
+  let results = reporter.PostAndReply(fun replyChannel -> Reporter.Retire replyChannel)
 
-
+  printfn "%A" results
   //if baselined validate times against baseline and fail if off
     //map diffs and print them
   //else
