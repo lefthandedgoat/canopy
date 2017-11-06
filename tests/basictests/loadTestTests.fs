@@ -18,7 +18,7 @@ let all () =
               [
                 {
                   Description = "print hello world"
-                  Action = fun _ -> printf "hello world"
+                  Action = fun _ -> printfn "hello world"
                   Frequency = 1
                 }
               ]

@@ -45,8 +45,9 @@ type Reporter =
   | Retire
 
 type Manager =
-  | WorkerDone of float * actor<Worker>
-  | Retire
+  | Initialize of workerCount:int
+  | WorkerDone
+  | Retire of AsyncReplyChannel<bool>
 
 let time f =
   //just time it and swallow any exceptions for now
@@ -66,7 +67,7 @@ let newWorker (manager : actor<Manager>) (reporter : actor<Reporter>) descriptio
         | Worker.Do ->
           let timing = time action
           reporter.Post(Reporter.WorkerDone(description, timing))
-          manager.Post(Manager.WorkerDone(timing, self))
+          manager.Post(Manager.WorkerDone)
           return! loop ()
       }
     loop ())
@@ -87,39 +88,26 @@ let newReporter () : actor<Reporter> =
       }
     loop ())
 
-let rec haveWorkersWork (idleWorkers : actor<Worker> list) numberOfRequests =
-    match idleWorkers with
-    | [] -> numberOfRequests
-    | worker :: remainingWorkers ->
-      worker.Post(Worker.Do)
-      haveWorkersWork remainingWorkers (numberOfRequests - 1)
-
 let newManager () : actor<Manager> =
   let sw = System.Diagnostics.Stopwatch()
   actor.Start(fun self ->
-    let rec loop numberOfRequests pendingRequests results =
+    let rec loop workerCount =
       async {
         let! msg = self.Receive ()
         match msg with
-        | Manager.Retire ->
-          return ()
-        | Manager.WorkerDone(ms, worker) ->
-          let results = ms :: results
-          if numberOfRequests > 0 then
-            let numberOfRequests = haveWorkersWork [worker] numberOfRequests
-            return! loop numberOfRequests pendingRequests results
-          else if pendingRequests > 1 then //if only 1 pendingRequest, then this that pendingRequest so we are done
-            let pendingRequests = pendingRequests - 1
-            return! loop numberOfRequests pendingRequests results
+        | Manager.Retire replyChannel ->
+          if workerCount = 0 then
+            replyChannel.Reply(true)
+            return ()
           else
-            sw.Stop()
-            let avg = results |> List.average
-            let min = results |> List.min
-            let max = results |> List.max
-            printfn "Total seconds: %A, Average ms: %A, Max ms: %A, Min ms: %A" sw.Elapsed.TotalSeconds avg max min
-            return! loop numberOfRequests pendingRequests results
+            self.Post(Manager.Retire replyChannel)
+            return! loop workerCount
+        | Manager.Initialize workerCount ->
+          return! loop workerCount
+        | Manager.WorkerDone ->
+          return! loop (workerCount - 1)
       }
-    loop 0 0 [])
+    loop 0)
 
 let private failIfDuplicateTasks job =
   let duplicates =
@@ -135,12 +123,14 @@ let private warmup job =
   let manager = newManager ()
   let reporter = newReporter ()
 
+  manager.Post(Initialize(job.Tasks.Length))
+
   job.Tasks
   |> List.map (fun task -> newWorker manager reporter task.Description task.Action)
   |> List.iter (fun worker -> worker.Post(Do); worker.Post(Worker.Retire))
 
+  manager.PostAndReply(fun replyChannel -> Manager.Retire replyChannel) |> ignore
   reporter.Post(Reporter.Retire)
-  manager.Post(Manager.Retire)
 
 
 let runLoadTest job =
