@@ -183,7 +183,7 @@ type TeamCityReporter(?logImagesToConsole: bool) =
 
         member this.setEnvironment env = ()
 
-type LiveHtmlReporter(browser : BrowserStartMode, driverPath : string, ?pinBrowserRight0: bool) =    
+type LiveHtmlReporter(browser : BrowserStartMode, driverPath : string, ?pinBrowserRight0: bool) =
     let pinBrowserRight = defaultArg pinBrowserRight0 true
     let consoleReporter : IReporter = new ConsoleReporter() :> IReporter
 
@@ -198,27 +198,38 @@ type LiveHtmlReporter(browser : BrowserStartMode, driverPath : string, ?pinBrows
                 let options = Chrome.ChromeOptions()
                 options.AddArguments("--disable-extensions")
                 options.AddArgument("disable-infobars")
-                options.AddArgument("test-type") //https://code.google.com/p/chromedriver/issues/detail?id=799                
+                options.AddArgument("test-type") //https://code.google.com/p/chromedriver/issues/detail?id=799
                 new Chrome.ChromeDriver(driverPath, options) :> IWebDriver
+        | ChromeHeadless ->
+            let options = Chrome.ChromeOptions()
+            options.AddArgument("--disable-extensions")
+            options.AddArgument("disable-infobars")
+            options.AddArgument("test-type") //https://code.google.com/p/chromedriver/issues/detail?id=799
+            options.AddArgument("--headless")
+            new Chrome.ChromeDriver(driverPath, options) :> IWebDriver
         | ChromeWithOptions options -> new Chrome.ChromeDriver(driverPath, options) :> IWebDriver
         | ChromeWithOptionsAndTimeSpan(options, timeSpan) -> new Chrome.ChromeDriver(driverPath, options, timeSpan) :> IWebDriver
         | ChromeWithUserAgent userAgent -> raise(System.Exception("Sorry ChromeWithUserAgent can't be used for LiveHtmlReporter"))
         | ChromiumWithOptions options -> new Chrome.ChromeDriver(driverPath, options) :> IWebDriver
         | Firefox -> new Firefox.FirefoxDriver() :> IWebDriver
         | FirefoxWithProfile profile -> new Firefox.FirefoxDriver(profile) :> IWebDriver
-        | FirefoxWithPath path -> 
+        | FirefoxWithPath path ->
           let options = new Firefox.FirefoxOptions()
           options.BrowserExecutableLocation <- path
           new Firefox.FirefoxDriver(options) :> IWebDriver
         | FirefoxWithUserAgent userAgent -> raise(System.Exception("Sorry FirefoxWithUserAgent can't be used for LiveHtmlReporter"))
-        | FirefoxWithPathAndTimeSpan(path, timespan) -> 
+        | FirefoxWithPathAndTimeSpan(path, timespan) ->
           let options = new Firefox.FirefoxOptions()
           options.BrowserExecutableLocation <- path
           new Firefox.FirefoxDriver(Firefox.FirefoxDriverService.CreateDefaultService(), options, timespan) :> IWebDriver
-        | FirefoxWithProfileAndTimeSpan(profile, timespan) -> 
+        | FirefoxWithProfileAndTimeSpan(profile, timespan) ->
           let options = new Firefox.FirefoxOptions()
           options.Profile <- profile
           new Firefox.FirefoxDriver(Firefox.FirefoxDriverService.CreateDefaultService(), options, timespan) :> IWebDriver
+        | FirefoxHeadless ->
+            let options = new Firefox.FirefoxOptions()
+            options.AddArgument("--headless")
+            new Firefox.FirefoxDriver(options) :> IWebDriver
         | Safari -> new Safari.SafariDriver() :> IWebDriver
         | PhantomJS | PhantomJSProxyNone -> raise(System.Exception("Sorry PhantomJS can't be used for LiveHtmlReporter"))
         | Remote(_,_) -> raise(System.Exception("Sorry Remote can't be used for LiveHtmlReporter"))
