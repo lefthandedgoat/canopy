@@ -36,16 +36,17 @@ type SendData =
 //actor stuff
 type actor<'t> = MailboxProcessor<'t>
 
-type Command =
-  | Process of (unit -> float)
-
 type Worker =
   | Do
   | Retire
 
+type Reporter =
+  | WorkerDone of description:string * timing:float
+  | Retire
+
 type Manager =
-  | Initialize of SendData * Command
   | WorkerDone of float * actor<Worker>
+  | Retire
 
 let time f =
   //just time it and swallow any exceptions for now
@@ -54,7 +55,7 @@ let time f =
   with _ -> ()
   stopWatch.Elapsed.TotalMilliseconds
 
-let newWorker (manager : actor<Manager>) (command : Command): actor<Worker> =
+let newWorker (manager : actor<Manager>) (reporter : actor<Reporter>) description action : actor<Worker> =
   actor.Start(fun self ->
     let rec loop () =
       async {
@@ -63,10 +64,25 @@ let newWorker (manager : actor<Manager>) (command : Command): actor<Worker> =
         | Worker.Retire ->
           return ()
         | Worker.Do ->
-          match command with
-          | Process f ->
-            let timing = time f
-            manager.Post(Manager.WorkerDone(timing, self))
+          let timing = time action
+          reporter.Post(Reporter.WorkerDone(description, timing))
+          manager.Post(Manager.WorkerDone(timing, self))
+          return! loop ()
+      }
+    loop ())
+
+let newReporter () : actor<Reporter> =
+  let mutable results : (string * float) list = []
+  actor.Start(fun self ->
+    let rec loop () =
+      async {
+        let! msg = self.Receive ()
+        match msg with
+        | Reporter.Retire ->
+          //do some calculations and return them?
+          return ()
+        | Reporter.WorkerDone (description, timing) ->
+          results <- (description, timing) :: results
           return! loop ()
       }
     loop ())
@@ -85,16 +101,8 @@ let newManager () : actor<Manager> =
       async {
         let! msg = self.Receive ()
         match msg with
-        | Manager.Initialize (sendData, command) ->
-          //build up a list of all the work to do
-          printfn "Requests: %A, Concurrency %A" sendData.NumberOfRequests sendData.MaxWorkers
-          let numberOfRequests = sendData.NumberOfRequests
-          let workers = [ 1 .. sendData.MaxWorkers ] |> List.map (fun _ -> newWorker self command)
-          let results = []
-          let pendingRequests = sendData.MaxWorkers
-          sw.Restart()
-          let numberOfRequests = haveWorkersWork workers numberOfRequests
-          return! loop numberOfRequests pendingRequests results
+        | Manager.Retire ->
+          return ()
         | Manager.WorkerDone(ms, worker) ->
           let results = ms :: results
           if numberOfRequests > 0 then
@@ -113,11 +121,38 @@ let newManager () : actor<Manager> =
       }
     loop 0 0 [])
 
+let private failIfDuplicateTasks job =
+  let duplicates =
+    job.Tasks
+    |> Seq.groupBy (fun task -> task.Description)
+    |> Seq.filter (fun (description, tasks) -> Seq.length tasks > 1)
+    |> Seq.map (fun (description, _) -> description)
+    |> List.ofSeq
+
+  if duplicates <> [] then failwith <| sprintf "You have tasks with duplicates decriptions: %A" duplicates
+
+let private warmup job =
+  let manager = newManager ()
+  let reporter = newReporter ()
+
+  job.Tasks
+  |> List.map (fun task -> newWorker manager reporter task.Description task.Action)
+  |> List.iter (fun worker -> worker.Post(Do); worker.Post(Worker.Retire))
+
+  reporter.Post(Reporter.Retire)
+  manager.Post(Manager.Retire)
+
+
 let runLoadTest job =
-  //validate that all the descriptions are unique
+  let reporter = newReporter ()
+
+  //make sure that we dont have duplicate descriptions because it will mess up the numbers
+  failIfDuplicateTasks job
 
   //create warmup workers if need be and run them 1 after the other
+  if job.Warmup = true then warmup job
 
+  //if job.Baseline = true then warmup job
   //create baseline workers and run them 1 after the other and record values
 
   //create all the workers and create the time they should execute
@@ -133,4 +168,5 @@ let runLoadTest job =
     //map diffs and print them
   //else
     //print averages
+
   ()
