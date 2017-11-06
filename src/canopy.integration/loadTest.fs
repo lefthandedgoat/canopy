@@ -25,12 +25,13 @@ type Job =
     Tasks : Task list
   }
 
-type SendData =
+type Result =
   {
-    JobId : System.Guid
-    NumberOfRequests : int
-    MaxWorkers : int
-    Uri : string
+    Description : string
+    Min : float
+    Max : float
+    Average: float
+    //Todo maybe add 95% and 99%
   }
 
 //actor stuff
@@ -42,7 +43,7 @@ type Worker =
 
 type Reporter =
   | WorkerDone of description:string * timing:float
-  | Retire
+  | Retire of AsyncReplyChannel<Result list>
 
 type Manager =
   | Initialize of workerCount:int
@@ -79,8 +80,21 @@ let newReporter () : actor<Reporter> =
       async {
         let! msg = self.Receive ()
         match msg with
-        | Reporter.Retire ->
-          //do some calculations and return them?
+        | Reporter.Retire replyChannel ->
+          let finalResults =
+            results
+            |> Seq.groupBy (fun (description, timing) -> description)
+            |> Seq.map (fun (description, pairs) -> description, pairs |> Seq.map (fun (_, timings) -> timings))
+            |> Seq.map (fun (description, timings) ->
+                 {
+                   Description = description
+                   Min = Seq.min timings
+                   Max = Seq.max timings
+                   Average = Seq.average timings
+                 }
+               )
+             |> List.ofSeq
+          replyChannel.Reply(finalResults)
           return ()
         | Reporter.WorkerDone (description, timing) ->
           results <- (description, timing) :: results
@@ -119,7 +133,7 @@ let private failIfDuplicateTasks job =
 
   if duplicates <> [] then failwith <| sprintf "You have tasks with duplicates decriptions: %A" duplicates
 
-let private warmup job =
+let private runTasksOnce job =
   let manager = newManager ()
   let reporter = newReporter ()
 
@@ -130,11 +144,19 @@ let private warmup job =
   |> List.iter (fun worker -> worker.Post(Do); worker.Post(Worker.Retire))
 
   manager.PostAndReply(fun replyChannel -> Manager.Retire replyChannel) |> ignore
-  reporter.Post(Reporter.Retire)
+  reporter.PostAndReply(fun replyChannel -> Reporter.Retire replyChannel)
 
+let private baseline job =
+  let results = runTasksOnce job
+  results |> List.iter (printfn "%A")
+  results
+
+//warmup and baseline are the same but you ignore the results of warmup
+let private warmup job = runTasksOnce job |> ignore
 
 let runLoadTest job =
   let reporter = newReporter ()
+  let mutable baselineResults : Result list = []
 
   //make sure that we dont have duplicate descriptions because it will mess up the numbers
   failIfDuplicateTasks job
@@ -142,7 +164,7 @@ let runLoadTest job =
   //create warmup workers if need be and run them 1 after the other
   if job.Warmup = true then warmup job
 
-  //if job.Baseline = true then warmup job
+  if job.Baseline = true then baselineResults <- baseline job
   //create baseline workers and run them 1 after the other and record values
 
   //create all the workers and create the time they should execute
