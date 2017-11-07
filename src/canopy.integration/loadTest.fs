@@ -143,10 +143,7 @@ let private runTasksOnce job =
   manager.PostAndReply(fun replyChannel -> Manager.Retire replyChannel) |> ignore
   reporter.PostAndReply(fun replyChannel -> Reporter.Retire replyChannel)
 
-let private baseline job =
-  let results = runTasksOnce job
-  results |> List.iter (printfn "%A")
-  results
+let private baseline job = runTasksOnce job
 
 //warmup and baseline are the same but you ignore the results of warmup
 let private warmup job = runTasksOnce job |> ignore
@@ -180,6 +177,17 @@ let rec private iterateWorkers timingsAndWorkers (sw : System.Diagnostics.Stopwa
       System.Threading.Thread.Sleep(1)
       iterateWorkers timingsAndWorkers sw
 
+let printResults results =
+  printfn "Task                                                  MIN ms    MAX ms    AVG ms"
+  printfn "--------------------------------------------------------------------------------"
+  results
+  |> List.iter (fun result ->
+       let description = result.Description.PadRight(50, ' ')
+       let min = (sprintf "%.1f" result.Min).PadLeft(10, ' ')
+       let max = (sprintf "%.1f" result.Max).PadLeft(10, ' ')
+       let avg = (sprintf "%.1f" result.Average).PadLeft(10, ' ')
+       printfn "%s%s%s%s" description min max avg)
+
 let runLoadTest job =
   let manager = newManager ()
   let reporter = newReporter ()
@@ -204,7 +212,8 @@ let runLoadTest job =
   manager.PostAndReply(fun replyChannel -> Manager.Retire replyChannel) |> ignore
   let results = reporter.PostAndReply(fun replyChannel -> Reporter.Retire replyChannel)
 
-  printfn "%A" results
+  printResults results
+
   //if baselined validate times against baseline and fail if off
     //map diffs and print them
   //else
