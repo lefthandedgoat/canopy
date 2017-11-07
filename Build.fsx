@@ -91,7 +91,7 @@ Target "CleanDocs" (fun _ ->
 
 Target "Build" (fun _ ->
     !! (solutionFile + "*.sln")
-    |> MSBuild "" "Rebuild" [ "Configuration", "Release"; "VisualStudioVersion", "11.0" ]
+    |> MSBuild "" "Rebuild" [ "Configuration", "Release"; "VisualStudioVersion", "14.0" ]
     |> ignore
 )
 
