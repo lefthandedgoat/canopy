@@ -22,7 +22,9 @@ configuration.failScreenshotFileName <-
       let stamp = DateTime.Now.ToString("MMM-d_HH-mm-ss")
       sprintf "%s_%s_%s" suiteContext cleanName stamp)
 
-failFast := true
+failFast := false
+
+loadTestTests.all()
 
 jsonValidatorTests.all()
 

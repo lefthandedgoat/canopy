@@ -52,7 +52,9 @@
     <Compile Include="AssemblyInfo.fs" />
     <None Include="paket.references" />
     <Compile Include="jsonValidator.fs" />
+    <Compile Include="loadTest.fs" />
     <Compile Include="csharp.fs" />
+    <Compile Include="chsharpLoadTest.fs" />
   </ItemGroup>
   <ItemGroup>
     <Reference Include="mscorlib" />

@@ -1,5 +1,9 @@
 ﻿using System;
+using System.Collections.Generic;
+using System.Net;
 using canopy;
+using canopy.csharp.loadTest;
+using canopy.integration;
 using _ = canopy.csharp.canopy;
 
 namespace csharptests
@@ -119,6 +123,37 @@ namespace csharptests
                 _.notDisplayed(".contextmenu");
                 _.rightClick("div:first");
                 _.displayed(".contextmenu");
+            });
+
+            _.skip("load test example", () =>
+            {
+                var job = new job(
+                    warmup: true,
+                    baseline: true,
+                    acceptableRatioPercent: 200,
+                    minutes: 1,
+                    load: 1,
+                    tasks: new List<task>
+                    {
+                        new task(
+                            description: "task1",
+                            action: () =>
+                            {
+                                using (var client = new WebClient()) { client.DownloadString("http://www.turtletest.com/chris");}
+                                Console.WriteLine("task1");
+                            },
+                            frequency: 6),
+                        new task(
+                            description: "task2",
+                            action: () =>
+                            {
+                                using (var client = new WebClient()) { client.DownloadString("http://www.turtletest.com/chris");}
+                                Console.WriteLine("task2");
+                            },
+                            frequency: 6)
+                    });
+
+                canopy.csharp.loadTest.runner.run(job);
             });
 
             _.run();
