@@ -1,0 +1,28 @@
+﻿<Project Sdk="Microsoft.NET.Sdk">
+
+  <PropertyGroup>
+    <TargetFramework>netstandard2.0</TargetFramework>
+  </PropertyGroup>
+
+  <ItemGroup>
+    <Compile Include="..\canopy\AssemblyInfo.fs" />
+    <Compile Include="..\canopy\types.fs" />
+    <Compile Include="..\canopy\wait.fs" />
+    <Compile Include="..\canopy\screen.fs" />
+    <Compile Include="..\canopy\reporters.fs" />
+    <Compile Include="..\canopy\finders.fs" />
+    <Compile Include="..\canopy\configuration.fs" />
+    <Compile Include="..\canopy\jarowinkler.fs" />
+    <Compile Include="..\canopy\canopy.fs" />
+    <Compile Include="..\canopy\history.fs" />
+    <Compile Include="..\canopy\runner.fs" />
+    <None Include="paket.references" />
+    <Compile Include="..\canopy\screenSizes.fs" />
+    <Compile Include="..\canopy\userAgents.fs" />
+    <Compile Include="..\canopy\csharp.fs" />
+    <None Include="..\canopy\companion\companion.fsx" />
+  </ItemGroup>
+
+  <Import Project="..\..\.paket\Paket.Restore.targets" />
+
+</Project>

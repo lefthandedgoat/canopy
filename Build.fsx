@@ -90,7 +90,7 @@ Target "CleanDocs" (fun _ ->
 // Build library & test project
 
 Target "Build" (fun _ ->
-    !! (solutionFile + "*.sln")
+    !! (solutionFile + ".sln")
     |> MSBuild "" "Rebuild" [ "Configuration", "Release"; "VisualStudioVersion", "11.0" ]
     |> ignore
 )

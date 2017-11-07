@@ -11,6 +11,8 @@ module screen =
           size: Drawing.Size
         }
 
+#if NETSTANDARD2_0
+#else
     module microsoftDotNet =
         let getPrimaryScreenResolution () =
             let h = System.Windows.Forms.Screen.PrimaryScreen.WorkingArea.Height
@@ -31,7 +33,7 @@ module screen =
         let allScreensWorkingArea () =
             System.Windows.Forms.Screen.AllScreens
             |> Array.map(fun x -> x.WorkingArea)
-
+#endif
 
     module mono =
         let mutable screenWidth = 1280
@@ -60,17 +62,33 @@ module screen =
         Environment.Is64BitProcess && Type.GetType("Mono.Runtime") <> null
 
     let getPrimaryScreenResolution () =
+#if NETSTANDARD2_0
+        mono.getPrimaryScreenResolution ()
+#else
         if is64BitMono then mono.getPrimaryScreenResolution ()
         else microsoftDotNet.getPrimaryScreenResolution ()
+#endif
 
     let getPrimaryScreenBounds () =
+#if NETSTANDARD2_0
+        mono.getPrimaryScreenBounds ()
+#else
         if is64BitMono then mono.getPrimaryScreenBounds ()
         else microsoftDotNet.getPrimaryScreenBounds ()
+#endif
 
     let monitorCount =
+#if NETSTANDARD2_0
+        mono.monitorCount ()
+#else
         if is64BitMono then mono.monitorCount ()
         else microsoftDotNet.monitorCount ()
+#endif
 
     let allScreensWorkingArea =
+#if NETSTANDARD2_0
+        mono.allScreensWorkingArea ()
+#else
         if is64BitMono then mono.allScreensWorkingArea ()
         else microsoftDotNet.allScreensWorkingArea ()
+#endif

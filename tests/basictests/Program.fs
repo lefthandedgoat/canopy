@@ -5,6 +5,8 @@ open OpenQA.Selenium
 open canopy
 open reporters
 
+configuration.chromeDir <- @"C:\Users\e.sada\Downloads\chromedriver_win32"
+
 start chrome
 let mainBrowser = browser
 elementTimeout <- 3.0

@@ -1,0 +1,24 @@
+﻿<Project Sdk="Microsoft.NET.Sdk">
+
+  <PropertyGroup>
+    <OutputType>Exe</OutputType>
+    <TargetFramework>netcoreapp2.0</TargetFramework>
+  </PropertyGroup>
+
+  <ItemGroup>
+    <Compile Include="..\basictests\jsonValidatorTests.fs" />
+    <Compile Include="..\basictests\file1.fs" />
+    <Compile Include="..\basictests\file2.fs" />
+    <Compile Include="..\basictests\Program.fs" />
+    <None Include="paket.references" />
+    <None Include="..\basictests\geckodriver.exe">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </None>
+  </ItemGroup>
+
+  <ItemGroup>
+    <ProjectReference Include="..\..\src\canopy.integration.netstandard\canopy.integration.fsproj" />
+    <ProjectReference Include="..\..\src\canopy.netstandard\canopy.fsproj" />
+  </ItemGroup>
+
+</Project>

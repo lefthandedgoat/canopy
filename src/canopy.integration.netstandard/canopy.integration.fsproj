@@ -1,0 +1,15 @@
+﻿<Project Sdk="Microsoft.NET.Sdk">
+
+  <PropertyGroup>
+    <TargetFramework>netstandard2.0</TargetFramework>
+  </PropertyGroup>
+
+  <ItemGroup>
+    <Compile Include="..\canopy.integration\AssemblyInfo.fs" />
+    <None Include="paket.references" />
+    <Compile Include="..\canopy.integration\jsonValidator.fs" />
+    <Compile Include="..\canopy.integration\csharp.fs" />
+  </ItemGroup>
+
+  <Import Project="..\..\.paket\Paket.Restore.targets" />
+</Project>
