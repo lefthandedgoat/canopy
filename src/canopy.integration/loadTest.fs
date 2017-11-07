@@ -214,6 +214,12 @@ let runLoadTest job =
 
   printResults results
 
+  if job.Baseline = true then
+    results
+    |> List.iter (fun result ->
+         let baselineResult = baselineResults |> List.find(fun baselineResult -> result.Description = baselineResult.Description)
+         if result.Average > baselineResult.Average * (float job.AcceptableRatioPercent / 100.0) then printfn "fail")
+
   //if baselined validate times against baseline and fail if off
     //map diffs and print them
   //else

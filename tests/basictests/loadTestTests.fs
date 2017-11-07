@@ -2,6 +2,7 @@ module loadTestTests
 
 open canopy.runner
 open loadTest
+open System.Net
 
 let all () =
     context "tests for the load tester in integration"
@@ -18,12 +19,18 @@ let all () =
               [
                 {
                   Description = "task1"
-                  Action = fun _ -> printfn "task1"
+                  Action = (fun _ ->
+                    use client = new WebClient()
+                    client.DownloadString("http://www.turtletest.com/chris") |> ignore
+                    printfn "task1")
                   Frequency = 6
                 }
                 {
                   Description = "task2"
-                  Action = fun _ -> printfn "task2"
+                  Action = (fun _ ->
+                    use client = new WebClient()
+                    client.DownloadString("http://www.turtletest.com/chris") |> ignore
+                    printfn "task2")
                   Frequency = 6
                 }
               ]
