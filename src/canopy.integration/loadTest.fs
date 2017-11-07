@@ -2,6 +2,8 @@ module loadTest
 
 open System
 
+//IF YOU ARE READIN THIS, SKIP TO BOTTOM TO runLoadTest TO GET IDEAD OF MAIN FLOW
+
 let guid guid = System.Guid.Parse(guid)
 
 type Task =
@@ -188,6 +190,20 @@ let printResults results =
        let avg = (sprintf "%.1f" result.Average).PadLeft(10, ' ')
        printfn "%s%s%s%s" description min max avg)
 
+let runBaseline job baselineResults results =
+  if job.Baseline = true then
+    results
+    |> List.map (fun result ->
+         let baselineResult = baselineResults |> List.find(fun baselineResult -> result.Description = baselineResult.Description)
+         let threshold = baselineResult.Average * (float job.AcceptableRatioPercent / 100.0)
+         if result.Average > threshold then
+           Some (sprintf "FAILED: Average of %.1f exceeded threshold of %.1f for %s" result.Average threshold result.Description)
+         else None)
+    |> List.choose id
+  else []
+
+let failIfFailure results = if results <> [] then failwith (System.String.Concat(results, "\r\n"))
+
 let runLoadTest job =
   let manager = newManager ()
   let reporter = newReporter ()
@@ -214,15 +230,4 @@ let runLoadTest job =
 
   printResults results
 
-  if job.Baseline = true then
-    results
-    |> List.iter (fun result ->
-         let baselineResult = baselineResults |> List.find(fun baselineResult -> result.Description = baselineResult.Description)
-         if result.Average > baselineResult.Average * (float job.AcceptableRatioPercent / 100.0) then printfn "fail")
-
-  //if baselined validate times against baseline and fail if off
-    //map diffs and print them
-  //else
-    //print averages
-
-  ()
+  runBaseline job baselineResults results |> failIfFailure
