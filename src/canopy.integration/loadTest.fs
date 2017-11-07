@@ -1,8 +1,8 @@
-module loadTest
+module canopy.integration.loadTest
 
 open System
 
-//IF YOU ARE READIN THIS, SKIP TO BOTTOM TO runLoadTest TO GET IDEAD OF MAIN FLOW
+//IF YOU ARE READING THIS, SKIP TO BOTTOM TO runLoadTest TO GET IDEAD OF MAIN FLOW
 
 let guid guid = System.Guid.Parse(guid)
 

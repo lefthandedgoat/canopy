@@ -1,7 +1,5 @@
 ﻿namespace canopy.csharp
 
-
-
 type integration () =
 
     static member diffJson example actual =

@@ -1,13 +1,13 @@
 module loadTestTests
 
 open canopy.runner
-open loadTest
+open canopy.integration.loadTest
 open System.Net
 
 let all () =
     context "tests for the load tester in integration"
 
-    "can create a basic job" &&&& fun _ ->
+    "can create a basic job" &&! fun _ ->
         let job =
           {
             Warmup = true
