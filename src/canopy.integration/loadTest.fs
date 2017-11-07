@@ -16,7 +16,8 @@ type Job =
     Warmup : bool
     Baseline : bool
     AcceptableRatioPercent : int
-    Iterations : int
+    Minutes : int
+    Load : int
     Tasks : Task list
   }
 
@@ -109,6 +110,7 @@ let newManager () : actor<Manager> =
             replyChannel.Reply(true)
             return ()
           else
+            System.Threading.Thread.Sleep(10)
             self.Post(Manager.Retire replyChannel)
             return! loop workerCount
         | Manager.Initialize workerCount ->
@@ -152,16 +154,17 @@ let private warmup job = runTasksOnce job |> ignore
 let createTimeline job =
   let random = System.Random(1) //always seed to 1 so we get the same pattern
 
-  [0 .. job.Iterations - 1]
+  [0 .. job.Minutes - 1]
   |> List.map (fun i ->
        job.Tasks
          |> List.map (fun task ->
          //find a random time to wait before running the first iteration
          //for a Frequency of 1 its random between 0 and 60
          //for a Frequencey of 12 its random between 0 and 5
-         let maxRandom = 60000 / task.Frequency //ms
+         //multiply by load to increase frequency
+         let maxRandom = 60000 / (task.Frequency * job.Load) //ms
          let startPoint = random.Next(0, maxRandom)
-         [0 .. task.Frequency - 1] |> List.map (fun j -> startPoint + (maxRandom * j) + (60000 * i), task))
+         [0 .. (task.Frequency * job.Load) - 1] |> List.map (fun j -> startPoint + (maxRandom * j) + (60000 * i), task))
        |> List.concat)
      |> List.concat
      |> List.sortBy (fun (timing, _) -> timing)

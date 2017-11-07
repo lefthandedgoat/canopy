@@ -12,13 +12,19 @@ let all () =
             Warmup = true
             Baseline = true
             AcceptableRatioPercent = 200
-            Iterations = 1
+            Minutes = 1
+            Load = 1
             Tasks =
               [
                 {
-                  Description = "print hello world"
-                  Action = fun _ -> printfn "hello world"
-                  Frequency = 60
+                  Description = "task1"
+                  Action = fun _ -> printfn "task1"
+                  Frequency = 6
+                }
+                {
+                  Description = "task2"
+                  Action = fun _ -> printfn "task2"
+                  Frequency = 6
                 }
               ]
           }
@@ -31,7 +37,8 @@ let all () =
             Warmup = true
             Baseline = true
             AcceptableRatioPercent = 200
-            Iterations = 1
+            Minutes = 1
+            Load = 1
             Tasks =
               [
                 {
