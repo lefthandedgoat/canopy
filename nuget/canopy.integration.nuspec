@@ -12,7 +12,7 @@
     <releaseNotes>@releaseNotes@</releaseNotes>
     <tags>@tags@</tags>
     <dependencies>
-      <dependency id="FSharp.Core" version="3.0.2" />
+      <dependency id="FSharp.Core" version="4.0.0.1" />
       <dependency id="canopy" version="1.6.0" />
 	  <dependency id="FSharp.Data" version="2.4.2" />
     </dependencies>

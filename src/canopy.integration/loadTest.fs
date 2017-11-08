@@ -6,6 +6,8 @@ open System
 
 let guid guid = System.Guid.Parse(guid)
 
+//A task is work to be done, like do a GET on the login page
+//Frequency is how many times per minute to run this action
 type Task =
   {
     Description : string
@@ -13,6 +15,12 @@ type Task =
     Frequency : int
   }
 
+//Jobs are a group of tasks that you want to run
+//Warmup = true will run each task 1 time
+//Baseline = true will run each task 1 time, capturing its performance
+////and using it to determine if the run was a pass or fail
+//AcceptableRatioPercent is used with baseline data to see if the average run of tasks exceeded the baseline
+//Load is the work factor, it is multiplied by frequency.  So 2 would provide double the load, 10 would be 10x load
 type Job =
   {
     Warmup : bool
@@ -23,9 +31,9 @@ type Job =
     Tasks : Task list
   }
 
-type Result =
+type private Result =
   {
-    Description : string
+    Task : Task
     Min : float
     Max : float
     Average: float
@@ -33,29 +41,31 @@ type Result =
   }
 
 //actor stuff
-type actor<'t> = MailboxProcessor<'t>
+type private actor<'t> = MailboxProcessor<'t>
 
-type Worker =
+type private Worker =
   | Do
   | Retire
 
-type Reporter =
-  | WorkerDone of description:string * timing:float
+type private Reporter =
+  | WorkerDone of Task * timing:float
   | Retire of AsyncReplyChannel<Result list>
 
-type Manager =
+type private Manager =
   | Initialize of workerCount:int
   | WorkerDone
   | Retire of AsyncReplyChannel<bool>
 
-let time f =
+let private time f =
   //just time it and swallow any exceptions for now
   let stopWatch = System.Diagnostics.Stopwatch.StartNew()
   try f() |> ignore
   with _ -> ()
   stopWatch.Elapsed.TotalMilliseconds
 
-let newWorker (manager : actor<Manager>) (reporter : actor<Reporter>) description action : actor<Worker> =
+//worker ctor
+//workers just run the action and send the timing informatoin to the reporter
+let private newWorker (manager : actor<Manager>) (reporter : actor<Reporter>) task : actor<Worker> =
   actor.Start(fun self ->
     let rec loop () =
       async {
@@ -64,15 +74,17 @@ let newWorker (manager : actor<Manager>) (reporter : actor<Reporter>) descriptio
         | Worker.Retire ->
           return ()
         | Worker.Do ->
-          let timing = time action
-          reporter.Post(Reporter.WorkerDone(description, timing))
+          let timing = time task.Action
+          reporter.Post(Reporter.WorkerDone(task, timing))
           manager.Post(Manager.WorkerDone)
           return! loop ()
       }
     loop ())
 
-let newReporter () : actor<Reporter> =
-  let mutable results : (string * float) list = []
+//reporter ctor
+//reporter recieves timing information about tasks from workers and aggregates it
+let private newReporter () : actor<Reporter> =
+  let mutable results : (Task * float) list = []
   actor.Start(fun self ->
     let rec loop () =
       async {
@@ -81,11 +93,12 @@ let newReporter () : actor<Reporter> =
         | Reporter.Retire replyChannel ->
           let finalResults =
             results
-            |> Seq.groupBy (fun (description, timing) -> description)
-            |> Seq.map (fun (description, pairs) -> description, pairs |> Seq.map (fun (_, timings) -> timings))
-            |> Seq.map (fun (description, timings) ->
+            |> Seq.groupBy (fun (task, timing) -> task.Description)
+            |> Seq.sortBy (fun (description, _) -> description)
+            |> Seq.map (fun (description, pairs) -> description, pairs |> Seq.head |> fst, pairs |> Seq.map (fun (_, timings) -> timings))
+            |> Seq.map (fun (description, task, timings) ->
                  {
-                   Description = description
+                   Task = task
                    Min = Seq.min timings
                    Max = Seq.max timings
                    Average = Seq.average timings
@@ -100,7 +113,9 @@ let newReporter () : actor<Reporter> =
       }
     loop ())
 
-let newManager () : actor<Manager> =
+//manager ctor
+//managers keep track of active workers and know when everything is done
+let private newManager () : actor<Manager> =
   let sw = System.Diagnostics.Stopwatch()
   actor.Start(fun self ->
     let rec loop workerCount =
@@ -122,6 +137,7 @@ let newManager () : actor<Manager> =
       }
     loop 0)
 
+//Validation for duplicate tasks
 let private failIfDuplicateTasks job =
   let duplicates =
     job.Tasks
@@ -139,7 +155,7 @@ let private runTasksOnce job =
   manager.Post(Initialize(job.Tasks.Length))
 
   job.Tasks
-  |> List.map (fun task -> newWorker manager reporter task.Description task.Action)
+  |> List.map (fun task -> newWorker manager reporter task)
   |> List.iter (fun worker -> worker.Post(Do); worker.Post(Worker.Retire))
 
   manager.PostAndReply(fun replyChannel -> Manager.Retire replyChannel) |> ignore
@@ -150,6 +166,7 @@ let private baseline job = runTasksOnce job
 //warmup and baseline are the same but you ignore the results of warmup
 let private warmup job = runTasksOnce job |> ignore
 
+//not private currently, for testing purposes
 let createTimeline job =
   let random = System.Random(1) //always seed to 1 so we get the same pattern
 
@@ -179,31 +196,48 @@ let rec private iterateWorkers timingsAndWorkers (sw : System.Diagnostics.Stopwa
       System.Threading.Thread.Sleep(1)
       iterateWorkers timingsAndWorkers sw
 
-let printResults results =
+let private printJob job = printfn "Job: (load %A) (minutes %A) (acceptableRatioPercent %A) (warmup %A) (baseline %A)" job.Load job.Minutes job.AcceptableRatioPercent job.Warmup job.Baseline
+
+let private printBaseline baselineResults =
+  printfn ""
+  if baselineResults |> List.length = 0 then printfn "No Baseline"
+  else
+    printfn "Baseline                                                                      ms"
+    printfn "--------------------------------------------------------------------------------"
+    baselineResults
+    |> List.iter (fun result ->
+         let description = result.Task.Description.PadRight(70, ' ')
+         let value = (sprintf "%.1f" result.Average).PadLeft(10, ' ')
+         printfn "%s%s" description value)
+
+let private printResults results load =
+  printfn ""
   printfn "Task                                                  MIN ms    MAX ms    AVG ms"
   printfn "--------------------------------------------------------------------------------"
   results
   |> List.iter (fun result ->
-       let description = result.Description.PadRight(50, ' ')
+       let temp = (sprintf "%s x%i" result.Task.Description (result.Task.Frequency * load))
+       let description = temp.Substring(0, System.Math.Min(temp.Length, 50)).PadRight(50, ' ')
        let min = (sprintf "%.1f" result.Min).PadLeft(10, ' ')
        let max = (sprintf "%.1f" result.Max).PadLeft(10, ' ')
        let avg = (sprintf "%.1f" result.Average).PadLeft(10, ' ')
        printfn "%s%s%s%s" description min max avg)
 
-let runBaseline job baselineResults results =
+let private runBaseline job baselineResults results =
   if job.Baseline = true then
     results
     |> List.map (fun result ->
-         let baselineResult = baselineResults |> List.find(fun baselineResult -> result.Description = baselineResult.Description)
+         let baselineResult = baselineResults |> List.find(fun baselineResult -> result.Task.Description = baselineResult.Task.Description)
          let threshold = baselineResult.Average * (float job.AcceptableRatioPercent / 100.0)
          if result.Average > threshold then
-           Some (sprintf "FAILED: Average of %.1f exceeded threshold of %.1f for %s" result.Average threshold result.Description)
+           Some (sprintf "FAILED: Average of %.1f exceeded threshold of %.1f for %s" result.Average threshold result.Task.Description)
          else None)
     |> List.choose id
   else []
 
-let failIfFailure results = if results <> [] then failwith (System.String.Concat(results, "\r\n"))
+let private failIfFailure results = if results <> [] then failwith (System.String.Concat(results, "\r\n"))
 
+//Meat and potatoes function
 let runLoadTest job =
   let manager = newManager ()
   let reporter = newReporter ()
@@ -219,7 +253,7 @@ let runLoadTest job =
   if job.Baseline = true then baselineResults <- baseline job
 
   //create all the workers and create the time they should execute
-  let timingsAndWorkers = createTimeline job |> List.map (fun (timing, task) -> timing, newWorker manager reporter task.Description task.Action)
+  let timingsAndWorkers = createTimeline job |> List.map (fun (timing, task) -> timing, newWorker manager reporter task)
   manager.Post(Initialize(timingsAndWorkers.Length))
 
   //loop and look at head and see if its time has passed and if it has then
@@ -228,6 +262,8 @@ let runLoadTest job =
   manager.PostAndReply(fun replyChannel -> Manager.Retire replyChannel) |> ignore
   let results = reporter.PostAndReply(fun replyChannel -> Reporter.Retire replyChannel)
 
-  printResults results
+  printJob job
+  printBaseline baselineResults
+  printResults results job.Load
 
   runBaseline job baselineResults results |> failIfFailure
