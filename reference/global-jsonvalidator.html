@@ -5,7 +5,7 @@
 	   h4 + img { margin-top: 20px; margin-bottom: 20px;}
 	</STYLE>
     <meta charset="utf-8">
-    <title>result - canopy</title>
+    <title>jsonValidator - canopy</title>
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <meta name="description" content="">
     <meta name="author" content="Chris Holt">
@@ -49,31 +49,62 @@
 
 
 
-<h1>result</h1>
+<h1>jsonValidator</h1>
 <p>
-  <span>Namespace: canopy</span><br />
-  <span>Parent Module: <a href="canopy-editdistance.html">EditDistance</a></span>
+  <span>Namespace: global</span><br />
 </p>
 <div class="xmldoc">
 </div>
-  <h3>Record Fields</h3>
+
+<!-- Render nested types and modules, if there are any -->
+  <h2>Nested types and modules</h2>
+  <div>
+      <table class="table table-bordered type-list">
+    <thead>
+      <tr><td>Type</td><td>Description</td></tr>
+    </thead>
+    <tbody>
+        <tr>
+          <td class="type-name">
+            <a href="jsonvalidator-difference.html">Difference</a>
+          </td>
+          <td class="xmldoc"></td>
+        </tr>
+        <tr>
+          <td class="type-name">
+            <a href="jsonvalidator-meta.html">Meta</a>
+          </td>
+          <td class="xmldoc"></td>
+        </tr>
+        <tr>
+          <td class="type-name">
+            <a href="jsonvalidator-type.html">Type</a>
+          </td>
+          <td class="xmldoc"></td>
+        </tr>
+    </tbody>
+  </table>
+
+  </div>
+
+  <h3>Functions and values</h3>
   <table class="table table-bordered member-list">
     <thead>
-      <tr><td>Record Field</td><td>Description</td></tr>
+      <tr><td>Function or value</td><td>Description</td></tr>
     </thead>
     <tbody>
       <tr>
         <td class="member-name">
 
-          <code onmouseout="hideTip(event, '233', 233)" onmouseover="showTip(event, '233', 233)">
-            selector
+          <code onmouseout="hideTip(event, '220', 220)" onmouseover="showTip(event, '220', 220)">
+            AST jsonValue
           </code>
-          <div class="tip" id="233">
-            <strong>Signature:</strong> string<br />
+          <div class="tip" id="220">
+            <strong>Signature:</strong> jsonValue:JsonValue -&gt; Meta []<br />
                       </div>
         </td>
         <td class="xmldoc">
-            <a href="https://github.com/lefthandedgoat/canopy/tree/scaffold/src/canopy/jarowinkler.fs#L73-73" class="github-link">
+            <a href="https://github.com/lefthandedgoat/canopy/tree/scaffold/src/canopy/jsonValidator.fs#L46-46" class="github-link">
               <img src="../content/img/github.png" class="normal" />
               <img src="../content/img/github-blue.png" class="hover" />
             </a>
@@ -83,15 +114,69 @@
       <tr>
         <td class="member-name">
 
-          <code onmouseout="hideTip(event, '234', 234)" onmouseover="showTip(event, '234', 234)">
-            similarity
+          <code onmouseout="hideTip(event, '221', 221)" onmouseover="showTip(event, '221', 221)">
+            diff example actual
           </code>
-          <div class="tip" id="234">
-            <strong>Signature:</strong> float<br />
+          <div class="tip" id="221">
+            <strong>Signature:</strong> example:string -&gt; actual:string -&gt; Difference list<br />
                       </div>
         </td>
         <td class="xmldoc">
-            <a href="https://github.com/lefthandedgoat/canopy/tree/scaffold/src/canopy/jarowinkler.fs#L73-73" class="github-link">
+            <a href="https://github.com/lefthandedgoat/canopy/tree/scaffold/src/canopy/jsonValidator.fs#L86-86" class="github-link">
+              <img src="../content/img/github.png" class="normal" />
+              <img src="../content/img/github-blue.png" class="hover" />
+            </a>
+          
+        </td>
+      </tr>
+      <tr>
+        <td class="member-name">
+
+          <code onmouseout="hideTip(event, '222', 222)" onmouseover="showTip(event, '222', 222)">
+            jsonValueToType jsonValue
+          </code>
+          <div class="tip" id="222">
+            <strong>Signature:</strong> jsonValue:JsonValue -&gt; Type<br />
+                      </div>
+        </td>
+        <td class="xmldoc">
+            <a href="https://github.com/lefthandedgoat/canopy/tree/scaffold/src/canopy/jsonValidator.fs#L40-40" class="github-link">
+              <img src="../content/img/github.png" class="normal" />
+              <img src="../content/img/github-blue.png" class="hover" />
+            </a>
+          
+        </td>
+      </tr>
+      <tr>
+        <td class="member-name">
+
+          <code onmouseout="hideTip(event, '223', 223)" onmouseover="showTip(event, '223', 223)">
+            root 
+          </code>
+          <div class="tip" id="223">
+            <strong>Signature:</strong> Meta<br />
+                      </div>
+        </td>
+        <td class="xmldoc">
+            <a href="https://github.com/lefthandedgoat/canopy/tree/scaffold/src/canopy/jsonValidator.fs#L29-29" class="github-link">
+              <img src="../content/img/github.png" class="normal" />
+              <img src="../content/img/github-blue.png" class="hover" />
+            </a>
+          
+        </td>
+      </tr>
+      <tr>
+        <td class="member-name">
+
+          <code onmouseout="hideTip(event, '224', 224)" onmouseover="showTip(event, '224', 224)">
+            validate example actual
+          </code>
+          <div class="tip" id="224">
+            <strong>Signature:</strong> example:string -&gt; actual:string -&gt; unit<br />
+                      </div>
+        </td>
+        <td class="xmldoc">
+            <a href="https://github.com/lefthandedgoat/canopy/tree/scaffold/src/canopy/jsonValidator.fs#L148-148" class="github-link">
               <img src="../content/img/github.png" class="normal" />
               <img src="../content/img/github-blue.png" class="hover" />
             </a>
