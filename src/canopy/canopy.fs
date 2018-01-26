@@ -889,6 +889,8 @@ let start b =
           options.BrowserExecutableLocation <- path
           new FirefoxDriver(firefoxDriverService (), options, TimeSpan.FromSeconds(elementTimeout)) :> IWebDriver
         | FirefoxWithUserAgent userAgent -> firefoxWithUserAgent userAgent
+        | FirefoxWithOptions options ->
+            new FirefoxDriver(firefoxDriverService (), options, TimeSpan.FromSeconds(elementTimeout)) :> IWebDriver
         | FirefoxWithPathAndTimeSpan(path, timespan) -> 
           let options = new Firefox.FirefoxOptions()
           options.BrowserExecutableLocation <- path
