@@ -371,3 +371,6 @@ Update to Selenium 3.3 [Issue #351](https://github.com/lefthandedgoat/canopy/iss
 #### 1.6.1 - Nov 8 2017
 * Updated to FSharp.Core 4.0.0.1 (Possibly breaking!!!)
 * Added more information to the results of a Load Test [PR #393](https://github.com/lefthandedgoat/canopy/pull/393)
+
+#### 1.6.2 - Feb 3 2018
+* Added more granular support for Firefox, thanks RubenOen! [PR #400](https://github.com/lefthandedgoat/canopy/pull/400)
