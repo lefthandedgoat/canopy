@@ -32,6 +32,7 @@ type CanopyCheckFailedException(message) = inherit CanopyException(message)
 type CanopyUncheckFailedException(message) = inherit CanopyException(message)
 type CanopyReadException(message) = inherit CanopyException(message)
 type CanopySkipTestException() = inherit CanopyException(String.Empty)
+type CanopyNoBrowserException(message) = inherit CanopyException(message)
 
 //directions
 type direction =

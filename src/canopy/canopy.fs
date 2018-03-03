@@ -257,6 +257,7 @@ let rec private findElements cssSelector (searchContext : ISearchContext) : IWeb
     with | ex -> []
 
 let private findByFunction cssSelector timeout waitFunc searchContext reliable =
+    if browser = null then raise (CanopyNoBrowserException("Can't perform the action because the browser instance is null.  `start chrome` to start a new browser."))
     if wipTest then colorizeAndSleep cssSelector
 
     try
