@@ -297,13 +297,16 @@ let private findByFunctionXX cssSelector timeout waitFunc searchContext reliable
     findByFunctionB browser cssSelector timeout waitFunc searchContext reliable
 
 let private findB browser cssSelector timeout searchContext reliable =
-    (findByFunctionB browser cssSelector timeout findElements searchContext reliable).Head
+    let finder = findElementsB browser
+    findByFunctionB browser cssSelector timeout finder searchContext reliable
+    |> List.head
 
 let private findXX cssSelector timeout searchContext reliable =
     findB browser cssSelector timeout searchContext reliable
 
 let private findManyB browser cssSelector timeout searchContext reliable =
-    findByFunction cssSelector timeout findElements searchContext reliable
+    let finder = findElementsB browser
+    findByFunctionB browser cssSelector timeout finder searchContext reliable
 
 let private findManyXX cssSelector timeout searchContext reliable =
     findManyB browser cssSelector timeout searchContext reliable
@@ -336,7 +339,9 @@ let elementsXX cssSelector =
 
 (* documented/actions *)
 let elementB browser cssSelector =
-    cssSelector |> elementsB browser |> elementFromList cssSelector
+    cssSelector
+    |> elementsB browser
+    |> elementFromList cssSelector
 
 (* documented/actions *)
 let elementXX cssSelector =
@@ -352,14 +357,16 @@ let unreliableElementsXX cssSelector =
 
 (* documented/actions *)
 let unreliableElementB browser cssSelector =
-    cssSelector |> unreliableElementsB browser |> elementFromList cssSelector
+    cssSelector
+    |> unreliableElementsB browser
+    |> elementFromList cssSelector
 
 (* documented/actions *)
 let unreliableElementXX cssSelector =
     unreliableElementB browser cssSelector
 
 (* documented/actions *)
-let elementWithinB browser cssSelector (elem: IWebElement) =
+let elementWithinB browser cssSelector elem =
     findB browser cssSelector elementTimeout elem true
 
 (* documented/actions *)
@@ -400,7 +407,7 @@ let elementsWithinXX cssSelector elem =
     elementsWithinB browser cssSelector elem
 
 (* documented/actions *)
-let unreliableElementsWithinB browser cssSelector elem =
+let unreliableElementsWithinB (browser: IWebDriver) cssSelector elem =
     findManyB browser cssSelector elementTimeout elem false
 
 (* documented/actions *)
@@ -428,41 +435,81 @@ let someElementWithinXX cssSelector elem =
     someElementWithinB browser cssSelector elem
 
 (* documented/actions *)
-let someParent elem = elem |> elementsWithin ".." |> someElementFromList "provided element"
+let someParentB browser elem =
+    elem
+    |> elementsWithinB browser ".."
+    |> someElementFromList "provided element"
 
 (* documented/actions *)
-let nth index cssSelector = List.item index (elements cssSelector)
+let someParentXX elem =
+    someParentB browser elem
 
 (* documented/actions *)
-let item index cssSelector = List.item index (elements cssSelector)
+let nthB browser index cssSelector =
+    List.item index (elementsB browser cssSelector)
 
 (* documented/actions *)
-let first cssSelector = (elements cssSelector).Head
+let nthXX index cssSelector =
+    nthB browser index cssSelector
 
 (* documented/actions *)
-let last cssSelector = (List.rev (elements cssSelector)).Head
+let itemB browser index cssSelector =
+    nthB index cssSelector
+
+(* documented/actions *)
+let itemXX index cssSelector =
+    itemB browser index cssSelector
+
+(* documented/actions *)
+let firstB browser cssSelector =
+    elementsB browser cssSelector
+    |> List.head
+
+(* documented/actions *)
+let firstXX cssSelector =
+    firstB browser cssSelector
+
+(* documented/actions *)
+let lastB browser cssSelector =
+    elementsB browser cssSelector
+    |> List.rev
+    |> List.head
+
+(* documented/actions *)
+let lastXX cssSelector =
+    lastB browser cssSelector
 
 //read/write
-let private writeToSelect (elem:IWebElement) (text:string) =
+let private writeToSelectB (browser: IWebDriver) (elem: IWebElement) (text:string) =
     let options =
         if writeToSelectWithOptionValue then
-            unreliableElementsWithin (sprintf """option[text()="%s"] | option[@value="%s"] | optgroup/option[text()="%s"] | optgroup/option[@value="%s"]""" text text text text) elem
+            unreliableElementsWithinB browser (sprintf """option[text()="%s"] | option[@value="%s"] | optgroup/option[text()="%s"] | optgroup/option[@value="%s"]""" text text text text) elem
         else //to preserve previous behaviour
-            unreliableElementsWithin (sprintf """option[text()="%s"] | optgroup/option[text()="%s"]""" text text) elem
+            unreliableElementsWithinB browser (sprintf """option[text()="%s"] | optgroup/option[text()="%s"]""" text text) elem
 
     match options with
-    | [] -> raise (CanopyOptionNotFoundException(sprintf "element %s does not contain value %s" (elem.ToString()) text))
-    | head::_ -> head.Click()
+    | [] ->
+        let message = sprintf "Element %s does not contain value %s" (elem.ToString()) text
+        raise (CanopyOptionNotFoundException message)
+    | head :: _ ->
+        head.Click()
 
-let private writeToElement (e : IWebElement) (text:string) =
+let private writeToSelectXX (elem: IWebElement) (text:string) =
+    writeToSelectB browser elem text
+
+let private writeToElement browser (e : IWebElement) (text:string) =
     if e.TagName = "select" then
-        writeToSelect e text
+        writeToSelectB browser e text
     else
         let readonly = e.GetAttribute("readonly")
         if readonly = "true" then
-            raise (CanopyReadOnlyException(sprintf "element %s is marked as read only, you can not write to read only elements" (e.ToString())))
+            let message =sprintf "element %s is marked as read only, you can not write to read only elements" (e.ToString())
+            raise (CanopyReadOnlyException message)
         if not optimizeByDisablingClearBeforeWrite then try e.Clear() with ex -> ex |> ignore
         e.SendKeys(text)
+
+let private writeToElementXX e text =
+    writeToElement browser e text
 
 (* documented/actions *)
 let ( << ) item text =
