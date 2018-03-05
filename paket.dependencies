@@ -1,10 +1,13 @@
-source https://www.nuget.org/api/v2/
-
-framework: net452
+source https://api.nuget.org/v3/index.json
+framework: net461
 
 nuget NuGet.CommandLine
 nuget FSharp.Core >= 4.0.0.1 lowest_matching:true
 nuget Selenium.WebDriver
-nuget FAKE
 nuget FSharp.Formatting
 nuget FSharp.Data
+
+group build
+  source https://api.nuget.org/v3/index.json
+  nuget FAKE
+  github fsharp/FAKE modules/Octokit/Octokit.fsx
