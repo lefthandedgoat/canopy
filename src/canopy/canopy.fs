@@ -81,7 +81,7 @@ let private takeScreenShotIfAlertUp () =
         Exception: %s" ex.Message
         Array.empty<byte>
 
-let private takeScreenshot directory filename =
+let private takeScreenshotB (browser: IWebDriver) directory filename =
     try
         let pic = (browser :?> ITakesScreenshot).GetScreenshot().AsByteArray
         saveScreenshot directory filename pic
@@ -94,6 +94,9 @@ let private takeScreenshot directory filename =
             alert.Accept()
             pic
 
+let private takeScreenshot directory filename =
+    takeScreenshotB browser directory filename
+
 let private pngToJpg pngArray =
   let pngStream = new MemoryStream()
   let jpgStream = new MemoryStream()
@@ -104,16 +107,24 @@ let private pngToJpg pngArray =
   img.Save(jpgStream, ImageFormat.Jpeg)
   jpgStream.ToArray()
 
+let screenshotB (browser: IWebDriver) directory filename =
+    match box browser with
+    | :? ITakesScreenshot -> takeScreenshot directory filename |> pngToJpg
+    | _ -> Array.empty<byte>
+
 (* documented/actions *)
 let screenshot directory filename =
-    match box browser with
-        | :? ITakesScreenshot -> takeScreenshot directory filename |> pngToJpg
-        | _ -> Array.empty<byte>
+    screenshotB browser directory
+
+let jsB (browser: IWebDriver) script =
+    (browser :?> IJavaScriptExecutor).ExecuteScript(script)
 
 (* documented/actions *)
-let js script = (browser :?> IJavaScriptExecutor).ExecuteScript(script)
+let js script =
+    jsB browser script
 
-let private swallowedJs script = try js script |> ignore with | ex -> ()
+let private swallowedJs script =
+    try js script |> ignore with | ex -> ()
 
 (* documented/actions *)
 let sleep seconds =
@@ -226,8 +237,8 @@ let waitFor2 message f =
 (* documented/actions *)
 let waitFor = waitFor2 "Condition not met in given amount of time. If you want to increase the time, put compareTimeout <- 10.0 anywhere before a test to increase the timeout"
 
-//find related
-let rec private findElements cssSelector (searchContext : ISearchContext) : IWebElement list =
+/// Find related
+let rec private findElementsB (browser: IWebDriver) cssSelector (searchContext: ISearchContext): IWebElement list =
     if optimizeByDisablingCoverageReport = false then searchedFor <- (cssSelector, browser.Url) :: searchedFor
     let findInIFrame () =
         let iframes = findByCss "iframe" searchContext.FindElements
@@ -239,7 +250,7 @@ let rec private findElements cssSelector (searchContext : ISearchContext) : IWeb
             iframes |> List.iter (fun frame ->
                 browser.SwitchTo().Frame(frame) |> ignore
                 let root = browser.FindElement(By.CssSelector("html"))
-                webElements := findElements cssSelector root
+                webElements := findElementsB browser cssSelector root
             )
             !webElements
 
@@ -259,7 +270,12 @@ let rec private findElements cssSelector (searchContext : ISearchContext) : IWeb
            results |> Seq.head
     with | ex -> []
 
-let private findByFunction cssSelector timeout waitFunc searchContext reliable =
+
+/// Find related
+let rec private findElementsXX cssSelector searchContext: IWebElement list =
+    findElementsB browser cssSelector searchContext
+
+let private findByFunctionB (browser: IWebDriver) cssSelector timeout waitFunc searchContext reliable =
     if browser = null then raise (CanopyNoBrowserException("Can't perform the action because the browser instance is null.  `start chrome` to start a new browser."))
     if wipTest then colorizeAndSleep cssSelector
 
@@ -277,11 +293,20 @@ let private findByFunction cssSelector timeout waitFunc searchContext reliable =
             suggestOtherSelectors cssSelector
             raise (CanopyElementNotFoundException(sprintf "can't find element %s" cssSelector))
 
-let private find cssSelector timeout searchContext reliable =
-    (findByFunction cssSelector timeout findElements searchContext reliable).Head
+let private findByFunctionXX cssSelector timeout waitFunc searchContext reliable =
+    findByFunctionB browser cssSelector timeout waitFunc searchContext reliable
 
-let private findMany cssSelector timeout searchContext reliable =
+let private findB browser cssSelector timeout searchContext reliable =
+    (findByFunctionB browser cssSelector timeout findElements searchContext reliable).Head
+
+let private findXX cssSelector timeout searchContext reliable =
+    findB browser cssSelector timeout searchContext reliable
+
+let private findManyB browser cssSelector timeout searchContext reliable =
     findByFunction cssSelector timeout findElements searchContext reliable
+
+let private findManyXX cssSelector timeout searchContext reliable =
+    findManyB browser cssSelector timeout searchContext reliable
 
 //get elements
 
@@ -302,48 +327,114 @@ let private someElementFromList cssSelector elementsList =
         else Some(x)
 
 (* documented/actions *)
-let elements cssSelector = findMany cssSelector elementTimeout browser true
+let elementsB browser cssSelector =
+    findManyB browser cssSelector elementTimeout browser true
 
 (* documented/actions *)
-let element cssSelector = cssSelector |> elements |> elementFromList cssSelector
+let elementsXX cssSelector =
+    elementsB browser cssSelector
 
 (* documented/actions *)
-let unreliableElements cssSelector = findMany cssSelector elementTimeout browser false
+let elementB browser cssSelector =
+    cssSelector |> elementsB browser |> elementFromList cssSelector
 
 (* documented/actions *)
-let unreliableElement cssSelector = cssSelector |> unreliableElements |> elementFromList cssSelector
+let elementXX cssSelector =
+    elementB browser cssSelector
 
 (* documented/actions *)
-let elementWithin cssSelector (elem:IWebElement) =  find cssSelector elementTimeout elem true
+let unreliableElementsB browser cssSelector =
+    findManyB browser cssSelector elementTimeout browser false
 
 (* documented/actions *)
-let elementsWithText cssSelector regex =
-    unreliableElements cssSelector
+let unreliableElementsXX cssSelector =
+    unreliableElementsB browser cssSelector
+
+(* documented/actions *)
+let unreliableElementB browser cssSelector =
+    cssSelector |> unreliableElementsB browser |> elementFromList cssSelector
+
+(* documented/actions *)
+let unreliableElementXX cssSelector =
+    unreliableElementB browser cssSelector
+
+(* documented/actions *)
+let elementWithinB browser cssSelector (elem: IWebElement) =
+    findB browser cssSelector elementTimeout elem true
+
+(* documented/actions *)
+let elementWithinXX cssSelector elem =
+    elementWithinB browser cssSelector elem
+
+(* documented/actions *)
+let elementsWithTextB browser cssSelector regex =
+    unreliableElementsB browser cssSelector
     |> List.filter (fun elem -> regexMatch regex (textOf elem))
 
 (* documented/actions *)
-let elementWithText cssSelector regex = (elementsWithText cssSelector regex).Head
+let elementsWithTextXX cssSelector regex =
+    elementsWithText browser cssSelector regex
 
 (* documented/actions *)
-let parent elem = elem |> elementWithin ".."
+let elementWithTextB browser cssSelector regex =
+    (elementsWithTextB browser cssSelector regex).Head
 
 (* documented/actions *)
-let elementsWithin cssSelector elem = findMany cssSelector elementTimeout elem true
+let elementWithTextXX cssSelector regex =
+    elementWithTextB browser cssSelector regex
 
 (* documented/actions *)
-let unreliableElementsWithin cssSelector elem = findMany cssSelector elementTimeout elem false
+let parentB browser elem =
+    elem |> elementWithinB browser ".."
 
 (* documented/actions *)
-let someElement cssSelector = cssSelector |> unreliableElements |> someElementFromList cssSelector
+let parentXX elem =
+    parentB browser elem
 
 (* documented/actions *)
-let someElementWithin cssSelector elem = elem |> unreliableElementsWithin cssSelector |> someElementFromList cssSelector
+let elementsWithinB browser cssSelector elem =
+    findManyB browser cssSelector elementTimeout elem true
+
+(* documented/actions *)
+let elementsWithinXX cssSelector elem =
+    elementsWithinB browser cssSelector elem
+
+(* documented/actions *)
+let unreliableElementsWithinB browser cssSelector elem =
+    findManyB browser cssSelector elementTimeout elem false
+
+(* documented/actions *)
+let unreliableElementsWithinXX cssSelector elem =
+    unreliableElementsWithinB browser cssSelector elem
+
+(* documented/actions *)
+let someElementB browser cssSelector =
+    cssSelector
+    |> unreliableElementsB browser
+    |> someElementFromList cssSelector
+
+(* documented/actions *)
+let someElementXX cssSelector =
+    someElementB browser cssSelector
+
+(* documented/actions *)
+let someElementWithinB browser cssSelector elem =
+    elem
+    |> unreliableElementsWithinB browser cssSelector
+    |> someElementFromList cssSelector
+
+(* documented/actions *)
+let someElementWithinXX cssSelector elem =
+    someElementWithinB browser cssSelector elem
 
 (* documented/actions *)
 let someParent elem = elem |> elementsWithin ".." |> someElementFromList "provided element"
 
 (* documented/actions *)
-let nth index cssSelector = List.nth (elements cssSelector) index
+let nth index cssSelector = List.item index (elements cssSelector)
+
+(* documented/actions *)
+let item index cssSelector = List.item index (elements cssSelector)
 
 (* documented/actions *)
 let first cssSelector = (elements cssSelector).Head
@@ -810,7 +901,7 @@ let private firefoxWithUserAgent (userAgent : string) =
     options.Profile <- profile
     new FirefoxDriver(firefoxDriverService (), options, TimeSpan.FromSeconds(elementTimeout)) :> IWebDriver
 
-let private chromeDriverService dir = 
+let private chromeDriverService dir =
     let service = Chrome.ChromeDriverService.CreateDefaultService(dir);
     service.HideCommandPromptWindow <- hideCommandPromptWindow;
     service
@@ -820,22 +911,22 @@ let private chromeWithUserAgent dir userAgent =
     options.AddArgument("--user-agent=" + userAgent)
     new Chrome.ChromeDriver(chromeDriverService dir, options) :> IWebDriver
 
-let private phantomJsDriverService _ = 
+let private phantomJsDriverService _ =
     let service = PhantomJS.PhantomJSDriverService.CreateDefaultService(phantomJSDir)
     service.HideCommandPromptWindow <- hideCommandPromptWindow
     service
 
-let private ieDriverService _ = 
+let private ieDriverService _ =
     let service = IE.InternetExplorerDriverService.CreateDefaultService(ieDir)
     service.HideCommandPromptWindow <- hideCommandPromptWindow
     service
 
-let private edgeDriverService _ = 
+let private edgeDriverService _ =
     let service = Edge.EdgeDriverService.CreateDefaultService(edgeDir)
     service.HideCommandPromptWindow <- hideCommandPromptWindow
     service
 
-let private safariDriverService _ = 
+let private safariDriverService _ =
     let service = Safari.SafariDriverService.CreateDefaultService(safariDir)
     service.HideCommandPromptWindow <- hideCommandPromptWindow
     service
@@ -864,9 +955,9 @@ let start b =
             new Chrome.ChromeDriver(chromeDriverService chromeDir, options) :> IWebDriver
         | ChromeWithOptions options ->
             new Chrome.ChromeDriver(chromeDriverService chromeDir, options) :> IWebDriver
-        | ChromeWithUserAgent userAgent -> 
+        | ChromeWithUserAgent userAgent ->
             chromeWithUserAgent chromeDir userAgent
-        | ChromeWithOptionsAndTimeSpan(options, timeSpan) -> 
+        | ChromeWithOptionsAndTimeSpan(options, timeSpan) ->
             new Chrome.ChromeDriver(chromeDriverService chromeDir, options, timeSpan) :> IWebDriver
         | ChromeHeadless ->
             let options = Chrome.ChromeOptions()
@@ -879,31 +970,31 @@ let start b =
             let options = Chrome.ChromeOptions()
             options.AddArgument("--disable-extensions")
             options.AddArgument("disable-infobars")
-            options.AddArgument("test-type") //https://code.google.com/p/chromedriver/issues/detail?id=799            
+            options.AddArgument("test-type") //https://code.google.com/p/chromedriver/issues/detail?id=799
             new Chrome.ChromeDriver(chromeDriverService chromiumDir, options) :> IWebDriver
         | ChromiumWithOptions options ->
             new Chrome.ChromeDriver(chromeDriverService chromiumDir, options) :> IWebDriver
         | Firefox ->new FirefoxDriver(firefoxDriverService ()) :> IWebDriver
-        | FirefoxWithProfile profile -> 
+        | FirefoxWithProfile profile ->
             let options = new Firefox.FirefoxOptions();
             options.Profile <- profile
             new FirefoxDriver(firefoxDriverService (), options, TimeSpan.FromSeconds(elementTimeout)) :> IWebDriver
-        | FirefoxWithPath path -> 
+        | FirefoxWithPath path ->
           let options = new Firefox.FirefoxOptions()
           options.BrowserExecutableLocation <- path
           new FirefoxDriver(firefoxDriverService (), options, TimeSpan.FromSeconds(elementTimeout)) :> IWebDriver
         | FirefoxWithUserAgent userAgent -> firefoxWithUserAgent userAgent
         | FirefoxWithOptions options ->
             new FirefoxDriver(firefoxDriverService (), options, TimeSpan.FromSeconds(elementTimeout)) :> IWebDriver
-        | FirefoxWithPathAndTimeSpan(path, timespan) -> 
+        | FirefoxWithPathAndTimeSpan(path, timespan) ->
           let options = new Firefox.FirefoxOptions()
           options.BrowserExecutableLocation <- path
           new FirefoxDriver(firefoxDriverService (), options, timespan) :> IWebDriver
-        | FirefoxWithProfileAndTimeSpan(profile, timespan) -> 
+        | FirefoxWithProfileAndTimeSpan(profile, timespan) ->
           let options = new Firefox.FirefoxOptions()
           options.Profile <- profile
           new FirefoxDriver(firefoxDriverService (), options, timespan) :> IWebDriver
-        | FirefoxHeadless -> 
+        | FirefoxHeadless ->
             let options = new Firefox.FirefoxOptions();
             options.AddArgument("--headless")
             new FirefoxDriver(firefoxDriverService (), options, TimeSpan.FromSeconds(elementTimeout)) :> IWebDriver
@@ -922,6 +1013,7 @@ let start b =
     if autoPinBrowserRightOnLaunch = true then pin Right
     browsers <- browsers @ [browser]
 
+// TODO: consider parallelism
 (* documented/actions *)
 let switchTo b = browser <- b
 
