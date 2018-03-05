@@ -291,7 +291,8 @@ let names = fastTextFromCSS ".name"
 (**
 switchTo
 --------
-Switch to an existing instance of a browser.
+Switch to an existing instance of a browser. Note: this function call does not
+support parallel execution.
 *)
 start firefox
 let mainBrowser = browser
