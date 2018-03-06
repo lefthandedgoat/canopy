@@ -1,4 +1,5 @@
 namespace canopy
+
 module screen =
 
     open System
@@ -34,7 +35,9 @@ module screen =
 
 
     module mono =
+        // TODO: remove global variable
         let mutable screenWidth = 1280
+        // TODO: remove global variable
         let mutable screenHeight = 800
 
         let getPrimaryScreenResolution () =
