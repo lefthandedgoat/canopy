@@ -18,7 +18,6 @@ open EditDistance
 
 let mutable (failureMessage : string) = null
 let mutable wipTest = false
-let mutable searchedFor : (string * string) list = []
 
 (* documented/actions *)
 let firefox = Firefox
@@ -235,7 +234,6 @@ let waitFor = waitFor2 "Condition not met in given amount of time. If you want t
 
 /// Find related
 let rec private findElementsB (browser: IWebDriver) cssSelector (searchContext: ISearchContext): IWebElement list =
-    if optimizeByDisablingCoverageReport = false then searchedFor <- (cssSelector, browser.Url) :: searchedFor
     let findInIFrame () =
         let iframes = findByCss "iframe" searchContext.FindElements
         if iframes.IsEmpty then
@@ -1460,39 +1458,6 @@ let forward = Forward
 let navigate = function
   | Back -> browser.Navigate().Back()
   | Forward -> browser.Navigate().Forward()
-
-(* documented/actions *)
-let coverage (url : 'a) =
-    let mutable innerUrl = ""
-    match box url with
-    | :? string as u -> innerUrl <- u
-    | _ -> innerUrl <- currentUrl()
-    let nonMutableInnerUrl = innerUrl
-
-    let selectors =
-        searchedFor
-        |> List.filter(fun (c, u) -> u = nonMutableInnerUrl)
-        |> List.map(fun (cssSelector, u) -> cssSelector)
-        |> Seq.distinct
-        |> List.ofSeq
-
-    let script cssSelector =
-        "var results = document.querySelectorAll('" + cssSelector + "'); \
-        for (var i=0; i < results.length; i++){ \
-            results[i].style.border = 'thick solid #ACD372'; \
-        }"
-
-    //kinda silly but the app I am current working on will redirect you to login if you try to access a url directly, so dont try if one isnt passed in
-    match box url with
-    | :? string as u -> !^ nonMutableInnerUrl
-    |_ -> ()
-
-    on nonMutableInnerUrl
-    selectors |> List.iter(fun cssSelector -> swallowedJs (script cssSelector))
-    let p = Path.Combine(Environment.GetFolderPath(Environment.SpecialFolder.ApplicationData), @"canopy\")
-    let f = sprintf "Coverage_%s" (DateTime.Now.ToString("MMM-d_HH-mm-ss-fff"))
-    let ss = screenshot p f
-    reporter.coverage nonMutableInnerUrl ss nonMutableInnerUrl
 
 (* documented/actions *)
 let addFinder finder =

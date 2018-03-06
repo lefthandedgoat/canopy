@@ -208,14 +208,6 @@ optimizeBySkippingIFrameCheck
 optimizeBySkippingIFrameCheck <- false
 
 (**
-optimizeByDisablingCoverageReport
-------------
-* If you need your tests to be faster and don't use coverage report you can turn this to true
-* Default is false
-*)
-optimizeByDisablingCoverageReport <- false
-
-(**
 showInfoDiv
 ------------
 * Allows information to be displayed on the browser when the puts function is called

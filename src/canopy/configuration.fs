@@ -64,8 +64,6 @@ let mutable writeToSelectWithOptionValue = true
 (* documented/configuration *)
 let mutable optimizeBySkippingIFrameCheck = false
 (* documented/configuration *)
-let mutable optimizeByDisablingCoverageReport = false
-(* documented/configuration *)
 let mutable optimizeByDisablingClearBeforeWrite = false
 (* documented/configuration *)
 let mutable showInfoDiv = true
