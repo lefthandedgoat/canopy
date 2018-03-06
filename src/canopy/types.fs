@@ -1,5 +1,5 @@
 [<AutoOpen>]
-module canopy.types
+module Canopy.Types
 
 open System
 open OpenQA.Selenium
@@ -76,8 +76,7 @@ type Test(description: string, func: (unit -> unit), number: int) =
     member x.Number = number
     member x.Id = if description = null then (String.Format("Test #{0}", number)) else description
 
-// TODO: type naming
-type suite () = class
+type Suite () = class
     member val Context : string = null with get, set
     member val TotalTestsCount : int = 0 with get, set
     member val Once = fun () -> () with get, set
@@ -91,7 +90,7 @@ type suite () = class
     member val Manys : Test list = [] with get, set
     member val Always : Test list = [] with get, set
     member val IsParallel = false with get, set
-    member this.Clone() = this.MemberwiseClone() :?> suite
+    member this.Clone() = this.MemberwiseClone() :?> Suite
 end
 
 type Result =

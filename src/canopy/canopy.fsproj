@@ -57,10 +57,12 @@
     <Compile Include="configuration.fs" />
     <Compile Include="jarowinkler.fs" />
     <Compile Include="canopy.fs" />
+    <Compile Include="Operators.fs" />
+    <Compile Include="Assert.fs" />
     <Compile Include="history.fs" />
     <Compile Include="runner.fs" />
-    <Compile Include="screenSizes.fs" />
     <Compile Include="userAgents.fs" />
+    <Compile Include="ClassicMode.fs" />
     <Compile Include="csharp.fs" />
     <None Include="companion\companion.fsx" />
     <None Include="paket.references" />

@@ -1,8 +1,7 @@
-module canopy.reporters
+module Canopy.Reporters
 
 open System
 open OpenQA.Selenium
-open types
 
 type IReporter =
    abstract member testStart : string -> unit
@@ -229,7 +228,7 @@ type LiveHtmlReporter(browser : BrowserStartMode, driverPath : string, ?pinBrows
         | Remote(_,_) -> raise(System.Exception("Sorry Remote can't be used for LiveHtmlReporter"))
 
     let pin () =
-        let (w, h) = canopy.screen.getPrimaryScreenResolution ()
+        let (w, h) = Screen.getPrimaryScreenResolution ()
         let maxWidth = w / 2
         _browser.Manage().Window.Size <- new System.Drawing.Size(maxWidth,h)
         _browser.Manage().Window.Position <- new System.Drawing.Point((maxWidth * 0),0)

@@ -1,5 +1,5 @@
 ﻿[<AutoOpen>]
-module canopy.wait
+module Canopy.Wait
 
 open System.Threading
 open System.Diagnostics

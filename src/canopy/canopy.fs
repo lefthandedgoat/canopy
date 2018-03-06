@@ -1,5 +1,5 @@
 [<AutoOpen>]
-module canopy.core
+module Canopy.Core
 
 open System.Collections.ObjectModel
 open OpenQA.Selenium.Firefox
@@ -8,10 +8,10 @@ open OpenQA.Selenium.Interactions
 open Microsoft.FSharp.Core.Printf
 open System.IO
 open System
-open configuration
-open reporters
-open types
-open finders
+open Configuration
+open Reporters
+open Types
+open Finders
 open System.Drawing
 open System.Drawing.Imaging
 open EditDistance
@@ -52,7 +52,7 @@ let failsWith message =
     // TODO: handle write to global via `Configuration`
     failureMessage <- message
 
-let private textOf (element: IWebElement) =
+let internal textOf (element: IWebElement) =
     match element.TagName  with
     | "input" ->
         element.GetAttribute("value")
@@ -66,17 +66,17 @@ let private textOf (element: IWebElement) =
     | _ ->
         element.Text
 
-let private regexMatch pattern input =
+let internal regexMatch pattern input =
     System.Text.RegularExpressions.Regex.Match(input, pattern).Success
 
-let private saveScreenshot directory filename pic =
+let internal saveScreenshot directory filename pic =
     if not <| Directory.Exists(directory)
         then Directory.CreateDirectory(directory) |> ignore
     IO.File.WriteAllBytes(Path.Combine(directory,filename + ".jpg"), pic)
 
-let private takeScreenShotIfAlertUp () =
+let internal takeScreenShotIfAlertUp () =
     try
-        let screenBounds = canopy.screen.getPrimaryScreenBounds ()
+        let screenBounds = Screen.getPrimaryScreenBounds ()
         let bitmap = new Bitmap(width=screenBounds.width, height=screenBounds.height, format=PixelFormat.Format32bppArgb);
         use graphics = Graphics.FromImage(bitmap)
         graphics.CopyFromScreen(screenBounds.x, screenBounds.y, 0, 0, screenBounds.size, CopyPixelOperation.SourceCopy);
@@ -88,7 +88,7 @@ let private takeScreenShotIfAlertUp () =
         Exception: %O" ex
         Array.empty<byte>
 
-let private takeScreenshotB (browser: IWebDriver) directory filename =
+let internal takeScreenshotB (browser: IWebDriver) directory filename =
     try
         let pic = (browser :?> ITakesScreenshot).GetScreenshot().AsByteArray
         saveScreenshot directory filename pic
@@ -101,10 +101,10 @@ let private takeScreenshotB (browser: IWebDriver) directory filename =
             alert.Accept()
             pic
 
-let private takeScreenshot directory filename =
+let internal takeScreenshot directory filename =
     takeScreenshotB browser directory filename
 
-let private pngToJpg pngArray =
+let internal pngToJpg pngArray =
   let pngStream = new MemoryStream()
   let jpgStream = new MemoryStream()
 
@@ -130,7 +130,7 @@ let jsB (browser: IWebDriver) script =
 let js script =
     jsB browser script
 
-let private swallowedJs script =
+let internal swallowedJs script =
     try js script |> ignore with | ex -> ()
 
 (* documented/actions *)
@@ -162,7 +162,7 @@ let puts text =
             infoDiv.innerHTML = 'locating: " + escapedText + "';"
         swallowedJs info
 
-let private colorizeAndSleep cssSelector =
+let internal colorizeAndSleep cssSelector =
     puts cssSelector
     swallowedJs <| sprintf "document.querySelector('%s').style.border = 'thick solid #FFF467';" cssSelector
     sleep wipSleep
@@ -172,7 +172,7 @@ let private colorizeAndSleep cssSelector =
 let highlight cssSelector =
     swallowedJs <| sprintf "document.querySelector('%s').style.border = 'thick solid #ACD372';" cssSelector
 
-let private suggestOtherSelectors cssSelector =
+let internal suggestOtherSelectors cssSelector =
     if not disableSuggestOtherSelectors then
         let classesViaJs = """
             var classes = [];
@@ -245,14 +245,15 @@ let waitFor2 message f =
     try
         wait compareTimeout f
     with
-        | :? WebDriverTimeoutException ->
-                raise (CanopyWaitForException(sprintf "%s%swaitFor condition failed to become true in %.1f seconds" message System.Environment.NewLine compareTimeout))
+    | :? WebDriverTimeoutException ->
+        let message = sprintf "%s%swaitFor condition failed to become true in %.1f seconds" message System.Environment.NewLine compareTimeout
+        raise (CanopyWaitForException message)
 
 (* documented/actions *)
 let waitFor = waitFor2 "Condition not met in given amount of time. If you want to increase the time, put compareTimeout <- 10.0 anywhere before a test to increase the timeout"
 
 /// Find related
-let rec private findElementsB (browser: IWebDriver) cssSelector (searchContext: ISearchContext): IWebElement list =
+let rec internal findElementsB (browser: IWebDriver) cssSelector (searchContext: ISearchContext): IWebElement list =
     let findInIFrame () =
         let iframes = findByCss "iframe" searchContext.FindElements
         if iframes.IsEmpty then
@@ -285,10 +286,10 @@ let rec private findElementsB (browser: IWebDriver) cssSelector (searchContext: 
 
 
 /// Find related
-let rec private findElements cssSelector searchContext: IWebElement list =
+let rec internal findElements cssSelector searchContext: IWebElement list =
     findElementsB browser cssSelector searchContext
 
-let private findByFunctionB (browser: IWebDriver) cssSelector timeout waitFunc searchContext reliable =
+let internal findByFunctionB (browser: IWebDriver) cssSelector timeout waitFunc searchContext reliable =
     if browser = null then raise (CanopyNoBrowserException("Can't perform the action because the browser instance is null.  `start chrome` to start a new browser."))
     if wipTest then colorizeAndSleep cssSelector
 
@@ -306,27 +307,27 @@ let private findByFunctionB (browser: IWebDriver) cssSelector timeout waitFunc s
             suggestOtherSelectors cssSelector
             raise (CanopyElementNotFoundException(sprintf "can't find element %s" cssSelector))
 
-let private findByFunction cssSelector timeout waitFunc searchContext reliable =
+let internal findByFunction cssSelector timeout waitFunc searchContext reliable =
     findByFunctionB browser cssSelector timeout waitFunc searchContext reliable
 
-let private findB browser cssSelector timeout searchContext reliable =
+let internal findB browser cssSelector timeout searchContext reliable =
     let finder = findElementsB browser
     findByFunctionB browser cssSelector timeout finder searchContext reliable
     |> List.head
 
-let private find cssSelector timeout searchContext reliable =
+let internal find cssSelector timeout searchContext reliable =
     findB browser cssSelector timeout searchContext reliable
 
-let private findManyB browser cssSelector timeout searchContext reliable =
+let internal findManyB browser cssSelector timeout searchContext reliable =
     let finder = findElementsB browser
     findByFunctionB browser cssSelector timeout finder searchContext reliable
 
-let private findMany cssSelector timeout searchContext reliable =
+let internal findMany cssSelector timeout searchContext reliable =
     findManyB browser cssSelector timeout searchContext reliable
 
 //get elements
 
-let private elementFromList cssSelector elementsList =
+let internal elementFromList cssSelector elementsList =
     match elementsList with
     | [] -> null
     | x :: [] -> x
@@ -334,7 +335,7 @@ let private elementFromList cssSelector elementsList =
         if throwIfMoreThanOneElement then raise (CanopyMoreThanOneElementFoundException(sprintf "More than one element was selected when only one was expected for selector: %s" cssSelector))
         else x
 
-let private someElementFromList cssSelector elementsList =
+let internal someElementFromList cssSelector elementsList =
     match elementsList with
     | [] -> None
     | x :: [] -> Some(x)
@@ -493,7 +494,7 @@ let last cssSelector =
     lastB browser cssSelector
 
 //read/write
-let private writeToSelectB (browser: IWebDriver) (elem: IWebElement) (text:string) =
+let internal writeToSelectB (browser: IWebDriver) (elem: IWebElement) (text:string) =
     let options =
         if writeToSelectWithOptionValue then
             unreliableElementsWithinB browser (sprintf """option[text()="%s"] | option[@value="%s"] | optgroup/option[text()="%s"] | optgroup/option[@value="%s"]""" text text text text) elem
@@ -507,10 +508,10 @@ let private writeToSelectB (browser: IWebDriver) (elem: IWebElement) (text:strin
     | head :: _ ->
         head.Click()
 
-let private writeToSelect (elem: IWebElement) (text:string) =
+let internal writeToSelect (elem: IWebElement) (text:string) =
     writeToSelectB browser elem text
 
-let private writeToElementB browser (e : IWebElement) (text:string) =
+let internal writeToElementB browser (e : IWebElement) (text:string) =
     if e.TagName = "select" then
         writeToSelectB browser e text
     else
@@ -521,32 +522,39 @@ let private writeToElementB browser (e : IWebElement) (text:string) =
         if not optimizeByDisablingClearBeforeWrite then try e.Clear() with ex -> ex |> ignore
         e.SendKeys(text)
 
-let private writeToElement e text =
+let internal writeToElement e text =
     writeToElementB browser e text
 
 (* documented/actions *)
-let ( << ) item text =
+let writeB browser text item =
     match box item with
     | :? IWebElement as elem ->
-        writeToElement elem text
+        writeToElementB browser elem text
     | :? string as cssSelector ->
         wait elementTimeout (fun _ ->
             elements cssSelector
-                |> List.map (fun elem ->
-                    try
-                        writeToElement elem text
-                        true
-                    with
-                        //Note: Enrich exception with proper cssSelector description
-                        | :? CanopyReadOnlyException -> raise (CanopyReadOnlyException(sprintf "element %s is marked as read only, you can not write to read only elements" cssSelector))
-                        | _ -> false)
-                |> List.exists (fun elem -> elem = true)
+            |> List.map (fun elem ->
+                try
+                    writeToElementB browser elem text
+                    true
+                with
+                    //Note: Enrich exception with proper cssSelector description
+                    | :? CanopyReadOnlyException ->
+                        let message = sprintf "element %s is marked as read only, you can not write to read only elements" cssSelector
+                        raise (CanopyReadOnlyException message)
+                    | _ ->
+                        false)
+            |> List.exists (fun elem -> elem = true)
         )
     | _ ->
         let message = sprintf "Can't read %O because it is not a string or element" item
         raise (CanopyNotStringOrElementException message)
 
-let private safeReadB browser item =
+(* documented/actions *)
+let write text item =
+    writeB browser text item
+
+let internal safeReadB browser item =
     let readvalue = ref ""
     try
         wait elementTimeout (fun _ ->
@@ -566,7 +574,7 @@ let private safeReadB browser item =
     with
         | :? WebDriverTimeoutException -> raise (CanopyReadException("was unable to read item for unknown reason"))
 
-let private safeRead item =
+let internal safeRead item =
     safeReadB browser item
 
 (* documented/actions *)
@@ -577,7 +585,6 @@ let readB browser item =
     | :? string as cssSelector ->
         safeReadB browser cssSelector
     | _ -> raise (CanopyNotStringOrElementException(sprintf "Can't read %O because it is not a string or element" item))
-
 
 (* documented/actions *)
 let read item =
@@ -682,340 +689,6 @@ let fastTextFromCSSB browser selector =
 (* documented/actions *)
 let fastTextFromCSS selector =
     fastTextFromCSSB browser selector
-
-/// Assertions
-module Assert =
-    let equal browser item value =
-        match box item with
-        | :? IAlert as alert ->
-            let text = alert.Text
-            if text <> value then
-                alert.Dismiss()
-                raise (CanopyEqualityFailedException(sprintf "equality check failed.  expected: %s, got: %s" value text))
-        | :? string as cssSelector ->
-            let bestvalue = ref ""
-            try
-                wait compareTimeout (fun _ ->
-                    let readvalue = readB browser cssSelector
-                    if readvalue <> value && readvalue <> "" then
-                        bestvalue := readvalue
-                        false
-                    else
-                        readvalue = value)
-            with
-            | :? CanopyElementNotFoundException as ex ->
-                let message = sprintf "%s%sequality check failed.  expected: %s, got: %s" ex.Message Environment.NewLine value !bestvalue
-                raise (CanopyEqualityFailedException message)
-            | :? WebDriverTimeoutException ->
-                let message = sprintf "equality check failed.  expected: %s, got: %s" value !bestvalue
-                raise (CanopyEqualityFailedException message)
-        | _ ->
-            let message = sprintf "Can't check equality on %O because it is not a string or alert" item
-            raise (CanopyNotStringOrElementException message)
-
-    let notEqual browser cssSelector value =
-        try
-            wait compareTimeout (fun _ -> (readB browser cssSelector) <> value)
-        with
-        | :? CanopyElementNotFoundException as ex ->
-            let message = sprintf "%s%snot equals check failed.  expected NOT: %s, got: " ex.Message Environment.NewLine value
-            raise (CanopyNotEqualsFailedException message)
-        | :? WebDriverTimeoutException ->
-            let gotten = readB browser cssSelector
-            let message = sprintf "not equals check failed.  expected NOT: %s, got: %s" value gotten
-            raise (CanopyNotEqualsFailedException message)
-
-    let atLeastOneEqual browser cssSelector value =
-        try
-            wait compareTimeout (fun _ ->
-                 cssSelector
-                 |> elementsB browser
-                 |> Seq.exists(fun element -> textOf element = value))
-        with
-        | :? CanopyElementNotFoundException as ex ->
-            let message = sprintf "%s%scan't find %s in list %s%sgot: " ex.Message Environment.NewLine value cssSelector Environment.NewLine
-            raise (CanopyValueNotInListException message)
-        | :? WebDriverTimeoutException ->
-            let sb = new System.Text.StringBuilder()
-            cssSelector
-            |> elementsB browser
-            |> List.iter (fun e -> bprintf sb "%s%s" (textOf e) Environment.NewLine)
-            let message = sprintf "can't find %s in list %s%sgot: %s" value cssSelector Environment.NewLine (sb.ToString())
-            raise (CanopyValueNotInListException message)
-
-    let noElementEquals browser cssSelector value =
-        try
-            wait compareTimeout (fun _ ->
-                cssSelector
-                |> elementsB browser
-                |> Seq.exists (fun element -> textOf element = value |> not))
-        with
-        | :? CanopyElementNotFoundException as ex ->
-            let message = sprintf "%s%sfound check failed" ex.Message Environment.NewLine
-            raise (CanopyValueInListException message)
-        | :? WebDriverTimeoutException ->
-            let message = sprintf "found %s in list %s, expected not to" value cssSelector
-            raise (CanopyValueInListException message)
-
-    let selectedB browser item =
-        let selected cssSelector (elem: IWebElement) =
-            if not <| elem.Selected then
-                let message = sprintf "Element selected failed, %s not selected." cssSelector
-                raise (CanopySelectionFailedExeception message)
-
-        match box item with
-        | :? IWebElement as elem ->
-            selected elem.TagName elem
-        | :? string as cssSelector ->
-            elementB browser cssSelector
-            |> selected cssSelector
-        | _ ->
-            let message = sprintf "Can't check selected on %O because it is not a string or element." item
-            raise (CanopyNotStringOrElementException message)
-
-    (* documented/assertions *)
-    let selected item =
-        selectedB browser item
-
-    (* documented/assertions *)
-    let deselectedB browser item =
-        let deselected cssSelector (elem : IWebElement) =
-            if elem.Selected then raise (CanopyDeselectionFailedException(sprintf "element deselected failed, %s selected." cssSelector))
-
-        match box item with
-        | :? IWebElement as elem ->
-            deselected elem.TagName elem
-        | :? string as cssSelector ->
-            elementB browser cssSelector
-            |> deselected cssSelector
-        | _ ->
-            let message = sprintf "Can't check deselected on %O because it is not a string or element." item
-            raise (CanopyNotStringOrElementException(message))
-
-    (* documented/assertions *)
-    let deselected item =
-        deselectedB browser item
-
-    (* documented/assertions *)
-    let contains (value1: string) (value2: string) =
-        if not (value2.Contains value1) then
-            let message = sprintf "contains check failed.  %s does not contain %s" value2 value1
-            raise (CanopyContainsFailedException message)
-
-    (* documented/assertions *)
-    let containsInsensitive (value1: string) (value2: string) =
-        let rules = StringComparison.InvariantCultureIgnoreCase
-        let contains = value2.IndexOf(value1, rules)
-        if contains < 0 then
-            let message = sprintf "contains insensitive check failed.  %s does not contain %s" value2 value1
-            raise (CanopyContainsFailedException message)
-
-    (* documented/assertions *)
-    let notContains (value1: string) (value2: string) =
-        if value2.Contains value1 then
-            let message = sprintf "notContains check failed.  %s does contain %s" value2 value1
-            raise (CanopyNotContainsFailedException message)
-
-    (* documented/assertions *)
-    let countB browser cssSelector count =
-        try
-            wait compareTimeout (fun _ ->
-                (unreliableElementsB browser cssSelector).Length = count)
-        with
-        | :? CanopyElementNotFoundException as ex ->
-            let message = sprintf "%s%scount failed. expected: %i got: %i" ex.Message Environment.NewLine count 0
-            raise (CanopyCountException message)
-
-        | :? WebDriverTimeoutException ->
-            let message = sprintf "count failed. expected: %i got: %i" count (unreliableElementsB browser cssSelector).Length
-            raise (CanopyCountException message)
-
-    (* documented/assertions *)
-    let count cssSelector count =
-        countB browser cssSelector count
-
-    let matches browser cssSelector regexPattern =
-        try
-            wait compareTimeout (fun _ ->
-                let value = readB browser cssSelector
-                regexMatch regexPattern value)
-        with
-        | :? CanopyElementNotFoundException as ex ->
-            let message = sprintf "%s%sregex equality check failed.  expected: %s, got:" ex.Message Environment.NewLine regexPattern
-            raise (CanopyEqualityFailedException message)
-        | :? WebDriverTimeoutException ->
-            let value = readB browser cssSelector
-            let message =
-                sprintf "regex equality check failed. Expected to match: /%s/, got: %s"
-                        regexPattern value
-            raise (CanopyEqualityFailedException message)
-
-    let matchesNot browser cssSelector regexPattern =
-        try
-            wait compareTimeout (fun _ ->
-                let value = readB browser cssSelector
-                regexMatch regexPattern value |> not)
-        with
-        | :? CanopyElementNotFoundException as ex ->
-            let message = sprintf "%s%sregex not equality check failed.  expected NOT: %s, got:" ex.Message Environment.NewLine regexPattern
-            raise (CanopyEqualityFailedException message)
-        | :? WebDriverTimeoutException ->
-            let value = readB browser cssSelector
-            let message =
-                sprintf "Regex negative equality check failed. Expected it not to match: /%s/, got: %s"
-                        regexPattern value
-            raise (CanopyEqualityFailedException message)
-
-
-    let atLeastOneMatches browser cssSelector regexPattern =
-        try
-            wait compareTimeout (fun _ ->
-                cssSelector
-                |> elementsB browser
-                |> Seq.exists(fun element -> regexMatch regexPattern (textOf element)))
-        with
-            | :? CanopyElementNotFoundException as ex ->
-                let message = sprintf "%s%scan't regex find %s in list %s%sgot: " ex.Message Environment.NewLine regexPattern cssSelector Environment.NewLine
-                raise (CanopyValueNotInListException message)
-            | :? WebDriverTimeoutException ->
-                let sb = new System.Text.StringBuilder()
-                cssSelector
-                |> elementsB browser
-                |> List.iter (fun e -> bprintf sb "%s%s" (textOf e) Environment.NewLine)
-                let message =
-                    sprintf "can't regex find %s in list %s%sgot: %s"
-                            regexPattern cssSelector Environment.NewLine (sb.ToString())
-                raise (CanopyValueNotInListException message)
-
-    (* documented/assertions *)
-    let is expected actual =
-        if expected <> actual then
-            let message = sprintf "equality check failed.  expected: %O, got: %O" expected actual
-            raise (CanopyEqualityFailedException message)
-
-    let private shown (elem: IWebElement) =
-        let opacity = elem.GetCssValue("opacity")
-        let display = elem.GetCssValue("display")
-        display <> "none" && opacity = "1"
-
-    (* documented/assertions *)
-    let displayedB browser item =
-        try
-            wait compareTimeout (fun _ ->
-                match box item with
-                | :? IWebElement as element ->
-                    shown element
-                | :? string as cssSelector ->
-                    shown (elementB browser cssSelector)
-                | _ ->
-                    let message = sprintf "Can't check displayed on %O because it is not a string or webelement" item
-                    raise (CanopyNotStringOrElementException message))
-        with
-        | :? CanopyElementNotFoundException as ex ->
-            let message = sprintf "%s%sdisplay check for %O failed." ex.Message Environment.NewLine item
-            raise (CanopyDisplayedFailedException message)
-
-        | :? WebDriverTimeoutException ->
-            let message = sprintf "display check for %O failed." item
-            raise (CanopyDisplayedFailedException message)
-
-    (* documented/assertions *)
-    let displayed item =
-        displayedB browser item
-
-    (* documented/assertions *)
-    let notDisplayedB browser item =
-        try
-            wait compareTimeout (fun _ ->
-                match box item with
-                | :? IWebElement as element ->
-                    not (shown element)
-                | :? string as cssSelector ->
-                       (unreliableElementsB browser cssSelector |> List.isEmpty)
-                    || not (unreliableElementB browser cssSelector |> shown)
-                | _ ->
-                    let message = sprintf "Can't check notDisplayed on %O because it is not a string or webelement" item
-                    raise (CanopyNotStringOrElementException message))
-        with
-        | :? CanopyElementNotFoundException as ex -> raise (CanopyNotDisplayedFailedException(sprintf "%s%snotDisplay check for %O failed." ex.Message Environment.NewLine item))
-        | :? WebDriverTimeoutException -> raise (CanopyNotDisplayedFailedException(sprintf "notDisplay check for %O failed." item))
-
-    (* documented/assertions *)
-    let notDisplayed item =
-        notDisplayedB browser item
-
-    (* documented/assertions *)
-    let enabledB browser item =
-        try
-            wait compareTimeout (fun _ ->
-                match box item with
-                | :? IWebElement as element ->
-                    element.Enabled
-                | :? string as cssSelector ->
-                    (elementB browser cssSelector).Enabled
-                | _ ->
-                    let message = sprintf "Can't check enabled on %O because it is not a string or webelement" item
-                    raise (CanopyNotStringOrElementException message))
-        with
-        | :? CanopyElementNotFoundException as ex -> raise (CanopyEnabledFailedException(sprintf "%s%senabled check for %O failed." ex.Message Environment.NewLine item))
-        | :? WebDriverTimeoutException -> raise (CanopyEnabledFailedException(sprintf "enabled check for %O failed." item))
-
-    (* documented/assertions *)
-    let enabled item =
-        enabledB browser item
-
-    (* documented/assertions *)
-    let disabledB browser item =
-        try
-            wait compareTimeout (fun _ ->
-                match box item with
-                | :? IWebElement as element ->
-                    not element.Enabled
-                | :? string as cssSelector ->
-                    not (elementB browser cssSelector).Enabled
-                | _ ->
-                    let message = sprintf "Can't check disabled on %O because it is not a string or webelement" item
-                    raise (CanopyNotStringOrElementException message))
-        with
-        | :? CanopyElementNotFoundException as ex ->
-            let message = sprintf "%s%sdisabled check for %O failed." ex.Message Environment.NewLine item
-            raise (CanopyDisabledFailedException message)
-        | :? WebDriverTimeoutException ->
-            let message = sprintf "disabled check for %O failed." item
-            raise (CanopyDisabledFailedException message)
-
-    (* documented/assertions *)
-    let disabled item =
-        disabledB browser item
-
-    (* documented/assertions *)
-    let fadedInB browser cssSelector =
-        fun _ ->
-            shown (elementB browser cssSelector)
-
-    (* documented/assertions *)
-    let fadedIn cssSelector =
-        fadedInB browser cssSelector
-
-    /// Infix operators for assertions; these use the global browser instance and are thus
-    /// not thread-safe.
-    module Operators =
-        (* documented/assertions *)
-        let ( == ) item value = equal browser item value
-        (* documented/assertions *)
-        let ( != ) cssSelector value = notEqual browser cssSelector value
-        (* documented/assertions *)
-        let ( *= ) cssSelector value = atLeastOneEqual browser cssSelector value
-        (* documented/assertions *)
-        let ( *!= ) cssSelector value = noElementEquals browser cssSelector value
-        (* documented/assertions *)
-        let ( =~ ) cssSelector pattern = matches browser cssSelector pattern
-        (* documented/assertions *)
-        let ( !=~ ) cssSelector pattern = matchesNot browser cssSelector pattern
-        (* documented/assertions *)
-        let ( *~ ) cssSelector pattern = atLeastOneMatches browser cssSelector pattern
-        (* documented/assertions *)
-        let (===) expected actual = is expected actual
 
 //clicking/checking
 (* documented/actions *)
@@ -1185,14 +858,10 @@ let dragB browser cssSelectorA cssSelectorB =
 let drag cssSelectorA cssSelectorB =
     dragB browser cssSelectorA cssSelectorB
 
-(* documented/actions *)
-let (-->) cssSelectorA cssSelectorB =
-  drag cssSelectorA cssSelectorB
-
 //browser related
 (* documented/actions *)
 let pinB (browser: IWebDriver) direction =
-    let (w, h) = canopy.screen.getPrimaryScreenResolution ()
+    let (w, h) = Screen.getPrimaryScreenResolution ()
     let maxWidth = w / 2
     browser.Manage().Window.Size <- new System.Drawing.Size(maxWidth, h)
     match direction with
@@ -1210,8 +879,8 @@ let pin direction =
 (* documented/actions *)
 let pinToMonitorB (browser: IWebDriver) n =
     let n' = if n < 1 then 1 else n
-    if canopy.screen.monitorCount >= n' then
-        let workingArea =  canopy.screen.allScreensWorkingArea.[n'-1]
+    if Screen.monitorCount >= n' then
+        let workingArea =  Screen.allScreensWorkingArea.[n'-1]
         browser.Manage().Window.Position <- new System.Drawing.Point(workingArea.X, 0)
         browser.Manage().Window.Maximize()
     else
@@ -1221,12 +890,12 @@ let pinToMonitorB (browser: IWebDriver) n =
 let pinToMonitor n =
     pinToMonitorB browser n
 
-let private firefoxDriverService _ =
+let internal firefoxDriverService _ =
     let service = Firefox.FirefoxDriverService.CreateDefaultService()
     service.HideCommandPromptWindow <- hideCommandPromptWindow
     service
 
-let private firefoxWithUserAgent (userAgent : string) =
+let internal firefoxWithUserAgent (userAgent : string) =
     let profile = FirefoxProfile()
     profile.SetPreference("general.useragent.override", userAgent)
     let options = Firefox.FirefoxOptions();
@@ -1234,28 +903,28 @@ let private firefoxWithUserAgent (userAgent : string) =
     new FirefoxDriver(firefoxDriverService (), options, TimeSpan.FromSeconds(elementTimeout))
     :> IWebDriver
 
-let private chromeDriverService dir =
+let internal chromeDriverService dir =
     let service = Chrome.ChromeDriverService.CreateDefaultService(dir);
     service.HideCommandPromptWindow <- hideCommandPromptWindow;
     service
 
-let private chromeWithUserAgent dir userAgent =
+let internal chromeWithUserAgent dir userAgent =
     let options = Chrome.ChromeOptions()
     options.AddArgument("--user-agent=" + userAgent)
     new Chrome.ChromeDriver(chromeDriverService dir, options)
     :> IWebDriver
 
-let private ieDriverService _ =
+let internal ieDriverService _ =
     let service = IE.InternetExplorerDriverService.CreateDefaultService(ieDir)
     service.HideCommandPromptWindow <- hideCommandPromptWindow
     service
 
-let private edgeDriverService _ =
+let internal edgeDriverService _ =
     let service = Edge.EdgeDriverService.CreateDefaultService(edgeDir)
     service.HideCommandPromptWindow <- hideCommandPromptWindow
     service
 
-let private safariDriverService _ =
+let internal safariDriverService _ =
     let service = Safari.SafariDriverService.CreateDefaultService(safariDir)
     service.HideCommandPromptWindow <- hideCommandPromptWindow
     service
@@ -1399,7 +1068,7 @@ let positionBrowserB (browser: IWebDriver) left top width height =
 let positionBrowser left top width height =
     positionBrowserB browser left top width height
 
-let private innerSize (browser: IWebDriver) =
+let internal innerSize (browser: IWebDriver) =
     let jsBrowser = browser :?> IJavaScriptExecutor
     let innerWidth = System.Int32.Parse(jsBrowser.ExecuteScript("return window.innerWidth").ToString())
     let innerHeight = System.Int32.Parse(jsBrowser.ExecuteScript("return window.innerHeight").ToString())
@@ -1484,10 +1153,6 @@ let url u =
     urlB browser u
 
 (* documented/actions *)
-let ( !^ ) (u: string) =
-    url u
-
-(* documented/actions *)
 let titleB (browser: IWebDriver) =
     browser.Title
 
@@ -1533,7 +1198,7 @@ let addFinder finder =
         |> Seq.append (seq { yield finder cssSelector f }))
 
 //hints
-let private addHintFinder hints finder =
+let internal addHintFinder hints finder =
     hints |> Seq.append (Seq.singleton finder)
 
 (* DONT/documented/actions *)

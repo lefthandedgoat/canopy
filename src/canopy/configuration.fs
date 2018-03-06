@@ -1,7 +1,6 @@
-﻿[<AutoOpen>]
-module canopy.configuration
+﻿module Canopy.Configuration
 
-open reporters
+open Reporters
 open System
 
 //runner related
@@ -13,7 +12,7 @@ let failFast = ref false
 let mutable failScreenshotPath = Environment.GetFolderPath(Environment.SpecialFolder.ApplicationData) + @"\canopy\"
 // TODO: remove global variable
 (* documented/configuration *)
-let mutable failScreenshotFileName = fun (test : types.Test) (suite: types.suite) -> DateTime.Now.ToString("MMM-d_HH-mm-ss-fff")
+let mutable failScreenshotFileName = fun (test: Test) (suite: Suite) -> DateTime.Now.ToString("MMM-d_HH-mm-ss-fff")
 // TODO: remove global variable
 (* documented/configuration *)
 let mutable failIfAnyWipTests = false
@@ -87,7 +86,7 @@ type CanopyConfig =
         disableSuggestOtherSelectors: bool
         autoPinBrowserRightOnLaunch: bool
         throwIfMoreThanOneElement: bool
-        configuredFinders: finders.Finders
+        configuredFinders: Finders.Finders
         writeToSelectWithOptionValue: bool
         optimizeBySkippingIFrameCheck: bool
         optimizeByDisablingClearBeforeWrite: bool
@@ -124,7 +123,7 @@ let mutable autoPinBrowserRightOnLaunch = true
 let mutable throwIfMoreThanOneElement = false
 // TODO: remove global variable
 (* documented/configuration *)
-let mutable configuredFinders = finders.defaultFinders
+let mutable configuredFinders = Finders.defaultFinders
 // TODO: remove global variable
 (* documented/configuration *)
 let mutable writeToSelectWithOptionValue = true

@@ -1,10 +1,17 @@
-﻿namespace canopy.csharp
+﻿namespace Canopy.CSharp
 
-type integration () =
+type Integration () =
 
-    static member diffJson example actual =
-        let diff = jsonValidator.diff example actual
-        let diffString = diff |> List.map (fun d -> match d with | jsonValidator.Missing s -> sprintf "Missing %s" s | jsonValidator.Extra s -> sprintf "Extra %s" s)
+    static member DiffJson example actual =
+        let diff = JsonValidator.diff example actual
+        let diffString =
+            diff
+            |> List.map (function
+            | JsonValidator.Missing s ->
+                sprintf "Missing %s" s
+            | JsonValidator.Extra s ->
+                sprintf "Extra %s" s)
         ResizeArray<string>(diffString)
 
-    static member validateJson example actual = jsonValidator.validate example actual
+    static member ValidateJson example actual =
+        JsonValidator.validate example actual

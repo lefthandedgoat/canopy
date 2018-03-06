@@ -1,15 +1,16 @@
-﻿namespace canopy.csharp
+﻿namespace Canopy.CSharp
 
-open canopy.runner
-open canopy
-open canopy.core.Assert
-open canopy.core.Assert.Operators
+open Canopy.Runner
+open Canopy
+open Canopy.Operators
+open Canopy.Assert
+open Canopy.Assert.Operators
 
-type canopy () =
+type Canopy () =
 
     static member browsers = browsers
 
-    static member browser = canopy.types.browser
+    static member browser = Canopy.Types.browser
 
     //runner stuff
     static member context description = context description
@@ -30,12 +31,12 @@ type canopy () =
 
     static member wip description (f : System.Action) = description &&&& fun _ -> f.Invoke()
 
-    static member skip description (f : System.Action) = description &&! canopy.runner.skipped
-                
-    static member run () = canopy.runner.run ()
+    static member skip description (f : System.Action) = description &&! Runner.skipped
 
-    static member runFor browsers = canopy.runner.runFor browsers
-        
+    static member run () = Runner.run ()
+
+    static member runFor browsers = Runner.runFor browsers
+
     //core stuff
     static member start b = start b
 
@@ -60,7 +61,7 @@ type canopy () =
     static member url destination = url destination
 
     static member currentUrl () = currentUrl ()
-    
+
     static member addFinder finder = addFinder finder
 
     static member title () = title ()
@@ -99,7 +100,7 @@ type canopy () =
     static member elements selector = elementsB browser selector
 
     static member elementWithin selector element = elementWithinB browser selector element
-    
+
     static member elementsWithin selector element = elementsWithinB browser selector element
 
     static member elementWithText selector regex = elementWithTextB browser selector regex
@@ -110,21 +111,21 @@ type canopy () =
 
     static member unreliableElementsWithin selector element = unreliableElementsWithinB browser selector element
 
-    static member someElement selector = 
+    static member someElement selector =
       match someElementB browser selector with
       | None -> null
       | Some element -> element
 
-    static member someElementWithin selector element = 
+    static member someElementWithin selector element =
       match someElementWithinB browser selector element with
       | None -> null
       | Some element -> element
 
-    static member someParent element = 
+    static member someParent element =
       match someParentB browser element with
       | None -> null
       | Some element -> element
-    
+
     static member nth index selector = nthB browser index selector
 
     static member first selector = firstB browser selector
@@ -138,7 +139,7 @@ type canopy () =
     static member write selector value = selector << value
 
     static member click selector = clickB browser selector
-    
+
     static member doubleClick selector = doubleClickB browser selector
 
     static member ctrlClick selector = ctrlClickB browser selector
@@ -150,11 +151,11 @@ type canopy () =
     static member check selector = checkB browser selector
 
     static member uncheck selector = uncheckB browser selector
-    
+
     static member hover selector = hoverB browser selector
 
     static member drag selector = dragB browser selector
-               
+
     static member press key = pressB browser key
 
     static member alert () = alertB browser
@@ -163,7 +164,7 @@ type canopy () =
 
     static member dismissAlert () = dismissAlertB browser
 
-    static member fastTextFromCSS selector = fastTextFromCSSB browser selector      
+    static member fastTextFromCSS selector = fastTextFromCSSB browser selector
 
     //assertions
     static member eq selector value = selector == value
