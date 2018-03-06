@@ -8,13 +8,17 @@ open System.Collections.Generic
 //basically a hack because I dont know a better way
 let findByCss (cssSelector : string) (f : (By -> ReadOnlyCollection<IWebElement>)) =
     try
-        f(By.CssSelector(cssSelector)) |> List.ofSeq
-    with | ex -> []
+        f (By.CssSelector(cssSelector))
+        |> List.ofSeq
+    with ex ->
+        []
 
 let findByXpath xpath f =
     try
-        f(By.XPath(xpath)) |> List.ofSeq
-    with | ex -> []
+        f (By.XPath(xpath))
+        |> List.ofSeq
+    with ex ->
+        []
 
 let findByLabel locator f =
     let isInputField (element : IWebElement) =
@@ -26,33 +30,38 @@ let findByLabel locator f =
     let firstFollowingField (label : IWebElement) =
         let followingElements = label.FindElements(By.XPath("./following-sibling::*[1]")) |> Seq.toList
         match followingElements with
-            | head :: tail when isField head-> [head]
-            | _ -> []
+        | head :: tail when isField head-> [head]
+        | _ -> []
+
     try
         let labels = f(By.XPath(sprintf """.//label[text() = "%s"]""" locator))
-        if (Seq.isEmpty labels) then
+        if Seq.isEmpty labels then
             []
         else
             let (label : IWebElement) = (labels |> List.ofSeq).Head
             match label.GetAttribute("for") with
             | null -> firstFollowingField (labels |> List.ofSeq).Head
             | id -> f(By.Id(id)) |> List.ofSeq
-    with | _ -> []
+    with _ ->
+        []
 
 let findByText text f =
     try
         f(By.XPath(sprintf """.//*[text() = "%s"]""" text)) |> List.ofSeq
-    with | _ -> []
+    with _ ->
+        []
 
 let findByNormalizeSpaceText text f =
     try
         f(By.XPath(sprintf """.//*[normalize-space(text()) = "%s"]""" text)) |> List.ofSeq
-    with | _ -> []
+    with _ ->
+        []
 
 let findByValue value f =
     try
         findByCss (sprintf """*[value="%s"]""" value) f |> List.ofSeq
-    with | _ -> []
+    with _ ->
+        []
 
 //Inspired by https://github.com/RaYell/selenium-webdriver-extensions
 let private loadJQuery (browser: IWebDriver) =
@@ -76,24 +85,30 @@ type ByJQuery (selector) =
 
     do
         let findElements (context: ISearchContext) =
-            loadJQuery browser //TODO not sure how this will work with parallel
-            if context :? IWebDriver
-            then
+            match context with
+            | :? IWebDriver as browser ->
+                loadJQuery browser
                 let script = sprintf """return jQuery("%s").get();""" selector
-                (browser :?> IJavaScriptExecutor).ExecuteScript(script) :?> ReadOnlyCollection<IWebElement>
-            else
+                (context :?> IJavaScriptExecutor).ExecuteScript(script) :?> ReadOnlyCollection<IWebElement>
+            | :? OpenQA.Selenium.Internal.IWrapsDriver as wrapper ->
                 let script = sprintf """return jQuery("%s", arguments[0]).get();""" selector
-                let wrapper = context :?> OpenQA.Selenium.Internal.IWrapsDriver
+                loadJQuery wrapper.WrappedDriver
                 (wrapper.WrappedDriver :?> IJavaScriptExecutor).ExecuteScript(script, wrapper) :?> ReadOnlyCollection<IWebElement>
+            | other ->
+                failwithf "Unexpected context '%s'" (other.GetType().FullName)
 
-        base.FindElementsMethod <- fun context -> findElements context
+        base.FindElementsMethod <-
+            fun context -> findElements context
 
-        base.FindElementMethod <- fun context -> findElements context |> Seq.head
+        base.FindElementMethod <-
+            fun context -> findElements context |> Seq.head
 
 let findByJQuery jquerySelector f =
     try
-        f(ByJQuery(jquerySelector) :> By) |> List.ofSeq
-    with | _ -> []
+        f (ByJQuery(jquerySelector) :> By)
+        |> List.ofSeq
+    with _ ->
+        []
 
 //you can use this as an example to how to extend canopy by creating your own set of finders, tweaking the current collection, or adding/removing
 let mutable defaultFinders =

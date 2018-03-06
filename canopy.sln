@@ -38,7 +38,6 @@ EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "tools", "tools", "{3C3590B5-4CC8-49D1-A2CE-4FDFA73ADB53}"
 	ProjectSection(SolutionItems) = preProject
 		docs\tools\generate.fsx = docs\tools\generate.fsx
-		docs\tools\packages.config = docs\tools\packages.config
 		docs\tools\templates\template.cshtml = docs\tools\templates\template.cshtml
 	EndProjectSection
 EndProject

@@ -1316,7 +1316,6 @@ let start b =
 let switchTo b =
     browser <- b
 
-
 (* documented/actions *)
 let switchToTabB (browser: IWebDriver) number =
     wait pageTimeout (fun _ ->
@@ -1451,23 +1450,39 @@ let onXX (u: string) =
     onB browser u
 
 (* documented/actions *)
-let ( !^ ) (u : string) =
+let urlB (browser: IWebDriver) (u: string) =
     if browser = null then
         raise (CanopyOnException "Can't navigate to the given url since the browser is not initialized.")
     browser.Navigate().GoToUrl(u)
 
 (* documented/actions *)
-let url u = !^ u
+let urlXX u =
+    urlB browser u
 
 (* documented/actions *)
-let title() = browser.Title
+let ( !^ ) (u: string) =
+    url u
 
 (* documented/actions *)
-let reload = currentUrl >> url
+let titleB (browser: IWebDriver) =
+    browser.Title
+
+(* documented/actions *)
+let titleXX () =
+    title browser
+
+(* documented/actions *)
+let reloadB browser =
+    currentUrlB browser
+    |> urlB browser
+
+(* documented/actions *)
+let reloadXX () =
+    reloadB browser
 
 type Navigate =
-  | Back
-  | Forward
+    | Back
+    | Forward
 
 (* documented/actions *)
 let back = Back
@@ -1475,19 +1490,28 @@ let back = Back
 let forward = Forward
 
 (* documented/actions *)
-let navigate = function
-  | Back -> browser.Navigate().Back()
-  | Forward -> browser.Navigate().Forward()
+let navigateB (browser: IWebDriver) = function
+    | Back ->
+        browser.Navigate().Back()
+    | Forward ->
+        browser.Navigate().Forward()
+
+(* documented/actions *)
+let navigateXX direction =
+    navigateB browser direction
 
 (* documented/actions *)
 let addFinder finder =
+    // TODO: global variable
     let currentFinders = configuredFinders
     configuredFinders <- (fun cssSelector f ->
         currentFinders cssSelector f
         |> Seq.append (seq { yield finder cssSelector f }))
 
 //hints
-let private addHintFinder hints finder = hints |> Seq.append (seq { yield finder })
+let private addHintFinder hints finder =
+    hints |> Seq.append (Seq.singleton finder)
+
 (* DONT/documented/actions *)
 let addSelector finder hintType selector =
     //gaurd against adding same hintType multipe times and increase size of finder seq
@@ -1496,7 +1520,7 @@ let addSelector finder hintType selector =
             hints.[selector] <- addHintFinder hints.[selector] finder
             addedHints.[selector] <- [hintType] @ addedHints.[selector]
         else
-            hints.[selector] <- seq { yield finder }
+            hints.[selector] <- Seq.singleton finder
             addedHints.[selector] <- [hintType]
     selector
 
