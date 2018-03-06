@@ -44,16 +44,6 @@ ieDir
 ieDir <- "C:\\"
 
 (**
-phantomJSDir
-----------
-* Directory for phantomJS
-* Defaults to pre-set OS paths
-* OSX: /usr/bin/
-* Windows: C:\
-*)
-phantomJSDir <- "C:\\"
-
-(**
 safariDir
 -----------
 * Directory for Safari

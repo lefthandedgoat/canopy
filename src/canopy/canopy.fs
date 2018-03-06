@@ -33,11 +33,7 @@ let chrome = Chrome
 (* documented/actions *)
 let chromium = Chromium
 (* documented/actions *)
-let phantomJS = PhantomJS
-(* documented/actions *)
 let safari = Safari
-(* DONT/documented/actions *)
-let phantomJSProxyNone = PhantomJSProxyNone
 
 let mutable browsers = []
 
@@ -1227,11 +1223,6 @@ let private chromeWithUserAgent dir userAgent =
     new Chrome.ChromeDriver(chromeDriverService dir, options)
     :> IWebDriver
 
-let private phantomJsDriverService _ =
-    let service = PhantomJS.PhantomJSDriverService.CreateDefaultService(phantomJSDir)
-    service.HideCommandPromptWindow <- hideCommandPromptWindow
-    service
-
 let private ieDriverService _ =
     let service = IE.InternetExplorerDriverService.CreateDefaultService(ieDir)
     service.HideCommandPromptWindow <- hideCommandPromptWindow
@@ -1254,7 +1245,6 @@ let start b =
     //for ie you need to set Settings -> Advance -> Security Section -> Check-Allow active content to run files on My Computer*
     //also download IEDriverServer and place in c:\ or configure with ieDir
     //firefox just works
-    //for phantomjs download it and put in c:\ or configure with phantomJSDir
     //for Safari download it and put in c:\ or configure with safariDir
 
     browser <-
@@ -1316,14 +1306,6 @@ let start b =
             new FirefoxDriver(firefoxDriverService (), options, TimeSpan.FromSeconds(elementTimeout)) :> IWebDriver
         | Safari ->
             new Safari.SafariDriver(safariDriverService ()) :> IWebDriver
-        | PhantomJS ->
-            autoPinBrowserRightOnLaunch <- false
-            new PhantomJS.PhantomJSDriver(phantomJsDriverService ()) :> IWebDriver
-        | PhantomJSProxyNone ->
-            autoPinBrowserRightOnLaunch <- false
-            let service = phantomJsDriverService ()
-            service.ProxyType <- "none"
-            new PhantomJS.PhantomJSDriver(service) :> IWebDriver
         | Remote(url, capabilities) -> new Remote.RemoteWebDriver(new Uri(url), capabilities) :> IWebDriver
 
     if autoPinBrowserRightOnLaunch then

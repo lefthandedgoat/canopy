@@ -62,8 +62,6 @@ type BrowserStartMode =
     | Chromium
     | ChromiumWithOptions of Chrome.ChromeOptions
     | Safari
-    | PhantomJS
-    | PhantomJSProxyNone
     | Remote of string * ICapabilities
 
 let toString (x:'a) =
