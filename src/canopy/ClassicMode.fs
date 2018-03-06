@@ -3,8 +3,8 @@ module Canopy.ClassicMode
 open Canopy
 
 let (<<) item text = write text item
-
 let (-->) source target = drag source target
+let ( !^ ) (u: string) = url u
 
 type suite = Suite
 
