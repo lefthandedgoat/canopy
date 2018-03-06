@@ -36,7 +36,7 @@ type CanopyNoBrowserException(message) = inherit CanopyException(message)
 
 // TODO: type naming to upper
 //directions
-type direction =
+type Direction =
     | Left
     | Right
     | FullScreen

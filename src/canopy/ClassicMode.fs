@@ -7,6 +7,7 @@ let (-->) source target = drag source target
 let ( !^ ) (u: string) = url u
 
 type suite = Suite
+type direction = Direction
 
 module userAgents =
     let iPhone = UserAgents.iPhone
