@@ -74,7 +74,7 @@ type result = { selector : string; similarity : float }
 
 /// Calculates the Jaro-Winkler edit distance between two strings.
 /// The edit distance is a metric that allows to measure the amount of similarity between two strings.
-let JaroWinklerDistance s1 s2 =
+let jaroWinklerDistance s1 s2 =
     let jaroScore = jaro s1 s2
     // Accumulate the number of matching initial characters
     let maxLength = (min s1.Length s2.Length) - 1
@@ -93,4 +93,5 @@ let rec remove char lst =
     | h::t -> h::remove char t
     | _ -> []
 
-let editdistance s1 s2 = { selector = s2; similarity = JaroWinklerDistance s1 s2 }
+let editdistance s1 s2 =
+    { selector = s2; similarity = jaroWinklerDistance s1 s2 }
