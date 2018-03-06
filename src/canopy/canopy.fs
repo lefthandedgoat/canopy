@@ -705,7 +705,7 @@ module Assert =
             let gotten = readB browser cssSelector
             let message = sprintf "not equals check failed.  expected NOT: %s, got: %s" value gotten
             raise (CanopyNotEqualsFailedException message)
-            
+
     let atLeastOneEqual browser cssSelector value =
         try
             wait compareTimeout (fun _ ->
@@ -723,7 +723,7 @@ module Assert =
             |> List.iter (fun e -> bprintf sb "%s%s" (textOf e) Environment.NewLine)
             let message = sprintf "can't find %s in list %s%sgot: %s" value cssSelector Environment.NewLine (sb.ToString())
             raise (CanopyValueNotInListException message)
-            
+
     let noElementEquals browser cssSelector value =
         try
             wait compareTimeout (fun _ ->
@@ -1407,28 +1407,48 @@ let rotateXX () =
 let quit browser =
     reporter.quit()
     match box browser with
-    | :? IWebDriver as b -> b.Quit()
-    | _ -> browsers |> List.iter (fun b -> b.Quit())
+    | :? IWebDriver as b ->
+        b.Quit()
+    | _ ->
+        browsers |> List.iter (fun b -> b.Quit())
 
 (* documented/actions *)
-let currentUrl() = browser.Url
+let currentUrlB (browser: IWebDriver) =
+    browser.Url
+
+(* documented/actions *)
+let currentUrlXX () =
+    currentUrlB browser
 
 (* documented/assertions *)
-let onn (u: string) =
-    let urlPath (u : string) =
+let onnB (browser: IWebDriver) (u: string) =
+    let urlPath (u: string) =
         let url = match u with
                   | x when x.StartsWith("http") -> u  //leave absolute urls alone
                   | _ -> "http://host/" + u.Trim('/') //ensure valid uri
         let uriBuilder = new System.UriBuilder(url)
         uriBuilder.Path.TrimEnd('/') //get the path part removing trailing slashes
-    wait pageTimeout (fun _ -> if browser.Url = u then true else urlPath(browser.Url) = urlPath(u))
+    wait pageTimeout (fun _ ->
+        browser.Url = u
+        || urlPath (browser.Url) = urlPath(u))
 
 (* documented/assertions *)
-let on (u: string) =
+let onnXX (u: string) =
+    onnB browser u
+
+(* documented/assertions *)
+let onB (browser: IWebDriver) (u: string) =
     try
-        onn u
+        onnB browser u
     with
-        | ex -> if browser.Url.Contains(u) = false then raise (CanopyOnException(sprintf "on check failed, expected expression '%s' got %s" u browser.Url))
+    | ex ->
+        if not <| browser.Url.Contains(u) then
+            let message = sprintf "on check failed, expected expression '%s' got %s" u browser.Url
+            raise (CanopyOnException message)
+
+(* documented/assertions *)
+let onXX (u: string) =
+    onB browser u
 
 (* documented/actions *)
 let ( !^ ) (u : string) =
