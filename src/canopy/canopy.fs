@@ -16,31 +16,43 @@ open System.Drawing
 open System.Drawing.Imaging
 open EditDistance
 
+// TODO: remove global mutable
 let mutable (failureMessage : string) = null
+
+// TODO: remove global mutable
 let mutable wipTest = false
 
 (* documented/actions *)
 let firefox = Firefox
+
 (* documented/actions *)
 let aurora = FirefoxWithPath(@"C:\Program Files (x86)\Aurora\firefox.exe")
+
 (* documented/actions *)
 let ie = IE
+
 (* documented/actions *)
 let edgeBETA = EdgeBETA
+
 (* documented/actions *)
 let chrome = Chrome
+
 (* documented/actions *)
 let chromium = Chromium
+
 (* documented/actions *)
 let safari = Safari
 
+// TODO: remove global mutable
 let mutable browsers = []
 
 //misc
 (* documented/actions *)
-let failsWith message = failureMessage <- message
+let failsWith message =
+    // TODO: handle write to global via `Configuration`
+    failureMessage <- message
 
-let private textOf (element : IWebElement) =
+let private textOf (element: IWebElement) =
     match element.TagName  with
     | "input" ->
         element.GetAttribute("value")
@@ -54,7 +66,8 @@ let private textOf (element : IWebElement) =
     | _ ->
         element.Text
 
-let private regexMatch pattern input = System.Text.RegularExpressions.Regex.Match(input, pattern).Success
+let private regexMatch pattern input =
+    System.Text.RegularExpressions.Regex.Match(input, pattern).Success
 
 let private saveScreenshot directory filename pic =
     if not <| Directory.Exists(directory)
@@ -64,16 +77,15 @@ let private saveScreenshot directory filename pic =
 let private takeScreenShotIfAlertUp () =
     try
         let screenBounds = canopy.screen.getPrimaryScreenBounds ()
-        let bitmap = new Bitmap(width= screenBounds.width, height= screenBounds.height, format=PixelFormat.Format32bppArgb);
+        let bitmap = new Bitmap(width=screenBounds.width, height=screenBounds.height, format=PixelFormat.Format32bppArgb);
         use graphics = Graphics.FromImage(bitmap)
         graphics.CopyFromScreen(screenBounds.x, screenBounds.y, 0, 0, screenBounds.size, CopyPixelOperation.SourceCopy);
         use stream = new MemoryStream()
         bitmap.Save(stream, ImageFormat.Png)
-        stream.Close()
         stream.ToArray()
     with ex ->
         printfn "Sorry, unable to take a screenshot. An alert was up, and the backup plan failed!
-        Exception: %s" ex.Message
+        Exception: %O" ex
         Array.empty<byte>
 
 let private takeScreenshotB (browser: IWebDriver) directory filename =
