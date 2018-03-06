@@ -261,6 +261,13 @@ Get the nth element.
 click (nth 4 ".button")
 
 (**
+nth
+---
+Get the nth indexed element (0-based index).
+*)
+click (item 4 ".button")
+
+(**
 first
 -----
 Get the first element.
@@ -284,7 +291,8 @@ let names = fastTextFromCSS ".name"
 (**
 switchTo
 --------
-Switch to an existing instance of a browser.
+Switch to an existing instance of a browser. Note: this function call does not
+support parallel execution.
 *)
 start firefox
 let mainBrowser = browser
@@ -476,7 +484,7 @@ tile [browser1; browser2; browser3]
 (**
 positionBrowser
 ----
-Position current browser on the screen - position is in percentages: positionBrowser left top width height 
+Position current browser on the screen - position is in percentages: positionBrowser left top width height
 *)
 positionBrowser 66 0 33 50
 

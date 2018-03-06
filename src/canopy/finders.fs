@@ -55,14 +55,17 @@ let findByValue value f =
     with | _ -> []
 
 //Inspired by https://github.com/RaYell/selenium-webdriver-extensions
-let private loadJQuery () =
+let private loadJQuery (browser: IWebDriver) =
     let jsBrowser = browser :?> IJavaScriptExecutor
     let jqueryExistsScript = """return (typeof window.jQuery) === 'function';"""
     let exists = jsBrowser.ExecuteScript(jqueryExistsScript) :?> bool
     if not exists then
+        // https://code.jquery.com/
         let load = """
             var jq = document.createElement('script');
-            jq.src = '//code.jquery.com/jquery-2.2.1.min.js';
+            jq.integrity = 'sha256-3edrmyuQ0w65f8gfBsqowzjJe2iM6n0nKciPUp8y+7E=';
+            jq,crossorigin = "anonymous";
+            jq.src = 'https://code.jquery.com/jquery-3.3.1.slim.min.js';
             document.getElementsByTagName('head')[0].appendChild(jq);
          """
         jsBrowser.ExecuteScript(load) |> ignore
@@ -72,7 +75,7 @@ type ByJQuery (selector) =
     inherit OpenQA.Selenium.By()
 
     do
-        let findElements (context : ISearchContext) =
+        let findElements (context: ISearchContext) =
             loadJQuery()
             if context :? IWebDriver
             then
