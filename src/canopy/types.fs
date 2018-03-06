@@ -5,7 +5,7 @@ open System
 open OpenQA.Selenium
 open Microsoft.FSharp.Reflection
 
-//let mutable (browser : IWebDriver) = null
+let mutable (browser : IWebDriver) = null
 
 type CanopyException(message) = inherit Exception(message)
 type CanopyReadOnlyException(message) = inherit CanopyException(message)

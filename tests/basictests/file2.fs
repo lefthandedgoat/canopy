@@ -1,6 +1,7 @@
 module file2
 
 open canopy
+open canopy.core.Assert.Operators
 open runner
 
 let testpage = "http://lefthandedgoat.github.io/canopy/testpages/"
