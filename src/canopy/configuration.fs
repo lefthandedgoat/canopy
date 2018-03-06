@@ -4,6 +4,49 @@ module canopy.configuration
 open reporters
 open System
 
+//runner related
+// TODO: remove global variable
+(* documented/configuration *)
+let failFast = ref false
+// TODO: remove global variable
+(* documented/configuration *)
+let mutable failScreenshotPath = Environment.GetFolderPath(Environment.SpecialFolder.ApplicationData) + @"\canopy\"
+// TODO: remove global variable
+(* documented/configuration *)
+let mutable failScreenshotFileName = fun (test : types.Test) (suite: types.suite) -> DateTime.Now.ToString("MMM-d_HH-mm-ss-fff")
+// TODO: remove global variable
+(* documented/configuration *)
+let mutable failIfAnyWipTests = false
+// TODO: remove global variable
+(* documented/configuration *)
+let mutable runFailedContextsFirst = false
+// TODO: remove global variable
+(* documented/configuration *)
+let mutable failureScreenshotsEnabled = true
+// TODO: remove global variable
+(* documented/configuration *)
+let mutable skipAllTestsOnFailure = false
+// TODO: remove global variable
+(* documented/configuration *)
+let mutable skipRemainingTestsInContextOnFailure = false
+// TODO: remove global variable
+(* documented/configuration *)
+let mutable skipNextTest = false
+// TODO: remove global variable
+(* documented/configuration *)
+let mutable failureMessagesThatShoulBeTreatedAsSkip : string list = []
+
+type CanopyRunnerConfig =
+    {
+        failFast: bool
+        failScreenshotPath: string
+        failScreenshotFileName: string
+        failIfAnyWIPTests: bool
+        runFailedContextsFirst: bool
+        // remaining...
+    }
+
+
 //location of drivers depending on OS
 let folderByOSType =
     match System.Environment.OSVersion.Platform with
@@ -16,17 +59,6 @@ let folderByOSTypeChromium =
     | PlatformID.MacOSX
     | PlatformID.Unix -> @"/usr/lib/chromium-browser"
     | _ -> @"c:\"
-
-//runner related
-// TODO: remove global variable
-(* documented/configuration *)
-let failFast = ref false
-// TODO: remove global variable
-(* documented/configuration *)
-let mutable failScreenshotPath = Environment.GetFolderPath(Environment.SpecialFolder.ApplicationData) + @"\canopy\"
-// TODO: remove global variable
-(* documented/configuration *)
-let mutable failScreenshotFileName = fun (test : types.Test) (suite: types.suite) -> DateTime.Now.ToString("MMM-d_HH-mm-ss-fff")
 
 // TODO: remove global variable
 (* documented/configuration *)
@@ -43,6 +75,25 @@ let mutable safariDir = folderByOSType
 // TODO: remove global variable
 (* documented/configuration *)
 let mutable edgeDir = @"C:\Program Files (x86)\Microsoft Web Driver\"
+
+type CanopyConfig =
+    {
+        hideCommandPromptWindow: bool
+        elementTimeout: TimeSpan
+        compareTimeout: TimeSpan
+        pageTimeout: TimeSpan
+        wipSleep: TimeSpan
+        reporter: IReporter
+        disableSuggestOtherSelectors: bool
+        autoPinBrowserRightOnLaunch: bool
+        throwIfMoreThanOneElement: bool
+        configuredFinders: finders.Finders
+        writeToSelectWithOptionValue: bool
+        optimizeBySkippingIFrameCheck: bool
+        optimizeByDisablingClearBeforeWrite: bool
+        showInfoDiv: bool
+    }
+
 // TODO: remove global variable
 (* documented/configuration *)
 let mutable hideCommandPromptWindow = false
@@ -61,13 +112,7 @@ let mutable pageTimeout = 10.0
 let mutable wipSleep = 1.0
 // TODO: remove global variable
 (* documented/configuration *)
-let mutable failIfAnyWipTests = false
-// TODO: remove global variable
-(* documented/configuration *)
-let mutable runFailedContextsFirst = false
-// TODO: remove global variable
-(* documented/configuration *)
-let mutable reporter : IReporter = new ConsoleReporter() :> IReporter
+let mutable reporter = new ConsoleReporter() :> IReporter
 // TODO: remove global variable
 (* documented/configuration *)
 let mutable disableSuggestOtherSelectors = false
@@ -92,18 +137,3 @@ let mutable optimizeByDisablingClearBeforeWrite = false
 // TODO: remove global variable
 (* documented/configuration *)
 let mutable showInfoDiv = true
-// TODO: remove global variable
-(* documented/configuration *)
-let mutable failureScreenshotsEnabled = true
-// TODO: remove global variable
-(* documented/configuration *)
-let mutable skipAllTestsOnFailure = false
-// TODO: remove global variable
-(* documented/configuration *)
-let mutable skipRemainingTestsInContextOnFailure = false
-// TODO: remove global variable
-(* documented/configuration *)
-let mutable skipNextTest = false
-// TODO: remove global variable
-(* documented/configuration *)
-let mutable failureMessagesThatShoulBeTreatedAsSkip : string list = []

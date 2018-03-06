@@ -135,16 +135,23 @@ let private swallowedJs script =
 
 (* documented/actions *)
 let sleep seconds =
-    let ms = match box seconds with
-              | :? int as i -> i * 1000
-              | :? float as i -> Convert.ToInt32(i * 1000.0)
-              | _ -> 1000
+    let ms =
+        match box seconds with
+        | :? int as i ->
+            i * 1000
+        | :? float as i ->
+            Convert.ToInt32(i * 1000.0)
+        | :? TimeSpan as ts ->
+           int (ts.TotalSeconds * 1000.0)
+        | _ ->
+            1000
+    // TO CONSIDER: async?
     System.Threading.Thread.Sleep(ms)
 
 (* documented/actions *)
 let puts text =
     reporter.write text
-    if (showInfoDiv) then
+    if showInfoDiv then
         let escapedText = System.Web.HttpUtility.JavaScriptStringEncode(text)
         let info = "
             var infoDiv = document.getElementById('canopy_info_div');

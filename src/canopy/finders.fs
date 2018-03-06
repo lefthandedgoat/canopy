@@ -24,24 +24,28 @@ let findByLabel locator f =
     let isInputField (element : IWebElement) =
         element.TagName = "input" && element.GetAttribute("type") <> "hidden"
 
-    let isField (element : IWebElement) =
+    let isField (element: IWebElement) =
         element.TagName = "select" || element.TagName = "textarea" || isInputField element
 
-    let firstFollowingField (label : IWebElement) =
+    let firstFollowingField (label: IWebElement) =
         let followingElements = label.FindElements(By.XPath("./following-sibling::*[1]")) |> Seq.toList
         match followingElements with
-        | head :: tail when isField head-> [head]
-        | _ -> []
+        | head :: tail when isField head ->
+            List.singleton head
+        | _ ->
+            []
 
     try
         let labels = f(By.XPath(sprintf """.//label[text() = "%s"]""" locator))
         if Seq.isEmpty labels then
             []
         else
-            let (label : IWebElement) = (labels |> List.ofSeq).Head
+            let (label: IWebElement) = (labels |> List.ofSeq).Head
             match label.GetAttribute("for") with
-            | null -> firstFollowingField (labels |> List.ofSeq).Head
-            | id -> f(By.Id(id)) |> List.ofSeq
+            | null ->
+                firstFollowingField (labels |> List.ofSeq).Head
+            | id ->
+                f(By.Id(id)) |> List.ofSeq
     with _ ->
         []
 
@@ -110,8 +114,12 @@ let findByJQuery jquerySelector f =
     with _ ->
         []
 
-//you can use this as an example to how to extend canopy by creating your own set of finders, tweaking the current collection, or adding/removing
-let mutable defaultFinders =
+type Finders =
+    string -> (By -> ReadOnlyCollection<IWebElement>) -> seq<IWebElement list>
+
+// TODO: remove global variable
+// You can use this as an example to how to extend canopy by creating your own set of finders, tweaking the current collection, or adding/removing
+let mutable defaultFinders: Finders =
     (fun cssSelector f ->
         seq {
             yield findByCss                cssSelector f
