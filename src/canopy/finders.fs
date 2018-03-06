@@ -76,7 +76,7 @@ type ByJQuery (selector) =
 
     do
         let findElements (context: ISearchContext) =
-            loadJQuery()
+            loadJQuery browser //TODO not sure how this will work with parallel
             if context :? IWebDriver
             then
                 let script = sprintf """return jQuery("%s").get();""" selector

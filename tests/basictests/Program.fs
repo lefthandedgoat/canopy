@@ -3,6 +3,8 @@ module main
 open System
 open OpenQA.Selenium
 open canopy
+open canopy.core.Assert
+open canopy.core.Assert.Operators
 open reporters
 
 start chrome
@@ -47,7 +49,7 @@ let testpage = "http://lefthandedgoat.github.io/canopy/testpages/"
 
 "Apostrophes don't break anything" &&& fun _ ->
     url testpage
-    count "I've got an apostrophe" 1
+    countXX "I've got an apostrophe" 1
 
 "#welcome should have Welcome" &&& fun _ ->
     url testpage
@@ -85,45 +87,45 @@ test (fun _ ->
 
 "#lastName should have Doe via read cssSelector" &&& fun _ ->
     !^ testpage
-    read "#lastName" |> is "Doe"
+    readXX "#lastName" |> is "Doe"
 
 "#lastName should have Doe via read IWebElements" &&& fun _ ->
     !^ testpage
-    element "#lastname" |> read |> is "Doe"
+    elementXX "#lastname" |> readXX |> is "Doe"
 
 "clearing #firstName sets text to new empty string" &&& fun _ ->
     !^ testpage
-    clear "#firstName"
+    clearXX "#firstName"
     "#firstName" == ""
 
 "clearing #firstName sets text to new empty string via IWebElement" &&& fun _ ->
     !^ testpage
-    element "#firstName" |> clear
+    elementXX "#firstName" |> clearXX
     "#firstName" == ""
 
 "writing to #lastName sets text to Smith" &&& fun _ ->
     !^ testpage
-    clear "#lastName"
+    clearXX "#lastName"
     "#lastName" << "Smith"
     "#lastName" == "Smith"
 
 "writing to #lastName (as element) sets text to John" &&& fun _ ->
     !^ testpage
-    let lastname = element "#lastname"
-    clear lastname
+    let lastname = elementXX "#lastname"
+    clearXX lastname
     lastname << "John"
     "#lastname" == "John"
 
 "writing to .lastName sets text to new Smith in both boxes" &&& fun _ ->
     !^ testpage
-    clear "#lastName"
+    clearXX "#lastName"
     ".lastName" << "Smith"
     "#lastName" == "Smith"
     "#lastName2" == "Smith"
 
 "writing to .lastName sets text to new Smith in both boxes, xpath test" &&& fun _ ->
     !^ testpage
-    clear "#lastName"
+    clearXX "#lastName"
     "//input[@class='lastName']" << "Smith"
     "#lastName" == "Smith"
     "#lastName2" == "Smith"
@@ -172,125 +174,125 @@ test (fun _ ->
 "clicking #button sets #button_clicked to button clicked" &&& fun _ ->
     !^ testpage
     "#button_clicked" == "button not clicked"
-    click "#button"
+    clickXX "#button"
     "#button_clicked" == "button clicked"
 
 "clicking button with text 'Click Me!!' sets #button_clicked to button clicked" &&& fun _ ->
     !^ testpage
     "#button_clicked" == "button not clicked"
-    click "Click Me!!"
+    clickXX "Click Me!!"
     "#button_clicked" == "button clicked"
 
 "clicking (element #button) sets #button_clicked to button clicked" &&& fun _ ->
     !^ testpage
     "#button_clicked" == "button not clicked"
-    click (element "#button")
+    clickXX (elementXX "#button")
     "#button_clicked" == "button clicked"
 
 "clicking hyperlink sets #link_clicked to link clicked" &&& fun _ ->
     !^ testpage
     "#link_clicked" == "link not clicked"
-    click "#hyperlink"
+    clickXX "#hyperlink"
     "#link_clicked" == "link clicked"
 
 "clicking hyperlink via text sets #link_clicked to link clicked" &&& fun _ ->
     !^ testpage
     "#link_clicked" == "link not clicked"
-    click "Click Me!"
+    clickXX "Click Me!"
     "#link_clicked" == "link clicked"
 
 "clicking #radio1 selects it" &&& fun _ ->
     !^ testpage
-    click "#radio1"
-    selected "#radio1"
+    clickXX "#radio1"
+    selectedXX "#radio1"
 
 "clicking #radio1 selects it via IWebElement" &&& fun _ ->
     !^ testpage
-    click "#radio1"
-    element "#radio1" |> selected
+    clickXX "#radio1"
+    elementXX "#radio1" |> selected
 
 "clicking #radio2 selects it" &&& fun _ ->
     !^ testpage
-    click "#radio2"
-    selected "#radio2"
+    clickXX "#radio2"
+    selectedXX "#radio2"
 
 
 "clicking #checkbox selects it" &&& fun _ ->
     !^ testpage
-    check "#checkbox"
-    selected "#checkbox"
+    checkXX "#checkbox"
+    selectedXX "#checkbox"
 
 "clicking #checkbox selects it via sizzle" &&& fun _ ->
     !^ testpage
-    check "#checkbox"
+    checkXX "#checkbox"
     count "input:checked" 1
 
 "clicking selected #checkbox deselects it" &&& fun _ ->
     !^ testpage
-    check "#checkbox"
-    uncheck "#checkbox"
-    deselected "#checkbox"
+    checkXX "#checkbox"
+    uncheckXX "#checkbox"
+    deselectedXX "#checkbox"
 
 "clicking selected #checkbox deselects it via IWebElement" &&& fun _ ->
     !^ testpage
-    check "#checkbox"
-    uncheck "#checkbox"
-    element "#checkbox" |> deselected
+    checkXX "#checkbox"
+    uncheckXX "#checkbox"
+    elementXX "#checkbox" |> deselected
 
 "rightClicking Works" &&& fun _ ->
     !^ "https://api.jquery.com/contextmenu/"
-    let iframe = element "iframe"
+    let iframe = elementXX "iframe"
     browser.SwitchTo().Frame(iframe) |> ignore
     notDisplayed ".contextmenu"
 
-    rightClick "div:first"
+    rightclickXX "div:first"
     displayed ".contextmenu"
 
 "element within only searching within the element" &&& fun _ ->
     url "http://lefthandedgoat.github.io/canopy/testpages/elementWithin"
     count ".item" 5
-    "spanned item 4" === (element "span" |> elementWithin ".item").Text
+    "spanned item 4" === (elementXX "span" |> elementWithin ".item").Text
 
 "elements within only searching within element" &&& fun _ ->
     url "http://lefthandedgoat.github.io/canopy/testpages/elementWithin"
     count ".item" 5
-    2 === (element "span" |> elementsWithin ".item" |> List.length)
+    2 === (elementXX "span" |> elementsWithin ".item" |> List.length)
 
 "someElementWithin only searching within element" &&& fun _ ->
     url "http://lefthandedgoat.github.io/canopy/testpages/elementWithin"
     count ".item" 5
-    true === (element "span" |> someElementWithin ".specialItem").IsSome
+    true === (elementXX "span" |> someElementWithin ".specialItem").IsSome
 
 "element within works with jquery selectors" &&& fun _ ->
     url "http://lefthandedgoat.github.io/canopy/testpages/elementWithin"
-    "spanned item 6" === (element ".specialItem:visible" |> parent |> elementWithin ".specialItem:visible").Text
+    "spanned item 6" === (elementXX ".specialItem:visible" |> parent |> elementWithin ".specialItem:visible").Text
 
 "element within works with jquery selectors and respects scope" &&& fun _ ->
     url "http://lefthandedgoat.github.io/canopy/testpages/elementWithin"
-    false === (element ".specialItem:visible" |> someElementWithin ".specialItem:visible").IsSome
+    false === (elementXX ".specialItem:visible" |> someElementWithin ".specialItem:visible").IsSome
 
 "parent of firstItem and secondItem is list" &&& fun _ ->
     url "http://lefthandedgoat.github.io/canopy/testpages/parent"
-    "list" === (element "#firstItem" |> parent).GetAttribute("id")
+    "list" === (elementXX "#firstItem" |> parent).GetAttribute("id")
 
 "some parent of firstItem and secondItem is list" &&& fun _ ->
     url "http://lefthandedgoat.github.io/canopy/testpages/parent"
-    true === (element "#firstItem" |> someParent).IsSome
-    "list" === (element "#firstItem" |> someParent).Value.GetAttribute("id")
+    true === (elementXX "#firstItem" |> someParent).IsSome
+    "list" === (elementXX "#firstItem" |> someParent).Value.GetAttribute("id")
 
 "someElement returns Some when element found" &&& fun _ ->
     url testpage
-    true === (someElement "#testfield2").IsSome
-    "test value 2" === (someElement "#testfield2").Value.GetAttribute("value")
+    true === (someelementXX "#testfield2").IsSome
+    "test value 2" === (someelementXX "#testfield2").Value.GetAttribute("value")
 
 "someElement returns None when element not found" &&& fun _ ->
     url testpage
-    None === (someElement "#thisIdDoesNotExist")
+    None === (someelementXX "#thisIdDoesNotExist")
 
 "someElement fails when more than one element found" &&& fun _ ->
     url testpage
     failsWith "More than one element was selected when only one was expected for selector: .lastName"
-    someElement ".lastName" |> ignore
+    someelementXX ".lastName" |> ignore
 
 "Navigating to a url should be on url" &&& fun _ ->
     url testpage
@@ -360,27 +362,27 @@ before (fun _ -> Console.WriteLine "only before set now")
 "ajax button should click" &&& fun _ ->
     !^ testpage
     "#ajax_button_clicked" == "ajax button not clicked"
-    click "#ajax_button"
+    clickXX "#ajax_button"
     "#ajax_button_clicked" == "ajax button clicked"
 
 "pressing keys should work (may need to verify visually)" &&& fun _ ->
     !^ testpage
-    click "#firstName"
+    clickXX "#firstName"
     press tab
     press tab
     press down
 
 "click polling" &&& fun _ ->
     url "http://lefthandedgoat.github.io/canopy/testpages/autocomplete"
-    click "#search"
-    click "table tr td"
+    clickXX "#search"
+    clickXX "table tr td"
     "#console" == "worked"
 
 "ajax button should click after sleep" &&& fun _ ->
     !^ testpage
     "#ajax_button_clicked" == "ajax button not clicked"
     sleep 2.5
-    click "#ajax_button"
+    clickXX "#ajax_button"
     "#ajax_button_clicked" == "ajax button clicked"
 
 "readonly should throw error on read only field with clear" &&& fun _ ->
@@ -402,7 +404,7 @@ context "other tests"
 
 "define a custom wait for using any function that takes in unit and returns bool" &&& fun _ ->
     let pageLoaded () =
-        (element "#wait_for").Text = "Done!"
+        (elementXX "#wait_for").Text = "Done!"
 
     !^ "http://lefthandedgoat.github.io/canopy/testpages/waitFor"
     waitFor pageLoaded
@@ -411,7 +413,7 @@ context "other tests"
 "define a custom wait for using any function that takes in unit and returns bool" &&& fun _ ->
     failsWith <| sprintf "waiting for page to load%swaitFor condition failed to become true in 3.0 seconds" System.Environment.NewLine
     let pageLoaded () =
-        (element "#wait_for").Text = "Done!!!"
+        (elementXX "#wait_for").Text = "Done!!!"
 
     !^ "http://lefthandedgoat.github.io/canopy/testpages/waitFor"
     waitFor2 "waiting for page to load" pageLoaded
@@ -420,7 +422,7 @@ context "other tests"
     compareTimeout <- 10.0
     !^ "http://lefthandedgoat.github.io/canopy/testpages/noClickTilVisible"
     waitFor (fadedIn "#link")
-    click "#link"
+    clickXX "#link"
     on "http://lefthandedgoat.github.io/canopy/testpages/home"
 
 "define a custom wait for using any function that takes in unit and returns bool, example using lists" &&& fun _ ->
@@ -492,19 +494,19 @@ context "other tests"
 "double clicking" &&& fun _ ->
     !^ "http://lefthandedgoat.github.io/canopy/testpages/doubleClick"
     "#clicked" == "Not Clicked"
-    doubleClick "#double_click"
+    doubleclickXX "#double_click"
     "#clicked" == "Clicked"
 
 "ctrl clicking" &&& fun _ ->
     !^ "http://lefthandedgoat.github.io/canopy/testpages/ctrlClick"
 
-    ctrlClick "One"
-    ctrlClick "2"
-    ctrlClick "Three"
+    ctrlclickXX "One"
+    ctrlclickXX "2"
+    ctrlclickXX "Three"
 
-    selected "1"
-    selected "Two"
-    selected "3"
+    selectedXX "1"
+    selectedXX "Two"
+    selectedXX "3"
 
 "displayed test" &&& fun _ ->
     !^ "http://lefthandedgoat.github.io/canopy/testpages/displayed"
@@ -512,15 +514,15 @@ context "other tests"
 
 "displayed test via element" &&& fun _ ->
     !^ "http://lefthandedgoat.github.io/canopy/testpages/displayed"
-    element "#displayed" |> displayed
+    elementXX "#displayed" |> displayed
 
 "displayed test2" &&& fun _ ->
     !^ "http://lefthandedgoat.github.io/canopy/testpages/displayed"
-    waitFor (fun _ -> (element "#displayed").Displayed)
+    waitFor (fun _ -> (elementXX "#displayed").Displayed)
 
 "displayed test3" &&& fun _ ->
     !^ "http://lefthandedgoat.github.io/canopy/testpages/waitFor"
-    waitFor (fun _ -> (element "#wait_for_2").Displayed)
+    waitFor (fun _ -> (elementXX "#wait_for_2").Displayed)
 
 "notDisplayed test" &&& fun _ ->
     !^ "http://lefthandedgoat.github.io/canopy/testpages/notDisplayed"
@@ -528,7 +530,7 @@ context "other tests"
 
 "notDisplayed test via element" &&& fun _ ->
     !^ "http://lefthandedgoat.github.io/canopy/testpages/notDisplayed"
-    element "#notDisplayed" |> notDisplayed
+    elementXX "#notDisplayed" |> notDisplayed
 
 "notDisplayed test for element that is not on the screen" &&& fun _ ->
     !^ "http://lefthandedgoat.github.io/canopy/testpages/notDisplayed"
@@ -603,11 +605,11 @@ context "hovering"
 context "dragging"
 "draging works" &&! fun _ ->
     url "http://scrumy.com/silenter39delayed"
-    click ".plus-button a img"
+    clickXX ".plus-button a img"
     "#task_title" << "Demo"
-    click "#task_editor_buttons .save_button"
+    clickXX "#task_editor_buttons .save_button"
     ".handle" --> ".inprogress"
-    click "Blog"
+    clickXX "Blog"
 
 if not (browser :? OpenQA.Selenium.PhantomJS.PhantomJSDriver) then
     context "alert tests"
@@ -615,33 +617,33 @@ if not (browser :? OpenQA.Selenium.PhantomJS.PhantomJSDriver) then
     before (fun _ -> !^ "http://lefthandedgoat.github.io/canopy/testpages/alert")
 
     "alert box should have 'Alert Test'" &&& fun _ ->
-        click "#alert_test"
+        clickXX "#alert_test"
         alert() == "Alert Test"
         acceptAlert()
 
     "alert box should have 'Alert Test'" &&& fun _ ->
-        click "#alert_test"
+        clickXX "#alert_test"
         alert() == "Alert Test"
         dismissAlert()
 
     "alert box should fail correctly when expecting wrong message" &&& fun _ ->
         failsWith "equality check failed.  expected: Not the message, got: Alert Test"
-        click "#alert_test"
+        clickXX "#alert_test"
         alert() == "Not the message"
 
     "confirmation box should have 'Confirmation Test'" &&& fun _ ->
-        click "#confirmation_test"
+        clickXX "#confirmation_test"
         alert() == "Confirmation Test"
         acceptAlert()
 
     "confirmation box should have 'Confirmation Test'" &&& fun _ ->
-        click "#confirmation_test"
+        clickXX "#confirmation_test"
         alert() == "Confirmation Test"
         dismissAlert()
 
     "confirmation box should fail correctly when expecting wrong message" &&& fun _ ->
         failsWith "equality check failed.  expected: Not the message, got: Confirmation Test"
-        click "#confirmation_test"
+        clickXX "#confirmation_test"
         alert() == "Not the message"
 
 context "multiple elements test"
@@ -649,12 +651,12 @@ context "multiple elements test"
 before (fun _ -> !^ "http://lefthandedgoat.github.io/canopy/testpages/")
 
 "no error with multiple elements" &&& fun _ ->
-    read (element "input") === "test value 1"
+    readXX (elementXX "input") === "test value 1"
 
 "error with multiple elements" &&& fun _ ->
     throwIfMoreThanOneElement <- true
     failsWith "More than one element was selected when only one was expected for selector: input"
-    read (element "input") === "test value 1"
+    readXX (elementXX "input") === "test value 1"
 
 
 context "tiling windows"
@@ -747,14 +749,14 @@ addFinder findByHref
 
 "test new findByHref by clicking an href" &&& fun _ ->
     url "http://lefthandedgoat.github.io/canopy/index.html"
-    click "actions.html"
+    clickXX "actions.html"
     on "http://lefthandedgoat.github.io/canopy/actions.html"
 
 context "Navigate tests"
 
 "Browser should navigate back and forward" &&& fun _ ->
   url "http://lefthandedgoat.github.io/canopy/index.html"
-  click "actions.html"
+  clickXX "actions.html"
   navigate back
   on "http://lefthandedgoat.github.io/canopy/index.html"
   navigate forward
