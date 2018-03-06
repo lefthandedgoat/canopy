@@ -177,6 +177,8 @@ type TeamCityReporter(?logImagesToConsole: bool) =
 
         member this.setEnvironment env = ()
 
+#nowarn "44"
+
 type LiveHtmlReporter(browser : BrowserStartMode, driverPath : string, ?pinBrowserRight0: bool) =
     let pinBrowserRight = defaultArg pinBrowserRight0 true
     let consoleReporter : IReporter = new ConsoleReporter() :> IReporter

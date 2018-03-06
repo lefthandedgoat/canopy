@@ -929,6 +929,8 @@ let internal safariDriverService _ =
     service.HideCommandPromptWindow <- hideCommandPromptWindow
     service
 
+#nowarn "44"
+
 (* documented/actions *)
 let start b =
     //for chrome you need to download chromedriver.exe from http://code.google.com/p/chromedriver/wiki/GettingStarted
