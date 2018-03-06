@@ -2,6 +2,10 @@ namespace Canopy
 
 open Canopy
 
+/// Gives you:
+/// - url operator: (!^)
+/// - write operator: (<<)
+/// - drag operator: (-->)
 module Operators =
     (* documented/actions *)
     let ( !^ ) (u: string) =
