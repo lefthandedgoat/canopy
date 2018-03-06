@@ -278,7 +278,7 @@ let rec private findElementsB (browser: IWebDriver) cssSelector (searchContext: 
 
 
 /// Find related
-let rec private findElementsXX cssSelector searchContext: IWebElement list =
+let rec private findElements cssSelector searchContext: IWebElement list =
     findElementsB browser cssSelector searchContext
 
 let private findByFunctionB (browser: IWebDriver) cssSelector timeout waitFunc searchContext reliable =
@@ -299,7 +299,7 @@ let private findByFunctionB (browser: IWebDriver) cssSelector timeout waitFunc s
             suggestOtherSelectors cssSelector
             raise (CanopyElementNotFoundException(sprintf "can't find element %s" cssSelector))
 
-let private findByFunctionXX cssSelector timeout waitFunc searchContext reliable =
+let private findByFunction cssSelector timeout waitFunc searchContext reliable =
     findByFunctionB browser cssSelector timeout waitFunc searchContext reliable
 
 let private findB browser cssSelector timeout searchContext reliable =
@@ -307,14 +307,14 @@ let private findB browser cssSelector timeout searchContext reliable =
     findByFunctionB browser cssSelector timeout finder searchContext reliable
     |> List.head
 
-let private findXX cssSelector timeout searchContext reliable =
+let private find cssSelector timeout searchContext reliable =
     findB browser cssSelector timeout searchContext reliable
 
 let private findManyB browser cssSelector timeout searchContext reliable =
     let finder = findElementsB browser
     findByFunctionB browser cssSelector timeout finder searchContext reliable
 
-let private findManyXX cssSelector timeout searchContext reliable =
+let private findMany cssSelector timeout searchContext reliable =
     findManyB browser cssSelector timeout searchContext reliable
 
 //get elements
@@ -340,7 +340,7 @@ let elementsB browser cssSelector =
     findManyB browser cssSelector elementTimeout browser true
 
 (* documented/actions *)
-let elementsXX cssSelector =
+let elements cssSelector =
     elementsB browser cssSelector
 
 (* documented/actions *)
@@ -350,7 +350,7 @@ let elementB browser cssSelector =
     |> elementFromList cssSelector
 
 (* documented/actions *)
-let elementXX cssSelector =
+let element cssSelector =
     elementB browser cssSelector
 
 (* documented/actions *)
@@ -358,7 +358,7 @@ let unreliableElementsB browser cssSelector =
     findManyB browser cssSelector elementTimeout browser false
 
 (* documented/actions *)
-let unreliableElementsXX cssSelector =
+let unreliableElements cssSelector =
     unreliableElementsB browser cssSelector
 
 (* documented/actions *)
@@ -368,7 +368,7 @@ let unreliableElementB browser cssSelector =
     |> elementFromList cssSelector
 
 (* documented/actions *)
-let unreliableElementXX cssSelector =
+let unreliableElement cssSelector =
     unreliableElementB browser cssSelector
 
 (* documented/actions *)
@@ -376,7 +376,7 @@ let elementWithinB browser cssSelector elem =
     findB browser cssSelector elementTimeout elem true
 
 (* documented/actions *)
-let elementWithinXX cssSelector elem =
+let elementWithin cssSelector elem =
     elementWithinB browser cssSelector elem
 
 (* documented/actions *)
@@ -385,7 +385,7 @@ let elementsWithTextB browser cssSelector regex =
     |> List.filter (fun elem -> regexMatch regex (textOf elem))
 
 (* documented/actions *)
-let elementsWithTextXX cssSelector regex =
+let elementsWithText cssSelector regex =
     elementsWithTextB browser cssSelector regex
 
 (* documented/actions *)
@@ -393,7 +393,7 @@ let elementWithTextB browser cssSelector regex =
     (elementsWithTextB browser cssSelector regex).Head
 
 (* documented/actions *)
-let elementWithTextXX cssSelector regex =
+let elementWithText cssSelector regex =
     elementWithTextB browser cssSelector regex
 
 (* documented/actions *)
@@ -401,7 +401,7 @@ let parentB browser elem =
     elem |> elementWithinB browser ".."
 
 (* documented/actions *)
-let parentXX elem =
+let parent elem =
     parentB browser elem
 
 (* documented/actions *)
@@ -409,7 +409,7 @@ let elementsWithinB browser cssSelector elem =
     findManyB browser cssSelector elementTimeout elem true
 
 (* documented/actions *)
-let elementsWithinXX cssSelector elem =
+let elementsWithin cssSelector elem =
     elementsWithinB browser cssSelector elem
 
 (* documented/actions *)
@@ -417,7 +417,7 @@ let unreliableElementsWithinB (browser: IWebDriver) cssSelector elem =
     findManyB browser cssSelector elementTimeout elem false
 
 (* documented/actions *)
-let unreliableElementsWithinXX cssSelector elem =
+let unreliableElementsWithin cssSelector elem =
     unreliableElementsWithinB browser cssSelector elem
 
 (* documented/actions *)
@@ -427,7 +427,7 @@ let someElementB browser cssSelector =
     |> someElementFromList cssSelector
 
 (* documented/actions *)
-let someElementXX cssSelector =
+let someElement cssSelector =
     someElementB browser cssSelector
 
 (* documented/actions *)
@@ -437,7 +437,7 @@ let someElementWithinB browser cssSelector elem =
     |> someElementFromList cssSelector
 
 (* documented/actions *)
-let someElementWithinXX cssSelector elem =
+let someElementWithin cssSelector elem =
     someElementWithinB browser cssSelector elem
 
 (* documented/actions *)
@@ -447,7 +447,7 @@ let someParentB browser elem =
     |> someElementFromList "provided element"
 
 (* documented/actions *)
-let someParentXX elem =
+let someParent elem =
     someParentB browser elem
 
 (* documented/actions *)
@@ -455,7 +455,7 @@ let nthB browser index cssSelector =
     List.item index (elementsB browser cssSelector)
 
 (* documented/actions *)
-let nthXX index cssSelector =
+let nth index cssSelector =
     nthB browser index cssSelector
 
 (* documented/actions *)
@@ -463,7 +463,7 @@ let itemB browser index cssSelector =
     nthB index cssSelector
 
 (* documented/actions *)
-let itemXX index cssSelector =
+let item index cssSelector =
     itemB browser index cssSelector
 
 (* documented/actions *)
@@ -472,7 +472,7 @@ let firstB browser cssSelector =
     |> List.head
 
 (* documented/actions *)
-let firstXX cssSelector =
+let first cssSelector =
     firstB browser cssSelector
 
 (* documented/actions *)
@@ -482,7 +482,7 @@ let lastB browser cssSelector =
     |> List.head
 
 (* documented/actions *)
-let lastXX cssSelector =
+let last cssSelector =
     lastB browser cssSelector
 
 //read/write
@@ -500,7 +500,7 @@ let private writeToSelectB (browser: IWebDriver) (elem: IWebElement) (text:strin
     | head :: _ ->
         head.Click()
 
-let private writeToSelectXX (elem: IWebElement) (text:string) =
+let private writeToSelect (elem: IWebElement) (text:string) =
     writeToSelectB browser elem text
 
 let private writeToElementB browser (e : IWebElement) (text:string) =
@@ -514,20 +514,20 @@ let private writeToElementB browser (e : IWebElement) (text:string) =
         if not optimizeByDisablingClearBeforeWrite then try e.Clear() with ex -> ex |> ignore
         e.SendKeys(text)
 
-let private writeToElementXX e text =
+let private writeToElement e text =
     writeToElementB browser e text
 
 (* documented/actions *)
 let ( << ) item text =
     match box item with
     | :? IWebElement as elem ->
-        writeToElementXX elem text
+        writeToElement elem text
     | :? string as cssSelector ->
         wait elementTimeout (fun _ ->
-            elementsXX cssSelector
+            elements cssSelector
                 |> List.map (fun elem ->
                     try
-                        writeToElementXX elem text
+                        writeToElement elem text
                         true
                     with
                         //Note: Enrich exception with proper cssSelector description
@@ -559,7 +559,7 @@ let private safeReadB browser item =
     with
         | :? WebDriverTimeoutException -> raise (CanopyReadException("was unable to read item for unknown reason"))
 
-let private safeReadXX item =
+let private safeRead item =
     safeReadB browser item
 
 (* documented/actions *)
@@ -573,7 +573,7 @@ let readB browser item =
 
 
 (* documented/actions *)
-let readXX item =
+let read item =
     readB browser item
 
 (* documented/actions *)
@@ -598,7 +598,7 @@ let clearB browser item =
         raise (CanopyNotStringOrElementException message)
 
 (* documented/actions *)
-let clearXX item =
+let clear item =
     clearB browser item
 
 //keyboard
@@ -625,7 +625,7 @@ let pressB browser key =
     active.SendKeys(key)
 
 (* documented/actions *)
-let pressXX key =
+let press key =
     pressB browser key
 
 //alerts
@@ -637,7 +637,7 @@ let alertB (browser: IWebDriver) =
     browser.SwitchTo().Alert()
 
 (* documented/actions *)
-let alertXX () =
+let alert () =
     alertB browser
 
 (* documented/actions *)
@@ -647,7 +647,7 @@ let acceptAlertB (browser: IWebDriver) =
         true)
 
 (* documented/actions *)
-let acceptAlertXX () =
+let acceptAlert () =
     acceptAlertB browser
 
 
@@ -658,22 +658,22 @@ let dismissAlertB (browser: IWebDriver) =
         true)
 
 (* documented/actions *)
-let dismissAlertXX () =
+let dismissAlert () =
     dismissAlertB browser
 
 (* documented/actions *)
 let fastTextFromCSSB browser selector =
-  let script =
-    //there is no map on NodeList which is the type returned by querySelectorAll =(
-    sprintf """return [].map.call(document.querySelectorAll("%s"), function (item) { return item.text || item.innerText; });""" selector
-  try
-    js script :?> System.Collections.ObjectModel.ReadOnlyCollection<System.Object>
-    |> Seq.map (fun item -> item.ToString())
-    |> List.ofSeq
-  with | _ -> [ "default" ]
+    let script =
+        //there is no map on NodeList which is the type returned by querySelectorAll =(
+        sprintf """return [].map.call(document.querySelectorAll("%s"), function (item) { return item.text || item.innerText; });""" selector
+    try
+        js script :?> System.Collections.ObjectModel.ReadOnlyCollection<System.Object>
+        |> Seq.map (fun item -> item.ToString())
+        |> List.ofSeq
+    with _ -> [ "default" ]
 
 (* documented/actions *)
-let fastTextFromCSSXX selector =
+let fastTextFromCSS selector =
     fastTextFromCSSB browser selector
 
 /// Assertions
@@ -767,7 +767,7 @@ module Assert =
             raise (CanopyNotStringOrElementException message)
 
     (* documented/assertions *)
-    let selectedXX item =
+    let selected item =
         selectedB browser item
 
     (* documented/assertions *)
@@ -786,7 +786,7 @@ module Assert =
             raise (CanopyNotStringOrElementException(message))
 
     (* documented/assertions *)
-    let deselectedXX item =
+    let deselected item =
         deselectedB browser item
 
     (* documented/assertions *)
@@ -815,11 +815,16 @@ module Assert =
             wait compareTimeout (fun _ ->
                 (unreliableElementsB browser cssSelector).Length = count)
         with
-        | :? CanopyElementNotFoundException as ex -> raise (CanopyCountException(sprintf "%s%scount failed. expected: %i got: %i" ex.Message Environment.NewLine count 0))
-        | :? WebDriverTimeoutException -> raise (CanopyCountException(sprintf "count failed. expected: %i got: %i" count (unreliableElementsXX cssSelector).Length))
+        | :? CanopyElementNotFoundException as ex ->
+            let message = sprintf "%s%scount failed. expected: %i got: %i" ex.Message Environment.NewLine count 0
+            raise (CanopyCountException message)
+
+        | :? WebDriverTimeoutException ->
+            let message = sprintf "count failed. expected: %i got: %i" count (unreliableElementsB browser cssSelector).Length
+            raise (CanopyCountException message)
 
     (* documented/assertions *)
-    let countXX cssSelector count =
+    let count cssSelector count =
         countB browser cssSelector count
 
     let matches browser cssSelector regexPattern =
@@ -908,7 +913,7 @@ module Assert =
             raise (CanopyDisplayedFailedException message)
 
     (* documented/assertions *)
-    let displayedXX item =
+    let displayed item =
         displayedB browser item
 
     (* documented/assertions *)
@@ -929,7 +934,7 @@ module Assert =
         | :? WebDriverTimeoutException -> raise (CanopyNotDisplayedFailedException(sprintf "notDisplay check for %O failed." item))
 
     (* documented/assertions *)
-    let notDisplayedXX item =
+    let notDisplayed item =
         notDisplayedB browser item
 
     (* documented/assertions *)
@@ -949,7 +954,7 @@ module Assert =
         | :? WebDriverTimeoutException -> raise (CanopyEnabledFailedException(sprintf "enabled check for %O failed." item))
 
     (* documented/assertions *)
-    let enabledXX item =
+    let enabled item =
         enabledB browser item
 
     (* documented/assertions *)
@@ -1026,7 +1031,7 @@ let clickB browser item =
         raise (CanopyNotStringOrElementException message)
 
 (* documented/actions *)
-let clickXX item =
+let click item =
     clickB browser item
 
 (* documented/actions *)
@@ -1044,7 +1049,7 @@ let doubleClickB (browser: IWebDriver) item =
     | _ -> raise (CanopyNotStringOrElementException(sprintf "Can't doubleClick %O because it is not a string or webelement" item))
 
 (* documented/actions *)
-let doubleClickXX item =
+let doubleClick item =
     doubleClickB browser item
 
 (* documented/actions *)
@@ -1068,7 +1073,7 @@ let ctrlClickB browser item =
     modifierClickB browser Keys.Control item
 
 (* documented/actions *)
-let ctrlClickXX item =
+let ctrlClick item =
     ctrlClickB browser item
 
 (* documented/actions *)
@@ -1076,7 +1081,7 @@ let shiftClickB browser item =
     modifierClickB browser Keys.Shift item
 
 (* documented/actions *)
-let shiftClickXX item =
+let shiftClick item =
     shiftClickB browser item
 
 (* documented/actions *)
@@ -1096,7 +1101,7 @@ let rightClickB browser item =
         raise (CanopyNotStringOrElementException message)
 
 (* documented/actions *)
-let rightClickXX item =
+let rightClick item =
     rightClickB browser item
 
 (* documented/actions *)
@@ -1119,7 +1124,7 @@ let checkB browser item =
     | :? WebDriverTimeoutException -> raise (CanopyCheckFailedException(sprintf "failed to check %O." item))
 
 (* documented/actions *)
-let checkXX item =
+let check item =
     checkB browser item
 
 (* documented/actions *)
@@ -1146,7 +1151,7 @@ let uncheckB browser item =
 
 
 (* documented/actions *)
-let uncheckXX item =
+let uncheck item =
     uncheckB browser item
 
 //hoverin
@@ -1157,7 +1162,7 @@ let hoverB browser selector =
     actions.MoveToElement(e).Perform()
 
 (* documented/actions *)
-let hoverXX selector =
+let hover selector =
     hoverB browser selector
 
 //draggin
@@ -1170,12 +1175,12 @@ let dragB browser cssSelectorA cssSelectorB =
         true)
 
 (* documented/actions *)
-let dragXX cssSelectorA cssSelectorB =
+let drag cssSelectorA cssSelectorB =
     dragB browser cssSelectorA cssSelectorB
 
 (* documented/actions *)
 let (-->) cssSelectorA cssSelectorB =
-  dragXX cssSelectorA cssSelectorB
+  drag cssSelectorA cssSelectorB
 
 //browser related
 (* documented/actions *)
@@ -1192,7 +1197,7 @@ let pinB (browser: IWebDriver) direction =
         browser.Manage().Window.Maximize()
 
 (* documented/actions *)
-let pinXX direction =
+let pin direction =
     pinB browser direction
 
 (* documented/actions *)
@@ -1206,7 +1211,7 @@ let pinToMonitorB (browser: IWebDriver) n =
         raise(CanopyException(sprintf "Monitor %d is not detected" n))
 
 (* documented/actions *)
-let pinToMonitorXX n =
+let pinToMonitor n =
     pinToMonitorB browser n
 
 let private firefoxDriverService _ =
@@ -1340,7 +1345,7 @@ let switchToTabB (browser: IWebDriver) number =
             false)
 
 (* documented/actions *)
-let switchToTabXX number =
+let switchToTab number =
     switchToTabB browser number
 
 (* documented/actions *)
@@ -1349,7 +1354,7 @@ let closeTabB (browser: IWebDriver) number =
     browser.Close()
 
 (* documented/actions *)
-let closeTabXX number =
+let closeTab number =
     closeTabB browser number
 
 
@@ -1402,7 +1407,7 @@ let resizeB (browser: IWebDriver) size =
     browser.Manage().Window.Size <- System.Drawing.Size(newWidth, newHeight)
 
 (* documented/actions *)
-let resizeXX size =
+let resize size =
     resizeB browser size
 
 (* documented/actions *)
@@ -1411,7 +1416,7 @@ let rotateB browser =
     resizeB browser (innerHeight, innerWidth)
 
 (* documented/actions *)
-let rotateXX () =
+let rotate () =
     rotateB browser
 
 (* documented/actions *)
@@ -1428,7 +1433,7 @@ let currentUrlB (browser: IWebDriver) =
     browser.Url
 
 (* documented/actions *)
-let currentUrlXX () =
+let currentUrl () =
     currentUrlB browser
 
 (* documented/assertions *)
@@ -1444,7 +1449,7 @@ let onnB (browser: IWebDriver) (u: string) =
         || urlPath (browser.Url) = urlPath(u))
 
 (* documented/assertions *)
-let onnXX (u: string) =
+let onn (u: string) =
     onnB browser u
 
 (* documented/assertions *)
@@ -1458,7 +1463,7 @@ let onB (browser: IWebDriver) (u: string) =
             raise (CanopyOnException message)
 
 (* documented/assertions *)
-let onXX (u: string) =
+let on (u: string) =
     onB browser u
 
 (* documented/actions *)
@@ -1468,7 +1473,7 @@ let urlB (browser: IWebDriver) (u: string) =
     browser.Navigate().GoToUrl(u)
 
 (* documented/actions *)
-let urlXX u =
+let url u =
     urlB browser u
 
 (* documented/actions *)
@@ -1480,8 +1485,8 @@ let titleB (browser: IWebDriver) =
     browser.Title
 
 (* documented/actions *)
-let titleXX () =
-    title browser
+let title () =
+    titleB browser
 
 (* documented/actions *)
 let reloadB browser =
@@ -1489,7 +1494,7 @@ let reloadB browser =
     |> urlB browser
 
 (* documented/actions *)
-let reloadXX () =
+let reload () =
     reloadB browser
 
 type Navigate =
@@ -1509,7 +1514,7 @@ let navigateB (browser: IWebDriver) = function
         browser.Navigate().Forward()
 
 (* documented/actions *)
-let navigateXX direction =
+let navigate direction =
     navigateB browser direction
 
 (* documented/actions *)
@@ -1554,5 +1559,10 @@ let skip message =
   raise <| CanopySkipTestException()
 
 (* documented/actions *)
+let waitForElementB browser cssSelector =
+    waitFor (fun _ ->
+        someElementB browser cssSelector |> Option.isSome)
+
+(* documented/actions *)
 let waitForElement cssSelector =
-    waitFor (fun _ -> someElementXX cssSelector |> Option.isSome)
+    waitForElementB browser cssSelector

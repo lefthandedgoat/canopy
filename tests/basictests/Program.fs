@@ -100,7 +100,7 @@ test (fun _ ->
 
 "clearing #firstName sets text to new empty string via IWebElement" &&& fun _ ->
     !^ testpage
-    element "#firstName" |> clearXX
+    element "#firstName" |> clear
     "#firstName" == ""
 
 "writing to #lastName sets text to Smith" &&& fun _ ->
@@ -245,7 +245,7 @@ test (fun _ ->
     browser.SwitchTo().Frame(iframe) |> ignore
     notDisplayed ".contextmenu"
 
-    rightclick "div:first"
+    rightClick "div:first"
     displayed ".contextmenu"
 
 "element within only searching within the element" &&& fun _ ->
@@ -292,7 +292,7 @@ test (fun _ ->
 "someElement fails when more than one element found" &&& fun _ ->
     url testpage
     failsWith "More than one element was selected when only one was expected for selector: .lastName"
-    someelement ".lastName" |> ignore
+    someElement ".lastName" |> ignore
 
 "Navigating to a url should be on url" &&& fun _ ->
     url testpage
@@ -494,15 +494,15 @@ context "other tests"
 "double clicking" &&& fun _ ->
     !^ "http://lefthandedgoat.github.io/canopy/testpages/doubleClick"
     "#clicked" == "Not Clicked"
-    doubleclick "#double_click"
+    doubleClick "#double_click"
     "#clicked" == "Clicked"
 
 "ctrl clicking" &&& fun _ ->
     !^ "http://lefthandedgoat.github.io/canopy/testpages/ctrlClick"
 
-    ctrlclick "One"
-    ctrlclick "2"
-    ctrlclick "Three"
+    ctrlClick "One"
+    ctrlClick "2"
+    ctrlClick "Three"
 
     selected "1"
     selected "Two"

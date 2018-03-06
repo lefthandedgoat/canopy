@@ -19,7 +19,6 @@ EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "project", "project", "{C8531F58-5EAB-413F-BB2F-FE96AE0A55F2}"
 	ProjectSection(SolutionItems) = preProject
 		Build.fsx = Build.fsx
-		nuget\canopy-edge.nuspec = nuget\canopy-edge.nuspec
 		nuget\canopy.nuspec = nuget\canopy.nuspec
 		README.md = README.md
 		RELEASE_NOTES.md = RELEASE_NOTES.md
