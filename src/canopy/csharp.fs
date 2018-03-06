@@ -60,9 +60,7 @@ type canopy () =
     static member url destination = url destination
 
     static member currentUrl () = currentUrl ()
-
-    static member coverage url = coverage url
-
+    
     static member addFinder finder = addFinder finder
 
     static member title () = title ()

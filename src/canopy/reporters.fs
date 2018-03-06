@@ -20,7 +20,6 @@ type IReporter =
    abstract member quit : unit -> unit
    abstract member suiteBegin : unit -> unit
    abstract member suiteEnd : unit -> unit
-   abstract member coverage : string -> byte [] -> string -> unit
    abstract member setEnvironment : string -> unit
 
 type ConsoleReporter() =
@@ -101,8 +100,6 @@ type ConsoleReporter() =
 
         member this.suiteEnd () = ()
 
-        member this.coverage url ss _ = ()
-
         member this.todo _ = ()
 
         member this.skip id =
@@ -174,8 +171,6 @@ type TeamCityReporter(?logImagesToConsole: bool) =
         member this.suiteBegin () = ()
 
         member this.suiteEnd () = ()
-
-        member this.coverage url ss _ = ()
 
         member this.todo _ = ()
 
@@ -388,14 +383,6 @@ type LiveHtmlReporter(browser : BrowserStartMode, driverPath : string, ?pinBrows
             canQuit <- true
             this.swallowedJS (sprintf "collapseContextsExcept('%s');" "") //cheap hack to collapse all contexts at the end of a run
 
-        member this.coverage url ss id =
-            let encodedId = jsEncode id
-            if (contexts |> List.exists (fun c -> c = "Coverage Reports")) = false then
-                contexts <- "Coverage Reports" :: contexts
-                this.swallowedJS (sprintf "addContext('%s');" "Coverage Reports")
-            this.swallowedJS (sprintf "addToContext ('%s', '%s');" "Coverage Reports" url)
-            this.swallowedJS (sprintf "updateTestInContext('%s', '%s', 'Pass', '%s');" "Coverage Reports" encodedId (Convert.ToBase64String(ss)))
-
         member this.todo id =
             let encodedId = jsEncode id
             this.swallowedJS (sprintf "updateTestInContext('%s', '%s', 'Todo', '%s');" context encodedId "")
@@ -480,7 +467,6 @@ type JUnitReporter(resultFilePath:string) =
         member this.quit () = ()
         member this.suiteBegin () = ()
         member this.suiteEnd () = ()
-        member this.coverage url ss _ = ()
         member this.todo _ = ()
         member this.skip id = ()
         member this.setEnvironment env = ()
