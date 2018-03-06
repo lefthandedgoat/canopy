@@ -374,3 +374,7 @@ Update to Selenium 3.3 [Issue #351](https://github.com/lefthandedgoat/canopy/iss
 
 #### 1.6.2 - Feb 3 2018
 * Added more granular support for Firefox, thanks RubenOen! [PR #400](https://github.com/lefthandedgoat/canopy/pull/400)
+
+#### 1.6.3 - Mar 3 2018
+* Protect from null refs in selector suggestions, thanks Haf! [Issue #404](https://github.com/lefthandedgoat/canopy/issues/404)
+* Provide better error messages when the browser is null, thanks again Haf! [Issue #405](https://github.com/lefthandedgoat/canopy/issues/405)
