@@ -611,40 +611,40 @@ context "dragging"
     ".handle" --> ".inprogress"
     clickXX "Blog"
 
-if not (browser :? OpenQA.Selenium.PhantomJS.PhantomJSDriver) then
-    context "alert tests"
 
-    before (fun _ -> !^ "http://lefthandedgoat.github.io/canopy/testpages/alert")
+context "alert tests"
 
-    "alert box should have 'Alert Test'" &&& fun _ ->
-        clickXX "#alert_test"
-        alert() == "Alert Test"
-        acceptAlert()
+before (fun _ -> !^ "http://lefthandedgoat.github.io/canopy/testpages/alert")
 
-    "alert box should have 'Alert Test'" &&& fun _ ->
-        clickXX "#alert_test"
-        alert() == "Alert Test"
-        dismissAlert()
+"alert box should have 'Alert Test'" &&& fun _ ->
+    clickXX "#alert_test"
+    alert() == "Alert Test"
+    acceptAlert()
 
-    "alert box should fail correctly when expecting wrong message" &&& fun _ ->
-        failsWith "equality check failed.  expected: Not the message, got: Alert Test"
-        clickXX "#alert_test"
-        alert() == "Not the message"
+"alert box should have 'Alert Test'" &&& fun _ ->
+    clickXX "#alert_test"
+    alert() == "Alert Test"
+    dismissAlert()
 
-    "confirmation box should have 'Confirmation Test'" &&& fun _ ->
-        clickXX "#confirmation_test"
-        alert() == "Confirmation Test"
-        acceptAlert()
+"alert box should fail correctly when expecting wrong message" &&& fun _ ->
+    failsWith "equality check failed.  expected: Not the message, got: Alert Test"
+    clickXX "#alert_test"
+    alert() == "Not the message"
 
-    "confirmation box should have 'Confirmation Test'" &&& fun _ ->
-        clickXX "#confirmation_test"
-        alert() == "Confirmation Test"
-        dismissAlert()
+"confirmation box should have 'Confirmation Test'" &&& fun _ ->
+    clickXX "#confirmation_test"
+    alert() == "Confirmation Test"
+    acceptAlert()
 
-    "confirmation box should fail correctly when expecting wrong message" &&& fun _ ->
-        failsWith "equality check failed.  expected: Not the message, got: Confirmation Test"
-        clickXX "#confirmation_test"
-        alert() == "Not the message"
+"confirmation box should have 'Confirmation Test'" &&& fun _ ->
+    clickXX "#confirmation_test"
+    alert() == "Confirmation Test"
+    dismissAlert()
+
+"confirmation box should fail correctly when expecting wrong message" &&& fun _ ->
+    failsWith "equality check failed.  expected: Not the message, got: Confirmation Test"
+    clickXX "#confirmation_test"
+    alert() == "Not the message"
 
 context "multiple elements test"
 
