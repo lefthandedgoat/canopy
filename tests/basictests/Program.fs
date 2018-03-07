@@ -16,7 +16,7 @@ compareTimeout <- 3.0
 pageTimeout <- 3.0
 runFailedContextsFirst <- false
 reporter <- new LiveHtmlReporter(Chrome, chromeDir) :> IReporter
-reporter.setEnvironment "My Machine"
+reporter.SetEnvironment "My Machine"
 failureMessagesThatShoulBeTreatedAsSkip <- ["Skip me when I fail"]
 
 failScreenshotFileName <-

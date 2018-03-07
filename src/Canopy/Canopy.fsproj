@@ -7,10 +7,10 @@
     <SchemaVersion>2.0</SchemaVersion>
     <ProjectGuid>{63135cf6-70a9-4382-851d-4b679ee0cbf8}</ProjectGuid>
     <OutputType>Library</OutputType>
-    <RootNamespace>canopy</RootNamespace>
-    <AssemblyName>canopy</AssemblyName>
+    <RootNamespace>Canopy</RootNamespace>
+    <AssemblyName>Canopy</AssemblyName>
     <TargetFrameworkVersion>v4.6.1</TargetFrameworkVersion>
-    <Name>canopy</Name>
+    <Name>Canopy</Name>
   </PropertyGroup>
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|AnyCPU' ">
     <DebugSymbols>true</DebugSymbols>
@@ -48,22 +48,29 @@
   </Choose>
   <Import Project="$(FSharpTargetsPath)" Condition="Exists('$(FSharpTargetsPath)')" />
   <ItemGroup>
+    <Compile Include="..\..\paket-files\logary\logary\src\Logary.Facade\Facade.fs">
+      <Paket>True</Paket>
+      <Link>paket-files/Facade.fs</Link>
+    </Compile>
     <Compile Include="AssemblyInfo.fs" />
-    <Compile Include="types.fs" />
-    <Compile Include="wait.fs" />
-    <Compile Include="screen.fs" />
-    <Compile Include="reporters.fs" />
-    <Compile Include="finders.fs" />
-    <Compile Include="configuration.fs" />
-    <Compile Include="jarowinkler.fs" />
-    <Compile Include="canopy.fs" />
+    <Compile Include="Types.fs" />
+    <Compile Include="Wait.fs" />
+    <Compile Include="Screen.fs" />
+    <Compile Include="Finders.fs" />
+    <Compile Include="CanopyConfig.fs" />
+    <Compile Include="JaroWinkler.fs" />
+    <Compile Include="Canopy.fs" />
     <Compile Include="Operators.fs" />
-    <Compile Include="Assert.fs" />
-    <Compile Include="history.fs" />
-    <Compile Include="runner.fs" />
-    <Compile Include="userAgents.fs" />
+    <Compile Include="History.fs" />
+    <Compile Include="UserAgents.fs" />
     <Compile Include="ClassicMode.fs" />
-    <Compile Include="csharp.fs" />
+    <!-- Canopy-specific testing framework -->
+    <Compile Include="Testing\Assert.fs" />
+    <Compile Include="Testing\Reporters.fs" />
+    <Compile Include="Testing\Runner.fs" />
+    <!-- C# interop -->
+    <Compile Include="CSharp.fs" />
+    <!-- Chrome extension -->
     <None Include="companion\companion.fsx" />
     <None Include="paket.references" />
   </ItemGroup>
@@ -81,7 +88,7 @@
     <When Condition="$(TargetFrameworkIdentifier) == '.NETFramework' And $(TargetFrameworkVersion) == 'v4.6.1'">
       <ItemGroup>
         <Reference Include="FSharp.Core">
-          <HintPath>..\..\packages\FSharp.Core\lib\net40\FSharp.Core.dll</HintPath>
+          <HintPath>..\..\packages\FSharp.Core\lib\net45\FSharp.Core.dll</HintPath>
           <Private>True</Private>
           <Paket>True</Paket>
         </Reference>

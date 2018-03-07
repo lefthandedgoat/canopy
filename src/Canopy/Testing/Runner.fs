@@ -1,18 +1,69 @@
-﻿[<AutoOpen>]
-module Canopy.Runner
+﻿module Canopy.Runner
 
-open System
 open Canopy
-open Configuration
-open Reporters
+open Canopy.Configuration
+open Canopy.Reporters
 open OpenQA.Selenium
+open System
+
+type CanopyRunnerConfig =
+    {
+        failFast: bool
+        failScreenshotPath: string
+        failScreenshotFileName: string
+        failIfAnyWIPTests: bool
+        runFailedContextsFirst: bool
+        failureScreenshotsEnabled: bool
+        skipAllTestsOnFailure: bool
+        skipRemainingTestsInContextOnFailure: bool
+        skipNextTest: bool
+        failureMessagesThatShoulBeTreatedAsSkip: string list
+    }
+
+//runner related
+// TODO: remove global variable
+(* documented/configuration *)
+let failFast = ref false
+// TODO: remove global variable
+(* documented/configuration *)
+let mutable failScreenshotPath = Environment.GetFolderPath(Environment.SpecialFolder.ApplicationData) + @"\canopy\"
+// TODO: remove global variable
+(* documented/configuration *)
+let mutable failScreenshotFileName = fun (test: Test) (suite: Suite) -> DateTime.Now.ToString("MMM-d_HH-mm-ss-fff")
+// TODO: remove global variable
+(* documented/configuration *)
+let mutable failIfAnyWipTests = false
+// TODO: remove global variable
+(* documented/configuration *)
+let mutable runFailedContextsFirst = false
+// TODO: remove global variable
+(* documented/configuration *)
+let mutable failureScreenshotsEnabled = true
+// TODO: remove global variable
+(* documented/configuration *)
+let mutable skipAllTestsOnFailure = false
+// TODO: remove global variable
+(* documented/configuration *)
+let mutable skipRemainingTestsInContextOnFailure = false
+// TODO: remove global variable
+(* documented/configuration *)
+let mutable skipNextTest = false
+// TODO: remove global variable
+(* documented/configuration *)
+let mutable failureMessagesThatShoulBeTreatedAsSkip : string list = []
+// TODO: remove global variable
+(* documented/configuration *)
+let mutable reporter = new ConsoleReporter() :> IReporter
 
 let private last = function
     | hd :: tl -> hd
     | [] -> failwith "Empty list."
 
+// TODO: remove global variable
 let mutable suites = [new Suite()]
+// TODO: remove global variable
 let mutable todo = fun () -> ()
+// TODO: remove global variable
 let mutable skipped = fun () -> ()
 
 (* documented/testing *)
@@ -80,12 +131,12 @@ let mutable failed = false
 
 let pass id (suite: Suite) =
     passedCount <- passedCount + 1
-    reporter.pass id
+    reporter.Pass id
     suite.OnPass()
 
 let skip id =
     skippedCount <- skippedCount + 1
-    reporter.skip id
+    reporter.Skip id
 
 let fail (ex : Exception) (test : Test) (suite: Suite) autoFail url =
     if failureMessagesThatShoulBeTreatedAsSkip |> List.exists (fun message -> ex.Message = message) then
@@ -99,18 +150,18 @@ let fail (ex : Exception) (test : Test) (suite: Suite) autoFail url =
                 if failFast = ref true then failed <- true
                 failedCount <- failedCount + 1
                 contextFailed <- true
-                let f = Configuration.failScreenshotFileName test suite
+                let f = failScreenshotFileName test suite
                 if failureScreenshotsEnabled = true then
-                  let ss = screenshot Configuration.failScreenshotPath f
-                  reporter.fail ex test.Id ss url
-                else reporter.fail ex test.Id Array.empty<byte> url
+                  let ss = screenshot failScreenshotPath f
+                  reporter.Fail ex test.Id ss url
+                else reporter.Fail ex test.Id Array.empty<byte> url
                 suite.OnFail()
             with
                 | failExc ->
                     //Fail during error report (likely  OpenQA.Selenium.WebDriverException.WebDriverTimeoutException ).
                     // Don't fail the runner itself, but report it.
-                    reporter.write (sprintf "Error during fail reporting: %s" (failExc.ToString()))
-                    reporter.fail ex test.Id Array.empty url
+                    reporter.Write (sprintf "Error during fail reporting: %s" (failExc.ToString()))
+                    reporter.Fail ex test.Id Array.empty url
                     suite.OnFail()
 
 let safelyGetUrl () =
@@ -119,9 +170,9 @@ let safelyGetUrl () =
 
 let failSuite (ex: Exception) (suite: Suite) =
     let reportFailedTest (ex: Exception) (test : Test) =
-        reporter.testStart test.Id
+        reporter.TestStart test.Id
         fail ex test suite true <| safelyGetUrl()
-        reporter.testEnd test.Id
+        reporter.TestEnd test.Id
 
     // tests are in reverse order and have to be reversed first
     do suite.Tests
@@ -142,15 +193,15 @@ let private processRunResult suite (test : Test) result =
     | Pass -> pass test.Id suite
     | Fail ex -> fail ex test suite false <| safelyGetUrl()
     | Skip -> skip test.Id
-    | Todo -> reporter.todo test.Id
+    | Todo -> reporter.Todo test.Id
     | FailFast -> ()
     | Failed -> ()
 
-    reporter.testEnd test.Id
+    reporter.TestEnd test.Id
 
 let private runtest (suite: Suite) (test : Test) =
     if failed = false then
-        reporter.testStart test.Id
+        reporter.TestStart test.Id
         let result =
           if System.Object.ReferenceEquals(test.Func, todo) then Todo
           else if System.Object.ReferenceEquals(test.Func, skipped) then Skip
@@ -181,10 +232,10 @@ let run () =
 
     let wipsExist = suites |> List.exists (fun s -> s.Wips.IsEmpty = false)
 
-    if wipsExist && Configuration.failIfAnyWipTests then
+    if wipsExist && failIfAnyWipTests then
        raise <| Exception "Wip tests found and failIfAnyWipTests is true"
 
-    reporter.suiteBegin()
+    reporter.SuiteBegin()
     let stopWatch = new Diagnostics.Stopwatch()
     stopWatch.Start()
 
@@ -207,7 +258,7 @@ let run () =
         if skipRemainingTestsInContextOnFailure = true && skipAllTestsOnFailure = false then skipNextTest <- false
         if failed = false then
             contextFailed <- false
-            if s.Context <> null then reporter.contextStart s.Context
+            if s.Context <> null then reporter.ContextStart s.Context
             try
                 s.Once ()
             with
@@ -226,14 +277,14 @@ let run () =
             s.Lastly ()
 
             if contextFailed = true then failedContexts <- s.Context::failedContexts
-            if s.Context <> null then reporter.contextEnd s.Context
+            if s.Context <> null then reporter.ContextEnd s.Context
     )
 
     History.save failedContexts
 
     stopWatch.Stop()
-    reporter.summary stopWatch.Elapsed.Minutes stopWatch.Elapsed.Seconds passedCount failedCount skippedCount
-    reporter.suiteEnd()
+    reporter.Summary stopWatch.Elapsed.Minutes stopWatch.Elapsed.Seconds passedCount failedCount skippedCount
+    reporter.SuiteEnd()
 
 (* documented/testing *)
 let runFor browsers =
@@ -248,7 +299,7 @@ let runFor browsers =
           |> List.map (fun browser ->
               let suite = new Suite()
               suite.Context <- sprintf "Running tests with %s browser" (toString browser)
-              suite.Once <- fun _ -> start browser
+              suite.Once <- fun _ -> start browser |> ignore; ()
               let currentSuites2 = currentSuites |> List.map(fun suite -> suite.Clone())
               currentSuites2 |> List.iter (fun (suite: Suite) ->
                   suite.Context <- sprintf "(%s) %s" (toString browser) suite.Context)
@@ -269,4 +320,5 @@ let runFor browsers =
               currentSuites2 @ [suite])
           |> List.concat
         suites <- newSuites
-    | _ -> raise <| Exception "I dont know what you have given me"
+    | _ ->
+        raise <| Exception "I dont know what you have given me"

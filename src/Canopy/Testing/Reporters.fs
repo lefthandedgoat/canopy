@@ -2,33 +2,70 @@ module Canopy.Reporters
 
 open System
 open OpenQA.Selenium
+open FSharp.Reflection
+
+let internal toString (x:'a) =
+    match FSharpValue.GetUnionFields(x, typeof<'a>) with
+    | case, _ ->
+        case.Name
+
+type Test(description: string, func: (unit -> unit), number: int) =
+    member x.Description = description
+    member x.Func = func
+    member x.Number = number
+    member x.Id = if description = null then (String.Format("Test #{0}", number)) else description
+
+type Suite () = class
+    member val Context : string = null with get, set
+    member val TotalTestsCount : int = 0 with get, set
+    member val Once = fun () -> () with get, set
+    member val Before = fun () -> () with get, set
+    member val After = fun () -> () with get, set
+    member val Lastly = fun () -> () with get, set
+    member val OnPass = fun () -> () with get, set
+    member val OnFail = fun () -> () with get, set
+    member val Tests : Test list = [] with get, set
+    member val Wips : Test list = [] with get, set
+    member val Manys : Test list = [] with get, set
+    member val Always : Test list = [] with get, set
+    member val IsParallel = false with get, set
+    member this.Clone() = this.MemberwiseClone() :?> Suite
+end
+
+type Result =
+    | Pass
+    | Fail of Exception
+    | Skip
+    | Todo
+    | FailFast
+    | Failed
 
 type IReporter =
-   abstract member testStart : string -> unit
-   abstract member pass : string -> unit
-   abstract member fail : Exception -> string -> byte [] -> string -> unit
-   abstract member todo : string -> unit
-   abstract member skip : string -> unit
-   abstract member testEnd : string -> unit
-   abstract member describe : string -> unit
-   abstract member contextStart : string -> unit
-   abstract member contextEnd : string -> unit
-   abstract member summary : int -> int -> int -> int -> int -> unit
-   abstract member write : string -> unit
-   abstract member suggestSelectors : string -> string list -> unit
-   abstract member quit : unit -> unit
-   abstract member suiteBegin : unit -> unit
-   abstract member suiteEnd : unit -> unit
-   abstract member setEnvironment : string -> unit
+   abstract member TestStart : string -> unit
+   abstract member Pass : string -> unit
+   abstract member Fail : Exception -> string -> byte [] -> string -> unit
+   abstract member Todo : string -> unit
+   abstract member Skip : string -> unit
+   abstract member TestEnd : string -> unit
+   abstract member Describe : string -> unit
+   abstract member ContextStart : string -> unit
+   abstract member ContextEnd : string -> unit
+   abstract member Summary : int -> int -> int -> int -> int -> unit
+   abstract member Write : string -> unit
+   abstract member SuggestSelectors : string -> string list -> unit
+   abstract member Quit : unit -> unit
+   abstract member SuiteBegin : unit -> unit
+   abstract member SuiteEnd : unit -> unit
+   abstract member SetEnvironment : string -> unit
 
 type ConsoleReporter() =
     interface IReporter with
-        member this.pass _ =
+        member this.Pass _ =
             Console.ForegroundColor <- ConsoleColor.Green
             Console.WriteLine("Passed");
             Console.ResetColor()
 
-        member this.fail ex id ss url =
+        member this.Fail ex id ss url =
             Console.ForegroundColor <- ConsoleColor.Red
             Console.WriteLine("Error: ");
             Console.ResetColor()
@@ -53,15 +90,15 @@ type ConsoleReporter() =
                         Console.WriteLine(trace)
                 Console.ResetColor())
 
-        member this.describe text =
+        member this.Describe text =
             let now = DateTime.Now.ToString()
             Console.WriteLine (sprintf "%s: %s" now text)
 
-        member this.contextStart c = Console.WriteLine (String.Format("context: {0}", c))
+        member this.ContextStart c = Console.WriteLine (String.Format("context: {0}", c))
 
-        member this.contextEnd c = ()
+        member this.ContextEnd c = ()
 
-        member this.summary minutes seconds passed failed skipped =
+        member this.Summary minutes seconds passed failed skipped =
             Console.WriteLine()
             Console.WriteLine("{0} minutes {1} seconds to execute", minutes, seconds)
             if failed = 0 then
@@ -77,36 +114,36 @@ type ConsoleReporter() =
             Console.WriteLine("{0} failed", failed)
             Console.ResetColor()
 
-        member this.write text =
+        member this.Write text =
             let now = DateTime.Now.ToString()
             Console.WriteLine (sprintf "%s: %s" now text)
 
-        member this.suggestSelectors selector suggestions =
+        member this.SuggestSelectors selector suggestions =
             Console.ForegroundColor <- ConsoleColor.Yellow
             Console.WriteLine("Couldn't find any elements with selector '{0}', did you mean:", selector)
             suggestions |> List.iter (fun suggestion -> Console.WriteLine("\t{0}", suggestion))
             Console.ResetColor()
-        member this.testStart id =
+        member this.TestStart id =
             Console.ForegroundColor <- ConsoleColor.DarkCyan
             Console.WriteLine("Test: {0}", id)
             Console.ResetColor()
 
-        member this.testEnd id = ()
+        member this.TestEnd id = ()
 
-        member this.quit () = ()
+        member this.Quit () = ()
 
-        member this.suiteBegin () = ()
+        member this.SuiteBegin () = ()
 
-        member this.suiteEnd () = ()
+        member this.SuiteEnd () = ()
 
-        member this.todo _ = ()
+        member this.Todo _ = ()
 
-        member this.skip id =
+        member this.Skip id =
             Console.ForegroundColor <- ConsoleColor.Yellow
             Console.WriteLine("Skipped");
             Console.ResetColor()
 
-        member this.setEnvironment env = ()
+        member this.SetEnvironment env = ()
 
 type TeamCityReporter(?logImagesToConsole: bool) =
     let logImagesToConsole = defaultArg logImagesToConsole true
@@ -127,12 +164,12 @@ type TeamCityReporter(?logImagesToConsole: bool) =
 
     let teamcityReport text =
         let temcityReport = sprintf "##teamcity[%s flowId='%s']" text flowId
-        consoleReporter.describe temcityReport
+        consoleReporter.Describe temcityReport
 
     interface IReporter with
-        member this.pass id = consoleReporter.pass id
+        member this.Pass id = consoleReporter.Pass id
 
-        member this.fail ex id ss url =
+        member this.Fail ex id ss url =
             let mutable image = ""
             if not (Array.isEmpty ss) && logImagesToConsole then
                 image <- String.Format("canopy-image({0})", Convert.ToBase64String(ss))
@@ -141,41 +178,41 @@ type TeamCityReporter(?logImagesToConsole: bool) =
                                 (tcFriendlyMessage id)
                                 (tcFriendlyMessage ex.Message)
                                 (tcFriendlyMessage image))
-            consoleReporter.fail ex id ss url
+            consoleReporter.Fail ex id ss url
 
-        member this.describe d =
+        member this.Describe d =
             teamcityReport (sprintf "message text='%s' status='NORMAL'" (tcFriendlyMessage d))
-            consoleReporter.describe d
+            consoleReporter.Describe d
 
-        member this.contextStart c =
+        member this.ContextStart c =
             teamcityReport (sprintf "testSuiteStarted name='%s'" (tcFriendlyMessage c))
-            consoleReporter.contextStart c
+            consoleReporter.ContextStart c
 
-        member this.contextEnd c =
+        member this.ContextEnd c =
             teamcityReport (sprintf "testSuiteFinished name='%s'" (tcFriendlyMessage c))
-            consoleReporter.contextEnd c
+            consoleReporter.ContextEnd c
 
-        member this.summary minutes seconds passed failed skipped = consoleReporter.summary minutes seconds passed failed skipped
+        member this.Summary minutes seconds passed failed skipped = consoleReporter.Summary minutes seconds passed failed skipped
 
-        member this.write w = consoleReporter.write w
+        member this.Write w = consoleReporter.Write w
 
-        member this.suggestSelectors selector suggestions = consoleReporter.suggestSelectors selector suggestions
+        member this.SuggestSelectors selector suggestions = consoleReporter.SuggestSelectors selector suggestions
 
-        member this.testStart id = teamcityReport (sprintf "testStarted name='%s'" (tcFriendlyMessage id))
+        member this.TestStart id = teamcityReport (sprintf "testStarted name='%s'" (tcFriendlyMessage id))
 
-        member this.testEnd id = teamcityReport (sprintf "testFinished name='%s'" (tcFriendlyMessage id))
+        member this.TestEnd id = teamcityReport (sprintf "testFinished name='%s'" (tcFriendlyMessage id))
 
-        member this.quit () = ()
+        member this.Quit () = ()
 
-        member this.suiteBegin () = ()
+        member this.SuiteBegin () = ()
 
-        member this.suiteEnd () = ()
+        member this.SuiteEnd () = ()
 
-        member this.todo _ = ()
+        member this.Todo _ = ()
 
-        member this.skip id = teamcityReport (sprintf "testIgnored name='%s'" (tcFriendlyMessage id))
+        member this.Skip id = teamcityReport (sprintf "testIgnored name='%s'" (tcFriendlyMessage id))
 
-        member this.setEnvironment env = ()
+        member this.SetEnvironment env = ()
 
 #nowarn "44"
 
@@ -186,11 +223,17 @@ type LiveHtmlReporter(browser : BrowserStartMode, driverPath : string, ?pinBrows
     let _browser =
         //copy pasta!
         match browser with
-        | IE -> new IE.InternetExplorerDriver(driverPath) :> IWebDriver
-        | IEWithOptions options -> new IE.InternetExplorerDriver(driverPath, options) :> IWebDriver
-        | IEWithOptionsAndTimeSpan(options, timeSpan) -> new IE.InternetExplorerDriver(driverPath, options, timeSpan) :> IWebDriver
-        | EdgeBETA -> new Edge.EdgeDriver(driverPath) :> IWebDriver
-        | Chrome | Chromium ->
+        | IE ->
+            new IE.InternetExplorerDriver(driverPath) :> IWebDriver
+        | IEWithOptions options ->
+            new IE.InternetExplorerDriver(driverPath, options) :> IWebDriver
+        | IEWithOptionsAndTimeSpan(options, timeSpan) ->
+            new IE.InternetExplorerDriver(driverPath, options, timeSpan) :> IWebDriver
+        | EdgeBETA
+        | Edge ->
+            new Edge.EdgeDriver(driverPath) :> IWebDriver
+        | Chrome
+        | Chromium ->
             let options = Chrome.ChromeOptions()
             options.AddArguments("--disable-extensions")
             options.AddArgument("disable-infobars")
@@ -211,7 +254,8 @@ type LiveHtmlReporter(browser : BrowserStartMode, driverPath : string, ?pinBrows
             raise(System.Exception("Sorry ChromeWithUserAgent can't be used for LiveHtmlReporter"))
         | ChromiumWithOptions options ->
             new Chrome.ChromeDriver(driverPath, options) :> IWebDriver
-        | Firefox -> new Firefox.FirefoxDriver() :> IWebDriver
+        | Firefox ->
+            new Firefox.FirefoxDriver() :> IWebDriver
         | FirefoxWithOptions options ->
             new Firefox.FirefoxDriver(options) :> IWebDriver
         | FirefoxWithPath path ->
@@ -230,7 +274,8 @@ type LiveHtmlReporter(browser : BrowserStartMode, driverPath : string, ?pinBrows
             let options = new Firefox.FirefoxOptions()
             options.AddArgument("--headless")
             new Firefox.FirefoxDriver(options) :> IWebDriver
-        | Safari -> new Safari.SafariDriver() :> IWebDriver
+        | Safari ->
+            new Safari.SafariDriver() :> IWebDriver
         | Remote(_,_) -> raise(System.Exception("Sorry Remote can't be used for LiveHtmlReporter"))
 
     let pin () =
@@ -276,13 +321,13 @@ type LiveHtmlReporter(browser : BrowserStartMode, driverPath : string, ?pinBrows
         let stack = jsEncode stack
         this.swallowedJS (sprintf "addStackToTest ('%s', '%s', '%s');" ctx encodedId stack)
         this.swallowedJS (sprintf "addUrlToTest ('%s', '%s', '%s');" ctx encodedId url)
-        consoleReporter.fail ex id ss url
+        consoleReporter.Fail ex id ss url
 
     member this.passWithContext ctx id =
         let encodedId = jsEncode id
         let context = jsEncode ctx
         this.swallowedJS (sprintf "updateTestInContext('%s', '%s', 'Pass', '%s');" context encodedId "")
-        consoleReporter.pass id
+        consoleReporter.Pass id
 
     member this.failWithContext ctx ex id ss url =
         let context = jsEncode ctx
@@ -293,13 +338,13 @@ type LiveHtmlReporter(browser : BrowserStartMode, driverPath : string, ?pinBrows
         let encoded = jsEncode w
         let context = jsEncode ctx
         this.swallowedJS (sprintf "addMessageToTestByName ('%s', '%s', '%s');" context encodedId encoded)
-        consoleReporter.write w
+        consoleReporter.Write w
 
     member this.testStartWithContext ctx id =
         let encodedId = jsEncode id
         let context = jsEncode ctx
         this.swallowedJS (sprintf "addToContext ('%s', '%s');" context encodedId)
-        consoleReporter.testStart id
+        consoleReporter.TestStart id
 
     member this.testEndWithContext ctx id minutes seconds =
         let encodedId = jsEncode id
@@ -315,89 +360,89 @@ type LiveHtmlReporter(browser : BrowserStartMode, driverPath : string, ?pinBrows
         let encodedId = jsEncode id
         let context = jsEncode ctx
         this.swallowedJS (sprintf "updateTestInContext('%s', '%s', 'Skip', '%s');" context encodedId "")
-        consoleReporter.skip id
+        consoleReporter.Skip id
 
     interface IReporter with
-        member this.pass id =
+        member this.Pass id =
             let encodedId = jsEncode id
             this.swallowedJS (sprintf "updateTestInContext('%s', '%s', 'Pass', '%s');" context encodedId "")
-            consoleReporter.pass id
+            consoleReporter.Pass id
 
-        member this.fail ex id ss url = this.commonFail context ex id ss url
+        member this.Fail ex id ss url = this.commonFail context ex id ss url
 
-        member this.describe d =
+        member this.Describe d =
             let encoded = jsEncode d
             this.swallowedJS (sprintf "addMessageToTest ('%s', '%s');" context encoded)
-            consoleReporter.describe d
+            consoleReporter.Describe d
 
-        member this.contextStart c =
+        member this.ContextStart c =
             contextStopWatch.Reset()
             contextStopWatch.Start()
             contexts <- c :: contexts
             context <- jsEncode c
             this.swallowedJS (sprintf "addContext('%s');" context)
             this.swallowedJS (sprintf "collapseContextsExcept('%s');" context)
-            consoleReporter.contextStart c
+            consoleReporter.ContextStart c
 
-        member this.contextEnd c =
+        member this.ContextEnd c =
             contextStopWatch.Stop()
             let ellapsed = contextStopWatch.Elapsed
             this.swallowedJS (sprintf "addTimeToContext ('%s', '%im %is');" context ellapsed.Minutes ellapsed.Seconds)
-            consoleReporter.contextEnd c
+            consoleReporter.ContextEnd c
 
-        member this.summary minutes seconds passed failed skipped =
+        member this.Summary minutes seconds passed failed skipped =
             this.swallowedJS (sprintf "setTotalTime ('%im %is');" minutes seconds)
-            consoleReporter.summary minutes seconds passed failed skipped
+            consoleReporter.Summary minutes seconds passed failed skipped
 
-        member this.write w =
+        member this.Write w =
             let encoded = jsEncode w
             this.swallowedJS (sprintf "addMessageToTest ('%s', '%s');" context encoded)
-            consoleReporter.write w
+            consoleReporter.Write w
 
-        member this.suggestSelectors selector suggestions =
-            consoleReporter.suggestSelectors selector suggestions
+        member this.SuggestSelectors selector suggestions =
+            consoleReporter.SuggestSelectors selector suggestions
 
-        member this.testStart id =
+        member this.TestStart id =
             testStopWatch.Reset()
             testStopWatch.Start()
             let encodedId = jsEncode id
             this.swallowedJS (sprintf "addToContext ('%s', '%s');" context encodedId)
-            consoleReporter.testStart id
+            consoleReporter.TestStart id
 
-        member this.testEnd id =
+        member this.TestEnd id =
             let encodedId = jsEncode id
             testStopWatch.Stop()
             let ellapsed = testStopWatch.Elapsed
             this.swallowedJS (sprintf "addTimeToTest ('%s', '%s', '%im %is');" context encodedId ellapsed.Minutes ellapsed.Seconds)
 
-        member this.quit () =
+        member this.Quit () =
           match this.reportPath with
             | Some(path) ->
               let reportFileInfo = new IO.FileInfo(path)
               this.saveReportHtml reportFileInfo.Directory.FullName reportFileInfo.Name
-            | None -> consoleReporter.write "Not saving report"
+            | None -> consoleReporter.Write "Not saving report"
 
           if canQuit then _browser.Quit()
 
-        member this.suiteBegin () =
+        member this.SuiteBegin () =
             _browser.Navigate().GoToUrl(this.reportTemplateUrl)
             this.swallowedJS (sprintf "setStartTime ('%s');" (String.Format("{0:F}", System.DateTime.Now)))
             if environment <> String.Empty then this.swallowedJS (sprintf "setEnvironment ('%s');" environment)
 
-        member this.suiteEnd () =
+        member this.SuiteEnd () =
             canQuit <- true
             this.swallowedJS (sprintf "collapseContextsExcept('%s');" "") //cheap hack to collapse all contexts at the end of a run
 
-        member this.todo id =
+        member this.Todo id =
             let encodedId = jsEncode id
             this.swallowedJS (sprintf "updateTestInContext('%s', '%s', 'Todo', '%s');" context encodedId "")
 
-        member this.skip id =
+        member this.Skip id =
             let encodedId = jsEncode id
             this.swallowedJS (sprintf "updateTestInContext('%s', '%s', 'Skip', '%s');" context encodedId "")
-            consoleReporter.skip id
+            consoleReporter.Skip id
 
-        member this.setEnvironment env =
+        member this.SetEnvironment env =
             environment <- env
 
 type JUnitReporter(resultFilePath:string) =
@@ -411,25 +456,25 @@ type JUnitReporter(resultFilePath:string) =
 
     interface IReporter with
 
-        member this.pass id =
-            consoleReporter.pass id
+        member this.Pass id =
+            consoleReporter.Pass id
             passedTests.Add(id)
 
-        member this.fail ex id ss url =
-            consoleReporter.fail ex id ss url
+        member this.Fail ex id ss url =
+            consoleReporter.Fail ex id ss url
             failedTests.Add(ex, id)
 
-        member this.describe d =
-            consoleReporter.describe d
+        member this.Describe d =
+            consoleReporter.Describe d
 
-        member this.contextStart c =
-            consoleReporter.contextStart c
+        member this.ContextStart c =
+            consoleReporter.ContextStart c
 
-        member this.contextEnd c =
-            consoleReporter.contextEnd c
+        member this.ContextEnd c =
+            consoleReporter.ContextEnd c
 
-        member this.summary minutes seconds passed failed skipped =
-            consoleReporter.summary minutes seconds passed failed skipped
+        member this.Summary minutes seconds passed failed skipped =
+            consoleReporter.Summary minutes seconds passed failed skipped
             let getTestTime test =
                 testTimes.Find(fun (t, _) -> test = t) |> snd
             let passedTestsXml =
@@ -447,31 +492,31 @@ type JUnitReporter(resultFilePath:string) =
                 sprintf "<testsuite name=\"canopy\" tests=\"%i\" time=\"%.3f\">%s</testsuite>" testCount testTimeSum allTestsXml
             let resultFile = System.IO.FileInfo(resultFilePath)
             resultFile.Directory.Create()
-            consoleReporter.write <| sprintf "Saving results to %s" resultFilePath
+            consoleReporter.Write <| sprintf "Saving results to %s" resultFilePath
             let enc = new System.Text.UTF8Encoding(false)
             let bytes = enc.GetBytes xml
             use fs = new System.IO.FileStream(resultFilePath, System.IO.FileMode.OpenOrCreate)
             fs.Write(bytes, 0, bytes.Length)
 
-        member this.write w =
-            consoleReporter.write w
+        member this.Write w =
+            consoleReporter.Write w
 
-        member this.suggestSelectors selector suggestions =
-            consoleReporter.suggestSelectors selector suggestions
+        member this.SuggestSelectors selector suggestions =
+            consoleReporter.SuggestSelectors selector suggestions
 
-        member this.testStart id =
-            consoleReporter.testStart id
+        member this.TestStart id =
+            consoleReporter.TestStart id
             testStopWatch.Reset()
             testStopWatch.Start()
 
-        member this.testEnd id =
+        member this.TestEnd id =
             testStopWatch.Stop()
             let elapsedSeconds = float testStopWatch.ElapsedMilliseconds / 1000.
             testTimes.Add(id, elapsedSeconds)
 
-        member this.quit () = ()
-        member this.suiteBegin () = ()
-        member this.suiteEnd () = ()
-        member this.todo _ = ()
-        member this.skip id = ()
-        member this.setEnvironment env = ()
+        member this.Quit () = ()
+        member this.SuiteBegin () = ()
+        member this.SuiteEnd () = ()
+        member this.Todo _ = ()
+        member this.Skip id = ()
+        member this.SetEnvironment env = ()

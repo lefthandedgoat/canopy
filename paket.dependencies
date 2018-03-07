@@ -2,10 +2,15 @@ source https://api.nuget.org/v3/index.json
 framework: net461
 
 nuget NuGet.CommandLine
-nuget FSharp.Core >= 4.0.0.1 lowest_matching:true
+nuget FSharp.Core ~> 4.2.3
 nuget Selenium.WebDriver
 nuget FSharp.Formatting
 nuget FSharp.Data
+nuget Argu ~> 4
+nuget Expecto
+nuget Expecto.FsCheck
+
+github logary/logary src/Logary.Facade/Facade.fs
 
 group build
   source https://api.nuget.org/v3/index.json
