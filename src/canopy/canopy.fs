@@ -973,26 +973,20 @@ let start b =
             new Chrome.ChromeDriver(chromeDriverService chromiumDir, options) :> IWebDriver
         | ChromiumWithOptions options ->
             new Chrome.ChromeDriver(chromeDriverService chromiumDir, options) :> IWebDriver
-        | Firefox ->new FirefoxDriver(firefoxDriverService ()) :> IWebDriver
-        | FirefoxWithProfile profile ->
-            let options = new Firefox.FirefoxOptions();
-            options.Profile <- profile
-            new FirefoxDriver(firefoxDriverService (), options, TimeSpan.FromSeconds(elementTimeout)) :> IWebDriver
+        | Firefox -> new FirefoxDriver(firefoxDriverService ()) :> IWebDriver        
         | FirefoxWithPath path ->
-          let options = new Firefox.FirefoxOptions()
-          options.BrowserExecutableLocation <- path
-          new FirefoxDriver(firefoxDriverService (), options, TimeSpan.FromSeconds(elementTimeout)) :> IWebDriver
+            let options = new Firefox.FirefoxOptions()
+            options.BrowserExecutableLocation <- path
+            new FirefoxDriver(firefoxDriverService (), options, TimeSpan.FromSeconds(elementTimeout)) :> IWebDriver
         | FirefoxWithUserAgent userAgent -> firefoxWithUserAgent userAgent
         | FirefoxWithOptions options ->
             new FirefoxDriver(firefoxDriverService (), options, TimeSpan.FromSeconds(elementTimeout)) :> IWebDriver
         | FirefoxWithPathAndTimeSpan(path, timespan) ->
-          let options = new Firefox.FirefoxOptions()
-          options.BrowserExecutableLocation <- path
-          new FirefoxDriver(firefoxDriverService (), options, timespan) :> IWebDriver
-        | FirefoxWithProfileAndTimeSpan(profile, timespan) ->
-          let options = new Firefox.FirefoxOptions()
-          options.Profile <- profile
-          new FirefoxDriver(firefoxDriverService (), options, timespan) :> IWebDriver
+            let options = new Firefox.FirefoxOptions()
+            options.BrowserExecutableLocation <- path
+            new FirefoxDriver(firefoxDriverService (), options, timespan) :> IWebDriver
+        | FirefoxWithOptionsAndTimeSpan(options, timespan) ->          
+            new FirefoxDriver(firefoxDriverService (), options, timespan) :> IWebDriver
         | FirefoxHeadless ->
             let options = new Firefox.FirefoxOptions();
             options.AddArgument("--headless")
