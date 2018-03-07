@@ -87,7 +87,6 @@ type CanopyConfig =
         autoPinBrowserRightOnLaunch: bool
         throwIfMoreThanOneElement: bool
         configuredFinders: Finders.Finders
-        writeToSelectWithOptionValue: bool
         optimizeBySkippingIFrameCheck: bool
         optimizeByDisablingClearBeforeWrite: bool
         showInfoDiv: bool
@@ -124,9 +123,6 @@ let mutable throwIfMoreThanOneElement = false
 // TODO: remove global variable
 (* documented/configuration *)
 let mutable configuredFinders = Finders.defaultFinders
-// TODO: remove global variable
-(* documented/configuration *)
-let mutable writeToSelectWithOptionValue = true
 // TODO: remove global variable
 (* documented/configuration *)
 let mutable optimizeBySkippingIFrameCheck = false

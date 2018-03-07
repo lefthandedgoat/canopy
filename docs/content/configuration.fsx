@@ -192,14 +192,6 @@ configuredFinders
 configuredFinders <- finders.defaultFinders
 
 (**
-writeToSelectWithOptionValue
-------------
-* Provided to preserve previous behaviour of not using the options value to write to a select
-* Default is true
-*)
-writeToSelectWithOptionValue <- true
-
-(**
 optimizeBySkippingIFrameCheck
 ------------
 * If you need your tests to be faster and don't have any iframes you can turn this to true

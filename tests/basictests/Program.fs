@@ -476,7 +476,6 @@ context "other tests"
     "#states" == "Kingman Reef"
 
 "writting (selecting) to drop down test, via option value, many options" &&& fun _ ->
-    //note that this can be turned off if its causing you problems via config.writeToSelectWithOptionValue
     !^ testpage
     "#states" << "95"
     "#states" == "Palmyra Atoll"
