@@ -495,12 +495,8 @@ let last cssSelector =
 
 //read/write
 let internal writeToSelectB (browser: IWebDriver) (elem: IWebElement) (text:string) =
-    let options =
-        if writeToSelectWithOptionValue then
-            unreliableElementsWithinB browser (sprintf """option[text()="%s"] | option[@value="%s"] | optgroup/option[text()="%s"] | optgroup/option[@value="%s"]""" text text text text) elem
-        else //to preserve previous behaviour
-            unreliableElementsWithinB browser (sprintf """option[text()="%s"] | optgroup/option[text()="%s"]""" text text) elem
-
+    let options = unreliableElementsWithinB browser (sprintf """option[text()="%s"] | option[@value="%s"] | optgroup/option[text()="%s"] | optgroup/option[@value="%s"]""" text text text text) elem
+    
     match options with
     | [] ->
         let message = sprintf "Element %s does not contain value %s" (elem.ToString()) text
