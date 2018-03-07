@@ -1,11 +1,11 @@
 [<AutoOpen>]
-module canopy.types
+module Canopy.Types
 
 open System
 open OpenQA.Selenium
 open Microsoft.FSharp.Reflection
 
-let mutable (browser : IWebDriver) = null
+let mutable (browser: IWebDriver) = null
 
 type CanopyException(message) = inherit Exception(message)
 type CanopyReadOnlyException(message) = inherit CanopyException(message)
@@ -34,8 +34,9 @@ type CanopyReadException(message) = inherit CanopyException(message)
 type CanopySkipTestException() = inherit CanopyException(String.Empty)
 type CanopyNoBrowserException(message) = inherit CanopyException(message)
 
+// TODO: type naming to upper
 //directions
-type direction =
+type Direction =
     | Left
     | Right
     | FullScreen
@@ -43,7 +44,7 @@ type direction =
 //browser
 type BrowserStartMode =
     | Firefox
-    | FirefoxWithProfile of Firefox.FirefoxProfile
+    | [<Obsolete "Use FirefoxWithOptions instead">] FirefoxWithProfile of Firefox.FirefoxProfile
     | FirefoxWithPath of string
     | FirefoxWithUserAgent of string
     | FirefoxWithPathAndTimeSpan of string * TimeSpan
@@ -64,17 +65,18 @@ type BrowserStartMode =
     | Safari
     | Remote of string * ICapabilities
 
+// TODO: remove from global ns
 let toString (x:'a) =
     match FSharpValue.GetUnionFields(x, typeof<'a>) with
     | case, _ -> case.Name
 
-type Test (description: string, func : (unit -> unit), number : int) =
+type Test(description: string, func: (unit -> unit), number: int) =
     member x.Description = description
     member x.Func = func
     member x.Number = number
     member x.Id = if description = null then (String.Format("Test #{0}", number)) else description
 
-type suite () = class
+type Suite () = class
     member val Context : string = null with get, set
     member val TotalTestsCount : int = 0 with get, set
     member val Once = fun () -> () with get, set
@@ -88,7 +90,7 @@ type suite () = class
     member val Manys : Test list = [] with get, set
     member val Always : Test list = [] with get, set
     member val IsParallel = false with get, set
-    member this.Clone() = this.MemberwiseClone() :?> suite
+    member this.Clone() = this.MemberwiseClone() :?> Suite
 end
 
 type Result =

@@ -1,4 +1,4 @@
-module jsonValidator
+module JsonValidator
 
 open FSharp.Data
 
@@ -50,7 +50,7 @@ let AST jsonValue =
     | JsonValue.Number  _
     | JsonValue.Float   _
     | JsonValue.Boolean _ -> [| { meta with ImmediateOptional = false } |]
-    
+
     | JsonValue.Null -> [| { meta with Type = Null; ImmediateOptional = false } |]
 
     //real work done here
@@ -92,7 +92,7 @@ let diff example actual =
   //if there is a null in actual and it has a matching array value in example, replace with the array definition because null arrays are legit
   let actual =
     actual
-    |> Seq.map (fun meta -> 
+    |> Seq.map (fun meta ->
         if meta.Type = Type.Null then
           let asArray = { meta with Type = Array; Path = meta.Path.Replace(meta.Name, sprintf "[%s]" meta.Name) }
           let exists = example.Contains(asArray)
@@ -103,14 +103,14 @@ let diff example actual =
   //if there is a null in actual and it has a matching property value in example, replace with the property definition because null properties are legit
   let actual =
     actual
-    |> Seq.map (fun meta -> 
+    |> Seq.map (fun meta ->
         if meta.Type = Type.Null then
           let asProperty = { meta with Type = Property; Path = meta.Path.Replace(meta.Name, sprintf "%s" meta.Name) }
           let exists = example.Contains(asProperty)
           if exists then asProperty else meta
         else meta)
     |> Set.ofSeq
-  
+
   let missing =
     let allMissing =
       example - actual

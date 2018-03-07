@@ -1,8 +1,7 @@
-module canopy.reporters
+module Canopy.Reporters
 
 open System
 open OpenQA.Selenium
-open types
 
 type IReporter =
    abstract member testStart : string -> unit
@@ -178,6 +177,8 @@ type TeamCityReporter(?logImagesToConsole: bool) =
 
         member this.setEnvironment env = ()
 
+#nowarn "44"
+
 type LiveHtmlReporter(browser : BrowserStartMode, driverPath : string, ?pinBrowserRight0: bool) =
     let pinBrowserRight = defaultArg pinBrowserRight0 true
     let consoleReporter : IReporter = new ConsoleReporter() :> IReporter
@@ -202,17 +203,25 @@ type LiveHtmlReporter(browser : BrowserStartMode, driverPath : string, ?pinBrows
             options.AddArgument("test-type") //https://code.google.com/p/chromedriver/issues/detail?id=799
             options.AddArgument("--headless")
             new Chrome.ChromeDriver(driverPath, options) :> IWebDriver
-        | ChromeWithOptions options -> new Chrome.ChromeDriver(driverPath, options) :> IWebDriver
-        | ChromeWithOptionsAndTimeSpan(options, timeSpan) -> new Chrome.ChromeDriver(driverPath, options, timeSpan) :> IWebDriver
-        | ChromeWithUserAgent userAgent -> raise(System.Exception("Sorry ChromeWithUserAgent can't be used for LiveHtmlReporter"))
-        | ChromiumWithOptions options -> new Chrome.ChromeDriver(driverPath, options) :> IWebDriver
+        | ChromeWithOptions options ->
+            new Chrome.ChromeDriver(driverPath, options) :> IWebDriver
+        | ChromeWithOptionsAndTimeSpan(options, timeSpan) ->
+            new Chrome.ChromeDriver(driverPath, options, timeSpan) :> IWebDriver
+        | ChromeWithUserAgent userAgent ->
+            raise(System.Exception("Sorry ChromeWithUserAgent can't be used for LiveHtmlReporter"))
+        | ChromiumWithOptions options ->
+            new Chrome.ChromeDriver(driverPath, options) :> IWebDriver
         | Firefox -> new Firefox.FirefoxDriver() :> IWebDriver
-        | FirefoxWithProfile profile -> new Firefox.FirefoxDriver(profile) :> IWebDriver
+        | FirefoxWithOptions options ->
+            new Firefox.FirefoxDriver(options) :> IWebDriver
+        | FirefoxWithProfile profile ->
+            new Firefox.FirefoxDriver(profile) :> IWebDriver
         | FirefoxWithPath path ->
           let options = new Firefox.FirefoxOptions()
           options.BrowserExecutableLocation <- path
           new Firefox.FirefoxDriver(options) :> IWebDriver
-        | FirefoxWithUserAgent userAgent -> raise(System.Exception("Sorry FirefoxWithUserAgent can't be used for LiveHtmlReporter"))
+        | FirefoxWithUserAgent userAgent ->
+            raise(System.Exception("Sorry FirefoxWithUserAgent can't be used for LiveHtmlReporter"))
         | FirefoxWithPathAndTimeSpan(path, timespan) ->
           let options = new Firefox.FirefoxOptions()
           options.BrowserExecutableLocation <- path
@@ -229,7 +238,7 @@ type LiveHtmlReporter(browser : BrowserStartMode, driverPath : string, ?pinBrows
         | Remote(_,_) -> raise(System.Exception("Sorry Remote can't be used for LiveHtmlReporter"))
 
     let pin () =
-        let (w, h) = canopy.screen.getPrimaryScreenResolution ()
+        let (w, h) = Screen.getPrimaryScreenResolution ()
         let maxWidth = w / 2
         _browser.Manage().Window.Size <- new System.Drawing.Size(maxWidth,h)
         _browser.Manage().Window.Position <- new System.Drawing.Point((maxWidth * 0),0)
