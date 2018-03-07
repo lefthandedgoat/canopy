@@ -191,11 +191,11 @@ type LiveHtmlReporter(browser : BrowserStartMode, driverPath : string, ?pinBrows
         | IEWithOptionsAndTimeSpan(options, timeSpan) -> new IE.InternetExplorerDriver(driverPath, options, timeSpan) :> IWebDriver
         | EdgeBETA -> new Edge.EdgeDriver(driverPath) :> IWebDriver
         | Chrome | Chromium ->
-                let options = Chrome.ChromeOptions()
-                options.AddArguments("--disable-extensions")
-                options.AddArgument("disable-infobars")
-                options.AddArgument("test-type") //https://code.google.com/p/chromedriver/issues/detail?id=799
-                new Chrome.ChromeDriver(driverPath, options) :> IWebDriver
+            let options = Chrome.ChromeOptions()
+            options.AddArguments("--disable-extensions")
+            options.AddArgument("disable-infobars")
+            options.AddArgument("test-type") //https://code.google.com/p/chromedriver/issues/detail?id=799
+            new Chrome.ChromeDriver(driverPath, options) :> IWebDriver
         | ChromeHeadless ->
             let options = Chrome.ChromeOptions()
             options.AddArgument("--disable-extensions")
@@ -214,22 +214,18 @@ type LiveHtmlReporter(browser : BrowserStartMode, driverPath : string, ?pinBrows
         | Firefox -> new Firefox.FirefoxDriver() :> IWebDriver
         | FirefoxWithOptions options ->
             new Firefox.FirefoxDriver(options) :> IWebDriver
-        | FirefoxWithProfile profile ->
-            new Firefox.FirefoxDriver(profile) :> IWebDriver
         | FirefoxWithPath path ->
-          let options = new Firefox.FirefoxOptions()
-          options.BrowserExecutableLocation <- path
-          new Firefox.FirefoxDriver(options) :> IWebDriver
+            let options = new Firefox.FirefoxOptions()
+            options.BrowserExecutableLocation <- path
+            new Firefox.FirefoxDriver(options) :> IWebDriver
         | FirefoxWithUserAgent userAgent ->
             raise(System.Exception("Sorry FirefoxWithUserAgent can't be used for LiveHtmlReporter"))
         | FirefoxWithPathAndTimeSpan(path, timespan) ->
-          let options = new Firefox.FirefoxOptions()
-          options.BrowserExecutableLocation <- path
-          new Firefox.FirefoxDriver(Firefox.FirefoxDriverService.CreateDefaultService(), options, timespan) :> IWebDriver
-        | FirefoxWithProfileAndTimeSpan(profile, timespan) ->
-          let options = new Firefox.FirefoxOptions()
-          options.Profile <- profile
-          new Firefox.FirefoxDriver(Firefox.FirefoxDriverService.CreateDefaultService(), options, timespan) :> IWebDriver
+            let options = new Firefox.FirefoxOptions()
+            options.BrowserExecutableLocation <- path
+            new Firefox.FirefoxDriver(Firefox.FirefoxDriverService.CreateDefaultService(), options, timespan) :> IWebDriver
+        | FirefoxWithOptionsAndTimeSpan(options, timespan) ->
+            new Firefox.FirefoxDriver(Firefox.FirefoxDriverService.CreateDefaultService(), options, timespan) :> IWebDriver
         | FirefoxHeadless ->
             let options = new Firefox.FirefoxOptions()
             options.AddArgument("--headless")

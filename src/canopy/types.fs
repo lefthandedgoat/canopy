@@ -44,11 +44,10 @@ type Direction =
 //browser
 type BrowserStartMode =
     | Firefox
-    | [<Obsolete "Use FirefoxWithOptions instead">] FirefoxWithProfile of Firefox.FirefoxProfile
     | FirefoxWithPath of string
     | FirefoxWithUserAgent of string
     | FirefoxWithPathAndTimeSpan of string * TimeSpan
-    | FirefoxWithProfileAndTimeSpan of Firefox.FirefoxProfile * TimeSpan
+    | FirefoxWithOptionsAndTimeSpan of Firefox.FirefoxOptions * TimeSpan
     | FirefoxWithOptions of Firefox.FirefoxOptions
     | FirefoxHeadless
     | IE
