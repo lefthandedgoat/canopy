@@ -13,7 +13,7 @@ type job(warmup:bool, baseline:bool, acceptableRatioPercent:int, minutes:int, lo
     member this.Load = load
     member this.Tasks = tasks
 
-open canopy.integration.loadTest
+open Canopy.Integration.LoadTest
 
 type runner () =
     static member run (job:job) =

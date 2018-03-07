@@ -1,4 +1,4 @@
-module canopy.integration.loadTest
+module Canopy.Integration.LoadTest
 
 open System
 
