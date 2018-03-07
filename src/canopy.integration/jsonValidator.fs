@@ -1,4 +1,4 @@
-module JsonValidator
+module Canopy.JsonValidator
 
 open FSharp.Data
 

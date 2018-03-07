@@ -1,7 +1,7 @@
 module loadTestTests
 
-open canopy.runner
-open canopy.integration.loadTest
+open Canopy.Runner
+open Canopy.Integration.LoadTest
 open System.Net
 
 let all () =
