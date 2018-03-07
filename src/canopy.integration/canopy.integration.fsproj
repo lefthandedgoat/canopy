@@ -7,10 +7,10 @@
     <SchemaVersion>2.0</SchemaVersion>
     <ProjectGuid>{4303ffac-759e-4764-89ad-ed6a73e2e16d}</ProjectGuid>
     <OutputType>Library</OutputType>
-    <RootNamespace>canopy.integration</RootNamespace>
-    <AssemblyName>canopy.integration</AssemblyName>
+    <RootNamespace>Canopy.Integration</RootNamespace>
+    <AssemblyName>Canopy.Integration</AssemblyName>
     <TargetFrameworkVersion>v4.6.1</TargetFrameworkVersion>
-    <Name>canopy.integration</Name>
+    <Name>Canopy.Integration</Name>
     <SolutionDir Condition="$(SolutionDir) == '' Or $(SolutionDir) == '*Undefined*'">..\</SolutionDir>
     <TargetFrameworkProfile />
   </PropertyGroup>
@@ -22,7 +22,7 @@
     <OutputPath>bin\Debug\</OutputPath>
     <DefineConstants>DEBUG;TRACE</DefineConstants>
     <WarningLevel>3</WarningLevel>
-    <DocumentationFile>bin\Debug\canopy.integration.XML</DocumentationFile>
+    <DocumentationFile>bin\Debug\Canopy.Integration.xml</DocumentationFile>
   </PropertyGroup>
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Release|AnyCPU' ">
     <DebugType>pdbonly</DebugType>
@@ -31,7 +31,7 @@
     <OutputPath>..\..\bin</OutputPath>
     <DefineConstants>TRACE</DefineConstants>
     <WarningLevel>3</WarningLevel>
-    <DocumentationFile>..\..\bin\canopy.integration.XML</DocumentationFile>
+    <DocumentationFile>..\..\bin\Canopy.Integration.XML</DocumentationFile>
   </PropertyGroup>
   <PropertyGroup>
     <MinimumVisualStudioVersion Condition="'$(MinimumVisualStudioVersion)' == ''">11</MinimumVisualStudioVersion>

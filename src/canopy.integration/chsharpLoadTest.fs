@@ -1,4 +1,4 @@
-﻿namespace canopy.csharp.loadTest
+﻿namespace Canopy.CSharp.LoadTest
 
 type task(description:string, action:System.Action, frequency:int) =
     member this.Description = description

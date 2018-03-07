@@ -1,18 +1,17 @@
 ﻿[<AutoOpen>]
-module canopy.runner
+module Canopy.Runner
 
 open System
-open configuration
-open canopy
-open reporters
-open types
+open Canopy
+open Configuration
+open Reporters
 open OpenQA.Selenium
 
 let private last = function
     | hd :: tl -> hd
     | [] -> failwith "Empty list."
 
-let mutable suites = [new suite()]
+let mutable suites = [new Suite()]
 let mutable todo = fun () -> ()
 let mutable skipped = fun () -> ()
 
@@ -33,7 +32,7 @@ let context c =
     if (last suites).Context = null then
         (last suites).Context <- c
     else
-        let s = new suite()
+        let s = new Suite()
         s.Context <- c
         suites <- s::suites
 let private incrementLastTestSuite () =
@@ -79,7 +78,7 @@ let mutable contextFailed = false
 let mutable failedContexts : string list = []
 let mutable failed = false
 
-let pass id (suite : suite) =
+let pass id (suite: Suite) =
     passedCount <- passedCount + 1
     reporter.pass id
     suite.OnPass()
@@ -88,7 +87,7 @@ let skip id =
     skippedCount <- skippedCount + 1
     reporter.skip id
 
-let fail (ex : Exception) (test : Test) (suite : suite) autoFail url =
+let fail (ex : Exception) (test : Test) (suite: Suite) autoFail url =
     if failureMessagesThatShoulBeTreatedAsSkip |> List.exists (fun message -> ex.Message = message) then
         skip test.Id
     else
@@ -100,9 +99,9 @@ let fail (ex : Exception) (test : Test) (suite : suite) autoFail url =
                 if failFast = ref true then failed <- true
                 failedCount <- failedCount + 1
                 contextFailed <- true
-                let f = configuration.failScreenshotFileName test suite
+                let f = Configuration.failScreenshotFileName test suite
                 if failureScreenshotsEnabled = true then
-                  let ss = screenshot configuration.failScreenshotPath f
+                  let ss = screenshot Configuration.failScreenshotPath f
                   reporter.fail ex test.Id ss url
                 else reporter.fail ex test.Id Array.empty<byte> url
                 suite.OnFail()
@@ -118,7 +117,7 @@ let safelyGetUrl () =
   if browser = null then "no browser = no url"
   else try browser.Url with _ -> "failed to get url"
 
-let failSuite (ex: Exception) (suite : suite) =
+let failSuite (ex: Exception) (suite: Suite) =
     let reportFailedTest (ex: Exception) (test : Test) =
         reporter.testStart test.Id
         fail ex test suite true <| safelyGetUrl()
@@ -149,7 +148,7 @@ let private processRunResult suite (test : Test) result =
 
     reporter.testEnd test.Id
 
-let private runtest (suite : suite) (test : Test) =
+let private runtest (suite: Suite) (test : Test) =
     if failed = false then
         reporter.testStart test.Id
         let result =
@@ -165,12 +164,12 @@ let private runtest (suite : suite) (test : Test) =
 
               match testResult with
               | Skip -> Skip
-              | _ -> 
+              | _ ->
                 let afterResult = tryTest test suite (suite.After)
                 match testResult with
                 | Failed -> testResult
                 | _ -> afterResult
-                        
+
         failureMessage <- null
         result
     else
@@ -182,7 +181,7 @@ let run () =
 
     let wipsExist = suites |> List.exists (fun s -> s.Wips.IsEmpty = false)
 
-    if wipsExist && configuration.failIfAnyWipTests then
+    if wipsExist && Configuration.failIfAnyWipTests then
        raise <| Exception "Wip tests found and failIfAnyWipTests is true"
 
     reporter.suiteBegin()
@@ -194,7 +193,7 @@ let run () =
 
     //run all the suites
     if runFailedContextsFirst = true then
-        let failedContexts = history.get()
+        let failedContexts = History.get()
         //reorder so failed contexts are first
         let fc, pc = suites |> List.partition (fun s -> failedContexts |> List.exists (fun fc -> fc = s.Context))
         suites <- fc @ pc
@@ -230,7 +229,7 @@ let run () =
             if s.Context <> null then reporter.contextEnd s.Context
     )
 
-    history.save failedContexts
+    History.save failedContexts
 
     stopWatch.Stop()
     reporter.summary stopWatch.Elapsed.Minutes stopWatch.Elapsed.Seconds passedCount failedCount skippedCount
@@ -240,32 +239,34 @@ let run () =
 let runFor browsers =
     // suites are in reverse order and have to be reversed before running the tests
     let currentSuites = suites
-    
+
     match box browsers with
-        | :? (types.BrowserStartMode list) as browsers ->
-            let newSuites =
-              browsers
-              |> List.rev
-              |> List.map (fun browser ->
-                  let suite = new suite()
-                  suite.Context <- sprintf "Running tests with %s browser" (toString browser)
-                  suite.Once <- fun _ -> start browser                                
-                  let currentSuites2 = currentSuites |> List.map(fun suite -> suite.Clone())
-                  currentSuites2 |> List.iter (fun suite -> suite.Context <- sprintf "(%s) %s" (toString browser) suite.Context)
-                  currentSuites2 @ [suite])
-              |> List.concat
-            suites <- newSuites
-        | :? (IWebDriver list) as browsers ->
-            let newSuites =
-              browsers
-              |> List.rev
-              |> List.map (fun browser ->
-                  let suite = new suite()
-                  suite.Context <- sprintf "Running tests with %s browser" (browser.ToString())                
-                  suite.Once <- fun _ -> switchTo browser
-                  let currentSuites2 = currentSuites |> List.map(fun suite -> suite.Clone())
-                  currentSuites2 |> List.iter (fun suite -> suite.Context <- sprintf "(%s) %s" (browser.ToString()) suite.Context)
-                  currentSuites2 @ [suite])
-              |> List.concat
-            suites <- newSuites
-        | _ -> raise <| Exception "I dont know what you have given me"
+    | :? (BrowserStartMode list) as browsers ->
+        let newSuites =
+          browsers
+          |> List.rev
+          |> List.map (fun browser ->
+              let suite = new Suite()
+              suite.Context <- sprintf "Running tests with %s browser" (toString browser)
+              suite.Once <- fun _ -> start browser
+              let currentSuites2 = currentSuites |> List.map(fun suite -> suite.Clone())
+              currentSuites2 |> List.iter (fun (suite: Suite) ->
+                  suite.Context <- sprintf "(%s) %s" (toString browser) suite.Context)
+              currentSuites2 @ [suite])
+          |> List.concat
+        suites <- newSuites
+    | :? (IWebDriver list) as browsers ->
+        let newSuites =
+          browsers
+          |> List.rev
+          |> List.map (fun browser ->
+              let suite = new Suite()
+              suite.Context <- sprintf "Running tests with %s browser" (browser.ToString())
+              suite.Once <- fun _ -> switchTo browser
+              let currentSuites2 = currentSuites |> List.map(fun suite -> suite.Clone())
+              currentSuites2 |> List.iter (fun (suite: Suite) ->
+                  suite.Context <- sprintf "(%s) %s" (browser.ToString()) suite.Context)
+              currentSuites2 @ [suite])
+          |> List.concat
+        suites <- newSuites
+    | _ -> raise <| Exception "I dont know what you have given me"

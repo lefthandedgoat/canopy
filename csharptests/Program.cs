@@ -1,10 +1,9 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Net;
-using canopy;
-using canopy.csharp.loadTest;
-using canopy.integration;
-using _ = canopy.csharp.canopy;
+using Canopy;
+using Canopy.CSharp.LoadTest;
+using _ = Canopy.CSharp.Canopy;
 
 namespace csharptests
 {
@@ -12,16 +11,16 @@ namespace csharptests
     {
         static void Main(string[] args)
         {
-            configuration.elementTimeout = 3.0;
-            configuration.compareTimeout = 3.0;
-            configuration.pageTimeout = 3.0;
-            configuration.reporter = new reporters.LiveHtmlReporter(types.BrowserStartMode.Chrome, configuration.chromeDir);
+            Configuration.elementTimeout = 3.0;
+            Configuration.compareTimeout = 3.0;
+            Configuration.pageTimeout = 3.0;
+            Configuration.reporter = new Reporters.LiveHtmlReporter(Types.BrowserStartMode.Chrome, Configuration.chromeDir);
 
             var testpage = "http://lefthandedgoat.github.io/canopy/testpages/";
 
             jsonValidatorTests.All();
-            
-            _.start(types.BrowserStartMode.Chrome);
+
+            _.start(Types.BrowserStartMode.Chrome);
 
             _.context("context1");
             _.once(() => Console.WriteLine("once"));
@@ -153,7 +152,7 @@ namespace csharptests
                             frequency: 6)
                     });
 
-                canopy.csharp.loadTest.runner.run(job);
+                runner.run(job);
             });
 
             _.run();
