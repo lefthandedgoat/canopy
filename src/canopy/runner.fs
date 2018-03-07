@@ -80,12 +80,12 @@ let mutable failed = false
 
 let pass id (suite: Suite) =
     passedCount <- passedCount + 1
-    reporter.pass id
+    reporter.Pass id
     suite.OnPass()
 
 let skip id =
     skippedCount <- skippedCount + 1
-    reporter.skip id
+    reporter.Skip id
 
 let fail (ex : Exception) (test : Test) (suite: Suite) autoFail url =
     if failureMessagesThatShoulBeTreatedAsSkip |> List.exists (fun message -> ex.Message = message) then
@@ -102,15 +102,15 @@ let fail (ex : Exception) (test : Test) (suite: Suite) autoFail url =
                 let f = Configuration.failScreenshotFileName test suite
                 if failureScreenshotsEnabled = true then
                   let ss = screenshot Configuration.failScreenshotPath f
-                  reporter.fail ex test.Id ss url
-                else reporter.fail ex test.Id Array.empty<byte> url
+                  reporter.Fail ex test.Id ss url
+                else reporter.Fail ex test.Id Array.empty<byte> url
                 suite.OnFail()
             with
                 | failExc ->
                     //Fail during error report (likely  OpenQA.Selenium.WebDriverException.WebDriverTimeoutException ).
                     // Don't fail the runner itself, but report it.
-                    reporter.write (sprintf "Error during fail reporting: %s" (failExc.ToString()))
-                    reporter.fail ex test.Id Array.empty url
+                    reporter.Write (sprintf "Error during fail reporting: %s" (failExc.ToString()))
+                    reporter.Fail ex test.Id Array.empty url
                     suite.OnFail()
 
 let safelyGetUrl () =
@@ -119,9 +119,9 @@ let safelyGetUrl () =
 
 let failSuite (ex: Exception) (suite: Suite) =
     let reportFailedTest (ex: Exception) (test : Test) =
-        reporter.testStart test.Id
+        reporter.TestStart test.Id
         fail ex test suite true <| safelyGetUrl()
-        reporter.testEnd test.Id
+        reporter.TestEnd test.Id
 
     // tests are in reverse order and have to be reversed first
     do suite.Tests
@@ -142,15 +142,15 @@ let private processRunResult suite (test : Test) result =
     | Pass -> pass test.Id suite
     | Fail ex -> fail ex test suite false <| safelyGetUrl()
     | Skip -> skip test.Id
-    | Todo -> reporter.todo test.Id
+    | Todo -> reporter.Todo test.Id
     | FailFast -> ()
     | Failed -> ()
 
-    reporter.testEnd test.Id
+    reporter.TestEnd test.Id
 
 let private runtest (suite: Suite) (test : Test) =
     if failed = false then
-        reporter.testStart test.Id
+        reporter.TestStart test.Id
         let result =
           if System.Object.ReferenceEquals(test.Func, todo) then Todo
           else if System.Object.ReferenceEquals(test.Func, skipped) then Skip
@@ -184,7 +184,7 @@ let run () =
     if wipsExist && Configuration.failIfAnyWipTests then
        raise <| Exception "Wip tests found and failIfAnyWipTests is true"
 
-    reporter.suiteBegin()
+    reporter.SuiteBegin()
     let stopWatch = new Diagnostics.Stopwatch()
     stopWatch.Start()
 
@@ -207,7 +207,7 @@ let run () =
         if skipRemainingTestsInContextOnFailure = true && skipAllTestsOnFailure = false then skipNextTest <- false
         if failed = false then
             contextFailed <- false
-            if s.Context <> null then reporter.contextStart s.Context
+            if s.Context <> null then reporter.ContextStart s.Context
             try
                 s.Once ()
             with
@@ -226,14 +226,14 @@ let run () =
             s.Lastly ()
 
             if contextFailed = true then failedContexts <- s.Context::failedContexts
-            if s.Context <> null then reporter.contextEnd s.Context
+            if s.Context <> null then reporter.ContextEnd s.Context
     )
 
     History.save failedContexts
 
     stopWatch.Stop()
-    reporter.summary stopWatch.Elapsed.Minutes stopWatch.Elapsed.Seconds passedCount failedCount skippedCount
-    reporter.suiteEnd()
+    reporter.Summary stopWatch.Elapsed.Minutes stopWatch.Elapsed.Seconds passedCount failedCount skippedCount
+    reporter.SuiteEnd()
 
 (* documented/testing *)
 let runFor browsers =

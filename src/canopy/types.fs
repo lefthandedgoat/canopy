@@ -99,3 +99,21 @@ type Result =
     | Todo
     | FailFast
     | Failed
+    
+type IReporter =
+   abstract member TestStart : string -> unit
+   abstract member Pass : string -> unit
+   abstract member Fail : Exception -> string -> byte [] -> string -> unit
+   abstract member Todo : string -> unit
+   abstract member Skip : string -> unit
+   abstract member TestEnd : string -> unit
+   abstract member Describe : string -> unit
+   abstract member ContextStart : string -> unit
+   abstract member ContextEnd : string -> unit
+   abstract member Summary : int -> int -> int -> int -> int -> unit
+   abstract member Write : string -> unit
+   abstract member SuggestSelectors : string -> string list -> unit
+   abstract member Quit : unit -> unit
+   abstract member SuiteBegin : unit -> unit
+   abstract member SuiteEnd : unit -> unit
+   abstract member SetEnvironment : string -> unit

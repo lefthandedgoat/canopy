@@ -150,7 +150,7 @@ let sleep seconds =
 
 (* documented/actions *)
 let puts text =
-    reporter.write text
+    reporter.Write text
     if showInfoDiv then
         let escapedText = System.Web.HttpUtility.JavaScriptStringEncode(text)
         let info = "
@@ -234,7 +234,7 @@ let internal suggestOtherSelectors cssSelector =
         results
         |> fun xs -> if xs.Length >= 5 then Seq.take 5 xs else Array.toSeq xs
         |> Seq.map (fun r -> r.selector) |> List.ofSeq
-        |> (fun suggestions -> reporter.suggestSelectors cssSelector suggestions)
+        |> (fun suggestions -> reporter.SuggestSelectors cssSelector suggestions)
 
 (* documented/actions *)
 let describe text =
@@ -1089,7 +1089,7 @@ let rotate () =
 
 (* documented/actions *)
 let quit browser =
-    reporter.quit()
+    reporter.Quit()
     match box browser with
     | :? IWebDriver as b ->
         b.Quit()
