@@ -49,21 +49,21 @@
   <Import Project="$(FSharpTargetsPath)" Condition="Exists('$(FSharpTargetsPath)')" />
   <ItemGroup>
     <Compile Include="AssemblyInfo.fs" />
-    <Compile Include="types.fs" />
-    <Compile Include="wait.fs" />
-    <Compile Include="screen.fs" />
-    <Compile Include="reporters.fs" />
-    <Compile Include="finders.fs" />
-    <Compile Include="configuration.fs" />
-    <Compile Include="jarowinkler.fs" />
-    <Compile Include="canopy.fs" />
+    <Compile Include="Types.fs" />
+    <Compile Include="Wait.fs" />
+    <Compile Include="Screen.fs" />
+    <Compile Include="Reporters.fs" />
+    <Compile Include="Finders.fs" />
+    <Compile Include="Configuration.fs" />
+    <Compile Include="JaroWinkler.fs" />
+    <Compile Include="Canopy.fs" />
     <Compile Include="Operators.fs" />
     <Compile Include="Assert.fs" />
-    <Compile Include="history.fs" />
-    <Compile Include="runner.fs" />
-    <Compile Include="userAgents.fs" />
+    <Compile Include="History.fs" />
+    <Compile Include="Runner.fs" />
+    <Compile Include="UserAgents.fs" />
     <Compile Include="ClassicMode.fs" />
-    <Compile Include="csharp.fs" />
+    <Compile Include="Csharp.fs" />
     <None Include="companion\companion.fsx" />
     <None Include="paket.references" />
   </ItemGroup>
