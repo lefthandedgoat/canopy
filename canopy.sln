@@ -12,7 +12,7 @@ Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "tests", "tests", "{0391DED2
 EndProject
 Project("{F2A71F9B-5D33-465A-A702-920D77279786}") = "basictests", "tests\basictests\basictests.fsproj", "{D4610DE2-BFD2-491D-AD72-BBBB206E11C7}"
 EndProject
-Project("{F2A71F9B-5D33-465A-A702-920D77279786}") = "canopy", "src\canopy\canopy.fsproj", "{63135CF6-70A9-4382-851D-4B679EE0CBF8}"
+Project("{F2A71F9B-5D33-465A-A702-920D77279786}") = "Canopy", "src\Canopy\Canopy.fsproj", "{63135CF6-70A9-4382-851D-4B679EE0CBF8}"
 EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "docs", "docs", "{12E9007C-8265-43D8-86B0-C9182921A9E5}"
 EndProject
@@ -42,7 +42,7 @@ Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "tools", "tools", "{3C3590B5
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "csharptests", "csharptests\csharptests.csproj", "{8FD011AE-ACEC-4B55-810B-736DAE312D32}"
 EndProject
-Project("{F2A71F9B-5D33-465A-A702-920D77279786}") = "canopy.integration", "src\canopy.integration\canopy.integration.fsproj", "{4303FFAC-759E-4764-89AD-ED6A73E2E16D}"
+Project("{F2A71F9B-5D33-465A-A702-920D77279786}") = "Canopy.Integration", "src\Canopy.Integration\canopy.integration.fsproj", "{4303FFAC-759E-4764-89AD-ED6A73E2E16D}"
 EndProject
 Project("{F2A71F9B-5D33-465A-A702-920D77279786}") = "ParallelUsage", "tests\ParallelUsage\ParallelUsage.fsproj", "{D4610DE2-BFD2-491D-AD73-BBBB206E11C8}"
 EndProject

@@ -65,10 +65,10 @@ type BrowserStartMode =
     | Safari
     | Remote of string * ICapabilities
 
-// TODO: remove from global ns
-let toString (x:'a) =
+let internal toString (x:'a) =
     match FSharpValue.GetUnionFields(x, typeof<'a>) with
-    | case, _ -> case.Name
+    | case, _ ->
+        case.Name
 
 type Test(description: string, func: (unit -> unit), number: int) =
     member x.Description = description
