@@ -496,7 +496,7 @@ let last cssSelector =
 //read/write
 let internal writeToSelectB (browser: IWebDriver) (elem: IWebElement) (text:string) =
     let options = unreliableElementsWithinB browser (sprintf """option[text()="%s"] | option[@value="%s"] | optgroup/option[text()="%s"] | optgroup/option[@value="%s"]""" text text text text) elem
-    
+
     match options with
     | [] ->
         let message = sprintf "Element %s does not contain value %s" (elem.ToString()) text
@@ -927,8 +927,7 @@ let internal safariDriverService _ =
 
 #nowarn "44"
 
-(* documented/actions *)
-let start b =
+let private startUnsynchronised b =
     //for chrome you need to download chromedriver.exe from http://code.google.com/p/chromedriver/wiki/GettingStarted
     //place chromedriver.exe in c:\ or you can place it in a customer location and change chromeDir value above
     //for ie you need to set Settings -> Advance -> Security Section -> Check-Allow active content to run files on My Computer*
@@ -969,7 +968,7 @@ let start b =
             new Chrome.ChromeDriver(chromeDriverService chromiumDir, options) :> IWebDriver
         | ChromiumWithOptions options ->
             new Chrome.ChromeDriver(chromeDriverService chromiumDir, options) :> IWebDriver
-        | Firefox -> new FirefoxDriver(firefoxDriverService ()) :> IWebDriver        
+        | Firefox -> new FirefoxDriver(firefoxDriverService ()) :> IWebDriver
         | FirefoxWithPath path ->
             let options = new Firefox.FirefoxOptions()
             options.BrowserExecutableLocation <- path
@@ -981,7 +980,7 @@ let start b =
             let options = new Firefox.FirefoxOptions()
             options.BrowserExecutableLocation <- path
             new FirefoxDriver(firefoxDriverService (), options, timespan) :> IWebDriver
-        | FirefoxWithOptionsAndTimeSpan(options, timespan) ->          
+        | FirefoxWithOptionsAndTimeSpan(options, timespan) ->
             new FirefoxDriver(firefoxDriverService (), options, timespan) :> IWebDriver
         | FirefoxHeadless ->
             let options = new Firefox.FirefoxOptions();
@@ -995,6 +994,13 @@ let start b =
         pinB browser Right
 
     browsers <- browsers @ [browser]
+
+    browser
+
+(* documented/actions *)
+let start: BrowserStartMode -> IWebDriver =
+    let sem = obj ()
+    fun b -> lock sem (fun () -> startUnsynchronised b)
 
 (* documented/actions *)
 /// Acts on global
