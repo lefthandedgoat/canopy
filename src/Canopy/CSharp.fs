@@ -8,9 +8,19 @@ open Canopy.Assert.Operators
 
 type Canopy() =
 
-    static member browsers = ctx.browsers
+    static member browsers =
+        match !Context.globalContext with
+        | Some ctx ->
+            ctx.browsers
+        | None ->
+            failwith "Canopy is not yet configured"
 
-    static member browser = Canopy.Types.browser
+    static member browser =
+        match !Context.globalContext with
+        | Some ctx when Option.isSome ctx.browser ->
+            Option.get ctx.browser
+        | _ ->
+            failwith "Canopy is not yet configured"
 
     //runner stuff
     static member context description = context description
@@ -40,23 +50,23 @@ type Canopy() =
     //core stuff
     static member start b = start b
 
-    static member pin direction = pinB browser direction
+    static member pin direction = pin direction
 
-    static member pinToMonitor direction = pinToMonitorB browser direction
+    static member pinToMonitor direction = pinToMonitor direction
 
     static member switchTo b = switchTo b
 
-    static member switchToTab number = switchToTabB browser number
+    static member switchToTab number = switchToTab number
 
-    static member closeTab number = closeTabB browser number
+    static member closeTab number = closeTab number
 
     static member tile browsers = tile browsers
 
     static member positionBrowser left top width height = positionBrowser left top width height
 
-    static member resize size = resizeB browser size
+    static member resize size = resize size
 
-    static member rotate () = rotateB browser
+    static member rotate () = rotate ()
 
     static member url destination = url destination
 
@@ -91,80 +101,81 @@ type Canopy() =
     static member waitForElement selector = waitForElement selector
 
     //element stuff
-    static member unreliableElement selector = unreliableElementB browser selector
+    static member unreliableElement selector = unreliableElement selector
 
-    static member unreliableElements selector = unreliableElementsB browser selector
+    static member unreliableElements selector = unreliableElements selector
 
-    static member element selector = elementB browser selector
+    static member element selector = element selector
 
-    static member elements selector = elementsB browser selector
+    static member elements selector = elements selector
 
-    static member elementWithin selector element = elementWithinB browser selector element
+    static member elementWithin selector element = elementWithin selector element
 
-    static member elementsWithin selector element = elementsWithinB browser selector element
+    static member elementsWithin selector element = elementsWithin selector element
 
-    static member elementWithText selector regex = elementWithTextB browser selector regex
+    static member elementWithText selector regex = elementWithText selector regex
 
-    static member elementsWithText selector regex = elementsWithTextB browser selector regex
+    static member elementsWithText selector regex = elementsWithText selector regex
 
-    static member parent element = parentB browser element
+    static member parent element = parent element
 
-    static member unreliableElementsWithin selector element = unreliableElementsWithinB browser selector element
+    static member unreliableElementsWithin selector element =
+        unreliableElementsWithin selector element
 
     static member someElement selector =
-      match someElementB browser selector with
+      match someElement selector with
       | None -> null
       | Some element -> element
 
     static member someElementWithin selector element =
-      match someElementWithinB browser selector element with
+      match someElementWithin selector element with
       | None -> null
       | Some element -> element
 
     static member someParent element =
-      match someParentB browser element with
+      match someParent element with
       | None -> null
       | Some element -> element
 
-    static member nth index selector = nthB browser index selector
+    static member nth index selector = nth index selector
 
-    static member first selector = firstB browser selector
+    static member first selector = first selector
 
-    static member last index selector = lastB browser selector
+    static member last index selector = last selector
 
-    static member read selector = readB browser selector
+    static member read selector = read selector
 
-    static member clear selector = clearB browser selector
+    static member clear selector = clear selector
 
-    static member write selector value = selector << value
+    static member write selector value = write selector value
 
-    static member click selector = clickB browser selector
+    static member click selector = click selector
 
-    static member doubleClick selector = doubleClickB browser selector
+    static member doubleClick selector = doubleClick selector
 
-    static member ctrlClick selector = ctrlClickB browser selector
+    static member ctrlClick selector = ctrlClick selector
 
-    static member shiftClick selector = shiftClickB browser selector
+    static member shiftClick selector = shiftClick selector
 
-    static member rightClick selector = rightClickB browser selector
+    static member rightClick selector = rightClick selector
 
-    static member check selector = checkB browser selector
+    static member check selector = check  selector
 
-    static member uncheck selector = uncheckB browser selector
+    static member uncheck selector = uncheck selector
 
-    static member hover selector = hoverB browser selector
+    static member hover selector = hover selector
 
-    static member drag selector = dragB browser selector
+    static member drag selector = drag selector
 
-    static member press key = pressB browser key
+    static member press key = press key
 
-    static member alert () = alertB browser
+    static member alert () = alert ()
 
-    static member acceptAlert () = acceptAlertB browser
+    static member acceptAlert () = acceptAlert ()
 
-    static member dismissAlert () = dismissAlertB browser
+    static member dismissAlert () = dismissAlert ()
 
-    static member fastTextFromCSS selector = fastTextFromCSSB browser selector
+    static member fastTextFromCSS selector = fastTextFromCSS selector
 
     //assertions
     static member eq selector value = selector == value
@@ -185,15 +196,15 @@ type Canopy() =
 
     static member notContains value1 value2 = notContains value1 value2
 
-    static member selected selector = selectedB browser selector
+    static member selected selector = selected selector
 
-    static member deselected selector = deselectedB browser selector
+    static member deselected selector = deselected selector
 
-    static member displayed selector = displayedB browser selector
+    static member displayed selector = displayed selector
 
-    static member notDisplayed selector = notDisplayedB browser selector
+    static member notDisplayed selector = notDisplayed selector
 
-    static member enabled selector = enabledB browser selector
+    static member enabled selector = enabled selector
 
     static member disabled selector = disabled selector
 
@@ -201,7 +212,7 @@ type Canopy() =
 
     static member equality value1 value2 = value1 === value2
 
-    static member count selector value = countB browser selector value
+    static member count selector value = count selector value
 
     static member onn url = onn url
 

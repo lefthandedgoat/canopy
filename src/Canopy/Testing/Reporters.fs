@@ -2,6 +2,61 @@ module Canopy.Reporters
 
 open System
 open OpenQA.Selenium
+open FSharp.Reflection
+
+let internal toString (x:'a) =
+    match FSharpValue.GetUnionFields(x, typeof<'a>) with
+    | case, _ ->
+        case.Name
+
+type Test(description: string, func: (unit -> unit), number: int) =
+    member x.Description = description
+    member x.Func = func
+    member x.Number = number
+    member x.Id = if description = null then (String.Format("Test #{0}", number)) else description
+
+type Suite () = class
+    member val Context : string = null with get, set
+    member val TotalTestsCount : int = 0 with get, set
+    member val Once = fun () -> () with get, set
+    member val Before = fun () -> () with get, set
+    member val After = fun () -> () with get, set
+    member val Lastly = fun () -> () with get, set
+    member val OnPass = fun () -> () with get, set
+    member val OnFail = fun () -> () with get, set
+    member val Tests : Test list = [] with get, set
+    member val Wips : Test list = [] with get, set
+    member val Manys : Test list = [] with get, set
+    member val Always : Test list = [] with get, set
+    member val IsParallel = false with get, set
+    member this.Clone() = this.MemberwiseClone() :?> Suite
+end
+
+type Result =
+    | Pass
+    | Fail of Exception
+    | Skip
+    | Todo
+    | FailFast
+    | Failed
+
+type IReporter =
+   abstract member TestStart : string -> unit
+   abstract member Pass : string -> unit
+   abstract member Fail : Exception -> string -> byte [] -> string -> unit
+   abstract member Todo : string -> unit
+   abstract member Skip : string -> unit
+   abstract member TestEnd : string -> unit
+   abstract member Describe : string -> unit
+   abstract member ContextStart : string -> unit
+   abstract member ContextEnd : string -> unit
+   abstract member Summary : int -> int -> int -> int -> int -> unit
+   abstract member Write : string -> unit
+   abstract member SuggestSelectors : string -> string list -> unit
+   abstract member Quit : unit -> unit
+   abstract member SuiteBegin : unit -> unit
+   abstract member SuiteEnd : unit -> unit
+   abstract member SetEnvironment : string -> unit
 
 type ConsoleReporter() =
     interface IReporter with

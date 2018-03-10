@@ -41,6 +41,11 @@ Target "AssemblyInfo" (fun _ ->
         Attribute.FileVersion release.AssemblyVersion ] 
 )
 
+Target "LoggingFile" (fun _ ->
+    ReplaceInFiles [ "namespace Logary.Facade", "namespace Canopy.Logging" ]
+                   [ "paket-files/logary/logary/src/Logary.Facade/Facade.fs" ]
+)
+
 // --------------------------------------------------------------------------------------
 // Clean build results
 
@@ -160,18 +165,15 @@ Target "Release" DoNothing
 
 Target "All" DoNothing
 
-"Clean"
+"Clean" 
   ==> "AssemblyInfo"
+  ==> "LoggingFile"
   ==> "Build"
-  //==> "RunTests"
-  ==> "All"
-
-"All" 
+  ==> "RunTests"
   //==> "CleanDocs"
   //==> "GenerateDocs"
   //==> "ReleaseDocs"
-  ==> "NuGet"
-  ==> "NuGet.Integration"
   ==> "Release"
+  ==> "All"
 
 RunTargetOrDefault "All"

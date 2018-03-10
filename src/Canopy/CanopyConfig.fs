@@ -1,6 +1,7 @@
 ﻿namespace Canopy
 
 open System
+open Canopy.Logging
 
 //// TODO: remove global mutable
 //let mutable (failureMessage : string) = null
@@ -30,9 +31,9 @@ type CanopyConfig =
         elementTimeout: TimeSpan
         compareTimeout: TimeSpan
         pageTimeout: TimeSpan
+        /// How long to wait until a function is retried against the DOM.
         wipSleep: TimeSpan
-        // TODO: consider introducing the facade
-        //reporter: IReporter
+        logger: Logger
         suggestOtherSelectors: bool
         autoPinBrowserRightOnLaunch: bool
         throwIfMoreThanOneElement: bool
@@ -41,6 +42,12 @@ type CanopyConfig =
         optimizeByDisablingClearBeforeWrite: bool
         showInfoDiv: bool
         failureMessage: string option
+        /// Whether to throw an exception is a global static variable is queried
+        /// by the DSL; enable this when you run with Expecto to support parallel
+        /// tests.
+        throwOnStatics: bool
+        /// What level to log static accesses with.
+        logLevelOnStatics: LogLevel
     }
 
 [<AutoOpen>]
@@ -78,6 +85,7 @@ module CanopyConfig =
             compareTimeout = TimeSpan.FromSeconds 10.
             pageTimeout = TimeSpan.FromSeconds 10.
             wipSleep = TimeSpan.FromSeconds 1.
+            logger = Log.create "Canopy"
             suggestOtherSelectors = true
             autoPinBrowserRightOnLaunch = true
             throwIfMoreThanOneElement = false
@@ -86,6 +94,8 @@ module CanopyConfig =
             optimizeByDisablingClearBeforeWrite = false
             showInfoDiv = true
             failureMessage = None
+            throwOnStatics = false
+            logLevelOnStatics = Verbose
         }
 
     (* documented/configuration *)

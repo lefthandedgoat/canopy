@@ -70,7 +70,9 @@ let jaro s1 s2 =
     // This is for cases where |s1|, |s2| or m are zero
     if System.Double.IsNaN result then 0.0 else result
 
-type result = { selector : string; similarity : float }
+type Result =
+    { selector: string
+      similarity: float }
 
 /// Calculates the Jaro-Winkler edit distance between two strings.
 /// The edit distance is a metric that allows to measure the amount of similarity between two strings.
