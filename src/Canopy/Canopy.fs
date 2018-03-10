@@ -581,53 +581,53 @@ let elementWithText cssSelector regex =
 
 (* documented/actions *)
 let parentC context elem =
-    elem |> elementWithinC (context ()) ".."
+    elem |> elementWithinC context ".."
 
 (* documented/actions *)
 let parent elem =
-    parentB browser elem
+    parentC (context ()) elem
 
 (* documented/actions *)
-let elementsWithinB browser cssSelector elem =
-    findManyB browser cssSelector elementTimeout elem true
+let elementsWithinC context cssSelector elem =
+    findManyC context cssSelector context.config.elementTimeout elem true
 
 (* documented/actions *)
 let elementsWithin cssSelector elem =
-    elementsWithinB browser cssSelector elem
+    elementsWithinC (context ()) cssSelector elem
 
 (* documented/actions *)
-let unreliableElementsWithinB (browser: IWebDriver) cssSelector elem =
-    findManyB browser cssSelector elementTimeout elem false
+let unreliableElementsWithinC context cssSelector elem =
+    findManyC context cssSelector context.config.elementTimeout elem false
 
 (* documented/actions *)
 let unreliableElementsWithin cssSelector elem =
-    unreliableElementsWithinB browser cssSelector elem
+    unreliableElementsWithinC (context ()) cssSelector elem
 
 (* documented/actions *)
-let someElementB browser cssSelector =
+let someElementC context cssSelector =
     cssSelector
-    |> unreliableElementsB browser
-    |> someElementFromList cssSelector
+    |> unreliableElementsC context
+    |> someElementFromListConf context.config cssSelector
 
 (* documented/actions *)
 let someElement cssSelector =
-    someElementB browser cssSelector
+    someElementC (context ()) cssSelector
 
 (* documented/actions *)
-let someElementWithinB browser cssSelector elem =
+let someElementWithinC context cssSelector elem =
     elem
-    |> unreliableElementsWithinB browser cssSelector
-    |> someElementFromList cssSelector
+    |> unreliableElementsWithinC context cssSelector
+    |> someElementFromListConf context.config cssSelector
 
 (* documented/actions *)
 let someElementWithin cssSelector elem =
-    someElementWithinB browser cssSelector elem
+    someElementWithinC (context ()) cssSelector elem
 
 (* documented/actions *)
-let someParentB browser elem =
+let someParentC context elem =
     elem
-    |> elementsWithinB browser ".."
-    |> someElementFromList "provided element"
+    |> elementsWithinC context ".."
+    |> someElementFromListConf context.config "provided element"
 
 (* documented/actions *)
 let someParent elem =
