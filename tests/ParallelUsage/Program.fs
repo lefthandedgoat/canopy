@@ -30,25 +30,26 @@ module Config =
       { config with site = site }
 
 // runtime state for parallel support
+// TODO: move to canopy lib
 type Context<'config> =
   { conf: 'config
     browser: IWebDriver }
 
 module Context =
-  let wrap conf (browser: IWebDriver) =
+  let create conf (browser: IWebDriver) =
     { conf = conf; browser = browser }
 
 // indirection
 let testCase conf name fn =
     testCaseAsync name <| async {
       use browser = start firefox
-      try fn (Context.wrap conf browser)
+      try fn (Context.create conf browser)
       finally quit browser
     }
 
 // tests
 let tests (conf: Config) =
-  testList "staging.qvitoo.com" [
+  testList "e2e" [
     testCase conf "navigate to" <| fun x ->
       urlB x.browser conf.site
   ]
@@ -60,10 +61,10 @@ let main argv =
   // let expectoConfig = { Expecto.Tests.defaultConfig with token = cts.Token }
   Console.CancelKeyPress.Subscribe(fun _ -> cts.Cancel()) |> ignore
   // TO CONSIDER: https://github.com/fsprojects/Argu/issues/107
-  let parser = ArgumentParser.Create<CLIArguments>(programName = "ParallelUsage.exe")
+  let parser = ArgumentParser.Create<CLIArguments>(programName = "Canopy.ParallelUsage.exe")
   let results = parser.Parse(argv, ConfigurationReader.FromEnvironmentVariables (), ignoreUnrecognized = true, raiseOnUsage = false)
   if results.IsUsageRequested then
-    let expectoParser = ArgumentParser.Create<Expecto.Tests.CLIArguments>(programName = "ParallelUsage.exe")
+    let expectoParser = ArgumentParser.Create<Expecto.Tests.CLIArguments>(programName = "Canopy.ParallelUsage.exe")
     printfn "%s" (parser.PrintUsage())
     printfn "%s" (expectoParser.PrintUsage(hideSyntax = true))
     0
