@@ -168,11 +168,17 @@ type LiveHtmlReporter(browser : BrowserStartMode, driverPath : string, ?pinBrows
     let _browser =
         //copy pasta!
         match browser with
-        | IE -> new IE.InternetExplorerDriver(driverPath) :> IWebDriver
-        | IEWithOptions options -> new IE.InternetExplorerDriver(driverPath, options) :> IWebDriver
-        | IEWithOptionsAndTimeSpan(options, timeSpan) -> new IE.InternetExplorerDriver(driverPath, options, timeSpan) :> IWebDriver
-        | EdgeBETA -> new Edge.EdgeDriver(driverPath) :> IWebDriver
-        | Chrome | Chromium ->
+        | IE ->
+            new IE.InternetExplorerDriver(driverPath) :> IWebDriver
+        | IEWithOptions options ->
+            new IE.InternetExplorerDriver(driverPath, options) :> IWebDriver
+        | IEWithOptionsAndTimeSpan(options, timeSpan) ->
+            new IE.InternetExplorerDriver(driverPath, options, timeSpan) :> IWebDriver
+        | EdgeBETA
+        | Edge ->
+            new Edge.EdgeDriver(driverPath) :> IWebDriver
+        | Chrome
+        | Chromium ->
             let options = Chrome.ChromeOptions()
             options.AddArguments("--disable-extensions")
             options.AddArgument("disable-infobars")
@@ -193,7 +199,8 @@ type LiveHtmlReporter(browser : BrowserStartMode, driverPath : string, ?pinBrows
             raise(System.Exception("Sorry ChromeWithUserAgent can't be used for LiveHtmlReporter"))
         | ChromiumWithOptions options ->
             new Chrome.ChromeDriver(driverPath, options) :> IWebDriver
-        | Firefox -> new Firefox.FirefoxDriver() :> IWebDriver
+        | Firefox ->
+            new Firefox.FirefoxDriver() :> IWebDriver
         | FirefoxWithOptions options ->
             new Firefox.FirefoxDriver(options) :> IWebDriver
         | FirefoxWithPath path ->
@@ -212,7 +219,8 @@ type LiveHtmlReporter(browser : BrowserStartMode, driverPath : string, ?pinBrows
             let options = new Firefox.FirefoxOptions()
             options.AddArgument("--headless")
             new Firefox.FirefoxDriver(options) :> IWebDriver
-        | Safari -> new Safari.SafariDriver() :> IWebDriver
+        | Safari ->
+            new Safari.SafariDriver() :> IWebDriver
         | Remote(_,_) -> raise(System.Exception("Sorry Remote can't be used for LiveHtmlReporter"))
 
     let pin () =

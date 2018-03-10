@@ -53,7 +53,8 @@ type BrowserStartMode =
     | IE
     | IEWithOptions of IE.InternetExplorerOptions
     | IEWithOptionsAndTimeSpan of IE.InternetExplorerOptions * TimeSpan
-    | EdgeBETA
+    | [<Obsolete "Use BrowserStartMode.Edge">] EdgeBETA
+    | Edge
     | Chrome
     | ChromeWithOptions of Chrome.ChromeOptions
     | ChromeWithOptionsAndTimeSpan of Chrome.ChromeOptions * TimeSpan
@@ -99,7 +100,7 @@ type Result =
     | Todo
     | FailFast
     | Failed
-    
+
 type IReporter =
    abstract member TestStart : string -> unit
    abstract member Pass : string -> unit

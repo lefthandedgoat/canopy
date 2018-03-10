@@ -32,7 +32,11 @@ let aurora = FirefoxWithPath(@"C:\Program Files (x86)\Aurora\firefox.exe")
 let ie = IE
 
 (* documented/actions *)
-let edgeBETA = EdgeBETA
+[<Obsolete "Use `edge` instead">]
+let edgeBETA = Edge
+
+(* documented/actions *)
+let edge = Edge
 
 (* documented/actions *)
 let chrome = Chrome
@@ -964,10 +968,15 @@ let private startUnsynchronised b =
 
     browser <-
         match b with
-        | IE -> new IE.InternetExplorerDriver(ieDriverService ()) :> IWebDriver
-        | IEWithOptions options -> new IE.InternetExplorerDriver(ieDriverService (), options) :> IWebDriver
-        | IEWithOptionsAndTimeSpan(options, timeSpan) -> new IE.InternetExplorerDriver(ieDriverService (), options, timeSpan) :> IWebDriver
-        | EdgeBETA -> new Edge.EdgeDriver(edgeDriverService ()) :> IWebDriver
+        | IE ->
+            new IE.InternetExplorerDriver(ieDriverService ()) :> IWebDriver
+        | IEWithOptions options ->
+            new IE.InternetExplorerDriver(ieDriverService (), options) :> IWebDriver
+        | IEWithOptionsAndTimeSpan(options, timeSpan) ->
+            new IE.InternetExplorerDriver(ieDriverService (), options, timeSpan) :> IWebDriver
+        | EdgeBETA
+        | Edge ->
+            new Edge.EdgeDriver(edgeDriverService ()) :> IWebDriver
         | Chrome ->
             let options = Chrome.ChromeOptions()
             options.AddArgument("--disable-extensions")
@@ -995,12 +1004,14 @@ let private startUnsynchronised b =
             new Chrome.ChromeDriver(chromeDriverService chromiumDir, options) :> IWebDriver
         | ChromiumWithOptions options ->
             new Chrome.ChromeDriver(chromeDriverService chromiumDir, options) :> IWebDriver
-        | Firefox -> new FirefoxDriver(firefoxDriverService ()) :> IWebDriver
+        | Firefox ->
+            new FirefoxDriver(firefoxDriverService ()) :> IWebDriver
         | FirefoxWithPath path ->
             let options = new Firefox.FirefoxOptions()
             options.BrowserExecutableLocation <- path
             new FirefoxDriver(firefoxDriverService (), options, TimeSpan.FromSeconds(elementTimeout)) :> IWebDriver
-        | FirefoxWithUserAgent userAgent -> firefoxWithUserAgent userAgent
+        | FirefoxWithUserAgent userAgent ->
+            firefoxWithUserAgent userAgent
         | FirefoxWithOptions options ->
             new FirefoxDriver(firefoxDriverService (), options, TimeSpan.FromSeconds(elementTimeout)) :> IWebDriver
         | FirefoxWithPathAndTimeSpan(path, timespan) ->
@@ -1015,7 +1026,8 @@ let private startUnsynchronised b =
             new FirefoxDriver(firefoxDriverService (), options, TimeSpan.FromSeconds(elementTimeout)) :> IWebDriver
         | Safari ->
             new Safari.SafariDriver(safariDriverService ()) :> IWebDriver
-        | Remote(url, capabilities) -> new Remote.RemoteWebDriver(new Uri(url), capabilities) :> IWebDriver
+        | Remote(url, capabilities) ->
+            new Remote.RemoteWebDriver(new Uri(url), capabilities) :> IWebDriver
 
     if autoPinBrowserRightOnLaunch then
         pinB browser Right
