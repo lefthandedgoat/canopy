@@ -48,8 +48,8 @@
   </Choose>
   <Import Project="$(FSharpTargetsPath)" Condition="Exists('$(FSharpTargetsPath)')" />
   <ItemGroup>
-    <Compile Include="Config.fs" />
     <Compile Include="Expecto.fs" />
+    <Compile Include="Config.fs" />
     <Compile Include="Pages.fs" />
     <Compile Include="Tests.fs" />
     <Compile Include="Program.fs" />

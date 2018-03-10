@@ -16,6 +16,8 @@ open System.Drawing
 open System.Drawing.Imaging
 open EditDistance
 
+// DEVELOPER? REMEMBER TO ADD ANY NEW FUNCTIONS TO `Context.fs`, as well as here!
+
 // TODO: remove global mutable
 let mutable (failureMessage : string) = null
 
@@ -1179,10 +1181,18 @@ let onB (browser: IWebDriver) (u: string) =
 let on (u: string) =
     onB browser u
 
+(* documented/assertions *)
+let uriB (browser: IWebDriver) (uri: Uri) =
+    if isNull browser then invalidArg "browser" "The browser was null; initialise your browser before calling `uriB`"
+    browser.Navigate().GoToUrl(uri)
+
+(* documented/assertions *)
+let uri (uri: Uri) =
+    uriB browser uri
+
 (* documented/actions *)
 let urlB (browser: IWebDriver) (u: string) =
-    if browser = null then
-        raise (CanopyOnException "Can't navigate to the given url since the browser is not initialized.")
+    if isNull browser then invalidArg "browser" "The browser was null; initialise your browser before calling `urlB`"
     browser.Navigate().GoToUrl(u)
 
 (* documented/actions *)

@@ -1,6 +1,8 @@
 namespace Canopy.ParallelUsage
 
 open Argu
+open Expecto
+open System
 
 // config for your own test suite
 type ParallelUsageArguments =
@@ -11,14 +13,15 @@ type ParallelUsageArguments =
       | Site _ -> "What URL to start the browser at."
 
 type Config =
-  { site: string }
+  { site: Uri }
+
+  interface HasStartURI with
+    member x.startURI = x.site
 
   static member empty =
-    { site = "https://staging.qvitoo.com" }
+    { site = Uri "https://staging.qvitoo.com" }
 
 module Config =
-  let update config arg =
-    match arg with
-    | Site site ->
-      { config with site = site }
+  let update config = function
+    | Site site -> { config with site = Uri site }
 

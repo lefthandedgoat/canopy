@@ -120,6 +120,8 @@ type Context<'config> with
         onB x.browser url
     member x.title () =
         titleB x.browser
+    member x.uri uri =
+        uriB x.browser uri
     member x.url url =
         urlB x.browser url
     member x.reload () =

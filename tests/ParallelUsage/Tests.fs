@@ -7,8 +7,7 @@ open Expecto.Logging.Message
 
 let tests (conf: Config) =
   testList "e2e" [
-    testCase conf "browse to start page" <| fun x ->
-      x.url conf.site
-    testCase conf "signup" <| fun x ->
+    testBrowser conf "browse to start page" <| fun _ -> ()
+    testBrowser conf "signup" <| fun x ->
       ()
   ]
