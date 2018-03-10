@@ -33,3 +33,11 @@ and Expecto together. There are many upsides of doing it this way:
        a test in `Tests.fs`. Now you have integration tests!
  - `Program.fs` — the main entry point, which handles argument parsing, handles
    SIGINT-based cancellation and delegates the bulk of the work to Expecto to run.
+
+
+## A note on editors
+
+The best interactive F# experience can be had with VSCode and [Ionide][i]. Ionide also
+supports Expecto out of the box and has the best F# Interactive integration.
+
+ [i]: http://ionide.io/

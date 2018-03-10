@@ -8,6 +8,7 @@ nuget FSharp.Formatting
 nuget FSharp.Data
 nuget Argu ~> 4
 nuget Expecto
+nuget Expecto.FsCheck
 
 group build
   source https://api.nuget.org/v3/index.json
