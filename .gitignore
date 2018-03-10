@@ -11,6 +11,7 @@ chromedriver.log
 *.cached
 paket-files/
 .idea/
+geckodriver
 
 # Xamarin Studio / monodevelop user-specific
 *.userprefs
