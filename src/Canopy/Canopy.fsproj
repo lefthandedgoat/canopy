@@ -63,7 +63,7 @@
     <Compile Include="Runner.fs" />
     <Compile Include="UserAgents.fs" />
     <Compile Include="ClassicMode.fs" />
-    <Compile Include="Csharp.fs" />
+    <Compile Include="CSharp.fs" />
     <None Include="companion\companion.fsx" />
     <None Include="paket.references" />
   </ItemGroup>

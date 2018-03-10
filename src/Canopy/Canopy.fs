@@ -114,15 +114,19 @@ let internal pngToJpg pngArray =
   img.Save(jpgStream, ImageFormat.Jpeg)
   jpgStream.ToArray()
 
+(* documented/actions *)
 let screenshotB (browser: IWebDriver) directory filename =
     match box browser with
-    | :? ITakesScreenshot -> takeScreenshot directory filename |> pngToJpg
-    | _ -> Array.empty<byte>
+    | :? ITakesScreenshot ->
+        takeScreenshot directory filename |> pngToJpg
+    | _ ->
+        Array.empty<byte>
 
 (* documented/actions *)
 let screenshot directory filename =
     screenshotB browser directory filename
 
+(* documented/actions *)
 let jsB (browser: IWebDriver) script =
     (browser :?> IJavaScriptExecutor).ExecuteScript(script)
 
@@ -130,10 +134,19 @@ let jsB (browser: IWebDriver) script =
 let js script =
     jsB browser script
 
+let internal swallowedJsB browser script =
+    try
+        jsB browser script
+        |> ignore
+    with ex ->
+        ()
+
 let internal swallowedJs script =
-    try js script |> ignore with | ex -> ()
+    swallowedJsB browser script
 
 (* documented/actions *)
+/// This has nothing to do with the browser; consider just sleeping in your
+/// test framework instead.
 let sleep seconds =
     let ms =
         match box seconds with
@@ -145,11 +158,10 @@ let sleep seconds =
            int (ts.TotalSeconds * 1000.0)
         | _ ->
             1000
-    // TO CONSIDER: async?
     System.Threading.Thread.Sleep(ms)
 
 (* documented/actions *)
-let puts text =
+let putsB browser text =
     reporter.Write text
     if showInfoDiv then
         let escapedText = System.Web.HttpUtility.JavaScriptStringEncode(text)
@@ -160,17 +172,28 @@ let puts text =
             infoDiv.setAttribute('style','position: absolute; border: 1px solid black; bottom: 0px; right: 0px; margin: 3px; padding: 3px; background-color: white; z-index: 99999; font-size: 20px; font-family: monospace; font-weight: bold;');
             document.getElementsByTagName('body')[0].appendChild(infoDiv);
             infoDiv.innerHTML = 'locating: " + escapedText + "';"
-        swallowedJs info
+        swallowedJsB browser info
+
+(* documented/actions *)
+let puts text =
+    putsB browser text
+
+let internal colorizeAndSleepB browser cssSelector =
+    putsB browser cssSelector
+    swallowedJsB browser <| sprintf "document.querySelector('%s').style.border = 'thick solid #FFF467';" cssSelector
+    sleep wipSleep
+    swallowedJsB browser <| sprintf "document.querySelector('%s').style.border = 'thick solid #ACD372';" cssSelector
 
 let internal colorizeAndSleep cssSelector =
-    puts cssSelector
-    swallowedJs <| sprintf "document.querySelector('%s').style.border = 'thick solid #FFF467';" cssSelector
-    sleep wipSleep
-    swallowedJs <| sprintf "document.querySelector('%s').style.border = 'thick solid #ACD372';" cssSelector
+    colorizeAndSleepB browser cssSelector
+
+(* documented/actions *)
+let highlightB browser cssSelector =
+    swallowedJsB browser <| sprintf "document.querySelector('%s').style.border = 'thick solid #ACD372';" cssSelector
 
 (* documented/actions *)
 let highlight cssSelector =
-    swallowedJs <| sprintf "document.querySelector('%s').style.border = 'thick solid #ACD372';" cssSelector
+    highlightB browser cssSelector
 
 let internal suggestOtherSelectors cssSelector =
     if not disableSuggestOtherSelectors then
@@ -237,8 +260,12 @@ let internal suggestOtherSelectors cssSelector =
         |> (fun suggestions -> reporter.SuggestSelectors cssSelector suggestions)
 
 (* documented/actions *)
+let describeB browser text =
+    putsB browser text
+
+(* documented/actions *)
 let describe text =
-    puts text
+    describeB browser text
 
 (* documented/actions *)
 let waitFor2 message f =
@@ -1224,6 +1251,7 @@ let text = addSelector findByText "text"
 (* documented/actions *)
 let value = addSelector findByValue "value"
 
+/// TODO: move to runners
 let skip message =
   describe <| sprintf "Skipped: %s" message
   raise <| CanopySkipTestException()
@@ -1236,3 +1264,126 @@ let waitForElementB browser cssSelector =
 (* documented/actions *)
 let waitForElement cssSelector =
     waitForElementB browser cssSelector
+
+// runtime state for parallel support
+type Context<'config> =
+    {
+        conf: 'config
+        browser: IWebDriver
+    }
+
+module Context =
+    let create conf (browser: IWebDriver) =
+        { conf = conf; browser = browser }
+
+/// Extensions for Context<'config> to get the DSL API on the context instance;
+/// this makes it easier to use the context and browser in your parallel tests.
+type Context<'config> with
+    member x.screenshot directory filename =
+        screenshotB x.browser directory filename
+    member x.js script =
+        jsB x.browser script
+    member x.puts text =
+        putsB x.browser text
+    member x.highlight cssSelector =
+        highlightB x.browser cssSelector
+    member x.describe text =
+        describeB x.browser text
+    member x.elements cssSelector =
+        elementsB x.browser cssSelector
+    member x.unreliableElements cssSelector =
+        unreliableElementsB x.browser cssSelector
+    member x.unreliableElement cssSelector =
+        unreliableElementB x.browser cssSelector
+    member x.elementWithin cssSelector elem =
+        elementWithinB x.browser cssSelector elem
+    member x.elementsWithText cssSelector regex =
+        elementsWithTextB x.browser cssSelector regex
+    member x.elementWithText cssSelector regex =
+        elementWithTextB x.browser cssSelector regex
+    member x.parent elem =
+        parentB x.browser elem
+    member x.elementsWithin cssSelector elem =
+        elementsWithinB x.browser cssSelector elem
+    member x.unreliableElementsWithin cssSelector elem =
+        unreliableElementsWithinB x.browser cssSelector elem
+    member x.someElement cssSelector =
+        someElementB x.browser cssSelector
+    member x.someElementWithin cssSelector elem =
+        someElementWithinB x.browser cssSelector elem
+    member x.someParent elem =
+        someParentB x.browser elem
+    member x.nth index cssSelector =
+        nthB x.browser index cssSelector
+    member x.item index cssSelector =
+        itemB x.browser index cssSelector
+    member x.first cssSelector =
+        firstB x.browser cssSelector
+    member x.last cssSelector =
+        lastB x.browser cssSelector
+    member x.write text item =
+        writeB x.browser text item
+    member x.read item =
+        readB x.browser item
+    member x.clear item =
+        clearB x.browser item
+    member x.press key =
+        pressB x.browser key
+    member x.alert () =
+        alertB x.browser
+    member x.acceptAlert () =
+        acceptAlertB x.browser
+    member x.dismissAlert () =
+        dismissAlertB x.browser
+    member x.fastTextFromCSS selector =
+        fastTextFromCSSB x.browser selector
+    member x.click item =
+        clickB x.browser item
+    member x.doubleClick item =
+        doubleClickB x.browser item
+    member x.modifierClick modifier item =
+        modifierClickB x.browser modifier item
+    member x.ctrlClick item =
+        ctrlClickB x.browser item
+    member x.shiftClick item =
+        shiftClickB x.browser item
+    member x.rightClick item =
+        rightClickB x.browser item
+    member x.check item =
+        checkB x.browser item
+    member x.uncheck item =
+        uncheckB x.browser item
+    member x.hover item =
+        hoverB x.browser item
+    member x.drag cssSelectorA cssSelectorB =
+        dragB x.browser cssSelectorA cssSelectorB
+    member x.pin direction =
+        pinB x.browser direction
+    member x.pinToMonitor number =
+        pinToMonitorB x.browser number
+    member x.switchToTab number =
+        switchToTabB x.browser number
+    member x.closeTab number =
+        closeTabB x.browser number
+    member x.positionBrowser left top width height =
+        positionBrowserB x.browser left top width height
+    member x.resize size =
+        resizeB x.browser size
+    member x.rotate () =
+        rotateB x.browser
+    member x.currentUrl () =
+        currentUrlB x.browser
+    member x.onn url =
+        onnB x.browser url
+    member x.on url =
+        onB x.browser url
+    member x.title () =
+        titleB x.browser
+    member x.url url =
+        urlB x.browser url
+    member x.reload () =
+        reloadB x.browser
+    member x.navigate direction =
+        navigateB x.browser direction
+    member x.waitForElement cssSelector =
+        waitForElementB x.browser cssSelector

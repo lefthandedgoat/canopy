@@ -29,16 +29,6 @@ module Config =
     | Site site ->
       { config with site = site }
 
-// runtime state for parallel support
-// TODO: move to canopy lib
-type Context<'config> =
-  { conf: 'config
-    browser: IWebDriver }
-
-module Context =
-  let create conf (browser: IWebDriver) =
-    { conf = conf; browser = browser }
-
 // indirection
 let testCase conf name fn =
     testCaseAsync name <| async {
@@ -50,8 +40,9 @@ let testCase conf name fn =
 // tests
 let tests (conf: Config) =
   testList "e2e" [
-    testCase conf "navigate to" <| fun x ->
-      urlB x.browser conf.site
+    testCase conf "browse to start page" <| fun x ->
+      x.url conf.site
+    testCase conf "signup" <| fun x -> ()
   ]
 
 // program
