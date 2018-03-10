@@ -1,6 +1,6 @@
-﻿/// Functions to compute the edit distance between two strings
-/// Taken from the Visual F# compiler
-module Canopy.EditDistance
+﻿/// Functions to compute the edit distance between two strings.
+/// See https://en.wikipedia.org/wiki/Jaro%E2%80%93Winkler_distance
+module Canopy.JaroWinkler
 
 /// Given an offset and a radius from that offset,
 /// does mChar exist in that part of str?

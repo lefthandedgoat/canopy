@@ -52,19 +52,21 @@
     <Compile Include="Types.fs" />
     <Compile Include="Wait.fs" />
     <Compile Include="Screen.fs" />
-    <Compile Include="Reporters.fs" />
     <Compile Include="Finders.fs" />
-    <Compile Include="Configuration.fs" />
+    <Compile Include="CanopyConfig.fs" />
     <Compile Include="JaroWinkler.fs" />
     <Compile Include="Canopy.fs" />
-    <Compile Include="Context.fs" />
     <Compile Include="Operators.fs" />
-    <Compile Include="Assert.fs" />
     <Compile Include="History.fs" />
-    <Compile Include="Runner.fs" />
     <Compile Include="UserAgents.fs" />
     <Compile Include="ClassicMode.fs" />
+    <!-- Canopy-specific testing framework -->
+    <Compile Include="Testing\Assert.fs" />
+    <Compile Include="Testing\Reporters.fs" />
+    <Compile Include="Testing\Runner.fs" />
+    <!-- C# interop -->
     <Compile Include="CSharp.fs" />
+    <!-- Chrome extension -->
     <None Include="companion\companion.fsx" />
     <None Include="paket.references" />
   </ItemGroup>

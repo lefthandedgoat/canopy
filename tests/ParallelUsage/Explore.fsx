@@ -20,7 +20,7 @@ let init () =
     Context.create Config.empty browser
 let x =  init ()
 
-
+x.url "https://staging.qvitoo.com"
 
 // lastly:
 quit ()

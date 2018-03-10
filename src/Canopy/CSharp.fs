@@ -6,9 +6,9 @@ open Canopy.Operators
 open Canopy.Assert
 open Canopy.Assert.Operators
 
-type Canopy () =
+type Canopy() =
 
-    static member browsers = browsers
+    static member browsers = ctx.browsers
 
     static member browser = Canopy.Types.browser
 

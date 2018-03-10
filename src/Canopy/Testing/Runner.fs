@@ -1,18 +1,69 @@
-﻿[<AutoOpen>]
-module Canopy.Runner
+﻿module Canopy.Runner
 
-open System
 open Canopy
-open Configuration
-open Reporters
+open Canopy.Configuration
+open Canopy.Reporters
 open OpenQA.Selenium
+open System
+
+type CanopyRunnerConfig =
+    {
+        failFast: bool
+        failScreenshotPath: string
+        failScreenshotFileName: string
+        failIfAnyWIPTests: bool
+        runFailedContextsFirst: bool
+        failureScreenshotsEnabled: bool
+        skipAllTestsOnFailure: bool
+        skipRemainingTestsInContextOnFailure: bool
+        skipNextTest: bool
+        failureMessagesThatShoulBeTreatedAsSkip: string list
+    }
+
+//runner related
+// TODO: remove global variable
+(* documented/configuration *)
+let failFast = ref false
+// TODO: remove global variable
+(* documented/configuration *)
+let mutable failScreenshotPath = Environment.GetFolderPath(Environment.SpecialFolder.ApplicationData) + @"\canopy\"
+// TODO: remove global variable
+(* documented/configuration *)
+let mutable failScreenshotFileName = fun (test: Test) (suite: Suite) -> DateTime.Now.ToString("MMM-d_HH-mm-ss-fff")
+// TODO: remove global variable
+(* documented/configuration *)
+let mutable failIfAnyWipTests = false
+// TODO: remove global variable
+(* documented/configuration *)
+let mutable runFailedContextsFirst = false
+// TODO: remove global variable
+(* documented/configuration *)
+let mutable failureScreenshotsEnabled = true
+// TODO: remove global variable
+(* documented/configuration *)
+let mutable skipAllTestsOnFailure = false
+// TODO: remove global variable
+(* documented/configuration *)
+let mutable skipRemainingTestsInContextOnFailure = false
+// TODO: remove global variable
+(* documented/configuration *)
+let mutable skipNextTest = false
+// TODO: remove global variable
+(* documented/configuration *)
+let mutable failureMessagesThatShoulBeTreatedAsSkip : string list = []
+// TODO: remove global variable
+(* documented/configuration *)
+let mutable reporter = new ConsoleReporter() :> IReporter
 
 let private last = function
     | hd :: tl -> hd
     | [] -> failwith "Empty list."
 
+// TODO: remove global variable
 let mutable suites = [new Suite()]
+// TODO: remove global variable
 let mutable todo = fun () -> ()
+// TODO: remove global variable
 let mutable skipped = fun () -> ()
 
 (* documented/testing *)
@@ -99,9 +150,9 @@ let fail (ex : Exception) (test : Test) (suite: Suite) autoFail url =
                 if failFast = ref true then failed <- true
                 failedCount <- failedCount + 1
                 contextFailed <- true
-                let f = Configuration.failScreenshotFileName test suite
+                let f = failScreenshotFileName test suite
                 if failureScreenshotsEnabled = true then
-                  let ss = screenshot Configuration.failScreenshotPath f
+                  let ss = screenshot failScreenshotPath f
                   reporter.Fail ex test.Id ss url
                 else reporter.Fail ex test.Id Array.empty<byte> url
                 suite.OnFail()
@@ -181,7 +232,7 @@ let run () =
 
     let wipsExist = suites |> List.exists (fun s -> s.Wips.IsEmpty = false)
 
-    if wipsExist && Configuration.failIfAnyWipTests then
+    if wipsExist && failIfAnyWipTests then
        raise <| Exception "Wip tests found and failIfAnyWipTests is true"
 
     reporter.SuiteBegin()
@@ -269,4 +320,5 @@ let runFor browsers =
               currentSuites2 @ [suite])
           |> List.concat
         suites <- newSuites
-    | _ -> raise <| Exception "I dont know what you have given me"
+    | _ ->
+        raise <| Exception "I dont know what you have given me"

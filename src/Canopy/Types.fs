@@ -5,8 +5,6 @@ open System
 open OpenQA.Selenium
 open Microsoft.FSharp.Reflection
 
-let mutable (browser: IWebDriver) = null
-
 type CanopyException(message) = inherit Exception(message)
 type CanopyReadOnlyException(message) = inherit CanopyException(message)
 type CanopyOptionNotFoundException(message) = inherit CanopyException(message)
@@ -34,14 +32,11 @@ type CanopyReadException(message) = inherit CanopyException(message)
 type CanopySkipTestException() = inherit CanopyException(String.Empty)
 type CanopyNoBrowserException(message) = inherit CanopyException(message)
 
-// TODO: type naming to upper
-//directions
 type Direction =
     | Left
     | Right
     | FullScreen
 
-//browser
 type BrowserStartMode =
     | Firefox
     | FirefoxWithPath of string

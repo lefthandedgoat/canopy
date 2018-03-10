@@ -1,28 +1,98 @@
 [<AutoOpen>]
 module Canopy.Core
 
-open System.Collections.ObjectModel
-open OpenQA.Selenium.Firefox
+open Canopy
+open Canopy.Finders
+open Canopy.JaroWinkler
+open FSharp.Core.Printf
 open OpenQA.Selenium
+open OpenQA.Selenium.Firefox
 open OpenQA.Selenium.Interactions
-open Microsoft.FSharp.Core.Printf
-open System.IO
 open System
-open Configuration
-open Reporters
-open Types
-open Finders
+open System.Collections.ObjectModel
 open System.Drawing
 open System.Drawing.Imaging
-open EditDistance
+open System.IO
+
+type Context =
+    abstract config: CanopyConfig
+    abstract browser: IWebDriver option
+    abstract browsers: IWebDriver list
+
+/// Runtime state for parallel support; you can access `.userState` for a value
+/// of your choice.
+type Context<'userState> =
+    {
+        userState: 'userState
+        config: CanopyConfig
+        browser: IWebDriver option
+        browsers: IWebDriver list
+    }
+    interface Context with
+        member x.config = x.config
+        member x.browser = x.browser
+        member x.browsers = x.browsers
+
+/// Module for manipulating the `Context` value.
+module Context =
+    let private map2 fnA b = function
+        | None ->
+            b
+        | Some x ->
+            fnA x
+
+    /// Creates a new Context object, with a `conf` value of your choice and a
+    /// browser.
+    let create (browser: IWebDriver option) (config: CanopyConfig): Context =
+        {
+            config = config
+            browser = browser
+            browsers = browser |> map2 (fun browser -> browser :: []) []
+            userState = obj ()
+        }
+        :> Context
+
+    let createT browser config userState =
+        {
+            config = config
+            browser = browser
+            browsers = browser |> map2 (fun browser -> browser :: []) []
+            userState = userState
+        }
+        :> Context
+
+    /// Sets the passed browser as the current browsers and updates the list of
+    /// browser instances for this context.
+    let addCurrentBrowser browser context =
+        { context with
+            browser = Some browser
+            browsers = browser :: context.browsers }
+
+    // TODO: update based on interactions
+    let internal globalContext: Context option ref = ref None
+
+    /// Configure the global configuration atomically (no lost writes).
+    let configure =
+        let sem = obj ()
+        fun (userState: 'us) (callback: CanopyConfig -> CanopyConfig) ->
+            lock sem <| fun () ->
+                globalContext :=
+                    match !globalContext with
+                    | None ->
+                        let newConfig = callback defaultConfig
+                        createT None newConfig userState
+                    | Some existing ->
+                        let newConfig = callback existing.config
+                        {
+                            config = newConfig
+                            userState = box userState
+                            browser = existing.browser
+                            browsers = existing.browsers
+                        }
+                        :> Context
+                    |> Some
 
 // DEVELOPER? REMEMBER TO ADD ANY NEW FUNCTIONS TO `Context.fs`, as well as here!
-
-// TODO: remove global mutable
-let mutable (failureMessage : string) = null
-
-// TODO: remove global mutable
-let mutable wipTest = false
 
 (* documented/actions *)
 let firefox = Firefox
@@ -49,17 +119,8 @@ let chromium = Chromium
 (* documented/actions *)
 let safari = Safari
 
-// TODO: remove global mutable
-let mutable browsers = []
-
-//misc
-(* documented/actions *)
-let failsWith message =
-    // TODO: handle write to global via `Configuration`
-    failureMessage <- message
-
 let internal textOf (element: IWebElement) =
-    match element.TagName  with
+    match element.TagName with
     | "input" ->
         element.GetAttribute("value")
     | "textarea" ->
@@ -67,8 +128,8 @@ let internal textOf (element: IWebElement) =
     | "select" ->
         let value = element.GetAttribute("value")
         let options = Seq.toList (element.FindElements(By.TagName("option")))
-        let option = options |> List.filter (fun e -> e.GetAttribute("value") = value)
-        option.Head.Text
+        let option = options |> List.find (fun e -> e.GetAttribute("value") = value)
+        option.Text
     | _ ->
         element.Text
 
@@ -303,7 +364,7 @@ let rec internal findElementsB (browser: IWebDriver) cssSelector (searchContext:
 
     try
         let results =
-            if (hints.ContainsKey cssSelector) then
+            if hints.ContainsKey cssSelector then
                 let finders = hints.[cssSelector]
                 finders
                 |> Seq.map (fun finder -> finder cssSelector searchContext.FindElements)
@@ -312,19 +373,22 @@ let rec internal findElementsB (browser: IWebDriver) cssSelector (searchContext:
                 configuredFinders cssSelector searchContext.FindElements
                 |> Seq.filter(fun list -> not(list.IsEmpty))
         if Seq.isEmpty results then
-            if optimizeBySkippingIFrameCheck then [] else findInIFrame()
+            if optimizeBySkippingIFrameCheck then [] else findInIFrame ()
         else
            results |> Seq.head
-    with | ex -> []
+    with ex ->
+        []
 
-
-/// Find related
 let rec internal findElements cssSelector searchContext: IWebElement list =
     findElementsB browser cssSelector searchContext
 
 let internal findByFunctionB (browser: IWebDriver) cssSelector timeout waitFunc searchContext reliable =
-    if browser = null then raise (CanopyNoBrowserException("Can't perform the action because the browser instance is null.  `start chrome` to start a new browser."))
-    if wipTest then colorizeAndSleep cssSelector
+    if isNull browser then
+        let message = "Can't perform the action because the browser instance is null. `start chrome` to start a new browser."
+        raise (CanopyNoBrowserException message)
+
+    if wipTest then
+        colorizeAndSleep cssSelector
 
     try
         if reliable then
@@ -336,9 +400,10 @@ let internal findByFunctionB (browser: IWebDriver) cssSelector timeout waitFunc 
         else
             waitResults elementTimeout (fun _ -> waitFunc cssSelector searchContext)
     with
-        | :? WebDriverTimeoutException ->
-            suggestOtherSelectors cssSelector
-            raise (CanopyElementNotFoundException(sprintf "can't find element %s" cssSelector))
+    | :? WebDriverTimeoutException ->
+        suggestOtherSelectors cssSelector
+        let message = sprintf "can't find element %s" cssSelector
+        raise (CanopyElementNotFoundException message)
 
 let internal findByFunction cssSelector timeout waitFunc searchContext reliable =
     findByFunctionB browser cssSelector timeout waitFunc searchContext reliable
@@ -358,7 +423,7 @@ let internal findManyB browser cssSelector timeout searchContext reliable =
 let internal findMany cssSelector timeout searchContext reliable =
     findManyB browser cssSelector timeout searchContext reliable
 
-//get elements
+// Get elements
 
 let internal elementFromList cssSelector elementsList =
     match elementsList with
@@ -370,11 +435,18 @@ let internal elementFromList cssSelector elementsList =
 
 let internal someElementFromList cssSelector elementsList =
     match elementsList with
-    | [] -> None
-    | x :: [] -> Some(x)
+    | [] ->
+        None
+    | x :: [] ->
+        Some x
     | x :: y :: _ ->
-        if throwIfMoreThanOneElement then raise (CanopyMoreThanOneElementFoundException(sprintf "More than one element was selected when only one was expected for selector: %s" cssSelector))
-        else Some(x)
+        if throwIfMoreThanOneElement then
+            let message =
+                sprintf "More than one element was selected when only one was expected for selector: %s"
+                        cssSelector
+            raise (CanopyMoreThanOneElementFoundException message)
+        else
+            Some x
 
 (* documented/actions *)
 let elementsB browser cssSelector =
@@ -393,6 +465,15 @@ let elementB browser cssSelector =
 (* documented/actions *)
 let element cssSelector =
     elementB browser cssSelector
+
+(* documented/actions *)
+let elementByIdB (browser: IWebDriver) (elId: string) =
+    // TO CONSIDER: provide optimised implementation when finding by id
+    elementB browser (sprintf "#%s" elId)
+
+(* documented/actions *)
+let elementById elId =
+    elementByIdB browser elId
 
 (* documented/actions *)
 let unreliableElementsB browser cssSelector =
@@ -1136,7 +1217,8 @@ let rotate () =
 
 (* documented/actions *)
 let quit browser =
-    reporter.Quit()
+    // TODO: this should be in the Reporters namespace
+    //reporter.Quit()
     match box browser with
     | :? IWebDriver as b ->
         b.Quit()
@@ -1286,3 +1368,117 @@ let waitForElementB browser cssSelector =
 (* documented/actions *)
 let waitForElement cssSelector =
     waitForElementB browser cssSelector
+
+/// Extensions for Context<'config> to get the DSL API on the context instance;
+/// this makes it easier to use the context and browser in your parallel tests.
+type Context<'config> with
+    member x.screenshot directory filename =
+        screenshotB x.browser directory filename
+    member x.js script =
+        jsB x.browser script
+    member x.puts text =
+        putsB x.browser text
+    member x.highlight cssSelector =
+        highlightB x.browser cssSelector
+    member x.describe text =
+        describeB x.browser text
+    member x.elements cssSelector =
+        elementsB x.browser cssSelector
+    member x.unreliableElements cssSelector =
+        unreliableElementsB x.browser cssSelector
+    member x.unreliableElement cssSelector =
+        unreliableElementB x.browser cssSelector
+    member x.elementWithin cssSelector elem =
+        elementWithinB x.browser cssSelector elem
+    member x.elementsWithText cssSelector regex =
+        elementsWithTextB x.browser cssSelector regex
+    member x.elementWithText cssSelector regex =
+        elementWithTextB x.browser cssSelector regex
+    member x.parent elem =
+        parentB x.browser elem
+    member x.elementsWithin cssSelector elem =
+        elementsWithinB x.browser cssSelector elem
+    member x.unreliableElementsWithin cssSelector elem =
+        unreliableElementsWithinB x.browser cssSelector elem
+    member x.someElement cssSelector =
+        someElementB x.browser cssSelector
+    member x.someElementWithin cssSelector elem =
+        someElementWithinB x.browser cssSelector elem
+    member x.someParent elem =
+        someParentB x.browser elem
+    member x.nth index cssSelector =
+        nthB x.browser index cssSelector
+    member x.item index cssSelector =
+        itemB x.browser index cssSelector
+    member x.first cssSelector =
+        firstB x.browser cssSelector
+    member x.last cssSelector =
+        lastB x.browser cssSelector
+    member x.write text item =
+        writeB x.browser text item
+    member x.read item =
+        readB x.browser item
+    member x.clear item =
+        clearB x.browser item
+    member x.press key =
+        pressB x.browser key
+    member x.alert () =
+        alertB x.browser
+    member x.acceptAlert () =
+        acceptAlertB x.browser
+    member x.dismissAlert () =
+        dismissAlertB x.browser
+    member x.fastTextFromCSS selector =
+        fastTextFromCSSB x.browser selector
+    member x.click item =
+        clickB x.browser item
+    member x.doubleClick item =
+        doubleClickB x.browser item
+    member x.modifierClick modifier item =
+        modifierClickB x.browser modifier item
+    member x.ctrlClick item =
+        ctrlClickB x.browser item
+    member x.shiftClick item =
+        shiftClickB x.browser item
+    member x.rightClick item =
+        rightClickB x.browser item
+    member x.check item =
+        checkB x.browser item
+    member x.uncheck item =
+        uncheckB x.browser item
+    member x.hover item =
+        hoverB x.browser item
+    member x.drag cssSelectorA cssSelectorB =
+        dragB x.browser cssSelectorA cssSelectorB
+    member x.pin direction =
+        pinB x.browser direction
+    member x.pinToMonitor number =
+        pinToMonitorB x.browser number
+    member x.switchToTab number =
+        switchToTabB x.browser number
+    member x.closeTab number =
+        closeTabB x.browser number
+    member x.positionBrowser left top width height =
+        positionBrowserB x.browser left top width height
+    member x.resize size =
+        resizeB x.browser size
+    member x.rotate () =
+        rotateB x.browser
+    member x.currentUrl () =
+        currentUrlB x.browser
+    member x.onn url =
+        onnB x.browser url
+    member x.on url =
+        onB x.browser url
+    member x.title () =
+        titleB x.browser
+    member x.uri uri =
+        uriB x.browser uri
+    member x.url url =
+        urlB x.browser url
+    member x.reload () =
+        reloadB x.browser
+    member x.navigate direction =
+        navigateB x.browser direction
+    member x.waitForElement cssSelector =
+        waitForElementB x.browser cssSelector

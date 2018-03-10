@@ -13,7 +13,7 @@ type HasStartURI =
 
 let private testB testFn conf name fn =
   testFn name <| async {
-    use browser = start firefox
+    use browser = start firefox // TODO: this must be configurable
     match box conf with
     | :? HasStartURI as testConfig ->
       uriB browser testConfig.startURI
