@@ -248,7 +248,7 @@ let runFor browsers =
           |> List.map (fun browser ->
               let suite = new Suite()
               suite.Context <- sprintf "Running tests with %s browser" (toString browser)
-              suite.Once <- fun _ -> start browser
+              suite.Once <- fun _ -> start browser |> ignore; ()
               let currentSuites2 = currentSuites |> List.map(fun suite -> suite.Clone())
               currentSuites2 |> List.iter (fun (suite: Suite) ->
                   suite.Context <- sprintf "(%s) %s" (toString browser) suite.Context)
