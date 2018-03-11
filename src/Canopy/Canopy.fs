@@ -79,7 +79,6 @@ module Context =
             browsers = browser |> map2 (fun browser -> browser :: []) []
             userState = userState
         }
-        :> Context
 
     /// Sets the passed browser as the current browsers and updates the list of
     /// browser instances for this context.
@@ -109,6 +108,7 @@ module Context =
                 | None ->
                     let newConfig = callback defaultConfig
                     createT None newConfig userState
+                    :> Context
                 | Some existing ->
                     let newConfig = callback existing.config
                     {
@@ -571,13 +571,13 @@ let element cssSelector =
     elementC (context ()) cssSelector
 
 (* documented/actions *)
-let elementByIdB context (elId: string) =
+let elementByIdC context (elId: string) =
     // TO CONSIDER: provide optimised implementation when finding by id
     elementC context (sprintf "#%s" elId)
 
 (* documented/actions *)
 let elementById elId =
-    elementByIdB (context ()) elId
+    elementByIdC (context ()) elId
 
 (* documented/actions *)
 let unreliableElementsC context cssSelector =
@@ -1478,6 +1478,10 @@ type Context<'config> with
         describeC x text
     member x.elements cssSelector =
         elementsC x cssSelector
+    member x.element cssSelector =
+        elementC x cssSelector
+    member x.elementById elementId =
+        elementByIdC x elementId
     member x.unreliableElements cssSelector =
         unreliableElementsC x cssSelector
     member x.unreliableElement cssSelector =
