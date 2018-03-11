@@ -1,24 +1,10 @@
 ﻿module Canopy.Runner
 
 open Canopy
-open Canopy.Configuration
 open Canopy.Reporters
 open OpenQA.Selenium
 open System
 
-type CanopyRunnerConfig =
-    {
-        failFast: bool
-        failScreenshotPath: string
-        failScreenshotFileName: string
-        failIfAnyWIPTests: bool
-        runFailedContextsFirst: bool
-        failureScreenshotsEnabled: bool
-        skipAllTestsOnFailure: bool
-        skipRemainingTestsInContextOnFailure: bool
-        skipNextTest: bool
-        failureMessagesThatShoulBeTreatedAsSkip: string list
-    }
 
 //runner related
 // TODO: remove global variable
@@ -54,6 +40,34 @@ let mutable failureMessagesThatShoulBeTreatedAsSkip : string list = []
 // TODO: remove global variable
 (* documented/configuration *)
 let mutable reporter = new ConsoleReporter() :> IReporter
+
+type CanopyRunnerConfig =
+    {
+        failFast: bool
+        failScreenshotPath: string
+        failScreenshotFileName: Test -> Suite -> string
+        failIfAnyWIPTests: bool
+        runFailedContextsFirst: bool
+        failureScreenshotsEnabled: bool
+        skipAllTestsOnFailure: bool
+        skipRemainingTestsInContextOnFailure: bool
+        skipNextTest: bool
+        failureMessagesThatShoulBeTreatedAsSkip: string list
+    }
+    /// Hack to get around moving all the above variables to a structured, parallel-safe variant.
+    static member create () =
+        {
+            failFast = !failFast
+            failScreenshotPath = failScreenshotPath
+            failScreenshotFileName = failScreenshotFileName
+            failIfAnyWIPTests = failIfAnyWipTests
+            runFailedContextsFirst = runFailedContextsFirst
+            failureScreenshotsEnabled = failureScreenshotsEnabled
+            skipAllTestsOnFailure = skipAllTestsOnFailure
+            skipRemainingTestsInContextOnFailure = skipRemainingTestsInContextOnFailure
+            skipNextTest = skipNextTest
+            failureMessagesThatShoulBeTreatedAsSkip = failureMessagesThatShoulBeTreatedAsSkip
+        }
 
 let private last = function
     | hd :: tl -> hd
@@ -187,6 +201,10 @@ let tryTest test suite func =
         | :? CanopySkipTestException -> Skip
         | ex when failureMessage <> null && failureMessage = ex.Message -> Pass
         | ex -> Fail ex
+
+let skip message =
+  describe <| sprintf "Skipped: %s" message
+  raise <| CanopySkipTestException()
 
 let private processRunResult suite (test : Test) result =
     match result with

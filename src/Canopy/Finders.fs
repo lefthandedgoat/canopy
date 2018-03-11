@@ -82,7 +82,7 @@ let private loadJQuery (browser: IWebDriver) =
             document.getElementsByTagName('head')[0].appendChild(jq);
          """
         jsBrowser.ExecuteScript(load) |> ignore
-        wait 2.0 (fun _ -> jsBrowser.ExecuteScript(jqueryExistsScript) :?> bool)
+        waitSeconds 2.0 (fun _ -> jsBrowser.ExecuteScript(jqueryExistsScript) :?> bool)
 
 type ByJQuery (selector) =
     inherit OpenQA.Selenium.By()
