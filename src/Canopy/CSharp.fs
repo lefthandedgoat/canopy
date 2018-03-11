@@ -93,7 +93,7 @@ type Canopy() =
 
     static member describe text = describe text
 
-    static member waitFor2 message (f : System.Predicate<obj>) = waitFor2 message (fun _ -> f.Invoke())
+    static member waitFor2 message (f : System.Predicate<obj>) = waitForMessage message (fun _ -> f.Invoke())
 
     static member waitFor (f : System.Predicate<obj>) = waitFor (fun _ -> f.Invoke())
 
