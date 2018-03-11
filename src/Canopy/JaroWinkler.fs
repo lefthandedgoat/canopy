@@ -1,6 +1,6 @@
-﻿/// Functions to compute the edit distance between two strings
-/// Taken from the Visual F# compiler
-module Canopy.EditDistance
+﻿/// Functions to compute the edit distance between two strings.
+/// See https://en.wikipedia.org/wiki/Jaro%E2%80%93Winkler_distance
+module Canopy.JaroWinkler
 
 /// Given an offset and a radius from that offset,
 /// does mChar exist in that part of str?
@@ -70,7 +70,9 @@ let jaro s1 s2 =
     // This is for cases where |s1|, |s2| or m are zero
     if System.Double.IsNaN result then 0.0 else result
 
-type result = { selector : string; similarity : float }
+type Result =
+    { selector: string
+      similarity: float }
 
 /// Calculates the Jaro-Winkler edit distance between two strings.
 /// The edit distance is a metric that allows to measure the amount of similarity between two strings.

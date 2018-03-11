@@ -1,6 +1,7 @@
 ﻿[<AutoOpen>]
 module Canopy.Wait
 
+open System
 open System.Threading
 open System.Diagnostics
 open OpenQA.Selenium
@@ -16,7 +17,7 @@ let waitResults timeout (f: unit -> 'a) =
 
     while keepGoing do
         try
-            if sw.Elapsed.TotalSeconds >= timeout then
+            if sw.Elapsed >= timeout then
                 raise <| WebDriverTimeoutException("Timed out!")
 
             let result = f ()
@@ -26,6 +27,7 @@ let waitResults timeout (f: unit -> 'a) =
                 finalResult <- result
 
             | :? bool ->
+                // TO CONSIDER: don't sleep the thread
                 Thread.Sleep(int (waitSleep * 1000.0))
 
             | _ as o when not (isNull o) ->
@@ -33,6 +35,7 @@ let waitResults timeout (f: unit -> 'a) =
                 finalResult <- result
 
             | _ as o ->
+                // TO CONSIDER: don't sleep the thread
                 Thread.Sleep(int (waitSleep * 1000.0))
         with
         | :? WebDriverTimeoutException ->

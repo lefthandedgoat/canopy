@@ -1,17 +1,32 @@
 RESTRICTION: == net461
 NUGET
   remote: https://api.nuget.org/v3/index.json
+    Argu (4.2.1)
+      FSharp.Core (>= 3.1.2)
+    Expecto (6.0)
+      Argu (>= 3.7)
+      FSharp.Core (>= 4.1.18)
+      Mono.Cecil (>= 0.10.0-beta7)
+    Expecto.FsCheck (6.0)
+      Expecto (>= 6.0)
+      FsCheck (>= 2.10.4)
+      FSharp.Core (>= 4.1.18)
+    FsCheck (2.10.8)
+      FSharp.Core (>= 4.0.0.1)
     FSharp.Compiler.Service (2.0.0.6)
-    FSharp.Core (4.0.0.1)
+    FSharp.Core (4.2.3)
     FSharp.Data (2.4.5)
     FSharp.Formatting (2.14.4)
       FSharp.Compiler.Service (2.0.0.6)
       FSharpVSPowerTools.Core (>= 2.3 < 2.4)
     FSharpVSPowerTools.Core (2.3)
       FSharp.Compiler.Service (>= 2.0.0.3)
+    Mono.Cecil (0.10.0-beta7)
     NuGet.CommandLine (4.5.1)
     Selenium.WebDriver (3.10)
-
+GITHUB
+  remote: logary/logary
+    src/Logary.Facade/Facade.fs (1ef55a8666f188d54998e972290c4940e7e43871)
 GROUP build
 NUGET
   remote: https://api.nuget.org/v3/index.json

@@ -5,22 +5,12 @@ open Fake.AssemblyInfoFile
 open Fake.ReleaseNotesHelper
 open System
 
-// --------------------------------------------------------------------------------------
-// Project-specific details below
-// --------------------------------------------------------------------------------------
-
-// Information about the project are used
-//  - for version and project name in generated AssemblyInfo file
-//  - by the generated NuGet package 
-//  - to run tests and to publish documentation on GitHub gh-pages
-//  - for documentation, you also need to edit info in "docs/tools/generate.fsx"
-
 let project = "canopy"
 let projectIntegration = "canopy.integration"
 let summary = "F# web testing framework"
 let description = """A simple framework in F# on top of selenium for writing UI automation and tests."""
 let descriptionIntegration = """A sister package to canopy for integration tests."""
-let authors = [ "Chris Holt" ]
+let authors = [ "Chris Holt"; "Henrik Feldt" ]
 let tags = "f# fsharp canopy selenium ui automation tests"
 
 let solutionFile  = "canopy"
@@ -49,6 +39,11 @@ Target "AssemblyInfo" (fun _ ->
         Attribute.Description summary
         Attribute.Version release.AssemblyVersion
         Attribute.FileVersion release.AssemblyVersion ] 
+)
+
+Target "LoggingFile" (fun _ ->
+    ReplaceInFiles [ "namespace Logary.Facade", "namespace Canopy.Logging" ]
+                   [ "paket-files/logary/logary/src/Logary.Facade/Facade.fs" ]
 )
 
 // --------------------------------------------------------------------------------------
@@ -170,18 +165,15 @@ Target "Release" DoNothing
 
 Target "All" DoNothing
 
-"Clean"
+"Clean" 
   ==> "AssemblyInfo"
+  ==> "LoggingFile"
   ==> "Build"
-  //==> "RunTests"
-  ==> "All"
-
-"All" 
+  ==> "RunTests"
   //==> "CleanDocs"
   //==> "GenerateDocs"
   //==> "ReleaseDocs"
-  ==> "NuGet"
-  ==> "NuGet.Integration"
   ==> "Release"
+  ==> "All"
 
 RunTargetOrDefault "All"
