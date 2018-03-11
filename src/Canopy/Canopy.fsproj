@@ -62,13 +62,13 @@
     <Compile Include="Canopy.fs" />
     <Compile Include="Operators.fs" />
     <Compile Include="UserAgents.fs" />
-    <Compile Include="ClassicMode.fs" />
     <!-- Canopy-specific testing framework -->
     <Compile Include="Runner\Assert.fs" />
     <Compile Include="Runner\Reporters.fs" />
     <Compile Include="Runner\CanopyRunnerConfig.fs" />
     <Compile Include="Runner\History.fs" />
     <Compile Include="Runner\Runner.fs" />
+    <Compile Include="ClassicMode.fs" />
     <!-- C# interop -->
     <Compile Include="CSharp.fs" />
     <!-- Chrome extension -->

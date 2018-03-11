@@ -210,7 +210,7 @@ let matchesNotC (context: Context) cssSelector regexPattern =
         raise (CanopyEqualityFailedException message)
 
 let matchesNot cssSelector regexPattern =
-    matchesNotC (context ())
+    matchesNotC (context ()) cssSelector regexPattern
 
 let atLeastOneMatchesC (context: Context) cssSelector regexPattern =
     try

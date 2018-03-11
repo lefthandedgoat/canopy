@@ -11,18 +11,14 @@ open Canopy.Runner.Assert.Operators
 type Canopy() =
 
     static member browsers =
-        match !Context.globalContext with
-        | Some ctx ->
-            ctx.browsers
-        | None ->
-            failwith "Canopy is not yet configured"
+        Context.getContext().browsers
 
     static member browser =
-        match !Context.globalContext with
-        | Some ctx when Option.isSome ctx.browser ->
-            Option.get ctx.browser
-        | _ ->
-            failwith "Canopy is not yet configured"
+        match Context.getContext().browser with
+        | Some browser ->
+            browser
+        | None ->
+            failwith "Canopy is not yet configured with a browser"
 
     //runner stuff
     static member context description = Runner.context description
@@ -50,7 +46,8 @@ type Canopy() =
     static member runFor browsers = Runner.runFor browsers
 
     //core stuff
-    static member start (config, b) = start config b
+    static member start (config, b) = startWithConfig config b
+    static member start b = start b
 
     static member pin direction = pin direction
 

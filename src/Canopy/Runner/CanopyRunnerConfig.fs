@@ -18,6 +18,7 @@ type CanopyRunnerConfig =
         wipTest: bool
     }
 
+[<AutoOpen>]
 module CanopyRunnerConfig =
     open System
 

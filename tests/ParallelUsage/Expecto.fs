@@ -22,7 +22,7 @@ type ParallelUsageArguments =
       match s with
       | Site _ -> "What URL to start the browser at."
 
-type ExpectoCanopyConfig =
+type TestConfig =
   { site: Uri
     mode: BrowserStartMode
     canopyConfig: CanopyConfig
@@ -37,13 +37,13 @@ type ExpectoCanopyConfig =
       canopyConfig = Canopy.CanopyConfig.defaultConfig
     }
 
-module Config =
+module TestConfig =
   let update config = function
     | Site site -> { config with site = Uri site }
 
-let private testB testFn (conf: ExpectoCanopyConfig) name fn =
+let private testB testFn (conf: TestConfig) name fn =
   testFn name <| async {
-    use browser = startPure conf.canopyConfig conf.mode
+    use browser = startWithConfigPure conf.canopyConfig conf.mode
     match box conf with
     | :? HasStartURI as testConfig ->
       uriB browser testConfig.startURI

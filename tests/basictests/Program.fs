@@ -3,19 +3,24 @@ module main
 open System
 open OpenQA.Selenium
 open Canopy
-open Canopy.Configuration
-open Canopy.Assert
-open Canopy.Assert.Operators
+open Canopy.Runner
+open Canopy.Runner.Runner
+open Canopy.Runner.Runner.Operators
+open Canopy.Runner.Assert
+open Canopy.Runner.Assert.Operators
+open Canopy.Runner.Reporters
 open Canopy.ClassicMode
-open Reporters
 
-start chrome
+let config =
+    { defaultConfig with
+        elementTimeout = TimeSpan.FromSeconds 3.0
+        compareTimeout = TimeSpan.FromSeconds 3.0
+        pageTimeout = TimeSpan.FromSeconds 3.0 }
+ignore (startWithConfig config chrome)
+
 let mainBrowser = browser
-elementTimeout <- 3.0
-compareTimeout <- 3.0
-pageTimeout <- 3.0
 runFailedContextsFirst <- false
-reporter <- new LiveHtmlReporter(Chrome, chromeDir) :> IReporter
+reporter <- new LiveHtmlReporter(Chrome, config.paths.chromeDir) :> IReporter
 reporter.SetEnvironment "My Machine"
 failureMessagesThatShoulBeTreatedAsSkip <- ["Skip me when I fail"]
 
@@ -418,10 +423,12 @@ context "other tests"
         (element "#wait_for").Text = "Done!!!"
 
     !^ "http://lefthandedgoat.github.io/canopy/testpages/waitFor"
-    waitFor2 "waiting for page to load" pageLoaded
+    waitForMessage "waiting for page to load" pageLoaded
 
 "another example of another wait for, waiting on opacity to be 100% before clicking" &&& fun _ ->
-    compareTimeout <- 10.0
+    use longerTimeout =
+        Context.configureScope (
+            CanopyConfig.setCompareTimeout (TimeSpan.FromSeconds 10.))
     !^ "http://lefthandedgoat.github.io/canopy/testpages/noClickTilVisible"
     waitFor (fadedIn "#link")
     click "#link"
@@ -655,10 +662,9 @@ before (fun _ -> !^ "http://lefthandedgoat.github.io/canopy/testpages/")
     read (element "input") === "test value 1"
 
 "error with multiple elements" &&& fun _ ->
-    throwIfMoreThanOneElement <- true
+    use thowing = Context.configureScope (CanopyConfig.setThrowIfMoreThanOneElement true)
     failsWith "More than one element was selected when only one was expected for selector: input"
     read (element "input") === "test value 1"
-
 
 context "tiling windows"
 "start multiple browsers and tile them" &&& fun _ ->
