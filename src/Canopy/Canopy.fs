@@ -96,7 +96,7 @@ module Context =
                 if List.contains browser context.browsers then context.browsers
                 else browser :: context.browsers }
 
-    let private _globalContext: Context option ref = ref None
+    let internal _globalContext: Context option ref = ref None
     let private _contextChanged: Event<Context> = new Event<Context>()
     let private sem = obj ()
     let internal contextChanged = _contextChanged.Publish
