@@ -221,8 +221,8 @@ let internal pngToJpg pngArray =
   jpgStream.ToArray()
 
 (* documented/actions *)
-let screenshotB (browser: IWebDriver) directory filename =
-    match box browser with
+let screenshotC (context : Context) directory filename =
+    match box (context.getBrowser()) with
     | :? ITakesScreenshot ->
         takeScreenshot directory filename |> pngToJpg
     | _ ->
@@ -230,25 +230,25 @@ let screenshotB (browser: IWebDriver) directory filename =
 
 (* documented/actions *)
 let screenshot directory filename =
-    screenshotB (browser ()) directory filename
+    screenshotC (context ()) directory filename
 
 (* documented/actions *)
-let jsB (browser: IWebDriver) script =
-    (browser :?> IJavaScriptExecutor).ExecuteScript(script)
+let jsC (context : Context) script =
+    (context.getBrowser() :?> IJavaScriptExecutor).ExecuteScript(script)
 
 (* documented/actions *)
 let js script =
-    jsB (browser ()) script
+    jsC (context ()) script
 
-let internal swallowedJsB browser script =
+let internal swallowedJsC context script =
     try
-        jsB browser script
+        jsC context script
         |> ignore
     with ex ->
         ()
 
 let internal swallowedJs script =
-    swallowedJsB (browser ()) script
+    swallowedJsC (context ()) script
 
 (* documented/actions *)
 /// This has nothing to do with the browser; consider just sleeping in your
@@ -278,7 +278,7 @@ let putsC (context: Context) text =
             infoDiv.setAttribute('style','position: absolute; border: 1px solid black; bottom: 0px; right: 0px; margin: 3px; padding: 3px; background-color: white; z-index: 99999; font-size: 20px; font-family: monospace; font-weight: bold;');
             document.getElementsByTagName('body')[0].appendChild(infoDiv);
             infoDiv.innerHTML = 'locating: " + escapedText + "';"
-        swallowedJsB (context.getBrowser()) info
+        swallowedJsC context info
 
 (* documented/actions *)
 let puts text =
@@ -287,21 +287,21 @@ let puts text =
 let internal colorizeAndSleepC (context: Context) cssSelector =
     let browser = context.getBrowser ()
     putsC context cssSelector
-    swallowedJsB browser <| sprintf "document.querySelector('%s').style.border = 'thick solid #FFF467';" cssSelector
+    swallowedJsC context <| sprintf "document.querySelector('%s').style.border = 'thick solid #FFF467';" cssSelector
     // TO CONSIDER: async instead of sleeping the thread
     sleep context.config.wipSleep
-    swallowedJsB browser <| sprintf "document.querySelector('%s').style.border = 'thick solid #ACD372';" cssSelector
+    swallowedJsC context <| sprintf "document.querySelector('%s').style.border = 'thick solid #ACD372';" cssSelector
 
 let internal colorizeAndSleep cssSelector =
     colorizeAndSleepC (context ()) cssSelector
 
 (* documented/actions *)
-let highlightB browser cssSelector =
-    swallowedJsB browser <| sprintf "document.querySelector('%s').style.border = 'thick solid #ACD372';" cssSelector
+let highlightC context cssSelector =
+    swallowedJsC context <| sprintf "document.querySelector('%s').style.border = 'thick solid #ACD372';" cssSelector
 
 (* documented/actions *)
 let highlight cssSelector =
-    highlightB (browser ()) cssSelector
+    highlightC (context ()) cssSelector
 
 let internal suggestOtherSelectors (config: CanopyConfig) cssSelector =
     if config.suggestOtherSelectors then
@@ -631,46 +631,46 @@ let someParentC context elem =
 
 (* documented/actions *)
 let someParent elem =
-    someParentB browser elem
+    someParentC (context ()) elem
 
 (* documented/actions *)
-let nthB browser index cssSelector =
-    List.item index (elementsB browser cssSelector)
+let nthC context index cssSelector =
+    List.item index (elementsC context cssSelector)
 
 (* documented/actions *)
 let nth index cssSelector =
-    nthB browser index cssSelector
+    nthC (context ()) index cssSelector
 
 (* documented/actions *)
-let itemB browser index cssSelector =
-    nthB index cssSelector
+let itemC context index cssSelector =
+    nthC context index cssSelector
 
 (* documented/actions *)
 let item index cssSelector =
-    itemB browser index cssSelector
+    itemC (context ()) index cssSelector
 
 (* documented/actions *)
-let firstB browser cssSelector =
-    elementsB browser cssSelector
+let firstC context cssSelector =
+    elementsC context cssSelector
     |> List.head
 
 (* documented/actions *)
 let first cssSelector =
-    firstB browser cssSelector
+    firstC (context ()) cssSelector
 
 (* documented/actions *)
-let lastB browser cssSelector =
-    elementsB browser cssSelector
+let lastC context cssSelector =
+    elementsC context cssSelector
     |> List.rev
     |> List.head
 
 (* documented/actions *)
 let last cssSelector =
-    lastB browser cssSelector
+    lastC (context ()) cssSelector
 
 //read/write
-let internal writeToSelectB (browser: IWebDriver) (elem: IWebElement) (text:string) =
-    let options = unreliableElementsWithinB browser (sprintf """option[text()="%s"] | option[@value="%s"] | optgroup/option[text()="%s"] | optgroup/option[@value="%s"]""" text text text text) elem
+let internal writeToSelectC context (elem: IWebElement) (text:string) =
+    let options = unreliableElementsWithinC context (sprintf """option[text()="%s"] | option[@value="%s"] | optgroup/option[text()="%s"] | optgroup/option[@value="%s"]""" text text text text) elem
 
     match options with
     | [] ->
@@ -680,33 +680,33 @@ let internal writeToSelectB (browser: IWebDriver) (elem: IWebElement) (text:stri
         head.Click()
 
 let internal writeToSelect (elem: IWebElement) (text:string) =
-    writeToSelectB browser elem text
+    writeToSelectC (context ()) elem text
 
-let internal writeToElementB browser (e : IWebElement) (text:string) =
+let internal writeToElementC context (e : IWebElement) (text:string) =
     if e.TagName = "select" then
-        writeToSelectB browser e text
+        writeToSelectC context e text
     else
         let readonly = e.GetAttribute("readonly")
         if readonly = "true" then
             let message =sprintf "element %s is marked as read only, you can not write to read only elements" (e.ToString())
             raise (CanopyReadOnlyException message)
-        if not optimizeByDisablingClearBeforeWrite then try e.Clear() with ex -> ex |> ignore
+        if not context.config.optimizeByDisablingClearBeforeWrite then try e.Clear() with ex -> ex |> ignore
         e.SendKeys(text)
 
 let internal writeToElement e text =
-    writeToElementB browser e text
+    writeToElementC (context ()) e text
 
 (* documented/actions *)
-let writeB browser text item =
+let writeC context text item =
     match box item with
     | :? IWebElement as elem ->
-        writeToElementB browser elem text
+        writeToElementC context elem text
     | :? string as cssSelector ->
-        wait elementTimeout (fun _ ->
+        wait context.config.elementTimeout (fun _ ->
             elements cssSelector
             |> List.map (fun elem ->
                 try
-                    writeToElementB browser elem text
+                    writeToElementC context elem text
                     true
                 with
                     //Note: Enrich exception with proper cssSelector description
@@ -723,18 +723,18 @@ let writeB browser text item =
 
 (* documented/actions *)
 let write text item =
-    writeB browser text item
+    writeC (context ()) text item
 
-let internal safeReadB browser item =
+let internal safeReadC context item =
     let readvalue = ref ""
     try
-        wait elementTimeout (fun _ ->
+        wait context.config.elementTimeout (fun _ ->
           readvalue :=
             match box item with
             | :? IWebElement as elem ->
                 textOf elem
             | :? string as cssSelector ->
-                elementB browser cssSelector |> textOf
+                elementC context cssSelector |> textOf
             | _ ->
                 let message =
                     sprintf "Was unable to read item because it was not a string or IWebElement, but a %s"
@@ -746,23 +746,23 @@ let internal safeReadB browser item =
         | :? WebDriverTimeoutException -> raise (CanopyReadException("was unable to read item for unknown reason"))
 
 let internal safeRead item =
-    safeReadB browser item
+    safeReadC (context ()) item
 
 (* documented/actions *)
-let readB browser item =
+let readC context item =
     match box item with
     | :? IWebElement as elem ->
-        safeReadB browser elem
+        safeReadC context elem
     | :? string as cssSelector ->
-        safeReadB browser cssSelector
+        safeReadC context cssSelector
     | _ -> raise (CanopyNotStringOrElementException(sprintf "Can't read %O because it is not a string or element" item))
 
 (* documented/actions *)
 let read item =
-    readB browser item
+    readC (context ()) item
 
 (* documented/actions *)
-let clearB browser item =
+let clearC context item =
     let clear cssSelector (elem: IWebElement) =
         let readonly = elem.GetAttribute("readonly")
         if readonly = "true" then
@@ -776,7 +776,7 @@ let clearB browser item =
     | :? IWebElement as elem ->
         clear elem.TagName elem
     | :? string as cssSelector ->
-        elementB browser cssSelector
+        elementC context cssSelector
         |> clear cssSelector
     | _ ->
         let message = sprintf "Can't clear %O because it is not a string or element" item
@@ -784,7 +784,7 @@ let clearB browser item =
 
 (* documented/actions *)
 let clear item =
-    clearB browser item
+    clearC (context ()) item
 
 //keyboard
 (* documented/actions *)
@@ -803,74 +803,73 @@ let right = Keys.Right
 let esc = Keys.Escape
 
 (* documented/actions *)
-let pressB browser key =
+let pressC context key =
     let active =
-        jsB browser "return document.activeElement;"
+        jsC context "return document.activeElement;"
         :?> IWebElement
     active.SendKeys(key)
 
 (* documented/actions *)
 let press key =
-    pressB browser key
+    pressC (context ()) key
 
 //alerts
 (* documented/actions *)
-let alertB (browser: IWebDriver) =
+let alertC (context : Context) =
     waitFor (fun _ ->
-        browser.SwitchTo().Alert() |> ignore
+        context.getBrowser().SwitchTo().Alert() |> ignore
         true)
-    browser.SwitchTo().Alert()
+    context.getBrowser().SwitchTo().Alert()
 
 (* documented/actions *)
 let alert () =
-    alertB browser
+    alertC (context ())
 
 (* documented/actions *)
-let acceptAlertB (browser: IWebDriver) =
-    wait compareTimeout (fun _ ->
-        browser.SwitchTo().Alert().Accept()
+let acceptAlertC context =
+    wait context.config.compareTimeout (fun _ ->
+        context.getBrowser().SwitchTo().Alert().Accept()
         true)
 
 (* documented/actions *)
 let acceptAlert () =
-    acceptAlertB browser
-
+    acceptAlertC (context ())
 
 (* documented/actions *)
-let dismissAlertB (browser: IWebDriver) =
-    wait compareTimeout (fun _ ->
-        browser.SwitchTo().Alert().Dismiss()
+let dismissAlertC context =
+    wait context.config.compareTimeout (fun _ ->
+        context.getBrowser().SwitchTo().Alert().Dismiss()
         true)
 
 (* documented/actions *)
 let dismissAlert () =
-    dismissAlertB browser
+    dismissAlertC (context ())
 
 (* documented/actions *)
-let fastTextFromCSSB browser selector =
+let fastTextFromCSSC context selector =
     let script =
         //there is no map on NodeList which is the type returned by querySelectorAll =(
         sprintf """return [].map.call(document.querySelectorAll("%s"), function (item) { return item.text || item.innerText; });""" selector
     try
-        js script :?> System.Collections.ObjectModel.ReadOnlyCollection<System.Object>
+        jsC context script :?> System.Collections.ObjectModel.ReadOnlyCollection<System.Object>
         |> Seq.map (fun item -> item.ToString())
         |> List.ofSeq
     with _ -> [ "default" ]
 
 (* documented/actions *)
 let fastTextFromCSS selector =
-    fastTextFromCSSB browser selector
+    fastTextFromCSSC (context ()) selector
 
 //clicking/checking
 (* documented/actions *)
-let clickB browser item =
+let clickC context item =
     match box item with
     | :? IWebElement as element ->
         element.Click()
     | :? string as cssSelector ->
-        wait elementTimeout (fun _ ->
+        wait context.config.elementTimeout (fun _ ->
             let atleastOneItemClicked = ref false
-            elementsB browser cssSelector
+            elementsC context cssSelector
             |> List.iter (fun elem ->
                 try
                     elem.Click()
@@ -883,36 +882,36 @@ let clickB browser item =
 
 (* documented/actions *)
 let click item =
-    clickB browser item
+    clickC (context ()) item
 
 (* documented/actions *)
-let doubleClickB (browser: IWebDriver) item =
+let doubleClickC (context : Context) item =
     let js = "var evt = document.createEvent('MouseEvents'); evt.initMouseEvent('dblclick',true, true, window, 0, 0, 0, 0, 0, false, false, false, false, 0,null); arguments[0].dispatchEvent(evt);"
 
     match box item with
     | :? IWebElement as elem ->
-        (browser :?> IJavaScriptExecutor).ExecuteScript(js, elem) |> ignore
+        (context.getBrowser() :?> IJavaScriptExecutor).ExecuteScript(js, elem) |> ignore
     | :? string as cssSelector ->
-        wait elementTimeout (fun _ ->
-            let elem = elementB browser cssSelector
-            (browser :?> IJavaScriptExecutor).ExecuteScript(js, elem) |> ignore
+        wait context.config.elementTimeout (fun _ ->
+            let elem = elementC context cssSelector
+            (context.getBrowser() :?> IJavaScriptExecutor).ExecuteScript(js, elem) |> ignore
             true)
     | _ -> raise (CanopyNotStringOrElementException(sprintf "Can't doubleClick %O because it is not a string or webelement" item))
 
 (* documented/actions *)
 let doubleClick item =
-    doubleClickB browser item
+    doubleClickC (context ()) item
 
 (* documented/actions *)
-let modifierClickB browser modifier item =
-    let actions = Actions browser
+let modifierClickC (context : Context) modifier item =
+    let actions = Actions (context.getBrowser())
 
     match box item with
     | :? IWebElement as elem ->
         actions.KeyDown(modifier).Click(elem).KeyUp(modifier).Perform() |> ignore
     | :? string as cssSelector ->
-        wait elementTimeout (fun _ ->
-            let elem = elementB browser cssSelector
+        wait context.config.elementTimeout (fun _ ->
+            let elem = elementC context cssSelector
             actions.KeyDown(modifier).Click(elem).KeyUp(modifier).Perform()
             true)
     | _ ->
@@ -920,31 +919,31 @@ let modifierClickB browser modifier item =
         raise (CanopyNotStringOrElementException message)
 
 (* documented/actions *)
-let ctrlClickB browser item =
-    modifierClickB browser Keys.Control item
+let ctrlClickC context item =
+    modifierClickC context Keys.Control item
 
 (* documented/actions *)
 let ctrlClick item =
-    ctrlClickB browser item
+    ctrlClickC (context ()) item
 
 (* documented/actions *)
-let shiftClickB browser item =
-    modifierClickB browser Keys.Shift item
+let shiftClickC context item =
+    modifierClickC context Keys.Shift item
 
 (* documented/actions *)
 let shiftClick item =
-    shiftClickB browser item
+    shiftClickC (context ()) item
 
 (* documented/actions *)
-let rightClickB browser item =
-    let actions = Actions(browser)
+let rightClickC (context : Context) item =
+    let actions = Actions (context.getBrowser())
 
     match box item with
     | :? IWebElement as elem ->
         actions.ContextClick(elem).Perform() |> ignore
     | :? string as cssSelector ->
-        wait elementTimeout (fun _ ->
-            let elem = elementB browser cssSelector
+        wait context.config.elementTimeout (fun _ ->
+            let elem = elementC context cssSelector
             actions.ContextClick(elem).Perform()
             true)
     | _ ->
@@ -953,20 +952,20 @@ let rightClickB browser item =
 
 (* documented/actions *)
 let rightClick item =
-    rightClickB browser item
+    rightClickC (context ()) item
 
 (* documented/actions *)
-let checkB browser item =
+let checkC context item =
     try
         match box item with
         | :? IWebElement as elem ->
-            if not elem.Selected then clickB browser elem
+            if not elem.Selected then clickC context elem
         | :? string as cssSelector ->
             waitFor (fun _ ->
-                let selected = (elementB browser cssSelector).Selected
+                let selected = (elementC context cssSelector).Selected
                 if not selected then
-                    clickB browser cssSelector
-                (elementB browser cssSelector).Selected)
+                    clickC context cssSelector
+                (elementC context cssSelector).Selected)
         | _ ->
             let message = sprintf "Can't read %O because it is not a string or element" item
             raise (CanopyNotStringOrElementException message)
@@ -976,19 +975,19 @@ let checkB browser item =
 
 (* documented/actions *)
 let check item =
-    checkB browser item
+    checkC (context ()) item
 
 (* documented/actions *)
-let uncheckB browser item =
+let uncheckC context item =
     try
         match box item with
         | :? IWebElement as elem ->
-            if elem.Selected then clickB browser elem
+            if elem.Selected then clickC context elem
         | :? string as cssSelector ->
             waitFor (fun _ ->
-                if (elementB browser cssSelector).Selected then
-                    clickB browser cssSelector
-                not (elementB browser cssSelector).Selected)
+                if (elementC context cssSelector).Selected then
+                    clickC context cssSelector
+                not (elementC context cssSelector).Selected)
         | _ ->
             let message = sprintf "Can't read %O because it is not a string or element" item
             raise (CanopyNotStringOrElementException message)
@@ -1003,35 +1002,36 @@ let uncheckB browser item =
 
 (* documented/actions *)
 let uncheck item =
-    uncheckB browser item
+    uncheckC (context ()) item
 
 //hoverin
 (* documented/actions *)
-let hoverB browser selector =
-    let actions = Actions(browser)
-    let e = elementB browser selector
+let hoverC (context : Context) selector =
+    let actions = Actions (context.getBrowser())
+    let e = elementC context selector
     actions.MoveToElement(e).Perform()
 
 (* documented/actions *)
 let hover selector =
-    hoverB browser selector
+    hoverC (context ()) selector
 
 //draggin
 (* documented/actions *)
-let dragB browser cssSelectorA cssSelectorB =
-    wait elementTimeout (fun _ ->
-        let a = elementB browser cssSelectorA
-        let b = elementB browser cssSelectorB
-        (new Actions(browser)).DragAndDrop(a, b).Perform()
+let dragC context cssSelectorA cssSelectorB =
+    wait context.config.elementTimeout (fun _ ->
+        let a = elementC context cssSelectorA
+        let b = elementC context cssSelectorB
+        (new Actions(context.getBrowser())).DragAndDrop(a, b).Perform()
         true)
 
 (* documented/actions *)
 let drag cssSelectorA cssSelectorB =
-    dragB browser cssSelectorA cssSelectorB
+    dragC (context ()) cssSelectorA cssSelectorB
 
 //browser related
 (* documented/actions *)
-let pinB (browser: IWebDriver) direction =
+let pinC (context : Context) direction =
+    let browser = context.getBrowser()
     let (w, h) = Screen.getPrimaryScreenResolution ()
     let maxWidth = w / 2
     browser.Manage().Window.Size <- new System.Drawing.Size(maxWidth, h)
@@ -1045,21 +1045,21 @@ let pinB (browser: IWebDriver) direction =
 
 (* documented/actions *)
 let pin direction =
-    pinB browser direction
+    pinC (context ()) direction
 
 (* documented/actions *)
-let pinToMonitorB (browser: IWebDriver) n =
+let pinToMonitorC (context : Context) n =
     let n' = if n < 1 then 1 else n
     if Screen.monitorCount >= n' then
         let workingArea =  Screen.allScreensWorkingArea.[n'-1]
-        browser.Manage().Window.Position <- new System.Drawing.Point(workingArea.X, 0)
-        browser.Manage().Window.Maximize()
+        context.getBrowser().Manage().Window.Position <- new System.Drawing.Point(workingArea.X, 0)
+        context.getBrowser().Manage().Window.Maximize()
     else
         raise(CanopyException(sprintf "Monitor %d is not detected" n))
 
 (* documented/actions *)
 let pinToMonitor n =
-    pinToMonitorB browser n
+    pinToMonitorC (context ()) n
 
 let internal firefoxDriverService _ =
     let service = Firefox.FirefoxDriverService.CreateDefaultService()
@@ -1191,29 +1191,28 @@ let switchTo b =
     browser <- b
 
 (* documented/actions *)
-let switchToTabB (browser: IWebDriver) number =
-    wait pageTimeout (fun _ ->
+let switchToTabC context number =
+    wait context.config.pageTimeout (fun _ ->
         let number = number - 1
-        let tabs = browser.WindowHandles;
+        let tabs = context.getBrowser().WindowHandles;
         if tabs |> Seq.length >= number then
-            browser.SwitchTo().Window(tabs.[number]) |> ignore
+            context.getBrowser().SwitchTo().Window(tabs.[number]) |> ignore
             true
         else
             false)
 
 (* documented/actions *)
 let switchToTab number =
-    switchToTabB browser number
+    switchToTabC (context ()) number
 
 (* documented/actions *)
-let closeTabB (browser: IWebDriver) number =
-    switchToTabB browser number
-    browser.Close()
+let closeTabC context number =
+    switchToTabC context number
+    context.getBrowser().Close()
 
 (* documented/actions *)
 let closeTab number =
-    closeTabB browser number
-
+    closeTabC (context ()) number
 
 (* documented/actions *)
 let tile (browsers: IWebDriver list) =
@@ -1233,7 +1232,7 @@ let tile (browsers: IWebDriver list) =
     setSize browsers 0
 
 (* documented/actions *)
-let positionBrowserB (browser: IWebDriver) left top width height =
+let positionBrowserC (context: Context) left top width height =
     let h = System.Windows.Forms.Screen.PrimaryScreen.WorkingArea.Height
     let w = System.Windows.Forms.Screen.PrimaryScreen.WorkingArea.Width
 
@@ -1242,39 +1241,39 @@ let positionBrowserB (browser: IWebDriver) left top width height =
     let bw = width * w /100
     let bh = height * h / 100
 
-    browser.Manage().Window.Size <- new System.Drawing.Size(bw, bh)
-    browser.Manage().Window.Position <- new System.Drawing.Point(x, y)
+    context.getBrowser().Manage().Window.Size <- new System.Drawing.Size(bw, bh)
+    context.getBrowser().Manage().Window.Position <- new System.Drawing.Point(x, y)
 
 (* documented/actions *)
 let positionBrowser left top width height =
-    positionBrowserB browser left top width height
+    positionBrowserC (context ()) left top width height
 
-let internal innerSize (browser: IWebDriver) =
-    let jsBrowser = browser :?> IJavaScriptExecutor
+let internal innerSizeC (context : Context) =
+    let jsBrowser = context.getBrowser() :?> IJavaScriptExecutor
     let innerWidth = System.Int32.Parse(jsBrowser.ExecuteScript("return window.innerWidth").ToString())
     let innerHeight = System.Int32.Parse(jsBrowser.ExecuteScript("return window.innerHeight").ToString())
     innerWidth, innerHeight
 
 (* documented/actions *)
-let resizeB (browser: IWebDriver) size =
+let resizeC context size =
     let width,height = size
-    let innerWidth, innerHeight = innerSize browser
-    let newWidth = browser.Manage().Window.Size.Width - innerWidth + width
-    let newHeight = browser.Manage().Window.Size.Height - innerHeight + height
-    browser.Manage().Window.Size <- System.Drawing.Size(newWidth, newHeight)
+    let innerWidth, innerHeight = innerSizeC context
+    let newWidth = context.getBrowser().Manage().Window.Size.Width - innerWidth + width
+    let newHeight = context.getBrowser().Manage().Window.Size.Height - innerHeight + height
+    context.getBrowser().Manage().Window.Size <- System.Drawing.Size(newWidth, newHeight)
 
 (* documented/actions *)
 let resize size =
-    resizeB browser size
+    resizeC (context ()) size
 
 (* documented/actions *)
-let rotateB browser =
-    let innerWidth, innerHeight = innerSize browser
-    resizeB browser (innerHeight, innerWidth)
+let rotateC context =
+    let innerWidth, innerHeight = innerSizeC context
+    resizeC context (innerHeight, innerWidth)
 
 (* documented/actions *)
 let rotate () =
-    rotateB browser
+    rotateC (context ())
 
 (* documented/actions *)
 let quit browser =
@@ -1287,76 +1286,76 @@ let quit browser =
         browsers |> List.iter (fun b -> b.Quit())
 
 (* documented/actions *)
-let currentUrlB (browser: IWebDriver) =
-    browser.Url
+let currentUrlC (context : Context) =
+    context.getBrowser().Url
 
 (* documented/actions *)
 let currentUrl () =
-    currentUrlB browser
+    currentUrlC (context ())
 
 (* documented/assertions *)
-let onnB (browser: IWebDriver) (u: string) =
+let onnC context (u: string) =
     let urlPath (u: string) =
         let url = match u with
                   | x when x.StartsWith("http") -> u  //leave absolute urls alone
                   | _ -> "http://host/" + u.Trim('/') //ensure valid uri
         let uriBuilder = new System.UriBuilder(url)
         uriBuilder.Path.TrimEnd('/') //get the path part removing trailing slashes
-    wait pageTimeout (fun _ ->
-        browser.Url = u
-        || urlPath (browser.Url) = urlPath(u))
+    wait context.config.pageTimeout (fun _ ->
+        context.getBrowser().Url = u
+        || urlPath (context.getBrowser().Url) = urlPath(u))
 
 (* documented/assertions *)
 let onn (u: string) =
-    onnB browser u
+    onnC (context ()) u
 
 (* documented/assertions *)
-let onB (browser: IWebDriver) (u: string) =
+let onC context (u: string) =
     try
-        onnB browser u
+        onnC context u
     with
     | ex ->
-        if not <| browser.Url.Contains(u) then
+        if not <| context.getBrowser().Url.Contains(u) then
             let message = sprintf "on check failed, expected expression '%s' got %s" u browser.Url
             raise (CanopyOnException message)
 
 (* documented/assertions *)
 let on (u: string) =
-    onB browser u
+    onC (context ()) u
 
 (* documented/assertions *)
-let uriB (browser: IWebDriver) (uri: Uri) =
-    browser.Navigate().GoToUrl(uri)
+let uriC (context: Context) (uri: Uri) =
+    context.getBrowser().Navigate().GoToUrl(uri)
 
 (* documented/assertions *)
 let uri (uri: Uri) =
-    uriB browser uri
+    uriC (context ()) uri
 
 (* documented/actions *)
-let urlB (browser: IWebDriver) (u: string) =
-    if isNull browser then invalidArg "browser" "The browser was null; initialise your browser before calling `urlB`"
-    browser.Navigate().GoToUrl(u)
+let urlC (context : Context) (u: string) =
+    if context.browser.IsNone then invalidArg "browser" "The browser was null; initialise your browser before calling `urlC`"
+    context.getBrowser().Navigate().GoToUrl(u)
 
 (* documented/actions *)
 let url u =
-    urlB browser u
+    urlC (context ()) u
 
 (* documented/actions *)
-let titleB (browser: IWebDriver) =
-    browser.Title
+let titleC (context : Context) =
+    context.getBrowser().Title
 
 (* documented/actions *)
 let title () =
-    titleB browser
+    titleC (context ())
 
 (* documented/actions *)
-let reloadB browser =
-    currentUrlB browser
-    |> urlB browser
+let reloadC context =
+    currentUrlC context
+    |> urlC context
 
 (* documented/actions *)
 let reload () =
-    reloadB browser
+    reloadC (context ())
 
 type Navigate =
     | Back
@@ -1368,15 +1367,15 @@ let back = Back
 let forward = Forward
 
 (* documented/actions *)
-let navigateB (browser: IWebDriver) = function
+let navigateC (context : Context) = function
     | Back ->
-        browser.Navigate().Back()
+        context.getBrowser().Navigate().Back()
     | Forward ->
-        browser.Navigate().Forward()
+        context.getBrowser().Navigate().Forward()
 
 (* documented/actions *)
 let navigate direction =
-    navigateB browser direction
+    navigateC (context ()) direction
 
 (* documented/actions *)
 let addFinder finder =
@@ -1421,124 +1420,124 @@ let skip message =
   raise <| CanopySkipTestException()
 
 (* documented/actions *)
-let waitForElementB browser cssSelector =
+let waitForElementC context cssSelector =
     waitFor (fun _ ->
-        someElementB browser cssSelector |> Option.isSome)
+        someElementC context cssSelector |> Option.isSome)
 
 (* documented/actions *)
 let waitForElement cssSelector =
-    waitForElementB browser cssSelector
+    waitForElementC (context ()) cssSelector
 
 /// Extensions for Context<'config> to get the DSL API on the context instance;
 /// this makes it easier to use the context and browser in your parallel tests.
 type Context<'config> with
     member x.screenshot directory filename =
-        screenshotB x.browser directory filename
+        screenshotC x directory filename
     member x.js script =
-        jsB x.browser script
+        jsC x script
     member x.puts text =
-        putsB x.browser text
+        putsC x text
     member x.highlight cssSelector =
-        highlightB x.browser cssSelector
+        highlightC x cssSelector
     member x.describe text =
-        describeB x.browser text
+        describeC x text
     member x.elements cssSelector =
-        elementsB x.browser cssSelector
+        elementsC x cssSelector
     member x.unreliableElements cssSelector =
-        unreliableElementsB x.browser cssSelector
+        unreliableElementsC x cssSelector
     member x.unreliableElement cssSelector =
-        unreliableElementB x.browser cssSelector
+        unreliableElementC x cssSelector
     member x.elementWithin cssSelector elem =
-        elementWithinB x.browser cssSelector elem
+        elementWithinC x cssSelector elem
     member x.elementsWithText cssSelector regex =
-        elementsWithTextB x.browser cssSelector regex
+        elementsWithTextC x cssSelector regex
     member x.elementWithText cssSelector regex =
-        elementWithTextB x.browser cssSelector regex
+        elementWithTextC x cssSelector regex
     member x.parent elem =
-        parentB x.browser elem
+        parentC x elem
     member x.elementsWithin cssSelector elem =
-        elementsWithinB x.browser cssSelector elem
+        elementsWithinC x cssSelector elem
     member x.unreliableElementsWithin cssSelector elem =
-        unreliableElementsWithinB x.browser cssSelector elem
+        unreliableElementsWithinC x cssSelector elem
     member x.someElement cssSelector =
-        someElementB x.browser cssSelector
+        someElementC x cssSelector
     member x.someElementWithin cssSelector elem =
-        someElementWithinB x.browser cssSelector elem
+        someElementWithinC x cssSelector elem
     member x.someParent elem =
-        someParentB x.browser elem
+        someParentC x elem
     member x.nth index cssSelector =
-        nthB x.browser index cssSelector
+        nthC x index cssSelector
     member x.item index cssSelector =
-        itemB x.browser index cssSelector
+        itemC x index cssSelector
     member x.first cssSelector =
-        firstB x.browser cssSelector
+        firstC x cssSelector
     member x.last cssSelector =
-        lastB x.browser cssSelector
+        lastC x cssSelector
     member x.write text item =
-        writeB x.browser text item
+        writeC x text item
     member x.read item =
-        readB x.browser item
+        readC x item
     member x.clear item =
-        clearB x.browser item
+        clearC x item
     member x.press key =
-        pressB x.browser key
+        pressC x key
     member x.alert () =
-        alertB x.browser
+        alertC x
     member x.acceptAlert () =
-        acceptAlertB x.browser
+        acceptAlertC x
     member x.dismissAlert () =
-        dismissAlertB x.browser
+        dismissAlertC x
     member x.fastTextFromCSS selector =
-        fastTextFromCSSB x.browser selector
+        fastTextFromCSSC x selector
     member x.click item =
-        clickB x.browser item
+        clickC x item
     member x.doubleClick item =
-        doubleClickB x.browser item
+        doubleClickC x item
     member x.modifierClick modifier item =
-        modifierClickB x.browser modifier item
+        modifierClickC x modifier item
     member x.ctrlClick item =
-        ctrlClickB x.browser item
+        ctrlClickC x item
     member x.shiftClick item =
-        shiftClickB x.browser item
+        shiftClickC x item
     member x.rightClick item =
-        rightClickB x.browser item
+        rightClickC x item
     member x.check item =
-        checkB x.browser item
+        checkC x item
     member x.uncheck item =
-        uncheckB x.browser item
+        uncheckC x item
     member x.hover item =
-        hoverB x.browser item
+        hoverC x item
     member x.drag cssSelectorA cssSelectorB =
-        dragB x.browser cssSelectorA cssSelectorB
+        dragC x cssSelectorA cssSelectorB
     member x.pin direction =
-        pinB x.browser direction
+        pinC x direction
     member x.pinToMonitor number =
-        pinToMonitorB x.browser number
+        pinToMonitorC x number
     member x.switchToTab number =
-        switchToTabB x.browser number
+        switchToTabC x number
     member x.closeTab number =
-        closeTabB x.browser number
+        closeTabC x number
     member x.positionBrowser left top width height =
-        positionBrowserB x.browser left top width height
+        positionBrowserC x left top width height
     member x.resize size =
-        resizeB x.browser size
+        resizeC x size
     member x.rotate () =
-        rotateB x.browser
+        rotateC x
     member x.currentUrl () =
-        currentUrlB x.browser
+        currentUrlC x
     member x.onn url =
-        onnB x.browser url
+        onnC x url
     member x.on url =
-        onB x.browser url
+        onC x url
     member x.title () =
-        titleB x.browser
+        titleC x
     member x.uri uri =
-        uriB x.browser uri
+        uriC x uri
     member x.url url =
-        urlB x.browser url
+        urlC x url
     member x.reload () =
-        reloadB x.browser
+        reloadC x
     member x.navigate direction =
-        navigateB x.browser direction
+        navigateC x direction
     member x.waitForElement cssSelector =
-        waitForElementB x.browser cssSelector
+        waitForElementC x cssSelector
