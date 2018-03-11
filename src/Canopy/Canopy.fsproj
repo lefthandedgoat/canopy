@@ -61,13 +61,13 @@
     <Compile Include="JaroWinkler.fs" />
     <Compile Include="Canopy.fs" />
     <Compile Include="Operators.fs" />
-    <Compile Include="History.fs" />
     <Compile Include="UserAgents.fs" />
     <Compile Include="ClassicMode.fs" />
     <!-- Canopy-specific testing framework -->
     <Compile Include="Testing\Assert.fs" />
     <Compile Include="Testing\Reporters.fs" />
     <Compile Include="Testing\Runner.fs" />
+    <Compile Include="Testing\History.fs" />
     <!-- C# interop -->
     <Compile Include="CSharp.fs" />
     <!-- Chrome extension -->

@@ -50,3 +50,6 @@ let waitResults timeout (f: unit -> 'a) =
 let wait timeout (f: unit -> bool) =
     waitResults timeout f
     |> ignore
+
+let waitSeconds timeout f =
+    wait (TimeSpan.FromSeconds timeout) f

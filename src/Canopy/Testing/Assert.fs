@@ -4,7 +4,6 @@ module Canopy.Assert
 open OpenQA.Selenium
 open System
 open Canopy
-open Canopy.Configuration
 
 let equal browser item value =
     match box item with

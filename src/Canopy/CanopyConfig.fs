@@ -15,6 +15,20 @@ open Canopy.Logging
 //    // TODO: handle write to global via `Configuration`
 //    failureMessage <- message
 
+/// For chrome you need to download chromedriver.exe from
+/// http://code.google.com/p/chromedriver/wiki/GettingStarted
+///
+/// Place chromedriver.exe in c:\ or you can place it in a custom location and
+/// set the chromeDir field.
+///
+/// For IE you need to set `Settings -> Advance -> Security Section ->
+/// Check-Allow active content` to run files on My Computer* also download
+/// IEDriverServer and place in c:\ or configure with ieDir.
+///
+/// Firefox just works.
+///
+/// Safari: download it and put in c:\ or configure with safariDir
+///
 type CanopyPaths =
     {
         chromeDir: string
@@ -133,6 +147,13 @@ module CanopyConfig =
     (* documented/configuration *)
     let setFinders finders (config: CanopyConfig) =
         { config with finders = finders }
+
+    (* documented/configuration *)
+    let addFinder finder (config: CanopyConfig) =
+        let composed cssSelector f =
+            config.finders cssSelector f
+            |> Seq.append (seq { yield finder cssSelector f })
+        { config with finders = composed }
 
     (* documented/configuration *)
     let setOptimizeBySkippingIFrameCheck enabled (config: CanopyConfig) =

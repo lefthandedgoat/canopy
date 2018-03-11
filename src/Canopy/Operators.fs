@@ -13,7 +13,7 @@ module Operators =
 
     (* documented/actions *)
     let (<<) item text =
-        writeB browser text item
+        writeC (context ()) text item
 
     (* documented/actions *)
     let (-->) cssSelectorA cssSelectorB =
