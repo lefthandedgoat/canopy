@@ -126,7 +126,7 @@ let fail (ex : Exception) (test : Test) (suite: Suite) autoFail url =
                     suite.OnFail()
 
 let safelyGetUrl () =
-    match !Context.globalContext with
+    match !Context._globalContext with
     | None ->
         "No context -> no URL"
     | Some context ->
@@ -267,6 +267,7 @@ let run () =
 let runFor browsers =
     // suites are in reverse order and have to be reversed before running the tests
     let currentSuites = suites
+    let config = defaultConfig
 
     match box browsers with
     | :? (BrowserStartMode list) as browsers ->
@@ -276,7 +277,7 @@ let runFor browsers =
           |> List.map (fun browser ->
               let suite = new Suite()
               suite.Context <- sprintf "Running tests with %s browser" (toString browser)
-              suite.Once <- fun _ -> start defaultConfig browser |> ignore
+              suite.Once <- fun _ -> startWithConfig config browser |> ignore
               let currentSuites2 = currentSuites |> List.map(fun suite -> suite.Clone())
               currentSuites2 |> List.iter (fun (suite: Suite) ->
                   suite.Context <- sprintf "(%s) %s" (toString browser) suite.Context)
