@@ -22,6 +22,6 @@ let main argv =
   else
     // TO CONSIDER: https://github.com/haf/expecto/issues/229
     let expectoArguments = results.UnrecognizedCliParams |> List.toArray
-    let conf = results.GetAllResults() |> List.fold Config.update Config.empty
+    let conf = results.GetAllResults() |> List.fold TestConfig.update TestConfig.empty
     Tests.tests conf
       |> runTestsWithArgs defaultConfig expectoArguments

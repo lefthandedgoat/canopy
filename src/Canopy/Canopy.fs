@@ -53,6 +53,7 @@ module ContextEx =
 
 /// Module for manipulating the `Context` value.
 module Context =
+    open System.Threading
 
     let private map2 fnA b = function
         | None ->
@@ -95,16 +96,16 @@ module Context =
                 if List.contains browser context.browsers then context.browsers
                 else browser :: context.browsers }
 
-
-    let internal globalContext: Context option ref = ref None
-
+    let private _globalContext: Context option ref = ref None
+    let private _contextChanged: Event<Context> = new Event<Context>()
     let private sem = obj ()
+    let internal contextChanged = _contextChanged.Publish
 
     /// Configure the global configuration atomically (no lost writes).
     let internal configure (userState: 'us) (callback: CanopyConfig -> CanopyConfig) =
         lock sem <| fun () ->
             let context =
-                match !globalContext with
+                match !_globalContext with
                 | None ->
                     let newConfig = callback defaultConfig
                     createT None newConfig userState
@@ -117,11 +118,12 @@ module Context =
                         browsers = existing.browsers
                     }
                     :> Context
-            globalContext := Some context
+            _globalContext := Some context
+            _contextChanged.Trigger context
             context
 
     let internal getContext () =
-        match !globalContext with
+        match !_globalContext with
         | None ->
             invalidOp "No global context configured yet"
 
@@ -134,12 +136,35 @@ module Context =
 
             context
 
+    let private mutateNoLock (callback: Context<'us> -> Context<'us>) =
+        let context = getContext ()
+        let value = context :?> Context<'us>
+        let result = callback value
+        _globalContext := Some (result :> Context)
+        _contextChanged.Trigger (result :> Context)
+        result
+
     /// Changes the global context atomically.
     let internal mutate<'us> (callback: Context<'us> -> Context<'us>) =
-        lock sem (fun () ->
-            let context = getContext ()
-            let value = context :?> Context<'us>
-            callback value)
+        lock sem (fun () -> mutateNoLock callback :> Context)
+
+    /// Lets the user pass a callback that configures the current context for
+    /// just-so for as long as the IDisposable is undisposed. If the disposable
+    /// is NOT disposed, no further progress can be made. Do NOT reconfigure
+    /// canopy in one of these scopes, or you'll deadlock.
+    let configureScope (configurator: CanopyConfig -> CanopyConfig) =
+        Monitor.Enter sem
+        try
+            let current = mutateNoLock id
+            let next = configure (obj ()) configurator
+            { new IDisposable with
+                member x.Dispose () =
+                    ignore (mutateNoLock (fun _ -> current))
+                    Monitor.Exit sem
+            }
+        with _ ->
+            Monitor.Exit sem
+            reraise ()
 
 let internal context () =
     Context.getContext ()
@@ -1190,20 +1215,25 @@ let private startUnsynchronised config mode =
 
     browser
 
-let startPure config mode =
+let startWithConfigPure config mode =
     startUnsynchronised config mode
 
 (* documented/actions *)
-let start (config: CanopyConfig) (mode: BrowserStartMode) =
+let startWithConfig config mode =
     let browser =
         startUnsynchronised config mode
 
     Context.mutate<obj> (Context.addCurrentBrowser browser)
 
 (* documented/actions *)
+let start (mode: BrowserStartMode) =
+    ignore (startWithConfig defaultConfig mode)
+
+(* documented/actions *)
 /// Acts on global
 let switchTo browser =
     Context.mutate<obj> (Context.setCurrent browser)
+    |> ignore
 
 (* documented/actions *)
 let switchToTabC (context: Context) number =

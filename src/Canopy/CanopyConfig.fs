@@ -5,10 +5,6 @@ open Canopy.Logging
 
 //misc
 (* documented/actions *)
-//let failsWith message =
-//    // TODO: handle write to global via `Configuration`
-//    failureMessage <- message
-
 /// For chrome you need to download chromedriver.exe from
 /// http://code.google.com/p/chromedriver/wiki/GettingStarted
 ///
