@@ -1,8 +1,9 @@
-module Canopy.Reporters
+module Canopy.Runner.Reporters
 
-open System
-open OpenQA.Selenium
+open Canopy
 open FSharp.Reflection
+open OpenQA.Selenium
+open System
 
 let internal toString (x:'a) =
     match FSharpValue.GetUnionFields(x, typeof<'a>) with
@@ -216,7 +217,7 @@ type TeamCityReporter(?logImagesToConsole: bool) =
 
 #nowarn "44"
 
-type LiveHtmlReporter(browser : BrowserStartMode, driverPath : string, ?pinBrowserRight0: bool) =
+type LiveHtmlReporter(browser: BrowserStartMode, driverPath : string, ?pinBrowserRight0: bool) =
     let pinBrowserRight = defaultArg pinBrowserRight0 true
     let consoleReporter : IReporter = new ConsoleReporter() :> IReporter
 

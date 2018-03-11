@@ -64,10 +64,11 @@
     <Compile Include="UserAgents.fs" />
     <Compile Include="ClassicMode.fs" />
     <!-- Canopy-specific testing framework -->
-    <Compile Include="Testing\Assert.fs" />
-    <Compile Include="Testing\Reporters.fs" />
-    <Compile Include="Testing\Runner.fs" />
-    <Compile Include="Testing\History.fs" />
+    <Compile Include="Runner\Assert.fs" />
+    <Compile Include="Runner\Reporters.fs" />
+    <Compile Include="Runner\CanopyRunnerConfig.fs" />
+    <Compile Include="Runner\History.fs" />
+    <Compile Include="Runner\Runner.fs" />
     <!-- C# interop -->
     <Compile Include="CSharp.fs" />
     <!-- Chrome extension -->

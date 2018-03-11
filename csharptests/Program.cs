@@ -11,16 +11,16 @@ namespace csharptests
     {
         static void Main(string[] args)
         {
-            Configuration.elementTimeout = 3.0;
-            Configuration.compareTimeout = 3.0;
-            Configuration.pageTimeout = 3.0;
-            Configuration.reporter = new Reporters.LiveHtmlReporter(Types.BrowserStartMode.Chrome, Configuration.chromeDir);
+//            Configuration.elementTimeout = 3.0;
+//            Configuration.compareTimeout = 3.0;
+//            Configuration.pageTimeout = 3.0;
+//            Configuration.reporter = new Reporters.LiveHtmlReporter(Types.BrowserStartMode.Chrome, Configuration.chromeDir);
 
             var testpage = "http://lefthandedgoat.github.io/canopy/testpages/";
 
             jsonValidatorTests.All();
 
-            _.start(Types.BrowserStartMode.Chrome);
+            _.start(CanopyConfigModule.defaultConfig, Types.BrowserStartMode.Chrome);
 
             _.context("context1");
             _.once(() => Console.WriteLine("once"));

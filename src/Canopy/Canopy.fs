@@ -1190,6 +1190,9 @@ let private startUnsynchronised config mode =
 
     browser
 
+let startPure config mode =
+    startUnsynchronised config mode
+
 (* documented/actions *)
 let start (config: CanopyConfig) (mode: BrowserStartMode) =
     let browser =

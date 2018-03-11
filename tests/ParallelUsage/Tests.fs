@@ -5,7 +5,7 @@ open Expecto
 open Expecto.Logging
 open Expecto.Logging.Message
 
-let tests (conf: Config) =
+let tests (conf: ExpectoCanopyConfig) =
   testList "e2e" [
     testBrowser conf "browse to start page" <| fun _ -> ()
     testBrowser conf "signup" <| fun x ->

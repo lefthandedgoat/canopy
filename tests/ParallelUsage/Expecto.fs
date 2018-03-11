@@ -1,26 +1,56 @@
 /// A module the indirects the function calls that the code makes into Expecto,
 /// in order to spawn the quit the browser instances.
 [<AutoOpen>]
-module Expecto.Core
+module Expecto.Canopy
 
 open Canopy
 open System
+open Expecto
+open Argu
 
 /// You can implement this interface on your `conf` value if you want the testing
 /// framework to start the browser at a specific URL.
 type HasStartURI =
   abstract startURI: Uri
 
-let private testB testFn conf name fn =
+// config for your own test suite
+type ParallelUsageArguments =
+  | Site of initialURL:string
+
+  interface IArgParserTemplate with
+    member s.Usage =
+      match s with
+      | Site _ -> "What URL to start the browser at."
+
+type ExpectoCanopyConfig =
+  { site: Uri
+    mode: BrowserStartMode
+    canopyConfig: CanopyConfig
+  }
+
+  interface HasStartURI with
+    member x.startURI = x.site
+
+  static member empty =
+    { site = Uri "https://staging.qvitoo.com"
+      mode = Firefox
+      canopyConfig = Canopy.CanopyConfig.defaultConfig
+    }
+
+module Config =
+  let update config = function
+    | Site site -> { config with site = Uri site }
+
+let private testB testFn (conf: ExpectoCanopyConfig) name fn =
   testFn name <| async {
-    use browser = start firefox // TODO: this must be configurable
+    use browser = startPure conf.canopyConfig conf.mode
     match box conf with
     | :? HasStartURI as testConfig ->
       uriB browser testConfig.startURI
     | _ ->
       ()
     try
-      let ctx = Context.create conf browser
+      let ctx = Context.createT (Some browser) conf.canopyConfig conf
       do! fn ctx
     finally
       quit browser
