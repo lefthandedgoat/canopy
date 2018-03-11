@@ -1,84 +1,15 @@
-﻿module Canopy.Runner
+﻿module Canopy.Runner.Runner
 
 open Canopy
-open Canopy.Reporters
+open Canopy.Runner.CanopyRunnerConfig
+open Canopy.Runner.Reporters
 open OpenQA.Selenium
 open System
 
 
-//runner related
-// TODO: remove global variable
-(* documented/configuration *)
-let failFast = ref false
-// TODO: remove global variable
-(* documented/configuration *)
-let mutable failScreenshotPath = Environment.GetFolderPath(Environment.SpecialFolder.ApplicationData) + @"\canopy\"
-// TODO: remove global variable
-(* documented/configuration *)
-let mutable failScreenshotFileName = fun (test: Test) (suite: Suite) -> DateTime.Now.ToString("MMM-d_HH-mm-ss-fff")
-// TODO: remove global variable
-(* documented/configuration *)
-let mutable failIfAnyWipTests = false
-// TODO: remove global variable
-(* documented/configuration *)
-let mutable runFailedContextsFirst = false
-// TODO: remove global variable
-(* documented/configuration *)
-let mutable failureScreenshotsEnabled = true
-// TODO: remove global variable
-(* documented/configuration *)
-let mutable skipAllTestsOnFailure = false
-// TODO: remove global variable
-(* documented/configuration *)
-let mutable skipRemainingTestsInContextOnFailure = false
-// TODO: remove global variable
-(* documented/configuration *)
-let mutable skipNextTest = false
-// TODO: remove global variable
-(* documented/configuration *)
-let mutable failureMessagesThatShoulBeTreatedAsSkip : string list = []
-// TODO: remove global variable
-(* documented/configuration *)
-let mutable reporter = new ConsoleReporter() :> IReporter
-
-type CanopyRunnerConfig =
-    {
-        failFast: bool
-        failScreenshotPath: string
-        failScreenshotFileName: Test -> Suite -> string
-        failIfAnyWIPTests: bool
-        runFailedContextsFirst: bool
-        failureScreenshotsEnabled: bool
-        skipAllTestsOnFailure: bool
-        skipRemainingTestsInContextOnFailure: bool
-        skipNextTest: bool
-        failureMessagesThatShoulBeTreatedAsSkip: string list
-    }
-    /// Hack to get around moving all the above variables to a structured, parallel-safe variant.
-    static member create () =
-        {
-            failFast = !failFast
-            failScreenshotPath = failScreenshotPath
-            failScreenshotFileName = failScreenshotFileName
-            failIfAnyWIPTests = failIfAnyWipTests
-            runFailedContextsFirst = runFailedContextsFirst
-            failureScreenshotsEnabled = failureScreenshotsEnabled
-            skipAllTestsOnFailure = skipAllTestsOnFailure
-            skipRemainingTestsInContextOnFailure = skipRemainingTestsInContextOnFailure
-            skipNextTest = skipNextTest
-            failureMessagesThatShoulBeTreatedAsSkip = failureMessagesThatShoulBeTreatedAsSkip
-        }
-
 let private last = function
     | hd :: tl -> hd
     | [] -> failwith "Empty list."
-
-// TODO: remove global variable
-let mutable suites = [new Suite()]
-// TODO: remove global variable
-let mutable todo = fun () -> ()
-// TODO: remove global variable
-let mutable skipped = fun () -> ()
 
 (* documented/testing *)
 let once f = (last suites).Once <- f
@@ -100,42 +31,58 @@ let context c =
         let s = new Suite()
         s.Context <- c
         suites <- s::suites
+
 let private incrementLastTestSuite () =
     let lastSuite = last suites
     lastSuite.TotalTestsCount <- lastSuite.TotalTestsCount + 1
     lastSuite
-(* documented/testing *)
-let ( &&& ) description f =
-    let lastSuite = incrementLastTestSuite()
-    lastSuite.Tests <- Test(description, f, lastSuite.TotalTestsCount)::lastSuite.Tests
+
+
+module Operators =
+    (* documented/testing *)
+    let ( &&& ) description f =
+        let lastSuite = incrementLastTestSuite()
+        lastSuite.Tests <- Test(description, f, lastSuite.TotalTestsCount)::lastSuite.Tests
+
+    (* documented/testing *)
+    let ( &&! ) description f =
+        let lastSuite = incrementLastTestSuite()
+        lastSuite.Tests <- Test(description, skipped, lastSuite.TotalTestsCount)::lastSuite.Tests
+
+    (* documented/testing *)
+    let ( &&&& ) description f =
+        let lastSuite = incrementLastTestSuite()
+        lastSuite.Wips <- Test(description, f, lastSuite.TotalTestsCount)::lastSuite.Wips
+
+    (* documented/testing *)
+    let ( &&&&& ) description f =
+        let lastSuite = incrementLastTestSuite()
+        lastSuite.Always <- Test(description, f, lastSuite.TotalTestsCount)::lastSuite.Always
+
+open Operators
+
 (* documented/testing *)
 let test f = null &&& f
+
 (* documented/testing *)
 let ntest description f = description &&& f
-(* documented/testing *)
-let ( &&&& ) description f =
-    let lastSuite = incrementLastTestSuite()
-    lastSuite.Wips <- Test(description, f, lastSuite.TotalTestsCount)::lastSuite.Wips
+
 (* documented/testing *)
 let wip f = null &&&& f
+
 (* documented/testing *)
 let many count f =
     let lastSuite = incrementLastTestSuite()
     [1 .. count] |> List.iter (fun _ -> lastSuite.Manys <- Test(null, f, lastSuite.TotalTestsCount)::lastSuite.Manys)
+
 (* documented/testing *)
 let nmany count description f =
     let lastSuite = incrementLastTestSuite()
     [1 .. count] |> List.iter (fun _ -> lastSuite.Manys <- Test(description, f, lastSuite.TotalTestsCount)::lastSuite.Manys)
-(* documented/testing *)
-let ( &&! ) description f =
-    let lastSuite = incrementLastTestSuite()
-    lastSuite.Tests <- Test(description, skipped, lastSuite.TotalTestsCount)::lastSuite.Tests
+
 (* documented/testing *)
 let xtest f = null &&! f
-(* documented/testing *)
-let ( &&&&& ) description f =
-    let lastSuite = incrementLastTestSuite()
-    lastSuite.Always <- Test(description, f, lastSuite.TotalTestsCount)::lastSuite.Always
+
 let mutable passedCount = 0
 let mutable skippedCount = 0
 let mutable failedCount = 0
@@ -179,8 +126,16 @@ let fail (ex : Exception) (test : Test) (suite: Suite) autoFail url =
                     suite.OnFail()
 
 let safelyGetUrl () =
-  if browser = null then "no browser = no url"
-  else try browser.Url with _ -> "failed to get url"
+    match !Context.globalContext with
+    | None ->
+        "No context -> no URL"
+    | Some context ->
+        match context.browser with
+        | None ->
+            "No browser -> no URL"
+        | Some browser ->
+            try currentUrlB browser
+            with _ -> "Failed to get URL"
 
 let failSuite (ex: Exception) (suite: Suite) =
     let reportFailedTest (ex: Exception) (test : Test) =
@@ -198,13 +153,16 @@ let tryTest test suite func =
         func ()
         Pass
     with
-        | :? CanopySkipTestException -> Skip
-        | ex when failureMessage <> null && failureMessage = ex.Message -> Pass
-        | ex -> Fail ex
+    | :? CanopySkipTestException ->
+        Skip
+    | ex when CanopyRunnerConfig.failureMessage = Some ex.Message ->
+        Pass
+    | ex ->
+        Fail ex
 
-let skip message =
-  describe <| sprintf "Skipped: %s" message
-  raise <| CanopySkipTestException()
+let skipTest message =
+    describe (sprintf "Skipped: %s" message)
+    raise (CanopySkipTestException())
 
 let private processRunResult suite (test : Test) result =
     match result with
@@ -218,6 +176,7 @@ let private processRunResult suite (test : Test) result =
     reporter.TestEnd test.Id
 
 let private runtest (suite: Suite) (test : Test) =
+    let ctx = Canopy.Core.context ()
     if failed = false then
         reporter.TestStart test.Id
         let result =
@@ -239,10 +198,10 @@ let private runtest (suite: Suite) (test : Test) =
                 | Failed -> testResult
                 | _ -> afterResult
 
-        failureMessage <- null
+        CanopyRunnerConfig.failureMessage <- None
         result
     else
-        failureMessage <- null
+        CanopyRunnerConfig.failureMessage <- None
         FailFast
 
 (* documented/testing *)
@@ -283,7 +242,7 @@ let run () =
                 | ex -> failSuite ex s
             if failed = false then
                 if s.Wips.IsEmpty = false then
-                    wipTest <- true
+                    CanopyRunnerConfig.wipTest <- true
                     let tests = s.Wips @ s.Always |> List.sortBy (fun t -> t.Number)
                     tests |> List.iter (fun w -> runtest s w |> processRunResult s w)
                     wipTest <- false
@@ -317,7 +276,7 @@ let runFor browsers =
           |> List.map (fun browser ->
               let suite = new Suite()
               suite.Context <- sprintf "Running tests with %s browser" (toString browser)
-              suite.Once <- fun _ -> start browser |> ignore; ()
+              suite.Once <- fun _ -> start defaultConfig browser |> ignore
               let currentSuites2 = currentSuites |> List.map(fun suite -> suite.Clone())
               currentSuites2 |> List.iter (fun (suite: Suite) ->
                   suite.Context <- sprintf "(%s) %s" (toString browser) suite.Context)
@@ -331,7 +290,7 @@ let runFor browsers =
           |> List.map (fun browser ->
               let suite = new Suite()
               suite.Context <- sprintf "Running tests with %s browser" (browser.ToString())
-              suite.Once <- fun _ -> switchTo browser
+              suite.Once <- fun _ -> switchTo browser |> ignore
               let currentSuites2 = currentSuites |> List.map(fun suite -> suite.Clone())
               currentSuites2 |> List.iter (fun (suite: Suite) ->
                   suite.Context <- sprintf "(%s) %s" (browser.ToString()) suite.Context)

@@ -1,23 +1,25 @@
-﻿module Canopy.History
+﻿module Canopy.Runner.History
 
+open Canopy
 open System.IO
 open System
-open Canopy.Runner
 
-let p = Environment.GetFolderPath(Environment.SpecialFolder.ApplicationData) + @"\canopy\"
-let path = Environment.GetFolderPath(Environment.SpecialFolder.ApplicationData) + @"\canopy\failedContexts.txt"
+let p =
+    Environment.GetFolderPath(Environment.SpecialFolder.ApplicationData) + @"\canopy\"
 
-let saveC (config: CanopyRunnerConfig) results =
-    if config.runFailedContextsFirst = true then
+let path =
+    Environment.GetFolderPath(Environment.SpecialFolder.ApplicationData) + @"\canopy\failedContexts.txt"
+
+let saveC runFailedContextsFirst results =
+    if runFailedContextsFirst then
         if not (Directory.Exists p) then
             Directory.CreateDirectory(p) |> ignore
 
         use sw = new StreamWriter(path)
         sw.Write (String.concat "|" results)
 
-
 let save (results: string list) =
-    saveC (CanopyRunnerConfig.create ())
+    saveC CanopyRunnerConfig.runFailedContextsFirst results
 
 let get _ =
     if not (File.Exists path) then

@@ -3,12 +3,6 @@
 open System
 open Canopy.Logging
 
-//// TODO: remove global mutable
-//let mutable (failureMessage : string) = null
-//
-//// TODO: remove global mutable
-//let mutable wipTest = false
-
 //misc
 (* documented/actions *)
 //let failsWith message =
@@ -55,7 +49,6 @@ type CanopyConfig =
         optimizeBySkippingIFrameCheck: bool
         optimizeByDisablingClearBeforeWrite: bool
         showInfoDiv: bool
-        failureMessage: string option
         /// Whether to throw an exception is a global static variable is queried
         /// by the DSL; enable this when you run with Expecto to support parallel
         /// tests.
@@ -107,7 +100,6 @@ module CanopyConfig =
             optimizeBySkippingIFrameCheck = false
             optimizeByDisablingClearBeforeWrite = false
             showInfoDiv = true
-            failureMessage = None
             throwOnStatics = false
             logLevelOnStatics = Verbose
         }
