@@ -1,5 +1,6 @@
 ﻿module Canopy.Finders
 
+open Canopy.Logging
 open OpenQA.Selenium
 open System.Collections.ObjectModel
 open System.Collections.Generic
@@ -67,7 +68,7 @@ let findByValue value f =
     with _ ->
         []
 
-//Inspired by https://github.com/RaYell/selenium-webdriver-extensions
+/// Inspired by https://github.com/RaYell/selenium-webdriver-extensions
 let private loadJQuery (browser: IWebDriver) =
     let jsBrowser = browser :?> IJavaScriptExecutor
     let jqueryExistsScript = """return (typeof window.jQuery) === 'function';"""
@@ -82,7 +83,7 @@ let private loadJQuery (browser: IWebDriver) =
             document.getElementsByTagName('head')[0].appendChild(jq);
          """
         jsBrowser.ExecuteScript(load) |> ignore
-        waitSeconds 2.0 (fun _ -> jsBrowser.ExecuteScript(jqueryExistsScript) :?> bool)
+        waitSeconds (*(Log.create "ByJQuery")*) 2.0 (fun _ -> jsBrowser.ExecuteScript(jqueryExistsScript) :?> bool)
 
 type ByJQuery (selector) =
     inherit OpenQA.Selenium.By()
@@ -117,9 +118,8 @@ let findByJQuery jquerySelector f =
 type Finders =
     string -> (By -> ReadOnlyCollection<IWebElement>) -> seq<IWebElement list>
 
-// TODO: remove global variable
 // You can use this as an example to how to extend canopy by creating your own set of finders, tweaking the current collection, or adding/removing
-let mutable defaultFinders: Finders =
+let defaultFinders: Finders =
     (fun cssSelector f ->
         seq {
             yield findByCss                cssSelector f
@@ -132,5 +132,7 @@ let mutable defaultFinders: Finders =
         }
     )
 
+/// TODO: remove global variable
 let addedHints = Dictionary<string, string list>()
+/// TODO: remove global variable
 let hints = new Dictionary<string, seq<(string -> (By -> ReadOnlyCollection<IWebElement>) -> IWebElement list)>>()

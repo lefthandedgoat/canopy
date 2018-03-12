@@ -6,6 +6,32 @@ open Canopy.Runner.Reporters
 open OpenQA.Selenium
 open System
 
+(* documented/assertions *)
+let contains (value1: string) (value2: string) =
+    if not (value2.Contains value1) then
+        let message = sprintf "contains check failed.  %s does not contain %s" value2 value1
+        raise (CanopyContainsFailedException message)
+
+(* documented/assertions *)
+let containsInsensitive (value1: string) (value2: string) =
+    let rules = StringComparison.InvariantCultureIgnoreCase
+    let contains = value2.IndexOf(value1, rules)
+    if contains < 0 then
+        let message = sprintf "contains insensitive check failed.  %s does not contain %s" value2 value1
+        raise (CanopyContainsFailedException message)
+
+(* documented/assertions *)
+let notContains (value1: string) (value2: string) =
+    if value2.Contains value1 then
+        let message = sprintf "notContains check failed.  %s does contain %s" value2 value1
+        raise (CanopyNotContainsFailedException message)
+
+(* documented/assertions *)
+let is expected actual =
+    if expected <> actual then
+        let message = sprintf "equality check failed. Expected: %O, got: %O" expected actual
+        raise (CanopyEqualityFailedException message)
+
 
 let private last = function
     | hd :: tl -> hd
@@ -39,6 +65,9 @@ let private incrementLastTestSuite () =
 
 
 module Operators =
+    (* documented/assertions *)
+    let (===) expected actual = is expected actual
+
     (* documented/testing *)
     let ( &&& ) description f =
         let lastSuite = incrementLastTestSuite()

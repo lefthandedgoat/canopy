@@ -5,12 +5,14 @@ open System
 open Canopy.Logging
 open OpenQA.Selenium
 
-type CanopyException(message) =inherit Exception(message)
+type CanopyException =
+    inherit exn
+    new (message) = { inherit Exception(message) }
+    new (message, inner: exn) = { inherit Exception(message, inner) }
 type CanopyReadOnlyException(message) = inherit CanopyException(message)
 type CanopyOptionNotFoundException(message) = inherit CanopyException(message)
 type CanopySelectionFailedExeception(message) = inherit CanopyException(message)
 type CanopyDeselectionFailedException(message) = inherit CanopyException(message)
-type CanopyWaitForException(message) = inherit CanopyException(message)
 type CanopyElementNotFoundException(message) = inherit CanopyException(message)
 type CanopyMoreThanOneElementFoundException(message) = inherit CanopyException(message)
 type CanopyEqualityFailedException(message) = inherit CanopyException(message)

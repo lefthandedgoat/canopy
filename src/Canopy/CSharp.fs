@@ -1,12 +1,12 @@
 ﻿namespace Canopy.CSharp
 
-open Canopy.Runner
 open Canopy
 open Canopy.Operators
 open Canopy.Runner
+open Canopy.Runner.Runner
 open Canopy.Runner.Runner.Operators
-open Canopy.Runner.Assert
-open Canopy.Runner.Assert.Operators
+open Canopy.Expect
+open Canopy.Expect.Operators
 
 type Canopy() =
 
@@ -23,7 +23,7 @@ type Canopy() =
     //runner stuff
     static member context description = Runner.context description
 
-    static member once (f : System.Action) = Runner.once (fun _ -> f.Invoke())
+    static member once (f: System.Action) = Runner.once (fun _ -> f.Invoke())
 
     static member before (f : System.Action) = Runner.before (fun _ -> f.Invoke())
 
@@ -93,9 +93,14 @@ type Canopy() =
 
     static member describe text = describe text
 
-    static member waitFor2 message (f : System.Predicate<obj>) = waitForMessage message (fun _ -> f.Invoke())
+    static member waitForMessage message (f: System.Predicate<obj>) =
+        waitForMessage message (fun _ -> f.Invoke())
 
-    static member waitFor (f : System.Predicate<obj>) = waitFor (fun _ -> f.Invoke())
+    static member waitFor2 message (f: System.Predicate<obj>) =
+        waitForMessage message (fun _ -> f.Invoke())
+
+    static member waitFor (f : System.Predicate<obj>) =
+        waitFor (fun _ -> f.Invoke())
 
     static member waitForElement selector = waitForElement selector
 
