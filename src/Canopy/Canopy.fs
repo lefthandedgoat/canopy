@@ -428,28 +428,20 @@ let waitForC (config: CanopyConfig) message f =
     let wO = config.configureOp message f
     waitFor wO
 
-let waitForMessageC config message f =
-    try
-        wait config.compareTimeout f
-    with
-    | :? WebDriverTimeoutException ->
-        raise (CanopyWaitForException (message, ()))
+let waitForMessageC (config: CanopyConfig) message f =
+    match waitForC config message f |> Async.RunSynchronously with
+    | WaitResult.Ok result ->
+        result
+    | WaitResult.Failure _
+    | WaitResult.Exn _
+    | WaitResult.Intermediate _ as result ->
+        let message =
+            sprintf "%s%swaitFor condition failed to become true in %.1f seconds"
+                    message System.Environment.NewLine (config.compareTimeout.TotalSeconds)
+        raise (CanopyWaitForException (message, result))
 
 let waitForMessage message f =
     waitForMessageC (config ()) message f
-
-//let waitForMessage message f =
-//    let config = config ()
-//    match waitForC config message f |> Async.RunSynchronously with
-//    | WaitResult.Ok result ->
-//        result
-//    | WaitResult.Failure _
-//    | WaitResult.Exn _
-//    | WaitResult.Error _ as result ->
-//        let message =
-//            sprintf "%s%swaitFor condition failed to become true in %.1f seconds"
-//                    message System.Environment.NewLine (config.compareTimeout.TotalSeconds)
-//        raise (CanopyWaitForException (message, result))
 
 (* documented/actions *)
 [<Obsolete "Use waitForMessage">]
@@ -457,7 +449,7 @@ let waitFor2 message f =
     waitForMessage message f
 
 (* documented/actions *)
-let waitFor =
+let waitForXX =
     waitForMessage "Condition not met in given amount of time. If you want to increase the time, put compareTimeout <- 10.0 anywhere before a test to increase the timeout"
 
 /// Find related
@@ -499,35 +491,34 @@ let rec internal findElementsC (context: Context) cssSelector (searchContext: IS
 let internal findElements cssSelector searchContext: IWebElement list =
     findElementsC (context ()) cssSelector searchContext
 
-let internal findByFunctionConf (config: CanopyConfig) cssSelector timeout waitFunc searchContext reliable =
-//    TODO: how to handle this one? It's a runner config, it would seem?
-//    if context.config.wipTest then
-//        colorizeAndSleep cssSelector
-    try
-        if reliable then
-            let elements = ref []
-            wait (*config.logger*) config.elementTimeout (fun _ ->
-                elements := waitFunc cssSelector searchContext
-                not <| List.isEmpty !elements)
-            !elements
-        else
-            waitResults (*config.logger*) config.elementTimeout (fun _ -> waitFunc cssSelector searchContext)
-    with
-    | :? WebDriverTimeoutException ->
-        suggestOtherSelectors config cssSelector
-        let message = sprintf "Canopy was unable to find element '%s'" cssSelector
-        raise (CanopyElementNotFoundException message)
+let internal findByFunctionConf (config: CanopyConfig) selectTimeout reliable waitOpFn cssSelector searchContext =
+    let reliableWait () =
+        match waitOpFn cssSelector searchContext with
+        | [] ->
+            Intermediate ()
+        | found ->
+            Ok found
 
-let internal findByFunction cssSelector timeout waitFunc searchContext reliable =
-    findByFunctionConf (config ()) cssSelector timeout waitFunc searchContext reliable
+    let fastWait () =
+        Ok (waitOpFn cssSelector searchContext)
 
-let internal findC context cssSelector timeout searchContext reliable =
+    let wop =
+        let waiter = if reliable then reliableWait else fastWait
+        config.configureOp cssSelector selectTimeout waiter
+
+    async {
+        let! res = waitFor wop ()
+        do res |> WaitResult.iterFailure (fun _ -> suggestOtherSelectors config cssSelector)
+        return res
+    }
+    // raise (CanopyElementNotFoundException message)
+
+let internal findC context selectTimeout reliable =
     let finder = findElementsC context
-    findByFunctionConf context.config cssSelector timeout finder searchContext reliable
-    |> List.head
+    findByFunctionConf context.config selectTimeout reliable finder
 
-let internal find cssSelector timeout searchContext reliable =
-    findC (context ()) cssSelector timeout searchContext reliable
+let internal find selectTimeout =
+    findC (context ()) selectTimeout
 
 let internal findManyC context cssSelector timeout searchContext reliable =
     let finder = findElementsC context
@@ -614,7 +605,7 @@ let unreliableElement cssSelector =
 
 (* documented/actions *)
 let elementWithinC context cssSelector elem =
-    findC context cssSelector context.config.elementTimeout elem true
+    findC context  (fun x -> x.elementTimeout) true cssSelector elem
 
 (* documented/actions *)
 let elementWithin cssSelector elem =

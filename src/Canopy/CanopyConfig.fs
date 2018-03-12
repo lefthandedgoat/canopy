@@ -190,9 +190,9 @@ module CanopyConfig =
         { config with paths = { config.paths with edgeDir = path } }
 
     type CanopyConfig with
-        member internal x.configureOp name fn: WaitOp<'ok, 'error> =
-            let xA =
+        member internal x.configureOp name fnTO fn: WaitOp<'state, 'res> =
+            let xA state =
                 async {
-                    return fn ()
+                    return fn state
                 }
-            WaitOp<_, _>.create xA name x.logger x.compareTimeout x.wipSleep
+            WaitOp<_, _>.create xA name x.logger (fnTO x) x.wipSleep

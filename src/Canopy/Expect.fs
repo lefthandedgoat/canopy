@@ -7,6 +7,21 @@ open System
 open System.Diagnostics
 open Canopy
 
+type AssertResult<'ok> =
+    | Passed
+    | Mismatch of expected:obj * actual:obj
+
+type Asserter<'input, 'ok> = Asserter of fn:('input -> AssertResult<'ok>)
+
+module Asserter =
+
+    let ofPredicate predicate createError =
+        Asserter (fun args ->
+            if predicate args then
+                Passed
+            else
+                createError ())
+
 let private waitAndAssert2 (context: Context) asserter fnRead =
     ()
 

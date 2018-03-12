@@ -1,35 +1,107 @@
-﻿[<AutoOpen>]
-module Canopy.Wait
+﻿/// Module for waiting for things to become true.
+[<AutoOpen>]
+module internal Canopy.Wait
 
-open Canopy.Logging
-open Canopy.Logging.Message
 open OpenQA.Selenium
 open System
 open System.Diagnostics
 open System.Threading
+open Canopy.Logging
+open Canopy.Logging.Message
 
-/// A recursive type that collects all failures.
-type WaitResult<'ok, 'error> =
-    | Ok of value:'ok
-    | Error of error:'error
+/// A recursive type that collects all failures and also allows monadic value
+/// passing between the invocations.
+type WaitResult<'state, 'res> =
+    | Ok of result:'res
+    | Intermediate of state:'state
     | Exn of e:exn
-    | Failure of results:WaitResult<'ok, 'error> list
+    | Failure of results:WaitResult<'state, 'res> list
 
 module WaitResult =
-    let ofResult expectedOnError = function
-        | Result.Ok value ->
-            Ok value
-        | Result.Error actual ->
-            Error (expectedOnError, actual)
+    let map fn = function
+        | Ok results ->
+            Ok (fn results)
+        | other ->
+            other
+
+    let map2 fOk fF = function
+        | Ok result ->
+            Ok (fOk result)
+        | Failure results ->
+            Failure (fF results)
+        | other ->
+            other
+
+    let map4 fOk fI fE fF = function
+        | Ok results ->
+            Ok (fOk results)
+        | Intermediate state ->
+            Intermediate (fI state)
+        | Exn e ->
+            Exn (fE e)
+        | Failure results ->
+            Failure (fF results)
+
+    let bind fn = function
+        | Ok results ->
+            fn results
+        | other ->
+            other
+
+    let bind2 fOk fF = function
+        | Ok result ->
+            fOk result
+        | Failure results ->
+            fF results
+        | other ->
+            other
+
+    let bind4 fOk fI fE fF = function
+        | Ok result ->
+            fOk result
+        | Intermediate state ->
+            fI state
+        | Exn e ->
+            fE e
+        | Failure results ->
+            fF results
+
+    let iter fn = function
+        | Ok result ->
+            ignore (fn result)
+        | _ ->
+            ()
+
+    let iterFailure fn = function
+        | Failure results ->
+            ignore (fn results)
+        | _ ->
+            ()
 
 type CanopyWaitForException(message, result: obj) =
     inherit CanopyException(message)
     member x.result = result
 
-type internal WaitOp<'ok, 'error> =
+/// Nice logging extensions for metrics.
+type Logger with
+    /// Wraps the async value in an async value that times the execution of the
+    /// `xA` async parameter.
+    member x.time (xA: Async<'a>) =
+        async {
+            let sw = Stopwatch.StartNew()
+            let! res = xA
+            sw.Stop()
+            do! x.log LogLevel.Debug (fun level -> { Message.gauge sw.ElapsedTicks "ticks" with level = level })
+            return res
+        }
+
+/// A wait operation is a contextual operation (name, logger) that has a time
+/// budget available to return WaitResult.Ok; it will be invoked every `sleep`
+/// duration until it is successful.
+type WaitOp<'state, 'res> =
     {
         /// Unwrapped/possibly throwing async
-        xA: Async<WaitResult<'ok, 'error>>
+        fA: 'state -> Async<WaitResult<'state, 'res>>
         /// Name/location for this operation
         name: string
         /// Logger to log with
@@ -39,69 +111,84 @@ type internal WaitOp<'ok, 'error> =
         /// How long to wait in between checking the value of the operation.
         sleep: TimeSpan
     }
-    static member create xA n l bdg sl =
+
+    /// Create a new WaitOp.
+    static member create fA n l bdg sl =
         {
-            xA = xA
+            fA = fA
             name = n
             logger = l
             budget = bdg
             sleep = sl
         }
 
-let internal waitFor (op: WaitOp<'ok, 'error>): Async<WaitResult<'ok, 'error>> =
-    // wrapped:
-    let wA =
+/// This waitFor function is basically a fold operation where each reduce step is
+/// interspersed with an async wait.
+///
+/// Callers build the op that acts on the state and get back an async workflow
+/// that implements the wait operation.
+///
+/// The returned value can be cached to save allocations, and the returned async
+/// value (codomain of the returned function) is cold, so it can be re-executed
+/// over and over again.
+///
+/// In the case of Failure being returned, this function will have acted as a
+/// Scan operation, with all intermediate failures or intermediate values mappended
+/// to a list in Failure.
+///
+/// Invariants:
+///
+///  - pre: op.fA: must not block forever
+///  - pre: op.fA: liveness can only be garuanteed when neither the function nor
+///    the async value blocks the thread-pool thead.
+///  - post: either returns `Failure` or `Ok`.
+///  - post: never throws exceptions.
+///
+let waitFor (op: WaitOp<'state, 'res>): 'state -> Async<WaitResult<'state, 'res>> =
+    // wrapped, catching exceptions:
+    let wfA state =
         async {
             try
-                return! op.xA
+                return! op.fA state
             with e ->
                 return Exn e
         }
 
-    let rec exec (sw: Stopwatch) acc =
+    let rec exec (sw: Stopwatch) state acc =
         async {
             if sw.Elapsed >= op.budget then
                 return Failure acc
             else
-                let! current = wA
+                let! current = op.logger.time (wfA state)
                 match current with
                 | Ok value ->
                     return Ok value
+                | Intermediate nextState as e ->
+                    return! chill sw nextState (e :: acc)
                 | Failure results ->
-                    return! chill sw (List.concat [ results; acc ])
+                    return! chill sw state (List.concat [ results; acc ])
                 | Exn _ as ee ->
-                    return! chill sw (ee :: acc)
-                | Error _ as e ->
-                    return! chill sw (e :: acc)
+                    return! chill sw state (ee :: acc)
         }
 
-    and chill sw acc =
+    and chill sw state acc =
         async {
-            do! Async.Sleep (op.sleep.TotalMilliseconds |> int)
-            return! exec sw acc
+            let sleep = min op.sleep (op.budget - sw.Elapsed)
+
+            if sleep <= TimeSpan.Zero then
+                return Failure acc
+            else
+                do! Async.Sleep (sleep.TotalMilliseconds |> int)
+                return! exec sw state acc
         }
 
-    async {
-        let sw = Stopwatch.StartNew()
-        return! exec sw []
-    }
+    fun state ->
+        async {
+            let sw = Stopwatch.StartNew()
+            return! exec sw state []
+        }
 
-type internal AssertResult<'ok> =
-    | WaitResult of wr:WaitResult<'ok, string>
-    | Mismatch of expected:obj * actual:obj
-
-type internal Asserter<'input, 'ok> = Asserter of fn:('input -> AssertResult<'ok>)
-
-module internal Asserter =
-
-    let ofPredicate predicate createError =
-        Asserter (fun args ->
-            if predicate args then
-                WaitResult (Ok ())
-            else
-                createError ())
-
-module internal String =
+module String =
     let eqCII a b =
         String.Equals(a, b, StringComparison.InvariantCultureIgnoreCase)
     let neqCII a b =
@@ -110,51 +197,3 @@ module internal String =
         fullString
             .ToLowerInvariant()
             .Contains(subString.ToLowerInvariant())
-
-let mutable waitSleep = 0.5
-
-/// TO CONSIDER: making this async?
-let waitResults timeout (f: unit -> 'a) =
-    let sw = Stopwatch.StartNew()
-
-    let mutable finalResult: 'a = Unchecked.defaultof<'a>
-    let mutable keepGoing = true
-
-    while keepGoing do
-        try
-            if sw.Elapsed >= timeout then
-                raise <| WebDriverTimeoutException("Timed out!")
-
-            let result = f ()
-            match box result with
-            | :? bool as b when b ->
-                keepGoing <- false
-                finalResult <- result
-
-            | :? bool ->
-                // TO CONSIDER: don't sleep the thread
-                Thread.Sleep(int (waitSleep * 1000.0))
-
-            | _ as o when not (isNull o) ->
-                keepGoing <- false
-                finalResult <- result
-
-            | _ as o ->
-                // TO CONSIDER: don't sleep the thread
-                Thread.Sleep(int (waitSleep * 1000.0))
-        with
-        | :? WebDriverTimeoutException ->
-            reraise ()
-        | :? CanopyException as ce ->
-            raise ce
-        | _ ->
-            Thread.Sleep(int (waitSleep * 1000.0))
-
-    finalResult
-
-let wait timeout (f: unit -> bool) =
-    waitResults timeout f
-    |> ignore
-
-let waitSeconds timeout f =
-    wait (TimeSpan.FromSeconds timeout) f
