@@ -97,8 +97,12 @@ module CanopyConfig =
             optimizeByDisablingClearBeforeWrite = false
             showInfoDiv = true
             throwOnStatics = false
-            logLevelOnStatics = Verbose
+            logLevelOnStatics = Info
         }
+
+    (* documented/configuration *)
+    let setLogLevel logLevel (config: CanopyConfig) =
+        { config with logger = Targets.create logLevel [| "Canopy" |] }
 
     (* documented/configuration *)
     let setHideCommandPromptWindow shouldHide (config: CanopyConfig) =
@@ -131,6 +135,14 @@ module CanopyConfig =
     (* documented/configuration *)
     let setThrowIfMoreThanOneElement enabled (config: CanopyConfig) =
         { config with throwIfMoreThanOneElement = enabled }
+
+    (* documented/configuration *)
+    let setThrowOnStatics enabled (config: CanopyConfig) =
+        { config with throwOnStatics = enabled }
+
+    (* documented/configuration *)
+    let setWarnLevelOnStatics logLevel (config: CanopyConfig) =
+        { config with logLevelOnStatics = logLevel }
 
     (* documented/configuration *)
     let setFinders finders (config: CanopyConfig) =
@@ -176,3 +188,11 @@ module CanopyConfig =
     (* documented/configuration *)
     let setEdgeDir path (config: CanopyConfig) =
         { config with paths = { config.paths with edgeDir = path } }
+
+    type CanopyConfig with
+        member internal x.configureOp name fn: WaitOp<'ok, 'error> =
+            let xA =
+                async {
+                    return fn ()
+                }
+            WaitOp<_, _>.create xA name x.logger x.compareTimeout x.wipSleep

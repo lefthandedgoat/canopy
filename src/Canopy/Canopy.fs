@@ -424,18 +424,32 @@ let describe text =
     describeC (context ()) text
 
 (* documented/actions *)
+let waitForC (config: CanopyConfig) message f =
+    let wO = config.configureOp message f
+    waitFor wO
+
 let waitForMessageC config message f =
     try
         wait config.compareTimeout f
     with
     | :? WebDriverTimeoutException ->
-        let message =
-            sprintf "%s%swaitFor condition failed to become true in %.1f seconds"
-                    message System.Environment.NewLine (config.compareTimeout.TotalSeconds)
-        raise (CanopyWaitForException message)
+        raise (CanopyWaitForException (message, ()))
 
 let waitForMessage message f =
     waitForMessageC (config ()) message f
+
+//let waitForMessage message f =
+//    let config = config ()
+//    match waitForC config message f |> Async.RunSynchronously with
+//    | WaitResult.Ok result ->
+//        result
+//    | WaitResult.Failure _
+//    | WaitResult.Exn _
+//    | WaitResult.Error _ as result ->
+//        let message =
+//            sprintf "%s%swaitFor condition failed to become true in %.1f seconds"
+//                    message System.Environment.NewLine (config.compareTimeout.TotalSeconds)
+//        raise (CanopyWaitForException (message, result))
 
 (* documented/actions *)
 [<Obsolete "Use waitForMessage">]
@@ -492,12 +506,12 @@ let internal findByFunctionConf (config: CanopyConfig) cssSelector timeout waitF
     try
         if reliable then
             let elements = ref []
-            wait config.elementTimeout (fun _ ->
+            wait (*config.logger*) config.elementTimeout (fun _ ->
                 elements := waitFunc cssSelector searchContext
                 not <| List.isEmpty !elements)
             !elements
         else
-            waitResults config.elementTimeout (fun _ -> waitFunc cssSelector searchContext)
+            waitResults (*config.logger*) config.elementTimeout (fun _ -> waitFunc cssSelector searchContext)
     with
     | :? WebDriverTimeoutException ->
         suggestOtherSelectors config cssSelector
@@ -746,21 +760,22 @@ let writeC context text item =
     | :? IWebElement as elem ->
         writeToElementC context elem text
     | :? string as cssSelector ->
-        wait context.config.elementTimeout (fun _ ->
-            elements cssSelector
+        wait (*context.config.logger*) context.config.elementTimeout (fun _ ->
+            elementsC context cssSelector
             |> List.map (fun elem ->
                 try
                     writeToElementC context elem text
                     true
                 with
-                    //Note: Enrich exception with proper cssSelector description
-                    | :? CanopyReadOnlyException ->
-                        let message = sprintf "element %s is marked as read only, you can not write to read only elements" cssSelector
-                        raise (CanopyReadOnlyException message)
-                    | _ ->
-                        false)
-            |> List.exists (fun elem -> elem = true)
-        )
+                // Note: Enrich exception with proper cssSelector description
+                | :? CanopyReadOnlyException ->
+                    let message =
+                        sprintf "Element '%s' is marked as read only, you can not write to read only elements"
+                                cssSelector
+                    raise (CanopyReadOnlyException message)
+                | _ ->
+                    false)
+            |> List.exists id)
     | _ ->
         let message = sprintf "Can't read %O because it is not a string or element" item
         raise (CanopyNotStringOrElementException message)
@@ -772,7 +787,7 @@ let write text item =
 let internal safeReadC (context: Context) item =
     let readvalue = ref ""
     try
-        wait context.config.elementTimeout (fun _ ->
+        wait (*context.config.logger*) context.config.elementTimeout (fun _ ->
           readvalue :=
             match box item with
             | :? IWebElement as elem ->
@@ -787,7 +802,8 @@ let internal safeReadC (context: Context) item =
           true)
         !readvalue
     with
-        | :? WebDriverTimeoutException -> raise (CanopyReadException("was unable to read item for unknown reason"))
+    | :? WebDriverTimeoutException ->
+        raise (CanopyReadException("was unable to read item for unknown reason"))
 
 let internal safeRead item =
     safeReadC (context ()) item
@@ -799,7 +815,8 @@ let readC context item =
         safeReadC context elem
     | :? string as cssSelector ->
         safeReadC context cssSelector
-    | _ -> raise (CanopyNotStringOrElementException(sprintf "Can't read %O because it is not a string or element" item))
+    | _ ->
+        raise (CanopyNotStringOrElementException(sprintf "Can't read %O because it is not a string or element" item))
 
 (* documented/actions *)
 let read item =
@@ -845,6 +862,10 @@ let left = Keys.Left
 let right = Keys.Right
 (* documented/actions *)
 let esc = Keys.Escape
+(* documented/actions *)
+let space = Keys.Space
+(* documented/actions *)
+let backspace = Keys.Backspace
 
 (* documented/actions *)
 let pressC context key =
@@ -871,7 +892,7 @@ let alert () =
 
 (* documented/actions *)
 let acceptAlertC (context: Context) =
-    wait context.config.compareTimeout (fun _ ->
+    wait (*context.config.logger*) context.config.compareTimeout (fun _ ->
         context.getBrowser().SwitchTo().Alert().Accept()
         true)
 
@@ -881,7 +902,7 @@ let acceptAlert () =
 
 (* documented/actions *)
 let dismissAlertC (context: Context) =
-    wait context.config.compareTimeout (fun _ ->
+    wait (*context.config.logger*) context.config.compareTimeout (fun _ ->
         context.getBrowser().SwitchTo().Alert().Dismiss()
         true)
 
@@ -912,7 +933,7 @@ let clickC (context: Context) item =
     | :? IWebElement as element ->
         element.Click()
     | :? string as cssSelector ->
-        wait context.config.elementTimeout (fun _ ->
+        wait (*context.config.logger*) context.config.elementTimeout (fun _ ->
             let atleastOneItemClicked = ref false
             elementsC context cssSelector
             |> List.iter (fun elem ->
@@ -937,7 +958,7 @@ let doubleClickC (context : Context) item =
     | :? IWebElement as elem ->
         (context.getBrowser() :?> IJavaScriptExecutor).ExecuteScript(js, elem) |> ignore
     | :? string as cssSelector ->
-        wait context.config.elementTimeout (fun _ ->
+        wait (*context.config.logger*) context.config.elementTimeout (fun _ ->
             let elem = elementC context cssSelector
             (context.getBrowser() :?> IJavaScriptExecutor).ExecuteScript(js, elem) |> ignore
             true)
@@ -955,7 +976,7 @@ let modifierClickC (context : Context) modifier item =
     | :? IWebElement as elem ->
         actions.KeyDown(modifier).Click(elem).KeyUp(modifier).Perform() |> ignore
     | :? string as cssSelector ->
-        wait context.config.elementTimeout (fun _ ->
+        wait (*context.config.logger*) context.config.elementTimeout (fun _ ->
             let elem = elementC context cssSelector
             actions.KeyDown(modifier).Click(elem).KeyUp(modifier).Perform()
             true)
@@ -987,7 +1008,7 @@ let rightClickC (context : Context) item =
     | :? IWebElement as elem ->
         actions.ContextClick(elem).Perform() |> ignore
     | :? string as cssSelector ->
-        wait context.config.elementTimeout (fun _ ->
+        wait (*context.config.logger*) context.config.elementTimeout (fun _ ->
             let elem = elementC context cssSelector
             actions.ContextClick(elem).Perform()
             true)
@@ -1063,7 +1084,7 @@ let hover selector =
 //draggin
 (* documented/actions *)
 let dragC (context: Context) cssSelectorA cssSelectorB =
-    wait context.config.elementTimeout (fun _ ->
+    wait (*context.config.logger*) context.config.elementTimeout (fun _ ->
         let a = elementC context cssSelectorA
         let b = elementC context cssSelectorB
         (new Actions(context.getBrowser())).DragAndDrop(a, b).Perform()
@@ -1237,7 +1258,7 @@ let switchTo browser =
 
 (* documented/actions *)
 let switchToTabC (context: Context) number =
-    wait context.config.pageTimeout (fun _ ->
+    wait (*context.config.logger*) context.config.pageTimeout (fun _ ->
         let number = number - 1
         let tabs = context.getBrowser().WindowHandles;
         if tabs |> Seq.length >= number then
@@ -1327,6 +1348,8 @@ let quit browser =
     match box browser with
     | :? IWebDriver as b ->
         b.Quit()
+    | :? Option<IWebDriver> as opt ->
+        opt |> Option.iter (fun b -> b.Quit())
     | _ ->
         let c = context ()
         c.browsers |> List.iter (fun b -> b.Quit())
@@ -1347,7 +1370,7 @@ let onnC (context: Context) (u: string) =
                   | _ -> "http://host/" + u.Trim('/') //ensure valid uri
         let uriBuilder = new System.UriBuilder(url)
         uriBuilder.Path.TrimEnd('/') //get the path part removing trailing slashes
-    wait context.config.pageTimeout (fun _ ->
+    wait (*context.config.logger*) context.config.pageTimeout (fun _ ->
         context.getBrowser().Url = u
         || urlPath (context.getBrowser().Url) = urlPath(u))
 
@@ -1411,15 +1434,15 @@ let back = Back
 let forward = Forward
 
 (* documented/actions *)
-let navigateC (context : Context) = function
+let navigateB (browser: IWebDriver) = function
     | Back ->
-        context.getBrowser().Navigate().Back()
+        browser.Navigate().Back()
     | Forward ->
-        context.getBrowser().Navigate().Forward()
+        browser.Navigate().Forward()
 
 (* documented/actions *)
 let navigate direction =
-    navigateC (context ()) direction
+    navigateB (browser ()) direction
 
 (* documented/actions *)
 let addFinder finder =
@@ -1429,6 +1452,7 @@ let addFinder finder =
 let internal addHintFinder hints finder =
     hints |> Seq.append (Seq.singleton finder)
 
+// TODO: remove global variable mutation
 (* DONT/documented/actions *)
 let addSelector finder hintType selector =
     //gaurd against adding same hintType multipe times and increase size of finder seq
@@ -1577,6 +1601,6 @@ type Context<'config> with
     member x.reload () =
         reloadB (x.getBrowser())
     member x.navigate direction =
-        navigateC x direction
+        navigateB (x.getBrowser()) direction
     member x.waitForElement cssSelector =
         waitForElementC x cssSelector

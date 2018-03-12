@@ -34,3 +34,14 @@ module screenSizes =
     let iPad = Screen.Sizes.iPad
     let Nexus4 = Screen.Sizes.Nexus4
     let Nexus7 = Screen.Sizes.Nexus7
+
+module Assert =
+    open Canopy.Expect
+
+    (* documented/assertions *)
+    let equal item value =
+        elementHasText (context ()) value item
+
+    (* documented/assertions *)
+    let notEqual cssSelector value =
+        noElementHasText (context ()) value cssSelector

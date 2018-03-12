@@ -62,8 +62,9 @@
     <Compile Include="Canopy.fs" />
     <Compile Include="Operators.fs" />
     <Compile Include="UserAgents.fs" />
+    <!-- Browser-specific asserts/expectations -->
+    <Compile Include="Expect.fs" />
     <!-- Canopy-specific testing framework -->
-    <Compile Include="Runner\Assert.fs" />
     <Compile Include="Runner\Reporters.fs" />
     <Compile Include="Runner\CanopyRunnerConfig.fs" />
     <Compile Include="Runner\History.fs" />

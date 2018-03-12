@@ -13,24 +13,43 @@ open OpenQA.Selenium.Firefox
 open Expecto
 #load "Pages.fs"
 open Canopy
+open Canopy.Logging
 open Canopy.ParallelUsage
 open Canopy.ParallelUsage.Pages
 open System
 // TO HERE!
 
 let init () =
+    let configure =
+        CanopyConfig.setOptimizeByDisablingClearBeforeWrite false
+        >> CanopyConfig.setOptimizeBySkippingIFrameCheck true
+        >> CanopyConfig.setSuggestOtherSelectors true
+        >> CanopyConfig.setThrowOnStatics true
+        >> CanopyConfig.setElementTimeout (TimeSpan.FromSeconds 2.)
+        >> CanopyConfig.setLogLevel Debug
+    let config = configure defaultConfig
     let firefoxWithOpts =
         let o = FirefoxOptions(AcceptInsecureCertificates = Nullable true)
         FirefoxWithOptions o
-    let b = startWithConfigPure defaultConfig firefoxWithOpts
-    Context.createT (Some b) defaultConfig ()
+    let b = startWithConfigPure config firefoxWithOpts
+    Context.createT (Some b) config ()
 
 let x = init ()
 
 x.url "https://qvitoo.dev:8080"
-x.click (x.element ".button.signup")
-x.write "#name" "Test User 1"
-x.write "#email" "test@example.com"
+
+let signup () =
+    x.click (x.element ".button.signup")
+    x.write "Test User 1" "#name"
+    x.write "test5@example.com" "#email"
+    x.press tab
+    x.press Keys.Space
+    x.press tab
+    x.press Keys.Enter
+    x.element ".view-heading"
+        |> Expect.elementHasText x "inbox"
+        // why is this not crashing??
+    
 
 // lastly:
-quit ()
+quit x.browser

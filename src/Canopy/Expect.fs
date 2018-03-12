@@ -1,60 +1,85 @@
 /// Assertions
-module Canopy.Runner.Assert
+module Canopy.Expect
 
+open Canopy.Logging
 open OpenQA.Selenium
 open System
+open System.Diagnostics
 open Canopy
 
-let equalC (context: Context) item value =
-    match box item with
-    | :? IAlert as alert ->
-        let text = alert.Text
-        if text <> value then
-            alert.Dismiss()
-            let message = sprintf "equality check failed.  expected: %s, got: %s" value text
-            raise (CanopyEqualityFailedException message)
-    | :? string as cssSelector ->
-        let bestvalue = ref ""
-        try
-            wait context.config.compareTimeout (fun _ ->
-                let readvalue = readC context cssSelector
-                if readvalue <> value && readvalue <> "" then
-                    bestvalue := readvalue
-                    false
-                else
-                    readvalue = value)
-        with
-        | :? CanopyElementNotFoundException as ex ->
-            let message = sprintf "%s%sequality check failed. Expected: %s, got: %s" ex.Message Environment.NewLine value !bestvalue
-            raise (CanopyEqualityFailedException message)
-        | :? WebDriverTimeoutException ->
-            let message = sprintf "Equality check failed. Expected: %s, got: %s" value !bestvalue
-            raise (CanopyEqualityFailedException message)
-    | _ ->
-        let message = sprintf "Can't check equality on %O because it is not a string or alert" item
-        raise (CanopyNotStringOrElementException message)
+let private waitAndAssert2 (context: Context) asserter fnRead =
+    ()
 
-let equal item value =
-    equalC (context ()) item value
-
-let notEqualC (context: Context) cssSelector value =
+let private waitAndAssert (context: Context) asserter fnRead =
+    let bestValue = ref ""
     try
-        wait context.config.compareTimeout (fun _ -> readC context cssSelector <> value)
+        waitResults (*context.config.logger*) context.config.compareTimeout (fun _ ->
+            let readValue = fnRead ()
+            match asserter readValue with
+            | Choice1Of2 () ->
+                Ok ()
+            | Choice2Of2 expected when readValue <> "" ->
+                bestValue := readValue
+                Error expected
+            | Choice2Of2 expected ->
+                Error expected)
+        |> ignore
     with
     | :? CanopyElementNotFoundException as ex ->
-        let message = sprintf "%s%snot equals check failed.  expected NOT: %s, got: " ex.Message Environment.NewLine value
-        raise (CanopyNotEqualsFailedException message)
+        let message =
+            sprintf "%s%sequality check failed. Best value found: '%s'."
+                    ex.Message Environment.NewLine !bestValue
+        raise (CanopyEqualityFailedException message)
+
     | :? WebDriverTimeoutException ->
-        let gotten = readC context cssSelector
-        let message = sprintf "Not-equals check failed.  expected NOT: %s, got: %s" value gotten
-        raise (CanopyNotEqualsFailedException message)
+        let message =
+            sprintf "Equality check failed. Best value found: '%s'." !bestValue
+        raise (CanopyEqualityFailedException message)
 
-let notEqual cssSelector value =
-    notEqualC (context ()) cssSelector value
+let private assertOnText context asserter item =
+    match box item with
+    | :? IAlert as alert ->
+        match asserter alert.Text with
+        | Choice1Of2 () -> ()
+        | Choice2Of2 expected ->
+            alert.Dismiss()
+            let message =
+                sprintf "Equality check failed. Expected: '%O', got: '%s'"
+                        expected alert.Text
+            raise (CanopyEqualityFailedException message)
+    | :? IWebElement as element ->
+        waitAndAssert context asserter (fun () -> readC context element)
+    | :? string as cssSelector ->
+        waitAndAssert context asserter (fun () -> readC context cssSelector)
+    | _ ->
+        let message =
+            sprintf "Can't check equality on '%O' because it is not a string, IWebElement or IAlert."
+                    item
+        raise (CanopyNotStringOrElementException message)
 
+let private buildAsserter fn message =
+    fun input ->
+        if fn input then
+            Choice1Of2 ()
+        else
+            Choice2Of2 message
+
+(* documented/assertions *)
+let elementHasText (context: Context) text alertElementOrSelector =
+    let asserter =
+        buildAsserter (String.eqCII text) (sprintf "Tried to find '%s'." text)
+    assertOnText context asserter alertElementOrSelector
+
+(* documented/assertions *)
+let noElementHasText (context: Context) text alertElementOrSelector =
+    let asserter =
+        buildAsserter (String.neqCII text) (sprintf "No element should contain: '%s'." text)
+    assertOnText context asserter alertElementOrSelector
+
+(* documented/assertions *)
 let atLeastOneEqualC (context: Context) cssSelector value =
     try
-        wait context.config.compareTimeout (fun _ ->
+        wait (*context.config.logger*) context.config.compareTimeout (fun _ ->
              cssSelector
              |> elementsC context
              |> Seq.exists (fun element -> textOf element = value))
@@ -70,12 +95,14 @@ let atLeastOneEqualC (context: Context) cssSelector value =
         let message = sprintf "can't find %s in list %s%sgot: %s" value cssSelector Environment.NewLine (sb.ToString())
         raise (CanopyValueNotInListException message)
 
+(* documented/assertions *)
 let atLeastOneEqual cssSelector value =
     atLeastOneEqualC (context ()) cssSelector value
 
+(* documented/assertions *)
 let noElementEqualsC (context: Context) cssSelector value =
     try
-        wait context.config.compareTimeout (fun _ ->
+        wait (*context.config.logger*) context.config.compareTimeout (fun _ ->
             cssSelector
             |> elementsC context
             |> Seq.exists (fun element -> textOf element <> value))
@@ -87,9 +114,11 @@ let noElementEqualsC (context: Context) cssSelector value =
         let message = sprintf "found %s in list %s, expected not to" value cssSelector
         raise (CanopyValueInListException message)
 
+(* documented/assertions *)
 let noElementEquals cssSelector value =
     noElementEqualsC (context ()) cssSelector value
 
+(* documented/assertions *)
 let selectedC (context: Context) item =
     let selected cssSelector (elem: IWebElement) =
         if not <| elem.Selected then
@@ -132,30 +161,11 @@ let deselected item =
     deselectedC (context ()) item
 
 (* documented/assertions *)
-let contains (value1: string) (value2: string) =
-    if not (value2.Contains value1) then
-        let message = sprintf "contains check failed.  %s does not contain %s" value2 value1
-        raise (CanopyContainsFailedException message)
-
-(* documented/assertions *)
-let containsInsensitive (value1: string) (value2: string) =
-    let rules = StringComparison.InvariantCultureIgnoreCase
-    let contains = value2.IndexOf(value1, rules)
-    if contains < 0 then
-        let message = sprintf "contains insensitive check failed.  %s does not contain %s" value2 value1
-        raise (CanopyContainsFailedException message)
-
-(* documented/assertions *)
-let notContains (value1: string) (value2: string) =
-    if value2.Contains value1 then
-        let message = sprintf "notContains check failed.  %s does contain %s" value2 value1
-        raise (CanopyNotContainsFailedException message)
-
-(* documented/assertions *)
 let countC (context: Context) cssSelector count =
     try
-        wait context.config.compareTimeout (fun _ ->
-            (unreliableElementsC context cssSelector).Length = count)
+        wait (*context.config.logger*) context.config.compareTimeout (fun _ ->
+            let found = unreliableElementsC context cssSelector
+            List.length found = count)
     with
     | :? CanopyElementNotFoundException as ex ->
         let message = sprintf "%s%scount failed. expected: %i got: %i" ex.Message Environment.NewLine count 0
@@ -172,7 +182,7 @@ let count cssSelector count =
 
 let matchesC (context: Context) cssSelector regexPattern =
     try
-        wait context.config.compareTimeout (fun _ ->
+        wait (* context.config.logger *) context.config.compareTimeout (fun _ ->
             let value = readC context cssSelector
             regexMatch regexPattern value)
     with
@@ -193,7 +203,7 @@ let matches cssSelector regexPattern =
 
 let matchesNotC (context: Context) cssSelector regexPattern =
     try
-        wait context.config.compareTimeout (fun _ ->
+        wait (*context.config.logger*) context.config.compareTimeout (fun _ ->
             let value = readC context cssSelector
             not (regexMatch regexPattern value))
     with
@@ -214,7 +224,7 @@ let matchesNot cssSelector regexPattern =
 
 let atLeastOneMatchesC (context: Context) cssSelector regexPattern =
     try
-        wait context.config.compareTimeout (fun _ ->
+        wait (*context.config.logger*) context.config.compareTimeout (fun _ ->
             cssSelector
             |> elementsC context
             |> Seq.exists(fun element -> regexMatch regexPattern (textOf element)))
@@ -237,12 +247,6 @@ let atLeastOneMatchesC (context: Context) cssSelector regexPattern =
 let atLeastOneMatches cssSelector regexPattern =
     atLeastOneMatchesC (context ()) cssSelector regexPattern
 
-(* documented/assertions *)
-let is expected actual =
-    if expected <> actual then
-        let message = sprintf "equality check failed. Expected: %O, got: %O" expected actual
-        raise (CanopyEqualityFailedException message)
-
 let private shown (elem: IWebElement) =
     let opacity = elem.GetCssValue "opacity"
     let display = elem.GetCssValue "display"
@@ -251,7 +255,7 @@ let private shown (elem: IWebElement) =
 (* documented/assertions *)
 let displayedC (context: Context) item =
     try
-        wait context.config.compareTimeout (fun _ ->
+        wait (*context.config.logger*) context.config.compareTimeout (fun _ ->
             match box item with
             | :? IWebElement as element ->
                 shown element
@@ -276,7 +280,7 @@ let displayed item =
 (* documented/assertions *)
 let notDisplayedC (context: Context) item =
     try
-        wait context.config.compareTimeout (fun _ ->
+        wait (*context.config.logger*) context.config.compareTimeout (fun _ ->
             match box item with
             | :? IWebElement as element ->
                 not (shown element)
@@ -301,7 +305,7 @@ let notDisplayed item =
 (* documented/assertions *)
 let enabledC (context: Context) item =
     try
-        wait context.config.compareTimeout (fun _ ->
+        wait (*context.config.logger*) context.config.compareTimeout (fun _ ->
             match box item with
             | :? IWebElement as element ->
                 element.Enabled
@@ -325,7 +329,7 @@ let enabled item =
 (* documented/assertions *)
 let disabledC (context: Context) item =
     try
-        wait context.config.compareTimeout (fun _ ->
+        wait (*context.config.logger*) context.config.compareTimeout (fun _ ->
             match box item with
             | :? IWebElement as element ->
                 not element.Enabled
@@ -359,9 +363,11 @@ let fadedIn cssSelector =
 /// not thread-safe.
 module Operators =
     (* documented/assertions *)
-    let ( == ) item value = equal item value
+    let ( == ) item value =
+        elementHasText (context ()) item value
     (* documented/assertions *)
-    let ( != ) cssSelector value = notEqual cssSelector value
+    let ( != ) cssSelector value =
+        noElementHasText cssSelector value
     (* documented/assertions *)
     let ( *= ) cssSelector value = atLeastOneEqual cssSelector value
     (* documented/assertions *)
@@ -372,5 +378,3 @@ module Operators =
     let ( !=~ ) cssSelector pattern = matchesNot cssSelector pattern
     (* documented/assertions *)
     let ( *~ ) cssSelector pattern = atLeastOneMatches cssSelector pattern
-    (* documented/assertions *)
-    let (===) expected actual = is expected actual
