@@ -511,13 +511,6 @@ navigate back
 navigate forward
 
 (**
-coverage
-------
-Create a coverage report for a url.
-*)
-coverage "http://www.google.com"
-
-(**
 addFinder
 ------
 Add a finder to the list of current finders to make your selectors cleaner.

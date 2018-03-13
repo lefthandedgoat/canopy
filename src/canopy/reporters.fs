@@ -4,25 +4,6 @@ open System
 open OpenQA.Selenium
 open types
 
-type IReporter =
-   abstract member testStart : string -> unit
-   abstract member pass : string -> unit
-   abstract member fail : Exception -> string -> byte [] -> string -> unit
-   abstract member todo : string -> unit
-   abstract member skip : string -> unit
-   abstract member testEnd : string -> unit
-   abstract member describe : string -> unit
-   abstract member contextStart : string -> unit
-   abstract member contextEnd : string -> unit
-   abstract member summary : int -> int -> int -> int -> int -> unit
-   abstract member write : string -> unit
-   abstract member suggestSelectors : string -> string list -> unit
-   abstract member quit : unit -> unit
-   abstract member suiteBegin : unit -> unit
-   abstract member suiteEnd : unit -> unit
-   abstract member coverage : string -> byte [] -> string -> unit
-   abstract member setEnvironment : string -> unit
-
 type ConsoleReporter() =
     interface IReporter with
         member this.pass _ =
@@ -101,8 +82,6 @@ type ConsoleReporter() =
 
         member this.suiteEnd () = ()
 
-        member this.coverage url ss _ = ()
-
         member this.todo _ = ()
 
         member this.skip id =
@@ -175,8 +154,6 @@ type TeamCityReporter(?logImagesToConsole: bool) =
 
         member this.suiteEnd () = ()
 
-        member this.coverage url ss _ = ()
-
         member this.todo _ = ()
 
         member this.skip id = teamcityReport (sprintf "testIgnored name='%s'" (tcFriendlyMessage id))
@@ -231,7 +208,6 @@ type LiveHtmlReporter(browser : BrowserStartMode, driverPath : string, ?pinBrows
             options.AddArgument("--headless")
             new Firefox.FirefoxDriver(options) :> IWebDriver
         | Safari -> new Safari.SafariDriver() :> IWebDriver
-        | PhantomJS | PhantomJSProxyNone -> raise(System.Exception("Sorry PhantomJS can't be used for LiveHtmlReporter"))
         | Remote(_,_) -> raise(System.Exception("Sorry Remote can't be used for LiveHtmlReporter"))
 
     let pin () =
@@ -389,14 +365,6 @@ type LiveHtmlReporter(browser : BrowserStartMode, driverPath : string, ?pinBrows
             canQuit <- true
             this.swallowedJS (sprintf "collapseContextsExcept('%s');" "") //cheap hack to collapse all contexts at the end of a run
 
-        member this.coverage url ss id =
-            let encodedId = jsEncode id
-            if (contexts |> List.exists (fun c -> c = "Coverage Reports")) = false then
-                contexts <- "Coverage Reports" :: contexts
-                this.swallowedJS (sprintf "addContext('%s');" "Coverage Reports")
-            this.swallowedJS (sprintf "addToContext ('%s', '%s');" "Coverage Reports" url)
-            this.swallowedJS (sprintf "updateTestInContext('%s', '%s', 'Pass', '%s');" "Coverage Reports" encodedId (Convert.ToBase64String(ss)))
-
         member this.todo id =
             let encodedId = jsEncode id
             this.swallowedJS (sprintf "updateTestInContext('%s', '%s', 'Todo', '%s');" context encodedId "")
@@ -481,7 +449,6 @@ type JUnitReporter(resultFilePath:string) =
         member this.quit () = ()
         member this.suiteBegin () = ()
         member this.suiteEnd () = ()
-        member this.coverage url ss _ = ()
         member this.todo _ = ()
         member this.skip id = ()
         member this.setEnvironment env = ()

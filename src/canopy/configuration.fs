@@ -62,11 +62,7 @@ let mutable throwIfMoreThanOneElement = false
 (* documented/configuration *)
 let mutable configuredFinders = finders.defaultFinders
 (* documented/configuration *)
-let mutable writeToSelectWithOptionValue = true
-(* documented/configuration *)
 let mutable optimizeBySkippingIFrameCheck = false
-(* documented/configuration *)
-let mutable optimizeByDisablingCoverageReport = false
 (* documented/configuration *)
 let mutable optimizeByDisablingClearBeforeWrite = false
 (* documented/configuration *)

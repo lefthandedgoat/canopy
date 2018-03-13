@@ -33,11 +33,7 @@ let chrome = Chrome
 (* documented/actions *)
 let chromium = Chromium
 (* documented/actions *)
-let phantomJS = PhantomJS
-(* documented/actions *)
 let safari = Safari
-(* DONT/documented/actions *)
-let phantomJSProxyNone = PhantomJSProxyNone
 
 let mutable browsers = []
 
@@ -228,7 +224,6 @@ let waitFor = waitFor2 "Condition not met in given amount of time. If you want t
 
 //find related
 let rec private findElements cssSelector (searchContext : ISearchContext) : IWebElement list =
-    if optimizeByDisablingCoverageReport = false then searchedFor <- (cssSelector, browser.Url) :: searchedFor
     let findInIFrame () =
         let iframes = findByCss "iframe" searchContext.FindElements
         if iframes.IsEmpty then
@@ -353,12 +348,8 @@ let last cssSelector = (List.rev (elements cssSelector)).Head
 
 //read/write
 let private writeToSelect (elem:IWebElement) (text:string) =
-    let options =
-        if writeToSelectWithOptionValue then
-            unreliableElementsWithin (sprintf """option[text()="%s"] | option[@value="%s"] | optgroup/option[text()="%s"] | optgroup/option[@value="%s"]""" text text text text) elem
-        else //to preserve previous behaviour
-            unreliableElementsWithin (sprintf """option[text()="%s"] | optgroup/option[text()="%s"]""" text text) elem
-
+    let options = unreliableElementsWithin (sprintf """option[text()="%s"] | option[@value="%s"] | optgroup/option[text()="%s"] | optgroup/option[@value="%s"]""" text text text text) elem
+        
     match options with
     | [] -> raise (CanopyOptionNotFoundException(sprintf "element %s does not contain value %s" (elem.ToString()) text))
     | head::_ -> head.Click()
@@ -1046,39 +1037,6 @@ let forward = Forward
 let navigate = function
   | Back -> browser.Navigate().Back()
   | Forward -> browser.Navigate().Forward()
-
-(* documented/actions *)
-let coverage (url : 'a) =
-    let mutable innerUrl = ""
-    match box url with
-    | :? string as u -> innerUrl <- u
-    | _ -> innerUrl <- currentUrl()
-    let nonMutableInnerUrl = innerUrl
-
-    let selectors =
-        searchedFor
-        |> List.filter(fun (c, u) -> u = nonMutableInnerUrl)
-        |> List.map(fun (cssSelector, u) -> cssSelector)
-        |> Seq.distinct
-        |> List.ofSeq
-
-    let script cssSelector =
-        "var results = document.querySelectorAll('" + cssSelector + "'); \
-        for (var i=0; i < results.length; i++){ \
-            results[i].style.border = 'thick solid #ACD372'; \
-        }"
-
-    //kinda silly but the app I am current working on will redirect you to login if you try to access a url directly, so dont try if one isnt passed in
-    match box url with
-    | :? string as u -> !^ nonMutableInnerUrl
-    |_ -> ()
-
-    on nonMutableInnerUrl
-    selectors |> List.iter(fun cssSelector -> swallowedJs (script cssSelector))
-    let p = Path.Combine(Environment.GetFolderPath(Environment.SpecialFolder.ApplicationData), @"canopy\")
-    let f = sprintf "Coverage_%s" (DateTime.Now.ToString("MMM-d_HH-mm-ss-fff"))
-    let ss = screenshot p f
-    reporter.coverage nonMutableInnerUrl ss nonMutableInnerUrl
 
 (* documented/actions *)
 let addFinder finder =
