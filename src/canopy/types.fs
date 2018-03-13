@@ -1,5 +1,4 @@
-[<AutoOpen>]
-module canopy.types
+module canopy.classic.types
 
 open System
 open OpenQA.Selenium

@@ -1,5 +1,4 @@
-[<AutoOpen>]
-module canopy.core
+module canopy.classic.core
 
 open System.Collections.ObjectModel
 open OpenQA.Selenium.Firefox
@@ -8,10 +7,11 @@ open OpenQA.Selenium.Interactions
 open Microsoft.FSharp.Core.Printf
 open System.IO
 open System
-open configuration
-open reporters
-open types
-open finders
+open canopy.classic.configuration
+open canopy.classic.reporters
+open canopy.classic.types
+open canopy.classic.finders
+open canopy.classic.wait
 open System.Drawing
 open System.Drawing.Imaging
 open EditDistance

@@ -1,5 +1,4 @@
-﻿[<AutoOpen>]
-module canopy.wait
+﻿module canopy.classic.wait
 
 open OpenQA.Selenium
 
@@ -27,7 +26,7 @@ let waitResults timeout (f : unit -> 'a) =
                     else System.Threading.Thread.Sleep(int (waitSleep * 1000.0))
         with
           | :? WebDriverTimeoutException as ex -> reraise()
-          | :? CanopyException as ce -> raise(ce)
+          | :? canopy.classic.types.CanopyException as ce -> raise(ce)
           | _ -> System.Threading.Thread.Sleep(int (waitSleep * 1000.0))
 
     finalResult

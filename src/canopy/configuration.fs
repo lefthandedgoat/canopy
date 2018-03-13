@@ -1,6 +1,7 @@
-﻿[<AutoOpen>]
-module canopy.configuration
-open reporters
+﻿module canopy.classic.configuration
+
+open canopy.classic.reporters
+open canopy.classic.types
 open System
 
 //location of drivers depending on OS
@@ -22,7 +23,7 @@ let failFast = ref false
 (* documented/configuration *)
 let mutable failScreenshotPath = Environment.GetFolderPath(Environment.SpecialFolder.ApplicationData) + @"\canopy\"
 (* documented/configuration *)
-let mutable failScreenshotFileName = fun (test : types.Test) (suite: types.suite) -> DateTime.Now.ToString("MMM-d_HH-mm-ss-fff")
+let mutable failScreenshotFileName = fun (test : canopy.classic.types.Test) (suite: canopy.classic.types.suite) -> DateTime.Now.ToString("MMM-d_HH-mm-ss-fff")
 
 (* documented/configuration *)
 let mutable chromeDir = folderByOSType
@@ -60,7 +61,7 @@ let mutable autoPinBrowserRightOnLaunch = true
 (* documented/configuration *)
 let mutable throwIfMoreThanOneElement = false
 (* documented/configuration *)
-let mutable configuredFinders = finders.defaultFinders
+let mutable configuredFinders = canopy.classic.finders.defaultFinders
 (* documented/configuration *)
 let mutable optimizeBySkippingIFrameCheck = false
 (* documented/configuration *)

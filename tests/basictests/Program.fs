@@ -2,8 +2,12 @@ module main
 
 open System
 open OpenQA.Selenium
-open canopy
-open reporters
+open canopy.classic.core
+open canopy.classic.reporters
+open canopy.classic.runner
+open canopy.classic.configuration
+open canopy.classic.types
+open canopy.classic
 
 start chrome
 let mainBrowser = browser

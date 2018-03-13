@@ -1,4 +1,4 @@
-﻿module canopy.finders
+﻿module canopy.classic.finders
 
 open OpenQA.Selenium
 open System.Collections.ObjectModel
@@ -56,7 +56,7 @@ let findByValue value f =
 
 //Inspired by https://github.com/RaYell/selenium-webdriver-extensions
 let private loadJQuery () =
-    let jsBrowser = browser :?> IJavaScriptExecutor
+    let jsBrowser = canopy.classic.types.browser :?> IJavaScriptExecutor
     let jqueryExistsScript = """return (typeof window.jQuery) === 'function';"""
     let exists = jsBrowser.ExecuteScript(jqueryExistsScript) :?> bool
     if not exists then
@@ -66,7 +66,7 @@ let private loadJQuery () =
             document.getElementsByTagName('head')[0].appendChild(jq);
          """
         jsBrowser.ExecuteScript(load) |> ignore
-        wait 2.0 (fun _ -> jsBrowser.ExecuteScript(jqueryExistsScript) :?> bool)
+        canopy.classic.wait.wait 2.0 (fun _ -> jsBrowser.ExecuteScript(jqueryExistsScript) :?> bool)
 
 type ByJQuery (selector) =
     inherit OpenQA.Selenium.By()
@@ -77,7 +77,7 @@ type ByJQuery (selector) =
             if context :? IWebDriver
             then
                 let script = sprintf """return jQuery("%s").get();""" selector
-                (browser :?> IJavaScriptExecutor).ExecuteScript(script) :?> ReadOnlyCollection<IWebElement>
+                (canopy.classic.types.browser :?> IJavaScriptExecutor).ExecuteScript(script) :?> ReadOnlyCollection<IWebElement>
             else
                 let script = sprintf """return jQuery("%s", arguments[0]).get();""" selector
                 let wrapper = context :?> OpenQA.Selenium.Internal.IWrapsDriver

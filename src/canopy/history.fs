@@ -1,4 +1,4 @@
-﻿module canopy.history
+﻿module canopy.classic.history
 
 open System.IO
 open System
@@ -7,7 +7,7 @@ let p = Environment.GetFolderPath(Environment.SpecialFolder.ApplicationData) + @
 let path = Environment.GetFolderPath(Environment.SpecialFolder.ApplicationData) + @"\canopy\failedContexts.txt"
 
 let save (results : string list) =
-    if configuration.runFailedContextsFirst = true then
+    if canopy.classic.configuration.runFailedContextsFirst = true then
         if Directory.Exists(p) = false then Directory.CreateDirectory(p) |> ignore
         use sw = new StreamWriter(path)
         sw.Write (String.concat "|" results)

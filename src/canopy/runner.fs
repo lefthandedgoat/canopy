@@ -1,11 +1,10 @@
-﻿[<AutoOpen>]
-module canopy.runner
+﻿module canopy.classic.runner
 
 open System
-open configuration
-open canopy
-open reporters
-open types
+open canopy.classic.configuration
+open canopy.classic.core
+open canopy.classic.reporters
+open canopy.classic.types
 open OpenQA.Selenium
 
 let private last = function
@@ -100,9 +99,9 @@ let fail (ex : Exception) (test : Test) (suite : suite) autoFail url =
                 if failFast = ref true then failed <- true
                 failedCount <- failedCount + 1
                 contextFailed <- true
-                let f = configuration.failScreenshotFileName test suite
+                let f = canopy.classic.configuration.failScreenshotFileName test suite
                 if failureScreenshotsEnabled = true then
-                  let ss = screenshot configuration.failScreenshotPath f
+                  let ss = screenshot canopy.classic.configuration.failScreenshotPath f
                   reporter.fail ex test.Id ss url
                 else reporter.fail ex test.Id Array.empty<byte> url
                 suite.OnFail()
@@ -182,7 +181,7 @@ let run () =
 
     let wipsExist = suites |> List.exists (fun s -> s.Wips.IsEmpty = false)
 
-    if wipsExist && configuration.failIfAnyWipTests then
+    if wipsExist && canopy.classic.configuration.failIfAnyWipTests then
        raise <| Exception "Wip tests found and failIfAnyWipTests is true"
 
     reporter.suiteBegin()
@@ -242,7 +241,7 @@ let runFor browsers =
     let currentSuites = suites
     
     match box browsers with
-        | :? (types.BrowserStartMode list) as browsers ->
+        | :? (canopy.classic.types.BrowserStartMode list) as browsers ->
             let newSuites =
               browsers
               |> List.rev
