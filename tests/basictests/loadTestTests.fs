@@ -1,6 +1,7 @@
 module loadTestTests
 
-open Canopy.Runner
+open Canopy.Runner.Runner
+open Canopy.Runner.Runner.Operators
 open Canopy.Integration.LoadTest
 open System.Net
 

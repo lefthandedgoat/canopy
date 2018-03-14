@@ -1,8 +1,9 @@
 module file1
 
-open Canopy
-open Canopy.Assert.Operators
-open Runner
+open Canopy.Core
+open Canopy.Runner.Runner
+open Canopy.Runner.Runner.Operators
+open Canopy.Expect.Operators
 
 let testpage = "http://lefthandedgoat.github.io/canopy/testpages/"
 

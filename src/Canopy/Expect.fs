@@ -367,7 +367,7 @@ module Operators =
         elementHasText (context ()) item value
     (* documented/assertions *)
     let ( != ) cssSelector value =
-        noElementHasText cssSelector value
+        noElementHasText (context ()) cssSelector value
     (* documented/assertions *)
     let ( *= ) cssSelector value = atLeastOneEqual cssSelector value
     (* documented/assertions *)

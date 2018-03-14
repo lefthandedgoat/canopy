@@ -6,10 +6,10 @@ open Canopy
 open Canopy.Runner
 open Canopy.Runner.Runner
 open Canopy.Runner.Runner.Operators
-open Canopy.Runner.Assert
-open Canopy.Runner.Assert.Operators
 open Canopy.Runner.Reporters
 open Canopy.ClassicMode
+open Canopy.Expect
+open Canopy.Expect.Operators
 
 let config =
     { defaultConfig with
