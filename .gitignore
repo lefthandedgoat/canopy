@@ -179,3 +179,5 @@ TestResults.xml
 nuget/*.nupkg
 *.orig
 .fake
+
+paket-files/*
