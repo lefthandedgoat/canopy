@@ -187,3 +187,4 @@ nuget/*.nupkg
 .fake
 
 paket-files/*
+.vs/*
