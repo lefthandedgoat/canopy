@@ -752,7 +752,7 @@ let findByHref href f =
         f(By.CssSelector(cssSelector)) |> List.ofSeq
     with | ex -> []
 
-addFinder findByHref
+addFinder findByHref config |> ignore
 
 "test new findByHref by clicking an href" &&& fun _ ->
     url "http://lefthandedgoat.github.io/canopy/index.html"

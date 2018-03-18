@@ -364,7 +364,7 @@ let fadedIn cssSelector =
 module Operators =
     (* documented/assertions *)
     let ( == ) item value =
-        elementHasText (context ()) item value
+        elementHasText (context ()) value item
     (* documented/assertions *)
     let ( != ) cssSelector value =
         noElementHasText (context ()) cssSelector value
