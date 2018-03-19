@@ -24,6 +24,8 @@ NUGET
     Mono.Cecil (0.10.0-beta7)
     NuGet.CommandLine (4.5.1)
     Selenium.WebDriver (3.10)
+    Selenium.WebDriver.ChromeDriver (2.37)
+    Selenium.WebDriver.GeckoDriver (0.20)
 GITHUB
   remote: logary/logary
     src/Logary.Facade/Facade.fs (1ef55a8666f188d54998e972290c4940e7e43871)

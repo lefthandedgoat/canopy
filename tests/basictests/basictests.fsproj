@@ -14,6 +14,7 @@
     </TargetFrameworkProfile>
     <Name>basictests</Name>
     <SolutionDir Condition="$(SolutionDir) == '' Or $(SolutionDir) == '*Undefined*'">..\</SolutionDir>
+    <AutoGenerateBindingRedirects>true</AutoGenerateBindingRedirects>
   </PropertyGroup>
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|x86' ">
     <DebugSymbols>true</DebugSymbols>
@@ -113,4 +114,6 @@
       </ItemGroup>
     </When>
   </Choose>
+  <Import Project="..\..\packages\Selenium.WebDriver.ChromeDriver\build\Selenium.WebDriver.ChromeDriver.targets" Condition="Exists('..\..\packages\Selenium.WebDriver.ChromeDriver\build\Selenium.WebDriver.ChromeDriver.targets')" Label="Paket" />
+  <Import Project="..\..\packages\Selenium.WebDriver.GeckoDriver\build\Selenium.WebDriver.GeckoDriver.targets" Condition="Exists('..\..\packages\Selenium.WebDriver.GeckoDriver\build\Selenium.WebDriver.GeckoDriver.targets')" Label="Paket" />
 </Project>

@@ -11,8 +11,11 @@ open Canopy.ClassicMode
 open Canopy.Expect
 open Canopy.Expect.Operators
 
+let executingDir () = System.IO.Path.GetDirectoryName(System.Reflection.Assembly.GetExecutingAssembly().Location)
+
 let config =
     { defaultConfig with
+        paths = { defaultConfig.paths with chromeDir = executingDir() }
         elementTimeout = TimeSpan.FromSeconds 3.0
         compareTimeout = TimeSpan.FromSeconds 3.0
         pageTimeout = TimeSpan.FromSeconds 3.0 }

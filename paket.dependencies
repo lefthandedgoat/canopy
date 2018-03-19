@@ -9,6 +9,8 @@ nuget FSharp.Data
 nuget Argu ~> 4
 nuget Expecto
 nuget Expecto.FsCheck
+nuget Selenium.WebDriver.ChromeDriver
+nuget Selenium.WebDriver.GeckoDriver
 
 github logary/logary src/Logary.Facade/Facade.fs
 
