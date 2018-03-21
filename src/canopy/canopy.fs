@@ -43,7 +43,7 @@ let puts text = canopy.parallell.functions.puts text
 let highlight cssSelector = canopy.parallell.functions.highlight cssSelector
 
 (* documented/actions *)
-let describe text = canopy.parallell.functions.describe text
+let describe text = canopy.parallell.functions.describe text browser
 
 (* documented/actions *)
 let waitFor2 message f = canopy.parallell.functions.waitFor2 message f

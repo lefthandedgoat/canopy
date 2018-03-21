@@ -58,9 +58,10 @@
     <Compile Include="finders.fs" />
     <Compile Include="configuration.fs" />
     <Compile Include="jarowinkler.fs" />
-    <Compile Include="canopy.parallel.functions.fs" />
+    <Compile Include="canopy.parallell.functions.fs" />
+    <Compile Include="canopy.parallell.instanced.fs" />
     <Compile Include="canopy.fs" />
-	<Compile Include="history.fs" />
+    <Compile Include="history.fs" />
     <Compile Include="runner.fs" />
     <None Include="paket.references" />
     <Compile Include="screenSizes.fs" />

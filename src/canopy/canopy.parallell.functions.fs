@@ -102,7 +102,7 @@ let screenshot directory filename (browser : IWebDriver) =
 (* documented/actions *)
 let js script (browser : IWebDriver) = (browser :?> IJavaScriptExecutor).ExecuteScript(script)
 
-let private swallowedJs script = try js script |> ignore with | ex -> ()
+let private swallowedJs script browser = try js script browser |> ignore with | ex -> ()
 
 (* documented/actions *)
 let sleep seconds =
@@ -113,7 +113,7 @@ let sleep seconds =
     System.Threading.Thread.Sleep(ms)
 
 (* documented/actions *)
-let puts text =
+let puts text browser =
     reporter.write text
     if (showInfoDiv) then
         let escapedText = System.Web.HttpUtility.JavaScriptStringEncode(text)
@@ -124,17 +124,17 @@ let puts text =
             infoDiv.setAttribute('style','position: absolute; border: 1px solid black; bottom: 0px; right: 0px; margin: 3px; padding: 3px; background-color: white; z-index: 99999; font-size: 20px; font-family: monospace; font-weight: bold;');
             document.getElementsByTagName('body')[0].appendChild(infoDiv);
             infoDiv.innerHTML = 'locating: " + escapedText + "';"
-        swallowedJs info
+        swallowedJs info browser
 
-let private colorizeAndSleep cssSelector =
-    puts cssSelector
-    swallowedJs <| sprintf "document.querySelector('%s').style.border = 'thick solid #FFF467';" cssSelector
+let private colorizeAndSleep cssSelector browser =
+    puts cssSelector browser
+    swallowedJs (sprintf "document.querySelector('%s').style.border = 'thick solid #FFF467';" cssSelector) browser
     sleep wipSleep
-    swallowedJs <| sprintf "document.querySelector('%s').style.border = 'thick solid #ACD372';" cssSelector
+    swallowedJs (sprintf "document.querySelector('%s').style.border = 'thick solid #ACD372';" cssSelector) browser
 
 (* documented/actions *)
-let highlight cssSelector =
-    swallowedJs <| sprintf "document.querySelector('%s').style.border = 'thick solid #ACD372';" cssSelector
+let highlight cssSelector browser =
+    swallowedJs (sprintf "document.querySelector('%s').style.border = 'thick solid #ACD372';" cssSelector) browser
 
 let private suggestOtherSelectors cssSelector browser =
     if not disableSuggestOtherSelectors then
@@ -201,8 +201,8 @@ let private suggestOtherSelectors cssSelector browser =
         |> (fun suggestions -> reporter.suggestSelectors cssSelector suggestions)
 
 (* documented/actions *)
-let describe text =
-    puts text
+let describe text browser =
+    puts text browser
 
 (* documented/actions *)
 let waitFor2 message f =
@@ -961,7 +961,7 @@ let resize size (browser : IWebDriver) =
 (* documented/actions *)
 let rotate browser =
     let innerWidth, innerHeight = innerSize browser
-    resize(innerHeight, innerWidth)
+    resize (innerHeight, innerWidth) browser
 
 (* documented/actions *)
 let quit browser =
@@ -1003,7 +1003,9 @@ let url u = !^ u
 let title (browser : IWebDriver) = browser.Title
 
 (* documented/actions *)
-let reload browser = currentUrl >> url
+let reload browser = 
+  let url' = currentUrl browser 
+  url url' browser
 
 type Navigate =
   | Back
@@ -1054,8 +1056,8 @@ let text = addSelector findByText "text"
 (* documented/actions *)
 let value = addSelector findByValue "value"
 
-let skip message =
-  describe <| sprintf "Skipped: %s" message
+let skip message browser =
+  describe (sprintf "Skipped: %s" message) browser
   raise <| CanopySkipTestException()
 
 (* documented/actions *)
