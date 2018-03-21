@@ -32,8 +32,6 @@ let mutable chromiumDir = folderByOSTypeChromium
 (* documented/configuration *)
 let mutable ieDir = folderByOSType
 (* documented/configuration *)
-let mutable phantomJSDir = folderByOSType
-(* documented/configuration *)
 let mutable safariDir = folderByOSType
 (* documented/configuration *)
 let mutable edgeDir = @"C:\Program Files (x86)\Microsoft Web Driver\"

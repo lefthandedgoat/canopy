@@ -24,7 +24,6 @@ start firefox
 start chrome
 start ie
 start safari
-start phantomJS
 start aurora
 start edgeBETA
 start chromium

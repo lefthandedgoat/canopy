@@ -343,7 +343,7 @@ let someElementWithin cssSelector elem browser = unreliableElementsWithin cssSel
 let someParent elem browser = elementsWithin ".." elem browser |> someElementFromList "provided element"
 
 (* documented/actions *)
-let nth index cssSelector browser = List.nth (elements cssSelector browser) index
+let nth index cssSelector browser = List.item index (elements cssSelector browser)
 
 (* documented/actions *)
 let first cssSelector browser = (elements cssSelector browser).Head
@@ -813,11 +813,6 @@ let private chromeWithUserAgent dir userAgent =
     options.AddArgument("--user-agent=" + userAgent)
     new Chrome.ChromeDriver(chromeDriverService dir, options) :> IWebDriver
 
-let private phantomJsDriverService _ = 
-    let service = PhantomJS.PhantomJSDriverService.CreateDefaultService(phantomJSDir)
-    service.HideCommandPromptWindow <- hideCommandPromptWindow
-    service
-
 let private ieDriverService _ = 
     let service = IE.InternetExplorerDriverService.CreateDefaultService(ieDir)
     service.HideCommandPromptWindow <- hideCommandPromptWindow
@@ -840,7 +835,6 @@ let start b =
     //for ie you need to set Settings -> Advance -> Security Section -> Check-Allow active content to run files on My Computer*
     //also download IEDriverServer and place in c:\ or configure with ieDir
     //firefox just works
-    //for phantomjs download it and put in c:\ or configure with phantomJSDir
     //for Safari download it and put in c:\ or configure with safariDir
 
     let browser =
@@ -877,10 +871,6 @@ let start b =
         | ChromiumWithOptions options ->
             new Chrome.ChromeDriver(chromeDriverService chromiumDir, options) :> IWebDriver
         | Firefox ->new FirefoxDriver(firefoxDriverService ()) :> IWebDriver
-        | FirefoxWithProfile profile -> 
-            let options = new Firefox.FirefoxOptions();
-            options.Profile <- profile
-            new FirefoxDriver(firefoxDriverService (), options, TimeSpan.FromSeconds(elementTimeout)) :> IWebDriver
         | FirefoxWithPath path -> 
           let options = new Firefox.FirefoxOptions()
           options.BrowserExecutableLocation <- path

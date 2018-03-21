@@ -42,7 +42,6 @@ type direction =
 //browser
 type BrowserStartMode =
     | Firefox
-    | FirefoxWithProfile of Firefox.FirefoxProfile
     | FirefoxWithPath of string
     | FirefoxWithUserAgent of string
     | FirefoxWithPathAndTimeSpan of string * TimeSpan

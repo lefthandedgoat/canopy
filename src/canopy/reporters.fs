@@ -189,7 +189,6 @@ type LiveHtmlReporter(browser : BrowserStartMode, driverPath : string, ?pinBrows
         | ChromeWithUserAgent userAgent -> raise(System.Exception("Sorry ChromeWithUserAgent can't be used for LiveHtmlReporter"))
         | ChromiumWithOptions options -> new Chrome.ChromeDriver(driverPath, options) :> IWebDriver
         | Firefox -> new Firefox.FirefoxDriver() :> IWebDriver
-        | FirefoxWithProfile profile -> new Firefox.FirefoxDriver(profile) :> IWebDriver
         | FirefoxWithPath path ->
           let options = new Firefox.FirefoxOptions()
           options.BrowserExecutableLocation <- path
