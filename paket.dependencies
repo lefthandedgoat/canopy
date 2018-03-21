@@ -8,3 +8,5 @@ nuget Selenium.WebDriver
 nuget FAKE
 nuget FSharp.Formatting
 nuget FSharp.Data
+nuget Selenium.WebDriver.ChromeDriver
+nuget Selenium.WebDriver.GeckoDriver

@@ -12,3 +12,5 @@ NUGET
       FSharp.Compiler.Service (>= 2.0.0.3)
     NuGet.CommandLine (4.3)
     Selenium.WebDriver (3.10)
+    Selenium.WebDriver.ChromeDriver (2.37)
+    Selenium.WebDriver.GeckoDriver (0.20)

@@ -9,6 +9,9 @@ open canopy.classic.configuration
 open canopy.classic.types
 open canopy.classic
 
+let executingDir () = System.IO.Path.GetDirectoryName(System.Reflection.Assembly.GetExecutingAssembly().Location)
+chromeDir <- executingDir()
+
 start chrome
 let mainBrowser = browser
 elementTimeout <- 3.0

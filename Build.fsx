@@ -197,7 +197,7 @@ Target "All" DoNothing
 "Clean"
   ==> "AssemblyInfo"
   ==> "Build"
-  //==> "RunTests"
+  ==> "RunTests"
   ==> "All"
 
 "All" 
