@@ -54,11 +54,11 @@
     <None Include="App.config" />
   </ItemGroup>
   <ItemGroup>
-    <ProjectReference Include="..\src\canopy.integration\canopy.integration.fsproj">
+    <ProjectReference Include="..\..\src\canopy.integration\canopy.integration.fsproj">
       <Project>{4303ffac-759e-4764-89ad-ed6a73e2e16d}</Project>
       <Name>canopy.integration</Name>
     </ProjectReference>
-    <ProjectReference Include="..\src\canopy\canopy.fsproj">
+    <ProjectReference Include="..\..\src\canopy\canopy.fsproj">
       <Project>{63135cf6-70a9-4382-851d-4b679ee0cbf8}</Project>
       <Name>canopy</Name>
     </ProjectReference>

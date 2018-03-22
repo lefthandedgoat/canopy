@@ -1,7 +1,7 @@
 ﻿
 Microsoft Visual Studio Solution File, Format Version 12.00
-# Visual Studio 2013
-VisualStudioVersion = 12.0.31101.0
+# Visual Studio 14
+VisualStudioVersion = 14.0.23107.0
 MinimumVisualStudioVersion = 10.0.40219.1
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = ".paket", ".paket", "{C6C8BF1E-28EC-41CD-B2A5-8321CE7DEB23}"
 	ProjectSection(SolutionItems) = preProject
@@ -42,9 +42,11 @@ Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "tools", "tools", "{3C3590B5
 		docs\tools\templates\template.cshtml = docs\tools\templates\template.cshtml
 	EndProjectSection
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "csharptests", "csharptests\csharptests.csproj", "{8FD011AE-ACEC-4B55-810B-736DAE312D32}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "csharptests", "tests\csharptests\csharptests.csproj", "{8FD011AE-ACEC-4B55-810B-736DAE312D32}"
 EndProject
 Project("{F2A71F9B-5D33-465A-A702-920D77279786}") = "canopy.integration", "src\canopy.integration\canopy.integration.fsproj", "{4303FFAC-759E-4764-89AD-ED6A73E2E16D}"
+EndProject
+Project("{F2A71F9B-5D33-465A-A702-920D77279786}") = "paralleltests", "tests\paralleltests\paralleltests.fsproj", "{E457036B-7783-4C69-8A54-1F7A8A5495BF}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -100,6 +102,18 @@ Global
 		{4303FFAC-759E-4764-89AD-ED6A73E2E16D}.Release|Mixed Platforms.Build.0 = Release|Any CPU
 		{4303FFAC-759E-4764-89AD-ED6A73E2E16D}.Release|x86.ActiveCfg = Release|Any CPU
 		{4303FFAC-759E-4764-89AD-ED6A73E2E16D}.Release|x86.Build.0 = Release|Any CPU
+		{E457036B-7783-4C69-8A54-1F7A8A5495BF}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{E457036B-7783-4C69-8A54-1F7A8A5495BF}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{E457036B-7783-4C69-8A54-1F7A8A5495BF}.Debug|Mixed Platforms.ActiveCfg = Debug|Any CPU
+		{E457036B-7783-4C69-8A54-1F7A8A5495BF}.Debug|Mixed Platforms.Build.0 = Debug|Any CPU
+		{E457036B-7783-4C69-8A54-1F7A8A5495BF}.Debug|x86.ActiveCfg = Debug|Any CPU
+		{E457036B-7783-4C69-8A54-1F7A8A5495BF}.Debug|x86.Build.0 = Debug|Any CPU
+		{E457036B-7783-4C69-8A54-1F7A8A5495BF}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{E457036B-7783-4C69-8A54-1F7A8A5495BF}.Release|Any CPU.Build.0 = Release|Any CPU
+		{E457036B-7783-4C69-8A54-1F7A8A5495BF}.Release|Mixed Platforms.ActiveCfg = Release|Any CPU
+		{E457036B-7783-4C69-8A54-1F7A8A5495BF}.Release|Mixed Platforms.Build.0 = Release|Any CPU
+		{E457036B-7783-4C69-8A54-1F7A8A5495BF}.Release|x86.ActiveCfg = Release|Any CPU
+		{E457036B-7783-4C69-8A54-1F7A8A5495BF}.Release|x86.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
@@ -109,5 +123,6 @@ Global
 		{A94D736A-68EB-4D7B-A761-DF6B1EEAE24C} = {12E9007C-8265-43D8-86B0-C9182921A9E5}
 		{3C3590B5-4CC8-49D1-A2CE-4FDFA73ADB53} = {12E9007C-8265-43D8-86B0-C9182921A9E5}
 		{8FD011AE-ACEC-4B55-810B-736DAE312D32} = {0391DED2-DF91-4A61-959E-EEA250356DA0}
+		{E457036B-7783-4C69-8A54-1F7A8A5495BF} = {0391DED2-DF91-4A61-959E-EEA250356DA0}
 	EndGlobalSection
 EndGlobal

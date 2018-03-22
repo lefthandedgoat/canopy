@@ -1,0 +1,5 @@
+FSharp.Core
+Selenium.WebDriver
+Selenium.WebDriver.ChromeDriver
+Selenium.WebDriver.GeckoDriver
+Expecto
