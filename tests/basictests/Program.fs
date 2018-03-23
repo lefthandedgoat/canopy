@@ -254,7 +254,10 @@ test (fun _ ->
 "rightClicking Works" &&& fun _ ->
     !^ "https://api.jquery.com/contextmenu/"
     let iframe = element "iframe"
+    if isNull browser then failwith "browser null"
+    if isNull iframe then failwith "iframe null"
     browser.SwitchTo().Frame(iframe) |> ignore
+
     notDisplayed ".contextmenu"
 
     rightClick "div:first"
