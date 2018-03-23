@@ -122,12 +122,15 @@ module Context =
             _contextChanged.Trigger context
             context
 
-    let internal getContext () =
-        match !_globalContext with
-        | None ->
+    let internal getContext (createIfNone: (unit -> Context) option) =
+        match !_globalContext, createIfNone with
+        | None, Some ctxFactory ->
+            ctxFactory ()
+
+        | None, None ->
             invalidOp "No global context configured yet"
 
-        | Some context ->
+        | Some context, _ ->
             if context.config.throwOnStatics then
                 invalidOp "Usages of functions that access the global statics is forbidden. You should be using the instance-based functions rather than the 'global' ones. See e.g. canopy/tests/ParallelUsage for examples of this"
 
@@ -136,8 +139,8 @@ module Context =
 
             context
 
-    let private mutateNoLock (callback: Context<'us> -> Context<'us>) =
-        let context = getContext ()
+    let private mutateNoLock defaultState (callback: Context<'us> -> Context<'us>) =
+        let context = getContext (Some (fun () -> configure defaultState id))
         let value = context :?> Context<'us>
         let result = callback value
         _globalContext := Some (result :> Context)
@@ -145,8 +148,8 @@ module Context =
         result
 
     /// Changes the global context atomically.
-    let internal mutate<'us> (callback: Context<'us> -> Context<'us>) =
-        lock sem (fun () -> mutateNoLock callback :> Context)
+    let internal mutate (defaultState: 'us) (callback: Context<'us> -> Context<'us>) =
+        lock sem (fun () -> mutateNoLock defaultState callback :> Context)
 
     /// Lets the user pass a callback that configures the current context for
     /// just-so for as long as the IDisposable is undisposed. If the disposable
@@ -155,7 +158,7 @@ module Context =
     let configureScope (configurator: CanopyConfig -> CanopyConfig) =
         Monitor.Enter sem
         try
-            let current = mutateNoLock id
+            let current = configure (obj ()) id
             let next = configure (obj ()) configurator
             { new IDisposable with
                 member x.Dispose () =
@@ -167,7 +170,7 @@ module Context =
             reraise ()
 
 let internal context () =
-    Context.getContext ()
+    Context.getContext None
 
 let internal browser () =
     context().getBrowser()
@@ -1244,7 +1247,8 @@ let startWithConfig config mode =
     let browser =
         startUnsynchronised config mode
 
-    Context.mutate<obj> (Context.addCurrentBrowser browser)
+    Context.mutate (obj ()) (Context.addCurrentBrowser browser)
+    |> ignore
 
 (* documented/actions *)
 let start (mode: BrowserStartMode) =
@@ -1253,7 +1257,7 @@ let start (mode: BrowserStartMode) =
 (* documented/actions *)
 /// Acts on global
 let switchTo browser =
-    Context.mutate<obj> (Context.setCurrent browser)
+    Context.mutate (obj ()) (Context.setCurrent browser)
     |> ignore
 
 (* documented/actions *)

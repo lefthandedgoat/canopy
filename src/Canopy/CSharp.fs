@@ -11,10 +11,10 @@ open Canopy.Expect.Operators
 type Canopy() =
 
     static member browsers =
-        Context.getContext().browsers
+        Context.getContext(None).browsers
 
     static member browser =
-        match Context.getContext().browser with
+        match Context.getContext(None).browser with
         | Some browser ->
             browser
         | None ->

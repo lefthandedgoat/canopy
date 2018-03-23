@@ -3,6 +3,7 @@ module main
 open System
 open OpenQA.Selenium
 open Canopy
+open Canopy.Logging
 open Canopy.Runner
 open Canopy.Runner.Runner
 open Canopy.Runner.Runner.Operators
@@ -18,7 +19,8 @@ let config =
         paths = { defaultConfig.paths with chromeDir = executingDir() }
         elementTimeout = TimeSpan.FromSeconds 3.0
         compareTimeout = TimeSpan.FromSeconds 3.0
-        pageTimeout = TimeSpan.FromSeconds 3.0 }
+        pageTimeout = TimeSpan.FromSeconds 3.0
+        logLevelOnStatics = Verbose }
 ignore (startWithConfig config chrome)
 
 let mainBrowser = browser
