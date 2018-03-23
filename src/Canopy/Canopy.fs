@@ -1560,6 +1560,8 @@ type Context<'config> with
         writeC x text item
     member x.read item =
         readC x item
+    member x.scrollTo item =
+        scrollToC x item
     member x.clear item =
         clearC x item
     member x.press key =
