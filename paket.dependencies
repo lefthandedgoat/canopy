@@ -1,7 +1,7 @@
 source https://api.nuget.org/v3/index.json
 framework: net461
+redirects: on
 
-nuget NuGet.CommandLine
 nuget FSharp.Core ~> 4.2.3
 nuget Selenium.WebDriver
 nuget FSharp.Formatting

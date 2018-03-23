@@ -350,8 +350,8 @@ let highlightC context cssSelector =
 let highlight cssSelector =
     highlightC (context ()) cssSelector
 
-let internal suggestOtherSelectors (config: CanopyConfig) cssSelector =
-    if config.suggestOtherSelectors then
+let internal suggestOtherSelectorsC (context: Context) cssSelector =
+    if context.config.suggestOtherSelectors then
         let classesViaJs = """
             var classes = [];
             var all = document.getElementsByTagName('*');
@@ -395,10 +395,10 @@ let internal suggestOtherSelectors (config: CanopyConfig) cssSelector =
             return texts;"""
         let safeSeq orig = if orig = null then Seq.empty else orig
         let safeToString orig = if orig = null then "" else orig.ToString()
-        let classes = js classesViaJs :?> ReadOnlyCollection<System.Object> |> safeSeq |> Seq.map (fun item -> "." + safeToString item) |> Array.ofSeq
-        let ids = js idsViaJs :?> ReadOnlyCollection<System.Object> |> safeSeq |> Seq.map (fun item -> "#" + safeToString item) |> Array.ofSeq
-        let values = js valuesViaJs :?> ReadOnlyCollection<System.Object> |> safeSeq |> Seq.map (fun item -> safeToString item) |> Array.ofSeq
-        let texts = js textsViaJs :?> ReadOnlyCollection<System.Object> |> safeSeq |> Seq.map (fun item -> safeToString item) |> Array.ofSeq
+        let classes = jsC context classesViaJs :?> ReadOnlyCollection<System.Object> |> safeSeq |> Seq.map (fun item -> "." + safeToString item) |> Array.ofSeq
+        let ids = jsC context idsViaJs :?> ReadOnlyCollection<System.Object> |> safeSeq |> Seq.map (fun item -> "#" + safeToString item) |> Array.ofSeq
+        let values = jsC context valuesViaJs :?> ReadOnlyCollection<System.Object> |> safeSeq |> Seq.map (fun item -> safeToString item) |> Array.ofSeq
+        let texts = jsC context textsViaJs :?> ReadOnlyCollection<System.Object> |> safeSeq |> Seq.map (fun item -> safeToString item) |> Array.ofSeq
 
         let results =
             Array.append classes ids
@@ -413,7 +413,7 @@ let internal suggestOtherSelectors (config: CanopyConfig) cssSelector =
         |> fun xs -> if xs.Length >= 5 then Seq.take 5 xs else Array.toSeq xs
         |> Seq.map (fun r -> r.selector) |> List.ofSeq
         |> (fun suggestions ->
-            config.logger.write (
+            context.config.logger.write (
                 eventX "Couldn't find any elements with selector '{selector}', did you mean:\n{alternatives}"
                 >> setField "selector" cssSelector
                 >> setField "alternatives" suggestions))
@@ -502,31 +502,28 @@ let rec internal findElementsC (context: Context) cssSelector (searchContext: IS
 let internal findElements cssSelector searchContext: IWebElement list =
     findElementsC (context ()) cssSelector searchContext
 
-let internal findByFunctionConf (config: CanopyConfig) cssSelector timeout waitFunc searchContext reliable =
-//    TODO: how to handle this one? It's a runner config, it would seem?
-//    if context.config.wipTest then
-//        colorizeAndSleep cssSelector
+let internal findByFunctionConf (context: Context) cssSelector timeout waitFunc searchContext reliable =
     try
         if reliable then
             let elements = ref []
-            wait (*config.logger*) config.elementTimeout (fun _ ->
+            wait timeout (fun _ ->
                 elements := waitFunc cssSelector searchContext
                 not <| List.isEmpty !elements)
             !elements
         else
-            waitResults (*config.logger*) config.elementTimeout (fun _ -> waitFunc cssSelector searchContext)
+            waitResults timeout (fun _ -> waitFunc cssSelector searchContext)
     with
     | :? WebDriverTimeoutException ->
-        suggestOtherSelectors config cssSelector
+        suggestOtherSelectorsC context cssSelector
         let message = sprintf "Canopy was unable to find element '%s'" cssSelector
         raise (CanopyElementNotFoundException message)
 
 let internal findByFunction cssSelector timeout waitFunc searchContext reliable =
-    findByFunctionConf (config ()) cssSelector timeout waitFunc searchContext reliable
+    findByFunctionConf (context ()) cssSelector timeout waitFunc searchContext reliable
 
 let internal findC context cssSelector timeout searchContext reliable =
     let finder = findElementsC context
-    findByFunctionConf context.config cssSelector timeout finder searchContext reliable
+    findByFunctionConf context cssSelector timeout finder searchContext reliable
     |> List.head
 
 let internal find cssSelector timeout searchContext reliable =
@@ -534,7 +531,7 @@ let internal find cssSelector timeout searchContext reliable =
 
 let internal findManyC context cssSelector timeout searchContext reliable =
     let finder = findElementsC context
-    findByFunctionConf context.config cssSelector timeout finder searchContext reliable
+    findByFunctionConf context cssSelector timeout finder searchContext reliable
 
 let internal findMany cssSelector timeout searchContext reliable =
     findManyC (context ()) cssSelector timeout searchContext reliable
@@ -845,6 +842,25 @@ let clearC context item =
     | _ ->
         let message = sprintf "Can't clear %O because it is not a string or element" item
         raise (CanopyNotStringOrElementException message)
+
+(* documented/actions *)
+let rec scrollToC (context: Context) (item: obj) =
+    match box item with
+    | :? IWebElement as elem ->
+        if not elem.Displayed then
+            let message = sprintf "Element %O not displayed; cannot be scrolled to." item
+            raise (CanopyNotDisplayedFailedException message)
+        jsC context (sprintf "window.scrollTo(%i, %i)" elem.Location.X elem.Location.Y)
+    | :? string as selector ->
+        elementC context selector
+        |> scrollToC context
+    | other ->
+        let message = sprintf "Cannot scroll to %O because it's neither a string nor an IWebElement." other
+        raise (CanopyNotStringOrElementException message)
+
+(* documented/actions *)
+let scrollTo item =
+    scrollToC (context ()) item
 
 (* documented/actions *)
 let clear item =

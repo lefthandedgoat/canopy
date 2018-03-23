@@ -47,13 +47,6 @@
     </Otherwise>
   </Choose>
   <Import Project="$(FSharpTargetsPath)" Condition="Exists('$(FSharpTargetsPath)')" />
-  <!-- To modify your build process, add your task inside one of the targets below and uncomment it.
-	     Other similar extension points exist, see Microsoft.Common.targets.
-	<Target Name="BeforeBuild">
-	</Target>
-	<Target Name="AfterBuild">
-	</Target>
-	-->
   <Import Project="..\..\.paket\paket.targets" />
   <ItemGroup>
     <Compile Include="Expecto.fs" />
@@ -70,13 +63,13 @@
     <Reference Include="System.Core" />
     <Reference Include="System.Drawing" />
     <Reference Include="System.Numerics" />
-    <ProjectReference Include="..\..\src\canopy.integration\canopy.integration.fsproj">
-      <Name>canopy.integration</Name>
+    <ProjectReference Include="..\..\src\Canopy.Integration\Canopy.Integration.fsproj">
+      <Name>Canopy.Integration</Name>
       <Project>{4303ffac-759e-4764-89ad-ed6a73e2e16d}</Project>
       <Private>True</Private>
     </ProjectReference>
-    <ProjectReference Include="..\..\src\canopy\canopy.fsproj">
-      <Name>canopy</Name>
+    <ProjectReference Include="..\..\src\Canopy\Canopy.fsproj">
+      <Name>Canopy</Name>
       <Project>{63135cf6-70a9-4382-851d-4b679ee0cbf8}</Project>
       <Private>True</Private>
     </ProjectReference>

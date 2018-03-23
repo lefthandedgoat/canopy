@@ -1,3 +1,4 @@
+REDIRECTS: ON
 RESTRICTION: == net461
 NUGET
   remote: https://api.nuget.org/v3/index.json
@@ -22,13 +23,12 @@ NUGET
     FSharpVSPowerTools.Core (2.3)
       FSharp.Compiler.Service (>= 2.0.0.3)
     Mono.Cecil (0.10.0-beta7)
-    NuGet.CommandLine (4.5.1)
     Selenium.WebDriver (3.10)
     Selenium.WebDriver.ChromeDriver (2.37)
     Selenium.WebDriver.GeckoDriver (0.20)
 GITHUB
   remote: logary/logary
-    src/Logary.Facade/Facade.fs (1ef55a8666f188d54998e972290c4940e7e43871)
+    src/Logary.Facade/Facade.fs (12a042ea2179427eb6ab761277d832b38b1d7ee2)
 GROUP build
 NUGET
   remote: https://api.nuget.org/v3/index.json

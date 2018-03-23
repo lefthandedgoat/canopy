@@ -36,9 +36,12 @@ let init () =
 
 let x = init ()
 
-x.url "https://qvitoo.dev:8080"
+// x.url "https://qvitoo.dev:8080"
+x.url "https://staging.qvitoo.com"
 
 let signup () =
+    x.scrollTo (x.element ".button.signup")
+    // scrollToC x ".button.signup"
     x.click (x.element ".button.signup")
     x.write "Test User 1" "#name"
     x.write "test5@example.com" "#email"
