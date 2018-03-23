@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Net;
+using canopy;
 using canopy.classic;
 using canopy.csharp.loadTest;
 using _ = canopy.csharp.canopy;

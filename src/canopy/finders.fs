@@ -56,7 +56,7 @@ let findByValue value f =
 
 //Inspired by https://github.com/RaYell/selenium-webdriver-extensions
 let private loadJQuery () =
-    let jsBrowser = canopy.classic.types.browser :?> IJavaScriptExecutor
+    let jsBrowser = canopy.types.browser :?> IJavaScriptExecutor
     let jqueryExistsScript = """return (typeof window.jQuery) === 'function';"""
     let exists = jsBrowser.ExecuteScript(jqueryExistsScript) :?> bool
     if not exists then
@@ -77,7 +77,7 @@ type ByJQuery (selector) =
             if context :? IWebDriver
             then
                 let script = sprintf """return jQuery("%s").get();""" selector
-                (canopy.classic.types.browser :?> IJavaScriptExecutor).ExecuteScript(script) :?> ReadOnlyCollection<IWebElement>
+                (canopy.types.browser :?> IJavaScriptExecutor).ExecuteScript(script) :?> ReadOnlyCollection<IWebElement>
             else
                 let script = sprintf """return jQuery("%s", arguments[0]).get();""" selector
                 let wrapper = context :?> OpenQA.Selenium.Internal.IWrapsDriver

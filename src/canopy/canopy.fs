@@ -1,6 +1,6 @@
 module canopy.classic.core
 
-open canopy.classic.types
+open canopy.types
 
 let mutable (failureMessage : string) = null
 let mutable wipTest = false

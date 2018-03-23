@@ -1,14 +1,29 @@
 ﻿module tests3
 
 open prunner
+open canopy.parallell.functions
 
-let add () =
-  "tests 3 write to console 1" &&& fun ctx -> ctx.printfn "test 1"
-  "tests 3 write to console 2" &&& fun ctx -> ctx.printfn "test 2"
-  "tests 3 write to console 3" &&& fun ctx -> ctx.printfn "test 3"
-  "tests 3 write to console 4" &&& fun ctx -> ctx.printfn "test 4"
-  "tests 3 write to console 5" &&& fun ctx -> ctx.printfn "test 5"
-  "tests 3 write to console 6" &&& fun ctx -> ctx.printfn "test 6"
-  "tests 3 write to console 7" &&& fun ctx -> ctx.printfn "test 7"
-  "tests 3 write to console 8" &&& fun ctx -> ctx.printfn "test 8"
-  "tests 3 write to console 9" &&& fun ctx -> ctx.printfn "test 9"
+let add () = 
+  let testpage = "http://lefthandedgoat.github.io/canopy/testpages/"
+
+  "Set 3 #firstName should have John" &&& fun ctx -> 
+    let browser = start canopy.types.Chrome
+    url testpage browser
+    equals "#firstName" "John" browser
+    quit browser
+
+  "Set 3 writing to #lastName sets text to Smith" &&& fun ctx -> 
+    let browser = start canopy.types.Chrome
+    url testpage browser
+    clear "#lastName" browser
+    write "#lastName" "Smith" browser
+    equals "#lastName" "Smith" browser
+    quit browser
+
+  "Set 3 clicking hyperlink sets #link_clicked to link clicked" &&& fun ctx -> 
+    let browser = start canopy.types.Chrome
+    url testpage browser
+    equals "#link_clicked" "link not clicked" browser
+    click "#hyperlink" browser
+    equals "#link_clicked" "link clicked" browser
+    quit browser

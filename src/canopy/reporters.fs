@@ -2,7 +2,7 @@ module canopy.classic.reporters
 
 open System
 open OpenQA.Selenium
-open canopy.classic.types
+open canopy.types
 
 type ConsoleReporter() =
     interface IReporter with

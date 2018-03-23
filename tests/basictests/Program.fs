@@ -6,7 +6,7 @@ open canopy.classic.core
 open canopy.classic.reporters
 open canopy.classic.runner
 open canopy.classic.configuration
-open canopy.classic.types
+open canopy.types
 open canopy.classic
 
 let executingDir () = System.IO.Path.GetDirectoryName(System.Reflection.Assembly.GetExecutingAssembly().Location)

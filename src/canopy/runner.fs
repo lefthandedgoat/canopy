@@ -4,7 +4,7 @@ open System
 open canopy.classic.configuration
 open canopy.classic.core
 open canopy.classic.reporters
-open canopy.classic.types
+open canopy.types
 open OpenQA.Selenium
 
 let private last = function
@@ -241,7 +241,7 @@ let runFor browsers =
     let currentSuites = suites
     
     match box browsers with
-        | :? (canopy.classic.types.BrowserStartMode list) as browsers ->
+        | :? (canopy.types.BrowserStartMode list) as browsers ->
             let newSuites =
               browsers
               |> List.rev

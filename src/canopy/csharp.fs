@@ -7,7 +7,7 @@ type canopy () =
 
     static member browsers = browsers
 
-    static member browser = canopy.classic.types.browser
+    static member browser = canopy.types.browser
 
     //runner stuff
     static member context description = context description

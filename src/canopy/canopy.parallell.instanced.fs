@@ -12,6 +12,10 @@ type Instance() =
     
     member x.start browserStartMode = x.browser <- start browserStartMode
 
+    member x.equals item value = equals item value x.browser
+
+    //todo add all assertions
+
     member x.screenshot directory filename = screenshot directory filename x.browser 
     
     member x.js script = js script x.browser
@@ -109,13 +113,13 @@ type Instance() =
     member x.on url = on url x.browser
     
     member x.title () = title x.browser
-    
-    member x.uri uri = uri x.browser
-    
-    member x.url url = url x.browser
+            
+    member x.url url' = url url' x.browser
     
     member x.reload () = reload x.browser
     
     member x.navigate direction = navigate x.browser
     
     member x.waitForElement cssSelector = waitForElement cssSelector x.browser
+
+    member x.quit () = quit x.browser

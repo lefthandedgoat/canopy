@@ -1,7 +1,7 @@
 ﻿module canopy.classic.configuration
 
 open canopy.classic.reporters
-open canopy.classic.types
+open canopy.types
 open System
 
 //location of drivers depending on OS
@@ -23,7 +23,7 @@ let failFast = ref false
 (* documented/configuration *)
 let mutable failScreenshotPath = Environment.GetFolderPath(Environment.SpecialFolder.ApplicationData) + @"\canopy\"
 (* documented/configuration *)
-let mutable failScreenshotFileName = fun (test : canopy.classic.types.Test) (suite: canopy.classic.types.suite) -> DateTime.Now.ToString("MMM-d_HH-mm-ss-fff")
+let mutable failScreenshotFileName = fun (test : canopy.types.Test) (suite: canopy.types.suite) -> DateTime.Now.ToString("MMM-d_HH-mm-ss-fff")
 
 (* documented/configuration *)
 let mutable chromeDir = folderByOSType
