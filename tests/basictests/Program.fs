@@ -742,7 +742,7 @@ context "pluggable finders tests"
 
 //example of a finder you could write so you didnt have to write boring selectors, just add this
 //and let canopy do the work of trying to find something by convention
-let findByHref href f =
+let findByHref href f (_ : IWebDriver) =
     try
         let cssSelector = sprintf "a[href*='%s']" href
         f(By.CssSelector(cssSelector)) |> List.ofSeq

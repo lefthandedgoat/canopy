@@ -73,6 +73,7 @@ let mutable skipAllTestsOnFailure = false
 (* documented/configuration *)
 let mutable skipRemainingTestsInContextOnFailure = false
 (* documented/configuration *)
-let mutable skipNextTest = false
-(* documented/configuration *)
 let mutable failureMessagesThatShoulBeTreatedAsSkip : string list = []
+
+//do not touch
+let mutable wipTest = false

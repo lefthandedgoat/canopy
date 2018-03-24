@@ -218,7 +218,7 @@ let waitFor = waitFor2 "Condition not met in given amount of time. If you want t
 //find related
 let rec private findElements cssSelector (searchContext : ISearchContext) (browser : IWebDriver) : IWebElement list =
     let findInIFrame () =
-        let iframes = findByCss "iframe" searchContext.FindElements
+        let iframes = findByCss "iframe" searchContext.FindElements browser
         if iframes.IsEmpty then
             browser.SwitchTo().DefaultContent() |> ignore
             []
@@ -236,10 +236,10 @@ let rec private findElements cssSelector (searchContext : ISearchContext) (brows
             if (hints.ContainsKey cssSelector) then
                 let finders = hints.[cssSelector]
                 finders
-                |> Seq.map (fun finder -> finder cssSelector searchContext.FindElements)
+                |> Seq.map (fun finder -> finder cssSelector searchContext.FindElements browser)
                 |> Seq.filter(fun list -> not(list.IsEmpty))
             else
-                configuredFinders cssSelector searchContext.FindElements
+                configuredFinders cssSelector searchContext.FindElements browser
                 |> Seq.filter(fun list -> not(list.IsEmpty))
         if Seq.isEmpty results then
             if optimizeBySkippingIFrameCheck then [] else findInIFrame()
@@ -249,19 +249,8 @@ let rec private findElements cssSelector (searchContext : ISearchContext) (brows
 
 let private findByFunction cssSelector timeout waitFunc searchContext reliable (browser : IWebDriver) =
     if browser = null then raise (CanopyNoBrowserException("Can't perform the action because the browser instance is null.  `start chrome` to start a new browser."))
-    
-    //TODO
-    //TODO
-    //TODO
-    //TODO
-    //TODO
-    //TODO
-    //TODO
-    //TODO
-    //TODO
-    //TODO
-    //TODO
-    //if wipTest then colorizeAndSleep cssSelector
+        
+    if canopy.classic.configuration.wipTest then colorizeAndSleep cssSelector browser
 
     try
         if reliable then
@@ -1023,11 +1012,11 @@ let navigate (browser : IWebDriver) direction =
   | Forward -> browser.Navigate().Forward()
 
 (* documented/actions *)
-let addFinder finder =
+let addFinder finder browser =
     let currentFinders = configuredFinders
-    configuredFinders <- (fun cssSelector f ->
-        currentFinders cssSelector f
-        |> Seq.append (seq { yield finder cssSelector f }))
+    configuredFinders <- (fun cssSelector browser f ->
+        currentFinders cssSelector browser f
+        |> Seq.append (seq { yield finder cssSelector browser f }))
 
 //hints
 let private addHintFinder hints finder = hints |> Seq.append (seq { yield finder })

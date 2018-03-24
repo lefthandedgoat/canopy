@@ -3,7 +3,6 @@ module canopy.classic.core
 open canopy.types
 
 let mutable (failureMessage : string) = null
-let mutable wipTest = false
 let mutable searchedFor : (string * string) list = []
 
 (* documented/actions *)
@@ -308,7 +307,7 @@ let forward = canopy.parallell.functions.forward
 let navigate direction = canopy.parallell.functions.navigate browser direction
 
 (* documented/actions *)
-let addFinder finder = canopy.parallell.functions.addFinder finder
+let addFinder finder = canopy.parallell.functions.addFinder finder browser
 
 //hints
 (* documented/actions *)

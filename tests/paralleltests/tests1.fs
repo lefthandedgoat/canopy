@@ -9,7 +9,7 @@ let add () =
   "Set 1 #firstName should have John" &&& fun ctx -> 
     let browser = start canopy.types.Chrome
     url testpage browser
-    equals "#firstName" "John" browser
+    equals "#firstName:visible" "John" browser
     quit browser
 
   "Set 1 writing to #lastName sets text to Smith" &&& fun ctx -> 

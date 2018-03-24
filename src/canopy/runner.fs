@@ -14,6 +14,8 @@ let private last = function
 let mutable suites = [new suite()]
 let mutable todo = fun () -> ()
 let mutable skipped = fun () -> ()
+(* documented/configuration *)
+let mutable skipNextTest = false
 
 (* documented/testing *)
 let once f = (last suites).Once <- f
