@@ -3,6 +3,20 @@
 open prunner
 open canopy.parallell.functions
 
+////////////////////////////////////
+////////////////////////////////////
+////////////////////////////////////
+(*
+These are examples of using the functions for parallel support
+each function requires you to pass in the instance of the IWebDriver to use
+If you do not want to do this, use the instanced version, see tests2.fs
+Use whatever test runner you want, use whatever scoping strategy you want
+I just use one I made so that I dont have to take external depencies for regression tests
+*)
+////////////////////////////////////
+////////////////////////////////////
+////////////////////////////////////
+
 let add () = 
   let testpage = "http://lefthandedgoat.github.io/canopy/testpages/"
 
