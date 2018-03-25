@@ -327,7 +327,7 @@ let text = text
 (* documented/actions *)
 let value = value
 
-let skip message = skip
+let skip message = skip message browser
 
 (* documented/actions *)
 let waitForElement cssSelector = waitForElement 
