@@ -47,7 +47,7 @@
   <ItemGroup>
     <Compile Include="AssemblyInfo.fs" />
     <Compile Include="prunner.fs" />
-    <Compile Include="tests1.fs" />
+    <Compile Include="functionsTests.fs" />
     <Compile Include="tests2.fs" />
     <Compile Include="tests3.fs" />
     <Compile Include="Program.fs" />
