@@ -23,11 +23,11 @@ let add () =
   "context1" &&& fun ctx -> 
     let browser = start canopy.types.Chrome
     
-    //"#firstName should have John (using == infix operator)"
+    //"#firstName should have John (using infix operator)"
     url testpage browser
     equals "#firstName" "John" browser
 
-    //"id('firstName') should have John (using == infix operator), basic xpath test"
+    //"id('firstName') should have John (using infix operator), basic xpath test"
     url testpage browser
     equals "id('firstName')" "John" browser
 
@@ -249,7 +249,222 @@ let add () =
     url testpage browser
     onn testpage browser
 
+    quit browser
 
+  "reddit tests" &&& fun ctx -> 
+    let browser = start canopy.types.Chrome
 
+    //"browsing to redit should be on reddit '"
+    url "http://www.reddit.com/" browser
+    on "http://www.reddit.com/" browser
 
+    //"reloading redit should be on reddit"
+    url "http://www.reddit.com/" browser
+    on "http://www.reddit.com/" browser
+    reload browser
+    on "http://www.reddit.com/" browser
+    
+    quit browser
+
+  "post reddit tests" &&& fun ctx -> 
+    let browser = start canopy.types.Chrome
+
+    //"textbox should not equals dontequalme"
+    url testpage browser
+    notEquals "#welcome" "dontequalme" browser
+
+    //"list should not have item"
+    url testpage browser
+    noneOfManyNotEquals "#value_list td" "Value 5" browser
+
+    //"ajax button should click"
+    url testpage browser
+    equals "#ajax_button_clicked" "ajax button not clicked" browser
+    click "#ajax_button" browser
+    equals "#ajax_button_clicked" "ajax button clicked" browser
+
+    //"pressing keys should work (may need to verify visually)"
+    url testpage browser
+    click "#firstName" browser
+    press tab browser
+    press tab browser
+    press down browser
+
+    //"click polling"
+    url "http://lefthandedgoat.github.io/canopy/testpages/autocomplete" browser
+    click "#search" browser
+    click "table tr td" browser
+    equals "#console" "worked" browser
+
+    //"ajax button should click after sleep"
+    url testpage browser
+    equals "#ajax_button_clicked" "ajax button not clicked" browser
+    sleep 2.5
+    click "#ajax_button" browser
+    equals "#ajax_button_clicked" "ajax button clicked" browser
+            
+    quit browser
+    
+  "other tests" &&& fun ctx -> 
+    let browser = start canopy.types.Chrome
+
+    //"define a custom wait for using any function that takes in unit and returns bool"
+    let pageLoaded () =
+        (element "#wait_for" browser).Text = "Done!"
+
+    url "http://lefthandedgoat.github.io/canopy/testpages/waitFor" browser
+    waitFor pageLoaded
+    equals "#wait_for" "Done!" browser
+        
+    
+    //"define a custom wait for using any function that takes in unit and returns bool, example using lists"
+    let fiveNumbersShown () =
+        (elements ".number" browser).Length = 5
+
+    url "http://lefthandedgoat.github.io/canopy/testpages/waitFor" browser
+    waitFor fiveNumbersShown
+    (elements ".number" browser).Length === 5
+
+    //"regex test"
+    url testpage browser
+    write "#lastName" "Gray" browser
+    regexEquals "#lastName" "Gr[ae]y" browser
+    write "#lastName" "Grey" browser
+    regexEquals "#lastName""Gr[ae]y" browser
+
+    //"regex not test"
+    url testpage browser
+    write "#lastName" "Gray" browser
+    regexNotEquals "#lastName" "Gr[o]y" browser
+    write "#lastName" "Grey" browser
+    regexNotEquals "#lastName" "Gr[o]y" browser
+
+    //"regex one of many test"
+    url testpage browser
+    oneOrManyRegexEquals "#colors li" "gr[ea]y" browser
+
+    //"test for first function"
+    url testpage browser
+    (first "#value_list td" browser).Text === "Value 1"
+
+    //"test for last function"
+    url testpage browser
+    (last "#value_list td" browser).Text === "Value 4"
+
+    //"test for nth function"
+    url testpage browser
+    (nth 2 "#value_list td" browser).Text === "Value 3"
+
+    //"writting (selecting) to drop down test"
+    url testpage browser
+    write "#item_list" "Item 2" browser
+    equals "#item_list" "Item 2" browser
+
+    //"writting (selecting) to drop down test, many options"
+    url testpage browser
+    write "#states" "Kingman Reef" browser
+    equals "#states" "Kingman Reef" browser
+
+    //"writting (selecting) to drop down test, via option value, many options"
+    url testpage browser
+    write "#states" "95" browser
+    equals "#states" "Palmyra Atoll" browser
+
+    //"writting (selecting) to drop down test, two selects same value"
+    url "http://lefthandedgoat.github.io/canopy/testpages/selectOptions" browser
+    write "#test-select" "g" browser
+    write "#test-select2" "b" browser
+    equals "#test-select" "Green" browser
+    equals "#test-select2" "Blue" browser
+
+    //"writting (selecting) to drop down test, value list, opt group"
+    url testpage browser
+    write "#test-select" "Audi" browser
+    equals "#test-select" "Audi" browser
+
+    //"double clicking"
+    url "http://lefthandedgoat.github.io/canopy/testpages/doubleClick" browser
+    equals "#clicked" "Not Clicked" browser
+    doubleClick "#double_click" browser
+    equals "#clicked" "Clicked" browser
+
+    //"ctrl clicking"
+    url "http://lefthandedgoat.github.io/canopy/testpages/ctrlClick" browser
+
+    ctrlClick "One" browser
+    ctrlClick "2" browser
+    ctrlClick "Three" browser
+
+    selected "1" browser
+    selected "Two" browser
+    selected "3" browser
+
+    //"displayed test"
+    url "http://lefthandedgoat.github.io/canopy/testpages/displayed" browser
+    displayed "#displayed" browser
+
+    //"displayed test via element"
+    url "http://lefthandedgoat.github.io/canopy/testpages/displayed" browser
+    element "#displayed" browser |> (fun e -> displayed e browser)
+
+    //"displayed test2"
+    url "http://lefthandedgoat.github.io/canopy/testpages/displayed" browser
+    waitFor (fun _ -> (element "#displayed" browser).Displayed)
+
+    //"displayed test3"
+    url "http://lefthandedgoat.github.io/canopy/testpages/waitFor" browser
+    waitFor (fun _ -> (element "#wait_for_2" browser).Displayed)
+
+    //"notDisplayed test"
+    url "http://lefthandedgoat.github.io/canopy/testpages/notDisplayed" browser
+    notDisplayed "#notDisplayed" browser
+
+    //"notDisplayed test via element"
+    url "http://lefthandedgoat.github.io/canopy/testpages/notDisplayed" browser
+    element "#notDisplayed"  browser |> (fun e -> notDisplayed e browser)
+
+    //"notDisplayed test for element that is not on the screen"
+    url "http://lefthandedgoat.github.io/canopy/testpages/notDisplayed" browser
+    notDisplayed "#nalsjdfalfalsdjfalsjfaljsflsjf" browser
+
+    //"count test"
+    url "http://lefthandedgoat.github.io/canopy/testpages/count" browser
+    count ".number" 5 browser
+
+    //"count test via sizzle"
+    url testpage browser
+    count "option:selected" 3 browser
+
+    //"#firstName should have John (using == infix operator), iframe1"
+    url "http://lefthandedgoat.github.io/canopy/testpages/iframe1" browser
+    equals "#firstName" "John" browser
+
+    //"elementWithin will find iFrame inside of outter element properly, iframe1"
+    url "http://lefthandedgoat.github.io/canopy/testpages/iframe1" browser
+    first "body" browser 
+    |> fun e -> elementWithin "#states" e browser
+    |> fun e -> elementWithin "1" e browser
+    |> fun e -> read e browser 
+    |> is "Alabama"
+
+    //"#firstName should have John (using == infix operator), iframe2"
+    url "http://lefthandedgoat.github.io/canopy/testpages/iframe2" browser
+    equals "#firstName" "John" browser
+
+    //"elementWithin will find iFrame inside of outter element properly, iframe2"
+    url "http://lefthandedgoat.github.io/canopy/testpages/iframe2" browser
+    first "body" browser
+    |> fun e -> elementWithin "#states" e browser
+    |> fun e -> elementWithin "1" e browser
+    |> fun e -> read e browser
+    |> is "Alabama"
+
+    //"selecting option in iframe works by text and value"
+    url "http://lefthandedgoat.github.io/canopy/testpages/iframe1" browser
+
+    write "#item_list" "Item 2" browser
+    equals "#item_list" "Item 2" browser
+    write "#item_list" "3" browser
+    equals "#item_list" "Item 3" browser
+        
     quit browser
