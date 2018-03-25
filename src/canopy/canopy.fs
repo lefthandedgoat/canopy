@@ -1,24 +1,25 @@
 module canopy.classic.core
 
 open canopy.types
+open canopy.parallell.functions
 
 let mutable (failureMessage : string) = null
 let mutable searchedFor : (string * string) list = []
 
 (* documented/actions *)
-let firefox = canopy.parallell.functions.firefox
+let firefox = firefox
 (* documented/actions *)
-let aurora = canopy.parallell.functions.aurora
+let aurora = aurora
 (* documented/actions *)
-let ie = canopy.parallell.functions.ie
+let ie = ie
 (* documented/actions *)
-let edgeBETA = canopy.parallell.functions.edgeBETA
+let edgeBETA = edgeBETA
 (* documented/actions *)
-let chrome = canopy.parallell.functions.chrome
+let chrome = chrome
 (* documented/actions *)
-let chromium = canopy.parallell.functions.chromium 
+let chromium = chromium 
 (* documented/actions *)
-let safari = canopy.parallell.functions.safari
+let safari = safari
 
 let mutable browsers = []
 
@@ -27,248 +28,248 @@ let mutable browsers = []
 let failsWith message = failureMessage <- message
 
 (* documented/actions *)
-let screenshot directory filename = canopy.parallell.functions.screenshot directory filename browser
+let screenshot directory filename = screenshot directory filename browser
 
 (* documented/actions *)
-let js script = canopy.parallell.functions.js script browser
+let js script = js script browser
 
 (* documented/actions *)
-let sleep seconds = canopy.parallell.functions.sleep seconds
+let sleep seconds = sleep seconds
 
 (* documented/actions *)
-let puts text = canopy.parallell.functions.puts text
+let puts text = puts text
 
 (* documented/actions *)
-let highlight cssSelector = canopy.parallell.functions.highlight cssSelector
+let highlight cssSelector = highlight cssSelector
 
 (* documented/actions *)
-let describe text = canopy.parallell.functions.describe text browser
+let describe text = describe text browser
 
 (* documented/actions *)
-let waitFor2 message f = canopy.parallell.functions.waitFor2 message f
+let waitFor2 message f = waitFor2 message f
 
 (* documented/actions *)
 let waitFor = waitFor2 "Condition not met in given amount of time. If you want to increase the time, put compareTimeout <- 10.0 anywhere before a test to increase the timeout"
 
 //get elements
 (* documented/actions *)
-let elements cssSelector = canopy.parallell.functions.elements cssSelector browser
+let elements cssSelector = elements cssSelector browser
 
 (* documented/actions *)
-let element cssSelector = canopy.parallell.functions.element cssSelector browser
+let element cssSelector = element cssSelector browser
 
 (* documented/actions *)
-let unreliableElements cssSelector = canopy.parallell.functions.unreliableElements cssSelector browser
+let unreliableElements cssSelector = unreliableElements cssSelector browser
 
 (* documented/actions *)
-let unreliableElement cssSelector = canopy.parallell.functions.unreliableElement cssSelector browser
+let unreliableElement cssSelector = unreliableElement cssSelector browser
 
 (* documented/actions *)
-let elementWithin cssSelector elem = canopy.parallell.functions.elementWithin cssSelector elem browser
+let elementWithin cssSelector elem = elementWithin cssSelector elem browser
 
 (* documented/actions *)
-let elementsWithText cssSelector regex = canopy.parallell.functions.elementsWithText cssSelector regex browser
+let elementsWithText cssSelector regex = elementsWithText cssSelector regex browser
 
 (* documented/actions *)
-let elementWithText cssSelector regex = canopy.parallell.functions.elementWithText cssSelector regex browser
+let elementWithText cssSelector regex = elementWithText cssSelector regex browser
 
 (* documented/actions *)
-let parent elem = canopy.parallell.functions.parent elem browser
+let parent elem = parent elem browser
 
 (* documented/actions *)
-let elementsWithin cssSelector elem = canopy.parallell.functions.elementsWithin cssSelector elem browser
+let elementsWithin cssSelector elem = elementsWithin cssSelector elem browser
 
 (* documented/actions *)
-let unreliableElementsWithin cssSelector elem = canopy.parallell.functions.unreliableElementsWithin cssSelector elem browser
+let unreliableElementsWithin cssSelector elem = unreliableElementsWithin cssSelector elem browser
 
 (* documented/actions *)
-let someElement cssSelector = canopy.parallell.functions.someElement cssSelector browser
+let someElement cssSelector = someElement cssSelector browser
 
 (* documented/actions *)
-let someElementWithin cssSelector elem = canopy.parallell.functions.someElementWithin cssSelector elem browser
+let someElementWithin cssSelector elem = someElementWithin cssSelector elem browser
 
 (* documented/actions *)
-let someParent elem = canopy.parallell.functions.someParent elem browser
+let someParent elem = someParent elem browser
 
 (* documented/actions *)
-let nth index cssSelector = canopy.parallell.functions.nth index cssSelector browser
+let nth index cssSelector = nth index cssSelector browser
 
 (* documented/actions *)
-let first cssSelector = canopy.parallell.functions.first cssSelector browser
+let first cssSelector = first cssSelector browser
 
 (* documented/actions *)
-let last cssSelector = canopy.parallell.functions.last cssSelector browser
+let last cssSelector = last cssSelector browser
 
 //read/write
 
 (* documented/actions *)
-let ( << ) item text = canopy.parallell.functions.write item text browser
+let ( << ) item text = write item text browser
 
 (* documented/actions *)
-let read item = canopy.parallell.functions.read item browser
+let read item = read item browser
 
 (* documented/actions *)
-let clear item = canopy.parallell.functions.clear item browser
+let clear item = clear item browser
 
 //status
 (* documented/assertions *)
-let selected item = canopy.parallell.functions.selected item browser
+let selected item = selected item browser
 
 (* documented/assertions *)
-let deselected item = canopy.parallell.functions.deselected item browser
+let deselected item = deselected item browser
 
 //keyboard
 (* documented/actions *)
-let tab = canopy.parallell.functions.tab
+let tab = tab
 (* documented/actions *)
-let enter = canopy.parallell.functions.enter
+let enter = enter
 (* documented/actions *)
-let down = canopy.parallell.functions.down
+let down = down
 (* documented/actions *)
-let up = canopy.parallell.functions.up
+let up = up
 (* documented/actions *)
-let left = canopy.parallell.functions.left
+let left = left
 (* documented/actions *)
-let right = canopy.parallell.functions.right
+let right = right
 (* documented/actions *)
-let esc = canopy.parallell.functions.esc
+let esc = esc
 
 (* documented/actions *)
-let press key = canopy.parallell.functions.press key browser
+let press key = press key browser
 
 //alerts
 (* documented/actions *)
-let alert() = canopy.parallell.functions.alert browser
+let alert() = alert browser
 
 (* documented/actions *)
-let acceptAlert() = canopy.parallell.functions.acceptAlert browser
+let acceptAlert() = acceptAlert browser
 
 (* documented/actions *)
-let dismissAlert() = canopy.parallell.functions.dismissAlert browser
+let dismissAlert() = dismissAlert browser
 
 (* documented/actions *)
-let fastTextFromCSS selector = canopy.parallell.functions.fastTextFromCSS selector browser
+let fastTextFromCSS selector = fastTextFromCSS selector browser
 
 //assertions
 (* documented/assertions *)
-let ( == ) item value = canopy.parallell.functions.equals item value browser
+let ( == ) item value = equals item value browser
 
 (* documented/assertions *)
-let ( != ) cssSelector value = canopy.parallell.functions.notEquals cssSelector value browser 
+let ( != ) cssSelector value = notEquals cssSelector value browser 
 
 (* documented/assertions *)
-let ( *= ) cssSelector value = canopy.parallell.functions.oneOrManyEquals cssSelector value browser
+let ( *= ) cssSelector value = oneOrManyEquals cssSelector value browser
 
 (* documented/assertions *)
-let ( *!= ) cssSelector value = canopy.parallell.functions.noneOfManyNotEquals cssSelector value browser
+let ( *!= ) cssSelector value = noneOfManyNotEquals cssSelector value browser
 
 (* documented/assertions *)
-let contains (value1 : string) (value2 : string) = canopy.parallell.functions.contains value1 value2
+let contains (value1 : string) (value2 : string) = contains value1 value2
 
 (* documented/assertions *)
-let containsInsensitive (value1 : string) (value2 : string) = canopy.parallell.functions.containsInsensitive value1 value2
+let containsInsensitive (value1 : string) (value2 : string) = containsInsensitive value1 value2
 
 (* documented/assertions *)
-let notContains (value1 : string) (value2 : string) = canopy.parallell.functions.notContains value1 value2
+let notContains (value1 : string) (value2 : string) = notContains value1 value2
 
 (* documented/assertions *)
-let count cssSelector count = canopy.parallell.functions.count cssSelector count browser
+let count cssSelector count' = count cssSelector count' browser
 
 (* documented/assertions *)
-let ( =~ ) cssSelector pattern = canopy.parallell.functions.regexEquals cssSelector pattern browser
+let ( =~ ) cssSelector pattern = regexEquals cssSelector pattern browser
 
 (* documented/assertions *)
-let ( !=~ ) cssSelector pattern = canopy.parallell.functions.regexNotEquals cssSelector pattern browser
+let ( !=~ ) cssSelector pattern = regexNotEquals cssSelector pattern browser
  
 (* documented/assertions *)
-let ( *~ ) cssSelector pattern = canopy.parallell.functions.oneOrManyRegexEquals cssSelector pattern browser
+let ( *~ ) cssSelector pattern = oneOrManyRegexEquals cssSelector pattern browser
 
 (* documented/assertions *)
-let is expected actual = canopy.parallell.functions.is expected actual 
+let is expected actual = is expected actual 
 
 (* documented/assertions *)
 let (===) expected actual = is expected actual
 
 (* documented/assertions *)
-let displayed item = canopy.parallell.functions.displayed item browser
+let displayed item = displayed item browser
 
 (* documented/assertions *)
-let notDisplayed item = canopy.parallell.functions.notDisplayed item browser
+let notDisplayed item = notDisplayed item browser
    
 (* documented/assertions *)
-let enabled item = canopy.parallell.functions.enabled item browser
+let enabled item = enabled item browser
 
 (* documented/assertions *)
-let disabled item = canopy.parallell.functions.disabled item browser
+let disabled item = disabled item browser
 
 (* documented/assertions *)
-let fadedIn cssSelector = canopy.parallell.functions.fadedIn cssSelector browser
+let fadedIn cssSelector = fadedIn cssSelector browser
 
 //clicking/checking
 (* documented/actions *)
-let click item = canopy.parallell.functions.click item browser
+let click item = click item browser
 
 (* documented/actions *)
-let doubleClick item = canopy.parallell.functions.doubleClick item browser
+let doubleClick item = doubleClick item browser
 
 (* documented/actions *)
-let ctrlClick item = canopy.parallell.functions.ctrlClick item browser
+let ctrlClick item = ctrlClick item browser
 
 (* documented/actions *)
-let shiftClick item = canopy.parallell.functions.shiftClick item browser
+let shiftClick item = shiftClick item browser
 
 (* documented/actions *)
-let rightClick item = canopy.parallell.functions.rightClick item browser
+let rightClick item = rightClick item browser
 
 (* documented/actions *)
-let check item = canopy.parallell.functions.check item browser
+let check item = check item browser
 
 (* documented/actions *)
-let uncheck item = canopy.parallell.functions.uncheck item browser
+let uncheck item = uncheck item browser
 
 //hoverin
 (* documented/actions *)
-let hover selector = canopy.parallell.functions.hover selector browser
+let hover selector = hover selector browser
 
 //draggin
 (* documented/actions *)
-let (-->) cssSelectorA cssSelectorB = canopy.parallell.functions.drag cssSelectorA cssSelectorB browser
+let (-->) cssSelectorA cssSelectorB = drag cssSelectorA cssSelectorB browser
 
 (* documented/actions *)
-let drag cssSelectorA cssSelectorB = canopy.parallell.functions.drag cssSelectorA cssSelectorB
+let drag cssSelectorA cssSelectorB = drag cssSelectorA cssSelectorB
 
 //browser related
 (* documented/actions *)
-let pin direction = canopy.parallell.functions.pin direction browser
+let pin direction = pin direction browser
 
 (* documented/actions *)
-let pinToMonitor n = canopy.parallell.functions.pinToMonitor n browser
+let pinToMonitor n = pinToMonitor n browser
     
 (* documented/actions *)
 let start b =
-    browser <- canopy.parallell.functions.start b
+    browser <- start b
     browsers <- browsers @ [browser]
 
 (* documented/actions *)
 let switchTo b = browser <- b
 
 (* documented/actions *)
-let switchToTab number = canopy.parallell.functions.switchToTab number browser
+let switchToTab number = switchToTab number browser
 
 (* documented/actions *)
-let closeTab number = canopy.parallell.functions.closeTab number browser
+let closeTab number = closeTab number browser
 
 (* documented/actions *)
-let tile browsers = canopy.parallell.functions.tile browsers
+let tile browsers = tile browsers
 
 (* documented/actions *)
-let positionBrowser left top width height = canopy.parallell.functions.positionBrowser left top width height browser
+let positionBrowser left top width height = positionBrowser left top width height browser
 
 (* documented/actions *)
-let resize size = canopy.parallell.functions.resize size browser
+let resize size = resize size browser
 
 (* documented/actions *)
-let rotate() = canopy.parallell.functions.rotate browser
+let rotate() = rotate browser
 
 (* documented/actions *)
 let quit browser =
@@ -278,52 +279,52 @@ let quit browser =
     | _ -> browsers |> List.iter (fun b -> b.Quit())
 
 (* documented/actions *)
-let currentUrl() = canopy.parallell.functions.currentUrl browser
+let currentUrl() = currentUrl browser
 
 (* documented/assertions *)
-let onn (u: string) = canopy.parallell.functions.onn u browser
+let onn (u: string) = onn u browser
 
 (* documented/assertions *)
-let on (u: string) = canopy.parallell.functions.on u browser
+let on (u: string) = on u browser
 
 (* documented/actions *)
-let ( !^ ) (u : string) = canopy.parallell.functions.url u browser
+let ( !^ ) (u : string) = url u browser
 
 (* documented/actions *)
 let url u = !^ u
 
 (* documented/actions *)
-let title() = canopy.parallell.functions.title browser
+let title() = title browser
 
 (* documented/actions *)
-let reload () = canopy.parallell.functions.reload browser
+let reload () = reload browser
 
 (* documented/actions *)
-let back = canopy.parallell.functions.back
+let back = back
 (* documented/actions *)
-let forward = canopy.parallell.functions.forward
+let forward = forward
 
 (* documented/actions *)
-let navigate direction = canopy.parallell.functions.navigate browser direction
+let navigate direction = navigate browser direction
 
 (* documented/actions *)
-let addFinder finder = canopy.parallell.functions.addFinder finder browser
+let addFinder finder = addFinder finder browser
 
 //hints
 (* documented/actions *)
-let css = canopy.parallell.functions.css
+let css = css
 (* documented/actions *)
-let xpath = canopy.parallell.functions.xpath
+let xpath = xpath
 (* documented/actions *)
-let jquery = canopy.parallell.functions.jquery
+let jquery = jquery
 (* documented/actions *)
-let label = canopy.parallell.functions.label
+let label = label
 (* documented/actions *)
-let text = canopy.parallell.functions.text
+let text = text
 (* documented/actions *)
-let value = canopy.parallell.functions.value
+let value = value
 
-let skip message = canopy.parallell.functions.skip
+let skip message = skip
 
 (* documented/actions *)
-let waitForElement cssSelector = canopy.parallell.functions.waitForElement 
+let waitForElement cssSelector = waitForElement 
