@@ -66,7 +66,7 @@ let private loadJQuery (browser : IWebDriver) =
             document.getElementsByTagName('head')[0].appendChild(jq);
          """
         jsBrowser.ExecuteScript(load) |> ignore
-        canopy.classic.wait.wait 2.0 (fun _ -> jsBrowser.ExecuteScript(jqueryExistsScript) :?> bool)
+        canopy.wait.wait 2.0 (fun _ -> jsBrowser.ExecuteScript(jqueryExistsScript) :?> bool)
 
 type ByJQuery (selector, browser) =
     inherit OpenQA.Selenium.By()

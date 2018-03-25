@@ -14,7 +14,7 @@ open canopy.classic.finders
 open System.Drawing
 open System.Drawing.Imaging
 open canopy.classic.EditDistance
-open canopy.classic.wait
+open canopy.wait
 
 (* documented/actions *)
 let firefox = Firefox

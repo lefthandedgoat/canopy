@@ -1,4 +1,4 @@
-﻿module canopy.classic.wait
+﻿module canopy.wait
 
 open OpenQA.Selenium
 
