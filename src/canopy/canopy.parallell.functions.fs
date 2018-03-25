@@ -8,7 +8,7 @@ open Microsoft.FSharp.Core.Printf
 open System.IO
 open System
 open canopy.classic.configuration
-open canopy.classic.reporters
+open canopy.reporters
 open canopy.types
 open canopy.classic.finders
 open System.Drawing

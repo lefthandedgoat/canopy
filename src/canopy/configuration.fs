@@ -1,6 +1,6 @@
 ﻿module canopy.classic.configuration
 
-open canopy.classic.reporters
+open canopy.reporters
 open canopy.types
 open System
 

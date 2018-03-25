@@ -3,7 +3,7 @@
 open System
 open canopy.classic.configuration
 open canopy.classic.core
-open canopy.classic.reporters
+open canopy.reporters
 open canopy.types
 open OpenQA.Selenium
 
