@@ -11,6 +11,7 @@ open canopy.classic
 
 let executingDir () = System.IO.Path.GetDirectoryName(System.Reflection.Assembly.GetExecutingAssembly().Location)
 chromeDir <- executingDir()
+firefoxDriverDir <- executingDir()
 
 start chrome
 let mainBrowser = browser
@@ -679,21 +680,21 @@ context "User Agents tests"
 
 "ChromeWithUserAgent userAgents.iPad should show as iPad" &&& fun _ ->
     start <| ChromeWithUserAgent userAgents.iPad
-    url "http://whatsmyuseragent.com/"
+    url "https://www.whoishostingthis.com/tools/user-agent/"
     ".info-box.user-agent" *~ "iPad"
     quit browser
     switchTo mainBrowser
 
 "FirefoxDeviceWithUserAgent userAgents.iPhone should show as iPhone" &&& fun _ ->
     start <| FirefoxWithUserAgent userAgents.iPhone
-    url "http://whatsmyuseragent.com/"
+    url "https://www.whoishostingthis.com/tools/user-agent/"
     ".info-box.user-agent" *~ "iPhone"
     quit browser
     switchTo mainBrowser
 
 "FirefoxDeviceWithUserAgent myagent should show as myagent" &&& fun _ ->
     start <| FirefoxWithUserAgent "myagent"
-    url "http://whatsmyuseragent.com/"
+    url "https://www.whoishostingthis.com/tools/user-agent/"
     ".info-box.user-agent" *~ "myagent"
     quit browser
     switchTo mainBrowser

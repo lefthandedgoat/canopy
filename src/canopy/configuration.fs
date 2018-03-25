@@ -17,6 +17,12 @@ let folderByOSTypeChromium =
     | PlatformID.Unix -> @"/usr/lib/chromium-browser"
     | _ -> @"c:\"
 
+let firefoxByOSType =
+    match System.Environment.OSVersion.Platform with
+    | PlatformID.MacOSX -> @"/Applications/Firefox.app"
+    | PlatformID.Unix -> @"/usr/lib/firefox-1.0" //unsure
+    | _ -> @"C:\Program Files (x86)\Mozilla Firefox\firefox.exe"
+    
 //runner related
 (* documented/configuration *)
 let failFast = ref false
@@ -37,6 +43,10 @@ let mutable safariDir = folderByOSType
 let mutable edgeDir = @"C:\Program Files (x86)\Microsoft Web Driver\"
 (* documented/configuration *)
 let mutable hideCommandPromptWindow = false
+(* TODO documented/configuration *)
+let mutable firefoxDriverDir = folderByOSType
+(* TODO documented/configuration *)
+let mutable firefoxDir = firefoxByOSType
 
 (* documented/configuration *)
 let mutable elementTimeout = 10.0

@@ -781,7 +781,8 @@ let pinToMonitor n (browser : IWebDriver) =
         raise(CanopyException(sprintf "Monitor %d is not detected" n))
 
 let private firefoxDriverService _ =
-    let service = Firefox.FirefoxDriverService.CreateDefaultService()
+    let service = Firefox.FirefoxDriverService.CreateDefaultService(canopy.classic.configuration.firefoxDriverDir)
+    service.FirefoxBinaryPath <- canopy.classic.configuration.firefoxDir
     service.HideCommandPromptWindow <- hideCommandPromptWindow
     service
 
@@ -790,7 +791,7 @@ let private firefoxWithUserAgent (userAgent : string) =
     profile.SetPreference("general.useragent.override", userAgent)
     let options = Firefox.FirefoxOptions();
     options.Profile <- profile
-    new FirefoxDriver(firefoxDriverService (), options, TimeSpan.FromSeconds(elementTimeout)) :> IWebDriver
+    new FirefoxDriver(firefoxDriverService (), options, TimeSpan.FromSeconds(20.0)) :> IWebDriver
 
 let private chromeDriverService dir = 
     let service = Chrome.ChromeDriverService.CreateDefaultService(dir);
