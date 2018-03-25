@@ -2,9 +2,9 @@ module main
 
 open System
 open OpenQA.Selenium
-open canopy.classic.core
+open canopy.classic
 open canopy.reporters
-open canopy.classic.runner
+open canopy.runner.classic
 open canopy.configuration
 open canopy.types
 open canopy.classic

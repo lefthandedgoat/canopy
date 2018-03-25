@@ -1,7 +1,10 @@
-module canopy.classic.core
+module canopy.classic
 
 open canopy.types
 open canopy.parallell.functions
+open OpenQA.Selenium
+
+let mutable (browser : IWebDriver) = null
 
 let mutable (failureMessage : string) = null
 let mutable searchedFor : (string * string) list = []

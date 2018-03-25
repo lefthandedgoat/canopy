@@ -1,8 +1,8 @@
-﻿module canopy.classic.runner
+﻿module canopy.runner.classic
 
 open System
 open canopy.configuration
-open canopy.classic.core
+open canopy.classic
 open canopy.reporters
 open canopy.types
 open OpenQA.Selenium

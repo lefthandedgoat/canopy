@@ -1,13 +1,13 @@
 ﻿namespace canopy.csharp
 
-open canopy.classic.runner
-open canopy.classic.core
+open canopy.runner.classic
+open canopy.classic
 
 type canopy () =
 
     static member browsers = browsers
 
-    static member browser = canopy.types.browser
+    static member browser = canopy.classic.browser
 
     //runner stuff
     static member context description = context description
@@ -28,11 +28,11 @@ type canopy () =
 
     static member wip description (f : System.Action) = description &&&& fun _ -> f.Invoke()
 
-    static member skip description (f : System.Action) = description &&! canopy.classic.runner.skipped
+    static member skip description (f : System.Action) = description &&! canopy.runner.classic.skipped
                 
-    static member run () = canopy.classic.runner.run ()
+    static member run () = canopy.runner.classic.run ()
 
-    static member runFor browsers = canopy.classic.runner.runFor browsers
+    static member runFor browsers = canopy.runner.classic.runFor browsers
         
     //core stuff
     static member start b = start b
