@@ -10,21 +10,30 @@ type Instance() =
       with get () = if _browser <> null then _browser else failwith "You must start a browser for Instance Mode"
       and set (value) = _browser <- value
     
-    member x.start browserStartMode = x.browser <- start browserStartMode
-
-    member x.equals item value = equals item value x.browser
-
-    //todo add all assertions
-
     member x.screenshot directory filename = screenshot directory filename x.browser 
-    
+
     member x.js script = js script x.browser
-    
+
+    member x.sleep sleep seconds = sleep seconds
+
     member x.puts text = puts text x.browser
     
     member x.highlight cssSelector = highlight cssSelector x.browser
-    
+
     member x.describe text = describe text x.browser
+
+
+
+    
+
+
+    
+    
+    
+    
+    
+    
+    
     
     member x.elements cssSelector = elements cssSelector x.browser
     
@@ -123,3 +132,7 @@ type Instance() =
     member x.waitForElement cssSelector = waitForElement cssSelector x.browser
 
     member x.quit () = quit x.browser
+
+    member x.start browserStartMode = x.browser <- start browserStartMode
+
+    member x.equals item value = equals item value x.browser
