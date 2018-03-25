@@ -93,20 +93,17 @@ let private pngToJpg pngArray =
   img.Save(jpgStream, ImageFormat.Jpeg)
   jpgStream.ToArray()
 
-//d
 (* documented/actions *)
 let screenshot directory filename (browser : IWebDriver) =
     match box browser with
         | :? ITakesScreenshot -> takeScreenshot directory filename browser |> pngToJpg
         | _ -> Array.empty<byte>
 
-//d
 (* documented/actions *)
 let js script (browser : IWebDriver) = (browser :?> IJavaScriptExecutor).ExecuteScript(script)
 
 let private swallowedJs script browser = try js script browser |> ignore with | ex -> ()
 
-//d
 (* documented/actions *)
 let sleep seconds =
     let ms = match box seconds with
@@ -115,7 +112,6 @@ let sleep seconds =
               | _ -> 1000
     System.Threading.Thread.Sleep(ms)
 
-//d
 (* documented/actions *)
 let puts text browser =
     reporter.write text
