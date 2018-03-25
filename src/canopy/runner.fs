@@ -195,7 +195,7 @@ let run () =
 
     //run all the suites
     if runFailedContextsFirst = true then
-        let failedContexts = history.get()
+        let failedContexts = canopy.history.get()
         //reorder so failed contexts are first
         let fc, pc = suites |> List.partition (fun s -> failedContexts |> List.exists (fun fc -> fc = s.Context))
         suites <- fc @ pc
@@ -231,7 +231,7 @@ let run () =
             if s.Context <> null then reporter.contextEnd s.Context
     )
 
-    history.save failedContexts
+    canopy.history.save failedContexts
 
     stopWatch.Stop()
     reporter.summary stopWatch.Elapsed.Minutes stopWatch.Elapsed.Seconds passedCount failedCount skippedCount
