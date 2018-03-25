@@ -273,7 +273,7 @@ let rotate() = rotate browser
 
 (* documented/actions *)
 let quit browser =
-    canopy.classic.configuration.reporter.quit()
+    canopy.configuration.reporter.quit()
     match box browser with
     | :? OpenQA.Selenium.IWebDriver as b -> b.Quit()
     | _ -> browsers |> List.iter (fun b -> b.Quit())

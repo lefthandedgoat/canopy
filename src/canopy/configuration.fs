@@ -1,4 +1,4 @@
-﻿module canopy.classic.configuration
+﻿module canopy.configuration
 
 open canopy.reporters
 open canopy.types

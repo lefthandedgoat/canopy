@@ -1,7 +1,7 @@
 ﻿module canopy.classic.runner
 
 open System
-open canopy.classic.configuration
+open canopy.configuration
 open canopy.classic.core
 open canopy.reporters
 open canopy.types
@@ -101,9 +101,9 @@ let fail (ex : Exception) (test : Test) (suite : suite) autoFail url =
                 if failFast = ref true then failed <- true
                 failedCount <- failedCount + 1
                 contextFailed <- true
-                let f = canopy.classic.configuration.failScreenshotFileName test suite
+                let f = canopy.configuration.failScreenshotFileName test suite
                 if failureScreenshotsEnabled = true then
-                  let ss = screenshot canopy.classic.configuration.failScreenshotPath f
+                  let ss = screenshot canopy.configuration.failScreenshotPath f
                   reporter.fail ex test.Id ss url
                 else reporter.fail ex test.Id Array.empty<byte> url
                 suite.OnFail()
@@ -183,7 +183,7 @@ let run () =
 
     let wipsExist = suites |> List.exists (fun s -> s.Wips.IsEmpty = false)
 
-    if wipsExist && canopy.classic.configuration.failIfAnyWipTests then
+    if wipsExist && canopy.configuration.failIfAnyWipTests then
        raise <| Exception "Wip tests found and failIfAnyWipTests is true"
 
     reporter.suiteBegin()

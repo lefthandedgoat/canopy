@@ -195,7 +195,7 @@ type Instance() =
     member x.rotate() = rotate x.browser
 
     member x.quit browser =
-        canopy.classic.configuration.reporter.quit()
+        canopy.configuration.reporter.quit()
         match box x.browser with
         | :? OpenQA.Selenium.IWebDriver as b -> b.Quit()
         | _ -> browsers |> List.iter (fun b -> b.Quit())

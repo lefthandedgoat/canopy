@@ -5,7 +5,7 @@ open OpenQA.Selenium
 open canopy.classic.core
 open canopy.reporters
 open canopy.classic.runner
-open canopy.classic.configuration
+open canopy.configuration
 open canopy.types
 open canopy.classic
 
@@ -19,11 +19,11 @@ elementTimeout <- 3.0
 compareTimeout <- 3.0
 pageTimeout <- 3.0
 runFailedContextsFirst <- false
-reporter <- new LiveHtmlReporter(Chrome, configuration.chromeDir) :> IReporter
+reporter <- new LiveHtmlReporter(Chrome, chromeDir) :> IReporter
 reporter.setEnvironment "My Machine"
-configuration.failureMessagesThatShoulBeTreatedAsSkip <- ["Skip me when I fail"]
+failureMessagesThatShoulBeTreatedAsSkip <- ["Skip me when I fail"]
 
-configuration.failScreenshotFileName <-
+failScreenshotFileName <-
   (fun test suite ->
       let suiteContext = if suite.Context = null then "" else suite.Context
       let cleanName = if test.Description = null then "" else test.Description.Replace(' ','_') //etc

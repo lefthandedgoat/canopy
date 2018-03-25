@@ -7,7 +7,7 @@ open OpenQA.Selenium.Interactions
 open Microsoft.FSharp.Core.Printf
 open System.IO
 open System
-open canopy.classic.configuration
+open canopy.configuration
 open canopy.reporters
 open canopy.types
 open canopy.finders
@@ -250,7 +250,7 @@ let rec private findElements cssSelector (searchContext : ISearchContext) (brows
 let private findByFunction cssSelector timeout waitFunc searchContext reliable (browser : IWebDriver) =
     if browser = null then raise (CanopyNoBrowserException("Can't perform the action because the browser instance is null.  `start chrome` to start a new browser."))
         
-    if canopy.classic.configuration.wipTest then colorizeAndSleep cssSelector browser
+    if canopy.configuration.wipTest then colorizeAndSleep cssSelector browser
 
     try
         if reliable then
@@ -781,8 +781,8 @@ let pinToMonitor n (browser : IWebDriver) =
         raise(CanopyException(sprintf "Monitor %d is not detected" n))
 
 let private firefoxDriverService _ =
-    let service = Firefox.FirefoxDriverService.CreateDefaultService(canopy.classic.configuration.firefoxDriverDir)
-    service.FirefoxBinaryPath <- canopy.classic.configuration.firefoxDir
+    let service = Firefox.FirefoxDriverService.CreateDefaultService(canopy.configuration.firefoxDriverDir)
+    service.FirefoxBinaryPath <- canopy.configuration.firefoxDir
     service.HideCommandPromptWindow <- hideCommandPromptWindow
     service
 
