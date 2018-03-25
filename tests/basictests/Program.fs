@@ -769,17 +769,6 @@ context "todo tests"
 
 "write a test that tests the whole internet!" &&& todo
 
-let createTest k =
-    let testName = sprintf "Testing addition performance %i" k
-    testName &&& todo
-
-let createTestSuite contextName n =
-    context contextName
-
-    [1..n] |> Seq.iter createTest
-
-createTestSuite "Add test performance" 1000
-
 run ()
 
 switchTo mainBrowser
