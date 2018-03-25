@@ -206,7 +206,7 @@ type Instance() =
 
     member x.on (u: string) = on u x.browser
     
-    member x.url u = !^ u
+    member x.url u = url u x.browser
 
     member x.title() = title x.browser
 
