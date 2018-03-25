@@ -19,10 +19,13 @@ let folderByOSTypeChromium =
 
 let firefoxByOSType =
     match System.Environment.OSVersion.Platform with
-    | PlatformID.MacOSX -> @"/Applications/Firefox.app"
-    | PlatformID.Unix -> @"/usr/lib/firefox-1.0" //unsure
+    | PlatformID.MacOSX
+    | PlatformID.Unix ->
+        if System.IO.File.Exists(@"/Applications/Firefox.app/Contents/MacOS/firefox-bin")
+        then @"/Applications/Firefox.app/Contents/MacOS/firefox-bin" //osx
+        else @"/usr/lib/firefox-2.0" //linux, unsure of correct path
     | _ -> @"C:\Program Files (x86)\Mozilla Firefox\firefox.exe"
-    
+
 //runner related
 (* documented/configuration *)
 let failFast = ref false
