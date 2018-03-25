@@ -10,7 +10,7 @@ open System
 open canopy.classic.configuration
 open canopy.reporters
 open canopy.types
-open canopy.classic.finders
+open canopy.finders
 open System.Drawing
 open System.Drawing.Imaging
 open canopy.classic.EditDistance

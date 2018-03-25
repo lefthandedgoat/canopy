@@ -72,7 +72,7 @@ let mutable autoPinBrowserRightOnLaunch = true
 (* documented/configuration *)
 let mutable throwIfMoreThanOneElement = false
 (* documented/configuration *)
-let mutable configuredFinders = canopy.classic.finders.defaultFinders
+let mutable configuredFinders = canopy.finders.defaultFinders
 (* documented/configuration *)
 let mutable optimizeBySkippingIFrameCheck = false
 (* documented/configuration *)

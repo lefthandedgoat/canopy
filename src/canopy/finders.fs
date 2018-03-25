@@ -1,4 +1,4 @@
-﻿module canopy.classic.finders
+﻿module canopy.finders
 
 open OpenQA.Selenium
 open System.Collections.ObjectModel
