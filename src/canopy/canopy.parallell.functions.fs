@@ -13,7 +13,7 @@ open canopy.types
 open canopy.finders
 open System.Drawing
 open System.Drawing.Imaging
-open canopy.classic.EditDistance
+open canopy.jaroWinkler
 open canopy.wait
 
 (* documented/actions *)

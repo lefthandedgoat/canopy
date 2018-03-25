@@ -1,6 +1,6 @@
 ﻿/// Functions to compute the edit distance between two strings
 /// Taken from the Visual F# compiler
-module canopy.classic.EditDistance
+module canopy.jaroWinkler
 
 /// Given an offset and a radius from that offset, 
 /// does mChar exist in that part of str?
