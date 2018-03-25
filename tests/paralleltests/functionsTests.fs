@@ -468,3 +468,72 @@ let add () =
     equals "#item_list" "Item 3" browser
         
     quit browser
+
+  "the rest" &&& fun ctx -> 
+    let browser = start canopy.types.Chrome
+
+    //"css hint"
+    url testpage browser
+    let firstName = css "#firstName"
+    equals firstName "John" browser
+    equals (css "#lastName") "Doe" browser
+
+    //"xpath hint"
+    url testpage browser
+    let firstName = xpath "id('firstName')"
+    equals firstName "John" browser
+    equals (xpath "id('lastName')") "Doe" browser
+
+    //"jquery hint"
+    url testpage browser
+    let firstName = jquery "#firstName"
+    equals firstName "John" browser
+    equals (jquery "#lastName") "Doe" browser
+
+    //"value hint"
+    url testpage browser
+    equals (value "Click Me!!") "Click Me!!" browser
+
+    //"text hint"
+    url testpage browser
+    equals (text "ajax button not clicked") "ajax button not clicked" browser
+      
+    //"hover works"
+    url testpage browser
+    equals "#hover" "not hovered" browser
+    hover "Milk" browser
+    equals "#hover" "hovered" browser
+  
+    //"draging works" &&! fun _ ->
+    url "http://scrumy.com/silenter39delayed" browser
+    click ".plus-button a img" browser
+    write "#task_title" "Demo" browser
+    click "#task_editor_buttons .save_button" browser
+    drag ".handle" ".inprogress" browser
+    click "Blog" browser
+        
+    //"alert box should have 'Alert Test'"
+    url "http://lefthandedgoat.github.io/canopy/testpages/alert" browser
+    click "#alert_test" browser
+    equals (alert browser) "Alert Test" browser
+    acceptAlert  browser
+
+    //"alert box should have 'Alert Test'"
+    url "http://lefthandedgoat.github.io/canopy/testpages/alert" browser
+    click "#alert_test" browser
+    equals (alert browser) "Alert Test" browser
+    dismissAlert browser
+
+    //"confirmation box should have 'Confirmation Test'"
+    url "http://lefthandedgoat.github.io/canopy/testpages/alert" browser
+    click "#confirmation_test" browser
+    equals (alert browser) "Confirmation Test" browser
+    acceptAlert browser
+
+    //"confirmation box should have 'Confirmation Test'"
+    url "http://lefthandedgoat.github.io/canopy/testpages/alert" browser
+    click "#confirmation_test" browser
+    equals (alert browser) "Confirmation Test" browser
+    dismissAlert browser
+
+    quit browser
