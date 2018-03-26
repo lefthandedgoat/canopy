@@ -6,6 +6,6 @@ canopy.configuration.chromeDir <- executingDir()
 functionsTests.add()
 instancedTests.add()
 
-prunner.run 5 |> ignore
+prunner.run 3 |> ignore
 
 System.Console.ReadKey() |> ignore

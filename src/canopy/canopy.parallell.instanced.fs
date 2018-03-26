@@ -31,7 +31,7 @@ type Instance() =
 
     member x.js script = js script x.browser
 
-    member x.sleep sleep seconds = sleep seconds
+    member x.sleep seconds = sleep seconds
 
     member x.puts text = puts text x.browser
     
@@ -169,7 +169,7 @@ type Instance() =
     member x.hover selector = hover selector x.browser
 
     //draggin
-    member x.drag cssSelectorA cssSelectorB = drag cssSelectorA cssSelectorB
+    member x.drag cssSelectorA cssSelectorB = drag cssSelectorA cssSelectorB x.browser
 
     //browser related
     member x.pin direction = pin direction x.browser
