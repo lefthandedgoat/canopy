@@ -449,6 +449,7 @@ let add () =
     //"elementWithin will find iFrame inside of outter element properly, iframe1"
     x.url "http://lefthandedgoat.github.io/canopy/testpages/iframe1"
     x.first "body" 
+    |> x.elementWithin "#states"
     |> x.elementWithin "1"
     |> x.read
     |> x.is "Alabama"
