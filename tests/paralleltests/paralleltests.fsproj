@@ -48,8 +48,7 @@
     <Compile Include="AssemblyInfo.fs" />
     <Compile Include="prunner.fs" />
     <Compile Include="functionsTests.fs" />
-    <Compile Include="tests2.fs" />
-    <Compile Include="tests3.fs" />
+    <Compile Include="instancedTests.fs" />
     <Compile Include="Program.fs" />
     <None Include="App.config" />
   </ItemGroup>

@@ -4,9 +4,8 @@ let executingDir () = System.IO.Path.GetDirectoryName(System.Reflection.Assembly
 canopy.configuration.chromeDir <- executingDir()
 
 functionsTests.add()
-//tests2.add()
-//tests3.add()
+instancedTests.add()
 
-let failed = prunner.run 5
+prunner.run 5 |> ignore
 
 System.Console.ReadKey() |> ignore
