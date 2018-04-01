@@ -378,3 +378,8 @@ Update to Selenium 3.3 [Issue #351](https://github.com/lefthandedgoat/canopy/iss
 #### 1.6.3 - Mar 3 2018
 * Protect from null refs in selector suggestions, thanks Haf! [Issue #404](https://github.com/lefthandedgoat/canopy/issues/404)
 * Provide better error messages when the browser is null, thanks again Haf! [Issue #405](https://github.com/lefthandedgoat/canopy/issues/405)
+
+#### 2.0.0-alpha - Mar 25 2018
+* Alpha release, some breaking changes with open statements, not yet documented, no migration docs yet
+* Added parallel support, thanks @haf!
+* Breaking changes, removed some old backwards compatability flags
