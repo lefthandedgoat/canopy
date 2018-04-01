@@ -3,7 +3,7 @@ NUGET
   remote: https://www.nuget.org/api/v2
     FAKE (4.63.2)
     FSharp.Compiler.Service (2.0.0.6)
-    FSharp.Core (4.0.0.1)
+    FSharp.Core (4.3.4)
     FSharp.Data (2.4.2)
     FSharp.Formatting (2.14.4)
       FSharp.Compiler.Service (2.0.0.6)
@@ -11,6 +11,6 @@ NUGET
     FSharpVSPowerTools.Core (2.3)
       FSharp.Compiler.Service (>= 2.0.0.3)
     NuGet.CommandLine (4.3)
-    Selenium.WebDriver (3.10)
+    Selenium.WebDriver (3.11)
     Selenium.WebDriver.ChromeDriver (2.37)
     Selenium.WebDriver.GeckoDriver (0.20)
