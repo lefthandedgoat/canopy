@@ -20,7 +20,7 @@ I just use one I made so that I dont have to take external depencies for regress
 ////////////////////////////////////
 
 let add () = 
-  let ( === ) left right = if left <> right then failwith "%A NOT EQUAL %B" left right
+  let ( === ) left right = if left <> right then failwith (sprintf "%A NOT EQUAL %A" left right)
   let testpage = "http://lefthandedgoat.github.io/canopy/testpages/"
         
   "context1" &&& fun ctx -> 

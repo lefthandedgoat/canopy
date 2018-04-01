@@ -208,6 +208,7 @@ type LiveHtmlReporter(browser : BrowserStartMode, driverPath : string, ?pinBrows
             new Firefox.FirefoxDriver(options) :> IWebDriver
         | Safari -> new Safari.SafariDriver() :> IWebDriver
         | Remote(_,_) -> raise(System.Exception("Sorry Remote can't be used for LiveHtmlReporter"))
+        | _ ->  failwith (sprintf "%A browser type not supported in reporter, please file an issue if you think this is incorrect" browser)
 
     let pin () =
         let (w, h) = canopy.screen.getPrimaryScreenResolution ()
