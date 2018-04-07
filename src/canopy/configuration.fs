@@ -4,18 +4,20 @@ open canopy.reporters
 open canopy.types
 open System
 
+let executingDir = System.IO.Path.GetDirectoryName(System.Reflection.Assembly.GetExecutingAssembly().Location)
+
 //location of drivers depending on OS
 let folderByOSType =
     match System.Environment.OSVersion.Platform with
     | PlatformID.MacOSX
-    | PlatformID.Unix -> @"/usr/local/bin/"
-    | _ -> @"c:\"
+    | PlatformID.Unix -> executingDir
+    | _ -> executingDir
 
 let folderByOSTypeChromium =
     match System.Environment.OSVersion.Platform with
     | PlatformID.MacOSX
     | PlatformID.Unix -> @"/usr/lib/chromium-browser"
-    | _ -> @"c:\"
+    | _ -> executingDir
 
 let firefoxByOSType =
     match System.Environment.OSVersion.Platform with

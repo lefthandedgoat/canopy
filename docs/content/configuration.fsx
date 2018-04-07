@@ -27,11 +27,9 @@ driverHostName <- "::1"
 chromeDir
 --
 * Directory for the chromedriver
-* Defaults to pre-set OS paths
-* OSX: /usr/local/bin/
-* Windows: C:\
+* Defaults executing directory (bin\Debug in many cases)
 *)
-chromeDir <- "C:\\"
+chromeDir <- @"C:\your\custom\path"
 
 (**
 chromiumDir
@@ -59,31 +57,25 @@ firefoxDir <- @"C:\Program Files (x86)\Mozilla Firefox\firefox.exe"
 firefoxDriverDir
 --
 * Directory for the firefox gecko driver
-* Defaults to pre-set OS paths
-* OSX: /usr/local/bin/
-* Windows: C:\
+* Defaults executing directory (bin\Debug in many cases)
 *)
-firefoxDriverDir <- "C:\\"
+firefoxDriverDir <- @"C:\your\custom\path"
 
 (**
 ieDir
 --------
 * Directory for Internet Explorer
-* Defaults to pre-set OS paths
-* OSX: /usr/bin/
-* Windows: C:\
+* Defaults executing directory (bin\Debug in many cases)
 *)
-ieDir <- "C:\\"
+ieDir <- @"C:\your\custom\path"
 
 (**
 safariDir
 -----------
 * Directory for Safari
-* Defaults to pre-set OS paths
-* OSX: /usr/bin/
-* Windows: C:\
+* Defaults executing directory (bin\Debug in many cases)
 *)
-safariDir <- "C:\\"
+safariDir <- @"C:\your\custom\path"
 
 (**
 edgeDir
@@ -91,7 +83,7 @@ edgeDir
 * Directory for edge driver
 * Defaults to C:\Program Files (x86)\Microsoft Web Driver\
 *)
-edgeDir <- "C:\\"
+edgeDir <- @"C:\your\custom\path"
 
 (**
 hideCommandPromptWindow

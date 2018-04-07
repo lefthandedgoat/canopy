@@ -7,11 +7,6 @@ open canopy.reporters
 open canopy.runner.classic
 open canopy.configuration
 open canopy.types
-open canopy.classic
-
-let executingDir () = System.IO.Path.GetDirectoryName(System.Reflection.Assembly.GetExecutingAssembly().Location)
-chromeDir <- executingDir()
-firefoxDriverDir <- executingDir()
 
 start chrome
 let mainBrowser = browser

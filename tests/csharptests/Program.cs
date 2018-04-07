@@ -14,7 +14,6 @@ namespace csharptests
             configuration.elementTimeout = 3.0;
             configuration.compareTimeout = 3.0;
             configuration.pageTimeout = 3.0;            
-            configuration.chromeDir = System.IO.Path.GetDirectoryName(System.Reflection.Assembly.GetExecutingAssembly().Location);
             configuration.reporter = new reporters.LiveHtmlReporter(types.BrowserStartMode.Chrome, configuration.chromeDir);
 
             var testpage = "http://lefthandedgoat.github.io/canopy/testpages/";

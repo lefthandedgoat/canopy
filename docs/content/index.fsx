@@ -49,10 +49,6 @@ open canopy.runner.classic
 open canopy.configuration
 open canopy.classic
 
-//set path for chromedriver to the bin directory
-let executingDir () = System.IO.Path.GetDirectoryName(System.Reflection.Assembly.GetExecutingAssembly().Location)
-chromeDir <- executingDir()
-
 //start an instance of chrome
 start chrome
 
