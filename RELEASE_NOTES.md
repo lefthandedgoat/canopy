@@ -383,3 +383,7 @@ Update to Selenium 3.3 [Issue #351](https://github.com/lefthandedgoat/canopy/iss
 * Alpha release, some breaking changes with open statements, not yet documented, no migration docs yet
 * Added parallel support, thanks @haf!
 * Breaking changes, removed some old backwards compatability flags
+
+#### 2.0.0-beta-1 - April 2 2018
+* Beta release, some breaking changes with open statements, not yet documented, no migration docs yet
+* Added .net standard 2.0 support

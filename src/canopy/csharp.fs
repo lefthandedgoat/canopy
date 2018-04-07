@@ -39,8 +39,6 @@ type canopy () =
 
     static member pin direction = pin direction
 
-    static member pinToMonitor direction = pinToMonitor direction
-
     static member switchTo b = switchTo b
 
     static member switchToTab number = switchToTab number

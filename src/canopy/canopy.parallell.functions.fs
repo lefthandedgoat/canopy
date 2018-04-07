@@ -8,13 +8,12 @@ open Microsoft.FSharp.Core.Printf
 open System.IO
 open System
 open canopy.configuration
-open canopy.reporters
 open canopy.types
 open canopy.finders
-open System.Drawing
-open System.Drawing.Imaging
 open canopy.jaroWinkler
 open canopy.wait
+open System.Drawing
+open System.Drawing.Imaging
 
 (* documented/actions *)
 let firefox = Firefox
@@ -58,7 +57,7 @@ let private saveScreenshot directory filename pic =
 let private takeScreenShotIfAlertUp () =
     try
         let screenBounds = canopy.screen.getPrimaryScreenBounds ()
-        let bitmap = new Bitmap(width= screenBounds.width, height= screenBounds.height, format=PixelFormat.Format32bppArgb);
+        let bitmap = new Bitmap(width = screenBounds.width, height = screenBounds.height, format = PixelFormat.Format32bppArgb);
         use graphics = Graphics.FromImage(bitmap)
         graphics.CopyFromScreen(screenBounds.x, screenBounds.y, 0, 0, screenBounds.size, CopyPixelOperation.SourceCopy);
         use stream = new MemoryStream()
@@ -770,19 +769,10 @@ let pin direction (browser : IWebDriver) =
     | Right -> browser.Manage().Window.Position <- new System.Drawing.Point((maxWidth * 1), 0)
     | FullScreen -> browser.Manage().Window.Maximize()
 
-(* documented/actions *)
-let pinToMonitor n (browser : IWebDriver) =
-    let n' = if n < 1 then 1 else n
-    if canopy.screen.monitorCount >= n' then
-        let workingArea =  canopy.screen.allScreensWorkingArea.[n'-1]
-        browser.Manage().Window.Position <- new System.Drawing.Point(workingArea.X, 0)
-        browser.Manage().Window.Maximize()
-    else
-        raise(CanopyException(sprintf "Monitor %d is not detected" n))
-
 let private firefoxDriverService _ =
     let service = Firefox.FirefoxDriverService.CreateDefaultService(canopy.configuration.firefoxDriverDir)
     service.FirefoxBinaryPath <- canopy.configuration.firefoxDir
+    service.HostName <- driverHostName
     service.HideCommandPromptWindow <- hideCommandPromptWindow
     service
 
@@ -795,6 +785,7 @@ let private firefoxWithUserAgent (userAgent : string) =
 
 let private chromeDriverService dir = 
     let service = Chrome.ChromeDriverService.CreateDefaultService(dir);
+    service.HostName <- driverHostName
     service.HideCommandPromptWindow <- hideCommandPromptWindow;
     service
 
@@ -805,16 +796,19 @@ let private chromeWithUserAgent dir userAgent =
 
 let private ieDriverService _ = 
     let service = IE.InternetExplorerDriverService.CreateDefaultService(ieDir)
+    service.HostName <- driverHostName
     service.HideCommandPromptWindow <- hideCommandPromptWindow
     service
 
 let private edgeDriverService _ = 
     let service = Edge.EdgeDriverService.CreateDefaultService(edgeDir)
+    service.HostName <- driverHostName
     service.HideCommandPromptWindow <- hideCommandPromptWindow
     service
 
 let private safariDriverService _ = 
     let service = Safari.SafariDriverService.CreateDefaultService(safariDir)
+    service.HostName <- driverHostName
     service.HideCommandPromptWindow <- hideCommandPromptWindow
     service
 
@@ -905,8 +899,8 @@ let closeTab number browser =
 
 (* documented/actions *)
 let tile (browsers : IWebDriver list) =
-    let h = System.Windows.Forms.Screen.PrimaryScreen.WorkingArea.Height
-    let w = System.Windows.Forms.Screen.PrimaryScreen.WorkingArea.Width
+    let h = canopy.screen.screenHeight
+    let w = canopy.screen.screenWidth
     let count = browsers.Length
     let maxWidth = w / count
 
@@ -922,8 +916,8 @@ let tile (browsers : IWebDriver list) =
 
 (* documented/actions *)
 let positionBrowser left top width height (browser : IWebDriver) =
-    let h = System.Windows.Forms.Screen.PrimaryScreen.WorkingArea.Height
-    let w = System.Windows.Forms.Screen.PrimaryScreen.WorkingArea.Width
+    let h = canopy.screen.screenHeight
+    let w = canopy.screen.screenWidth
 
     let x = left * w / 100
     let y = top * h / 100

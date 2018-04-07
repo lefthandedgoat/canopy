@@ -244,9 +244,6 @@ let drag cssSelectorA cssSelectorB = drag cssSelectorA cssSelectorB
 //browser related
 (* documented/actions *)
 let pin direction = pin direction browser
-
-(* documented/actions *)
-let pinToMonitor n = pinToMonitor n browser
     
 (* documented/actions *)
 let start b =

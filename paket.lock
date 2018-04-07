@@ -1,16 +1,21 @@
-RESTRICTION: == net461
+RESTRICTION: || (== net461) (== netstandard2.0)
 NUGET
   remote: https://www.nuget.org/api/v2
     FAKE (4.64.11)
     FSharp.Compiler.Service (2.0.0.6)
     FSharp.Core (4.3.4)
     FSharp.Data (2.4.6)
+      Zlib.Portable (>= 1.11) - restriction: || (&& (== net461) (< net40)) (== netstandard2.0)
     FSharp.Formatting (2.14.4)
       FSharp.Compiler.Service (2.0.0.6)
       FSharpVSPowerTools.Core (>= 2.3 < 2.4)
     FSharpVSPowerTools.Core (2.3)
       FSharp.Compiler.Service (>= 2.0.0.3)
+    Newtonsoft.Json (11.0.2) - restriction: || (&& (== net461) (< net35) (>= netstandard2.0)) (== netstandard2.0)
     NuGet.CommandLine (4.5.1)
     Selenium.WebDriver (3.11)
+      Newtonsoft.Json (>= 10.0.3) - restriction: || (&& (== net461) (< net35) (>= netstandard2.0)) (== netstandard2.0)
     Selenium.WebDriver.ChromeDriver (2.37)
     Selenium.WebDriver.GeckoDriver (0.20)
+    System.Drawing.Common (4.5.0-preview1-26216-02)
+    Zlib.Portable (1.11) - restriction: || (&& (== net461) (< net40)) (== netstandard2.0)

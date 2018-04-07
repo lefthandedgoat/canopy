@@ -160,54 +160,54 @@ type TeamCityReporter(?logImagesToConsole: bool) =
 
         member this.setEnvironment env = ()
 
-type LiveHtmlReporter(browser : BrowserStartMode, driverPath : string, ?pinBrowserRight0: bool) =
+type LiveHtmlReporter(browser : BrowserStartMode, driverPath : string, ?driverHostName0: string, ?hideCommandPromptWindow0: bool, ?pinBrowserRight0: bool) =
     let pinBrowserRight = defaultArg pinBrowserRight0 true
+    let hideCommandPromptWindow = defaultArg hideCommandPromptWindow0 false
+    let driverHostName = defaultArg driverHostName0 "127.0.0.1"
     let consoleReporter : IReporter = new ConsoleReporter() :> IReporter
+    
+    let chromeDriverService dir = 
+        let service = Chrome.ChromeDriverService.CreateDefaultService(dir);
+        service.HostName <- driverHostName
+        service.HideCommandPromptWindow <- hideCommandPromptWindow;
+        service
 
+    let chromeWithUserAgent dir userAgent =
+        let options = Chrome.ChromeOptions()
+        options.AddArgument("--user-agent=" + userAgent)
+        new Chrome.ChromeDriver(chromeDriverService dir, options) :> IWebDriver
+        
     let _browser =
         //copy pasta!
         match browser with
-        | IE -> new IE.InternetExplorerDriver(driverPath) :> IWebDriver
-        | IEWithOptions options -> new IE.InternetExplorerDriver(driverPath, options) :> IWebDriver
-        | IEWithOptionsAndTimeSpan(options, timeSpan) -> new IE.InternetExplorerDriver(driverPath, options, timeSpan) :> IWebDriver
-        | EdgeBETA -> new Edge.EdgeDriver(driverPath) :> IWebDriver
-        | Chrome | Chromium ->
-                let options = Chrome.ChromeOptions()
-                options.AddArguments("--disable-extensions")
-                options.AddArgument("disable-infobars")
-                options.AddArgument("test-type") //https://code.google.com/p/chromedriver/issues/detail?id=799
-                new Chrome.ChromeDriver(driverPath, options) :> IWebDriver
+        | Chrome ->
+            let options = Chrome.ChromeOptions()
+            options.AddArgument("--disable-extensions")
+            options.AddArgument("disable-infobars")
+            options.AddArgument("test-type") //https://code.google.com/p/chromedriver/issues/detail?id=799
+            new Chrome.ChromeDriver(chromeDriverService driverPath, options) :> IWebDriver
+        | ChromeWithOptions options ->
+            new Chrome.ChromeDriver(chromeDriverService driverPath, options) :> IWebDriver
+        | ChromeWithUserAgent userAgent -> 
+            chromeWithUserAgent driverPath userAgent
+        | ChromeWithOptionsAndTimeSpan(options, timeSpan) -> 
+            new Chrome.ChromeDriver(chromeDriverService driverPath, options, timeSpan) :> IWebDriver
         | ChromeHeadless ->
             let options = Chrome.ChromeOptions()
             options.AddArgument("--disable-extensions")
             options.AddArgument("disable-infobars")
             options.AddArgument("test-type") //https://code.google.com/p/chromedriver/issues/detail?id=799
             options.AddArgument("--headless")
-            new Chrome.ChromeDriver(driverPath, options) :> IWebDriver
-        | ChromeWithOptions options -> new Chrome.ChromeDriver(driverPath, options) :> IWebDriver
-        | ChromeWithOptionsAndTimeSpan(options, timeSpan) -> new Chrome.ChromeDriver(driverPath, options, timeSpan) :> IWebDriver
-        | ChromeWithUserAgent userAgent -> raise(System.Exception("Sorry ChromeWithUserAgent can't be used for LiveHtmlReporter"))
-        | ChromiumWithOptions options -> new Chrome.ChromeDriver(driverPath, options) :> IWebDriver
-        | Firefox -> new Firefox.FirefoxDriver() :> IWebDriver
-        | FirefoxWithPath path ->
-          let options = new Firefox.FirefoxOptions()
-          options.BrowserExecutableLocation <- path
-          new Firefox.FirefoxDriver(options) :> IWebDriver
-        | FirefoxWithUserAgent userAgent -> raise(System.Exception("Sorry FirefoxWithUserAgent can't be used for LiveHtmlReporter"))
-        | FirefoxWithPathAndTimeSpan(path, timespan) ->
-          let options = new Firefox.FirefoxOptions()
-          options.BrowserExecutableLocation <- path
-          new Firefox.FirefoxDriver(Firefox.FirefoxDriverService.CreateDefaultService(), options, timespan) :> IWebDriver
-        | FirefoxWithProfileAndTimeSpan(profile, timespan) ->
-          let options = new Firefox.FirefoxOptions()
-          options.Profile <- profile
-          new Firefox.FirefoxDriver(Firefox.FirefoxDriverService.CreateDefaultService(), options, timespan) :> IWebDriver
-        | FirefoxHeadless ->
-            let options = new Firefox.FirefoxOptions()
-            options.AddArgument("--headless")
-            new Firefox.FirefoxDriver(options) :> IWebDriver
-        | Safari -> new Safari.SafariDriver() :> IWebDriver
-        | Remote(_,_) -> raise(System.Exception("Sorry Remote can't be used for LiveHtmlReporter"))
+            new Chrome.ChromeDriver(chromeDriverService driverPath, options) :> IWebDriver
+        | Chromium ->
+            let options = Chrome.ChromeOptions()
+            options.AddArgument("--disable-extensions")
+            options.AddArgument("disable-infobars")
+            options.AddArgument("test-type") //https://code.google.com/p/chromedriver/issues/detail?id=799            
+            new Chrome.ChromeDriver(chromeDriverService driverPath, options) :> IWebDriver
+        | ChromiumWithOptions options ->
+            new Chrome.ChromeDriver(chromeDriverService driverPath, options) :> IWebDriver
+        | Remote(url, capabilities) -> new Remote.RemoteWebDriver(new Uri(url), capabilities) :> IWebDriver
         | _ ->  failwith (sprintf "%A browser type not supported in reporter, please file an issue if you think this is incorrect" browser)
 
     let pin () =
@@ -228,10 +228,8 @@ type LiveHtmlReporter(browser : BrowserStartMode, driverPath : string, ?pinBrows
     let testStopWatch = System.Diagnostics.Stopwatch()
     let contextStopWatch = System.Diagnostics.Stopwatch()
     let jsEncode value = System.Web.HttpUtility.JavaScriptStringEncode(value)
-
-    new() = LiveHtmlReporter(Firefox, String.Empty)
-    new(browser : BrowserStartMode) = LiveHtmlReporter(browser, String.Empty)
-    new (browser : BrowserStartMode, driverPath : string) = LiveHtmlReporter(browser, driverPath, true)
+    
+    new (browser : BrowserStartMode, driverPath : string) = LiveHtmlReporter(browser, driverPath, "127.0.0.1", false, true)
 
     member this.browser
         with get () = _browser

@@ -13,7 +13,8 @@ namespace csharptests
         {
             configuration.elementTimeout = 3.0;
             configuration.compareTimeout = 3.0;
-            configuration.pageTimeout = 3.0;
+            configuration.pageTimeout = 3.0;            
+            configuration.chromeDir = System.IO.Path.GetDirectoryName(System.Reflection.Assembly.GetExecutingAssembly().Location);
             configuration.reporter = new reporters.LiveHtmlReporter(types.BrowserStartMode.Chrome, configuration.chromeDir);
 
             var testpage = "http://lefthandedgoat.github.io/canopy/testpages/";
@@ -102,7 +103,7 @@ namespace csharptests
             _.test("clicking #radio1 selects it", () =>
             {
                 _.url(testpage);
-                _.click("#button");
+                _.click("#radio1");
                 _.selected("#radio1");
             });
 

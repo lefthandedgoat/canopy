@@ -88,5 +88,7 @@ let mutable skipRemainingTestsInContextOnFailure = false
 (* documented/configuration *)
 let mutable failureMessagesThatShoulBeTreatedAsSkip : string list = []
 
+let mutable driverHostName = "127.0.0.1"
+
 //do not touch
 let mutable wipTest = false

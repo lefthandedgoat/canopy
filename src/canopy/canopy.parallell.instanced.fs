@@ -173,8 +173,6 @@ type Instance() =
 
     //browser related
     member x.pin direction = pin direction x.browser
-
-    member x.pinToMonitor n = pinToMonitor n x.browser
     
     member x.start b =
         x.browser <- start b
