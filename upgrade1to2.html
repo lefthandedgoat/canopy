@@ -96,11 +96,13 @@ changed default driver path from c:\ to executing directory
 </table>
 <h2>Signature changes</h2>
 <p>The signature for custom finders now requires an instance of IWebDriver (the browser) also
-From <code>string -&gt; (By -&gt; ReadOnlyCollection&lt;IWebElement&gt;) -&gt; IWebElement list</code>
-To <code>string -&gt; (By -&gt; ReadOnlyCollection&lt;IWebElement&gt;) -&gt; IWebDriver -&gt; IWebElement list</code></p>
+From
+<code>string -&gt; (By -&gt; ReadOnlyCollection&lt;IWebElement&gt;) -&gt; IWebElement list</code>
+To
+<code>string -&gt; (By -&gt; ReadOnlyCollection&lt;IWebElement&gt;) -&gt; IWebDriver -&gt; IWebElement list</code></p>
 <h2>Screen management changes</h2>
-<p>Due to the upgrade to support .net Core canopy can no longer determine your resolution
-You will need to manually set the resolutions so things like <code>pin</code> work correctly</p>
+<p>Due to the upgrade to support .net Core canopy can no longer determine your resolution</p>
+<p>You will need to manually set the resolutions so things like <code>pin</code> work correctly</p>
 <table class="pre"><tr><td class="lines"><pre class="fssnip"><span class="l">1: </span>
 <span class="l">2: </span>
 <span class="l">3: </span>
@@ -112,7 +114,7 @@ You will need to manually set the resolutions so things like <code>pin</code> wo
 </tr>
 </table>
 <h2>New features</h2>
-<p>.net Standard 2.0 Support</p>
+<p>.net Standard 2.0 support</p>
 <p>Added parallel support in two styles in two new namespaces</p>
 <h2>Parallel testing</h2>
 <p>Added parallel support in two styles in two new namespaces</p>
@@ -124,17 +126,19 @@ You will need to manually set the resolutions so things like <code>pin</code> wo
 </code></pre></td>
 </tr>
 </table>
-<p>See examples of function based tests: <a href="https://github.com/lefthandedgoat/canopy/blob/canopy2/tests/paralleltests/functionsTests.fs
+<p>See examples of function based tests:</p>
+<p><a href="https://github.com/lefthandedgoat/canopy/blob/canopy2/tests/paralleltests/functionsTests.fs
 See">https://github.com/lefthandedgoat/canopy/blob/canopy2/tests/paralleltests/functionsTests.fs
-See</a> examples of instanced based tests: <a href="https://github.com/lefthandedgoat/canopy/blob/canopy2/tests/paralleltests/instancedTests.fs">https://github.com/lefthandedgoat/canopy/blob/canopy2/tests/paralleltests/instancedTests.fs</a></p>
-<p><code>canopy.runner.classic</code> does NOT support parallel tests.
-You should choose a unit test library that you like and supports this and write canopy tests in it
-In the future I may release a parallel friendly test runner for canopy that includes some features from the classic runner
-Parallel test running is HARD.  Your database is a global mutable variable and your tests may interfere with each other
-You will also need to understand how your test runner runs tests, as it may not run them in order</p>
+See</a> examples of instanced based tests:</p>
+<p><a href="https://github.com/lefthandedgoat/canopy/blob/canopy2/tests/paralleltests/instancedTests.fs">https://github.com/lefthandedgoat/canopy/blob/canopy2/tests/paralleltests/instancedTests.fs</a></p>
+<p><code>canopy.runner.classic</code> does NOT support parallel tests.</p>
+<p>You should choose a unit test library that you like and supports this and write canopy tests in it</p>
+<p>In the future I may release a parallel friendly test runner for canopy that includes some features from the classic runner</p>
+<p>Parallel test running is HARD.  Your database is a global mutable variable and your tests may interfere with each other</p>
+<p>You will also need to understand how your test runner runs tests, as it may not run them in order</p>
 <h2>Upgrading from .net 4.5.2</h2>
-<p>In an real world code base I simply updated the project from 4.5.2 to 4.6.1, installed the .net core SDK, and it worked
-If you have problems please let me know in the github issues and I will see what I can do to repro and help</p>
+<p>In an real world code base I simply updated the project from 4.5.2 to 4.6.1, installed the .net core SDK, and it worked</p>
+<p>If you have problems please let me know in the github issues and I will see what I can do to repro and help</p>
 
 <div class="tip" id="fs1">namespace canopy</div>
 <div class="tip" id="fs2">module classic<br /><br />from canopy</div>
