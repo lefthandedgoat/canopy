@@ -387,3 +387,9 @@ Update to Selenium 3.3 [Issue #351](https://github.com/lefthandedgoat/canopy/iss
 #### 2.0.0-beta-1 - April 2 2018
 * Beta release, some breaking changes with open statements, not yet documented, no migration docs yet
 * Added .net standard 2.0 support
+
+#### 2.0.0-beta-2 - April 6 2018
+* Fix FSharp.Core version
+  
+#### 2.0.0-beta-3 - April 6 2018
+*  Restrict to netstandard2
