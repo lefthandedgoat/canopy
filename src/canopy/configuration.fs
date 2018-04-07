@@ -48,9 +48,9 @@ let mutable safariDir = folderByOSType
 let mutable edgeDir = @"C:\Program Files (x86)\Microsoft Web Driver\"
 (* documented/configuration *)
 let mutable hideCommandPromptWindow = false
-(* TODO documented/configuration *)
+(* documented/configuration *)
 let mutable firefoxDriverDir = folderByOSType
-(* TODO documented/configuration *)
+(* documented/configuration *)
 let mutable firefoxDir = firefoxByOSType
 
 (* documented/configuration *)
@@ -89,7 +89,7 @@ let mutable skipAllTestsOnFailure = false
 let mutable skipRemainingTestsInContextOnFailure = false
 (* documented/configuration *)
 let mutable failureMessagesThatShoulBeTreatedAsSkip : string list = []
-
+(* documented/configuration *)
 let mutable driverHostName = "127.0.0.1"
 
 //do not touch
