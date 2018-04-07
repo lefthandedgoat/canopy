@@ -32,25 +32,29 @@ canopy is a web testing framework with one goal in mind, make UI testing simple:
 
 Getting Started
 ---------------
-####1\. Create a new F# console application
+####1\. Create a new F# console application (4.6.1+ or .net core)
 <img src="img/newProject.png" alt="F# New Project" style="display: inherit;"/>
 
-####2\. Set target framework to .NET Framework 4
-<img src="img/profile.png" alt="Change target framework" style="display: inherit;"/>
-
-####3\. Install canopy via Nuget
+####2\. Install canopy via Nuget
 <img src="img/installCanopy.png" alt="Install canopy" style="display: inherit;"/>
+
+####3\. Install chromedriver via Nuget
+<img src="img/installChromeDriver.png" alt="Install chromedriver" style="display: inherit;"/>
 
 ####4\. Paste the following code into `Program.fs`
 
 *)
 //these are similar to C# using statements
-open canopy
-open runner
-open System
+open canopy.runner.classic
+open canopy.configuration
+open canopy.classic
 
-//start an instance of the firefox browser
-start firefox
+//set path for chromedriver to the bin directory
+let executingDir () = System.IO.Path.GetDirectoryName(System.Reflection.Assembly.GetExecutingAssembly().Location)
+chromeDir <- executingDir()
+
+//start an instance of chrome
+start chrome
 
 //this is how you define a test
 "taking canopy for a spin" &&& fun _ ->
