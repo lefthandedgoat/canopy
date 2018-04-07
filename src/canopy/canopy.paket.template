@@ -1,6 +1,6 @@
 type file
 id canopy
-version 2.0.0-beta-2
+version 2.0.0-beta-3
 authors Chris Holt
 iconUrl http://lefthandedgoat.github.io/canopy/canopy_orig.jpg
 projectUrl http://lefthandedgoat.github.io/canopy/
@@ -21,8 +21,11 @@ releaseNotes
   2.0.0-beta-2 - April 6 2018
   Fix FSharp.Core version
   
-dependencies
-  FSharp.Core = 4.3.4
-  Selenium.WebDriver >= 3.11.0
-  System.Drawing.Common >= 4.5.0-preview1-26216-02
+  2.0.0-beta-3 - April 6 2018
+  Restrict to netstandard2
   
+dependencies
+  framework: netstandard2
+	  FSharp.Core >= 4.3.4
+	  Selenium.WebDriver >= 3.11.0
+	  System.Drawing.Common >= 4.5.0-preview1-26216-02
