@@ -14,7 +14,72 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "csharptests", "tests\csharp
 EndProject
 Project("{6EC3EE1D-3C4E-46DD-8F32-0CC8E7565705}") = "paralleltests", "tests\paralleltests\paralleltests.fsproj", "{D866A0A1-F599-48E8-8A52-06296198FF3C}"
 EndProject
-Project("{F2A71F9B-5D33-465A-A702-920D77279786}") = "basictests", "tests\basictests\basictests.fsproj", "{42CDC11A-1229-4C68-B6DF-EF04526A8B5C}"
+Project("{6EC3EE1D-3C4E-46DD-8F32-0CC8E7565705}") = "basictests", "tests\basictests\basictests.fsproj", "{42CDC11A-1229-4C68-B6DF-EF04526A8B5C}"
+EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "docs", "docs", "{880D511C-2B00-4EE1-94B6-CA0FF93678A2}"
+EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "tools", "tools", "{0AE82023-8F64-4981-BE0B-4DA8B2C8109F}"
+	ProjectSection(SolutionItems) = preProject
+		docs\tools\generate.fsx = docs\tools\generate.fsx
+	EndProjectSection
+EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "templates", "templates", "{DD8309E0-9B03-4F96-BD3F-147107C62AE0}"
+	ProjectSection(SolutionItems) = preProject
+		docs\tools\templates\template.cshtml = docs\tools\templates\template.cshtml
+	EndProjectSection
+EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "files", "files", "{159D3E26-A3CC-43C4-B868-6635A25C5D70}"
+	ProjectSection(SolutionItems) = preProject
+		docs\files\canopy_orig.jpg = docs\files\canopy_orig.jpg
+		docs\files\canopy_small.jpg = docs\files\canopy_small.jpg
+		docs\files\reporttemplate.html = docs\files\reporttemplate.html
+		docs\files\reporttemplatep.html = docs\files\reporttemplatep.html
+	EndProjectSection
+EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "img", "img", "{A352CC44-6E5E-4114-AB29-C292B9BB7082}"
+	ProjectSection(SolutionItems) = preProject
+		docs\files\img\console.png = docs\files\img\console.png
+		docs\files\img\coverage.png = docs\files\img\coverage.png
+		docs\files\img\installCanopy.png = docs\files\img\installCanopy.png
+		docs\files\img\livehtmlreport.png = docs\files\img\livehtmlreport.png
+		docs\files\img\logo.jpg = docs\files\img\logo.jpg
+		docs\files\img\newProject.png = docs\files\img\newProject.png
+		docs\files\img\profile.png = docs\files\img\profile.png
+		docs\files\img\run.png = docs\files\img\run.png
+	EndProjectSection
+EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "testpages", "testpages", "{35AFA189-B128-4A38-A40D-D250EF771B36}"
+	ProjectSection(SolutionItems) = preProject
+		docs\files\testpages\alert.html = docs\files\testpages\alert.html
+		docs\files\testpages\autocomplete.html = docs\files\testpages\autocomplete.html
+		docs\files\testpages\count.html = docs\files\testpages\count.html
+		docs\files\testpages\ctrlClick.html = docs\files\testpages\ctrlClick.html
+		docs\files\testpages\displayed.html = docs\files\testpages\displayed.html
+		docs\files\testpages\doubleClick.html = docs\files\testpages\doubleClick.html
+		docs\files\testpages\elementWithin.html = docs\files\testpages\elementWithin.html
+		docs\files\testpages\home.html = docs\files\testpages\home.html
+		docs\files\testpages\iframe1.html = docs\files\testpages\iframe1.html
+		docs\files\testpages\iframe2.html = docs\files\testpages\iframe2.html
+		docs\files\testpages\index.html = docs\files\testpages\index.html
+		docs\files\testpages\noClickTilVisible.html = docs\files\testpages\noClickTilVisible.html
+		docs\files\testpages\notDisplayed.html = docs\files\testpages\notDisplayed.html
+		docs\files\testpages\parent.html = docs\files\testpages\parent.html
+		docs\files\testpages\readonly.html = docs\files\testpages\readonly.html
+		docs\files\testpages\ryansError.html = docs\files\testpages\ryansError.html
+		docs\files\testpages\sandbox.html = docs\files\testpages\sandbox.html
+		docs\files\testpages\selectOptions.html = docs\files\testpages\selectOptions.html
+		docs\files\testpages\waitFor.html = docs\files\testpages\waitFor.html
+	EndProjectSection
+EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "content", "content", "{E14871FF-5F1A-47F9-97B1-FE8E2732FABD}"
+	ProjectSection(SolutionItems) = preProject
+		docs\content\actions.fsx = docs\content\actions.fsx
+		docs\content\assertions.fsx = docs\content\assertions.fsx
+		docs\content\configuration.fsx = docs\content\configuration.fsx
+		docs\content\index.fsx = docs\content\index.fsx
+		docs\content\reporting.fsx = docs\content\reporting.fsx
+		docs\content\testing.fsx = docs\content\testing.fsx
+	EndProjectSection
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -96,6 +161,12 @@ Global
 		{0AD2A734-0C6B-4E22-98BA-7BB0B7BBD222} = {01B72FCF-1989-44FA-A6B6-EAF0A7C06043}
 		{D866A0A1-F599-48E8-8A52-06296198FF3C} = {01B72FCF-1989-44FA-A6B6-EAF0A7C06043}
 		{42CDC11A-1229-4C68-B6DF-EF04526A8B5C} = {01B72FCF-1989-44FA-A6B6-EAF0A7C06043}
+		{0AE82023-8F64-4981-BE0B-4DA8B2C8109F} = {880D511C-2B00-4EE1-94B6-CA0FF93678A2}
+		{DD8309E0-9B03-4F96-BD3F-147107C62AE0} = {0AE82023-8F64-4981-BE0B-4DA8B2C8109F}
+		{159D3E26-A3CC-43C4-B868-6635A25C5D70} = {880D511C-2B00-4EE1-94B6-CA0FF93678A2}
+		{A352CC44-6E5E-4114-AB29-C292B9BB7082} = {159D3E26-A3CC-43C4-B868-6635A25C5D70}
+		{35AFA189-B128-4A38-A40D-D250EF771B36} = {159D3E26-A3CC-43C4-B868-6635A25C5D70}
+		{E14871FF-5F1A-47F9-97B1-FE8E2732FABD} = {880D511C-2B00-4EE1-94B6-CA0FF93678A2}
 	EndGlobalSection
 	GlobalSection(ExtensibilityGlobals) = postSolution
 		SolutionGuid = {B95258A8-5DB1-4AF1-93D9-BB7B81925831}
