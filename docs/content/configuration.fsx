@@ -14,11 +14,21 @@ Configuration
 *)
 
 (**
+driverHostName
+--
+* .net core has a delay when resolving localhost that makes using canopy very slow
+* canopy uses 127.0.0.1 instead but allows you to adjust it based on your ipv/ipv6 needs
+* Defaults to "127.0.0.1"
+*)
+driverHostName <- "localhost"
+driverHostName <- "::1"
+
+(**
 chromeDir
 --
 * Directory for the chromedriver
 * Defaults to pre-set OS paths
-O* SX: /usr/local/bin/
+* OSX: /usr/local/bin/
 * Windows: C:\
 *)
 chromeDir <- "C:\\"
@@ -28,10 +38,32 @@ chromiumDir
 --
 * Directory for the chromedriver for use with chromium
 * Defaults to pre-set OS paths
-*nix: /usr/lib/chromium-browser
+* nix: /usr/lib/chromium-browser
 * Windows: C:\
 *)
-chromeDir <- "C:\\"
+chromiumDir <- "C:\\"
+
+(**
+firefoxDir
+--
+* Install path for firefox
+* Defaults to pre-set OS paths
+* OSX: /Applications/Firefox.app/Contents/MacOS/firefox-bin
+* nix: /usr/lib/firefox-2.0 (probably wrong)
+* Windows: C:\Program Files (x86)\Mozilla Firefox\firefox.exe
+*)
+firefoxDir <- @"C:\Program Files (x86)\Mozilla Firefox\firefox.exe"
+
+
+(**
+firefoxDriverDir
+--
+* Directory for the firefox gecko driver
+* Defaults to pre-set OS paths
+* OSX: /usr/local/bin/
+* Windows: C:\
+*)
+firefoxDriverDir <- "C:\\"
 
 (**
 ieDir
