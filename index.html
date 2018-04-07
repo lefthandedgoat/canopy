@@ -113,19 +113,11 @@
 <span class="l">37: </span>
 <span class="l">38: </span>
 <span class="l">39: </span>
-<span class="l">40: </span>
-<span class="l">41: </span>
-<span class="l">42: </span>
-<span class="l">43: </span>
 </pre></td>
 <td class="snippet"><pre class="fssnip highlighted"><code lang="fsharp"><span class="c">//these are similar to C# using statements</span>
 <span class="k">open</span> <span class="i">canopy</span><span class="o">.</span><span class="i">runner</span><span class="o">.</span><span class="i">classic</span>
 <span class="k">open</span> <span class="i">canopy</span><span class="o">.</span><span class="i">configuration</span>
 <span class="k">open</span> <span class="i">canopy</span><span class="o">.</span><span class="i">classic</span>
-
-<span class="c">//set path for chromedriver to the bin directory</span>
-<span class="k">let</span> <span onmouseout="hideTip(event, 'fs1', 1)" onmouseover="showTip(event, 'fs1', 1)" class="f">executingDir</span> () <span class="o">=</span> <span onmouseout="hideTip(event, 'fs2', 2)" onmouseover="showTip(event, 'fs2', 2)" class="i">System</span><span class="o">.</span><span onmouseout="hideTip(event, 'fs3', 3)" onmouseover="showTip(event, 'fs3', 3)" class="i">IO</span><span class="o">.</span><span onmouseout="hideTip(event, 'fs4', 4)" onmouseover="showTip(event, 'fs4', 4)" class="t">Path</span><span class="o">.</span><span onmouseout="hideTip(event, 'fs5', 5)" onmouseover="showTip(event, 'fs5', 5)" class="f">GetDirectoryName</span>(<span onmouseout="hideTip(event, 'fs2', 6)" onmouseover="showTip(event, 'fs2', 6)" class="i">System</span><span class="o">.</span><span onmouseout="hideTip(event, 'fs6', 7)" onmouseover="showTip(event, 'fs6', 7)" class="i">Reflection</span><span class="o">.</span><span onmouseout="hideTip(event, 'fs7', 8)" onmouseover="showTip(event, 'fs7', 8)" class="t">Assembly</span><span class="o">.</span><span onmouseout="hideTip(event, 'fs8', 9)" onmouseover="showTip(event, 'fs8', 9)" class="f">GetExecutingAssembly</span>()<span class="o">.</span><span class="i">Location</span>)
-<span class="i">chromeDir</span> <span class="o">&lt;-</span> <span onmouseout="hideTip(event, 'fs1', 10)" onmouseover="showTip(event, 'fs1', 10)" class="i">executingDir</span>()
 
 <span class="c">//start an instance of chrome</span>
 <span class="i">start</span> <span class="i">chrome</span>
@@ -157,8 +149,8 @@
 <span class="c">//run all tests</span>
 <span class="i">run</span>()
 
-<span onmouseout="hideTip(event, 'fs9', 11)" onmouseover="showTip(event, 'fs9', 11)" class="f">printfn</span> <span class="s">&quot;press [enter] to exit&quot;</span>
-<span onmouseout="hideTip(event, 'fs2', 12)" onmouseover="showTip(event, 'fs2', 12)" class="i">System</span><span class="o">.</span><span onmouseout="hideTip(event, 'fs10', 13)" onmouseover="showTip(event, 'fs10', 13)" class="t">Console</span><span class="o">.</span><span onmouseout="hideTip(event, 'fs11', 14)" onmouseover="showTip(event, 'fs11', 14)" class="f">ReadLine</span>() <span class="o">|&gt;</span> <span onmouseout="hideTip(event, 'fs12', 15)" onmouseover="showTip(event, 'fs12', 15)" class="f">ignore</span>
+<span onmouseout="hideTip(event, 'fs1', 1)" onmouseover="showTip(event, 'fs1', 1)" class="f">printfn</span> <span class="s">&quot;press [enter] to exit&quot;</span>
+<span onmouseout="hideTip(event, 'fs2', 2)" onmouseover="showTip(event, 'fs2', 2)" class="i">System</span><span class="o">.</span><span onmouseout="hideTip(event, 'fs3', 3)" onmouseover="showTip(event, 'fs3', 3)" class="t">Console</span><span class="o">.</span><span onmouseout="hideTip(event, 'fs4', 4)" onmouseover="showTip(event, 'fs4', 4)" class="f">ReadLine</span>() <span class="o">|&gt;</span> <span onmouseout="hideTip(event, 'fs5', 5)" onmouseover="showTip(event, 'fs5', 5)" class="f">ignore</span>
 
 <span class="i">quit</span>()
 </code></pre></td>
@@ -168,6 +160,7 @@
 <img src="img/run.png" alt="Run" style="display: inherit;"/>
 <h4>6. Explore the rest of canopy's API</h4>
 <ul>
+<li><a href="/canopy/upgrade1to2.html">Upgrade 1.x -&gt; 2.x</a>: documentation of upgrading from canopy 1.x to 2.x</li>
 <li><a href="/canopy/actions.html">Actions</a>: documentation of everything you can do on a page</li>
 <li><a href="/canopy/assertions.html">Assertions</a>: all the ways you can verify what's on the page is correct</li>
 <li><a href="/canopy/configuration.html">Configuration</a>: configure and fine tune canopy</li>
@@ -192,18 +185,11 @@ allowFullScreen
 frameBorder="0">
 </iframe></p>
 
-<div class="tip" id="fs1">val executingDir : unit -&gt; string<br /><br />Full name: Index.executingDir</div>
+<div class="tip" id="fs1">val printfn : format:Printf.TextWriterFormat&lt;&#39;T&gt; -&gt; &#39;T<br /><br />Full name: Microsoft.FSharp.Core.ExtraTopLevelOperators.printfn</div>
 <div class="tip" id="fs2">namespace System</div>
-<div class="tip" id="fs3">namespace System.IO</div>
-<div class="tip" id="fs4">type Path =<br />&#160;&#160;static val DirectorySeparatorChar : char<br />&#160;&#160;static val AltDirectorySeparatorChar : char<br />&#160;&#160;static val VolumeSeparatorChar : char<br />&#160;&#160;static val InvalidPathChars : char[]<br />&#160;&#160;static val PathSeparator : char<br />&#160;&#160;static member ChangeExtension : path:string * extension:string -&gt; string<br />&#160;&#160;static member Combine : [&lt;ParamArray&gt;] paths:string[] -&gt; string + 3 overloads<br />&#160;&#160;static member GetDirectoryName : path:string -&gt; string<br />&#160;&#160;static member GetExtension : path:string -&gt; string<br />&#160;&#160;static member GetFileName : path:string -&gt; string<br />&#160;&#160;...<br /><br />Full name: System.IO.Path</div>
-<div class="tip" id="fs5">System.IO.Path.GetDirectoryName(path: string) : string</div>
-<div class="tip" id="fs6">namespace System.Reflection</div>
-<div class="tip" id="fs7">type Assembly =<br />&#160;&#160;member CodeBase : string<br />&#160;&#160;member CreateInstance : typeName:string -&gt; obj + 2 overloads<br />&#160;&#160;member EntryPoint : MethodInfo<br />&#160;&#160;member Equals : o:obj -&gt; bool<br />&#160;&#160;member EscapedCodeBase : string<br />&#160;&#160;member Evidence : Evidence<br />&#160;&#160;member FullName : string<br />&#160;&#160;member GetCustomAttributes : inherit:bool -&gt; obj[] + 1 overload<br />&#160;&#160;member GetCustomAttributesData : unit -&gt; IList&lt;CustomAttributeData&gt;<br />&#160;&#160;member GetExportedTypes : unit -&gt; Type[]<br />&#160;&#160;...<br /><br />Full name: System.Reflection.Assembly</div>
-<div class="tip" id="fs8">System.Reflection.Assembly.GetExecutingAssembly() : System.Reflection.Assembly</div>
-<div class="tip" id="fs9">val printfn : format:Printf.TextWriterFormat&lt;&#39;T&gt; -&gt; &#39;T<br /><br />Full name: Microsoft.FSharp.Core.ExtraTopLevelOperators.printfn</div>
-<div class="tip" id="fs10">type Console =<br />&#160;&#160;static member BackgroundColor : ConsoleColor with get, set<br />&#160;&#160;static member Beep : unit -&gt; unit + 1 overload<br />&#160;&#160;static member BufferHeight : int with get, set<br />&#160;&#160;static member BufferWidth : int with get, set<br />&#160;&#160;static member CapsLock : bool<br />&#160;&#160;static member Clear : unit -&gt; unit<br />&#160;&#160;static member CursorLeft : int with get, set<br />&#160;&#160;static member CursorSize : int with get, set<br />&#160;&#160;static member CursorTop : int with get, set<br />&#160;&#160;static member CursorVisible : bool with get, set<br />&#160;&#160;...<br /><br />Full name: System.Console</div>
-<div class="tip" id="fs11">System.Console.ReadLine() : string</div>
-<div class="tip" id="fs12">val ignore : value:&#39;T -&gt; unit<br /><br />Full name: Microsoft.FSharp.Core.Operators.ignore</div>
+<div class="tip" id="fs3">type Console =<br />&#160;&#160;static member BackgroundColor : ConsoleColor with get, set<br />&#160;&#160;static member Beep : unit -&gt; unit + 1 overload<br />&#160;&#160;static member BufferHeight : int with get, set<br />&#160;&#160;static member BufferWidth : int with get, set<br />&#160;&#160;static member CapsLock : bool<br />&#160;&#160;static member Clear : unit -&gt; unit<br />&#160;&#160;static member CursorLeft : int with get, set<br />&#160;&#160;static member CursorSize : int with get, set<br />&#160;&#160;static member CursorTop : int with get, set<br />&#160;&#160;static member CursorVisible : bool with get, set<br />&#160;&#160;...<br /><br />Full name: System.Console</div>
+<div class="tip" id="fs4">System.Console.ReadLine() : string</div>
+<div class="tip" id="fs5">val ignore : value:&#39;T -&gt; unit<br /><br />Full name: Microsoft.FSharp.Core.Operators.ignore</div>
 
         </div>
         <div class="span3">
@@ -217,7 +203,8 @@ frameBorder="0">
             <li><a href="https://github.com/lefthandedgoat/canopy/blob/master/LICENSE.txt">License</a></li>
             <li><a href="https://github.com/lefthandedgoat/canopy/blob/master/RELEASE_NOTES.md">Release Notes</a></li>
             
-            <li class="nav-header">Getting started</li>
+	          <li class="nav-header">Getting started</li>
+            <li><a href="/canopy/upgrade1to2.html">Upgrade 1.x -> 2.x notes</a></li>
             <li><a href="/canopy/actions.html">Actions</a></li>
             <li><a href="/canopy/assertions.html">Assertions</a></li>
             <li><a href="/canopy/testing.html">Testing</a></li>
