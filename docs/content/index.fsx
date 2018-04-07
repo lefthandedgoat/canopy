@@ -1,7 +1,7 @@
 (*** hide ***)
 // This block of code is omitted in the generated HTML documentation. Use
 // it to define helpers that you do not want to show in the documentation.
-#I "../../bin"
+#I "../../src/canopy/bin/Release/netstandard2.0"
 
 (**
 canopy - f#rictionless web testing
@@ -89,6 +89,7 @@ quit()
 
 ####6\. Explore the rest of canopy's API
 
+* [Upgrade 1.x -> 2.x](/canopy/upgrade1to2.html): documentation of upgrading from canopy 1.x to 2.x
 * [Actions](/canopy/actions.html): documentation of everything you can do on a page
 * [Assertions](/canopy/assertions.html): all the ways you can verify what's on the page is correct
 * [Configuration](/canopy/configuration.html): configure and fine tune canopy

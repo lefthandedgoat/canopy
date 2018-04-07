@@ -79,6 +79,7 @@ Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "content", "content", "{E148
 		docs\content\index.fsx = docs\content\index.fsx
 		docs\content\reporting.fsx = docs\content\reporting.fsx
 		docs\content\testing.fsx = docs\content\testing.fsx
+		docs\content\upgrade1to2.fsx = docs\content\upgrade1to2.fsx
 	EndProjectSection
 EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Solution Items", "Solution Items", "{481AC6B2-C46E-4E47-BF16-5A18C0AB532C}"
