@@ -55,26 +55,86 @@
 <span class="l">4: </span>
 <span class="l">5: </span>
 </pre></td>
-<td class="snippet"><pre class="fssnip highlighted"><code lang="fsharp"><span class="i">removed</span> <span class="i">coverage</span> <span class="i">report</span> <span class="i">support</span>, <span class="i">made</span> <span class="i">move</span> <span class="k">to</span> <span class="n">2.0</span> <span class="i">more</span> <span class="i">difficult</span> <span class="k">and</span> <span class="i">I</span> <span class="i">don&#39;t</span> <span class="i">think</span> <span class="i">they</span> <span class="i">were</span> <span class="i">used</span>
-<span class="i">removed</span> <span class="i">phantomjs</span> <span class="i">support</span>, <span class="i">the</span> <span class="i">project</span> <span class="i">is</span> <span class="i">no</span> <span class="i">longer</span> <span class="i">updated</span> <span class="i">because</span> <span class="k">of</span> <span class="i">chrome</span> <span class="i">headless</span> 
-<span class="i">removed</span> <span class="i">writeToSelectWithOptionValue</span>, <span class="i">old</span> <span class="i">backwards</span> <span class="i">compat</span> <span class="i">flag</span>
-<span class="i">removed</span> <span class="i">optimizeByDisablingCoverageReport</span>, <span class="i">old</span> <span class="i">optimization</span> <span class="i">around</span> <span class="i">coverage</span> <span class="i">reports</span>
-<span class="i">changed</span> <span class="k">default</span> <span class="i">driver</span> <span class="i">path</span> <span class="i">from</span> <span class="i">c</span><span class="o">:</span>
+<td class="snippet"><pre class="fssnip"><code lang="text">removed coverage report support, made move to 2.0 more difficult and I don't think they were used
+removed phantomjs support, the project is no longer updated because of chrome headless 
+removed writeToSelectWithOptionValue, old backwards compat flag
+removed optimizeByDisablingCoverageReport, old optimization around coverage reports
+changed default driver path from c:\ to executing directory
+</code></pre></td></tr></table>
+<h2>Namespace changes</h2>
+<table class="pre"><tr><td class="lines"><pre class="fssnip"><span class="l"> 1: </span>
+<span class="l"> 2: </span>
+<span class="l"> 3: </span>
+<span class="l"> 4: </span>
+<span class="l"> 5: </span>
+<span class="l"> 6: </span>
+<span class="l"> 7: </span>
+<span class="l"> 8: </span>
+<span class="l"> 9: </span>
+<span class="l">10: </span>
+<span class="l">11: </span>
+<span class="l">12: </span>
+<span class="l">13: </span>
+<span class="l">14: </span>
+</pre></td>
+<td class="snippet"><pre class="fssnip highlighted"><code lang="fsharp"><span class="i">canopy</span>        <span class="k">-&gt;</span> <span class="i">canopy</span><span class="o">.</span><span class="i">classic</span>
+<span class="i">canopy</span><span class="o">.</span><span class="i">runner</span> <span class="k">-&gt;</span> <span class="i">canopy</span><span class="o">.</span><span class="i">runner</span><span class="o">.</span><span class="i">classic</span> <span class="c">//no longer auto opened</span>
+
+<span class="i">canopy</span><span class="o">.</span><span class="i">configuration</span> <span class="c">//no longer auto opened</span>
+<span class="i">canopy</span><span class="o">.</span><span class="i">reporters</span>
+<span class="i">canopy</span><span class="o">.</span><span class="i">screen</span>
+<span class="i">canopy</span><span class="o">.</span><span class="i">types</span>         <span class="c">//no longer auto opened</span>
+<span class="i">canopy</span><span class="o">.</span><span class="i">wait</span>          <span class="c">//no longer auto opened</span>
+<span class="i">canopy</span><span class="o">.</span><span class="i">finders</span>
+<span class="i">canopy</span><span class="o">.</span><span class="i">history</span>
+<span class="i">canopy</span><span class="o">.</span><span class="i">userAgents</span>
+
+<span class="i">canopy</span><span class="o">.</span><span class="i">parallell</span><span class="o">.</span><span class="i">functions</span> <span class="c">//new</span>
+<span class="i">canopy</span><span class="o">.</span><span class="i">parallell</span><span class="o">.</span><span class="i">instanced</span> <span class="c">//new</span>
 </code></pre></td>
 </tr>
 </table>
-<h2>Namespace changes</h2>
-<p>lorem ipsum</p>
 <h2>Signature changes</h2>
-<p>lorem ipsum</p>
+<p>The signature for custom finders now requires an instance of IWebDriver (the browser) also
+From <code>string -&gt; (By -&gt; ReadOnlyCollection&lt;IWebElement&gt;) -&gt; IWebElement list</code>
+To <code>string -&gt; (By -&gt; ReadOnlyCollection&lt;IWebElement&gt;) -&gt; IWebDriver -&gt; IWebElement list</code></p>
 <h2>Screen management changes</h2>
-<p>lorem ipsum</p>
+<p>Due to the upgrade to support .net Core canopy can no longer determine your resolution
+You will need to manually set the resolutions so things like <code>pin</code> work correctly</p>
+<table class="pre"><tr><td class="lines"><pre class="fssnip"><span class="l">1: </span>
+<span class="l">2: </span>
+<span class="l">3: </span>
+</pre></td>
+<td class="snippet"><pre class="fssnip highlighted"><code lang="fsharp"><span class="i">canopy</span><span class="o">.</span><span class="i">screen</span><span class="o">.</span><span class="i">screenWidth</span> <span class="o">&lt;-</span> <span class="n">3840</span>  <span class="c">//default 1920</span>
+<span class="i">canopy</span><span class="o">.</span><span class="i">screen</span><span class="o">.</span><span class="i">screenHeight</span> <span class="o">&lt;-</span> <span class="n">2160</span> <span class="c">//default 1080</span>
+<span class="i">canopy</span><span class="o">.</span><span class="i">screen</span><span class="o">.</span><span class="i">monitorCount</span> <span class="o">&lt;-</span> <span class="n">2</span>    <span class="c">//default 1</span>
+</code></pre></td>
+</tr>
+</table>
 <h2>New features</h2>
-<p>lorem ipsum</p>
+<p>.net Standard 2.0 Support</p>
+<p>Added parallel support in two styles in two new namespaces</p>
 <h2>Parallel testing</h2>
-<p>lorem ipsum</p>
+<p>Added parallel support in two styles in two new namespaces</p>
+<table class="pre"><tr><td class="lines"><pre class="fssnip"><span class="l">1: </span>
+<span class="l">2: </span>
+</pre></td>
+<td class="snippet"><pre class="fssnip highlighted"><code lang="fsharp"><span class="i">canopy</span><span class="o">.</span><span class="i">parallell</span><span class="o">.</span><span class="i">functions</span>
+<span class="i">canopy</span><span class="o">.</span><span class="i">parallell</span><span class="o">.</span><span class="i">instanced</span>
+</code></pre></td>
+</tr>
+</table>
+<p>See examples of function based tests: <a href="https://github.com/lefthandedgoat/canopy/blob/canopy2/tests/paralleltests/functionsTests.fs
+See">https://github.com/lefthandedgoat/canopy/blob/canopy2/tests/paralleltests/functionsTests.fs
+See</a> examples of instanced based tests: <a href="https://github.com/lefthandedgoat/canopy/blob/canopy2/tests/paralleltests/instancedTests.fs">https://github.com/lefthandedgoat/canopy/blob/canopy2/tests/paralleltests/instancedTests.fs</a></p>
+<p><code>canopy.runner.classic</code> does NOT support parallel tests.
+You should choose a unit test library that you like and supports this and write canopy tests in it
+In the future I may release a parallel friendly test runner for canopy that includes some features from the classic runner
+Parallel test running is HARD.  Your database is a global mutable variable and your tests may interfere with each other
+You will also need to understand how your test runner runs tests, as it may not run them in order</p>
 <h2>Upgrading from .net 4.5.2</h2>
-<p>lorem ipsum</p>
+<p>In an real world code base I simply updated the project from 4.5.2 to 4.6.1, installed the .net core SDK, and it worked
+If you have problems please let me know in the github issues and I will see what I can do to repro and help</p>
 
 <div class="tip" id="fs1">namespace canopy</div>
 <div class="tip" id="fs2">module classic<br /><br />from canopy</div>
