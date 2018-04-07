@@ -26,6 +26,8 @@ canopy is a web testing framework with one goal in mind, make UI testing simple:
 
 * Clean, concise API.
 
+* .net Standard 2.0.
+
 * MIT License.
 
 Getting Started
