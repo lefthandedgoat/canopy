@@ -4,17 +4,17 @@ VisualStudioVersion = 15.0.26124.0
 MinimumVisualStudioVersion = 15.0.26124.0
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "src", "src", "{EE14AF5C-CE88-4A66-B7D1-1D6EF558A4F3}"
 EndProject
-Project("{6EC3EE1D-3C4E-46DD-8F32-0CC8E7565705}") = "canopy", "src\canopy\canopy.fsproj", "{2C3AAFE0-7840-4BB9-B0AB-AA70B3B0B0A1}"
+Project("{6EC3EE1D-3C4E-46DD-8F32-0CC8E7565705}") = "canopy", "src/canopy/canopy.fsproj", "{2C3AAFE0-7840-4BB9-B0AB-AA70B3B0B0A1}"
 EndProject
-Project("{6EC3EE1D-3C4E-46DD-8F32-0CC8E7565705}") = "canopy.integration", "src\canopy.integration\canopy.integration.fsproj", "{E764022F-52E2-4C86-9D1F-AFCFDA22C20E}"
+Project("{6EC3EE1D-3C4E-46DD-8F32-0CC8E7565705}") = "canopy.integration", "src/canopy.integration/canopy.integration.fsproj", "{E764022F-52E2-4C86-9D1F-AFCFDA22C20E}"
 EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "tests", "tests", "{01B72FCF-1989-44FA-A6B6-EAF0A7C06043}"
 EndProject
-Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "csharptests", "tests\csharptests\csharptests.csproj", "{0AD2A734-0C6B-4E22-98BA-7BB0B7BBD222}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "csharptests", "tests/csharptests/csharptests.csproj", "{0AD2A734-0C6B-4E22-98BA-7BB0B7BBD222}"
 EndProject
-Project("{6EC3EE1D-3C4E-46DD-8F32-0CC8E7565705}") = "paralleltests", "tests\paralleltests\paralleltests.fsproj", "{D866A0A1-F599-48E8-8A52-06296198FF3C}"
+Project("{6EC3EE1D-3C4E-46DD-8F32-0CC8E7565705}") = "paralleltests", "tests/paralleltests/paralleltests.fsproj", "{D866A0A1-F599-48E8-8A52-06296198FF3C}"
 EndProject
-Project("{6EC3EE1D-3C4E-46DD-8F32-0CC8E7565705}") = "basictests", "tests\basictests\basictests.fsproj", "{42CDC11A-1229-4C68-B6DF-EF04526A8B5C}"
+Project("{6EC3EE1D-3C4E-46DD-8F32-0CC8E7565705}") = "basictests", "tests/basictests/basictests.fsproj", "{42CDC11A-1229-4C68-B6DF-EF04526A8B5C}"
 EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "docs", "docs", "{880D511C-2B00-4EE1-94B6-CA0FF93678A2}"
 EndProject
