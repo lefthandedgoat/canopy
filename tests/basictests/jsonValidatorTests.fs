@@ -1,7 +1,7 @@
 ﻿module jsonValidatorTests
 
-open canopy
-open runner
+open canopy.classic
+open canopy.runner.classic
 open jsonValidator
 
 let ( == ) left right = if left <> right then failwith (sprintf "expected %A%sgot %A" right System.Environment.NewLine left)

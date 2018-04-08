@@ -1,11 +1,10 @@
-﻿[<AutoOpen>]
-module canopy.runner
+﻿module canopy.runner.classic
 
 open System
-open configuration
-open canopy
-open reporters
-open types
+open canopy.configuration
+open canopy.classic
+open canopy.reporters
+open canopy.types
 open OpenQA.Selenium
 
 let private last = function
@@ -15,6 +14,8 @@ let private last = function
 let mutable suites = [new suite()]
 let mutable todo = fun () -> ()
 let mutable skipped = fun () -> ()
+(* documented/configuration *)
+let mutable skipNextTest = false
 
 (* documented/testing *)
 let once f = (last suites).Once <- f
@@ -100,9 +101,9 @@ let fail (ex : Exception) (test : Test) (suite : suite) autoFail url =
                 if failFast = ref true then failed <- true
                 failedCount <- failedCount + 1
                 contextFailed <- true
-                let f = configuration.failScreenshotFileName test suite
+                let f = canopy.configuration.failScreenshotFileName test suite
                 if failureScreenshotsEnabled = true then
-                  let ss = screenshot configuration.failScreenshotPath f
+                  let ss = screenshot canopy.configuration.failScreenshotPath f
                   reporter.fail ex test.Id ss url
                 else reporter.fail ex test.Id Array.empty<byte> url
                 suite.OnFail()
@@ -182,7 +183,7 @@ let run () =
 
     let wipsExist = suites |> List.exists (fun s -> s.Wips.IsEmpty = false)
 
-    if wipsExist && configuration.failIfAnyWipTests then
+    if wipsExist && canopy.configuration.failIfAnyWipTests then
        raise <| Exception "Wip tests found and failIfAnyWipTests is true"
 
     reporter.suiteBegin()
@@ -194,7 +195,7 @@ let run () =
 
     //run all the suites
     if runFailedContextsFirst = true then
-        let failedContexts = history.get()
+        let failedContexts = canopy.history.get()
         //reorder so failed contexts are first
         let fc, pc = suites |> List.partition (fun s -> failedContexts |> List.exists (fun fc -> fc = s.Context))
         suites <- fc @ pc
@@ -230,7 +231,7 @@ let run () =
             if s.Context <> null then reporter.contextEnd s.Context
     )
 
-    history.save failedContexts
+    canopy.history.save failedContexts
 
     stopWatch.Stop()
     reporter.summary stopWatch.Elapsed.Minutes stopWatch.Elapsed.Seconds passedCount failedCount skippedCount
@@ -242,7 +243,7 @@ let runFor browsers =
     let currentSuites = suites
     
     match box browsers with
-        | :? (types.BrowserStartMode list) as browsers ->
+        | :? (canopy.types.BrowserStartMode list) as browsers ->
             let newSuites =
               browsers
               |> List.rev

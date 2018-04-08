@@ -378,3 +378,24 @@ Update to Selenium 3.3 [Issue #351](https://github.com/lefthandedgoat/canopy/iss
 #### 1.6.3 - Mar 3 2018
 * Protect from null refs in selector suggestions, thanks Haf! [Issue #404](https://github.com/lefthandedgoat/canopy/issues/404)
 * Provide better error messages when the browser is null, thanks again Haf! [Issue #405](https://github.com/lefthandedgoat/canopy/issues/405)
+
+#### 2.0.0-alpha - Mar 25 2018
+* Alpha release, some breaking changes with open statements, not yet documented, no migration docs yet
+* Added parallel support, thanks @haf!
+* Breaking changes, removed some old backwards compatability flags
+
+#### 2.0.0-beta-1 - April 2 2018
+* Beta release, some breaking changes with open statements, not yet documented, no migration docs yet
+* Added .net standard 2.0 support
+
+#### 2.0.0-beta-2 - April 6 2018
+* Fix FSharp.Core version
+  
+#### 2.0.0-beta-3 - April 6 2018
+* Restrict to netstandard2
+
+#### 2.0.0 - April 7 2018
+* Final build
+* Added parallel support
+* Added .net standard 2.0 support
+* Please read upgrade documentation http://lefthandedgoat.github.io/canopy/upgrade1to2.html

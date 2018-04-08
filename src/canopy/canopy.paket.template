@@ -1,0 +1,26 @@
+type file
+id canopy
+version 2.0.0-beta-3
+authors Chris Holt
+iconUrl http://lefthandedgoat.github.io/canopy/canopy_orig.jpg
+projectUrl http://lefthandedgoat.github.io/canopy/
+licenseUrl https://github.com/lefthandedgoat/canopy/blob/master/LICENSE.txt
+tags
+  f# fsharp canopy selenium ui automation tests
+description
+  A simple framework in F# on top of selenium for writing UI automation and tests.
+
+files
+  bin\Debug\netstandard2.0 ==> lib
+  
+releaseNotes
+  2.0.0 - April 7 2018
+  Added parallel support
+  Added .net standard 2.0 support
+  Please read upgrade documentation http://lefthandedgoat.github.io/canopy/upgrade1to2.html
+  
+dependencies
+  framework: netstandard2
+	  FSharp.Core >= 4.3.4
+	  Selenium.WebDriver >= 3.11.0
+	  System.Drawing.Common >= 4.5.0-preview1-26216-02

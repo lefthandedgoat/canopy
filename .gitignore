@@ -48,7 +48,6 @@ build/
 *.vssscc
 .builds
 *.pidb
-*.log
 *.scc
 
 # Visual C++ cache files
@@ -181,3 +180,5 @@ nuget/*.nupkg
 .fake
 
 paket-files/*
+.vs/*
+*.nupkg

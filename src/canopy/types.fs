@@ -1,11 +1,8 @@
-[<AutoOpen>]
 module canopy.types
 
 open System
 open OpenQA.Selenium
 open Microsoft.FSharp.Reflection
-
-let mutable (browser : IWebDriver) = null
 
 type CanopyException(message) = inherit Exception(message)
 type CanopyReadOnlyException(message) = inherit CanopyException(message)
@@ -43,7 +40,6 @@ type direction =
 //browser
 type BrowserStartMode =
     | Firefox
-    | FirefoxWithProfile of Firefox.FirefoxProfile
     | FirefoxWithPath of string
     | FirefoxWithUserAgent of string
     | FirefoxWithPathAndTimeSpan of string * TimeSpan
@@ -62,8 +58,6 @@ type BrowserStartMode =
     | Chromium
     | ChromiumWithOptions of Chrome.ChromeOptions
     | Safari
-    | PhantomJS
-    | PhantomJSProxyNone
     | Remote of string * ICapabilities
 
 let toString (x:'a) =
@@ -100,3 +94,21 @@ type Result =
     | Todo
     | FailFast
     | Failed
+
+type IReporter =
+   abstract member testStart : string -> unit
+   abstract member pass : string -> unit
+   abstract member fail : Exception -> string -> byte [] -> string -> unit
+   abstract member todo : string -> unit
+   abstract member skip : string -> unit
+   abstract member testEnd : string -> unit
+   abstract member describe : string -> unit
+   abstract member contextStart : string -> unit
+   abstract member contextEnd : string -> unit
+   abstract member summary : int -> int -> int -> int -> int -> unit
+   abstract member write : string -> unit
+   abstract member suggestSelectors : string -> string list -> unit
+   abstract member quit : unit -> unit
+   abstract member suiteBegin : unit -> unit
+   abstract member suiteEnd : unit -> unit
+   abstract member setEnvironment : string -> unit

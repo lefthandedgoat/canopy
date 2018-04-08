@@ -1,7 +1,7 @@
 (*** hide ***)
 // This block of code is omitted in the generated HTML documentation. Use
 // it to define helpers that you do not want to show in the documentation.
-#I "../../bin"
+#I "../../src/canopy/bin/Release/netstandard2.0"
 
 (**
 canopy - f#rictionless web testing
@@ -26,29 +26,31 @@ canopy is a web testing framework with one goal in mind, make UI testing simple:
 
 * Clean, concise API.
 
+* .net Standard 2.0.
+
 * MIT License.
 
 Getting Started
 ---------------
-####1\. Create a new F# console application
+####1\. Create a new F# console application (4.6.1+ or .net core)
 <img src="img/newProject.png" alt="F# New Project" style="display: inherit;"/>
 
-####2\. Set target framework to .NET Framework 4
-<img src="img/profile.png" alt="Change target framework" style="display: inherit;"/>
-
-####3\. Install canopy via Nuget
+####2\. Install canopy via Nuget
 <img src="img/installCanopy.png" alt="Install canopy" style="display: inherit;"/>
+
+####3\. Install chromedriver via Nuget
+<img src="img/installChromeDriver.png" alt="Install chromedriver" style="display: inherit;"/>
 
 ####4\. Paste the following code into `Program.fs`
 
 *)
 //these are similar to C# using statements
-open canopy
-open runner
-open System
+open canopy.runner.classic
+open canopy.configuration
+open canopy.classic
 
-//start an instance of the firefox browser
-start firefox
+//start an instance of chrome
+start chrome
 
 //this is how you define a test
 "taking canopy for a spin" &&& fun _ ->
@@ -87,6 +89,7 @@ quit()
 
 ####6\. Explore the rest of canopy's API
 
+* [Upgrade 1.x -> 2.x](/canopy/upgrade1to2.html): documentation of upgrading from canopy 1.x to 2.x
 * [Actions](/canopy/actions.html): documentation of everything you can do on a page
 * [Assertions](/canopy/assertions.html): all the ways you can verify what's on the page is correct
 * [Configuration](/canopy/configuration.html): configure and fine tune canopy
