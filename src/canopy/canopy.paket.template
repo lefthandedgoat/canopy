@@ -1,6 +1,6 @@
 type file
 id canopy
-version 2.0.0-beta-3
+version 2.0.0
 authors Chris Holt
 iconUrl http://lefthandedgoat.github.io/canopy/canopy_orig.jpg
 projectUrl http://lefthandedgoat.github.io/canopy/
