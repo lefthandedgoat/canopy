@@ -81,8 +81,8 @@ Parallel testing
 canopy.parallell.functions
 canopy.parallell.instanced
 ```
-* See examples of function based tests: https://github.com/lefthandedgoat/canopy/blob/canopy2/tests/paralleltests/functionsTests.fs
-* See examples of instanced based tests: https://github.com/lefthandedgoat/canopy/blob/canopy2/tests/paralleltests/instancedTests.fs
+* See examples of function based tests: https://github.com/lefthandedgoat/canopy/blob/master/tests/paralleltests/functionsTests.fs
+* See examples of instanced based tests: https://github.com/lefthandedgoat/canopy/blob/master/tests/paralleltests/instancedTests.fs
 
 * `canopy.runner.classic` does NOT support parallel tests.
 * You should choose a unit test library that you like and supports this and write canopy tests in it
