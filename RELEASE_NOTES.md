@@ -392,4 +392,10 @@ Update to Selenium 3.3 [Issue #351](https://github.com/lefthandedgoat/canopy/iss
 * Fix FSharp.Core version
   
 #### 2.0.0-beta-3 - April 6 2018
-*  Restrict to netstandard2
+* Restrict to netstandard2
+
+#### 2.0.0 - April 7 2018
+* Final build
+* Added parallel support
+* Added .net standard 2.0 support
+* Please read upgrade documentation http://lefthandedgoat.github.io/canopy/upgrade1to2.html
