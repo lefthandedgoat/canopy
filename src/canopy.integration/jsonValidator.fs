@@ -76,7 +76,7 @@ let AST jsonValue =
                | Property        -> sprintf "%s.%s"   self.Path prop
                | _        -> failwith (sprintf "should not happen %A" type')
 
-             AST { self with Path = path; Name = prop; ParentPath = self.Path; Type = type'; ParentType = self.Type; ImmediateOptional = false } value
+             AST { self with Path = path; Name = prop; ParentPath = self.Path; Type = type'; ParentType = self.Type; ImmediateOptional = false; HistoricalOptional = true } value
            )
         |> Array.concat
         |> Array.append [| self |]
@@ -85,9 +85,9 @@ let AST jsonValue =
 
 let diff example actual =
   let example = JsonValue.Parse(example) |> AST |> Set.ofArray
-  //printfn "example: %A" example
+  printfn "example: %A" example
   let actual = JsonValue.Parse(actual) |> AST |> Set.ofArray
-  //printfn "actual: %A" actual
+  printfn "actual: %A" actual
 
   //if there is a null in actual and it has a matching array value in example, replace with the array definition because null arrays are legit
   let actual =
@@ -108,6 +108,17 @@ let diff example actual =
           let asProperty = { meta with Type = Property; Path = meta.Path.Replace(meta.Name, sprintf "%s" meta.Name) }
           let exists = example.Contains(asProperty)
           if exists then asProperty else meta
+        else meta)
+    |> Set.ofSeq
+
+  //if there is a null in actual and it has a matching record value in example, replace with the record definition because null records are legit
+  let actual =
+    actual
+    |> Seq.map (fun meta -> 
+        if meta.Type = Type.Null then
+          let asRecord = { meta with Type = Record; Path = meta.Path.Replace(meta.Name, sprintf "{%s}" meta.Name) }
+          let exists = example.Contains(asRecord)
+          if exists then asRecord else meta
         else meta)
     |> Set.ofSeq
   
