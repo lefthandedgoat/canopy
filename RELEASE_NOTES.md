@@ -378,3 +378,6 @@ Update to Selenium 3.3 [Issue #351](https://github.com/lefthandedgoat/canopy/iss
 #### 1.6.3 - Mar 3 2018
 * Protect from null refs in selector suggestions, thanks Haf! [Issue #404](https://github.com/lefthandedgoat/canopy/issues/404)
 * Provide better error messages when the browser is null, thanks again Haf! [Issue #405](https://github.com/lefthandedgoat/canopy/issues/405)
+
+#### 1.6.5 - April 11 2018
+* Fix a bug with null records in jsonValidator

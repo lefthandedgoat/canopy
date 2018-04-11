@@ -85,9 +85,9 @@ let AST jsonValue =
 
 let diff example actual =
   let example = JsonValue.Parse(example) |> AST |> Set.ofArray
-  printfn "example: %A" example
+  //printfn "example: %A" example
   let actual = JsonValue.Parse(actual) |> AST |> Set.ofArray
-  printfn "actual: %A" actual
+  //printfn "actual: %A" actual
 
   //if there is a null in actual and it has a matching array value in example, replace with the array definition because null arrays are legit
   let actual =
