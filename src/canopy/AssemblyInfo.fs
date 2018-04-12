@@ -7,6 +7,7 @@ open System.Reflection
 [<assembly: AssemblyDescriptionAttribute("F# web testing framework")>]
 [<assembly: AssemblyVersionAttribute("2.0.0")>]
 [<assembly: AssemblyFileVersionAttribute("2.0.0")>]
+
 do ()
 
 module internal AssemblyVersionInformation =

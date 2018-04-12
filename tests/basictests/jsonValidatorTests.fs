@@ -23,6 +23,7 @@ let location8 = """{ "lat":4.0212, "long":12.102012, "people":[ { "first":"jane"
 
 let class1 = """{ "name":"bio 101",  "building":"science", "location": { "lat":4.0212, "long":12.102012, "people": [ { "first":"jane", "middle":"something", "last":"doe" } ] } }"""
 let class2 = """{ "name":"chem 101", "building":"science", "location": { "lat":4.0212, "lng":12.102012,  "people": [ { "first":"jane", "last":"doe" } ] } }"""
+let class3 = """{ "name":"chem 101", "building":"science", "location": null }"""
 
 let withArray = """{ "name":"bio 101", "people": [ { "first":"jane" } ] }"""
 let nullArray = """{ "name":"chem 101", "people": null }"""
@@ -70,12 +71,15 @@ let all () =
   "nested objects with arrays reocgnized correctly" &&& fun _ ->
     diff class1 class2 ==
       [
-        Missing "{root}.{location}.long"
         Missing "{root}.{location}.[people].{}.middle"
-
+        Missing "{root}.{location}.long"
+        
         Extra "{root}.{location}.lng"
       ]
 
+  "null object property is ok" &&& fun _ ->
+    diff class1 class3 == [ ]
+ 
   "null array is acceptable" &&& fun _ ->
     diff withArray nullArray == [ ]
 
