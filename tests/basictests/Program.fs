@@ -2,8 +2,11 @@ module main
 
 open System
 open OpenQA.Selenium
-open canopy
-open reporters
+open canopy.classic
+open canopy.reporters
+open canopy.runner.classic
+open canopy.configuration
+open canopy.types
 
 start chrome
 let mainBrowser = browser
@@ -11,11 +14,11 @@ elementTimeout <- 3.0
 compareTimeout <- 3.0
 pageTimeout <- 3.0
 runFailedContextsFirst <- false
-reporter <- new LiveHtmlReporter(Chrome, configuration.chromeDir) :> IReporter
+reporter <- new LiveHtmlReporter(Chrome, chromeDir) :> IReporter
 reporter.setEnvironment "My Machine"
-configuration.failureMessagesThatShoulBeTreatedAsSkip <- ["Skip me when I fail"]
+failureMessagesThatShoulBeTreatedAsSkip <- ["Skip me when I fail"]
 
-configuration.failScreenshotFileName <-
+failScreenshotFileName <-
   (fun test suite ->
       let suiteContext = if suite.Context = null then "" else suite.Context
       let cleanName = if test.Description = null then "" else test.Description.Replace(' ','_') //etc
@@ -472,7 +475,6 @@ context "other tests"
     "#states" == "Kingman Reef"
 
 "writting (selecting) to drop down test, via option value, many options" &&& fun _ ->
-    //note that this can be turned off if its causing you problems via config.writeToSelectWithOptionValue
     !^ testpage
     "#states" << "95"
     "#states" == "Palmyra Atoll"
@@ -609,40 +611,39 @@ context "dragging"
     ".handle" --> ".inprogress"
     click "Blog"
 
-if not (browser :? OpenQA.Selenium.PhantomJS.PhantomJSDriver) then
-    context "alert tests"
+context "alert tests"
 
-    before (fun _ -> !^ "http://lefthandedgoat.github.io/canopy/testpages/alert")
+before (fun _ -> !^ "http://lefthandedgoat.github.io/canopy/testpages/alert")
 
-    "alert box should have 'Alert Test'" &&& fun _ ->
-        click "#alert_test"
-        alert() == "Alert Test"
-        acceptAlert()
+"alert box should have 'Alert Test'" &&& fun _ ->
+    click "#alert_test"
+    alert() == "Alert Test"
+    acceptAlert()
 
-    "alert box should have 'Alert Test'" &&& fun _ ->
-        click "#alert_test"
-        alert() == "Alert Test"
-        dismissAlert()
+"alert box should have 'Alert Test'" &&& fun _ ->
+    click "#alert_test"
+    alert() == "Alert Test"
+    dismissAlert()
 
-    "alert box should fail correctly when expecting wrong message" &&& fun _ ->
-        failsWith "equality check failed.  expected: Not the message, got: Alert Test"
-        click "#alert_test"
-        alert() == "Not the message"
+"alert box should fail correctly when expecting wrong message" &&& fun _ ->
+    failsWith "equality check failed.  expected: Not the message, got: Alert Test"
+    click "#alert_test"
+    alert() == "Not the message"
 
-    "confirmation box should have 'Confirmation Test'" &&& fun _ ->
-        click "#confirmation_test"
-        alert() == "Confirmation Test"
-        acceptAlert()
+"confirmation box should have 'Confirmation Test'" &&& fun _ ->
+    click "#confirmation_test"
+    alert() == "Confirmation Test"
+    acceptAlert()
 
-    "confirmation box should have 'Confirmation Test'" &&& fun _ ->
-        click "#confirmation_test"
-        alert() == "Confirmation Test"
-        dismissAlert()
+"confirmation box should have 'Confirmation Test'" &&& fun _ ->
+    click "#confirmation_test"
+    alert() == "Confirmation Test"
+    dismissAlert()
 
-    "confirmation box should fail correctly when expecting wrong message" &&& fun _ ->
-        failsWith "equality check failed.  expected: Not the message, got: Confirmation Test"
-        click "#confirmation_test"
-        alert() == "Not the message"
+"confirmation box should fail correctly when expecting wrong message" &&& fun _ ->
+    failsWith "equality check failed.  expected: Not the message, got: Confirmation Test"
+    click "#confirmation_test"
+    alert() == "Not the message"
 
 context "multiple elements test"
 
@@ -674,21 +675,21 @@ context "User Agents tests"
 
 "ChromeWithUserAgent userAgents.iPad should show as iPad" &&& fun _ ->
     start <| ChromeWithUserAgent userAgents.iPad
-    url "http://whatsmyuseragent.com/"
+    url "https://www.whoishostingthis.com/tools/user-agent/"
     ".info-box.user-agent" *~ "iPad"
     quit browser
     switchTo mainBrowser
 
 "FirefoxDeviceWithUserAgent userAgents.iPhone should show as iPhone" &&& fun _ ->
     start <| FirefoxWithUserAgent userAgents.iPhone
-    url "http://whatsmyuseragent.com/"
+    url "https://www.whoishostingthis.com/tools/user-agent/"
     ".info-box.user-agent" *~ "iPhone"
     quit browser
     switchTo mainBrowser
 
 "FirefoxDeviceWithUserAgent myagent should show as myagent" &&& fun _ ->
     start <| FirefoxWithUserAgent "myagent"
-    url "http://whatsmyuseragent.com/"
+    url "https://www.whoishostingthis.com/tools/user-agent/"
     ".info-box.user-agent" *~ "myagent"
     quit browser
     switchTo mainBrowser
@@ -737,7 +738,7 @@ context "pluggable finders tests"
 
 //example of a finder you could write so you didnt have to write boring selectors, just add this
 //and let canopy do the work of trying to find something by convention
-let findByHref href f =
+let findByHref href f (_ : IWebDriver) =
     try
         let cssSelector = sprintf "a[href*='%s']" href
         f(By.CssSelector(cssSelector)) |> List.ofSeq
@@ -764,22 +765,8 @@ context "todo tests"
 
 "write a test that tests the whole internet!" &&& todo
 
-let createTest k =
-    let testName = sprintf "Testing addition performance %i" k
-    testName &&& todo
-
-let createTestSuite contextName n =
-    context contextName
-
-    [1..n] |> Seq.iter createTest
-
-createTestSuite "Add test performance" 1000
-
 run ()
 
 switchTo mainBrowser
-coverage testpage
-coverage()
-coverage "http://scrumy.com/silenter39delayed"
 
 quit()

@@ -1,7 +1,7 @@
 ﻿(*** hide ***)
 // This block of code is omitted in the generated HTML documentation. Use
 // it to define helpers that you do not want to show in the documentation.
-#I "../../bin"
+#I "../../src/canopy/bin/Release/netstandard2.0"
 #r "canopy.dll"
 #r "WebDriver.dll"
 open canopy
@@ -14,54 +14,68 @@ Configuration
 *)
 
 (**
+driverHostName
+--
+* .net core has a delay when resolving localhost that makes using canopy very slow
+* canopy uses 127.0.0.1 instead but allows you to adjust it based on your ipv/ipv6 needs
+* Defaults to "127.0.0.1"
+*)
+driverHostName <- "localhost"
+driverHostName <- "::1"
+
+(**
 chromeDir
 --
 * Directory for the chromedriver
-* Defaults to pre-set OS paths
-O* SX: /usr/local/bin/
-* Windows: C:\
+* Defaults executing directory (bin\Debug in many cases)
 *)
-chromeDir <- "C:\\"
+chromeDir <- @"C:\your\custom\path"
 
 (**
 chromiumDir
 --
 * Directory for the chromedriver for use with chromium
 * Defaults to pre-set OS paths
-*nix: /usr/lib/chromium-browser
+* nix: /usr/lib/chromium-browser
 * Windows: C:\
 *)
-chromeDir <- "C:\\"
+chromiumDir <- "C:\\"
+
+(**
+firefoxDir
+--
+* Install path for firefox
+* Defaults to pre-set OS paths
+* OSX: /Applications/Firefox.app/Contents/MacOS/firefox-bin
+* nix: /usr/lib/firefox-2.0 (probably wrong)
+* Windows: C:\Program Files (x86)\Mozilla Firefox\firefox.exe
+*)
+firefoxDir <- @"C:\Program Files (x86)\Mozilla Firefox\firefox.exe"
+
+
+(**
+firefoxDriverDir
+--
+* Directory for the firefox gecko driver
+* Defaults executing directory (bin\Debug in many cases)
+*)
+firefoxDriverDir <- @"C:\your\custom\path"
 
 (**
 ieDir
 --------
 * Directory for Internet Explorer
-* Defaults to pre-set OS paths
-* OSX: /usr/bin/
-* Windows: C:\
+* Defaults executing directory (bin\Debug in many cases)
 *)
-ieDir <- "C:\\"
-
-(**
-phantomJSDir
-----------
-* Directory for phantomJS
-* Defaults to pre-set OS paths
-* OSX: /usr/bin/
-* Windows: C:\
-*)
-phantomJSDir <- "C:\\"
+ieDir <- @"C:\your\custom\path"
 
 (**
 safariDir
 -----------
 * Directory for Safari
-* Defaults to pre-set OS paths
-* OSX: /usr/bin/
-* Windows: C:\
+* Defaults executing directory (bin\Debug in many cases)
 *)
-safariDir <- "C:\\"
+safariDir <- @"C:\your\custom\path"
 
 (**
 edgeDir
@@ -69,7 +83,7 @@ edgeDir
 * Directory for edge driver
 * Defaults to C:\Program Files (x86)\Microsoft Web Driver\
 *)
-edgeDir <- "C:\\"
+edgeDir <- @"C:\your\custom\path"
 
 (**
 hideCommandPromptWindow
@@ -202,28 +216,12 @@ configuredFinders
 configuredFinders <- finders.defaultFinders
 
 (**
-writeToSelectWithOptionValue
-------------
-* Provided to preserve previous behaviour of not using the options value to write to a select
-* Default is true
-*)
-writeToSelectWithOptionValue <- true
-
-(**
 optimizeBySkippingIFrameCheck
 ------------
 * If you need your tests to be faster and don't have any iframes you can turn this to true
 * Default is false
 *)
 optimizeBySkippingIFrameCheck <- false
-
-(**
-optimizeByDisablingCoverageReport
-------------
-* If you need your tests to be faster and don't use coverage report you can turn this to true
-* Default is false
-*)
-optimizeByDisablingCoverageReport <- false
 
 (**
 showInfoDiv

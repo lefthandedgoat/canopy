@@ -1,7 +1,7 @@
 (*** hide ***)
 // This block of code is omitted in the generated HTML documentation. Use
 // it to define helpers that you do not want to show in the documentation.
-#I "../../bin"
+#I "../../src/canopy/bin/Release/netstandard2.0"
 #r "canopy.dll"
 #r "WebDriver.dll"
 open canopy
@@ -24,7 +24,6 @@ start firefox
 start chrome
 start ie
 start safari
-start phantomJS
 start aurora
 start edgeBETA
 start chromium
@@ -509,13 +508,6 @@ Navigate forward or back.
 *)
 navigate back
 navigate forward
-
-(**
-coverage
-------
-Create a coverage report for a url.
-*)
-coverage "http://www.google.com"
 
 (**
 addFinder

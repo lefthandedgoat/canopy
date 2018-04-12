@@ -1,7 +1,7 @@
 module file2
 
-open canopy
-open runner
+open canopy.classic
+open canopy.runner.classic
 
 let testpage = "http://lefthandedgoat.github.io/canopy/testpages/"
 

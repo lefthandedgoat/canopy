@@ -1,13 +1,13 @@
 ﻿namespace canopy.csharp
 
-open canopy.runner
-open canopy
+open canopy.runner.classic
+open canopy.classic
 
 type canopy () =
 
     static member browsers = browsers
 
-    static member browser = canopy.types.browser
+    static member browser = canopy.classic.browser
 
     //runner stuff
     static member context description = context description
@@ -28,18 +28,16 @@ type canopy () =
 
     static member wip description (f : System.Action) = description &&&& fun _ -> f.Invoke()
 
-    static member skip description (f : System.Action) = description &&! canopy.runner.skipped
+    static member skip description (f : System.Action) = description &&! canopy.runner.classic.skipped
                 
-    static member run () = canopy.runner.run ()
+    static member run () = canopy.runner.classic.run ()
 
-    static member runFor browsers = canopy.runner.runFor browsers
+    static member runFor browsers = canopy.runner.classic.runFor browsers
         
     //core stuff
     static member start b = start b
 
     static member pin direction = pin direction
-
-    static member pinToMonitor direction = pinToMonitor direction
 
     static member switchTo b = switchTo b
 
@@ -58,8 +56,6 @@ type canopy () =
     static member url destination = url destination
 
     static member currentUrl () = currentUrl ()
-
-    static member coverage url = coverage url
 
     static member addFinder finder = addFinder finder
 

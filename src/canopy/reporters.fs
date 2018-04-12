@@ -2,26 +2,7 @@ module canopy.reporters
 
 open System
 open OpenQA.Selenium
-open types
-
-type IReporter =
-   abstract member testStart : string -> unit
-   abstract member pass : string -> unit
-   abstract member fail : Exception -> string -> byte [] -> string -> unit
-   abstract member todo : string -> unit
-   abstract member skip : string -> unit
-   abstract member testEnd : string -> unit
-   abstract member describe : string -> unit
-   abstract member contextStart : string -> unit
-   abstract member contextEnd : string -> unit
-   abstract member summary : int -> int -> int -> int -> int -> unit
-   abstract member write : string -> unit
-   abstract member suggestSelectors : string -> string list -> unit
-   abstract member quit : unit -> unit
-   abstract member suiteBegin : unit -> unit
-   abstract member suiteEnd : unit -> unit
-   abstract member coverage : string -> byte [] -> string -> unit
-   abstract member setEnvironment : string -> unit
+open canopy.types
 
 type ConsoleReporter() =
     interface IReporter with
@@ -101,8 +82,6 @@ type ConsoleReporter() =
 
         member this.suiteEnd () = ()
 
-        member this.coverage url ss _ = ()
-
         member this.todo _ = ()
 
         member this.skip id =
@@ -175,64 +154,61 @@ type TeamCityReporter(?logImagesToConsole: bool) =
 
         member this.suiteEnd () = ()
 
-        member this.coverage url ss _ = ()
-
         member this.todo _ = ()
 
         member this.skip id = teamcityReport (sprintf "testIgnored name='%s'" (tcFriendlyMessage id))
 
         member this.setEnvironment env = ()
 
-type LiveHtmlReporter(browser : BrowserStartMode, driverPath : string, ?pinBrowserRight0: bool) =
+type LiveHtmlReporter(browser : BrowserStartMode, driverPath : string, ?driverHostName0: string, ?hideCommandPromptWindow0: bool, ?pinBrowserRight0: bool) =
     let pinBrowserRight = defaultArg pinBrowserRight0 true
+    let hideCommandPromptWindow = defaultArg hideCommandPromptWindow0 false
+    let driverHostName = defaultArg driverHostName0 "127.0.0.1"
     let consoleReporter : IReporter = new ConsoleReporter() :> IReporter
+    
+    let chromeDriverService dir = 
+        let service = Chrome.ChromeDriverService.CreateDefaultService(dir);
+        service.HostName <- driverHostName
+        service.HideCommandPromptWindow <- hideCommandPromptWindow;
+        service
 
+    let chromeWithUserAgent dir userAgent =
+        let options = Chrome.ChromeOptions()
+        options.AddArgument("--user-agent=" + userAgent)
+        new Chrome.ChromeDriver(chromeDriverService dir, options) :> IWebDriver
+        
     let _browser =
         //copy pasta!
         match browser with
-        | IE -> new IE.InternetExplorerDriver(driverPath) :> IWebDriver
-        | IEWithOptions options -> new IE.InternetExplorerDriver(driverPath, options) :> IWebDriver
-        | IEWithOptionsAndTimeSpan(options, timeSpan) -> new IE.InternetExplorerDriver(driverPath, options, timeSpan) :> IWebDriver
-        | EdgeBETA -> new Edge.EdgeDriver(driverPath) :> IWebDriver
-        | Chrome | Chromium ->
-                let options = Chrome.ChromeOptions()
-                options.AddArguments("--disable-extensions")
-                options.AddArgument("disable-infobars")
-                options.AddArgument("test-type") //https://code.google.com/p/chromedriver/issues/detail?id=799
-                new Chrome.ChromeDriver(driverPath, options) :> IWebDriver
+        | Chrome ->
+            let options = Chrome.ChromeOptions()
+            options.AddArgument("--disable-extensions")
+            options.AddArgument("disable-infobars")
+            options.AddArgument("test-type") //https://code.google.com/p/chromedriver/issues/detail?id=799
+            new Chrome.ChromeDriver(chromeDriverService driverPath, options) :> IWebDriver
+        | ChromeWithOptions options ->
+            new Chrome.ChromeDriver(chromeDriverService driverPath, options) :> IWebDriver
+        | ChromeWithUserAgent userAgent -> 
+            chromeWithUserAgent driverPath userAgent
+        | ChromeWithOptionsAndTimeSpan(options, timeSpan) -> 
+            new Chrome.ChromeDriver(chromeDriverService driverPath, options, timeSpan) :> IWebDriver
         | ChromeHeadless ->
             let options = Chrome.ChromeOptions()
             options.AddArgument("--disable-extensions")
             options.AddArgument("disable-infobars")
             options.AddArgument("test-type") //https://code.google.com/p/chromedriver/issues/detail?id=799
             options.AddArgument("--headless")
-            new Chrome.ChromeDriver(driverPath, options) :> IWebDriver
-        | ChromeWithOptions options -> new Chrome.ChromeDriver(driverPath, options) :> IWebDriver
-        | ChromeWithOptionsAndTimeSpan(options, timeSpan) -> new Chrome.ChromeDriver(driverPath, options, timeSpan) :> IWebDriver
-        | ChromeWithUserAgent userAgent -> raise(System.Exception("Sorry ChromeWithUserAgent can't be used for LiveHtmlReporter"))
-        | ChromiumWithOptions options -> new Chrome.ChromeDriver(driverPath, options) :> IWebDriver
-        | Firefox -> new Firefox.FirefoxDriver() :> IWebDriver
-        | FirefoxWithProfile profile -> new Firefox.FirefoxDriver(profile) :> IWebDriver
-        | FirefoxWithPath path ->
-          let options = new Firefox.FirefoxOptions()
-          options.BrowserExecutableLocation <- path
-          new Firefox.FirefoxDriver(options) :> IWebDriver
-        | FirefoxWithUserAgent userAgent -> raise(System.Exception("Sorry FirefoxWithUserAgent can't be used for LiveHtmlReporter"))
-        | FirefoxWithPathAndTimeSpan(path, timespan) ->
-          let options = new Firefox.FirefoxOptions()
-          options.BrowserExecutableLocation <- path
-          new Firefox.FirefoxDriver(Firefox.FirefoxDriverService.CreateDefaultService(), options, timespan) :> IWebDriver
-        | FirefoxWithProfileAndTimeSpan(profile, timespan) ->
-          let options = new Firefox.FirefoxOptions()
-          options.Profile <- profile
-          new Firefox.FirefoxDriver(Firefox.FirefoxDriverService.CreateDefaultService(), options, timespan) :> IWebDriver
-        | FirefoxHeadless ->
-            let options = new Firefox.FirefoxOptions()
-            options.AddArgument("--headless")
-            new Firefox.FirefoxDriver(options) :> IWebDriver
-        | Safari -> new Safari.SafariDriver() :> IWebDriver
-        | PhantomJS | PhantomJSProxyNone -> raise(System.Exception("Sorry PhantomJS can't be used for LiveHtmlReporter"))
-        | Remote(_,_) -> raise(System.Exception("Sorry Remote can't be used for LiveHtmlReporter"))
+            new Chrome.ChromeDriver(chromeDriverService driverPath, options) :> IWebDriver
+        | Chromium ->
+            let options = Chrome.ChromeOptions()
+            options.AddArgument("--disable-extensions")
+            options.AddArgument("disable-infobars")
+            options.AddArgument("test-type") //https://code.google.com/p/chromedriver/issues/detail?id=799            
+            new Chrome.ChromeDriver(chromeDriverService driverPath, options) :> IWebDriver
+        | ChromiumWithOptions options ->
+            new Chrome.ChromeDriver(chromeDriverService driverPath, options) :> IWebDriver
+        | Remote(url, capabilities) -> new Remote.RemoteWebDriver(new Uri(url), capabilities) :> IWebDriver
+        | _ ->  failwith (sprintf "%A browser type not supported in reporter, please file an issue if you think this is incorrect" browser)
 
     let pin () =
         let (w, h) = canopy.screen.getPrimaryScreenResolution ()
@@ -252,10 +228,8 @@ type LiveHtmlReporter(browser : BrowserStartMode, driverPath : string, ?pinBrows
     let testStopWatch = System.Diagnostics.Stopwatch()
     let contextStopWatch = System.Diagnostics.Stopwatch()
     let jsEncode value = System.Web.HttpUtility.JavaScriptStringEncode(value)
-
-    new() = LiveHtmlReporter(Firefox, String.Empty)
-    new(browser : BrowserStartMode) = LiveHtmlReporter(browser, String.Empty)
-    new (browser : BrowserStartMode, driverPath : string) = LiveHtmlReporter(browser, driverPath, true)
+    
+    new (browser : BrowserStartMode, driverPath : string) = LiveHtmlReporter(browser, driverPath, "127.0.0.1", false, true)
 
     member this.browser
         with get () = _browser
@@ -389,14 +363,6 @@ type LiveHtmlReporter(browser : BrowserStartMode, driverPath : string, ?pinBrows
             canQuit <- true
             this.swallowedJS (sprintf "collapseContextsExcept('%s');" "") //cheap hack to collapse all contexts at the end of a run
 
-        member this.coverage url ss id =
-            let encodedId = jsEncode id
-            if (contexts |> List.exists (fun c -> c = "Coverage Reports")) = false then
-                contexts <- "Coverage Reports" :: contexts
-                this.swallowedJS (sprintf "addContext('%s');" "Coverage Reports")
-            this.swallowedJS (sprintf "addToContext ('%s', '%s');" "Coverage Reports" url)
-            this.swallowedJS (sprintf "updateTestInContext('%s', '%s', 'Pass', '%s');" "Coverage Reports" encodedId (Convert.ToBase64String(ss)))
-
         member this.todo id =
             let encodedId = jsEncode id
             this.swallowedJS (sprintf "updateTestInContext('%s', '%s', 'Todo', '%s');" context encodedId "")
@@ -481,7 +447,6 @@ type JUnitReporter(resultFilePath:string) =
         member this.quit () = ()
         member this.suiteBegin () = ()
         member this.suiteEnd () = ()
-        member this.coverage url ss _ = ()
         member this.todo _ = ()
         member this.skip id = ()
         member this.setEnvironment env = ()

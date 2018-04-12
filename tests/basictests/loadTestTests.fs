@@ -1,6 +1,6 @@
 module loadTestTests
 
-open canopy.runner
+open canopy.runner.classic
 open canopy.integration.loadTest
 open System.Net
 
