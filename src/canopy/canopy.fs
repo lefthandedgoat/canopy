@@ -327,4 +327,4 @@ let value = value
 let skip message = skip message browser
 
 (* documented/actions *)
-let waitForElement cssSelector = waitForElement cssSelector
+let waitForElement cssSelector = waitForElement cssSelector browser
