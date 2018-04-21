@@ -20,7 +20,7 @@ let edgeBETA = edgeBETA
 (* documented/actions *)
 let chrome = chrome
 (* documented/actions *)
-let chromium = chromium 
+let chromium = chromium
 (* documented/actions *)
 let safari = safari
 
@@ -158,7 +158,7 @@ let fastTextFromCSS selector = fastTextFromCSS selector browser
 let ( == ) item value = equals item value browser
 
 (* documented/assertions *)
-let ( != ) cssSelector value = notEquals cssSelector value browser 
+let ( != ) cssSelector value = notEquals cssSelector value browser
 
 (* documented/assertions *)
 let ( *= ) cssSelector value = oneOrManyEquals cssSelector value browser
@@ -183,12 +183,12 @@ let ( =~ ) cssSelector pattern = regexEquals cssSelector pattern browser
 
 (* documented/assertions *)
 let ( !=~ ) cssSelector pattern = regexNotEquals cssSelector pattern browser
- 
+
 (* documented/assertions *)
 let ( *~ ) cssSelector pattern = oneOrManyRegexEquals cssSelector pattern browser
 
 (* documented/assertions *)
-let is expected actual = is expected actual 
+let is expected actual = is expected actual
 
 (* documented/assertions *)
 let (===) expected actual = is expected actual
@@ -198,7 +198,7 @@ let displayed item = displayed item browser
 
 (* documented/assertions *)
 let notDisplayed item = notDisplayed item browser
-   
+
 (* documented/assertions *)
 let enabled item = enabled item browser
 
@@ -244,7 +244,7 @@ let drag cssSelectorA cssSelectorB = drag cssSelectorA cssSelectorB
 //browser related
 (* documented/actions *)
 let pin direction = pin direction browser
-    
+
 (* documented/actions *)
 let start b =
     browser <- start b
@@ -327,4 +327,4 @@ let value = value
 let skip message = skip message browser
 
 (* documented/actions *)
-let waitForElement cssSelector = waitForElement 
+let waitForElement cssSelector = waitForElement cssSelector browser
