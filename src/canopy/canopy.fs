@@ -43,7 +43,7 @@ let sleep seconds = sleep seconds
 let puts text = puts text
 
 (* documented/actions *)
-let highlight cssSelector = highlight cssSelector
+let highlight cssSelector = highlight cssSelector browser
 
 (* documented/actions *)
 let describe text = describe text browser
