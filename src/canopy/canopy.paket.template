@@ -1,6 +1,6 @@
 type file
 id canopy
-version 2.0.1
+version 2.0.2
 authors Chris Holt
 iconUrl http://lefthandedgoat.github.io/canopy/canopy_orig.jpg
 projectUrl http://lefthandedgoat.github.io/canopy/
@@ -14,10 +14,11 @@ files
   bin\Debug\netstandard2.0 ==> lib
   
 releaseNotes
-  Fixed a bug in waitForElement function signature, thanks draganjovanovic!! [PR #428](https://github.com/lefthandedgoat/canopy/pull/428)
-  
+  2.0.2 - September 9 2018
+  Fixed some small bugs
+    
 dependencies
   framework: netstandard2
 	  FSharp.Core >= 4.3.4
-	  Selenium.WebDriver >= 3.11.0
-	  System.Drawing.Common >= 4.5.0-preview1-26216-02
+	  Selenium.WebDriver >= 3.14.0
+	  System.Drawing.Common >= 4.5.0
