@@ -398,3 +398,6 @@ Update to Selenium 3.3 [Issue #351](https://github.com/lefthandedgoat/canopy/iss
 * Added parallel support
 * Added .net standard 2.0 support
 * Please read upgrade documentation http://lefthandedgoat.github.io/canopy/upgrade1to2.html
+
+#### 2.0.1 - April 21 2018
+* Fixed a bug in waitForElement function signature, thanks draganjovanovic!! [PR #428](https://github.com/lefthandedgoat/canopy/pull/428)

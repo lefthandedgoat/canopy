@@ -1,6 +1,6 @@
 type file
 id canopy
-version 2.0.0
+version 2.0.1
 authors Chris Holt
 iconUrl http://lefthandedgoat.github.io/canopy/canopy_orig.jpg
 projectUrl http://lefthandedgoat.github.io/canopy/
@@ -14,10 +14,7 @@ files
   bin\Debug\netstandard2.0 ==> lib
   
 releaseNotes
-  2.0.0 - April 7 2018
-  Added parallel support
-  Added .net standard 2.0 support
-  Please read upgrade documentation http://lefthandedgoat.github.io/canopy/upgrade1to2.html
+  Fixed a bug in waitForElement function signature, thanks draganjovanovic!! [PR #428](https://github.com/lefthandedgoat/canopy/pull/428)
   
 dependencies
   framework: netstandard2
