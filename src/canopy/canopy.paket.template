@@ -2,7 +2,7 @@ type file
 id
   canopy
 version
-  2.0.4
+  2.1.0
 authors
   Chris Holt
 iconUrl
@@ -21,7 +21,7 @@ files
   bin\Debug\netstandard2.0 ==> lib\netstandard2.0
   
 releaseNotes
-  2.0.4 - September 9 2018
+  2.1.0 - September 9 2018
   Fixed some small bugs
     
 dependencies
