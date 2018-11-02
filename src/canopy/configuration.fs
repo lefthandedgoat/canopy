@@ -25,7 +25,7 @@ let firefoxByOSType =
     | PlatformID.Unix ->
         if System.IO.File.Exists(@"/Applications/Firefox.app/Contents/MacOS/firefox-bin")
         then @"/Applications/Firefox.app/Contents/MacOS/firefox-bin" //osx
-        else @"/usr/lib/firefox-2.0" //linux, unsure of correct path
+        else @"/usr/lib/firefox/firefox" //linux
     | _ ->
         if System.IO.File.Exists(@"C:\Program Files\Mozilla Firefox\firefox.exe")
         then @"C:\Program Files\Mozilla Firefox\firefox.exe" // 64-bit version
