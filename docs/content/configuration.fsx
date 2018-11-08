@@ -47,7 +47,7 @@ firefoxDir
 * Install path for firefox
 * Defaults to pre-set OS paths
 * OSX: /Applications/Firefox.app/Contents/MacOS/firefox-bin
-* nix: /usr/lib/firefox-2.0 (probably wrong)
+* nix: /usr/lib/firefox/firefox
 * Windows: C:\Program Files (x86)\Mozilla Firefox\firefox.exe
 *)
 firefoxDir <- @"C:\Program Files (x86)\Mozilla Firefox\firefox.exe"
