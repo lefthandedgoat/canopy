@@ -49,6 +49,8 @@ open canopy.runner.classic
 open canopy.configuration
 open canopy.classic
 
+canopy.configruation.chromeDir <- System.AppContext.BaseDirectory
+
 //start an instance of chrome
 start chrome
 
