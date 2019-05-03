@@ -452,13 +452,6 @@ pin Right
 pin FullScreen
 
 (**
-pinToMonitor
----
-Move the browser to another monitor.
-*)
-pinToMonitor 2
-
-(**
 tile
 ----
 Tile listed browsers equally across your screen. 4 open browsers would each take 25% of the screen.
