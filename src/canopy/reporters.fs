@@ -96,7 +96,7 @@ type TeamCityReporter(?logImagesToConsole: bool) =
 
     let flowId = System.Guid.NewGuid().ToString()
 
-    let consoleReporter : IReporter = new ConsoleReporter() :> IReporter
+    let consoleReporter : IReporter = ConsoleReporter() :> IReporter
     let tcFriendlyMessage (message : string) =
         let message = message.Replace("|", "||")
         let message = message.Replace("'", "|'")
@@ -164,9 +164,9 @@ type LiveHtmlReporter(browser : BrowserStartMode, driverPath : string, ?driverHo
     let pinBrowserRight = defaultArg pinBrowserRight0 true
     let hideCommandPromptWindow = defaultArg hideCommandPromptWindow0 false
     let driverHostName = defaultArg driverHostName0 "127.0.0.1"
-    let consoleReporter : IReporter = new ConsoleReporter() :> IReporter
-    
-    let chromeDriverService dir = 
+    let consoleReporter : IReporter = ConsoleReporter() :> IReporter
+
+    let chromeDriverService dir =
         let service = Chrome.ChromeDriverService.CreateDefaultService(dir);
         service.HostName <- driverHostName
         service.HideCommandPromptWindow <- hideCommandPromptWindow;
@@ -176,7 +176,7 @@ type LiveHtmlReporter(browser : BrowserStartMode, driverPath : string, ?driverHo
         let options = Chrome.ChromeOptions()
         options.AddArgument("--user-agent=" + userAgent)
         new Chrome.ChromeDriver(chromeDriverService dir, options) :> IWebDriver
-        
+
     let _browser =
         //copy pasta!
         match browser with
@@ -188,9 +188,9 @@ type LiveHtmlReporter(browser : BrowserStartMode, driverPath : string, ?driverHo
             new Chrome.ChromeDriver(chromeDriverService driverPath, options) :> IWebDriver
         | ChromeWithOptions options ->
             new Chrome.ChromeDriver(chromeDriverService driverPath, options) :> IWebDriver
-        | ChromeWithUserAgent userAgent -> 
+        | ChromeWithUserAgent userAgent ->
             chromeWithUserAgent driverPath userAgent
-        | ChromeWithOptionsAndTimeSpan(options, timeSpan) -> 
+        | ChromeWithOptionsAndTimeSpan(options, timeSpan) ->
             new Chrome.ChromeDriver(chromeDriverService driverPath, options, timeSpan) :> IWebDriver
         | ChromeHeadless ->
             let options = Chrome.ChromeOptions()
@@ -203,18 +203,18 @@ type LiveHtmlReporter(browser : BrowserStartMode, driverPath : string, ?driverHo
             let options = Chrome.ChromeOptions()
             options.AddArgument("--disable-extensions")
             options.AddArgument("disable-infobars")
-            options.AddArgument("test-type") //https://code.google.com/p/chromedriver/issues/detail?id=799            
+            options.AddArgument("test-type") //https://code.google.com/p/chromedriver/issues/detail?id=799
             new Chrome.ChromeDriver(chromeDriverService driverPath, options) :> IWebDriver
         | ChromiumWithOptions options ->
             new Chrome.ChromeDriver(chromeDriverService driverPath, options) :> IWebDriver
-        | Remote(url, capabilities) -> new Remote.RemoteWebDriver(new Uri(url), capabilities) :> IWebDriver
+        | Remote(url, capabilities) -> new Remote.RemoteWebDriver(Uri(url), capabilities) :> IWebDriver
         | _ ->  failwith (sprintf "%A browser type not supported in reporter, please file an issue if you think this is incorrect" browser)
 
     let pin () =
         let (w, h) = canopy.screen.getPrimaryScreenResolution ()
         let maxWidth = w / 2
-        _browser.Manage().Window.Size <- new System.Drawing.Size(maxWidth,h)
-        _browser.Manage().Window.Position <- new System.Drawing.Point((maxWidth * 0),0)
+        _browser.Manage().Window.Size <- System.Drawing.Size(maxWidth,h)
+        _browser.Manage().Window.Position <- System.Drawing.Point((maxWidth * 0),0)
 
     let tryPin() =
         if pinBrowserRight then do pin()
@@ -228,7 +228,7 @@ type LiveHtmlReporter(browser : BrowserStartMode, driverPath : string, ?driverHo
     let testStopWatch = System.Diagnostics.Stopwatch()
     let contextStopWatch = System.Diagnostics.Stopwatch()
     let jsEncode value = System.Web.HttpUtility.JavaScriptStringEncode(value)
-    
+
     new (browser : BrowserStartMode, driverPath : string) = LiveHtmlReporter(browser, driverPath, "127.0.0.1", false, true)
 
     member this.browser
@@ -348,7 +348,7 @@ type LiveHtmlReporter(browser : BrowserStartMode, driverPath : string, ?driverHo
         member this.quit () =
           match this.reportPath with
             | Some(path) ->
-              let reportFileInfo = new IO.FileInfo(path)
+              let reportFileInfo = IO.FileInfo(path)
               this.saveReportHtml reportFileInfo.Directory.FullName reportFileInfo.Name
             | None -> consoleReporter.write "Not saving report"
 
@@ -377,7 +377,7 @@ type LiveHtmlReporter(browser : BrowserStartMode, driverPath : string, ?driverHo
 
 type JUnitReporter(resultFilePath:string) =
 
-    let consoleReporter : IReporter = new ConsoleReporter() :> IReporter
+    let consoleReporter : IReporter = ConsoleReporter() :> IReporter
 
     let testStopWatch = System.Diagnostics.Stopwatch()
     let testTimes = ResizeArray<string * float>()
@@ -423,7 +423,7 @@ type JUnitReporter(resultFilePath:string) =
             let resultFile = System.IO.FileInfo(resultFilePath)
             resultFile.Directory.Create()
             consoleReporter.write <| sprintf "Saving results to %s" resultFilePath
-            let enc = new System.Text.UTF8Encoding(false)
+            let enc = System.Text.UTF8Encoding(false)
             let bytes = enc.GetBytes xml
             use fs = new System.IO.FileStream(resultFilePath, System.IO.FileMode.OpenOrCreate)
             fs.Write(bytes, 0, bytes.Length)

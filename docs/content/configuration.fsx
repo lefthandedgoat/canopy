@@ -270,3 +270,21 @@ failureMessagesThatShoulBeTreatedAsSkip
 * Default is empty list
 *)
 failureMessagesThatShoulBeTreatedAsSkip <- ["message 1"; "message 2"]
+
+(**
+webdriverPort
+------------
+* Allow specifying a port on which the **WebDriver** instance wil start (instead of a random one)
+* Defualt is `None` and it **must** be an `Option` type, i.e. `None` or `Some x`
+* Do **NOT** use if running tests in parallel!
+*)
+webdriverPort <- Some 4444
+
+(**
+acceptInsecureSslCerts
+------------
+* Allow the driver to navigate to sites with self-signed SSL certificates
+* Crucial for Chrome Headless testing
+* Default is true
+*)
+acceptInsecureSslCerts <- true
