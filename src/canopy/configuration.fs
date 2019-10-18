@@ -69,7 +69,7 @@ let mutable failIfAnyWipTests = false
 (* documented/configuration *)
 let mutable runFailedContextsFirst = false
 (* documented/configuration *)
-let mutable reporter : IReporter = ConsoleReporter() :> IReporter
+let mutable reporter : IReporter = new ConsoleReporter() :> IReporter
 (* documented/configuration *)
 let mutable disableSuggestOtherSelectors = false
 (* documented/configuration *)
