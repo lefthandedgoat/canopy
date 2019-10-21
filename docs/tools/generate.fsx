@@ -85,4 +85,4 @@ let buildDocumentation () =
 // Generate
 copyFiles()
 buildDocumentation()
-//buildReference()
+buildReference()
