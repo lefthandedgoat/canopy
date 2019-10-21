@@ -787,6 +787,12 @@ let private chromeDriverService dir =
     let service = Chrome.ChromeDriverService.CreateDefaultService(dir);
     service.HostName <- driverHostName
     service.HideCommandPromptWindow <- hideCommandPromptWindow;
+    match acceptInsecureSslCerts with
+    | false -> ()
+    | true -> service.WhitelistedIPAddresses <- ""
+    match webdriverPort with
+    | Some value -> service.Port <- value
+    | None -> ()
     service
 
 let private chromeWithUserAgent dir userAgent =

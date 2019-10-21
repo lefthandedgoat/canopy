@@ -94,6 +94,10 @@ let mutable skipRemainingTestsInContextOnFailure = false
 let mutable failureMessagesThatShoulBeTreatedAsSkip : string list = []
 (* documented/configuration *)
 let mutable driverHostName = "127.0.0.1"
+(* documented/configuration *)
+let mutable webdriverPort: int option = None
+(* documented/configuration *)
+let mutable acceptInsecureSslCerts = true
 
 //do not touch
 let mutable wipTest = false
