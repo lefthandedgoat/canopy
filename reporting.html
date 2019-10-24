@@ -16,8 +16,8 @@
     <script src="//netdna.bootstrapcdn.com/twitter-bootstrap/2.2.1/js/bootstrap.min.js"></script>
     <link href="//netdna.bootstrapcdn.com/twitter-bootstrap/2.2.1/css/bootstrap-combined.min.css" rel="stylesheet">
 
-    <link type="text/css" rel="stylesheet" href="/canopy/content/style.css" />
-    <script type="text/javascript" src="/canopy/content/tips.js"></script>
+    <link type="text/css" rel="stylesheet" href="file://C:\projects\canopy\docs\tools\../output/content/style.css" />
+    <script type="text/javascript" src="file://C:\projects\canopy\docs\tools\../output/content/tips.js"></script>
     <!-- HTML5 shim, for IE6-8 support of HTML5 elements -->
     <!--[if lt IE 9]>
       <script src="//html5shim.googlecode.com/svn/trunk/html5.js"></script>
@@ -41,7 +41,7 @@
           <li><a href="http://www.tryfsharp.org/">tryfsharp.org</a></li>
           <li><a href="https://github.com/lefthandedgoat/canopy">github page</a></li>
         </ul>
-        <h3 class="muted"><a href="/canopy/index.html">canopy</a></h3>
+        <h3 class="muted"><a href="file://C:\projects\canopy\docs\tools\../output/index.html">canopy</a></h3>
       </div>
       <hr />
       <div class="row">
@@ -57,9 +57,9 @@
 <span class="l">2: </span>
 <span class="l">3: </span>
 </pre></td>
-<td class="snippet"><pre class="fssnip highlighted"><code lang="fsharp"><span class="k">open</span> <span onmouseout="hideTip(event, 'fs4', 4)" onmouseover="showTip(event, 'fs4', 4)" class="i">configuration</span>
-<span class="k">open</span> <span onmouseout="hideTip(event, 'fs5', 5)" onmouseover="showTip(event, 'fs5', 5)" class="i">reporters</span>
-<span onmouseout="hideTip(event, 'fs6', 6)" onmouseover="showTip(event, 'fs6', 6)" class="v">reporter</span> <span class="o">&lt;-</span> <span class="k">new</span> <span onmouseout="hideTip(event, 'fs7', 7)" onmouseover="showTip(event, 'fs7', 7)" class="t">LiveHtmlReporter</span>() <span class="o">:&gt;</span> <span class="i">IReporter</span>
+<td class="snippet"><pre class="fssnip highlighted"><code lang="fsharp"><span class="k">open</span> <span class="i">configuration</span>
+<span class="k">open</span> <span class="i">reporters</span>
+<span class="i">reporter</span> <span class="o">&lt;-</span> <span class="k">new</span> <span class="i">LiveHtmlReporter</span>() <span class="o">:&gt;</span> <span class="i">IReporter</span>
 </code></pre></td>
 </tr>
 </table>
@@ -72,9 +72,9 @@
 <span class="l">4: </span>
 <span class="l">5: </span>
 </pre></td>
-<td class="snippet"><pre class="fssnip highlighted"><code lang="fsharp"><span class="k">open</span> <span onmouseout="hideTip(event, 'fs4', 8)" onmouseover="showTip(event, 'fs4', 8)" class="i">configuration</span>
-<span class="k">open</span> <span onmouseout="hideTip(event, 'fs5', 9)" onmouseover="showTip(event, 'fs5', 9)" class="i">reporters</span>
-<span onmouseout="hideTip(event, 'fs6', 10)" onmouseover="showTip(event, 'fs6', 10)" class="v">reporter</span> <span class="o">&lt;-</span> <span class="k">new</span> <span onmouseout="hideTip(event, 'fs8', 11)" onmouseover="showTip(event, 'fs8', 11)" class="t">TeamCityReporter</span>() <span class="o">:&gt;</span> <span class="i">IReporter</span>
+<td class="snippet"><pre class="fssnip highlighted"><code lang="fsharp"><span class="k">open</span> <span class="i">configuration</span>
+<span class="k">open</span> <span class="i">reporters</span>
+<span class="i">reporter</span> <span class="o">&lt;-</span> <span class="k">new</span> <span class="i">TeamCityReporter</span>() <span class="o">:&gt;</span> <span class="i">IReporter</span>
 
 <span class="c">//screenshot is TODO</span>
 </code></pre></td>
@@ -86,29 +86,20 @@
 <span class="l">2: </span>
 <span class="l">3: </span>
 </pre></td>
-<td class="snippet"><pre class="fssnip highlighted"><code lang="fsharp"><span class="k">open</span> <span onmouseout="hideTip(event, 'fs4', 12)" onmouseover="showTip(event, 'fs4', 12)" class="i">configuration</span>
-<span class="k">open</span> <span onmouseout="hideTip(event, 'fs5', 13)" onmouseover="showTip(event, 'fs5', 13)" class="i">reporters</span>
-<span onmouseout="hideTip(event, 'fs6', 14)" onmouseover="showTip(event, 'fs6', 14)" class="v">reporter</span> <span class="o">&lt;-</span> <span class="k">new</span> <span onmouseout="hideTip(event, 'fs9', 15)" onmouseover="showTip(event, 'fs9', 15)" class="t">JUnitReporter</span>(<span class="s">&quot;./TestResults.xml&quot;</span>) <span class="o">:&gt;</span> <span class="i">IReporter</span>
+<td class="snippet"><pre class="fssnip highlighted"><code lang="fsharp"><span class="k">open</span> <span class="i">configuration</span>
+<span class="k">open</span> <span class="i">reporters</span>
+<span class="i">reporter</span> <span class="o">&lt;-</span> <span class="k">new</span> <span class="i">JUnitReporter</span>(<span class="s">&quot;./TestResults.xml&quot;</span>) <span class="o">:&gt;</span> <span class="i">IReporter</span>
 </code></pre></td>
 </tr>
 </table>
 
-<div class="tip" id="fs1">namespace canopy</div>
-<div class="tip" id="fs2">namespace canopy.runner</div>
-<div class="tip" id="fs3">namespace System</div>
-<div class="tip" id="fs4">module configuration<br /><br />from canopy</div>
-<div class="tip" id="fs5">module reporters<br /><br />from canopy</div>
-<div class="tip" id="fs6">val mutable reporter : types.IReporter<br /><br />Full name: canopy.configuration.reporter</div>
-<div class="tip" id="fs7">Multiple items<br /><br />--------------------<br />new : browser:types.BrowserStartMode * driverPath:string -&gt; LiveHtmlReporter<br />new : browser:types.BrowserStartMode * driverPath:string * ?driverHostName0:string * ?hideCommandPromptWindow0:bool * ?pinBrowserRight0:bool -&gt; LiveHtmlReporter</div>
-<div class="tip" id="fs8">Multiple items<br />type TeamCityReporter =<br />&#160;&#160;interface IReporter<br />&#160;&#160;new : ?logImagesToConsole:bool -&gt; TeamCityReporter<br /><br />Full name: canopy.reporters.TeamCityReporter<br /><br />--------------------<br />new : ?logImagesToConsole:bool -&gt; TeamCityReporter</div>
-<div class="tip" id="fs9">Multiple items<br />type JUnitReporter =<br />&#160;&#160;interface IReporter<br />&#160;&#160;new : resultFilePath:string -&gt; JUnitReporter<br /><br />Full name: canopy.reporters.JUnitReporter<br /><br />--------------------<br />new : resultFilePath:string -&gt; JUnitReporter</div>
 
         </div>
         <div class="span3">
           <img src="/canopy/img/logo.jpg" alt="F# Project" style="width:250px;margin:10px" />  
           <ul class="nav nav-list" id="menu" style="margin-top: 20px;">
             <li class="nav-header">canopy</li>
-            <li><a href="/canopy/index.html">Home page</a></li>
+            <li><a href="file://C:\projects\canopy\docs\tools\../output/index.html">Home page</a></li>
             <li class="divider"></li>
             <li><a href="https://www.nuget.org/packages/canopy/">Get Library via NuGet</a></li>
             <li><a href="https://github.com/lefthandedgoat/canopy">Source Code on GitHub</a></li>
@@ -116,15 +107,15 @@
             <li><a href="https://github.com/lefthandedgoat/canopy/blob/master/RELEASE_NOTES.md">Release Notes</a></li>
             
 	          <li class="nav-header">Getting started</li>
-            <li><a href="/canopy/upgrade1to2.html">Upgrade 1.x -> 2.x notes</a></li>
-            <li><a href="/canopy/actions.html">Actions</a></li>
-            <li><a href="/canopy/assertions.html">Assertions</a></li>
-            <li><a href="/canopy/testing.html">Testing</a></li>
-			<li><a href="/canopy/configuration.html">Configuration</a></li>
-            <li><a href="/canopy/reporting.html">Reporting</a></li>
+            <li><a href="file://C:\projects\canopy\docs\tools\../output/upgrade1to2.html">Upgrade 1.x -> 2.x notes</a></li>
+            <li><a href="file://C:\projects\canopy\docs\tools\../output/actions.html">Actions</a></li>
+            <li><a href="file://C:\projects\canopy\docs\tools\../output/assertions.html">Assertions</a></li>
+            <li><a href="file://C:\projects\canopy\docs\tools\../output/testing.html">Testing</a></li>
+			<li><a href="file://C:\projects\canopy\docs\tools\../output/configuration.html">Configuration</a></li>
+            <li><a href="file://C:\projects\canopy\docs\tools\../output/reporting.html">Reporting</a></li>
 
             <li class="nav-header">Documentation</li>
-            <li><a href="/canopy/reference/index.html">API Reference</a></li>
+            <li><a href="file://C:\projects\canopy\docs\tools\../output/reference/index.html">API Reference</a></li>
 
             <li class="nav-header">Testimonials</li>
             <li><a href="http://amirrajan.github.com/Oak/">Oak MVC</a></li>
