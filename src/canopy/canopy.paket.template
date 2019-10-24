@@ -2,7 +2,7 @@ type file
 id
   canopy
 version
-  2.1.0
+  2.1.1
 authors
   Chris Holt
 iconUrl
@@ -21,8 +21,9 @@ files
   bin\Debug\netstandard2.0 ==> lib\netstandard2.0
   
 releaseNotes
-  2.1.0 - September 9 2018
-  Fixed some small bugs
+  2.1.1 - October 23 2019
+  Added option to select WebDriver port and allow insecure SSL cert
+  Thanks @OmanF (https://github.com/lefthandedgoat/canopy/pull/482)
     
 dependencies
   framework: netstandard2.0

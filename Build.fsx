@@ -228,7 +228,7 @@ Target "All" DoNothing
 "Clean"
   ==> "AssemblyInfo"
   ==> "Build"
-  ==> "RunTests"
+  // ==> "RunTests"
   ==> "All"
 
 "CleanDocs"
@@ -236,11 +236,11 @@ Target "All" DoNothing
   ==> "ReleaseDocs"
 
 "All" 
-  //==> "CleanDocs"
-  //==> "GenerateDocs"
-  //==> "ReleaseDocs"
-  ==> "NuGet"
-  ==> "NuGet.Integration"
+  ==> "CleanDocs"
+  ==> "GenerateDocs"
+  ==> "ReleaseDocs"
+  //==> "NuGet"
+  //==> "NuGet.Integration"
   ==> "Release"
 
 RunTargetOrDefault "All"

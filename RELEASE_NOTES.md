@@ -401,3 +401,7 @@ Update to Selenium 3.3 [Issue #351](https://github.com/lefthandedgoat/canopy/iss
 
 #### 2.0.1 - April 21 2018
 * Fixed a bug in waitForElement function signature, thanks draganjovanovic!! [PR #428](https://github.com/lefthandedgoat/canopy/pull/428)
+
+#### 2.1.1 - October 23 2019
+* Added option to select WebDriver port and allow insecure SSL cert
+* Thanks @OmanF (https://github.com/lefthandedgoat/canopy/pull/482)
