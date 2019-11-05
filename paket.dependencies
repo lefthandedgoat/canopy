@@ -3,11 +3,11 @@ source https://www.nuget.org/api/v2/
 framework: netstandard2.0, net461
 
 nuget NuGet.CommandLine
-nuget FSharp.Core >= 4.3.4 lowest_matching:true
+nuget FSharp.Core >= 4.7.0 lowest_matching:true
 nuget Selenium.WebDriver
-nuget FAKE
+nuget FAKE prerelease
 nuget FSharp.Formatting
 nuget FSharp.Data
 nuget Selenium.WebDriver.ChromeDriver
 nuget Selenium.WebDriver.GeckoDriver
-nuget System.Drawing.Common >= 4.5.0
+nuget System.Drawing.Common >= 4.6.0
