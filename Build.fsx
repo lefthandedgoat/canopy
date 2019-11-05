@@ -2,11 +2,9 @@
 // FAKE build script 
 // --------------------------------------------------------------------------------------
 #r @"packages/FAKE/tools/FakeLib.dll"
-open Fake 
-open Fake.Git
-open Fake.AssemblyInfoFile
-open Fake.ReleaseNotesHelper
+open Fake
 open System
+open Fake.Core.TargetOperators
 
 // --------------------------------------------------------------------------------------
 // Project-specific details below
@@ -54,42 +52,42 @@ let gitName = "canopy"
 
 // Read additional information from the release notes document
 Environment.CurrentDirectory <- __SOURCE_DIRECTORY__
-let release = parseReleaseNotes (IO.File.ReadAllLines "RELEASE_NOTES.md")
+let release = Fake.Core.ReleaseNotes.parse (IO.File.ReadAllLines "RELEASE_NOTES.md")
 
 // Generate assembly info files with the right version & up-to-date information
-Target "AssemblyInfo" (fun _ ->
+Fake.Core.Target.create "AssemblyInfo" (fun _ ->
   let fileName = "src/" + project + "/AssemblyInfo.fs"
-  CreateFSharpAssemblyInfo fileName
-      [ Attribute.Title project
-        Attribute.Product project
-        Attribute.Description summary
-        Attribute.Version release.AssemblyVersion
-        Attribute.FileVersion release.AssemblyVersion ] 
+  Fake.DotNet.AssemblyInfoFile.createFSharp fileName
+      [ Fake.DotNet.AssemblyInfo.Title project
+        Fake.DotNet.AssemblyInfo.Product project
+        Fake.DotNet.AssemblyInfo.Description summary
+        Fake.DotNet.AssemblyInfo.Version release.AssemblyVersion
+        Fake.DotNet.AssemblyInfo.FileVersion release.AssemblyVersion ] 
 
   let fileName = "src/" + projectIntegration + "/AssemblyInfo.fs"
-  CreateFSharpAssemblyInfo fileName
-      [ Attribute.Title projectIntegration
-        Attribute.Product projectIntegration
-        Attribute.Description summary
-        Attribute.Version release.AssemblyVersion
-        Attribute.FileVersion release.AssemblyVersion ] 
+  Fake.DotNet.AssemblyInfoFile.createFSharp fileName
+      [ Fake.DotNet.AssemblyInfo.Title projectIntegration
+        Fake.DotNet.AssemblyInfo.Product projectIntegration
+        Fake.DotNet.AssemblyInfo.Description summary
+        Fake.DotNet.AssemblyInfo.Version release.AssemblyVersion
+        Fake.DotNet.AssemblyInfo.FileVersion release.AssemblyVersion ] 
 )
 
 // --------------------------------------------------------------------------------------
 // Clean build results
 
-Target "Clean" (fun _ ->
-    CleanDirs ["bin"; "temp"]
+Fake.Core.Target.create "Clean" (fun _ ->
+    Fake.IO.Shell.cleanDirs ["bin"; "temp"]
 )
 
-Target "CleanDocs" (fun _ ->
-    CleanDirs ["docs/output"]
+Fake.Core.Target.create "CleanDocs" (fun _ ->
+    Fake.IO.Shell.cleanDirs ["docs/output"]
 )
 
 // --------------------------------------------------------------------------------------
 // Build library & test project
 
-Target "Build" (fun _ ->
+Fake.Core.Target.create "Build" (fun _ ->
     !! (solutionFile + "*.sln")
     |> MSBuild "" "Rebuild" [ "Configuration", "Release"; "VisualStudioVersion", "15.0" ]
     |> ignore
@@ -98,7 +96,7 @@ Target "Build" (fun _ ->
 // --------------------------------------------------------------------------------------
 // Run the unit tests using test runner
 
-Target "RunTests" (fun _ ->
+Fake.Core.Target.create "RunTests" (fun _ ->
 //    ()
     !! testAssemblies 
     |> Seq.iter (fun testFile ->
@@ -138,37 +136,37 @@ let executeFAKEWithOutput workingDirectory script fsiargs envArgs =
 
 // Documentation
 let buildDocumentationTarget fsiargs target =
-    trace (sprintf "Building documentation (%s), this could take some time, please wait..." target)
+    Fake.Core.Trace.trace (sprintf "Building documentation (%s), this could take some time, please wait..." target)
     let exit = executeFAKEWithOutput "docs/tools" "generate.fsx" fsiargs ["target", target]
     if exit <> 0 then
         failwith "generating reference documentation failed"
     ()
 
-Target "GenerateDocs" (fun _ ->
+Fake.Core.Target.create "GenerateDocs" (fun _ ->
     buildDocumentationTarget "-D:RELEASE -d:REFERENCE" "Default"
  )
 
 // --------------------------------------------------------------------------------------
 // Release Scripts
 
-Target "ReleaseDocs" (fun _ ->
+Fake.Core.Target.create "ReleaseDocs" (fun _ ->
     let tempDocsDir = "temp/gh-pages"
-    CleanDir tempDocsDir
-    Repository.cloneSingleBranch "" (gitHome + "/" + gitName + ".git") "gh-pages" tempDocsDir
+    Fake.IO.Shell.cleanDir tempDocsDir
+    Fake.Tools.Git.Repository.cloneSingleBranch "" (gitHome + "/" + gitName + ".git") "gh-pages" tempDocsDir
 
-    fullclean tempDocsDir
-    CopyRecursive "docs/output" tempDocsDir true |> tracefn "%A"
-    StageAll tempDocsDir
-    Commit tempDocsDir (sprintf "Update generated documentation for version %s" release.NugetVersion)
-    Branches.push tempDocsDir
+    Fake.Tools.Git.Repository.fullclean tempDocsDir
+    Fake.IO.Shell.copyRecursive "docs/output" tempDocsDir true |> Fake.Core.Trace.tracefn "%A"
+    Fake.Tools.Git.Staging.stageAll tempDocsDir
+    Fake.Tools.Git.Commit.exec tempDocsDir (sprintf "Update generated documentation for version %s" release.NugetVersion)
+    Fake.Tools.Git.Branches.push tempDocsDir
 )
 
-Target "Release" DoNothing
+Fake.Core.Target.create "Release" ignore
 
 // --------------------------------------------------------------------------------------
 // Run all targets by default. Invoke 'build <Target>' to override
 
-Target "All" DoNothing
+Fake.Core.Target.create "All" ignore
 
 "Clean"
   ==> "AssemblyInfo"
@@ -186,4 +184,4 @@ Target "All" DoNothing
   ==> "ReleaseDocs"
   ==> "Release"
 
-RunTargetOrDefault "All"
+Fake.Core.Target.runOrDefault "All"
