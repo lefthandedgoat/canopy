@@ -5,6 +5,8 @@
 open Fake
 open System
 open Fake.Core.TargetOperators
+open Fake.IO.Globbing.Operators
+open Fake.IO.FileSystemOperators
 
 // --------------------------------------------------------------------------------------
 // Project-specific details below
@@ -89,7 +91,7 @@ Fake.Core.Target.create "CleanDocs" (fun _ ->
 
 Fake.Core.Target.create "Build" (fun _ ->
     !! (solutionFile + "*.sln")
-    |> MSBuild "" "Rebuild" [ "Configuration", "Release"; "VisualStudioVersion", "15.0" ]
+    |> Fake.DotNet.MSBuild.run id "" "Rebuild" [ "Configuration", "Release"; "VisualStudioVersion", "15.0" ]
     |> ignore
 )
 
@@ -97,7 +99,6 @@ Fake.Core.Target.create "Build" (fun _ ->
 // Run the unit tests using test runner
 
 Fake.Core.Target.create "RunTests" (fun _ ->
-//    ()
     !! testAssemblies 
     |> Seq.iter (fun testFile ->
         let result =
