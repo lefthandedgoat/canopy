@@ -166,12 +166,12 @@ let private runtest (suite : suite) (test : Test) =
 
               match testResult with
               | Skip -> Skip
-              | _ -> 
+              | _ ->
                 let afterResult = tryTest test suite (suite.After)
                 match testResult with
                 | Failed -> testResult
                 | _ -> afterResult
-                        
+
         failureMessage <- null
         result
     else
@@ -238,35 +238,32 @@ let run () =
     reporter.suiteEnd()
 
 (* documented/testing *)
-let runFor browsers =
+let runFor (browsers: Browsers) =
     // suites are in reverse order and have to be reversed before running the tests
     let currentSuites = suites
-    
-    match box browsers with
-        | :? (canopy.types.BrowserStartMode list) as browsers ->
+
+    match browsers with
+        | BrowserStartModes browsers ->
             let newSuites =
               browsers
               |> List.rev
-              |> List.map (fun browser ->
+              |> List.collect (fun browser ->
                   let suite = new suite()
                   suite.Context <- sprintf "Running tests with %s browser" (toString browser)
-                  suite.Once <- fun _ -> start browser                                
+                  suite.Once <- fun _ -> start browser
                   let currentSuites2 = currentSuites |> List.map(fun suite -> suite.Clone())
                   currentSuites2 |> List.iter (fun suite -> suite.Context <- sprintf "(%s) %s" (toString browser) suite.Context)
                   currentSuites2 @ [suite])
-              |> List.concat
             suites <- newSuites
-        | :? (IWebDriver list) as browsers ->
+        | WebDrivers browsers ->
             let newSuites =
               browsers
               |> List.rev
-              |> List.map (fun browser ->
+              |> List.collect (fun browser ->
                   let suite = new suite()
-                  suite.Context <- sprintf "Running tests with %s browser" (browser.ToString())                
+                  suite.Context <- sprintf "Running tests with %s browser" (browser.ToString())
                   suite.Once <- fun _ -> switchTo browser
                   let currentSuites2 = currentSuites |> List.map(fun suite -> suite.Clone())
                   currentSuites2 |> List.iter (fun suite -> suite.Context <- sprintf "(%s) %s" (browser.ToString()) suite.Context)
                   currentSuites2 @ [suite])
-              |> List.concat
             suites <- newSuites
-        | _ -> raise <| Exception "I dont know what you have given me"

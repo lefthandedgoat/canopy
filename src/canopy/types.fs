@@ -112,3 +112,7 @@ type IReporter =
    abstract member suiteBegin : unit -> unit
    abstract member suiteEnd : unit -> unit
    abstract member setEnvironment : string -> unit
+
+type Browsers =
+| BrowserStartModes of BrowserStartMode list
+| WebDrivers of IWebDriver list
