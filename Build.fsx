@@ -111,61 +111,6 @@ Target "RunTests" (fun _ ->
 )
 
 // --------------------------------------------------------------------------------------
-// Build a NuGet package
-
-Target "NuGet" (fun _ ->
-    CleanDirs ["temp"]
-    CreateDir "temp/lib"
-    
-    XCopy @"./bin" "temp/lib"
-    !! @"temp/lib/*.*"
-      -- @"temp/lib/canopy.???"
-      |> Seq.iter (System.IO.File.Delete)
-
-    NuGet (fun p -> 
-        { p with   
-            Authors = authors
-            Project = project
-            Summary = summary
-            Description = description
-            Version = release.NugetVersion
-            ReleaseNotes = String.Join(Environment.NewLine, release.Notes)
-            Tags = tags
-            WorkingDir = "temp"
-            OutputPath = "bin"
-            AccessKey = getBuildParamOrDefault "nugetkey" ""
-            Publish = hasBuildParam "nugetkey"
-            Dependencies = [] })
-        ("nuget/" + project + ".nuspec")
-)
-
-Target "NuGet.Integration" (fun _ ->
-    CleanDirs ["temp"]
-    CreateDir "temp/lib"
-    
-    XCopy @"./bin" "temp/lib"
-    !! @"temp/lib/*.*"
-      -- @"temp/lib/canopy.integration.???"
-      |> Seq.iter (System.IO.File.Delete)
-
-    NuGet (fun p -> 
-        { p with   
-            Authors = authors
-            Project = projectIntegration
-            Summary = summary
-            Description = descriptionIntegration
-            Version = release.NugetVersion
-            ReleaseNotes = String.Join(Environment.NewLine, release.Notes)
-            Tags = tags
-            WorkingDir = "temp"
-            OutputPath = "bin"
-            AccessKey = getBuildParamOrDefault "nugetkey" ""
-            Publish = hasBuildParam "nugetkey"
-            Dependencies = [] })
-        ("nuget/canopy.integration.nuspec")
-)
-
-// --------------------------------------------------------------------------------------
 // Generate the documentation
 
 let fakePath = "packages" @@ "FAKE" @@ "tools" @@ "FAKE.exe"
@@ -239,8 +184,6 @@ Target "All" DoNothing
   ==> "CleanDocs"
   ==> "GenerateDocs"
   ==> "ReleaseDocs"
-  //==> "NuGet"
-  //==> "NuGet.Integration"
   ==> "Release"
 
 RunTargetOrDefault "All"
