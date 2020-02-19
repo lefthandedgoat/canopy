@@ -1,9 +1,4 @@
-@echo off
-cls
+echo Restoring dotnet tools...
+dotnet tool restore
 
-.paket\paket.exe restore -v
-if errorlevel 1 (
-  exit /b %errorlevel%
-)
-
-packages\FAKE\tools\FAKE.exe build.fsx %*
+dotnet fake build -t %*

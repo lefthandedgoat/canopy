@@ -1,0 +1,25 @@
+# EditorConfig is awesome:
+http://EditorConfig.org
+
+# top-most EditorConfig file
+root = true
+
+# Default settings:
+# A newline ending every file
+# Use 4 spaces as indentation
+[*]
+insert_final_newline = true
+indent_style = space
+indent_size = 4
+
+[*.{fs,fsi,fsx,config}]
+charset = utf-8
+trim_trailing_whitespace = true
+
+[paket.*]
+trim_trailing_whitespace = true
+indent_size = 2
+
+[*.paket.references]
+trim_trailing_whitespace = true
+indent_size = 2

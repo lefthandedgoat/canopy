@@ -1,0 +1,23 @@
+<html>
+    <head>
+        <title>canopy testing page</title>
+        <script src="http://code.jquery.com/jquery-1.9.1.min.js"></script>
+    </head>
+
+    <body>
+
+	<label id="displayed">Displayed</label>
+	
+	<ul id="list">		
+	</ul>
+    
+    <script type="text/javascript">
+        $(document).ready(function () {
+			$("#displayed").hide();
+            setTimeout(function () { $("#displayed").show(); }, 2000)      			
+		});        
+    </script>
+
+    </body>
+</html>
+

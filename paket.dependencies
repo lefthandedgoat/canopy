@@ -3,11 +3,45 @@ source https://www.nuget.org/api/v2/
 framework: netstandard2.0, net461
 
 nuget NuGet.CommandLine
-nuget FSharp.Core >= 4.3.4 lowest_matching:true
+nuget FSharp.Core >= 4.7.0 lowest_matching:true
 nuget Selenium.WebDriver
-nuget FAKE
+nuget FAKE prerelease
 nuget FSharp.Formatting
 nuget FSharp.Data
 nuget Selenium.WebDriver.ChromeDriver
 nuget Selenium.WebDriver.GeckoDriver
-nuget System.Drawing.Common >= 4.5.0
+nuget System.Drawing.Common >= 4.6.0
+
+// [ FAKE GROUP ]
+group Build
+    source https://www.nuget.org/api/v2
+    storage: none
+    nuget Expecto
+    nuget YoloDev.Expecto.TestSdk
+    nuget Microsoft.NET.Test.Sdk 15.7.2
+    nuget Fake.IO.FileSystem 5.19.0
+    nuget Fake.Core.Target 5.19.0
+    nuget Fake.Core.ReleaseNotes 5.19.0
+    nuget FAKE.Core.Environment 5.19.1
+    nuget Fake.DotNet.Cli 5.19.0
+    nuget FAKE.Core.Process 5.19.0
+    nuget Fake.DotNet.AssemblyInfoFile 5.19.0
+    nuget Fake.Tools.Git 5.19.0
+    nuget Fake.DotNet.Paket 5.19.0
+    nuget Fake.Api.GitHub 5.19.0
+    nuget Fake.BuildServer.AppVeyor 5.19.0
+    nuget Fake.BuildServer.Travis 5.19.0
+    nuget Argu
+
+group Docs
+    storage: none
+    source https://www.nuget.org/api/v2
+    source https://api.nuget.org/v3/index.json
+    nuget Argu
+    nuget FSharp.Core
+    nuget Fake.IO.FileSystem
+    nuget FAKE.Core.Environment
+    nuget Fake.DotNet.Cli
+    nuget FSharp.Literate
+    nuget Fable.React
+    nuget Dotnet.ProjInfo.Workspace.FCS

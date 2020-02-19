@@ -1,0 +1,9 @@
+{
+    "recommendations": [
+        "ionide.ionide-paket",
+        "ionide.ionide-fsharp",
+        "ionide.ionide-fake",
+        "ms-vscode.csharp",
+        "editorConfig.editorConfig"
+    ]
+}

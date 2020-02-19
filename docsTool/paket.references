@@ -1,0 +1,8 @@
+group Docs
+Argu
+FSharp.Core
+Fake.IO.FileSystem
+Fake.DotNet.Cli
+FSharp.Literate
+Fable.React
+Dotnet.ProjInfo.Workspace.FCS

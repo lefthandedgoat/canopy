@@ -1,18 +1,9 @@
-#!/bin/bash
+#!/usr/bin/env bash
 
-mono .paket/paket.exe restore -v
-exit_code=$?
-if [ $exit_code -ne 0 ]; then
-	exit $exit_code
-fi
+set -eu
+set -o pipefail
 
-#workaround assembly resolution issues in build.fsx
-export FSHARPI=`which fsharpi`
-cat - > fsharpi <<"EOF"
-#!/bin/bash
-libdir=$PWD/packages/FAKE/tools/
-$FSHARPI --lib:$libdir $@
-EOF
-chmod +x fsharpi
-mono packages/FAKE/tools/FAKE.exe Build.fsx $@
-rm fsharpi
+echo "Restoring dotnet tools..."
+dotnet tool restore
+
+PAKET_SKIP_RESTORE_TARGETS=true FAKE_DETAILED_ERRORS=true dotnet fake build -t "$@"

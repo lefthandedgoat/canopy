@@ -1,0 +1,28 @@
+<html>
+    <head>
+        <title>canopy testing page</title>
+        <script src="http://code.jquery.com/jquery-1.9.1.min.js"></script>
+    </head>
+
+    <body>
+
+	<label id="wait_for">Not Done</label>
+	
+	<ul id="list">		
+	</ul>
+    
+    <script type="text/javascript">
+        $(document).ready(function () {
+            setTimeout(function () { $("#wait_for").html("Done!"); }, 2000)      			
+            setTimeout(function () { $("#wait_for").after('<div id=wait_for_2>Done!!</div>'); }, 2500)      			
+            setTimeout(function () { $("#list").append('<li class="number">1</li>'); }, 400)      
+            setTimeout(function () { $("#list").append('<li class="number">2</li>'); }, 800)      
+            setTimeout(function () { $("#list").append('<li class="number">3</li>'); }, 1200)      
+            setTimeout(function () { $("#list").append('<li class="number">4</li>'); }, 1600)      
+            setTimeout(function () { $("#list").append('<li class="number">5</li>'); }, 2000)      
+		});        
+    </script>
+
+    </body>
+</html>
+

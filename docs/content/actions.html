@@ -1,0 +1,819 @@
+<!doctype html>
+<html data-reactroot="" lang="en"><head><title>canopy docs / actions.html-canopy</title><meta name="viewport" content="width=device-width, initial-scale=1" /><link href="https://jeremybellows.github.io/canopy/content/toggle-bootstrap.min.css?version=637176971940993473" type="text/css" rel="stylesheet" /><link href="https://jeremybellows.github.io/canopy/content/toggle-bootstrap-dark.min.css?version=637176971940993473" type="text/css" rel="stylesheet" /><link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.11.2/css/all.min.css" rel="stylesheet" integrity="sha384-KA6wR/X5RY4zFAHpv/CnoG2UW1uogYfdnP67Uv7eULvTveboZJg0qUpmJZb5VqzN" crossorigin="anonymous" /><link href="https://jeremybellows.github.io/canopy/content/style.css?version=637176971940993473" type="text/css" rel="stylesheet" /></head><body><nav class="navbar navbar-expand-md sticky-top navbar-dark bg-dark"><a class="navbar-brand" href="https://jeremybellows.github.io/canopy/index.html"><i class="fa fa-car text-white mr-2"></i>canopy</a><button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarNav" aria-controls="navbarNav" aria-expanded="false" aria-label="Toggle navigation"><span class="navbar-toggler-icon"></span></button><div class="collapse navbar-collapse" id="navbarNav"><ul class="navbar-nav mr-auto"><li class="nav-item dropdown"><a id="navbarDropdown-Api_Reference" href="#" data-toggle="dropdown" aria-haspopup  class="nav-link dropdown-toggle">Api Reference</a><ul aria-labelledby="dropdownMenu1" class="dropdown-menu border-0 shadow"><li class="dropdown-submenu"><a id="navbarDropdown-canopy" href="#" role="button" data-toggle="dropdown" aria-haspopup  class="dropdown-item dropdown-toggle">canopy</a><ul aria-labelledby="dropdownMenu2" class="dropdown-menu border-0 shadow"><li class="nav-item"><a class="dropdown-item" href="https://jeremybellows.github.io/canopy/\Api_Reference\canopy\canopy.html">canopy</a></li><li class="nav-item"><a class="dropdown-item" href="https://jeremybellows.github.io/canopy/\Api_Reference\canopy\canopy-classic.html">canopy classic</a></li><li class="nav-item"><a class="dropdown-item" href="https://jeremybellows.github.io/canopy/\Api_Reference\canopy\canopy-configuration.html">canopy configuration</a></li><li class="nav-item"><a class="dropdown-item" href="https://jeremybellows.github.io/canopy/\Api_Reference\canopy\canopy-csharp-canopy.html">canopy csharp canopy</a></li><li class="nav-item"><a class="dropdown-item" href="https://jeremybellows.github.io/canopy/\Api_Reference\canopy\canopy-finders.html">canopy finders</a></li><li class="nav-item"><a class="dropdown-item" href="https://jeremybellows.github.io/canopy/\Api_Reference\canopy\canopy-finders-byjquery.html">canopy finders byjquery</a></li><li class="nav-item"><a class="dropdown-item" href="https://jeremybellows.github.io/canopy/\Api_Reference\canopy\canopy-history.html">canopy history</a></li><li class="nav-item"><a class="dropdown-item" href="https://jeremybellows.github.io/canopy/\Api_Reference\canopy\canopy-jarowinkler.html">canopy jarowinkler</a></li><li class="nav-item"><a class="dropdown-item" href="https://jeremybellows.github.io/canopy/\Api_Reference\canopy\canopy-jarowinkler-result.html">canopy jarowinkler result</a></li><li class="nav-item"><a class="dropdown-item" href="https://jeremybellows.github.io/canopy/\Api_Reference\canopy\canopy-parallell-functions.html">canopy parallell functions</a></li><li class="nav-item"><a class="dropdown-item" href="https://jeremybellows.github.io/canopy/\Api_Reference\canopy\canopy-parallell-functions-navigate.html">canopy parallell functions navigate</a></li><li class="nav-item"><a class="dropdown-item" href="https://jeremybellows.github.io/canopy/\Api_Reference\canopy\canopy-parallell-instanced.html">canopy parallell instanced</a></li><li class="nav-item"><a class="dropdown-item" href="https://jeremybellows.github.io/canopy/\Api_Reference\canopy\canopy-parallell-instanced-instance.html">canopy parallell instanced instance</a></li><li class="nav-item"><a class="dropdown-item" href="https://jeremybellows.github.io/canopy/\Api_Reference\canopy\canopy-reporters.html">canopy reporters</a></li><li class="nav-item"><a class="dropdown-item" href="https://jeremybellows.github.io/canopy/\Api_Reference\canopy\canopy-reporters-consolereporter.html">canopy reporters consolereporter</a></li><li class="nav-item"><a class="dropdown-item" href="https://jeremybellows.github.io/canopy/\Api_Reference\canopy\canopy-reporters-junitreporter.html">canopy reporters junitreporter</a></li><li class="nav-item"><a class="dropdown-item" href="https://jeremybellows.github.io/canopy/\Api_Reference\canopy\canopy-reporters-livehtmlreporter.html">canopy reporters livehtmlreporter</a></li><li class="nav-item"><a class="dropdown-item" href="https://jeremybellows.github.io/canopy/\Api_Reference\canopy\canopy-reporters-teamcityreporter.html">canopy reporters teamcityreporter</a></li><li class="nav-item"><a class="dropdown-item" href="https://jeremybellows.github.io/canopy/\Api_Reference\canopy\canopy-runner-classic.html">canopy runner classic</a></li><li class="nav-item"><a class="dropdown-item" href="https://jeremybellows.github.io/canopy/\Api_Reference\canopy\canopy-screen.html">canopy screen</a></li><li class="nav-item"><a class="dropdown-item" href="https://jeremybellows.github.io/canopy/\Api_Reference\canopy\canopy-screen-screenboundary.html">canopy screen screenboundary</a></li><li class="nav-item"><a class="dropdown-item" href="https://jeremybellows.github.io/canopy/\Api_Reference\canopy\canopy-types.html">canopy types</a></li><li class="nav-item"><a class="dropdown-item" href="https://jeremybellows.github.io/canopy/\Api_Reference\canopy\canopy-types-browsers.html">canopy types browsers</a></li><li class="nav-item"><a class="dropdown-item" href="https://jeremybellows.github.io/canopy/\Api_Reference\canopy\canopy-types-browserstartmode.html">canopy types browserstartmode</a></li><li class="nav-item"><a class="dropdown-item" href="https://jeremybellows.github.io/canopy/\Api_Reference\canopy\canopy-types-canopycheckfailedexception.html">canopy types canopycheckfailedexception</a></li><li class="nav-item"><a class="dropdown-item" href="https://jeremybellows.github.io/canopy/\Api_Reference\canopy\canopy-types-canopycontainsfailedexception.html">canopy types canopycontainsfailedexception</a></li><li class="nav-item"><a class="dropdown-item" href="https://jeremybellows.github.io/canopy/\Api_Reference\canopy\canopy-types-canopycountexception.html">canopy types canopycountexception</a></li><li class="nav-item"><a class="dropdown-item" href="https://jeremybellows.github.io/canopy/\Api_Reference\canopy\canopy-types-canopydeselectionfailedexception.html">canopy types canopydeselectionfailedexception</a></li><li class="nav-item"><a class="dropdown-item" href="https://jeremybellows.github.io/canopy/\Api_Reference\canopy\canopy-types-canopydisabledfailedexception.html">canopy types canopydisabledfailedexception</a></li><li class="nav-item"><a class="dropdown-item" href="https://jeremybellows.github.io/canopy/\Api_Reference\canopy\canopy-types-canopydisplayedfailedexception.html">canopy types canopydisplayedfailedexception</a></li><li class="nav-item"><a class="dropdown-item" href="https://jeremybellows.github.io/canopy/\Api_Reference\canopy\canopy-types-canopyelementnotfoundexception.html">canopy types canopyelementnotfoundexception</a></li><li class="nav-item"><a class="dropdown-item" href="https://jeremybellows.github.io/canopy/\Api_Reference\canopy\canopy-types-canopyenabledfailedexception.html">canopy types canopyenabledfailedexception</a></li><li class="nav-item"><a class="dropdown-item" href="https://jeremybellows.github.io/canopy/\Api_Reference\canopy\canopy-types-canopyequalityfailedexception.html">canopy types canopyequalityfailedexception</a></li><li class="nav-item"><a class="dropdown-item" href="https://jeremybellows.github.io/canopy/\Api_Reference\canopy\canopy-types-canopyexception.html">canopy types canopyexception</a></li><li class="nav-item"><a class="dropdown-item" href="https://jeremybellows.github.io/canopy/\Api_Reference\canopy\canopy-types-canopymorethanoneelementfoundexception.html">canopy types canopymorethanoneelementfoundexception</a></li><li class="nav-item"><a class="dropdown-item" href="https://jeremybellows.github.io/canopy/\Api_Reference\canopy\canopy-types-canopynobrowserexception.html">canopy types canopynobrowserexception</a></li><li class="nav-item"><a class="dropdown-item" href="https://jeremybellows.github.io/canopy/\Api_Reference\canopy\canopy-types-canopynotcontainsfailedexception.html">canopy types canopynotcontainsfailedexception</a></li><li class="nav-item"><a class="dropdown-item" href="https://jeremybellows.github.io/canopy/\Api_Reference\canopy\canopy-types-canopynotdisplayedfailedexception.html">canopy types canopynotdisplayedfailedexception</a></li><li class="nav-item"><a class="dropdown-item" href="https://jeremybellows.github.io/canopy/\Api_Reference\canopy\canopy-types-canopynotequalsfailedexception.html">canopy types canopynotequalsfailedexception</a></li><li class="nav-item"><a class="dropdown-item" href="https://jeremybellows.github.io/canopy/\Api_Reference\canopy\canopy-types-canopynotstringorelementexception.html">canopy types canopynotstringorelementexception</a></li><li class="nav-item"><a class="dropdown-item" href="https://jeremybellows.github.io/canopy/\Api_Reference\canopy\canopy-types-canopyonexception.html">canopy types canopyonexception</a></li><li class="nav-item"><a class="dropdown-item" href="https://jeremybellows.github.io/canopy/\Api_Reference\canopy\canopy-types-canopyoptionnotfoundexception.html">canopy types canopyoptionnotfoundexception</a></li><li class="nav-item"><a class="dropdown-item" href="https://jeremybellows.github.io/canopy/\Api_Reference\canopy\canopy-types-canopyreadexception.html">canopy types canopyreadexception</a></li><li class="nav-item"><a class="dropdown-item" href="https://jeremybellows.github.io/canopy/\Api_Reference\canopy\canopy-types-canopyreadonlyexception.html">canopy types canopyreadonlyexception</a></li><li class="nav-item"><a class="dropdown-item" href="https://jeremybellows.github.io/canopy/\Api_Reference\canopy\canopy-types-canopyselectionfailedexeception.html">canopy types canopyselectionfailedexeception</a></li><li class="nav-item"><a class="dropdown-item" href="https://jeremybellows.github.io/canopy/\Api_Reference\canopy\canopy-types-canopyskiptestexception.html">canopy types canopyskiptestexception</a></li><li class="nav-item"><a class="dropdown-item" href="https://jeremybellows.github.io/canopy/\Api_Reference\canopy\canopy-types-canopyuncheckfailedexception.html">canopy types canopyuncheckfailedexception</a></li><li class="nav-item"><a class="dropdown-item" href="https://jeremybellows.github.io/canopy/\Api_Reference\canopy\canopy-types-canopyvalueinlistexception.html">canopy types canopyvalueinlistexception</a></li><li class="nav-item"><a class="dropdown-item" href="https://jeremybellows.github.io/canopy/\Api_Reference\canopy\canopy-types-canopyvaluenotinlistexception.html">canopy types canopyvaluenotinlistexception</a></li><li class="nav-item"><a class="dropdown-item" href="https://jeremybellows.github.io/canopy/\Api_Reference\canopy\canopy-types-canopywaitforexception.html">canopy types canopywaitforexception</a></li><li class="nav-item"><a class="dropdown-item" href="https://jeremybellows.github.io/canopy/\Api_Reference\canopy\canopy-types-direction.html">canopy types direction</a></li><li class="nav-item"><a class="dropdown-item" href="https://jeremybellows.github.io/canopy/\Api_Reference\canopy\canopy-types-ireporter.html">canopy types ireporter</a></li><li class="nav-item"><a class="dropdown-item" href="https://jeremybellows.github.io/canopy/\Api_Reference\canopy\canopy-types-result.html">canopy types result</a></li><li class="nav-item"><a class="dropdown-item" href="https://jeremybellows.github.io/canopy/\Api_Reference\canopy\canopy-types-suite.html">canopy types suite</a></li><li class="nav-item"><a class="dropdown-item" href="https://jeremybellows.github.io/canopy/\Api_Reference\canopy\canopy-types-test.html">canopy types test</a></li><li class="nav-item"><a class="dropdown-item" href="https://jeremybellows.github.io/canopy/\Api_Reference\canopy\canopy-wait.html">canopy wait</a></li><li class="nav-item"><a class="dropdown-item" href="https://jeremybellows.github.io/canopy/\Api_Reference\canopy\global-screensizes.html">global screensizes</a></li><li class="nav-item"><a class="dropdown-item" href="https://jeremybellows.github.io/canopy/\Api_Reference\canopy\global-useragents.html">global useragents</a></li></ul></li><li class="dropdown-submenu"><a id="navbarDropdown-canopy.integration" href="#" role="button" data-toggle="dropdown" aria-haspopup  class="dropdown-item dropdown-toggle">canopy.integration</a><ul aria-labelledby="dropdownMenu2" class="dropdown-menu border-0 shadow"><li class="nav-item"><a class="dropdown-item" href="https://jeremybellows.github.io/canopy/\Api_Reference\canopy.integration\canopy-csharp-integration.html">canopy csharp integration</a></li><li class="nav-item"><a class="dropdown-item" href="https://jeremybellows.github.io/canopy/\Api_Reference\canopy.integration\canopy-csharp-loadtest-job.html">canopy csharp loadtest job</a></li><li class="nav-item"><a class="dropdown-item" href="https://jeremybellows.github.io/canopy/\Api_Reference\canopy.integration\canopy-csharp-loadtest-runner.html">canopy csharp loadtest runner</a></li><li class="nav-item"><a class="dropdown-item" href="https://jeremybellows.github.io/canopy/\Api_Reference\canopy.integration\canopy-csharp-loadtest-task.html">canopy csharp loadtest task</a></li><li class="nav-item"><a class="dropdown-item" href="https://jeremybellows.github.io/canopy/\Api_Reference\canopy.integration\canopy-integration-loadtest.html">canopy integration loadtest</a></li><li class="nav-item"><a class="dropdown-item" href="https://jeremybellows.github.io/canopy/\Api_Reference\canopy.integration\canopy-integration-loadtest-job.html">canopy integration loadtest job</a></li><li class="nav-item"><a class="dropdown-item" href="https://jeremybellows.github.io/canopy/\Api_Reference\canopy.integration\canopy-integration-loadtest-task.html">canopy integration loadtest task</a></li><li class="nav-item"><a class="dropdown-item" href="https://jeremybellows.github.io/canopy/\Api_Reference\canopy.integration\canopy.integration.html">canopy.integration</a></li><li class="nav-item"><a class="dropdown-item" href="https://jeremybellows.github.io/canopy/\Api_Reference\canopy.integration\global-jsonvalidator.html">global jsonvalidator</a></li><li class="nav-item"><a class="dropdown-item" href="https://jeremybellows.github.io/canopy/\Api_Reference\canopy.integration\jsonvalidator-difference.html">jsonvalidator difference</a></li><li class="nav-item"><a class="dropdown-item" href="https://jeremybellows.github.io/canopy/\Api_Reference\canopy.integration\jsonvalidator-meta.html">jsonvalidator meta</a></li><li class="nav-item"><a class="dropdown-item" href="https://jeremybellows.github.io/canopy/\Api_Reference\canopy.integration\jsonvalidator-type.html">jsonvalidator type</a></li></ul></li></ul></li><li class="nav-item dropdown"><a id="navbarDropdown-Explanations" href="#" data-toggle="dropdown" aria-haspopup  class="nav-link dropdown-toggle">Explanations</a><ul aria-labelledby="dropdownMenu1" class="dropdown-menu border-0 shadow"><li class="nav-item"><a class="dropdown-item" href="https://jeremybellows.github.io/canopy/\Explanations\Background.html">Background</a></li></ul></li><li class="nav-item dropdown"><a id="navbarDropdown-How_Tos" href="#" data-toggle="dropdown" aria-haspopup  class="nav-link dropdown-toggle">How Tos</a><ul aria-labelledby="dropdownMenu1" class="dropdown-menu border-0 shadow"><li class="nav-item"><a class="dropdown-item" href="https://jeremybellows.github.io/canopy/\How_Tos\Doing_A_Thing.html">Doing A Thing</a></li><li class="nav-item"><a class="dropdown-item" href="https://jeremybellows.github.io/canopy/\How_Tos\Doing_Another_Thing.html">Doing Another Thing</a></li></ul></li><li class="nav-item dropdown"><a id="navbarDropdown-Tutorials" href="#" data-toggle="dropdown" aria-haspopup  class="nav-link dropdown-toggle">Tutorials</a><ul aria-labelledby="dropdownMenu1" class="dropdown-menu border-0 shadow"><li class="nav-item"><a class="dropdown-item" href="https://jeremybellows.github.io/canopy/\Tutorials\Getting_Started.html">Getting Started</a></li></ul></li></ul><ul class="navbar-nav"><button id="theme-toggle" class=""></button><li class="nav-item"><a class="nav-link" aria-label="canopy Repository on Github" href="https://github.com/JeremyBellows/canopy"><i class="fab fa-github fa-lg fa-fw text-light"></i></a></li></ul></div></nav><div class="wrapper d-flex flex-column justify-content-between min-vh-100"><main class="container main mb-4"><div><h1><a name="Actions" class="anchor" href="#Actions">Actions</a></h1>
+<h2><a name="start" class="anchor" href="#start">start</a></h2>
+<p>Start an instance of a browser.</p>
+<table class="pre"><tr><td class="lines"><pre class="fssnip"><span class="l">1: </span>
+<span class="l">2: </span>
+<span class="l">3: </span>
+<span class="l">4: </span>
+<span class="l">5: </span>
+<span class="l">6: </span>
+<span class="l">7: </span>
+</pre></td>
+<td class="snippet"><pre class="fssnip highlighted"><code lang="fsharp"><span onmouseout="hideTip(event, '8', 10)" onmouseover="showTip(event, '8', 10)" class="fn">start</span> <span onmouseout="hideTip(event, '9', 11)" onmouseover="showTip(event, '9', 11)" class="id">firefox</span>
+<span onmouseout="hideTip(event, '8', 12)" onmouseover="showTip(event, '8', 12)" class="fn">start</span> <span onmouseout="hideTip(event, '10', 13)" onmouseover="showTip(event, '10', 13)" class="id">chrome</span>
+<span onmouseout="hideTip(event, '8', 14)" onmouseover="showTip(event, '8', 14)" class="fn">start</span> <span onmouseout="hideTip(event, '11', 15)" onmouseover="showTip(event, '11', 15)" class="id">ie</span>
+<span onmouseout="hideTip(event, '8', 16)" onmouseover="showTip(event, '8', 16)" class="fn">start</span> <span onmouseout="hideTip(event, '12', 17)" onmouseover="showTip(event, '12', 17)" class="id">safari</span>
+<span onmouseout="hideTip(event, '8', 18)" onmouseover="showTip(event, '8', 18)" class="fn">start</span> <span onmouseout="hideTip(event, '13', 19)" onmouseover="showTip(event, '13', 19)" class="id">aurora</span>
+<span onmouseout="hideTip(event, '8', 20)" onmouseover="showTip(event, '8', 20)" class="fn">start</span> <span onmouseout="hideTip(event, '14', 21)" onmouseover="showTip(event, '14', 21)" class="id">edgeBETA</span>
+<span onmouseout="hideTip(event, '8', 22)" onmouseover="showTip(event, '8', 22)" class="fn">start</span> <span onmouseout="hideTip(event, '15', 23)" onmouseover="showTip(event, '15', 23)" class="id">chromium</span>
+</code></pre></td>
+</tr>
+</table>
+<h2><a name="aliased-by-url" class="anchor" href="#aliased-by-url">!^ (aliased by url)</a></h2>
+<p>Go to a url.</p>
+<table class="pre"><tr><td class="lines"><pre class="fssnip"><span class="l">1: </span>
+<span class="l">2: </span>
+</pre></td>
+<td class="snippet"><pre class="fssnip highlighted"><code lang="fsharp"><span class="o">!^</span> <span class="s">&quot;http://www.google.com&quot;</span>
+<span onmouseout="hideTip(event, '16', 24)" onmouseover="showTip(event, '16', 24)" class="fn">url</span> <span class="s">&quot;http://www.google.com&quot;</span>
+</code></pre></td>
+</tr>
+</table>
+<h2><a name="quit" class="anchor" href="#quit">quit</a></h2>
+<p>Quit the current browser or the specified browser.</p>
+<table class="pre"><tr><td class="lines"><pre class="fssnip"><span class="l">1: </span>
+<span class="l">2: </span>
+<span class="l">3: </span>
+<span class="l">4: </span>
+<span class="l">5: </span>
+</pre></td>
+<td class="snippet"><pre class="fssnip highlighted"><code lang="fsharp"><span class="c">//quit current</span>
+<span onmouseout="hideTip(event, '17', 25)" onmouseover="showTip(event, '17', 25)" class="fn">quit</span> <span class="pn">(</span><span class="pn">)</span>
+<span class="c">//quit specific</span>
+<span class="k">let</span> <span onmouseout="hideTip(event, '18', 26)" onmouseover="showTip(event, '18', 26)" class="id">browser1</span> <span class="o">=</span> <span onmouseout="hideTip(event, '8', 27)" onmouseover="showTip(event, '8', 27)" class="fn">start</span> <span onmouseout="hideTip(event, '10', 28)" onmouseover="showTip(event, '10', 28)" class="id">chrome</span>
+<span onmouseout="hideTip(event, '17', 29)" onmouseover="showTip(event, '17', 29)" class="fn">quit</span> <span onmouseout="hideTip(event, '18', 30)" onmouseover="showTip(event, '18', 30)" class="id">browser1</span>
+</code></pre></td>
+</tr>
+</table>
+<h2><a name="lt-lt-write" class="anchor" href="#lt-lt-write">&lt;&lt; (write)</a></h2>
+<p>Write text to element.</p>
+<table class="pre"><tr><td class="lines"><pre class="fssnip"><span class="l">1: </span>
+<span class="l">2: </span>
+<span class="l">3: </span>
+<span class="l">4: </span>
+</pre></td>
+<td class="snippet"><pre class="fssnip highlighted"><code lang="fsharp"><span class="s">&quot;#firstName&quot;</span> <span class="o">&lt;&lt;</span> <span class="s">&quot;Alex&quot;</span>
+<span class="c">//if you dont like the &lt;&lt; syntax you can alias anyway you like, eg:</span>
+<span class="k">let</span> <span onmouseout="hideTip(event, '19', 31)" onmouseover="showTip(event, '19', 31)" class="fn">write</span> <span onmouseout="hideTip(event, '20', 32)" onmouseover="showTip(event, '20', 32)" class="id">text</span> <span onmouseout="hideTip(event, '21', 33)" onmouseover="showTip(event, '21', 33)" class="id">selector</span> <span class="o">=</span>
+    <span onmouseout="hideTip(event, '21', 34)" onmouseover="showTip(event, '21', 34)" class="id">selector</span> <span class="o">&lt;&lt;</span> <span onmouseout="hideTip(event, '20', 35)" onmouseover="showTip(event, '20', 35)" class="id">text</span>
+</code></pre></td>
+</tr>
+</table>
+<h2><a name="read" class="anchor" href="#read">read</a></h2>
+<p>Read the text (or value or selected option) of an element.</p>
+<table class="pre"><tr><td class="lines"><pre class="fssnip"><span class="l">1: </span>
+<span class="l">2: </span>
+<span class="l">3: </span>
+</pre></td>
+<td class="snippet"><pre class="fssnip highlighted"><code lang="fsharp"><span class="k">let</span> <span onmouseout="hideTip(event, '22', 36)" onmouseover="showTip(event, '22', 36)" class="id">selectedState</span> <span class="o">=</span> <span onmouseout="hideTip(event, '23', 37)" onmouseover="showTip(event, '23', 37)" class="fn">read</span> <span class="s">&quot;#states&quot;</span>
+<span class="k">let</span> <span onmouseout="hideTip(event, '24', 38)" onmouseover="showTip(event, '24', 38)" class="id">firstName</span> <span class="o">=</span> <span onmouseout="hideTip(event, '23', 39)" onmouseover="showTip(event, '23', 39)" class="fn">read</span> <span class="s">&quot;#firstName&quot;</span>
+<span class="k">let</span> <span onmouseout="hideTip(event, '25', 40)" onmouseover="showTip(event, '25', 40)" class="id">linkText</span> <span class="o">=</span> <span onmouseout="hideTip(event, '23', 41)" onmouseover="showTip(event, '23', 41)" class="fn">read</span> <span class="s">&quot;#someLink&quot;</span>
+</code></pre></td>
+</tr>
+</table>
+<h2><a name="click" class="anchor" href="#click">click</a></h2>
+<p>Click an element via selector or text, can also click selenium <code>IWebElements</code>.</p>
+<table class="pre"><tr><td class="lines"><pre class="fssnip"><span class="l">1: </span>
+<span class="l">2: </span>
+<span class="l">3: </span>
+</pre></td>
+<td class="snippet"><pre class="fssnip highlighted"><code lang="fsharp"><span onmouseout="hideTip(event, '26', 42)" onmouseover="showTip(event, '26', 42)" class="fn">click</span> <span class="s">&quot;#login&quot;</span>
+<span onmouseout="hideTip(event, '26', 43)" onmouseover="showTip(event, '26', 43)" class="fn">click</span> <span class="s">&quot;Login&quot;</span>
+<span onmouseout="hideTip(event, '26', 44)" onmouseover="showTip(event, '26', 44)" class="fn">click</span> <span class="pn">(</span><span onmouseout="hideTip(event, '27', 45)" onmouseover="showTip(event, '27', 45)" class="fn">element</span> <span class="s">&quot;#login&quot;</span><span class="pn">)</span>
+</code></pre></td>
+</tr>
+</table>
+<h2><a name="doubleClick" class="anchor" href="#doubleClick">doubleClick</a></h2>
+<p>Simulates a double click via JavaScript.</p>
+<table class="pre"><tr><td class="lines"><pre class="fssnip"><span class="l">1: </span>
+</pre></td>
+<td class="snippet"><pre class="fssnip highlighted"><code lang="fsharp"><span onmouseout="hideTip(event, '28', 46)" onmouseover="showTip(event, '28', 46)" class="fn">doubleClick</span> <span class="s">&quot;#login&quot;</span>
+</code></pre></td>
+</tr>
+</table>
+<h2><a name="ctrlClick" class="anchor" href="#ctrlClick">ctrlClick</a></h2>
+<p>Click an element via selector or text while holding down the control key, can also click selenium <code>IWebElements</code>.</p>
+<table class="pre"><tr><td class="lines"><pre class="fssnip"><span class="l">1: </span>
+<span class="l">2: </span>
+<span class="l">3: </span>
+</pre></td>
+<td class="snippet"><pre class="fssnip highlighted"><code lang="fsharp"><span onmouseout="hideTip(event, '29', 47)" onmouseover="showTip(event, '29', 47)" class="fn">ctrlClick</span> <span class="s">&quot;#list &gt; option&quot;</span>
+<span onmouseout="hideTip(event, '29', 48)" onmouseover="showTip(event, '29', 48)" class="fn">ctrlClick</span> <span class="s">&quot;Oklahoma&quot;</span>
+<span onmouseout="hideTip(event, '29', 49)" onmouseover="showTip(event, '29', 49)" class="fn">ctrlClick</span> <span class="pn">(</span><span onmouseout="hideTip(event, '27', 50)" onmouseover="showTip(event, '27', 50)" class="fn">element</span> <span class="s">&quot;#list &gt; option&quot;</span><span class="pn">)</span>
+</code></pre></td>
+</tr>
+</table>
+<h2><a name="shiftClick" class="anchor" href="#shiftClick">shiftClick</a></h2>
+<p>Click an element via selector or text while holding down the shift key, can also click selenium <code>IWebElements</code>.</p>
+<table class="pre"><tr><td class="lines"><pre class="fssnip"><span class="l">1: </span>
+<span class="l">2: </span>
+<span class="l">3: </span>
+</pre></td>
+<td class="snippet"><pre class="fssnip highlighted"><code lang="fsharp"><span onmouseout="hideTip(event, '30', 51)" onmouseover="showTip(event, '30', 51)" class="fn">shiftClick</span> <span class="s">&quot;#list &gt; option&quot;</span>
+<span onmouseout="hideTip(event, '30', 52)" onmouseover="showTip(event, '30', 52)" class="fn">shiftClick</span> <span class="s">&quot;Oklahoma&quot;</span>
+<span onmouseout="hideTip(event, '30', 53)" onmouseover="showTip(event, '30', 53)" class="fn">shiftClick</span> <span class="pn">(</span><span onmouseout="hideTip(event, '27', 54)" onmouseover="showTip(event, '27', 54)" class="fn">element</span> <span class="s">&quot;#list &gt; option&quot;</span><span class="pn">)</span>
+</code></pre></td>
+</tr>
+</table>
+<h2><a name="rightClick" class="anchor" href="#rightClick">rightClick</a></h2>
+<p>Right click an element.</p>
+<table class="pre"><tr><td class="lines"><pre class="fssnip"><span class="l">1: </span>
+</pre></td>
+<td class="snippet"><pre class="fssnip highlighted"><code lang="fsharp"><span onmouseout="hideTip(event, '31', 55)" onmouseover="showTip(event, '31', 55)" class="fn">rightClick</span> <span class="s">&quot;#settings&quot;</span>
+</code></pre></td>
+</tr>
+</table>
+<h2><a name="check" class="anchor" href="#check">check</a></h2>
+<p>Checks a checkbox if it is not already checked.</p>
+<table class="pre"><tr><td class="lines"><pre class="fssnip"><span class="l">1: </span>
+<span class="l">2: </span>
+<span class="l">3: </span>
+</pre></td>
+<td class="snippet"><pre class="fssnip highlighted"><code lang="fsharp"><span onmouseout="hideTip(event, '32', 56)" onmouseover="showTip(event, '32', 56)" class="fn">check</span> <span class="s">&quot;#yes&quot;</span>
+<span class="c">//below code will not click the checkbox again, which would uncheck it</span>
+<span onmouseout="hideTip(event, '32', 57)" onmouseover="showTip(event, '32', 57)" class="fn">check</span> <span class="s">&quot;#yes&quot;</span>
+</code></pre></td>
+</tr>
+</table>
+<h2><a name="uncheck" class="anchor" href="#uncheck">uncheck</a></h2>
+<p>Unchecks a checkbox if it is not already unchecked.</p>
+<table class="pre"><tr><td class="lines"><pre class="fssnip"><span class="l">1: </span>
+<span class="l">2: </span>
+<span class="l">3: </span>
+</pre></td>
+<td class="snippet"><pre class="fssnip highlighted"><code lang="fsharp"><span onmouseout="hideTip(event, '33', 58)" onmouseover="showTip(event, '33', 58)" class="fn">uncheck</span> <span class="s">&quot;#yes&quot;</span>
+<span class="c">//below code will not click the checkbox again, which would check it</span>
+<span onmouseout="hideTip(event, '33', 59)" onmouseover="showTip(event, '33', 59)" class="fn">uncheck</span> <span class="s">&quot;#yes&quot;</span>
+</code></pre></td>
+</tr>
+</table>
+<h2><a name="gt-drag-is-an-alias" class="anchor" href="#gt-drag-is-an-alias">--&gt; (drag is an alias)</a></h2>
+<p>Drag on item to another.</p>
+<table class="pre"><tr><td class="lines"><pre class="fssnip"><span class="l">1: </span>
+<span class="l">2: </span>
+</pre></td>
+<td class="snippet"><pre class="fssnip highlighted"><code lang="fsharp"><span class="s">&quot;.todo&quot;</span> <span class="o">--&gt;</span> <span class="s">&quot;.inprogress&quot;</span>
+<span onmouseout="hideTip(event, '34', 60)" onmouseover="showTip(event, '34', 60)" class="fn">drag</span> <span class="s">&quot;.todo&quot;</span> <span class="s">&quot;.inprogress&quot;</span>
+</code></pre></td>
+</tr>
+</table>
+<h2><a name="hover" class="anchor" href="#hover">hover</a></h2>
+<p>Hover over an element.</p>
+<table class="pre"><tr><td class="lines"><pre class="fssnip"><span class="l">1: </span>
+<span class="l">2: </span>
+<span class="l">3: </span>
+<span class="l">4: </span>
+</pre></td>
+<td class="snippet"><pre class="fssnip highlighted"><code lang="fsharp"><span onmouseout="hideTip(event, '16', 61)" onmouseover="showTip(event, '16', 61)" class="fn">url</span> <span class="s">&quot;http://lefthandedgoat.github.io/canopy/testpages/&quot;</span>
+<span class="s">&quot;#hover&quot;</span> <span class="o">==</span> <span class="s">&quot;not hovered&quot;</span>
+<span onmouseout="hideTip(event, '35', 62)" onmouseover="showTip(event, '35', 62)" class="fn">hover</span> <span class="s">&quot;Milk&quot;</span>
+<span class="s">&quot;#hover&quot;</span> <span class="o">==</span> <span class="s">&quot;hovered&quot;</span>
+</code></pre></td>
+</tr>
+</table>
+<h2><a name="element" class="anchor" href="#element">element</a></h2>
+<p>Get an element (Selenium <code>IWebElement</code>) with given css selector or text (built in waits, automatically searches through <code>iFrames</code>).
+Most useful if you need to write some custom helpers to provide functionality that canopy does not currently have.</p>
+<table class="pre"><tr><td class="lines"><pre class="fssnip"><span class="l">1: </span>
+<span class="l">2: </span>
+<span class="l">3: </span>
+</pre></td>
+<td class="snippet"><pre class="fssnip highlighted"><code lang="fsharp"><span class="k">let</span> <span onmouseout="hideTip(event, '36', 63)" onmouseover="showTip(event, '36', 63)" class="id">logoutHref</span> <span class="o">=</span> <span class="fn">(</span><span onmouseout="hideTip(event, '27', 64)" onmouseover="showTip(event, '27', 64)" class="fn">element</span> <span class="s">&quot;#logout&quot;</span><span class="pn">)</span><span class="pn">.</span><span class="id">GetAttribute</span><span class="pn">(</span><span class="s">&quot;href&quot;</span><span class="pn">)</span>
+<span onmouseout="hideTip(event, '37', 65)" onmouseover="showTip(event, '37', 65)" class="fn">describe</span> <span class="pn">(</span><span class="s">&quot;logout href is: &quot;</span> <span class="o">+</span> <span onmouseout="hideTip(event, '36', 66)" onmouseover="showTip(event, '36', 66)" class="id">logoutHref</span><span class="pn">)</span>
+<span class="c">//continue with your test</span>
+</code></pre></td>
+</tr>
+</table>
+<h2><a name="unreliableElement" class="anchor" href="#unreliableElement">unreliableElement</a></h2>
+<p>Try to get an element without the built in reliability. Throws exception if element not found.</p>
+<table class="pre"><tr><td class="lines"><pre class="fssnip"><span class="l">1: </span>
+</pre></td>
+<td class="snippet"><pre class="fssnip highlighted"><code lang="fsharp"><span class="k">let</span> <span onmouseout="hideTip(event, '38', 67)" onmouseover="showTip(event, '38', 67)" class="id">logout</span> <span class="o">=</span> <span onmouseout="hideTip(event, '39', 68)" onmouseover="showTip(event, '39', 68)" class="fn">unreliableElement</span> <span class="s">&quot;#logout&quot;</span>
+</code></pre></td>
+</tr>
+</table>
+<h2><a name="elementWithText" class="anchor" href="#elementWithText">elementWithText</a></h2>
+<p>Unreliably get the first element with specific text for a selector.</p>
+<table class="pre"><tr><td class="lines"><pre class="fssnip"><span class="l">1: </span>
+</pre></td>
+<td class="snippet"><pre class="fssnip highlighted"><code lang="fsharp"><span class="k">let</span> <span onmouseout="hideTip(event, '40', 69)" onmouseover="showTip(event, '40', 69)" class="id">firstBob</span> <span class="o">=</span> <span onmouseout="hideTip(event, '41', 70)" onmouseover="showTip(event, '41', 70)" class="fn">elementWithText</span> <span class="s">&quot;.name&quot;</span> <span class="s">&quot;Bob&quot;</span>
+</code></pre></td>
+</tr>
+</table>
+<h2><a name="elementWithin" class="anchor" href="#elementWithin">elementWithin</a></h2>
+<p>Get an element by searching within another element (nested).</p>
+<table class="pre"><tr><td class="lines"><pre class="fssnip"><span class="l">1: </span>
+</pre></td>
+<td class="snippet"><pre class="fssnip highlighted"><code lang="fsharp"><span class="k">let</span> <span onmouseout="hideTip(event, '42', 71)" onmouseover="showTip(event, '42', 71)" class="id">name</span> <span class="o">=</span> <span onmouseout="hideTip(event, '27', 72)" onmouseover="showTip(event, '27', 72)" class="fn">element</span> <span class="s">&quot;#header&quot;</span> <span class="o">|&gt;</span> <span onmouseout="hideTip(event, '43', 73)" onmouseover="showTip(event, '43', 73)" class="fn">elementWithin</span> <span class="s">&quot;.name&quot;</span>
+</code></pre></td>
+</tr>
+</table>
+<h2><a name="someElement" class="anchor" href="#someElement">someElement</a></h2>
+<p>Like <code>element</code> function except it runs a <code>Some(IWebElement)</code> or <code>None</code>.
+Read more about <code>Option</code> types <a href="http://en.wikibooks.org/wiki/F_Sharp_Programming/Option_Types">here</a>.</p>
+<table class="pre"><tr><td class="lines"><pre class="fssnip"><span class="l">1: </span>
+<span class="l">2: </span>
+<span class="l">3: </span>
+<span class="l">4: </span>
+<span class="l">5: </span>
+<span class="l">6: </span>
+</pre></td>
+<td class="snippet"><pre class="fssnip highlighted"><code lang="fsharp"><span class="c">//create your own exists helper function</span>
+<span class="k">let</span> <span onmouseout="hideTip(event, '44', 74)" onmouseover="showTip(event, '44', 74)" class="fn">exists</span> <span onmouseout="hideTip(event, '45', 75)" onmouseover="showTip(event, '45', 75)" class="id">selector</span> <span class="o">=</span>
+    <span class="k">let</span> <span onmouseout="hideTip(event, '46', 76)" onmouseover="showTip(event, '46', 76)" class="id">someEle</span> <span class="o">=</span> <span onmouseout="hideTip(event, '47', 77)" onmouseover="showTip(event, '47', 77)" class="fn">someElement</span> <span onmouseout="hideTip(event, '45', 78)" onmouseover="showTip(event, '45', 78)" class="id">selector</span>
+    <span class="k">match</span> <span onmouseout="hideTip(event, '46', 79)" onmouseover="showTip(event, '46', 79)" class="id">someEle</span> <span class="k">with</span>
+    <span class="pn">|</span> <span onmouseout="hideTip(event, '48', 80)" onmouseover="showTip(event, '48', 80)" class="uc">Some</span><span class="pn">(</span><span class="id">_</span><span class="pn">)</span> <span class="k">-&gt;</span> <span class="k">true</span>
+    <span class="pn">|</span> <span onmouseout="hideTip(event, '49', 81)" onmouseover="showTip(event, '49', 81)" class="uc">None</span> <span class="k">-&gt;</span> <span class="k">false</span>
+</code></pre></td>
+</tr>
+</table>
+<h2><a name="someElementWithin" class="anchor" href="#someElementWithin">someElementWithin</a></h2>
+<p>Like <code>elementWithin</code> function except it runs a <code>Some(IWebElement)</code> or <code>None</code>.
+Read more about Option types <a href="http://en.wikibooks.org/wiki/F_Sharp_Programming/Option_Types">here</a>.</p>
+<table class="pre"><tr><td class="lines"><pre class="fssnip"><span class="l">1: </span>
+<span class="l">2: </span>
+</pre></td>
+<td class="snippet"><pre class="fssnip highlighted"><code lang="fsharp"><span class="c">//create your own exists helper function</span>
+<span class="k">let</span> <span onmouseout="hideTip(event, '50', 82)" onmouseover="showTip(event, '50', 82)" class="id">someName</span> <span class="o">=</span> <span onmouseout="hideTip(event, '27', 83)" onmouseover="showTip(event, '27', 83)" class="fn">element</span> <span class="s">&quot;#header&quot;</span> <span class="o">|&gt;</span> <span onmouseout="hideTip(event, '51', 84)" onmouseover="showTip(event, '51', 84)" class="fn">someElementWithin</span> <span class="s">&quot;.name&quot;</span>
+</code></pre></td>
+</tr>
+</table>
+<h2><a name="parent" class="anchor" href="#parent">parent</a></h2>
+<p>Get the parent element of provided element.</p>
+<table class="pre"><tr><td class="lines"><pre class="fssnip"><span class="l">1: </span>
+</pre></td>
+<td class="snippet"><pre class="fssnip highlighted"><code lang="fsharp"><span onmouseout="hideTip(event, '27', 85)" onmouseover="showTip(event, '27', 85)" class="fn">element</span> <span class="s">&quot;#firstName&quot;</span> <span class="o">|&gt;</span> <span onmouseout="hideTip(event, '52', 86)" onmouseover="showTip(event, '52', 86)" class="fn">parent</span>
+</code></pre></td>
+</tr>
+</table>
+<h2><a name="someParent" class="anchor" href="#someParent">someParent</a></h2>
+<p>Get the <code>Some</code>/<code>None</code> parent element of provided element.</p>
+<table class="pre"><tr><td class="lines"><pre class="fssnip"><span class="l">1: </span>
+</pre></td>
+<td class="snippet"><pre class="fssnip highlighted"><code lang="fsharp"><span onmouseout="hideTip(event, '27', 87)" onmouseover="showTip(event, '27', 87)" class="fn">element</span> <span class="s">&quot;#firstName&quot;</span> <span class="o">|&gt;</span> <span onmouseout="hideTip(event, '53', 88)" onmouseover="showTip(event, '53', 88)" class="fn">someParent</span>
+</code></pre></td>
+</tr>
+</table>
+<h2><a name="elements" class="anchor" href="#elements">elements</a></h2>
+<p>The same as element except you get all elements that match the css selector or text.</p>
+<table class="pre"><tr><td class="lines"><pre class="fssnip"><span class="l">1: </span>
+<span class="l">2: </span>
+<span class="l">3: </span>
+<span class="l">4: </span>
+<span class="l">5: </span>
+</pre></td>
+<td class="snippet"><pre class="fssnip highlighted"><code lang="fsharp"><span class="k">let</span> <span onmouseout="hideTip(event, '54', 89)" onmouseover="showTip(event, '54', 89)" class="fn">clickAll</span> <span onmouseout="hideTip(event, '45', 90)" onmouseover="showTip(event, '45', 90)" class="id">selector</span> <span class="o">=</span>
+  <span onmouseout="hideTip(event, '55', 91)" onmouseover="showTip(event, '55', 91)" class="fn">elements</span> <span onmouseout="hideTip(event, '45', 92)" onmouseover="showTip(event, '45', 92)" class="id">selector</span>
+  <span class="o">|&gt;</span> <span onmouseout="hideTip(event, '56', 93)" onmouseover="showTip(event, '56', 93)" class="m">List</span><span class="pn">.</span><span onmouseout="hideTip(event, '57', 94)" onmouseover="showTip(event, '57', 94)" class="id">iter</span> <span class="pn">(</span><span class="k">fun</span> <span onmouseout="hideTip(event, '58', 95)" onmouseover="showTip(event, '58', 95)" class="id">element</span> <span class="k">-&gt;</span> <span onmouseout="hideTip(event, '26', 96)" onmouseover="showTip(event, '26', 96)" class="fn">click</span> <span onmouseout="hideTip(event, '58', 97)" onmouseover="showTip(event, '58', 97)" class="id">element</span><span class="pn">)</span>
+
+<span onmouseout="hideTip(event, '54', 98)" onmouseover="showTip(event, '54', 98)" class="fn">clickAll</span> <span class="s">&quot;.button&quot;</span>
+</code></pre></td>
+</tr>
+</table>
+<h2><a name="unreliableElements" class="anchor" href="#unreliableElements">unreliableElements</a></h2>
+<p>The same as elements except there is no reliability.  You get an empty list if there no elements on the first try.</p>
+<table class="pre"><tr><td class="lines"><pre class="fssnip"><span class="l">1: </span>
+</pre></td>
+<td class="snippet"><pre class="fssnip highlighted"><code lang="fsharp"><span class="k">let</span> <span onmouseout="hideTip(event, '59', 99)" onmouseover="showTip(event, '59', 99)" class="id">names</span> <span class="o">=</span> <span onmouseout="hideTip(event, '60', 100)" onmouseover="showTip(event, '60', 100)" class="fn">unreliableElements</span> <span class="s">&quot;.name&quot;</span>
+</code></pre></td>
+</tr>
+</table>
+<h2><a name="unreliableElementsWithin" class="anchor" href="#unreliableElementsWithin">unreliableElementsWithin</a></h2>
+<p>Try without reliability to get elements within an existing element.</p>
+<table class="pre"><tr><td class="lines"><pre class="fssnip"><span class="l">1: </span>
+<span class="l">2: </span>
+<span class="l">3: </span>
+<span class="l">4: </span>
+</pre></td>
+<td class="snippet"><pre class="fssnip highlighted"><code lang="fsharp"><span class="c">//note that the bellow can be done (better) with selector &#39;#people tr:first&#39;</span>
+<span class="c">//the space is &#39;within&#39; in css selectors</span>
+<span class="k">let</span> <span onmouseout="hideTip(event, '61', 101)" onmouseover="showTip(event, '61', 101)" class="id">people</span> <span class="o">=</span> <span onmouseout="hideTip(event, '27', 102)" onmouseover="showTip(event, '27', 102)" class="fn">element</span> <span class="s">&quot;#people&quot;</span>
+<span class="k">let</span> <span onmouseout="hideTip(event, '62', 103)" onmouseover="showTip(event, '62', 103)" class="id">firstPerson</span> <span class="o">=</span> <span onmouseout="hideTip(event, '63', 104)" onmouseover="showTip(event, '63', 104)" class="fn">unreliableElementsWithin</span> <span class="s">&quot;tr:first&quot;</span> <span onmouseout="hideTip(event, '61', 105)" onmouseover="showTip(event, '61', 105)" class="id">people</span>
+</code></pre></td>
+</tr>
+</table>
+<h2><a name="elementsWithText" class="anchor" href="#elementsWithText">elementsWithText</a></h2>
+<p>Unreliably gets elements with specific text for a selector.</p>
+<table class="pre"><tr><td class="lines"><pre class="fssnip"><span class="l">1: </span>
+</pre></td>
+<td class="snippet"><pre class="fssnip highlighted"><code lang="fsharp"><span class="k">let</span> <span onmouseout="hideTip(event, '64', 106)" onmouseover="showTip(event, '64', 106)" class="id">daves</span> <span class="o">=</span> <span onmouseout="hideTip(event, '65', 107)" onmouseover="showTip(event, '65', 107)" class="fn">elementsWithText</span> <span class="s">&quot;.name&quot;</span> <span class="s">&quot;Dave&quot;</span>
+</code></pre></td>
+</tr>
+</table>
+<h2><a name="elementsWithin" class="anchor" href="#elementsWithin">elementsWithin</a></h2>
+<p>Get elements by searching within another element (nested).</p>
+<table class="pre"><tr><td class="lines"><pre class="fssnip"><span class="l">1: </span>
+</pre></td>
+<td class="snippet"><pre class="fssnip highlighted"><code lang="fsharp"><span class="k">let</span> <span onmouseout="hideTip(event, '66', 108)" onmouseover="showTip(event, '66', 108)" class="id">names2</span> <span class="o">=</span> <span onmouseout="hideTip(event, '27', 109)" onmouseover="showTip(event, '27', 109)" class="fn">element</span> <span class="s">&quot;#header&quot;</span> <span class="o">|&gt;</span> <span onmouseout="hideTip(event, '67', 110)" onmouseover="showTip(event, '67', 110)" class="fn">elementsWithin</span> <span class="s">&quot;.name&quot;</span>
+</code></pre></td>
+</tr>
+</table>
+<h2><a name="nth" class="anchor" href="#nth">nth</a></h2>
+<p>Get the nth element.</p>
+<table class="pre"><tr><td class="lines"><pre class="fssnip"><span class="l">1: </span>
+</pre></td>
+<td class="snippet"><pre class="fssnip highlighted"><code lang="fsharp"><span onmouseout="hideTip(event, '26', 111)" onmouseover="showTip(event, '26', 111)" class="fn">click</span> <span class="pn">(</span><span onmouseout="hideTip(event, '68', 112)" onmouseover="showTip(event, '68', 112)" class="fn">nth</span> <span class="n">4</span> <span class="s">&quot;.button&quot;</span><span class="pn">)</span>
+</code></pre></td>
+</tr>
+</table>
+<h2><a name="first" class="anchor" href="#first">first</a></h2>
+<p>Get the first element.</p>
+<table class="pre"><tr><td class="lines"><pre class="fssnip"><span class="l">1: </span>
+</pre></td>
+<td class="snippet"><pre class="fssnip highlighted"><code lang="fsharp"><span onmouseout="hideTip(event, '26', 113)" onmouseover="showTip(event, '26', 113)" class="fn">click</span> <span class="pn">(</span><span onmouseout="hideTip(event, '69', 114)" onmouseover="showTip(event, '69', 114)" class="fn">first</span> <span class="s">&quot;.button&quot;</span><span class="pn">)</span>
+</code></pre></td>
+</tr>
+</table>
+<h2><a name="last" class="anchor" href="#last">last</a></h2>
+<p>Get the last element.</p>
+<table class="pre"><tr><td class="lines"><pre class="fssnip"><span class="l">1: </span>
+</pre></td>
+<td class="snippet"><pre class="fssnip highlighted"><code lang="fsharp"><span onmouseout="hideTip(event, '26', 115)" onmouseover="showTip(event, '26', 115)" class="fn">click</span> <span class="pn">(</span><span onmouseout="hideTip(event, '70', 116)" onmouseover="showTip(event, '70', 116)" class="fn">last</span> <span class="s">&quot;.button&quot;</span><span class="pn">)</span>
+</code></pre></td>
+</tr>
+</table>
+<h2><a name="fastTextFromCSS" class="anchor" href="#fastTextFromCSS">fastTextFromCSS</a></h2>
+<p>Effeciently get the text values for all elements matching a css selector.</p>
+<table class="pre"><tr><td class="lines"><pre class="fssnip"><span class="l">1: </span>
+</pre></td>
+<td class="snippet"><pre class="fssnip highlighted"><code lang="fsharp"><span class="k">let</span> <span onmouseout="hideTip(event, '71', 117)" onmouseover="showTip(event, '71', 117)" class="id">names3</span> <span class="o">=</span> <span onmouseout="hideTip(event, '72', 118)" onmouseover="showTip(event, '72', 118)" class="fn">fastTextFromCSS</span> <span class="s">&quot;.name&quot;</span>
+</code></pre></td>
+</tr>
+</table>
+<h2><a name="switchTo" class="anchor" href="#switchTo">switchTo</a></h2>
+<p>Switch to an existing instance of a browser.</p>
+<table class="pre"><tr><td class="lines"><pre class="fssnip"><span class="l">1: </span>
+<span class="l">2: </span>
+<span class="l">3: </span>
+<span class="l">4: </span>
+<span class="l">5: </span>
+<span class="l">6: </span>
+</pre></td>
+<td class="snippet"><pre class="fssnip highlighted"><code lang="fsharp"><span onmouseout="hideTip(event, '8', 119)" onmouseover="showTip(event, '8', 119)" class="fn">start</span> <span onmouseout="hideTip(event, '9', 120)" onmouseover="showTip(event, '9', 120)" class="id">firefox</span>
+<span class="k">let</span> <span onmouseout="hideTip(event, '73', 121)" onmouseover="showTip(event, '73', 121)" class="id">mainBrowser</span> <span class="o">=</span> <span onmouseout="hideTip(event, '74', 122)" onmouseover="showTip(event, '74', 122)" class="mv">browser</span>
+<span onmouseout="hideTip(event, '8', 123)" onmouseover="showTip(event, '8', 123)" class="fn">start</span> <span onmouseout="hideTip(event, '10', 124)" onmouseover="showTip(event, '10', 124)" class="id">chrome</span>
+<span class="k">let</span> <span onmouseout="hideTip(event, '75', 125)" onmouseover="showTip(event, '75', 125)" class="id">secondBrowser</span> <span class="o">=</span> <span onmouseout="hideTip(event, '74', 126)" onmouseover="showTip(event, '74', 126)" class="mv">browser</span>
+<span class="c">//switch back to mainBrowser after opening secondBrowser</span>
+<span onmouseout="hideTip(event, '76', 127)" onmouseover="showTip(event, '76', 127)" class="fn">switchTo</span> <span onmouseout="hideTip(event, '73', 128)" onmouseover="showTip(event, '73', 128)" class="id">mainBrowser</span>
+</code></pre></td>
+</tr>
+</table>
+<h2><a name="switchToTab" class="anchor" href="#switchToTab">switchToTab</a></h2>
+<p>Switch browser focus between tabs.</p>
+<table class="pre"><tr><td class="lines"><pre class="fssnip"><span class="l">1: </span>
+</pre></td>
+<td class="snippet"><pre class="fssnip highlighted"><code lang="fsharp"><span onmouseout="hideTip(event, '77', 129)" onmouseover="showTip(event, '77', 129)" class="fn">switchToTab</span> <span class="n">2</span>
+</code></pre></td>
+</tr>
+</table>
+<h2><a name="closeTab" class="anchor" href="#closeTab">closeTab</a></h2>
+<p>Close a specific tab.</p>
+<table class="pre"><tr><td class="lines"><pre class="fssnip"><span class="l">1: </span>
+</pre></td>
+<td class="snippet"><pre class="fssnip highlighted"><code lang="fsharp"><span onmouseout="hideTip(event, '78', 130)" onmouseover="showTip(event, '78', 130)" class="fn">closeTab</span> <span class="n">2</span>
+</code></pre></td>
+</tr>
+</table>
+<h2><a name="resize" class="anchor" href="#resize">resize</a></h2>
+<p>Resize the browser to a specific size.</p>
+<table class="pre"><tr><td class="lines"><pre class="fssnip"><span class="l">1: </span>
+</pre></td>
+<td class="snippet"><pre class="fssnip highlighted"><code lang="fsharp"><span onmouseout="hideTip(event, '79', 131)" onmouseover="showTip(event, '79', 131)" class="fn">resize</span> <span class="pn">(</span><span class="n">1920</span><span class="pn">,</span> <span class="n">1080</span><span class="pn">)</span>
+</code></pre></td>
+</tr>
+</table>
+<h2><a name="rotate" class="anchor" href="#rotate">rotate</a></h2>
+<p>Rotate the browser by switching the Height and Width.</p>
+<table class="pre"><tr><td class="lines"><pre class="fssnip"><span class="l">1: </span>
+</pre></td>
+<td class="snippet"><pre class="fssnip highlighted"><code lang="fsharp"><span onmouseout="hideTip(event, '80', 132)" onmouseover="showTip(event, '80', 132)" class="fn">rotate</span><span class="pn">(</span><span class="pn">)</span>
+</code></pre></td>
+</tr>
+</table>
+<h2><a name="js" class="anchor" href="#js">js</a></h2>
+<p>Run JavaScript in the current browser.</p>
+<table class="pre"><tr><td class="lines"><pre class="fssnip"><span class="l">1: </span>
+<span class="l">2: </span>
+</pre></td>
+<td class="snippet"><pre class="fssnip highlighted"><code lang="fsharp"><span class="c">//give the title a border</span>
+<span onmouseout="hideTip(event, '81', 133)" onmouseover="showTip(event, '81', 133)" class="fn">js</span> <span class="s">&quot;document.querySelector(&#39;#title&#39;).style.border = &#39;thick solid #FFF467&#39;;&quot;</span>
+</code></pre></td>
+</tr>
+</table>
+<h2><a name="screenshot" class="anchor" href="#screenshot">screenshot</a></h2>
+<p>Take a screenshot and save it to the specified path with specified filename. Returns image as byte array.</p>
+<table class="pre"><tr><td class="lines"><pre class="fssnip"><span class="l">1: </span>
+<span class="l">2: </span>
+<span class="l">3: </span>
+</pre></td>
+<td class="snippet"><pre class="fssnip highlighted"><code lang="fsharp"><span class="k">let</span> <span onmouseout="hideTip(event, '82', 134)" onmouseover="showTip(event, '82', 134)" class="id">path</span> <span class="o">=</span> <span onmouseout="hideTip(event, '83', 135)" onmouseover="showTip(event, '83', 135)" class="rt">Environment</span><span class="pn">.</span><span onmouseout="hideTip(event, '84', 136)" onmouseover="showTip(event, '84', 136)" class="id">GetFolderPath</span><span class="pn">(</span><span onmouseout="hideTip(event, '83', 137)" onmouseover="showTip(event, '83', 137)" class="rt">Environment</span><span class="pn">.</span><span onmouseout="hideTip(event, '85', 138)" onmouseover="showTip(event, '85', 138)" class="vt">SpecialFolder</span><span class="pn">.</span><span onmouseout="hideTip(event, '86', 139)" onmouseover="showTip(event, '86', 139)" class="id">ApplicationData</span><span class="pn">)</span> <span class="o">+</span> <span class="s">@&quot;\canopy\&quot;</span>
+<span class="k">let</span> <span onmouseout="hideTip(event, '87', 140)" onmouseover="showTip(event, '87', 140)" class="id">filename</span> <span class="o">=</span> <span onmouseout="hideTip(event, '88', 141)" onmouseover="showTip(event, '88', 141)" class="vt">DateTime</span><span class="pn">.</span><span onmouseout="hideTip(event, '89', 142)" onmouseover="showTip(event, '89', 142)" class="id">Now</span><span class="pn">.</span><span onmouseout="hideTip(event, '90', 143)" onmouseover="showTip(event, '90', 143)" class="id">ToString</span><span class="pn">(</span><span class="s">&quot;MMM-d_HH-mm-ss-fff&quot;</span><span class="pn">)</span>
+<span onmouseout="hideTip(event, '91', 144)" onmouseover="showTip(event, '91', 144)" class="fn">screenshot</span> <span onmouseout="hideTip(event, '82', 145)" onmouseover="showTip(event, '82', 145)" class="id">path</span> <span onmouseout="hideTip(event, '87', 146)" onmouseover="showTip(event, '87', 146)" class="id">filename</span>
+</code></pre></td>
+</tr>
+</table>
+<h2><a name="sleep" class="anchor" href="#sleep">sleep</a></h2>
+<p>Sleep for <code>X</code> seconds.</p>
+<table class="pre"><tr><td class="lines"><pre class="fssnip"><span class="l">1: </span>
+<span class="l">2: </span>
+<span class="l">3: </span>
+<span class="l">4: </span>
+<span class="l">5: </span>
+<span class="l">6: </span>
+</pre></td>
+<td class="snippet"><pre class="fssnip highlighted"><code lang="fsharp"><span class="c">//sleep for 1 second</span>
+<span onmouseout="hideTip(event, '92', 147)" onmouseover="showTip(event, '92', 147)" class="fn">sleep</span> <span class="pn">(</span><span class="pn">)</span>
+<span class="c">//sleep for 1 second</span>
+<span onmouseout="hideTip(event, '92', 148)" onmouseover="showTip(event, '92', 148)" class="fn">sleep</span> <span class="n">1</span>
+<span class="c">//sleep for 3 seconds</span>
+<span onmouseout="hideTip(event, '92', 149)" onmouseover="showTip(event, '92', 149)" class="fn">sleep</span> <span class="n">3</span>
+</code></pre></td>
+</tr>
+</table>
+<h2><a name="highlight" class="anchor" href="#highlight">highlight</a></h2>
+<p>Place a border around an element to help you identify it visually, used in wip test mode.</p>
+<table class="pre"><tr><td class="lines"><pre class="fssnip"><span class="l">1: </span>
+</pre></td>
+<td class="snippet"><pre class="fssnip highlighted"><code lang="fsharp"><span onmouseout="hideTip(event, '93', 150)" onmouseover="showTip(event, '93', 150)" class="fn">highlight</span> <span class="s">&quot;.btn&quot;</span>
+</code></pre></td>
+</tr>
+</table>
+<h2><a name="describe-aliased-as-puts" class="anchor" href="#describe-aliased-as-puts">describe (aliased as puts)</a></h2>
+<p>Describe something in your test, currently writes description to console.</p>
+<table class="pre"><tr><td class="lines"><pre class="fssnip"><span class="l">1: </span>
+</pre></td>
+<td class="snippet"><pre class="fssnip highlighted"><code lang="fsharp"><span onmouseout="hideTip(event, '37', 151)" onmouseover="showTip(event, '37', 151)" class="fn">describe</span> <span class="s">&quot;on main page, testing logout&quot;</span>
+</code></pre></td>
+</tr>
+</table>
+<h2><a name="waitFor" class="anchor" href="#waitFor">waitFor</a></h2>
+<p>Wait until custom function is true (better alternative to sleeping <code>X</code> seconds).</p>
+<table class="pre"><tr><td class="lines"><pre class="fssnip"><span class="l">1: </span>
+<span class="l">2: </span>
+<span class="l">3: </span>
+<span class="l">4: </span>
+<span class="l">5: </span>
+<span class="l">6: </span>
+</pre></td>
+<td class="snippet"><pre class="fssnip highlighted"><code lang="fsharp"><span class="k">let</span> <span onmouseout="hideTip(event, '94', 152)" onmouseover="showTip(event, '94', 152)" class="fn">fiveNumbersShown</span> <span class="pn">(</span><span class="pn">)</span> <span class="o">=</span>
+    <span class="pn">(</span><span onmouseout="hideTip(event, '55', 153)" onmouseover="showTip(event, '55', 153)" class="fn">elements</span> <span class="s">&quot;.number&quot;</span><span class="pn">)</span><span class="pn">.</span><span class="id">Length</span> <span class="o">=</span> <span class="n">5</span>
+
+<span onmouseout="hideTip(event, '16', 154)" onmouseover="showTip(event, '16', 154)" class="fn">url</span> <span class="s">&quot;http://somepage.com/countdown&quot;</span>
+<span onmouseout="hideTip(event, '95', 155)" onmouseover="showTip(event, '95', 155)" class="fn">waitFor</span> <span onmouseout="hideTip(event, '94', 156)" onmouseover="showTip(event, '94', 156)" class="fn">fiveNumbersShown</span>
+<span class="c">//continue with your test</span>
+</code></pre></td>
+</tr>
+</table>
+<h2><a name="waitFor2" class="anchor" href="#waitFor2">waitFor2</a></h2>
+<p>Wait (with message) until custom function is true (better alternative to sleeping <code>X</code> seconds).</p>
+<table class="pre"><tr><td class="lines"><pre class="fssnip"><span class="l">1: </span>
+<span class="l">2: </span>
+<span class="l">3: </span>
+</pre></td>
+<td class="snippet"><pre class="fssnip highlighted"><code lang="fsharp"><span onmouseout="hideTip(event, '16', 157)" onmouseover="showTip(event, '16', 157)" class="fn">url</span> <span class="s">&quot;http://somepage.com/countdown&quot;</span>
+<span onmouseout="hideTip(event, '96', 158)" onmouseover="showTip(event, '96', 158)" class="fn">waitFor2</span> <span class="s">&quot;waiting for five numbers to be shown&quot;</span> <span onmouseout="hideTip(event, '94', 159)" onmouseover="showTip(event, '94', 159)" class="fn">fiveNumbersShown</span>
+<span class="c">//continue with your test</span>
+</code></pre></td>
+</tr>
+</table>
+<h2><a name="waitForElement" class="anchor" href="#waitForElement">waitForElement</a></h2>
+<p>Wait until an element with a given CSS selector appears in the DOM.
+This is useful when you need to wait for data being loaded and displayed.</p>
+<table class="pre"><tr><td class="lines"><pre class="fssnip"><span class="l">1: </span>
+<span class="l">2: </span>
+<span class="l">3: </span>
+</pre></td>
+<td class="snippet"><pre class="fssnip highlighted"><code lang="fsharp"><span onmouseout="hideTip(event, '16', 160)" onmouseover="showTip(event, '16', 160)" class="fn">url</span> <span class="s">&quot;http://somepage.com/countdown&quot;</span>
+<span onmouseout="hideTip(event, '97', 161)" onmouseover="showTip(event, '97', 161)" class="fn">waitForElement</span> <span class="s">&quot;.number&quot;</span>
+<span class="c">//continue with your test</span>
+</code></pre></td>
+</tr>
+</table>
+<h2><a name="clear" class="anchor" href="#clear">clear</a></h2>
+<p>Clear the text of an element.</p>
+<table class="pre"><tr><td class="lines"><pre class="fssnip"><span class="l">1: </span>
+</pre></td>
+<td class="snippet"><pre class="fssnip highlighted"><code lang="fsharp"><span onmouseout="hideTip(event, '98', 162)" onmouseover="showTip(event, '98', 162)" class="fn">clear</span> <span class="s">&quot;#firstName&quot;</span>
+</code></pre></td>
+</tr>
+</table>
+<h2><a name="press" class="anchor" href="#press">press</a></h2>
+<p>Simulate a key press. Other keys can be sent by first importing OpenQA.Selenium and using the keys defined there.</p>
+<table class="pre"><tr><td class="lines"><pre class="fssnip"><span class="l"> 1: </span>
+<span class="l"> 2: </span>
+<span class="l"> 3: </span>
+<span class="l"> 4: </span>
+<span class="l"> 5: </span>
+<span class="l"> 6: </span>
+<span class="l"> 7: </span>
+<span class="l"> 8: </span>
+<span class="l"> 9: </span>
+<span class="l">10: </span>
+</pre></td>
+<td class="snippet"><pre class="fssnip highlighted"><code lang="fsharp"><span onmouseout="hideTip(event, '99', 163)" onmouseover="showTip(event, '99', 163)" class="fn">press</span> <span onmouseout="hideTip(event, '100', 164)" onmouseover="showTip(event, '100', 164)" class="id">tab</span>
+<span onmouseout="hideTip(event, '99', 165)" onmouseover="showTip(event, '99', 165)" class="fn">press</span> <span onmouseout="hideTip(event, '101', 166)" onmouseover="showTip(event, '101', 166)" class="id">enter</span>
+<span onmouseout="hideTip(event, '99', 167)" onmouseover="showTip(event, '99', 167)" class="fn">press</span> <span onmouseout="hideTip(event, '102', 168)" onmouseover="showTip(event, '102', 168)" class="id">down</span>
+<span onmouseout="hideTip(event, '99', 169)" onmouseover="showTip(event, '99', 169)" class="fn">press</span> <span onmouseout="hideTip(event, '103', 170)" onmouseover="showTip(event, '103', 170)" class="id">up</span>
+<span onmouseout="hideTip(event, '99', 171)" onmouseover="showTip(event, '99', 171)" class="fn">press</span> <span onmouseout="hideTip(event, '104', 172)" onmouseover="showTip(event, '104', 172)" class="id">left</span>
+<span onmouseout="hideTip(event, '99', 173)" onmouseover="showTip(event, '99', 173)" class="fn">press</span> <span onmouseout="hideTip(event, '105', 174)" onmouseover="showTip(event, '105', 174)" class="id">right</span>
+<span onmouseout="hideTip(event, '99', 175)" onmouseover="showTip(event, '99', 175)" class="fn">press</span> <span onmouseout="hideTip(event, '106', 176)" onmouseover="showTip(event, '106', 176)" class="id">esc</span>
+
+<span class="k">open</span> <span onmouseout="hideTip(event, '5', 177)" onmouseover="showTip(event, '5', 177)" class="id">OpenQA</span><span class="pn">.</span><span onmouseout="hideTip(event, '6', 178)" onmouseover="showTip(event, '6', 178)" class="id">Selenium</span>
+<span onmouseout="hideTip(event, '99', 179)" onmouseover="showTip(event, '99', 179)" class="fn">press</span> <span onmouseout="hideTip(event, '107', 180)" onmouseover="showTip(event, '107', 180)" class="rt">Keys</span><span class="pn">.</span><span onmouseout="hideTip(event, '108', 181)" onmouseover="showTip(event, '108', 181)" class="id">Backspace</span>
+</code></pre></td>
+</tr>
+</table>
+<h2><a name="alert" class="anchor" href="#alert">alert</a></h2>
+<p>Gets the current alert.</p>
+<table class="pre"><tr><td class="lines"><pre class="fssnip"><span class="l">1: </span>
+</pre></td>
+<td class="snippet"><pre class="fssnip highlighted"><code lang="fsharp"><span onmouseout="hideTip(event, '109', 182)" onmouseover="showTip(event, '109', 182)" class="fn">alert</span><span class="pn">(</span><span class="pn">)</span> <span class="o">==</span> <span class="s">&quot;Welcome to Test Page!&quot;</span>
+</code></pre></td>
+</tr>
+</table>
+<h2><a name="acceptAlert" class="anchor" href="#acceptAlert">acceptAlert</a></h2>
+<p>Accepts the current alert.</p>
+<table class="pre"><tr><td class="lines"><pre class="fssnip"><span class="l">1: </span>
+</pre></td>
+<td class="snippet"><pre class="fssnip highlighted"><code lang="fsharp"><span onmouseout="hideTip(event, '110', 183)" onmouseover="showTip(event, '110', 183)" class="fn">acceptAlert</span><span class="pn">(</span><span class="pn">)</span>
+</code></pre></td>
+</tr>
+</table>
+<h2><a name="dismissAlert" class="anchor" href="#dismissAlert">dismissAlert</a></h2>
+<p>Dismiss the current alert.</p>
+<table class="pre"><tr><td class="lines"><pre class="fssnip"><span class="l">1: </span>
+</pre></td>
+<td class="snippet"><pre class="fssnip highlighted"><code lang="fsharp"><span onmouseout="hideTip(event, '111', 184)" onmouseover="showTip(event, '111', 184)" class="fn">dismissAlert</span><span class="pn">(</span><span class="pn">)</span>
+</code></pre></td>
+</tr>
+</table>
+<h2><a name="pin" class="anchor" href="#pin">pin</a></h2>
+<p>Pin a browser to the left, right, or fullscreen (any browser you start is pinned right automatically).</p>
+<table class="pre"><tr><td class="lines"><pre class="fssnip"><span class="l">1: </span>
+<span class="l">2: </span>
+<span class="l">3: </span>
+</pre></td>
+<td class="snippet"><pre class="fssnip highlighted"><code lang="fsharp"><span onmouseout="hideTip(event, '112', 185)" onmouseover="showTip(event, '112', 185)" class="fn">pin</span> <span onmouseout="hideTip(event, '113', 186)" onmouseover="showTip(event, '113', 186)" class="uc">Left</span>
+<span onmouseout="hideTip(event, '112', 187)" onmouseover="showTip(event, '112', 187)" class="fn">pin</span> <span onmouseout="hideTip(event, '114', 188)" onmouseover="showTip(event, '114', 188)" class="uc">Right</span>
+<span onmouseout="hideTip(event, '112', 189)" onmouseover="showTip(event, '112', 189)" class="fn">pin</span> <span onmouseout="hideTip(event, '115', 190)" onmouseover="showTip(event, '115', 190)" class="uc">FullScreen</span>
+</code></pre></td>
+</tr>
+</table>
+<h2><a name="tile" class="anchor" href="#tile">tile</a></h2>
+<p>Tile listed browsers equally across your screen. 4 open browsers would each take 25% of the screen.</p>
+<table class="pre"><tr><td class="lines"><pre class="fssnip"><span class="l">1: </span>
+<span class="l">2: </span>
+<span class="l">3: </span>
+<span class="l">4: </span>
+<span class="l">5: </span>
+<span class="l">6: </span>
+<span class="l">7: </span>
+<span class="l">8: </span>
+</pre></td>
+<td class="snippet"><pre class="fssnip highlighted"><code lang="fsharp"><span onmouseout="hideTip(event, '8', 191)" onmouseover="showTip(event, '8', 191)" class="fn">start</span> <span onmouseout="hideTip(event, '10', 192)" onmouseover="showTip(event, '10', 192)" class="id">chrome</span>
+<span class="k">let</span> <span onmouseout="hideTip(event, '116', 193)" onmouseover="showTip(event, '116', 193)" class="id">browser2</span> <span class="o">=</span> <span onmouseout="hideTip(event, '74', 194)" onmouseover="showTip(event, '74', 194)" class="mv">browser</span>
+<span onmouseout="hideTip(event, '8', 195)" onmouseover="showTip(event, '8', 195)" class="fn">start</span> <span onmouseout="hideTip(event, '10', 196)" onmouseover="showTip(event, '10', 196)" class="id">chrome</span>
+<span class="k">let</span> <span onmouseout="hideTip(event, '117', 197)" onmouseover="showTip(event, '117', 197)" class="id">browser3</span> <span class="o">=</span> <span onmouseout="hideTip(event, '74', 198)" onmouseover="showTip(event, '74', 198)" class="mv">browser</span>
+<span onmouseout="hideTip(event, '8', 199)" onmouseover="showTip(event, '8', 199)" class="fn">start</span> <span onmouseout="hideTip(event, '10', 200)" onmouseover="showTip(event, '10', 200)" class="id">chrome</span>
+<span class="k">let</span> <span onmouseout="hideTip(event, '118', 201)" onmouseover="showTip(event, '118', 201)" class="id">browser4</span> <span class="o">=</span> <span onmouseout="hideTip(event, '74', 202)" onmouseover="showTip(event, '74', 202)" class="mv">browser</span>
+
+<span onmouseout="hideTip(event, '119', 203)" onmouseover="showTip(event, '119', 203)" class="fn">tile</span> <span class="pn">[</span><span onmouseout="hideTip(event, '116', 204)" onmouseover="showTip(event, '116', 204)" class="id">browser2</span><span class="pn">;</span> <span onmouseout="hideTip(event, '117', 205)" onmouseover="showTip(event, '117', 205)" class="id">browser3</span><span class="pn">;</span> <span onmouseout="hideTip(event, '118', 206)" onmouseover="showTip(event, '118', 206)" class="id">browser4</span><span class="pn">]</span>
+</code></pre></td>
+</tr>
+</table>
+<h2><a name="positionBrowser" class="anchor" href="#positionBrowser">positionBrowser</a></h2>
+<p>Position current browser on the screen - position is in percentages: positionBrowser left top width height</p>
+<table class="pre"><tr><td class="lines"><pre class="fssnip"><span class="l">1: </span>
+</pre></td>
+<td class="snippet"><pre class="fssnip highlighted"><code lang="fsharp"><span onmouseout="hideTip(event, '120', 207)" onmouseover="showTip(event, '120', 207)" class="fn">positionBrowser</span> <span class="n">66</span> <span class="n">0</span> <span class="n">33</span> <span class="n">50</span>
+</code></pre></td>
+</tr>
+</table>
+<h2><a name="currentUrl" class="anchor" href="#currentUrl">currentUrl</a></h2>
+<p>Gets the current url.</p>
+<table class="pre"><tr><td class="lines"><pre class="fssnip"><span class="l">1: </span>
+</pre></td>
+<td class="snippet"><pre class="fssnip highlighted"><code lang="fsharp"><span class="k">let</span> <span onmouseout="hideTip(event, '121', 208)" onmouseover="showTip(event, '121', 208)" class="id">u</span> <span class="o">=</span> <span onmouseout="hideTip(event, '122', 209)" onmouseover="showTip(event, '122', 209)" class="fn">currentUrl</span> <span class="pn">(</span><span class="pn">)</span>
+</code></pre></td>
+</tr>
+</table>
+<h2><a name="title" class="anchor" href="#title">title</a></h2>
+<p>Gets the title of the current page.</p>
+<table class="pre"><tr><td class="lines"><pre class="fssnip"><span class="l">1: </span>
+</pre></td>
+<td class="snippet"><pre class="fssnip highlighted"><code lang="fsharp"><span class="k">let</span> <span onmouseout="hideTip(event, '123', 210)" onmouseover="showTip(event, '123', 210)" class="id">theTitle</span> <span class="o">=</span> <span onmouseout="hideTip(event, '124', 211)" onmouseover="showTip(event, '124', 211)" class="fn">title</span> <span class="pn">(</span><span class="pn">)</span>
+</code></pre></td>
+</tr>
+</table>
+<h2><a name="reload" class="anchor" href="#reload">reload</a></h2>
+<p>Reload the current page.</p>
+<table class="pre"><tr><td class="lines"><pre class="fssnip"><span class="l">1: </span>
+</pre></td>
+<td class="snippet"><pre class="fssnip highlighted"><code lang="fsharp"><span onmouseout="hideTip(event, '125', 212)" onmouseover="showTip(event, '125', 212)" class="fn">reload</span> <span class="pn">(</span><span class="pn">)</span>
+</code></pre></td>
+</tr>
+</table>
+<h2><a name="navigate" class="anchor" href="#navigate">navigate</a></h2>
+<p>Navigate forward or back.</p>
+<table class="pre"><tr><td class="lines"><pre class="fssnip"><span class="l">1: </span>
+<span class="l">2: </span>
+</pre></td>
+<td class="snippet"><pre class="fssnip highlighted"><code lang="fsharp"><span onmouseout="hideTip(event, '126', 213)" onmouseover="showTip(event, '126', 213)" class="fn">navigate</span> <span onmouseout="hideTip(event, '127', 214)" onmouseover="showTip(event, '127', 214)" class="id">back</span>
+<span onmouseout="hideTip(event, '126', 215)" onmouseover="showTip(event, '126', 215)" class="fn">navigate</span> <span onmouseout="hideTip(event, '128', 216)" onmouseover="showTip(event, '128', 216)" class="id">forward</span>
+</code></pre></td>
+</tr>
+</table>
+<h2><a name="addFinder" class="anchor" href="#addFinder">addFinder</a></h2>
+<p>Add a finder to the list of current finders to make your selectors cleaner.</p>
+<table class="pre"><tr><td class="lines"><pre class="fssnip"><span class="l">1: </span>
+<span class="l">2: </span>
+<span class="l">3: </span>
+<span class="l">4: </span>
+<span class="l">5: </span>
+<span class="l">6: </span>
+<span class="l">7: </span>
+</pre></td>
+<td class="snippet"><pre class="fssnip highlighted"><code lang="fsharp"><span class="k">let</span> <span onmouseout="hideTip(event, '129', 217)" onmouseover="showTip(event, '129', 217)" class="fn">findByHref</span> <span onmouseout="hideTip(event, '130', 218)" onmouseover="showTip(event, '130', 218)" class="id">href</span> <span onmouseout="hideTip(event, '131', 219)" onmouseover="showTip(event, '131', 219)" class="fn">f</span> <span onmouseout="hideTip(event, '132', 220)" onmouseover="showTip(event, '132', 220)" class="id">webdriver</span> <span class="o">=</span>
+    <span class="k">try</span>
+        <span class="k">let</span> <span onmouseout="hideTip(event, '133', 221)" onmouseover="showTip(event, '133', 221)" class="id">cssSelector</span> <span class="o">=</span> <span onmouseout="hideTip(event, '134', 222)" onmouseover="showTip(event, '134', 222)" class="fn">sprintf</span> <span class="s">&quot;a[href*=&#39;</span><span class="pf">%s</span><span class="s">&#39;]&quot;</span> <span onmouseout="hideTip(event, '130', 223)" onmouseover="showTip(event, '130', 223)" class="id">href</span>
+        <span onmouseout="hideTip(event, '131', 224)" onmouseover="showTip(event, '131', 224)" class="fn">f</span><span class="pn">(</span><span onmouseout="hideTip(event, '135', 225)" onmouseover="showTip(event, '135', 225)" class="rt">By</span><span class="pn">.</span><span onmouseout="hideTip(event, '136', 226)" onmouseover="showTip(event, '136', 226)" class="id">CssSelector</span><span class="pn">(</span><span onmouseout="hideTip(event, '133', 227)" onmouseover="showTip(event, '133', 227)" class="id">cssSelector</span><span class="pn">)</span><span class="pn">)</span> <span class="o">|&gt;</span> <span onmouseout="hideTip(event, '56', 228)" onmouseover="showTip(event, '56', 228)" class="m">List</span><span class="pn">.</span><span onmouseout="hideTip(event, '137', 229)" onmouseover="showTip(event, '137', 229)" class="id">ofSeq</span>
+    <span class="k">with</span> <span class="pn">|</span> <span onmouseout="hideTip(event, '138', 230)" onmouseover="showTip(event, '138', 230)" class="id">ex</span> <span class="k">-&gt;</span> <span class="pn">[</span><span class="pn">]</span>
+
+<span onmouseout="hideTip(event, '139', 231)" onmouseover="showTip(event, '139', 231)" class="fn">addFinder</span> <span onmouseout="hideTip(event, '129', 232)" onmouseover="showTip(event, '129', 232)" class="fn">findByHref</span>
+</code></pre></td>
+</tr>
+</table>
+<h2><a name="Fast-selectors" class="anchor" href="#Fast-selectors">Fast selectors</a></h2>
+<p>Skip looking through the list of finders for a specific selector, use a specific function.</p>
+<table class="pre"><tr><td class="lines"><pre class="fssnip"><span class="l">1: </span>
+<span class="l">2: </span>
+<span class="l">3: </span>
+<span class="l">4: </span>
+<span class="l">5: </span>
+<span class="l">6: </span>
+</pre></td>
+<td class="snippet"><pre class="fssnip highlighted"><code lang="fsharp"><span onmouseout="hideTip(event, '140', 233)" onmouseover="showTip(event, '140', 233)" class="fn">css</span> <span class="s">&quot;.name&quot;</span>
+<span onmouseout="hideTip(event, '141', 234)" onmouseover="showTip(event, '141', 234)" class="fn">xpath</span> <span class="s">&quot;//div/span&quot;</span>
+<span onmouseout="hideTip(event, '142', 235)" onmouseover="showTip(event, '142', 235)" class="fn">jquery</span> <span class="s">&quot;.name:first&quot;</span>
+<span onmouseout="hideTip(event, '143', 236)" onmouseover="showTip(event, '143', 236)" class="fn">label</span> <span class="s">&quot;First Name&quot;</span>
+<span onmouseout="hideTip(event, '144', 237)" onmouseover="showTip(event, '144', 237)" class="fn">text</span> <span class="s">&quot;Last Name&quot;</span>
+<span onmouseout="hideTip(event, '145', 238)" onmouseover="showTip(event, '145', 238)" class="fn">value</span> <span class="s">&quot;Submit&quot;</span>
+</code></pre></td>
+</tr>
+</table>
+<h2><a name="failsWith" class="anchor" href="#failsWith">failsWith</a></h2>
+<p>Expect a failure with a specific message and pass test if it occurs</p>
+<table class="pre"><tr><td class="lines"><pre class="fssnip"><span class="l">1: </span>
+</pre></td>
+<td class="snippet"><pre class="fssnip highlighted"><code lang="fsharp"><span onmouseout="hideTip(event, '146', 239)" onmouseover="showTip(event, '146', 239)" class="fn">failsWith</span> <span class="s">&quot;An expected error message&quot;</span>
+</code></pre></td>
+</tr>
+</table>
+<div class="tip" id="1">namespace canopy</div>
+<div class="tip" id="2">module types<br /><br />from canopy</div>
+<div class="tip" id="3">namespace canopy.runner</div>
+<div class="tip" id="4">namespace System</div>
+<div class="tip" id="5">namespace OpenQA</div>
+<div class="tip" id="6">namespace OpenQA.Selenium</div>
+<div class="tip" id="7">module classic<br /><br />from canopy</div>
+<div class="tip" id="8">val start : b:BrowserStartMode -&gt; unit</div>
+<div class="tip" id="9">val firefox : BrowserStartMode</div>
+<div class="tip" id="10">val chrome : BrowserStartMode</div>
+<div class="tip" id="11">val ie : BrowserStartMode</div>
+<div class="tip" id="12">val safari : BrowserStartMode</div>
+<div class="tip" id="13">val aurora : BrowserStartMode</div>
+<div class="tip" id="14">val edgeBETA : BrowserStartMode</div>
+<div class="tip" id="15">val chromium : BrowserStartMode</div>
+<div class="tip" id="16">val url : u:string -&gt; unit</div>
+<div class="tip" id="17">val quit : browser:&#39;a6 -&gt; unit</div>
+<div class="tip" id="18">val browser1 : unit</div>
+<div class="tip" id="19">val write : text:string -&gt; selector:&#39;a -&gt; unit</div>
+<div class="tip" id="20">val text : string</div>
+<div class="tip" id="21">val selector : &#39;a</div>
+<div class="tip" id="22">val selectedState : string</div>
+<div class="tip" id="23">val read : item:&#39;a -&gt; string</div>
+<div class="tip" id="24">val firstName : string</div>
+<div class="tip" id="25">val linkText : string</div>
+<div class="tip" id="26">val click : item:&#39;a -&gt; unit</div>
+<div class="tip" id="27">val element : cssSelector:string -&gt; IWebElement</div>
+<div class="tip" id="28">val doubleClick : item:&#39;a -&gt; unit</div>
+<div class="tip" id="29">val ctrlClick : item:&#39;a -&gt; unit</div>
+<div class="tip" id="30">val shiftClick : item:&#39;a -&gt; unit</div>
+<div class="tip" id="31">val rightClick : item:&#39;a -&gt; unit</div>
+<div class="tip" id="32">val check : item:&#39;a -&gt; unit</div>
+<div class="tip" id="33">val uncheck : item:&#39;a -&gt; unit</div>
+<div class="tip" id="34">val drag : cssSelectorA:string -&gt; cssSelectorB:string -&gt; (IWebDriver -&gt; unit)</div>
+<div class="tip" id="35">val hover : selector:string -&gt; unit</div>
+<div class="tip" id="36">val logoutHref : string</div>
+<div class="tip" id="37">val describe : text:string -&gt; unit</div>
+<div class="tip" id="38">val logout : IWebElement</div>
+<div class="tip" id="39">val unreliableElement : cssSelector:string -&gt; IWebElement</div>
+<div class="tip" id="40">val firstBob : IWebElement</div>
+<div class="tip" id="41">val elementWithText : cssSelector:string -&gt; regex:string -&gt; IWebElement</div>
+<div class="tip" id="42">val name : IWebElement</div>
+<div class="tip" id="43">val elementWithin : cssSelector:string -&gt; elem:IWebElement -&gt; IWebElement</div>
+<div class="tip" id="44">val exists : selector:string -&gt; bool</div>
+<div class="tip" id="45">val selector : string</div>
+<div class="tip" id="46">val someEle : IWebElement option</div>
+<div class="tip" id="47">val someElement : cssSelector:string -&gt; IWebElement option</div>
+<div class="tip" id="48">union case Option.Some: Value: &#39;T -&gt; Option&lt;&#39;T&gt;</div>
+<div class="tip" id="49">union case Option.None: Option&lt;&#39;T&gt;</div>
+<div class="tip" id="50">val someName : IWebElement option</div>
+<div class="tip" id="51">val someElementWithin : cssSelector:string -&gt; elem:ISearchContext -&gt; IWebElement option</div>
+<div class="tip" id="52">val parent : elem:IWebElement -&gt; IWebElement</div>
+<div class="tip" id="53">val someParent : elem:ISearchContext -&gt; IWebElement option</div>
+<div class="tip" id="54">val clickAll : selector:string -&gt; unit</div>
+<div class="tip" id="55">val elements : cssSelector:string -&gt; IWebElement list</div>
+<div class="tip" id="56">Multiple items<br />module List<br /><br />from Microsoft.FSharp.Collections<br /><br />--------------------<br />type List&lt;&#39;T&gt; =<br />&#160;&#160;| ( [] )<br />&#160;&#160;| ( :: ) of Head: &#39;T * Tail: &#39;T list<br />&#160;&#160;&#160;&#160;interface IReadOnlyList&lt;&#39;T&gt;<br />&#160;&#160;&#160;&#160;interface IReadOnlyCollection&lt;&#39;T&gt;<br />&#160;&#160;&#160;&#160;interface IEnumerable<br />&#160;&#160;&#160;&#160;interface IEnumerable&lt;&#39;T&gt;<br />&#160;&#160;&#160;&#160;member GetSlice : startIndex:int option * endIndex:int option -&gt; &#39;T list<br />&#160;&#160;&#160;&#160;member Head : &#39;T<br />&#160;&#160;&#160;&#160;member IsEmpty : bool<br />&#160;&#160;&#160;&#160;member Item : index:int -&gt; &#39;T with get<br />&#160;&#160;&#160;&#160;member Length : int<br />&#160;&#160;&#160;&#160;member Tail : &#39;T list<br />&#160;&#160;&#160;&#160;...</div>
+<div class="tip" id="57">val iter : action:(&#39;T -&gt; unit) -&gt; list:&#39;T list -&gt; unit</div>
+<div class="tip" id="58">val element : IWebElement</div>
+<div class="tip" id="59">val names : IWebElement list</div>
+<div class="tip" id="60">val unreliableElements : cssSelector:string -&gt; IWebElement list</div>
+<div class="tip" id="61">val people : IWebElement</div>
+<div class="tip" id="62">val firstPerson : IWebElement list</div>
+<div class="tip" id="63">val unreliableElementsWithin : cssSelector:string -&gt; elem:ISearchContext -&gt; IWebElement list</div>
+<div class="tip" id="64">val daves : IWebElement list</div>
+<div class="tip" id="65">val elementsWithText : cssSelector:string -&gt; regex:string -&gt; IWebElement list</div>
+<div class="tip" id="66">val names2 : IWebElement list</div>
+<div class="tip" id="67">val elementsWithin : cssSelector:string -&gt; elem:ISearchContext -&gt; IWebElement list</div>
+<div class="tip" id="68">val nth : index:int -&gt; cssSelector:string -&gt; IWebElement</div>
+<div class="tip" id="69">val first : cssSelector:string -&gt; IWebElement</div>
+<div class="tip" id="70">val last : cssSelector:string -&gt; IWebElement</div>
+<div class="tip" id="71">val names3 : string list</div>
+<div class="tip" id="72">val fastTextFromCSS : selector:string -&gt; string list</div>
+<div class="tip" id="73">val mainBrowser : IWebDriver</div>
+<div class="tip" id="74">val mutable browser : IWebDriver</div>
+<div class="tip" id="75">val secondBrowser : IWebDriver</div>
+<div class="tip" id="76">val switchTo : b:IWebDriver -&gt; unit</div>
+<div class="tip" id="77">val switchToTab : number:int -&gt; unit</div>
+<div class="tip" id="78">val closeTab : number:int -&gt; unit</div>
+<div class="tip" id="79">val resize : int * int -&gt; unit</div>
+<div class="tip" id="80">val rotate : unit -&gt; unit</div>
+<div class="tip" id="81">val js : script:string -&gt; obj</div>
+<div class="tip" id="82">val path : string</div>
+<div class="tip" id="83">type Environment =<br />&#160;&#160;static member CommandLine : string<br />&#160;&#160;static member CurrentDirectory : string with get, set<br />&#160;&#160;static member CurrentManagedThreadId : int<br />&#160;&#160;static member Exit : exitCode:int -&gt; unit<br />&#160;&#160;static member ExitCode : int with get, set<br />&#160;&#160;static member ExpandEnvironmentVariables : name:string -&gt; string<br />&#160;&#160;static member FailFast : message:string -&gt; unit + 2 overloads<br />&#160;&#160;static member GetCommandLineArgs : unit -&gt; string[]<br />&#160;&#160;static member GetEnvironmentVariable : variable:string -&gt; string + 1 overload<br />&#160;&#160;static member GetEnvironmentVariables : unit -&gt; IDictionary + 1 overload<br />&#160;&#160;...<br />&#160;&#160;nested type SpecialFolder<br />&#160;&#160;nested type SpecialFolderOption</div>
+<div class="tip" id="84">Environment.GetFolderPath(folder: Environment.SpecialFolder) : string<br />Environment.GetFolderPath(folder: Environment.SpecialFolder, option: Environment.SpecialFolderOption) : string</div>
+<div class="tip" id="85">type SpecialFolder =<br />&#160;&#160;| ApplicationData = 26<br />&#160;&#160;| CommonApplicationData = 35<br />&#160;&#160;| LocalApplicationData = 28<br />&#160;&#160;| Cookies = 33<br />&#160;&#160;| Desktop = 0<br />&#160;&#160;| Favorites = 6<br />&#160;&#160;| History = 34<br />&#160;&#160;| InternetCache = 32<br />&#160;&#160;| Programs = 2<br />&#160;&#160;| MyComputer = 17<br />&#160;&#160;...</div>
+<div class="tip" id="86">field Environment.SpecialFolder.ApplicationData: Environment.SpecialFolder = 26</div>
+<div class="tip" id="87">val filename : string</div>
+<div class="tip" id="88">Multiple items<br />type DateTime =<br />&#160;&#160;struct<br />&#160;&#160;&#160;&#160;new : ticks:int64 -&gt; DateTime + 10 overloads<br />&#160;&#160;&#160;&#160;member Add : value:TimeSpan -&gt; DateTime<br />&#160;&#160;&#160;&#160;member AddDays : value:float -&gt; DateTime<br />&#160;&#160;&#160;&#160;member AddHours : value:float -&gt; DateTime<br />&#160;&#160;&#160;&#160;member AddMilliseconds : value:float -&gt; DateTime<br />&#160;&#160;&#160;&#160;member AddMinutes : value:float -&gt; DateTime<br />&#160;&#160;&#160;&#160;member AddMonths : months:int -&gt; DateTime<br />&#160;&#160;&#160;&#160;member AddSeconds : value:float -&gt; DateTime<br />&#160;&#160;&#160;&#160;member AddTicks : value:int64 -&gt; DateTime<br />&#160;&#160;&#160;&#160;member AddYears : value:int -&gt; DateTime<br />&#160;&#160;&#160;&#160;...<br />&#160;&#160;end<br /><br />--------------------<br />DateTime ()<br />&#160;&#160;&#160;<em>(+0 other overloads)</em><br />DateTime(ticks: int64) : DateTime<br />&#160;&#160;&#160;<em>(+0 other overloads)</em><br />DateTime(ticks: int64, kind: DateTimeKind) : DateTime<br />&#160;&#160;&#160;<em>(+0 other overloads)</em><br />DateTime(year: int, month: int, day: int) : DateTime<br />&#160;&#160;&#160;<em>(+0 other overloads)</em><br />DateTime(year: int, month: int, day: int, calendar: Globalization.Calendar) : DateTime<br />&#160;&#160;&#160;<em>(+0 other overloads)</em><br />DateTime(year: int, month: int, day: int, hour: int, minute: int, second: int) : DateTime<br />&#160;&#160;&#160;<em>(+0 other overloads)</em><br />DateTime(year: int, month: int, day: int, hour: int, minute: int, second: int, kind: DateTimeKind) : DateTime<br />&#160;&#160;&#160;<em>(+0 other overloads)</em><br />DateTime(year: int, month: int, day: int, hour: int, minute: int, second: int, calendar: Globalization.Calendar) : DateTime<br />&#160;&#160;&#160;<em>(+0 other overloads)</em><br />DateTime(year: int, month: int, day: int, hour: int, minute: int, second: int, millisecond: int) : DateTime<br />&#160;&#160;&#160;<em>(+0 other overloads)</em><br />DateTime(year: int, month: int, day: int, hour: int, minute: int, second: int, millisecond: int, kind: DateTimeKind) : DateTime<br />&#160;&#160;&#160;<em>(+0 other overloads)</em></div>
+<div class="tip" id="89">property DateTime.Now: DateTime</div>
+<div class="tip" id="90">DateTime.ToString() : string<br />DateTime.ToString(provider: IFormatProvider) : string<br />DateTime.ToString(format: string) : string<br />DateTime.ToString(format: string, provider: IFormatProvider) : string</div>
+<div class="tip" id="91">val screenshot : directory:string -&gt; filename:string -&gt; byte []</div>
+<div class="tip" id="92">val sleep : seconds:&#39;a -&gt; unit</div>
+<div class="tip" id="93">val highlight : cssSelector:string -&gt; unit</div>
+<div class="tip" id="94">val fiveNumbersShown : unit -&gt; bool</div>
+<div class="tip" id="95">val waitFor : ((unit -&gt; bool) -&gt; unit)</div>
+<div class="tip" id="96">val waitFor2 : message:string -&gt; f:(unit -&gt; bool) -&gt; unit</div>
+<div class="tip" id="97">val waitForElement : cssSelector:string -&gt; unit</div>
+<div class="tip" id="98">val clear : item:&#39;a -&gt; unit</div>
+<div class="tip" id="99">val press : key:string -&gt; unit</div>
+<div class="tip" id="100">val tab : string</div>
+<div class="tip" id="101">val enter : string</div>
+<div class="tip" id="102">val down : string</div>
+<div class="tip" id="103">val up : string</div>
+<div class="tip" id="104">val left : string</div>
+<div class="tip" id="105">val right : string</div>
+<div class="tip" id="106">val esc : string</div>
+<div class="tip" id="107">type Keys =<br />&#160;&#160;static val Null : string<br />&#160;&#160;static val Cancel : string<br />&#160;&#160;static val Help : string<br />&#160;&#160;static val Backspace : string<br />&#160;&#160;static val Tab : string<br />&#160;&#160;static val Clear : string<br />&#160;&#160;static val Return : string<br />&#160;&#160;static val Enter : string<br />&#160;&#160;static val Shift : string<br />&#160;&#160;static val LeftShift : string<br />&#160;&#160;...</div>
+<div class="tip" id="108">field Keys.Backspace: string</div>
+<div class="tip" id="109">val alert : unit -&gt; IAlert</div>
+<div class="tip" id="110">val acceptAlert : unit -&gt; unit</div>
+<div class="tip" id="111">val dismissAlert : unit -&gt; unit</div>
+<div class="tip" id="112">val pin : direction:direction -&gt; unit</div>
+<div class="tip" id="113">union case direction.Left: direction</div>
+<div class="tip" id="114">union case direction.Right: direction</div>
+<div class="tip" id="115">union case direction.FullScreen: direction</div>
+<div class="tip" id="116">val browser2 : IWebDriver</div>
+<div class="tip" id="117">val browser3 : IWebDriver</div>
+<div class="tip" id="118">val browser4 : IWebDriver</div>
+<div class="tip" id="119">val tile : browsers:IWebDriver list -&gt; unit</div>
+<div class="tip" id="120">val positionBrowser : left:int -&gt; top:int -&gt; width:int -&gt; height:int -&gt; unit</div>
+<div class="tip" id="121">val u : string</div>
+<div class="tip" id="122">val currentUrl : unit -&gt; string</div>
+<div class="tip" id="123">val theTitle : string</div>
+<div class="tip" id="124">val title : unit -&gt; string</div>
+<div class="tip" id="125">val reload : unit -&gt; unit</div>
+<div class="tip" id="126">val navigate : direction:canopy.parallell.functions.Navigate -&gt; unit</div>
+<div class="tip" id="127">val back : canopy.parallell.functions.Navigate</div>
+<div class="tip" id="128">val forward : canopy.parallell.functions.Navigate</div>
+<div class="tip" id="129">val findByHref : href:string -&gt; f:(By -&gt; #seq&lt;&#39;b&gt;) -&gt; webdriver:&#39;c -&gt; &#39;b list</div>
+<div class="tip" id="130">val href : string</div>
+<div class="tip" id="131">val f : (By -&gt; #seq&lt;&#39;b&gt;)</div>
+<div class="tip" id="132">val webdriver : &#39;c</div>
+<div class="tip" id="133">val cssSelector : string</div>
+<div class="tip" id="134">val sprintf : format:Printf.StringFormat&lt;&#39;T&gt; -&gt; &#39;T</div>
+<div class="tip" id="135">type By =<br />&#160;&#160;member Equals : obj:obj -&gt; bool<br />&#160;&#160;member FindElement : context:ISearchContext -&gt; IWebElement<br />&#160;&#160;member FindElements : context:ISearchContext -&gt; ReadOnlyCollection&lt;IWebElement&gt;<br />&#160;&#160;member GetHashCode : unit -&gt; int<br />&#160;&#160;member ToString : unit -&gt; string<br />&#160;&#160;static member ClassName : classNameToFind:string -&gt; By<br />&#160;&#160;static member CssSelector : cssSelectorToFind:string -&gt; By<br />&#160;&#160;static member Id : idToFind:string -&gt; By<br />&#160;&#160;static member LinkText : linkTextToFind:string -&gt; By<br />&#160;&#160;static member Name : nameToFind:string -&gt; By<br />&#160;&#160;...</div>
+<div class="tip" id="136">By.CssSelector(cssSelectorToFind: string) : By</div>
+<div class="tip" id="137">val ofSeq : source:seq&lt;&#39;T&gt; -&gt; &#39;T list</div>
+<div class="tip" id="138">val ex : exn</div>
+<div class="tip" id="139">val addFinder : finder:(string -&gt; (#By -&gt; Collections.ObjectModel.ReadOnlyCollection&lt;IWebElement&gt;) -&gt; IWebDriver -&gt; IWebElement list) -&gt; unit</div>
+<div class="tip" id="140">val css : (string -&gt; string)</div>
+<div class="tip" id="141">val xpath : (string -&gt; string)</div>
+<div class="tip" id="142">val jquery : (string -&gt; string)</div>
+<div class="tip" id="143">val label : (string -&gt; string)</div>
+<div class="tip" id="144">val text : (string -&gt; string)</div>
+<div class="tip" id="145">val value : (string -&gt; string)</div>
+<div class="tip" id="146">val failsWith : message:string -&gt; unit</div>
+</div></main><footer class="footer font-small m-0 py-4 bg-dark"><div class="container"><div class="row"><div class="col-12 col-md-4 mb-4 mb-md-0"><div class="text-light"><h2 class="h5">Project Resources</h2><ul class="list-group list-group-flush"><li class="list-group-item bg-dark ml-0 pl-0"><a href="https://github.com/JeremyBellows/canopy/blob/master/README.md" class="text-white"><i class="fas fa-book-reader fa-fw mr-2"></i>README</a></li><li class="list-group-item bg-dark ml-0 pl-0"><a href="https://github.com/JeremyBellows/canopy/blob/master/CHANGELOG.md" class="text-white"><i class="fas fa-sticky-note fa-fw mr-2"></i>Release Notes / Changelog</a></li></ul></div></div><div class="col-12 col-md-4 mb-4 mb-md-0"><div class="text-light"><h2 class="h5">Other Links</h2><ul class="list-group list-group-flush"><li class="list-group-item bg-dark ml-0 pl-0"><a href="https://docs.microsoft.com/en-us/dotnet/fsharp/" class="text-white"><i class="fab fa-microsoft fa-fw mr-2"></i>F# Documentation</a></li><li class="list-group-item bg-dark ml-0 pl-0"><a href="https://fsharp.org/guides/slack/" class="text-white"><i class="fab fa-slack fa-fw mr-2"></i>F# Slack</a></li><li class="list-group-item bg-dark ml-0 pl-0"><a href="http://foundation.fsharp.org/" class="text-white"><img class="fsharp-footer-logo mr-2" src="https://fsharp.org/img/logo/fsharp.svg" alt="FSharp Logo" />F# Software Foundation</a></li></ul></div></div><div class="col-12 col-md-4 mb-4 mb-md-0"><div class="text-light"><h2 class="h5">Metadata</h2><ul class="list-group list-group-flush"><li class="list-group-item bg-dark ml-0 pl-0">Generated for version <a class="text-white" href="https://github.com/JeremyBellows/canopy/releases/tag/0.1.0">0.1.0</a> on 2020/02/19</li><li class="list-group-item bg-dark ml-0 pl-0">Found an issue? <a class="text-white" href="https://github.com/JeremyBellows/canopy/edit/master/docsSrc/content/actions.fsx">Edit this page.</a></li></ul></div></div></div><div class="row"><div class="col text-center"><small class="text-light"><i class="fas fa-copyright mr-1"></i>2020 canopy, All rights reserved</small></div></div></div></footer></div><script src="https://jeremybellows.github.io/canopy/content/themes.js?version=637176971940993473"></script><script src="https://code.jquery.com/jquery-3.4.1.slim.min.js" integrity="sha384-J6qa4849blE2+poT4WnyKhv5vZF5SrPo0iEjwBvKU7imGFAV0wwj1yYfoRSJoZ+n" crossorigin="anonymous"></script><script src="https://cdn.jsdelivr.net/npm/popper.js@1.16.0/dist/umd/popper.min.js" integrity="sha384-Q6E9RHvbIyZFJoft+2mJbHaEWldlvI9IOYy5n3zV9zzTtmI3UksdQRVvoxMfooAo" crossorigin="anonymous"></script><script src="https://stackpath.bootstrapcdn.com/bootstrap/4.4.1/js/bootstrap.min.js" integrity="sha384-wfSDF2E50Y2D1uUdj0O3uMBJnjuUD4Ih7YwaYd1iqfktj0Uod8GCExl3Og8ifwB6" crossorigin="anonymous"></script><script src="https://jeremybellows.github.io/canopy/content/tips.js?version=637176971940993473"></script><script src="https://jeremybellows.github.io/canopy/content/submenu.js?version=637176971940993473"></script><script src="https://jeremybellows.github.io/canopy/content/cleanups.js?version=637176971940993473"></script></body></html>
