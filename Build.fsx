@@ -641,7 +641,6 @@ Target.create "ReleaseDocs" releaseDocs
 
 "DotnetRestore"
     ==> "DotnetBuild"
-    ==> "DotnetTest"
     =?> ("GenerateCoverageReport", not disableCodeCoverage)
     ==> "DotnetPack"
     ==> "SourceLinkTest"
