@@ -155,7 +155,7 @@ let generateNav (navCfg : NavConfig) =
             Class "navbar-brand"
             Href (navCfg.SiteBaseUrl |> Uri.simpleCombine "/index.html")
         ] [
-            i [ Class "fa fa-car text-white mr-2"] []
+            i [ Class "fa fa-tree text-white mr-2"] []
             str (navCfg.ProjectName)
         ]
         button [
