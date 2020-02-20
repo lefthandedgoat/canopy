@@ -1,4 +1,4 @@
-#load ".fake/build.fsx/intellisense.fsx"
+//#load ".fake/build.fsx/intellisense.fsx"
 #load "docsTool/CLI.fs"
 #if !FAKE
 #r "netstandard"

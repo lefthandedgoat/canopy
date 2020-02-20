@@ -1,7 +1,7 @@
 (*** hide ***)
 // This block of code is omitted in the generated HTML documentation. Use
 // it to define helpers that you do not want to show in the documentation.
-#I "../../src/canopy/bin/Release/netstandard2.0"
+#I "../../src/canopy/bin/Debug/netstandard2.0"
 #I "../../packages/Selenium.WebDriver/lib/netstandard2.0"
 #r "canopy.dll"
 #r "WebDriver.dll"
