@@ -14,6 +14,10 @@
 (**
 canopy - f#rictionless web testing
 ===================
+<div class="row">
+<div class="col">
+    </div>
+</div>
 
 <div class="row">
   <div class="col-2"></div>
@@ -31,6 +35,8 @@ canopy - f#rictionless web testing
   </div>
 </div>
 
+<div class="row">
+<div class="col">
 canopy is a web testing framework with one goal in mind, make UI testing simple:
 
 * Solid stabilization layer built on top of Selenium. Death to "brittle, quirky, UI tests".
@@ -42,17 +48,31 @@ canopy is a web testing framework with one goal in mind, make UI testing simple:
 * .net Standard 2.0.
 
 * MIT License.
+</div>
+</div>
 
 Getting Started
 ---------------
 ####1\. Create a new F# console application (4.6.1+ or .net core)
-<img src="img/newProject.png" alt="F# New Project" style="display: inherit;"/>
+<div class="row">
+<div class="col">
+<img src="/files/img/newProject.png" alt="F# New Project" style="display: inherit;"/>
+</div>
+</div>
 
 ####2\. Install canopy via Nuget
-<img src="img/installCanopy.png" alt="Install canopy" style="display: inherit;"/>
+<div class="row">
+<div class="col">
+<img src="/files/img/installCanopy.png" alt="Install canopy" style="display: inherit;"/>
+</div>
+</div>
 
 ####3\. Install chromedriver via Nuget
-<img src="img/installChromeDriver.png" alt="Install chromedriver" style="display: inherit;"/>
+<div class="row">
+<div class="col">
+<img src="files/img/installChromeDriver.png" alt="Install chromedriver" style="display: inherit;"/>
+</div>
+</div>
 
 ####4\. Paste the following code into `Program.fs`
 
@@ -99,9 +119,15 @@ System.Console.ReadLine() |> ignore
 
 quit()
 (**
+<div class="row">
+<div class="col">
 ####5\. Run
-<img src="img/run.png" alt="Run" style="display: inherit;"/>
+<img src="files/img/run.png" alt="Run" style="display: inherit;"/>
+</div>
+</div>
 
+<div class="row">
+<div class="col">
 ####6\. Explore the rest of canopy's API
 
 * [Actions](/canopy/Docs/actions.html): documentation of everything you can do on a page
@@ -109,11 +135,19 @@ quit()
 * [Configuration](/canopy/Docs/configuration.html): configure and fine tune canopy
 * [Testing](/canopy/Docs/content.html): different ways to orchestrate tests and troubleshoot issues with a page
 * [Reporting](/canopy/Docs/reporting.html): different ways to output the results of your test suite
+</div>
+</div>
 
 ####7\. Watch some intro videos
+<div class="row">
+<div class="col">
 4 minute canopy starter kit
 <iframe width="960" height="540" src="https://www.youtube.com/embed/kLNPl3EcsCI" frameborder="0" allowfullscreen></iframe>
+</div>
+</div>
 
+<div class="row">
+<div class="col">
 5 minutes with Amir Rajan
 <iframe src="https://channel9.msdn.com/Events/NET-Fringe/NET-Fringe-2015/Web-UI-Testing-with-F-and-Canopy/player"
     width="960"
@@ -121,7 +155,11 @@ quit()
     allowFullScreen
     frameBorder="0">
 </iframe>
+</div>
+</div>
 
+<div class="row">
+<div class="col">
 30 minutes with Chris Holt at fsharpConf
 <iframe src="https://channel9.msdn.com/Events/FSharp-Events/fsharpConf-2016/Web-UI-Automation-with-F-and-canopy/player"
     width="960"
@@ -129,4 +167,6 @@ quit()
     allowFullScreen
     frameBorder="0">
 </iframe>
+</div>
+</div>
 *)
