@@ -599,7 +599,7 @@ Target.create "DotnetBuild" dotnetBuild
 //Target.create "WatchTests" watchTests
 Target.create "GenerateAssemblyInfo" generateAssemblyInfo
 Target.create "DotnetPack" dotnetPack
-Target.create "SourceLinkTest" sourceLinkTest
+//Target.create "SourceLinkTest" sourceLinkTest
 Target.create "PublishToNuGet" publishToNuget
 Target.create "GitRelease" gitRelease
 Target.create "GitHubRelease" githubRelease
@@ -641,7 +641,7 @@ Target.create "ReleaseDocs" releaseDocs
 "DotnetRestore"
     ==> "DotnetBuild"
     ==> "DotnetPack"
-    ==> "SourceLinkTest"
+    //==> "SourceLinkTest"
     ==> "PublishToNuGet"
     ==> "GitRelease"
     ==> "GitHubRelease"
