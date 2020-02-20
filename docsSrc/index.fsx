@@ -56,14 +56,14 @@ Getting Started
 ####1\. Create a new F# console application (4.6.1+ or .net core)
 <div class="row">
 <div class="col">
-<img src="/files/img/newProject.png" alt="F# New Project" style="display: inherit;"/>
+<img src="files/img/newProject.png" alt="F# New Project" style="display: inherit;"/>
 </div>
 </div>
 
 ####2\. Install canopy via Nuget
 <div class="row">
 <div class="col">
-<img src="/files/img/installCanopy.png" alt="Install canopy" style="display: inherit;"/>
+<img src="files/img/installCanopy.png" alt="Install canopy" style="display: inherit;"/>
 </div>
 </div>
 
