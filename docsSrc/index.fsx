@@ -16,14 +16,19 @@ canopy - f#rictionless web testing
 ===================
 
 <div class="row">
-  <div class="span1"></div>
-  <div class="span6">
-    <div class="well well-small" id="nuget">
+  <div class="col-2"></div>
+  <div class="col-8">
+    <div class="card bg-light" id="nuget">
+      <div class="card-body">
+        <p class="card-title">
       The canopy library can be <a href="https://www.nuget.org/packages/canopy/">installed from NuGet</a>:
-      <pre>PM> Install-Package canopy</pre>
+      </p>
+      <p class="card-text">
+        <pre>PM> Install-Package canopy</pre>
+      </p>
+      </div>
     </div>
   </div>
-  <div class="span1"></div>
 </div>
 
 canopy is a web testing framework with one goal in mind, make UI testing simple:
@@ -99,12 +104,11 @@ quit()
 
 ####6\. Explore the rest of canopy's API
 
-* [Upgrade 1.x -> 2.x](/canopy/upgrade1to2.html): documentation of upgrading from canopy 1.x to 2.x
-* [Actions](/canopy/actions.html): documentation of everything you can do on a page
-* [Assertions](/canopy/assertions.html): all the ways you can verify what's on the page is correct
-* [Configuration](/canopy/configuration.html): configure and fine tune canopy
-* [Testing](/canopy/testing.html): different ways to orchestrate tests and troubleshoot issues with a page
-* [Reporting](/canopy/reporting.html): different ways to output the results of your test suite
+* [Actions](/content/actions.html): documentation of everything you can do on a page
+* [Assertions](/content/assertions.html): all the ways you can verify what's on the page is correct
+* [Configuration](/content/configuration.html): configure and fine tune canopy
+* [Testing](/canopy/content.html): different ways to orchestrate tests and troubleshoot issues with a page
+* [Reporting](/content/reporting.html): different ways to output the results of your test suite
 
 ####7\. Watch some intro videos
 4 minute canopy starter kit
