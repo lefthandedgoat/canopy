@@ -104,11 +104,11 @@ quit()
 
 ####6\. Explore the rest of canopy's API
 
-* [Actions](/content/actions.html): documentation of everything you can do on a page
-* [Assertions](/content/assertions.html): all the ways you can verify what's on the page is correct
-* [Configuration](/content/configuration.html): configure and fine tune canopy
-* [Testing](/canopy/content.html): different ways to orchestrate tests and troubleshoot issues with a page
-* [Reporting](/content/reporting.html): different ways to output the results of your test suite
+* [Actions](/canopy/Docs/actions.html): documentation of everything you can do on a page
+* [Assertions](/canopy/Docs/assertions.html): all the ways you can verify what's on the page is correct
+* [Configuration](/canopy/Docs/configuration.html): configure and fine tune canopy
+* [Testing](/canopy/Docs/content.html): different ways to orchestrate tests and troubleshoot issues with a page
+* [Reporting](/canopy/Docs/reporting.html): different ways to output the results of your test suite
 
 ####7\. Watch some intro videos
 4 minute canopy starter kit
