@@ -6,10 +6,11 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
-## [0.1.0] - 2017-03-17
-First release
+## [2.1.1] - 2020-02-20
+New project structure release!
 
-### Added
-- This release already has lots of features
+### Changed
+- Changed project scaffolding
+- Fixed docs
 
-[0.1.0]: https://github.com/user/MyCoolNewLib.git/releases/tag/v0.1.0
+[2.1.1]: https://github.com/lefthandedgoat/canopy/releases/tag/v2.1.1
