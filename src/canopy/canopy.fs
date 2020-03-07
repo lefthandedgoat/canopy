@@ -108,6 +108,8 @@ let last cssSelector = last cssSelector browser
 (* documented/actions *)
 let ( << ) item text = write item text browser
 
+let ( <<< ) item text = checkedWrite item text browser
+
 (* documented/actions *)
 let read item = read item browser
 

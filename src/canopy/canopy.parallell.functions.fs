@@ -347,26 +347,25 @@ let private writeToSelect (elem:IWebElement) (text:string) browser =
     | [] -> raise (CanopyOptionNotFoundException(sprintf "element %s does not contain value %s" (elem.ToString()) text))
     | head::_ -> head.Click()
 
-let private writeToElement (e : IWebElement) (text:string) browser =
+let private writeToElement (e : IWebElement) (text:string) browser clear =
     if e.TagName = "select" then
         writeToSelect e text browser
     else
         let readonly = e.GetAttribute("readonly")
         if readonly = "true" then
             raise (CanopyReadOnlyException(sprintf "element %s is marked as read only, you can not write to read only elements" (e.ToString())))
-        if not optimizeByDisablingClearBeforeWrite then try e.Clear() with ex -> ex |> ignore
+        if clear then try e.Clear() with ex -> ex |> ignore
         e.SendKeys(text)
 
-(* documented/actions *)
-let write item text browser =
+let private clearAndWrite item text browser clear =
     match box item with
-    | :? IWebElement as elem ->  writeToElement elem text browser
+    | :? IWebElement as elem ->  writeToElement elem text browser clear
     | :? string as cssSelector ->
         wait elementTimeout (fun _ ->
             elements cssSelector browser
                 |> List.map (fun elem ->
                     try
-                        writeToElement elem text browser
+                        writeToElement elem text browser clear
                         true
                     with
                         //Note: Enrich exception with proper cssSelector description
@@ -375,6 +374,9 @@ let write item text browser =
                 |> List.exists (fun elem -> elem = true)
         )
     | _ -> raise (CanopyNotStringOrElementException(sprintf "Can't read %O because it is not a string or element" item))
+
+(* documented/actions *)
+let write item text browser = clearAndWrite item text browser (not optimizeByDisablingClearBeforeWrite)
 
 let private safeRead item browser =
     let readvalue = ref ""
@@ -396,6 +398,12 @@ let read item browser =
     | :? IWebElement as elem -> safeRead elem browser
     | :? string as cssSelector -> safeRead cssSelector browser
     | _ -> raise (CanopyNotStringOrElementException(sprintf "Can't read %O because it is not a string or element" item))
+
+let checkedWrite item (text: string) browser =
+    let len = text.Length
+    for index in [ 0 .. len - 1  ] do
+        clearAndWrite item (text.Substring(index, 1)) browser false
+        waitFor (fun _ -> (read item browser) = text.Substring(0, index + 1))
 
 (* documented/actions *)
 let clear item browser =
