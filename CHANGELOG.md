@@ -6,6 +6,9 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
+## [2.1.3] - 2020-03-07
+New project structure release!
+
 ## [2.1.2] - 2020-02-20
 New project structure release!
 
