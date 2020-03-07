@@ -467,8 +467,8 @@ let generateAssemblyInfo _ =
     |> Seq.iter (fun (projFileName, _, folderName, attributes) ->
         match projFileName with
         | Fsproj -> AssemblyInfoFile.createFSharp (folderName @@ "AssemblyInfo.fs") attributes
-        | Csproj -> AssemblyInfoFile.createCSharp ((folderName @@ "Properties") @@ "AssemblyInfo.cs") attributes
-        | Vbproj -> AssemblyInfoFile.createVisualBasic ((folderName @@ "My Project") @@ "AssemblyInfo.vb") attributes
+        | Csproj -> ()
+        | Vbproj -> ()
         )
 
 let dotnetPack ctx =
@@ -642,7 +642,7 @@ Target.create "ReleaseDocs" releaseDocs
     ==> "DotnetBuild"
     ==> "DotnetPack"
     //==> "SourceLinkTest"
-    ==> "PublishToNuGet"
+    //==> "PublishToNuGet"
     ==> "GitRelease"
     ==> "GitHubRelease"
     ==> "Release"
