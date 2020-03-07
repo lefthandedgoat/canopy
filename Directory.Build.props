@@ -2,12 +2,13 @@
     <PropertyGroup>
         <!-- summary is not migrated from project.json, but you can use the <Description> property for that if needed. -->
         <PackageTags>f#, fsharp</PackageTags>
-        <PackageProjectUrl>https://github.com/JeremyBellows/canopy</PackageProjectUrl>
-        <PackageLicenseUrl>https://github.com/JeremyBellows/canopy/blob/master/LICENSE.md</PackageLicenseUrl>
+        <PackageProjectUrl>https://github.com/lefthandedgoat/canopy</PackageProjectUrl>
+        <PackageLicenseUrl>https://github.com/lefthandedgoat/canopy/blob/master/LICENSE.md</PackageLicenseUrl>
+		<PackageIconUrl>https://github.com/lefthandedgoat/canopy/blob/master/docs/files/canopy_small.jpg</PackageIconUrl>
         <PackageRequireLicenseAcceptance>false</PackageRequireLicenseAcceptance>
         <RepositoryType>git</RepositoryType>
-        <Authors>JeremyBellows</Authors>
-        <RepositoryUrl>https://github.com/JeremyBellows/canopy</RepositoryUrl>
+        <Authors>Chris Holt, Amir Rajan, Jeremy Bellows</Authors>
+        <RepositoryUrl>https://github.com/lefthandedgoat/canopy</RepositoryUrl>
         <!-- owners is not supported in MSBuild -->
     </PropertyGroup>
 </Project>
