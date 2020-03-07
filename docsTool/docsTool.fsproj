@@ -1,0 +1,25 @@
+﻿<Project Sdk="Microsoft.NET.Sdk.Web">
+
+  <PropertyGroup>
+    <OutputType>Exe</OutputType>
+    <TargetFramework>netcoreapp3.1</TargetFramework>
+    <IsPackable>false</IsPackable>
+  </PropertyGroup>
+
+  <ItemGroup>
+    <Compile Include="Prelude.fs" />
+    <Compile Include="templates/helpers.fs" />
+    <Compile Include="templates/partMembers.fs" />
+    <Compile Include="templates/partNested.fs" />
+    <Compile Include="templates/modules.fs" />
+    <Compile Include="templates/namespaces.fs" />
+    <Compile Include="templates/types.fs" />
+    <Compile Include="templates/master.fs" />
+    <Compile Include="templates/nav.fs" />
+    <Compile Include="CLI.fs" />
+    <Compile Include="Program.fs" />
+  </ItemGroup>
+
+  <Import Project="..\.paket\Paket.Restore.targets" />
+
+</Project>

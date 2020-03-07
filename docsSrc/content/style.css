@@ -1,0 +1,333 @@
+@import url(https://fonts.googleapis.com/css?family=Droid+Sans|Droid+Sans+Mono|Open+Sans:400,600,700);
+
+/*--------------------------------------------------------------------------
+  Formatting for F# code snippets
+/*--------------------------------------------------------------------------*/
+
+/* strings --- and styles for other string related formats */
+span.s { color:#E0E268; }
+/* printf formatters */
+span.pf { color:#E0C57F; }
+/* escaped chars */
+span.e { color:#EA8675; }
+
+/* identifiers --- and styles for more specific identifier types */
+span.i { color:#d1d1d1; }
+/* type or module */
+span.t { color:#43AEC6; }
+/* function */
+span.f { color:#e1e1e1; }
+/* DU case or active pattern */
+span.p { color:#4ec9b0; }
+
+/* keywords */
+span.k { color:#FAB11D; }
+/* comment */
+span.c { color:#808080; }
+/* operators */
+span.o { color:#af75c1; }
+/* numbers */
+span.n { color:#96C71D; }
+/* line number */
+span.l { color:#80b0b0; }
+/* mutable var or ref cell */
+span.v { color:#d1d1d1; font-weight: bold; }
+/* inactive code */
+span.inactive { color:#808080; }
+/* preprocessor */
+span.prep { color:#af75c1; }
+/* fsi output */
+span.fsi { color:#808080; }
+
+/* omitted */
+span.omitted {
+	background:#3c4e52;
+  border-radius:5px;
+	color:#808080;
+	padding:0px 0px 1px 0px;
+}
+/* tool tip */
+div.tip {
+	background:#475b5f;
+  border-radius:4px;
+  font:11pt 'Droid Sans', arial, sans-serif;
+	padding:6px 8px 6px 8px;
+	display:none;
+  color:#d1d1d1;
+  pointer-events:none;
+}
+table.pre pre {
+  padding:0px;
+  margin:0px;
+  border:none;
+}
+table.pre, pre.fssnip, pre {
+  line-height:13pt;
+  /*border:1px solid #d8d8d8;*/
+  border:1px solid #000;
+  /* border: none; */
+  border-collapse:separate;
+  white-space:pre-wrap;
+  font: 9pt 'Droid Sans Mono',consolas,monospace;
+  width:90%;
+  margin:10px 20px 20px 20px;
+  background-color:#212d30;
+  padding:10px;
+  /*border-radius:5px;*/
+  color:#d1d1d1;
+  max-width: none;
+}
+pre.fssnip code {
+  font: 9pt 'Droid Sans Mono',consolas,monospace;
+}
+table.pre pre {
+  padding:0px;
+  margin:0px;
+  border-radius:0px;
+  width: 100%;
+}
+table.pre td {
+  padding:0px;
+  white-space:normal;
+  margin:0px;
+}
+table.pre td.lines {
+  width:30px;
+}
+
+.table thead td.fit,
+.table th.fit {
+    white-space: nowrap;
+    width: 1%;
+}
+/*--------------------------------------------------------------------------
+  Formatting for page & standard document content
+/*--------------------------------------------------------------------------*/
+
+body {
+  font-family: 'Open Sans', serif;
+}
+
+pre {
+    word-wrap: inherit;
+}
+
+/* Format the heading - nicer spacing etc. */
+.masthead {
+  overflow: hidden;
+}
+.masthead .muted a {
+  text-decoration:none;
+  color:#999999;
+}
+.masthead ul, .masthead li {
+  margin-bottom:0px;
+}
+.masthead .nav li {
+  margin-top: 15px;
+  font-size:110%;
+}
+.masthead h3 {
+  margin-bottom:5px;
+  font-size:170%;
+}
+hr {
+  margin:0px 0px 20px 0px;
+}
+
+/* Make table headings and td.title bold */
+td.title, thead {
+  font-weight:bold;
+}
+
+/* Format the right-side menu */
+#menu {
+  margin-top:50px;
+  font-size:11pt;
+  padding-left:20px;
+}
+
+#menu .nav-header {
+  font-size:12pt;
+  color:#606060;
+  margin-top:20px;
+}
+
+#menu li {
+  line-height:25px;
+}
+
+.wrapper {
+    margin-top: -56px;
+    padding-top: 56px;
+}
+
+/* Change font sizes for headings etc. */
+#main h1 { font-size: 26pt; margin:10px 0px 15px 0px; font-weight:400; }
+#main h2 { font-size: 20pt; margin:20px 0px 0px 0px; font-weight:400; }
+#main h3 { font-size: 14pt; margin:15px 0px 0px 0px; font-weight:600; }
+#main p  { font-size: 11pt; margin:5px 0px 15px 0px; }
+#main ul { font-size: 11pt; margin-top:10px; }
+#main li { font-size: 11pt; margin: 5px 0px 5px 0px; }
+#main strong { font-weight:700; }
+
+/*--------------------------------------------------------------------------
+  Formatting for API reference
+/*--------------------------------------------------------------------------*/
+
+.type-list .type-name, .module-list .module-name {
+  width:25%;
+  font-weight:bold;
+}
+.member-list .member-name {
+  width:35%;
+}
+#main .xmldoc h2 {
+  font-size:14pt;
+  margin:10px 0px 0px 0px;
+}
+#main .xmldoc h3 {
+  font-size:12pt;
+  margin:10px 0px 0px 0px;
+}
+.github-link {
+  float:right;
+  text-decoration:none;
+}
+.github-link img {
+  border-style:none;
+  margin-left:10px;
+}
+.github-link .hover { display:none; }
+.github-link:hover .hover { display:block; }
+.github-link .normal { display: block; }
+.github-link:hover .normal { display: none; }
+
+/*--------------------------------------------------------------------------
+  Links
+/*--------------------------------------------------------------------------*/
+
+.bootstrap h1 a, .bootstrap h1 a:hover, .bootstrap h1 a:focus,
+.bootstrap h2 a, .bootstrap h2 a:hover, .bootstrap h2 a:focus,
+.bootstrap h3 a, .bootstrap h3 a:hover, .bootstrap h3 a:focus,
+.bootstrap h4 a, .bootstrap h4 a:hover, .bootstrap h4 a:focus,
+.bootstrap h5 a, .bootstrap h5 a:hover, .bootstrap h5 a:focus,
+.bootstrap h6 a, .bootstrap h6 a:hover, .bootstrap h6 a:focus { color : inherit; text-decoration : inherit; outline:none }
+
+/*--------------------------------------------------------------------------
+  Additional formatting for the homepage
+/*--------------------------------------------------------------------------*/
+
+#nuget {
+  margin-top:20px;
+  font-size: 11pt;
+  padding:20px;
+}
+
+#nuget pre {
+  font-size:11pt;
+  -moz-border-radius: 0px;
+  -webkit-border-radius: 0px;
+  border-radius: 0px;
+  background: #404040;
+  border-style:none;
+  color: #e0e0e0;
+  margin-top:15px;
+}
+
+.date {
+  font-style: italic;
+  margin-bottom: 15px;
+}
+
+h1.header {
+  color: green;
+}
+
+h1.header:hover {
+  color: green;
+}
+
+h1.header:visited {
+  color: green;
+}
+
+.categories, .category, .recent-posts {
+  font-family: 'Droid Sans', arial, sans-serif;
+}
+
+.categories ul,
+.recent-posts ul {
+  margin-left: 0;
+}
+.categories li,
+.category li,
+.recent-posts li
+{
+  list-style-type: none;
+  white-space: nowrap;
+}
+
+.links {
+  text-align: center;
+  margin-bottom: 8px;
+}
+
+.copyright {
+  text-align: center;
+  color: lightslategray;
+  margin-bottom: 25px;
+}
+
+.social {
+  margin-bottom: 30px;
+}
+
+/* Fixes page anchors with bootstrap navbar */
+:target::before {
+    display: block;
+    height: 59px;
+    margin-top: -59px;
+    content: "";
+}
+
+/* Hides first br from FSharp.Literate xml-doc rendering */
+.comment-block > br:first-child,
+.xmldoc > br:first-child {
+    display: none;
+}
+
+.main h1 {
+    padding: .5em 0em
+}
+
+.main h2 {
+    padding: .5em 0em
+}
+
+.dropdown-submenu {
+    position: relative;
+}
+
+.dropdown-submenu>a:after {
+    content: "\f0da";
+    padding-left: 5px;
+    vertical-align: middle;
+    border: none;
+    font-weight: 900;
+    font-family: 'Font Awesome 5 Free';
+}
+
+.dropdown-submenu>.dropdown-menu {
+    top: 0;
+    left: 100%;
+    margin-top: 0px;
+    margin-left: 0px;
+}
+
+.fsharp-footer-logo {
+    width: 20px;
+    margin-top: -2px;
+    -webkit-filter: grayscale(100%) brightness(0) invert(1); /* Safari 6.0 - 9.0 */
+    filter: grayscale(100%) brightness(0) invert(1);
+}

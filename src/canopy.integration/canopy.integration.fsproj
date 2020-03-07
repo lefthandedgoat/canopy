@@ -5,6 +5,10 @@
   </PropertyGroup>
 
   <PropertyGroup><NoWarn>NU1701</NoWarn></PropertyGroup>
+
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|AnyCPU'">
+    <DocumentationFile>.\canopy.integration.XML</DocumentationFile>
+  </PropertyGroup>
   
   <ItemGroup>
     <Compile Include="AssemblyInfo.fs" />
