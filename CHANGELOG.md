@@ -6,6 +6,9 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
+## [2.1.4] - 2020-03-07
+Add back nuget icon
+
 ## [2.1.3] - 2020-03-07
 New project structure release!
 
