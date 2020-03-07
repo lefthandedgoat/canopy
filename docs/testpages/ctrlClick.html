@@ -1,0 +1,23 @@
+<html>
+  <head>
+    <title>ctrl click</title>
+    <script src="http://code.jquery.com/jquery-1.9.1.min.js"></script>
+  </head>
+  <body>
+
+	<select multiple>
+	  <option value="1">One</option>
+	  <option value="2">Two</option>
+	  <option value="3">Three</option>
+	  <option value="4">Four</option>
+	</select>
+  
+    <script>
+	$(document).ready(function () {
+            $("#double_click").dblclick(function() {
+				$("#clicked").text("Clicked");
+			});
+        });        
+	</script>
+  </body>
+</html>

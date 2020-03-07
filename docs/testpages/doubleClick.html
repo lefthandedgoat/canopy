@@ -1,0 +1,19 @@
+<html>
+  <head>
+    <title>double click</title>
+    <script src="http://code.jquery.com/jquery-1.9.1.min.js"></script>
+  </head>
+  <body>
+    <input type="button" id="double_click" value="Double Click Me!" />
+	<br>
+	<br>
+	<label id="clicked">Not Clicked</label>
+    <script>
+	$(document).ready(function () {
+            $("#double_click").dblclick(function() {
+				$("#clicked").text("Clicked");
+			});
+        });        
+	</script>
+  </body>
+</html>
