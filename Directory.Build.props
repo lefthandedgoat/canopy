@@ -4,7 +4,7 @@
         <PackageTags>f#, fsharp</PackageTags>
         <PackageProjectUrl>https://github.com/lefthandedgoat/canopy</PackageProjectUrl>
         <PackageLicenseUrl>https://github.com/lefthandedgoat/canopy/blob/master/LICENSE.md</PackageLicenseUrl>
-		<PackageIconUrl>https://github.com/lefthandedgoat/canopy/blob/master/docs/files/canopy_small.jpg</PackageIconUrl>
+		<PackageIconUrl>https://raw.githubusercontent.com/lefthandedgoat/canopy/master/docs/files/canopy_small.jpg</PackageIconUrl>
         <PackageRequireLicenseAcceptance>false</PackageRequireLicenseAcceptance>
         <RepositoryType>git</RepositoryType>
         <Authors>Chris Holt, Amir Rajan, Jeremy Bellows</Authors>
