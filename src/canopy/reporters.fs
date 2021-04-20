@@ -235,7 +235,7 @@ type LiveHtmlReporter(browser : BrowserStartMode, driverPath : string, ?driverHo
         with get () = _browser
 
     member val reportPath = None with get, set
-    member val reportTemplateUrl = @"http://lefthandedgoat.github.com/canopy/reporttemplatep.html" with get, set
+    member val reportTemplateUrl = @"http://lefthandedgoat.github.io/canopy/reporttemplatep.html" with get, set
     member this.js script = (_browser :?> IJavaScriptExecutor).ExecuteScript(script)
     member this.reportHtml () = (this.js "return $('*').html();").ToString()
     member private this.swallowedJS script = try (_browser :?> IJavaScriptExecutor).ExecuteScript(script) |> ignore with | ex -> ()
