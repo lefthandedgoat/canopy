@@ -72,7 +72,7 @@ containsInsensitive "Log" (read "#logout")
 (**
 notContains
 --------
-Assert that one string does not contains another.
+Assert that one string does not contain another.
 *)
 notContains "Hello Bob!" (read "#name")
 
