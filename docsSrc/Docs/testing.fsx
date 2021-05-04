@@ -55,7 +55,7 @@ context "Reset password page tests"
 (**
 once
 ----
-Function that is run once time at the beginning of a test suite. (per context)
+Function that is run one time at the beginning of a test suite. (per context)
 *)
 once (fun _ ->
     ()//do this one time at the beginning of the most recently defined context
