@@ -26,6 +26,11 @@
     <None Include="companion\companion.fsx" />
   </ItemGroup>
 
-  <Import Project="..\..\.paket\Paket.Restore.targets" />
+  <ItemGroup>
+    <PackageReference Include="Selenium.WebDriver" Version="3.141.0" />
+    <PackageReference Include="System.Drawing.Common" Version="5.0.2" />
+  </ItemGroup>
+
+  <!--<Import Project="..\..\.paket\Paket.Restore.targets" />-->
   
 </Project>

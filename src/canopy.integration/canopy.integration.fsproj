@@ -18,7 +18,11 @@
     <Compile Include="csharp.fs" />
     <Compile Include="chsharpLoadTest.fs" />
   </ItemGroup>
+  
+  <ItemGroup>
+    <PackageReference Include="FSharp.Data" Version="4.1.1" />
+  </ItemGroup>
 
-  <Import Project="..\..\.paket\Paket.Restore.targets" />
+  <!--<Import Project="..\..\.paket\Paket.Restore.targets" />-->
   
 </Project>

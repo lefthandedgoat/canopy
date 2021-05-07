@@ -19,5 +19,4 @@
   <ItemGroup>
     <ProjectReference Include="..\..\src\canopy\canopy.fsproj" />
   </ItemGroup>
-  <Import Project="..\..\.paket\Paket.Restore.targets" />
 </Project>
