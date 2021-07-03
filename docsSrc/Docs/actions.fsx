@@ -239,7 +239,7 @@ unreliableElementsWithin
 --------
 Try without reliability to get elements within an existing element.
 *)
-//note that the bellow can be done (better) with selector '#people tr:first'
+//note that the below can be done (better) with selector '#people tr:first'
 //the space is 'within' in css selectors
 let people = element "#people"
 let firstPerson = unreliableElementsWithin "tr:first" people
