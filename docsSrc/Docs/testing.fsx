@@ -31,10 +31,21 @@ run()
 (**
 runFor
 ----
-Starts test suite and runs the suite with each of the listed browsers.  Usually at the bottom of your Program.fs
+Starts test suite and runs the suite with each of the listed browsers.
+Usually at the bottom of your Program.fs
+
+Pass a list of browsers start modes. There is no need to start a browser beforehand.
 *)
-//TODO Dotnet doesn't allow vague type definitions
-//runFor [chrome; firefox; ie]
+runFor (BrowserStartModes [chrome; firefox; ie])
+
+(**
+Alternatively, you can pass existing browser instances that are already started.
+*)
+start firefox
+let mainBrowser = browser
+start chrome
+let secondBrowser = browser
+runFor (WebDrivers [ mainBrowser; secondBrowser])
 
 
 (**
