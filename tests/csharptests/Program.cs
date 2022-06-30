@@ -138,7 +138,7 @@ namespace csharptests
                             description: "task1",
                             action: () =>
                             {
-                                using (var client = new WebClient()) { client.DownloadString("http://www.turtletest.com/chris");}
+                                using (var client = new System.Net.Http.HttpClient()) {client.GetStringAsync("http://www.turtletest.com/chris");}
                                 Console.WriteLine("task1");
                             },
                             frequency: 6),

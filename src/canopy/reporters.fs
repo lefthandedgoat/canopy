@@ -232,13 +232,13 @@ type LiveHtmlReporter(browser : BrowserStartMode, driverPath : string, ?driverHo
     new (browser : BrowserStartMode, driverPath : string) = LiveHtmlReporter(browser, driverPath, "127.0.0.1", false, true)
 
     member this.browser
-        with get () = _browser
+        with get () : IWebDriver = _browser
 
     member val reportPath = None with get, set
     member val reportTemplateUrl = @"http://lefthandedgoat.github.io/canopy/reporttemplatep.html" with get, set
-    member this.js script = (_browser :?> IJavaScriptExecutor).ExecuteScript(script)
+    member this.js (script: string) = (_browser :?> IJavaScriptExecutor).ExecuteScript(script)
     member this.reportHtml () = (this.js "return $('*').html();").ToString()
-    member private this.swallowedJS script = try (_browser :?> IJavaScriptExecutor).ExecuteScript(script) |> ignore with | ex -> ()
+    member private this.swallowedJS (script: string) = try (_browser :?> IJavaScriptExecutor).ExecuteScript(script) |> ignore with | ex -> ()
     member this.saveReportHtml directory filename =
         if not <| System.IO.Directory.Exists(directory)
             then System.IO.Directory.CreateDirectory(directory) |> ignore

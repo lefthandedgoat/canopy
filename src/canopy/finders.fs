@@ -79,8 +79,8 @@ type ByJQuery (selector, browser) =
                 let script = sprintf """return jQuery("%s").get();""" selector
                 ((browser : IWebDriver) :?> IJavaScriptExecutor).ExecuteScript(script) :?> ReadOnlyCollection<IWebElement>
             else
-                let script = sprintf """return jQuery("%s", arguments[0]).get();""" selector
-                let wrapper = context :?> OpenQA.Selenium.Internal.IWrapsDriver
+                let (script: string) = sprintf """return jQuery("%s", arguments[0]).get();""" selector
+                let wrapper = context :?> OpenQA.Selenium.IWrapsDriver
                 (wrapper.WrappedDriver :?> IJavaScriptExecutor).ExecuteScript(script, wrapper) :?> ReadOnlyCollection<IWebElement>
 
         base.FindElementsMethod <- fun context -> findElements context

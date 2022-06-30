@@ -99,7 +99,7 @@ let screenshot directory filename (browser : IWebDriver) =
         | _ -> Array.empty<byte>
 
 (* documented/actions *)
-let js script (browser : IWebDriver) = (browser :?> IJavaScriptExecutor).ExecuteScript(script)
+let js (script:string) (browser : IWebDriver) = (browser :?> IJavaScriptExecutor).ExecuteScript(script)
 
 let private swallowedJs script browser = try js script browser |> ignore with | ex -> ()
 
@@ -135,7 +135,7 @@ let private colorizeAndSleep cssSelector browser =
 let highlight cssSelector browser =
     swallowedJs (sprintf "document.querySelector('%s').style.border = 'thick solid #ACD372';" cssSelector) browser
 
-let private suggestOtherSelectors cssSelector browser =
+let private suggestOtherSelectors (cssSelector: string) browser =
     if not disableSuggestOtherSelectors then
         let classesViaJs = """
             var classes = [];
