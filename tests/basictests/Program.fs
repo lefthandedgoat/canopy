@@ -680,16 +680,14 @@ context "User Agents tests"
     quit browser
     switchTo mainBrowser
 
-// Firefox not working at the moment
-"FirefoxDeviceWithUserAgent userAgents.iPhone should show as iPhone" &&! fun _ ->
+"FirefoxDeviceWithUserAgent userAgents.iPhone should show as iPhone" &&& fun _ ->
     start <| FirefoxWithUserAgent userAgents.iPhone
     url "https://www.whatismybrowser.com/detect/what-is-my-user-agent/"
     "#detected_value" *~ "iPhone"
     quit browser
     switchTo mainBrowser
 
-// Firefox not working at the moment
-"FirefoxDeviceWithUserAgent myagent should show as myagent" &&! fun _ ->
+"FirefoxDeviceWithUserAgent myagent should show as myagent" &&& fun _ ->
     start <| FirefoxWithUserAgent "myagent"
     url "https://www.whatismybrowser.com/detect/what-is-my-user-agent/"
     "#detected_value" *~ "myagent"

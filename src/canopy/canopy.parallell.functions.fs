@@ -32,6 +32,8 @@ let safari = Safari
 
 let mutable browsers : OpenQA.Selenium.IWebDriver list = []
 
+System.Text.Encoding.RegisterProvider(System.Text.CodePagesEncodingProvider.Instance)
+
 //misc
 let private textOf (element : IWebElement) =
     match element.TagName  with
