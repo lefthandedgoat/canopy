@@ -32,6 +32,8 @@ let safari = Safari
 
 let mutable browsers : OpenQA.Selenium.IWebDriver list = []
 
+System.Text.Encoding.RegisterProvider(System.Text.CodePagesEncodingProvider.Instance)
+
 //misc
 let private textOf (element : IWebElement) =
     match element.TagName  with
@@ -829,7 +831,7 @@ let private safariDriverService _ =
 (* documented/actions *)
 let start b =
     //for chrome you need to download chromedriver.exe from http://code.google.com/p/chromedriver/wiki/GettingStarted
-    //place chromedriver.exe in c:\ or you can place it in a customer location and change chromeDir value above
+    //place chromedriver.exe in c:\ or you can place it in a custom location and change chromeDir value above
     //for ie you need to set Settings -> Advance -> Security Section -> Check-Allow active content to run files on My Computer*
     //also download IEDriverServer and place in c:\ or configure with ieDir
     //firefox just works

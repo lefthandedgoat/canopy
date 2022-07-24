@@ -12,6 +12,8 @@ nuget FSharp.Data
 nuget Selenium.WebDriver.ChromeDriver
 nuget Selenium.WebDriver.GeckoDriver
 nuget System.Drawing.Common >= 4.6.0
+nuget System.Text.Encoding.CodePages = 5.0.0
+nuget System.Runtime.CompilerServices.Unsafe = 5.0.0
 
 // [ FAKE GROUP ]
 group Build

@@ -675,22 +675,22 @@ context "User Agents tests"
 
 "ChromeWithUserAgent userAgents.iPad should show as iPad" &&& fun _ ->
     start <| ChromeWithUserAgent userAgents.iPad
-    url "https://www.whoishostingthis.com/tools/user-agent/"
-    ".info-box.user-agent" *~ "iPad"
+    url "https://www.whatismybrowser.com/detect/what-is-my-user-agent/"
+    "#detected_value" *~ "iPad"
     quit browser
     switchTo mainBrowser
 
 "FirefoxDeviceWithUserAgent userAgents.iPhone should show as iPhone" &&& fun _ ->
     start <| FirefoxWithUserAgent userAgents.iPhone
-    url "https://www.whoishostingthis.com/tools/user-agent/"
-    ".info-box.user-agent" *~ "iPhone"
+    url "https://www.whatismybrowser.com/detect/what-is-my-user-agent/"
+    "#detected_value" *~ "iPhone"
     quit browser
     switchTo mainBrowser
 
 "FirefoxDeviceWithUserAgent myagent should show as myagent" &&& fun _ ->
     start <| FirefoxWithUserAgent "myagent"
-    url "https://www.whoishostingthis.com/tools/user-agent/"
-    ".info-box.user-agent" *~ "myagent"
+    url "https://www.whatismybrowser.com/detect/what-is-my-user-agent/"
+    "#detected_value" *~ "myagent"
     quit browser
     switchTo mainBrowser
 
@@ -749,7 +749,7 @@ addFinder findByHref
 "test new findByHref by clicking an href" &&& fun _ ->
     url "http://lefthandedgoat.github.io/canopy/index.html"
     click "actions.html"
-    on "http://lefthandedgoat.github.io/canopy/actions.html"
+    on "http://lefthandedgoat.github.io/canopy/Docs/actions.html"
 
 context "Navigate tests"
 
@@ -759,7 +759,7 @@ context "Navigate tests"
   navigate back
   on "http://lefthandedgoat.github.io/canopy/index.html"
   navigate forward
-  on "http://lefthandedgoat.github.io/canopy/actions.html"
+  on "http://lefthandedgoat.github.io/canopy/Docs/actions.html"
 
 context "todo tests"
 

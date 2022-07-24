@@ -14,8 +14,8 @@
     <None Include="paket.references" />
   </ItemGroup>
   <ItemGroup>
-    <PackageReference Include="Selenium.WebDriver.ChromeDriver" Version="2.37.0" />
-    <PackageReference Include="Selenium.WebDriver.GeckoDriver" Version="0.20.0" />
+    <PackageReference Include="Selenium.WebDriver.ChromeDriver" Version="103.0.5060.13400" />
+    <PackageReference Include="Selenium.WebDriver.GeckoDriver.Win64" Version="0.31.0" />
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\..\src\canopy.integration\canopy.integration.fsproj" />
