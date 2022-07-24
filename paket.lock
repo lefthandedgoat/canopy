@@ -499,6 +499,8 @@ NUGET
       Microsoft.NETCore.Platforms (>= 1.1)
       Microsoft.NETCore.Targets (>= 1.1)
       System.Runtime (>= 4.3)
+    System.Text.Encoding.CodePages (5.0)
+      Microsoft.NETCore.Platforms (>= 5.0)
     System.Text.Encoding.Extensions (4.3)
       Microsoft.NETCore.Platforms (>= 1.1)
       Microsoft.NETCore.Targets (>= 1.1)
