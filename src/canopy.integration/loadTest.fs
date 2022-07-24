@@ -2,9 +2,9 @@ module canopy.integration.loadTest
 
 open System
 
-//IF YOU ARE READING THIS, SKIP TO BOTTOM TO runLoadTest TO GET IDEAD OF MAIN FLOW
+//IF YOU ARE READING THIS, SKIP TO BOTTOM TO runLoadTest TO GET IDEA OF MAIN FLOW
 
-let guid guid = System.Guid.Parse(guid)
+let guid (guid: string) = System.Guid.Parse(guid)
 
 //A task is work to be done, like do a GET on the login page
 //Frequency is how many times per minute to run this action

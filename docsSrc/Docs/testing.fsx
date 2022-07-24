@@ -31,10 +31,21 @@ run()
 (**
 runFor
 ----
-Starts test suite and runs the suite with each of the listed browsers.  Usually at the bottom of your Program.fs
+Starts test suite and runs the suite with each of the listed browsers.
+Usually at the bottom of your Program.fs
+
+Pass a list of browsers start modes. There is no need to start a browser beforehand.
 *)
-//TODO Dotnet doesn't allow vague type definitions
-//runFor [chrome; firefox; ie]
+runFor (BrowserStartModes [chrome; firefox; ie])
+
+(**
+Alternatively, you can pass existing browser instances that are already started.
+*)
+start firefox
+let mainBrowser = browser
+start chrome
+let secondBrowser = browser
+runFor (WebDrivers [ mainBrowser; secondBrowser])
 
 
 (**
@@ -55,7 +66,7 @@ context "Reset password page tests"
 (**
 once
 ----
-Function that is run once time at the beginning of a test suite. (per context)
+Function that is run one time at the beginning of a test suite. (per context)
 *)
 once (fun _ ->
     ()//do this one time at the beginning of the most recently defined context

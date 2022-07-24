@@ -371,7 +371,7 @@ let dotnetBuild ctx =
 let dotnetTest ctx =
     let excludeCoverage =
         !! testsGlob
-        |> Seq.map IO.Path.GetFileNameWithoutExtension
+        |> Seq.map (fun (s: string) -> IO.Path.GetFileNameWithoutExtension(s))
         |> String.concat "|"
     let args =
         [
@@ -453,7 +453,7 @@ let generateAssemblyInfo _ =
             AssemblyInfo.Metadata("GitHash", Git.Information.getCurrentSHA1(null))
         ]
 
-    let getProjectDetails projectPath =
+    let getProjectDetails (projectPath: string) =
         let projectName = IO.Path.GetFileNameWithoutExtension(projectPath)
         (
             projectPath,

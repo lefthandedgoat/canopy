@@ -178,34 +178,44 @@ let private runtest (suite : suite) (test : Test) =
         failureMessage <- null
         FailFast
 
-(* documented/testing *)
-let run () =
+let private runSuitesForBrowser browserName useBrowser (suites:suite list) =
+    let browserSuites =
+        suites
+        |> List.rev // suites list is in reverse order and have to be reversed first
+        |> List.map (fun s ->
+            match browserName with
+            | Some name ->
+                // clone with context specific to browser
+                let clone = s.Clone()
+                clone.Context <- sprintf "(%s) %s" name s.Context
+                clone
+            | None ->
+                s)
 
-    let wipsExist = suites |> List.exists (fun s -> s.Wips.IsEmpty = false)
+    let prioritisedSuites =
+        if runFailedContextsFirst
+        then
+            let fc, pc = browserSuites |> List.partition (fun s -> failedContexts |> List.contains s.Context)
+            fc @ pc
+        else
+            browserSuites
 
-    if wipsExist && canopy.configuration.failIfAnyWipTests then
-       raise <| Exception "Wip tests found and failIfAnyWipTests is true"
+    let openContext = Option.map (sprintf "Running tests with %s browser") browserName
+    Option.iter reporter.contextStart openContext
 
-    reporter.suiteBegin()
-    let stopWatch = new Diagnostics.Stopwatch()
-    stopWatch.Start()
+    let browserSuccess =
+        try
+            useBrowser ()
+            true
+        with
+        | ex ->
+            List.iter (failSuite ex) prioritisedSuites //fail all tests in all suites for the browser
+            false
 
-    // suites list is in reverse order and have to be reversed before running the tests
-    suites <- List.rev suites
+    Option.iter reporter.contextEnd openContext
 
-    //run all the suites
-    if runFailedContextsFirst = true then
-        let failedContexts = canopy.history.get()
-        //reorder so failed contexts are first
-        let fc, pc = suites |> List.partition (fun s -> failedContexts |> List.exists (fun fc -> fc = s.Context))
-        suites <- fc @ pc
 
-    //run only wips if there are any
-    if wipsExist then
-        suites <- suites |> List.filter (fun s -> s.Wips.IsEmpty = false || s.Always.IsEmpty = false)
-
-    suites
-    |> List.iter (fun s ->
+    let runSuite (s:suite) =
         if skipRemainingTestsInContextOnFailure = true && skipAllTestsOnFailure = false then skipNextTest <- false
         if failed = false then
             contextFailed <- false
@@ -229,7 +239,36 @@ let run () =
 
             if contextFailed = true then failedContexts <- s.Context::failedContexts
             if s.Context <> null then reporter.contextEnd s.Context
-    )
+
+    if browserSuccess then List.iter runSuite prioritisedSuites
+    ()
+
+let private runForBrowsers (browsers: Browsers option) =
+    let wipsExist = suites |> List.exists (fun s -> not s.Wips.IsEmpty)
+
+    if wipsExist && failIfAnyWipTests then
+       raise <| Exception "Wip tests found and failIfAnyWipTests is true"
+
+    reporter.suiteBegin()
+    let stopWatch = Diagnostics.Stopwatch()
+    stopWatch.Start()
+
+    //if there are wips, run only wip and always tests
+    let filteredSuites =
+        if wipsExist
+        then suites |> List.filter (fun s -> not (s.Wips.IsEmpty && s.Always.IsEmpty))
+        else suites
+    let failedContexts = canopy.history.get()
+
+    match browsers with
+    | Some (BrowserStartModes browsers) ->
+        for browser in browsers do
+            runSuitesForBrowser (Some (toString browser)) (fun () -> start browser) filteredSuites
+    | Some (WebDrivers browsers) ->
+        for browser in browsers do
+            runSuitesForBrowser (Some (browser.ToString())) (fun () -> switchTo browser) filteredSuites
+    | None ->
+        runSuitesForBrowser None id filteredSuites
 
     canopy.history.save failedContexts
 
@@ -238,32 +277,9 @@ let run () =
     reporter.suiteEnd()
 
 (* documented/testing *)
-let runFor (browsers: Browsers) =
-    // suites are in reverse order and have to be reversed before running the tests
-    let currentSuites = suites
+let run () =
+    runForBrowsers None
 
-    match browsers with
-        | BrowserStartModes browsers ->
-            let newSuites =
-              browsers
-              |> List.rev
-              |> List.collect (fun browser ->
-                  let suite = new suite()
-                  suite.Context <- sprintf "Running tests with %s browser" (toString browser)
-                  suite.Once <- fun _ -> start browser
-                  let currentSuites2 = currentSuites |> List.map(fun suite -> suite.Clone())
-                  currentSuites2 |> List.iter (fun suite -> suite.Context <- sprintf "(%s) %s" (toString browser) suite.Context)
-                  currentSuites2 @ [suite])
-            suites <- newSuites
-        | WebDrivers browsers ->
-            let newSuites =
-              browsers
-              |> List.rev
-              |> List.collect (fun browser ->
-                  let suite = new suite()
-                  suite.Context <- sprintf "Running tests with %s browser" (browser.ToString())
-                  suite.Once <- fun _ -> switchTo browser
-                  let currentSuites2 = currentSuites |> List.map(fun suite -> suite.Clone())
-                  currentSuites2 |> List.iter (fun suite -> suite.Context <- sprintf "(%s) %s" (browser.ToString()) suite.Context)
-                  currentSuites2 @ [suite])
-            suites <- newSuites
+(* documented/testing *)
+let runFor browsers =
+    runForBrowsers (Some browsers)

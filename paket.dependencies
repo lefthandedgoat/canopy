@@ -1,9 +1,10 @@
+version 7.1.5
 source https://www.nuget.org/api/v2/
 
-framework: netstandard2.0, net461
+framework: net6.0
 
 nuget NuGet.CommandLine
-nuget FSharp.Core >= 4.7.0 lowest_matching:true
+nuget FSharp.Core
 nuget Selenium.WebDriver
 nuget FAKE prerelease
 nuget FSharp.Formatting
@@ -12,7 +13,7 @@ nuget Selenium.WebDriver.ChromeDriver
 nuget Selenium.WebDriver.GeckoDriver
 nuget System.Drawing.Common >= 4.6.0
 nuget System.Text.Encoding.CodePages = 5.0.0
-nuget System.Runtime.CompilerServices.Unsafe = 5.0.0
+nuget System.Runtime.CompilerServices.Unsafe = 6.0.0
 
 // [ FAKE GROUP ]
 group Build
@@ -20,19 +21,19 @@ group Build
     storage: none
     nuget Expecto
     nuget YoloDev.Expecto.TestSdk
-    nuget Microsoft.NET.Test.Sdk 15.7.2
-    nuget Fake.IO.FileSystem 5.19.0
-    nuget Fake.Core.Target 5.19.0
-    nuget Fake.Core.ReleaseNotes 5.19.0
-    nuget FAKE.Core.Environment 5.19.1
-    nuget Fake.DotNet.Cli 5.19.0
-    nuget FAKE.Core.Process 5.19.0
-    nuget Fake.DotNet.AssemblyInfoFile 5.19.0
-    nuget Fake.Tools.Git 5.19.0
-    nuget Fake.DotNet.Paket 5.19.0
-    nuget Fake.Api.GitHub 5.19.0
-    nuget Fake.BuildServer.AppVeyor 5.19.0
-    nuget Fake.BuildServer.Travis 5.19.0
+    nuget Microsoft.NET.Test.Sdk
+    nuget Fake.IO.FileSystem
+    nuget Fake.Core.Target
+    nuget Fake.Core.ReleaseNotes
+    nuget FAKE.Core.Environment
+    nuget Fake.DotNet.Cli
+    nuget FAKE.Core.Process
+    nuget Fake.DotNet.AssemblyInfoFile
+    nuget Fake.Tools.Git
+    nuget Fake.DotNet.Paket
+    nuget Fake.Api.GitHub
+    nuget Fake.BuildServer.AppVeyor
+    nuget Fake.BuildServer.Travis
     nuget Argu
 
 group Docs
