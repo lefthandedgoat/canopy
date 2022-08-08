@@ -1,4 +1,5 @@
 //#load ".fake/build.fsx/intellisense.fsx"
+#nowarn "52"
 #load "docsTool/CLI.fs"
 #if !FAKE
 #r "netstandard"
@@ -238,7 +239,7 @@ module DocsTool =
         ]
         |> watchparser.PrintCommandLineArgumentsFlat
 
-    let watch projectpath =
+    let watch _ =
         dotnet.watch (fun args ->
            { args with WorkingDirectory = docsToolDir }
         ) "run" (sprintf "-- watch %s" (watchCLI()))

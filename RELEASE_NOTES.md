@@ -405,3 +405,8 @@ Update to Selenium 3.3 [Issue #351](https://github.com/lefthandedgoat/canopy/iss
 #### 2.1.1 - October 23 2019
 * Added option to select WebDriver port and allow insecure SSL cert
 * Thanks @OmanF (https://github.com/lefthandedgoat/canopy/pull/482)
+
+#### 2.5.0 - August 7 2022
+* Upgraded to Net6, Thanks @voronoipotato (https://github.com/lefthandedgoat/canopy/pull/527)
+* Documentation fixes, Thanks @dharmatech
+* runFor fixes, Thanks @olivercoad (https://github.com/lefthandedgoat/canopy/pull/506)

@@ -1,5 +1,6 @@
-version 7.1.5
+version 6.2.1
 source https://www.nuget.org/api/v2/
+source https://api.nuget.org/v3/index.json
 
 framework: net6.0
 
@@ -17,7 +18,9 @@ nuget System.Runtime.CompilerServices.Unsafe = 6.0.0
 
 // [ FAKE GROUP ]
 group Build
-    source https://www.nuget.org/api/v2
+	source https://www.nuget.org/api/v2
+	source https://api.nuget.org/v3/index.json
+    framework: net6.0
     storage: none
     nuget Expecto
     nuget YoloDev.Expecto.TestSdk
