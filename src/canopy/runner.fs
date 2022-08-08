@@ -1,4 +1,4 @@
-﻿module canopy.runner.classic
+module canopy.runner.classic
 
 open System
 open canopy.configuration
@@ -95,7 +95,12 @@ let fail (ex : Exception) (test : Test) (suite : suite) autoFail url =
     else
         if skipAllTestsOnFailure = true || skipRemainingTestsInContextOnFailure = true then skipNextTest <- true
         if autoFail then
-            skip test.Id //dont take the time to fail all the tests just skip them
+            // same as a regular fail but w/o trying to get a screenshot
+            if failFast = ref true then failed <- true
+            failedCount <- failedCount + 1
+            contextFailed <- true            
+            reporter.fail ex test.Id Array.empty<byte> url
+            suite.OnFail()
         else
             try
                 if failFast = ref true then failed <- true
