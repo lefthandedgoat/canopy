@@ -133,7 +133,7 @@ uncheck "#yes"
 (**
 --> (drag is an alias)
 ----------------------
-Drag on item to another.
+Drag one item to another.
 *)
 ".todo" --> ".inprogress"
 drag ".todo" ".inprogress"
